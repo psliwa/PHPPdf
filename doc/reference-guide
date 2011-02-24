@@ -1,0 +1,189 @@
+1. Architecture
+1.1. Overview
+
+[diagram class, flow diagram etc.]
+
+One element, whom is able to display is named Glyph. Pdf document is representing by glyph's tree structure containing attributes, coordinates of bounds and dimensions. Dynamic data (position and dimension) is calculated by Formatters (implementation of "Chain of Responsibilites" pattern). Formatters are invoking before drawing glyph. Last important class hierarchy, responsible for additional drawing decoration, is Enhancements.
+
+1.2. Glyphs.
+
+There are several basic glyphs.
+
+Container
+=========
+Container is the most common glyph, is equivalent of html's div. Most of glyphs extends Container (Text is only exception for now).
+
+Page
+====
+Represents single page. While overflowing page dosn't split itself - glyphs will be outside drawing range.
+
+PageCollection
+==============
+Simple collection of the pages. This collection is static, you must manually split pages.
+
+DynamicPage
+===========
+Auto splitting on overflow - most common kind of page. Page prototype must be passed as first constructor's parameter.
+
+[php]
+use Ps\Pdf\Glyph\Page;
+use Ps\Pdf\Glyph\DynamicPage;
+
+$prototype = new Page();
+$page = new DynamicPage($prototype);
+[/php]
+
+
+Image
+=====
+Image not be able to split on two pages. Is undivided.
+
+Text
+====
+Text glyph is equivalent of html's span tag, but Text not be able to have children. Default display mode is inline (as in html).
+
+[php]
+use Ps\Pdf\Glyph\Text;
+
+$text = new Text('some text', $attributes);
+[/php]
+
+Table
+=====
+Table is composite of Rows.
+
+[php]
+//table creating
+use Ps\Pdf\Glyph\Table;
+use Ps\Pdf\Glyph as Glyphs;
+
+$table = new Table(array('width' => 500));
+$row = new Table\Row();
+$cell = new Table\Cell();
+$cell->add(new Glyphs\Text('some text'));
+$row->add($cell)
+    ->add(clone $cell);
+$table->add($row)
+      ->add(clone $row);
+[/php]
+
+Table\Row
+=========
+Row not be able to split on two pages. Is undivided. Width of Row is Table width. Children of Row are Cells.
+
+Table\Cell
+==========
+Cells are the same height as parent Row. Margin and padding attributes are working with this glyph.
+
+1.3. Formatters.
+
+Formatters objects can be shared becouse they haven't internal status - flyweight objects.
+
+Chain
+=====
+Chain isn't Formatter, but is manager of Formatters. Implementation of "Chain of Responsibilites" pattern.
+
+DebugFormatter
+==============
+Collect debug data.
+
+ConvertDimensionFormatter (@todo change name)
+=========================
+Converts some attributes value. For example percentage dimensions (width and height) has converted to normal numbers.
+
+StandardDimensionFormatter
+==========================
+Calculates glyph's dimensions.
+
+StandardPositionFormatter
+=========================
+Calculates glyph's position (bounds).
+
+TextDimensionFormatter
+======================
+Calculates Text's dimensions.
+
+TextPositionFormatter
+=====================
+Calculates Text's position.
+
+ContainerFormatter
+==================
+Clones and adds chain of formatters to children of container and execute children chain.
+
+ContainerDimensionFormatter
+===========================
+Calculates Container's dimensions depends on dimensions of the children.
+
+ImageDimensionFormatter
+=======================
+Calculates Image's dimensions depends on given width/height or on size of source image.
+
+TableFormatter
+==============
+Formats dimensions and position of Rows and Cells.
+
+1.4. Enhancements.
+
+Background
+==========
+Drawing background. Possible color or image background.
+
+[php]
+use Ps\Pdf\Enhancement\Background;
+//white background
+$background = Background('#cccccc');
+
+//image background without repeating
+$background = Background(null, $pathToImage);
+
+//image background with vertical and horizontal repeating
+$background = Background(null, $pathToImage, Background::REPEAT_ALL);
+[/php]
+
+Border
+======
+Drawing border.
+
+//... to be continued.
+
+2. Ways of creation pdf document.
+
+2.1. Clean php code.
+
+To create pdf document via clean php code, you must:
+* create Ps\Pdf object - builder of pdf document
+* create glyph's compose tree structure
+* pass root of the glyph's tree to Ps\Pdf::draw method
+* for example render pdf document via render engine
+
+Sample code:
+[php]
+use Ps\Pdf;
+//.. other "use" clausules
+
+$pdf = new Pdf();
+
+//page prototype
+$prototype = new Page();
+
+$page = new DynamicPage($prototype);
+
+$container = new Container(array('width' => '90%'));
+$container->setMargin(20, 'auto');//set top and bottom margins on 20, left and right margins on auto
+$table = new Table(array('width' => 400));
+$row = new Row();
+$cell = new Cell();
+$text = new Text('sample text');
+$cell->add($text);
+$row->add($cell)->add(clone $cell);
+$table->add($row)->add(clone $row);
+$container->add($table);
+
+$page->add($container);
+
+$pdf->draw($page);
+
+header('Content-Type: application/pdf');
+echo $pdf->getPdfEngine()->render();
+[/php]

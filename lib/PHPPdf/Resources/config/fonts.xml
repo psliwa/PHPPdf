@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fonts>
+    <font name="verdana">
+        <normal file="%resources%/fonts/verdana/normal.ttf" />
+        <bold file="%resources%/fonts/verdana/bold.ttf" />
+        <italic file="%resources%/fonts/verdana/italic.ttf" />
+        <bold-italic file="%resources%/fonts/verdana/bold+italic.ttf" />
+    </font>
+
+    <font name="courier">
+        <normal type="courier" />
+        <bold type="courier-bold" />
+        <italic type="courier-oblique" />
+    </font>
+</fonts>

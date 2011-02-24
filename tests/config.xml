@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit>
+    <testsuites>
+        <testsuite name="Ps">
+            <directory>Parser</directory>
+            <directory>Enhancement</directory>
+            <directory>Formatter</directory>
+            <directory>Glyph</directory>
+            <directory>Main</directory>
+            <directory>Util</directory>
+            <directory>Font</directory>
+        </testsuite>
+    </testsuites>
+</phpunit>

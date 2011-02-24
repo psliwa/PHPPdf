@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<glyphs>
+    <glyph name="page" class="PHPPdf\Glyph\Page">
+        <stylesheet>
+            <attribute name="font-type" value="verdana" />
+            <attribute name="font-size" value="10" />
+            <attribute name="font-style" value="normal" />
+            <attribute name="margin" value="40 40" />
+            <attribute name="color" value="black" />
+        </stylesheet>
+    </glyph>
+    <glyph name="div" class="PHPPdf\Glyph\Container">
+    </glyph>
+    <glyph name="p" class="PHPPdf\Glyph\Container">
+        <stylesheet>
+            <attribute name="padding" value="5 0" />
+        </stylesheet>
+    </glyph>
+    <glyph name="text" class="PHPPdf\Glyph\Text">
+    </glyph>
+    <glyph name="h1" class="PHPPdf\Glyph\Container">
+        <stylesheet>
+            <attribute name="font-size" value="16" />
+            <attribute name="font-style" value="bold" />
+            <attribute name="margin" value="5 0" />
+        </stylesheet>
+    </glyph>
+    <glyph name="h2" class="PHPPdf\Glyph\Container">
+        <stylesheet>
+            <attribute name="font-size" value="14" />
+            <attribute name="font-style" value="bold" />
+            <attribute name="margin" value="4 0" />
+        </stylesheet>
+    </glyph>
+    <glyph name="h3" class="PHPPdf\Glyph\Container">
+        <stylesheet>
+            <attribute name="font-size" value="12" />
+            <attribute name="margin" value="3 0" />
+        </stylesheet>
+    </glyph>
+    <glyph name="page-info" class="PHPPdf\Glyph\Runtime\PageInfo"></glyph>
+    <glyph name="table" class="PHPPdf\Glyph\Table"></glyph>
+    <glyph name="tr" class="PHPPdf\Glyph\Table\Row">
+        <stylesheet>
+            <attribute name="height" value="5" />
+        </stylesheet>
+    </glyph>
+    <glyph name="td" class="PHPPdf\Glyph\Table\Cell">
+        <stylesheet>
+            <enhancement name="border" color="black" />
+        </stylesheet>
+    </glyph>
+    <glyph name="img" class="PHPPdf\Glyph\Image">
+        <stylesheet>
+            <attribute name="margin" value="1" />
+        </stylesheet>
+    </glyph>
+    <glyph name="br" class="PHPPdf\Glyph\Container">
+        <stylesheet>
+            <attribute name="height" value="10" />
+        </stylesheet>
+    </glyph>
+    <glyph name="nl" class="PHPPdf\Glyph\Container">
+    </glyph>
+    <glyph name="span" class="PHPPdf\Glyph\Text">
+    </glyph>
+    <glyph name="b" class="PHPPdf\Glyph\Text">
+        <stylesheet>
+            <attribute name="font-style" value="bold" />
+        </stylesheet>
+    </glyph>
+</glyphs>
