@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<phpunit>
+<phpunit bootstrap="bootstrap.php">
     <testsuites>
-        <testsuite name="Ps">
+        <testsuite name="PHPPdf">
             <directory>Parser</directory>
             <directory>Enhancement</directory>
             <directory>Formatter</directory>
