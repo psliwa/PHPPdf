@@ -2,9 +2,6 @@
 
 namespace PHPPdf;
 
-require_once 'Zend/Pdf.php';
-require_once 'Zend/Pdf/Page.php';
-
 use PHPPdf\Glyph\Glyph,
     PHPPdf\Formatter as Formatters,
     PHPPdf\Glyph\Page,

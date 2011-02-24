@@ -6,8 +6,6 @@ use PHPPdf\Document,
     PHPPdf\Util\DrawingTask,
     PHPPdf\Formatter\Formatter;
 
-require_once 'Zend/Pdf.php';
-
 /**
  * Single pdf page
  *

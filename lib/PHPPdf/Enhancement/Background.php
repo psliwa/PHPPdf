@@ -26,7 +26,6 @@ class Background extends Enhancement
 
         if($image !== null && !$image instanceof \Zend_Pdf_Resource_Image)
         {
-            require_once 'Zend/Pdf/Image.php';
             $image = \Zend_Pdf_Image::imageWithPath($image);
         }
 

@@ -3,9 +3,6 @@
 use PHPPdf\Document;
 use PHPPdf\Glyph\Image;
 
-require_once 'Zend/Pdf/Page.php';
-require_once 'Zend/Pdf/Image.php';
-
 class Zend_Pdf_Page_Stub extends \Zend_Pdf_Page
 {
     public function __construct()

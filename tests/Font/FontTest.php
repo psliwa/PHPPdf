@@ -2,8 +2,6 @@
 
 use PHPPdf\Font\Font;
 
-require_once 'Zend/Pdf/Font.php';
-
 class FontTest extends PHPUnit_Framework_TestCase
 {
     private $font;

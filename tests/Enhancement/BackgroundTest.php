@@ -1,7 +1,5 @@
 <?php
 
-require_once 'Zend/Pdf/Page.php';
-
 use PHPPdf\Enhancement\Background;
 use PHPPdf\Glyph\Page;
 use PHPPdf\Util\Point;

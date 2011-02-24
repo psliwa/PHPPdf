@@ -3,8 +3,6 @@
 use PHPPdf\Parser\FontRegistryParser,
     PHPPdf\Font\Font;
 
-require_once 'Zend/Pdf/Font.php';
-
 class FontRegistryParserTest extends PHPUnit_Framework_TestCase
 {
     private $parser;

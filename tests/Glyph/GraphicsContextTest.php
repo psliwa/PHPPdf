@@ -3,8 +3,6 @@
 use PHPPdf\Glyph\Page,
     PHPPdf\Glyph\GraphicsContext;
 
-require_once 'Zend/Pdf/Image.php';
-
 class GraphicsContextTest extends TestCase
 {
     /**
@@ -119,7 +117,6 @@ class GraphicsContextTest extends TestCase
     public function setColorsWrapper($method)
     {
         $zendPageMock = $this->getMock('\Zend_Pdf_Page', array($method), array(), '', false);
-        require_once 'Zend/Pdf/Color.php';
         $zendColor = $this->getMock('\Zend_Pdf_Color');
 
         $zendPageMock->expects($this->once())

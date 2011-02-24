@@ -1,7 +1,5 @@
 <?php
 
-require_once 'Zend/Pdf/Page.php';
-
 use PHPPdf\Enhancement\Border;
 use PHPPdf\Util\Boundary;
 use PHPPdf\Glyph\Page;
