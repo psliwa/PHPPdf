@@ -7,8 +7,13 @@ namespace PHPPdf;
  */
 class Autoloader
 {
-    public static function register($basePath = __DIR__)
+    public static function register($basePath = null)
     {
+        if($basePath === null)
+        {
+            $basePath = __DIR__.'/..';
+        }
+        
         \spl_autoload_register(function($name) use($basePath)
         {
             $path = \str_replace(array('\\', '_'), \DIRECTORY_SEPARATOR, $name).'.php';
