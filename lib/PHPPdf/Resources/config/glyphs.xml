@@ -69,4 +69,9 @@
             <attribute name="font-style" value="bold" />
         </stylesheet>
     </glyph>
+    <glyph name="page-break" class="PHPPdf\Glyph\Container">
+        <stylesheet>
+            <attribute name="page-break" value="1" />
+        </stylesheet>
+    </glyph>
 </glyphs>

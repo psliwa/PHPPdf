@@ -164,6 +164,7 @@ abstract class AbstractGlyph implements Glyph, \ArrayAccess
         $this->addAttribute('float', self::FLOAT_NONE);
         $this->addAttribute('font-style', null);
         $this->addAttribute('static-size', false);
+        $this->addAttribute('page-break', false);
 
         $this->enhancementBag = new EnhancementBag();
     }
@@ -557,6 +558,7 @@ abstract class AbstractGlyph implements Glyph, \ArrayAccess
         }
         catch(\Exception $e)
         {
+            echo $e;
             throw new \PHPPdf\Exception\DrawingException(sprintf('Error while drawing glyph "%s"', get_class($this)), 0, $e);
         }
     }

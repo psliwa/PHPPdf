@@ -6,7 +6,7 @@ use PHPPdf\Glyph\PageCollection;
 use PHPPdf\Glyph\DynamicPage;
 use PHPPdf\Util\Boundary;
 
-class DynamicPageTest extends PHPUnit_Framework_TestCase
+class DynamicPageTest extends TestCase
 {
     private $page;
 
@@ -44,8 +44,8 @@ class DynamicPageTest extends PHPUnit_Framework_TestCase
     public function pageOverflow()
     {
         $prototype = $this->page->getPrototypePage();
-        $container = $this->createContainerMock(array(0, $prototype->getHeight()), array($prototype->getWidth(), 0));
-        $container2 = $this->createContainerMock(array(0, 0), array($prototype->getWidth(), -$prototype->getHeight()));
+        $container = $this->getContainerMock(array(0, $prototype->getHeight()), array($prototype->getWidth(), 0));
+        $container2 = $this->getContainerMock(array(0, 0), array($prototype->getWidth(), -$prototype->getHeight()));
 
         $this->page->add($container);
         $this->page->add($container2);
@@ -67,8 +67,8 @@ class DynamicPageTest extends PHPUnit_Framework_TestCase
     {
         $prototype = $this->page->getPrototypePage();
 
-        $container = $this->createContainerMock(array(0, $prototype->getHeight()), array($prototype->getWidth(), $prototype->getHeight()/2));
-        $container2 = $this->createContainerMock(array(0, $prototype->getHeight()/2), array($prototype->getWidth(), -$prototype->getHeight()/2));
+        $container = $this->getContainerMock(array(0, $prototype->getHeight()), array($prototype->getWidth(), $prototype->getHeight()/2));
+        $container2 = $this->getContainerMock(array(0, $prototype->getHeight()/2), array($prototype->getWidth(), -$prototype->getHeight()/2));
 
         $this->page->add($container);
         $this->page->add($container2);
@@ -87,9 +87,10 @@ class DynamicPageTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(1, count($pages[1]->getChildren()));
     }
 
-    private function createContainerMock($start, $end)
+    private function getContainerMock($start, $end, array $methods = array())
     {
-        $mock = $this->getMock('PHPPdf\Glyph\Container', array('getBoundary', 'getHeight'));
+        $methods = array_merge(array('getBoundary', 'getHeight'), $methods);
+        $mock = $this->getMock('PHPPdf\Glyph\Container', $methods);
 
         $boundary = new Boundary();
         $boundary->setNext($start[0], $start[1])
@@ -98,7 +99,7 @@ class DynamicPageTest extends PHPUnit_Framework_TestCase
                  ->setNext($start[0], $end[1])
                  ->close();
 
-        $mock->expects($this->any())
+        $mock->expects($this->atLeastOnce())
              ->method('getBoundary')
              ->will($this->returnValue($boundary));
 
@@ -128,7 +129,7 @@ class DynamicPageTest extends PHPUnit_Framework_TestCase
         $prototype = $this->page->getPrototypePage();
         $height = $prototype->getHeight();
 
-        $mock = $this->createContainerMock(array(0, $height), array(100, -($height*3)));
+        $mock = $this->getContainerMock(array(0, $height), array(100, -($height*3)));
 
         $this->page->add($mock);
 
@@ -167,7 +168,7 @@ class DynamicPageTest extends PHPUnit_Framework_TestCase
         $mocks = array();
         for($i=0; $i<32; $i++, $height -= $heightOfGlyph)
         {
-            $this->page->add($this->createContainerMock(array(0, $height), array(100, $height-$heightOfGlyph)));
+            $this->page->add($this->getContainerMock(array(0, $height), array(100, $height-$heightOfGlyph)));
         }
 
         $tasks = $this->page->getDrawingTasks(new Document());
@@ -200,5 +201,34 @@ class DynamicPageTest extends PHPUnit_Framework_TestCase
             $this->assertEquals($i, $page->getContext()->getPageNumber());
             $i++;
         }
+    }
+
+    /**
+     * @test
+     */
+    public function pageBreak()
+    {
+        $prototype = $this->getMock('PHPPdf\Glyph\Page', array('copy'));
+        $prototype->expects($this->exactly(2))
+                  ->method('copy')
+                  ->will($this->returnValue($prototype));
+
+        $this->invokeMethod($this->page, 'setPrototypePage', array($prototype));
+
+        $container = $this->getContainerMock(array(0, 700), array(40, 600), array('getPageBreak', 'split'));
+        $container->expects($this->once())
+                  ->method('getPageBreak')
+                  ->will($this->returnValue(false));
+
+        $this->page->add($container);
+
+        $container = $this->getContainerMock(array(0, 600), array(0, 600), array('getPageBreak', 'split'));
+        $container->expects($this->once())
+                  ->method('getPageBreak')
+                  ->will($this->returnValue(true));
+
+        $this->page->add($container);
+
+        $this->page->getDrawingTasks(new Document());
     }
 }

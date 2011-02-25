@@ -14,10 +14,12 @@ class DynamicPage extends Page
     private $prototype = null;
     private $currentPage = null;
     private $pages = array();
+    private $totalTranslation = 0;
 
     public function __construct(Page $prototype = null)
     {
-        $this->prototype = $prototype ? $prototype : new Page();
+        $prototype = $prototype ? $prototype : new Page();
+        $this->setPrototypePage($prototype);
 
         $this->initialize();
     }
@@ -43,6 +45,11 @@ class DynamicPage extends Page
     public function getPrototypePage()
     {
         return $this->prototype;
+    }
+
+    private function setPrototypePage(Page $page)
+    {
+        $this->prototype = $page;
     }
 
     /**
@@ -95,63 +102,78 @@ class DynamicPage extends Page
     }
 
     private function splitChildrenIntoPages()
-    {
-        $prototype = $this->getPrototypePage();
-        $currentPageHeight = $prototype->getHeight() + $prototype->getMarginBottom();
-        $pageEnd = $this->getCurrentPage()->getBoundary()->getDiagonalPoint()->getY();
-
-        $totalTranslation = 0;
-        foreach($this->getChildren() as /* @var $child PHPPdf\Glyph\Glyph */ $child)
+    {       
+        $originalPageEnd = $this->getBoundary()->getDiagonalPoint()->getY();
+        $this->totalTranslation = 0;
+        foreach($this->getChildren() as $child)
         {
-            $originalChild = $child;
-            $child->translate(0, -$totalTranslation);
-            $translation = 0;
-            while($child)
-            {               
-                list($xStart, $yStart) = $child->getBoundary()->getFirstPoint()->toArray();
-                list($xEnd, $yEnd) = $child->getBoundary()->getDiagonalPoint()->toArray();
-                $originalHeight = $child->getHeight();
+            $this->splitChildIfNecessary($child, $originalPageEnd);
+        }
+    }
 
-                if($yEnd < $pageEnd)
+    private function splitChildIfNecessary(Glyph $glyph, $pageEndYCoord)
+    {
+        $originalChild = $glyph;
+        $glyph->translate(0, -$this->totalTranslation);
+
+        $translation = 0;
+
+        if($glyph->getPageBreak())
+        {
+            $glyphEndYCoord = $glyph->getBoundary()->getDiagonalPoint()->getY();
+            $translation += $pageEndYCoord - $glyphEndYCoord;
+            $pageEndYCoord = $glyphEndYCoord + 1;
+        }
+
+        while($glyph)
+        {
+            $yStart = $glyph->getBoundary()->getFirstPoint()->getY();
+            $glyphEndYCoord = $glyph->getBoundary()->getDiagonalPoint()->getY();
+
+            if($glyphEndYCoord < $pageEndYCoord)
+            {
+                $splitLine = $translation + $yStart - $this->getMarginBottom();
+                $glyph = $this->splitChild($glyph, $splitLine, $translation);
+
+                $translation = 0;
+                $originalChild = null;
+            }
+            else
+            {
+                $glyph = null;
+                if($originalChild)
                 {
-                    $splitLine = $translation + $yStart - $prototype->getMarginBottom();
-                    $splitedGlyph = $splitLine > 0 ? $child->split($splitLine) : null;
-
-                    list(,$yChildStart) = $child->getBoundary()->getFirstPoint()->toArray();
-                    list(,$yChildEnd) = $child->getBoundary()->getDiagonalPoint()->toArray();
-
-                    $heightAfterSplit = $splitedGlyph ? $splitedGlyph->getHeight() + $child->getHeight() : $child->getHeight();
-
-                    if($splitedGlyph)
-                    {
-                        list($xStart, $yStart) = $splitedGlyph->getBoundary()->getFirstPoint()->toArray();
-                        $this->getCurrentPage()->add($child);
-                        $child->translate(0, -$translation);
-                        $child = $splitedGlyph;
-                    }
-
-                    $translation += $currentPageHeight - ($translation + $yStart);
-                    $this->createNextPage();
-
-                    $this->getCurrentPage()->add($child);
-                    $child->translate(0, -$translation);
-
-                    $totalTranslation += $translation;
-                    $translation = 0;
+                    $this->getCurrentPage()->add($originalChild);
+                    $originalChild->translate(0, -$translation);
                     $originalChild = null;
-                }
-                else
-                {
-                    $child = null;
-                    if($originalChild)
-                    {
-                        $this->getCurrentPage()->add($originalChild);
-                        $originalChild->translate(0, -$translation);
-                        $originalChild = null;
-                    }
                 }
             }
         }
+    }
+
+    private function splitChild(Glyph $glyph, $splitLine, $translation)
+    {
+        $yStart = $glyph->getBoundary()->getFirstPoint()->getY();
+        $splitedGlyph = $splitLine > 0 ? $glyph->split($splitLine) : null;
+        $currentPageHeight = $this->getHeight() + $this->getMarginBottom();
+
+        if($splitedGlyph)
+        {
+            $yStart = $splitedGlyph->getBoundary()->getFirstPoint()->getY();
+            $this->getCurrentPage()->add($glyph);
+            $glyph->translate(0, -$translation);
+            $glyph = $splitedGlyph;
+        }
+
+        $translation += $currentPageHeight - ($translation + $yStart);
+        $this->createNextPage();
+
+        $this->getCurrentPage()->add($glyph);
+        $glyph->translate(0, -$translation);
+
+        $this->totalTranslation += $translation;
+
+        return $glyph;
     }
 
     public function getAttribute($name)
