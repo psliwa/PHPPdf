@@ -58,6 +58,7 @@ class Page extends Container
         $this->addAttribute(self::ATTR_SIZE);       
         $this->setPageSize(self::SIZE_A4);
         $this->addAttribute('encoding', 'utf-8');
+        $this->addAttribute('static-size', true);
     }
 
     public function setPageSize($pageSize)
