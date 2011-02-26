@@ -452,7 +452,7 @@ abstract class AbstractGlyph implements Glyph, \ArrayAccess
         $this->attributes[$name] = $value;
     }
 
-    final protected function getAttributeDirectly($name)
+    protected function getAttributeDirectly($name)
     {
         return isset($this->attributes[$name]) ? $this->attributes[$name] : null;
     }
