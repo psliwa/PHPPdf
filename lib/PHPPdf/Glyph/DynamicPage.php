@@ -116,9 +116,18 @@ class DynamicPage extends Page
         $childMayBeSplitted = true;
         $glyph->translate(0, -$this->totalTranslation);
         
+        if($glyph->getPageBreak())
+        {
+            $pageYCoordEnd = $glyph->getDiagonalPoint()->getY() + 1;
+        }
+        else
+        {
+            $pageYCoordEnd = $this->getDiagonalPoint()->getY();
+        }
+        
         do
         {
-            if($this->shouldBeSplited($glyph))
+            if($this->shouldBeSplited($glyph, $pageYCoordEnd))
             {
                 $glyph = $this->splitChildAndGetProductOfSplitting($glyph);
                 $childHasBeenSplitted = true;
@@ -136,35 +145,58 @@ class DynamicPage extends Page
         while($childMayBeSplitted);
     }
     
-    private function shouldBeSplited(Glyph $glyph)
+    private function shouldBeSplited(Glyph $glyph, $pageYCoordEnd)
     {
-        $yEnd = $glyph->getBoundary()->getDiagonalPoint()->getY();
-        $pageEnd = $this->getBoundary()->getDiagonalPoint()->getY();
+        $yEnd = $glyph->getDiagonalPoint()->getY();
 
-        return $yEnd < $pageEnd;
+        return ($yEnd < $pageYCoordEnd);
     }
 
+    /**
+     * @return Glyph Product of splitting
+     */
     private function splitChildAndGetProductOfSplitting(Glyph $glyph)
     {
-        $glyphYCoordStart = $glyph->getBoundary()->getFirstPoint()->getY();
-        $splitLine = $glyphYCoordStart - $this->getMarginBottom();
+        $originalHeight = $glyph->getFirstPoint()->getY() - $glyph->getDiagonalPoint()->getY();
+        $glyphYCoordStart = $this->getChildYCoordOfFirstPoint($glyph);
+        $splitLine = $glyphYCoordStart - $this->getDiagonalPoint()->getY();
         $splittedGlyph = $glyph->split($splitLine);
+
+        $heightAfterSplit = $glyph->getFirstPoint()->getY() - $glyph->getDiagonalPoint()->getY();
+
+        $gapBeetwenBottomOfOriginalGlyphAndEndOfPage = 0;
 
         if($splittedGlyph)
         {
-            $glyphYCoordStart = $splittedGlyph->getBoundary()->getFirstPoint()->getY();
+            $gapBeetwenBottomOfOriginalGlyphAndEndOfPage = $glyph->getDiagonalPoint()->getY() - $this->getDiagonalPoint()->getY();
+            $glyphYCoordStart = $splittedGlyph->getFirstPoint()->getY();
             $this->getCurrentPage()->add($glyph);
+            $heightAfterSplit += $splittedGlyph->getFirstPoint()->getY() - $splittedGlyph->getDiagonalPoint()->getY();
             $glyph = $splittedGlyph;
         }
 
-        $translation = $this->getHeight() + $this->getMarginBottom() - $glyphYCoordStart;
+        $translation = $this->getGlyphTranslation($glyph, $glyphYCoordStart);
         $this->createNextPage();
 
-        $this->totalTranslation += $translation;
+        $this->totalTranslation += $translation - $gapBeetwenBottomOfOriginalGlyphAndEndOfPage;
 
         $this->addChildrenToCurrentPageAndTranslate($glyph, $translation);
 
         return $glyph;
+    }
+
+    private function getChildYCoordOfFirstPoint(Glyph $glyph)
+    {
+        $yCoordOfFirstPoint = $glyph->getFirstPoint()->getY();
+
+        return $yCoordOfFirstPoint;
+    }
+
+    private function getGlyphTranslation(Glyph $glyph, $glyphYCoordStart)
+    {
+        $translation = $this->getHeight() + $this->getMarginBottom() - $glyphYCoordStart;
+
+        return $translation;
     }
 
     private function addChildrenToCurrentPageAndTranslate(Glyph $glyph, $translation)
@@ -226,5 +258,15 @@ class DynamicPage extends Page
     public function preFormat(Document $document)
     {
         $this->getPrototypePage()->prepareTemplate($document);
+    }
+
+    public function getDiagonalPoint()
+    {
+        return $this->getPrototypePage()->getDiagonalPoint();
+    }
+
+    public function getFirstPoint()
+    {
+        return $this->getPrototypePage()->getFirstPoint();
     }
 }

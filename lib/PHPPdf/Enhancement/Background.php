@@ -53,8 +53,8 @@ class Background extends Enhancement
         {
             $graphicsContext = $page->getGraphicsContext();
 
-            list($x, $y) = $glyph->getBoundary()->getFirstPoint()->toArray();
-            list($endX, $endY) = $glyph->getBoundary()->getDiagonalPoint()->toArray();
+            list($x, $y) = $glyph->getFirstPoint()->toArray();
+            list($endX, $endY) = $glyph->getDiagonalPoint()->toArray();
 
             $height = $image->getPixelHeight();
             $width = $image->getPixelWidth();

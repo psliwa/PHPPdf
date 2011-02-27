@@ -234,7 +234,7 @@ class FloatFormatterTest extends PHPUnit_Framework_TestCase
         $this->formatter->preFormat($container);
         $this->formatter->postFormat($container);
 
-        $this->assertEquals($glyph1->getBoundary()->getFirstPoint()->getY(), $glyph2->getBoundary()->getFirstPoint()->getY());
+        $this->assertEquals($glyph1->getFirstPoint()->getY(), $glyph2->getFirstPoint()->getY());
     }
 
     private function getGlyphMockWithFloatAndParent($x, $y, $width, $height, $float, $parent, array $methods = array())

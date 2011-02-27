@@ -4,6 +4,7 @@ use PHPPdf\Document;
 use PHPPdf\Glyph\Page;
 use PHPPdf\Glyph\PageCollection;
 use PHPPdf\Glyph\DynamicPage;
+use PHPPdf\Util\Point;
 use PHPPdf\Util\Boundary;
 
 class DynamicPageTest extends TestCase
@@ -206,10 +207,8 @@ class DynamicPageTest extends TestCase
     /**
      * @test
      */
-    public function pageBreak()
+    public function pageShouldBeBreakIfPageBreakAttributeIsUsed()
     {
-        $this->markTestIncomplete();
-
         $prototype = $this->getMock('PHPPdf\Glyph\Page', array('copy'));
         $prototype->expects($this->exactly(2))
                   ->method('copy')
@@ -218,19 +217,70 @@ class DynamicPageTest extends TestCase
         $this->invokeMethod($this->page, 'setPrototypePage', array($prototype));
 
         $container = $this->getContainerMock(array(0, 700), array(40, 600), array('getPageBreak', 'split'));
-        $container->expects($this->once())
+        $container->expects($this->atLeastOnce())
                   ->method('getPageBreak')
                   ->will($this->returnValue(false));
 
         $this->page->add($container);
 
         $container = $this->getContainerMock(array(0, 600), array(0, 600), array('getPageBreak', 'split'));
-        $container->expects($this->once())
+        $container->expects($this->atLeastOnce())
                   ->method('getPageBreak')
                   ->will($this->returnValue(true));
 
         $this->page->add($container);
 
         $this->page->getDrawingTasks(new Document());
+    }
+
+    /**
+     * @test
+     *
+     * @todo przerobić ten test, aby dotyczył glyphu który się podzielił na dwie strony, tylko że pomiędzy pierwszą częścią glyphu a końcem strony jest "luka" (np. tabela)
+     */
+    public function nextSiblingOfNotSplittableGlyphMustBeDirectlyAfterThisGlyphIfPageBreakOccurs()
+    {
+        $this->markTestIncomplete();
+
+        $diagonalPoint = Point::getInstance(100, 10);
+
+        $prototype = $this->getMock('PHPPdf\Glyph\Page', array('copy', 'getHeight', 'getDiagonalPoint'));
+        $this->page->setMarginBottom(10);
+        $prototype->expects($this->exactly(1))
+                  ->method('copy')
+                  ->will($this->returnValue($prototype));
+
+        $prototype->expects($this->atLeastOnce())
+                  ->method('getHeight')
+                  ->will($this->returnValue(100));
+
+        $prototype->expects($this->atLeastOnce())
+                  ->method('getDiagonalPoint')
+                  ->will($this->returnValue($diagonalPoint));
+
+        $this->invokeMethod($this->page, 'setPrototypePage', array($prototype));
+
+        $notSplittedContainer = $this->getContainerMock(array(0, 100), array(50, 30), array('split'));
+        $notSplittedContainer->expects($this->never())
+                             ->method('split');
+
+        $this->page->add($notSplittedContainer);
+
+        $splittedContainer = $this->getContainerMock(array(0, 30), array(50, -10), array('split'));
+        $splittedContainer->expects($this->once())
+                          ->method('split')
+                          ->will($this->returnValue(null));
+
+        $this->page->add($splittedContainer);
+
+        $nextSiblingOfSplittedContainer = $this->getContainerMock(array(0, -10), array(50, -20), array('split'));
+        $nextSiblingOfSplittedContainer->expects($this->never())
+                                       ->method('split');
+
+        $this->page->add($nextSiblingOfSplittedContainer);
+
+        $this->page->getDrawingTasks(new Document());
+
+        $this->assertEquals($splittedContainer->getDiagonalPoint()->getY(), $nextSiblingOfSplittedContainer->getFirstPoint()->getY());
     }
 }

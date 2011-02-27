@@ -101,8 +101,8 @@ class PageTest extends TestCase
         $height = $this->page->getHeight();
         $width = $this->page->getWidth();
 
-        $firstPoint = $this->page->getBoundary()->getFirstPoint();
-        $diagonalPoint = $this->page->getBoundary()->getDiagonalPoint();
+        $firstPoint = $this->page->getFirstPoint();
+        $diagonalPoint = $this->page->getDiagonalPoint();
 
         $verticalMargin = 40;
         $horizontalMargin = 20;
@@ -111,8 +111,8 @@ class PageTest extends TestCase
         $this->assertEquals($height - 2*$verticalMargin, $this->page->getHeight());
         $this->assertEquals($width - 2*$horizontalMargin, $this->page->getWidth());
 
-        $this->assertEquals($firstPoint->translate(20, 40), $this->page->getBoundary()->getFirstPoint());
-        $this->assertEquals($diagonalPoint->translate(-20, -40), $this->page->getBoundary()->getDiagonalPoint());
+        $this->assertEquals($firstPoint->translate(20, 40), $this->page->getFirstPoint());
+        $this->assertEquals($diagonalPoint->translate(-20, -40), $this->page->getDiagonalPoint());
     }
     
     /**

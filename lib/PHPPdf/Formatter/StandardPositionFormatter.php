@@ -44,8 +44,8 @@ class StandardPositionFormatter extends BaseFormatter
 
         if($previousSibling)
         {
-            list($siblingEndX, $siblingEndY) = $previousSibling->getBoundary()->getDiagonalPoint()->toArray();
-            list($siblingStartX, $siblingStartY) = $previousSibling->getBoundary()->getFirstPoint()->toArray();
+            list($siblingEndX, $siblingEndY) = $previousSibling->getDiagonalPoint()->toArray();
+            list($siblingStartX, $siblingStartY) = $previousSibling->getFirstPoint()->toArray();
 
             if($this->isGlyphInSameRowAsPreviousSibling($glyph, $previousSibling))
             {

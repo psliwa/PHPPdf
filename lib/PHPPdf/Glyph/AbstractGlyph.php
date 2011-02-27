@@ -27,7 +27,7 @@ abstract class AbstractGlyph implements Glyph, \ArrayAccess
     const ALIGN_RIGHT = 'right';
     const ALIGN_CENTER = 'center';
 
-    private $attributes = array();
+    protected $attributes = array();
     private $attributesSnapshot = null;
 
     private $parent = null;
@@ -83,6 +83,28 @@ abstract class AbstractGlyph implements Glyph, \ArrayAccess
     protected function setBoundary(Boundary $boundary)
     {
         $this->boundary = $boundary;
+    }
+
+    /**
+     * Get point of left upper corner of this glyph or null if boundaries have not been
+     * calculated yet.
+     *
+     * @return PHPPdf\Util\Point
+     */
+    public function getFirstPoint()
+    {
+        return $this->getBoundary()->getFirstPoint();
+    }
+
+    /**
+     * Get point of right bottom corner of this glyph or null if boundaries have not been
+     * calculated yet.
+     *
+     * @return PHPPdf\Util\Point
+     */
+    public function getDiagonalPoint()
+    {
+        return $this->getBoundary()->getDiagonalPoint();
     }
 
     public function setParent(Container $glyph)
@@ -608,7 +630,7 @@ abstract class AbstractGlyph implements Glyph, \ArrayAccess
 
     public function getStartDrawingPoint()
     {
-        list($x, $y) = $this->getBoundary()->getFirstPoint()->toArray();
+        list($x, $y) = $this->getFirstPoint()->toArray();
 
         return array($x + $this->getPaddingLeft(), $y - $this->getPaddingTop());
     }
@@ -625,7 +647,7 @@ abstract class AbstractGlyph implements Glyph, \ArrayAccess
 
     public function getEndDrawingPoint()
     {
-        list($x, $y) = $this->getBoundary()->getDiagonalPoint()->toArray();
+        list($x, $y) = $this->getDiagonalPoint()->toArray();
 
         return array($x - $this->getPaddingRight(), $y + $this->getPaddingBottom());
     }

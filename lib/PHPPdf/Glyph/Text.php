@@ -164,9 +164,9 @@ class Text extends AbstractGlyph
             $clone->setLineSizes(\array_values($lineSizesForClone));
             $clone->setWordsInRows(\array_values($wordsInRowsForClone));
 
-            $startDrawingPoint = $this->getBoundary()->getFirstPoint();
+            $startDrawingPoint = $this->getFirstPoint();
             $this->reorganize($startDrawingPoint);
-            $endDrawingPoint = $this->getBoundary()->getDiagonalPoint();
+            $endDrawingPoint = $this->getDiagonalPoint();
             $clone->reorganize($endDrawingPoint->translate(-$this->getWidth(), $height - count($wordsInRows)*$lineHeight));
         }
 

@@ -1,6 +1,7 @@
 <?php
 
 use PHPPdf\Document;
+use PHPPdf\Util\Point;
 use PHPPdf\Glyph\AbstractGlyph;
 use PHPPdf\Glyph\Container;
 
@@ -23,7 +24,7 @@ class StubComposeGlyph extends Container
 {
 }
 
-class AbstractGlyphTest extends PHPUnit_Framework_TestCase
+class AbstractGlyphTest extends TestCase
 {
     private $glyph;
 
@@ -344,5 +345,27 @@ class AbstractGlyphTest extends PHPUnit_Framework_TestCase
     public function throwExceptionIfNotExistedPlaceholderIsSet()
     {
         $this->glyph->setPlaceholder('name', $this->getMock('PHPPdf\Glyph\Container'));
+    }
+
+    /**
+     * @test
+     */
+    public function gettingBoundaryPoints()
+    {
+        $boundary = $this->getMock('PHPPdf\Util\Boundary', array('getFirstPoint', 'getDiagonalPoint'));
+        $boundary->expects($this->once())
+                 ->id('first-point')
+                 ->method('getFirstPoint')
+                 ->will($this->returnValue(Point::getInstance(10, 10)));
+
+        $boundary->expects($this->once())
+                 ->after('first-point')
+                 ->method('getDiagonalPoint')
+                 ->will($this->returnValue(Point::getInstance(20, 20)));
+
+        $this->invokeMethod($this->glyph, 'setBoundary', array($boundary));
+
+        $this->assertTrue($this->glyph->getFirstPoint() === Point::getInstance(10, 10));
+        $this->assertTrue($this->glyph->getDiagonalPoint() === Point::getInstance(20, 20));
     }
 }

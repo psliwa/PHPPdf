@@ -36,7 +36,7 @@ class FloatFormatter extends BaseFormatter
                     $previousSibling = $child->getPreviousSibling();
                     if($previousSibling)
                     {
-                        $y = $previousSibling->getBoundary()->getDiagonalPoint()->getY() - $previousSibling->getMarginBottom() - $child->getMarginTop() - $child->getPaddingTop();
+                        $y = $previousSibling->getDiagonalPoint()->getY() - $previousSibling->getMarginBottom() - $child->getMarginTop() - $child->getPaddingTop();
                     }
                 }
 
@@ -50,7 +50,7 @@ class FloatFormatter extends BaseFormatter
                 $previousSibling = $child->getPreviousSibling();
                 if($previousSibling)
                 {
-                    $siblingY = $previousSibling->getBoundary()->getDiagonalPoint()->getY();
+                    $siblingY = $previousSibling->getDiagonalPoint()->getY();
                     $translateY = -($siblingY - $y - $previousSibling->getMarginBottom() - $child->getMarginTop() - $child->getPaddingTop());
                     if($child->getDisplay() === AbstractGlyph::DISPLAY_INLINE)
                     {
@@ -64,7 +64,7 @@ class FloatFormatter extends BaseFormatter
                 $child->translate($translateX, $translateY);
             }
 
-            $childBottomYCoord = $child->getBoundary()->getDiagonalPoint()->getY() - $child->getMarginBottom();
+            $childBottomYCoord = $child->getDiagonalPoint()->getY() - $child->getMarginBottom();
             if($parentBottomYCoord === null || $childBottomYCoord < $parentBottomYCoord)
             {
                 $parentBottomYCoord = $childBottomYCoord;
@@ -78,7 +78,7 @@ class FloatFormatter extends BaseFormatter
 
         if($positionCorrection && $parentBottomYCoord && !$glyph->getAttribute('static-size'))
         {
-            $parentTranslate = $glyph->getBoundary()->getDiagonalPoint()->getY() - $parentBottomYCoord;
+            $parentTranslate = $glyph->getDiagonalPoint()->getY() - $parentBottomYCoord;
             $newHeight = $glyph->getHeight() + $parentTranslate;
             $oldHeight = isset($attributesSnapshot['height']) ? $attributesSnapshot['height'] : 0;
 
@@ -128,16 +128,16 @@ class FloatFormatter extends BaseFormatter
             $originalPreferredXCoord = $preferredXCoord;
             if($glyph->getFloat() === AbstractGlyph::FLOAT_LEFT)
             {
-                $preferredXCoord = $sibling->getBoundary()->getDiagonalPoint()->getX() + $sibling->getMarginRight() + $glyph->getMarginLeft() + $glyph->getPaddingLeft();
+                $preferredXCoord = $sibling->getDiagonalPoint()->getX() + $sibling->getMarginRight() + $glyph->getMarginLeft() + $glyph->getPaddingLeft();
             }
             else
             {
-                $preferredXCoord = $sibling->getBoundary()->getFirstPoint()->getX() - $sibling->getMarginLeft() - $glyph->getMarginRight() - $glyph->getWidth() - $glyph->getPaddingRight() ;
+                $preferredXCoord = $sibling->getFirstPoint()->getX() - $sibling->getMarginLeft() - $glyph->getMarginRight() - $glyph->getWidth() - $glyph->getPaddingRight() ;
             }
 
             list(,$preferredYCoord) = $sibling->getStartDrawingPoint();
 
-            if($preferredXCoord < $parent->getBoundary()->getFirstPoint()->getX() || ($preferredXCoord + $glyph->getWidth()) > $parent->getBoundary()->getDiagonalPoint()->getX())
+            if($preferredXCoord < $parent->getFirstPoint()->getX() || ($preferredXCoord + $glyph->getWidth()) > $parent->getDiagonalPoint()->getX())
             {
                 $overflowed = true;
             }
@@ -163,7 +163,7 @@ class FloatFormatter extends BaseFormatter
 
             if($overflowed)
             {
-                $preferredYCoord = $sibling->getBoundary()->getDiagonalPoint()->getY() - ($sibling->getMarginBottom() + $glyph->getMarginTop());
+                $preferredYCoord = $sibling->getDiagonalPoint()->getY() - ($sibling->getMarginBottom() + $glyph->getMarginTop());
                 $preferredXCoord = $this->correctXCoordWithParent($glyph, $sibling);
             }
         }
@@ -185,11 +185,11 @@ class FloatFormatter extends BaseFormatter
         $parent = $glyph->getParent();
         if($glyph->getFloat() === AbstractGlyph::FLOAT_LEFT)
         {
-            $preferredXCoord = $parent->getBoundary()->getFirstPoint()->getX() + $parent->getPaddingLeft() + $glyph->getMarginLeft() + $glyph->getPaddingLeft();
+            $preferredXCoord = $parent->getFirstPoint()->getX() + $parent->getPaddingLeft() + $glyph->getMarginLeft() + $glyph->getPaddingLeft();
         }
         else
         {
-            $preferredXCoord = $parent->getBoundary()->getDiagonalPoint()->getX() - $glyph->getWidth() + $glyph->getPaddingLeft();
+            $preferredXCoord = $parent->getDiagonalPoint()->getX() - $glyph->getWidth() + $glyph->getPaddingLeft();
         }
 
         return $preferredXCoord;
