@@ -52,7 +52,7 @@ class FloatFormatter extends BaseFormatter
                 {
                     $siblingY = $previousSibling->getDiagonalPoint()->getY();
                     $translateY = -($siblingY - $y - $previousSibling->getMarginBottom() - $child->getMarginTop() - $child->getPaddingTop());
-                    if($child->getDisplay() === AbstractGlyph::DISPLAY_INLINE)
+                    if($child->getDisplay() === AbstractGlyph::DISPLAY_INLINE && $previousSibling->getDisplay() === AbstractGlyph::DISPLAY_INLINE)
                     {
                         $translateY -= $child instanceof Text ? $child->getLineHeight() : $child->getHeight();
                     }

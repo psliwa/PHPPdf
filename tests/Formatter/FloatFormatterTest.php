@@ -21,79 +21,48 @@ class FloatFormatterTest extends PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function leftFloatPositionCorrection()
+    public function correctGlyphsPositionIfHasFloatSetToLeft()
     {
-        $glyph1 = $this->getGlyphMock(0, 700, 300, 300);
-        $glyph2 = $this->getGlyphMock(0, 400, 200, 200);
+        $containers = $this->createContainerWithFloatingChildren(
+                array(0, 700, 700, 700),
+                array(0, 700, 300, 300), 'left',
+                array(0, 400, 200, 200), 'left'
+        );
 
-        $glyph1->setFloat('left');
-        $glyph2->setFloat('left');
+        $this->formatter->preFormat($containers[0]);
+        $this->formatter->postFormat($containers[0]);
 
-        $page = new Page(array('page-size' => '700:700:'));
-        $page->add($glyph1)
-             ->add($glyph2);
-
-        $this->formatter->preFormat($page);
-        $this->formatter->postFormat($page);
-
-        $this->assertEquals(array(300, 700), $glyph2->getStartDrawingPoint());
-        $this->assertEquals(array(500, 500), $glyph2->getEndDrawingPoint());
+        $this->assertEquals(array(300, 700), $containers[2]->getStartDrawingPoint());
+        $this->assertEquals(array(500, 500), $containers[2]->getEndDrawingPoint());
     }
 
-    /**
-     * @test
-     */
-    public function rightFloatPositionCorrection()
+    private function createContainerWithFloatingChildren()
     {
-        $glyph1 = $this->getGlyphMock(0, 500, 300, 300);
-        $glyph2 = $this->getGlyphMock(0, 200, 200, 200);
-
-        $glyph1->setFloat('left');
-        $glyph2->setFloat('right');
+        $args = func_get_args();
+        $numArgs = func_num_args();
         
-        $page = new Page(array('page-size' => '700:500:'));
-        $page->add($glyph1)
-             ->add($glyph2);
+        $container = $this->getGlyphMock($args[0][0], $args[0][1], $args[0][2], $args[0][3], array('getChildren'));
 
-        $this->formatter->preFormat($page);
-        $this->formatter->postFormat($page);
+        $children = array();
 
-        $this->assertEquals(array(500, 500), $glyph2->getStartDrawingPoint());
-        $this->assertEquals(array(700, 300), $glyph2->getEndDrawingPoint());
+        for($i=1; $i<$numArgs; $i+=2)
+        {
+            $children[] = $this->getGlyphMockWithFloatAndParent($args[$i][0], $args[$i][1], $args[$i][2], $args[$i][3], $args[$i+1], $container);
+
+        }
+
+        $container->expects($this->atLeastOnce())
+                  ->method('getChildren')
+                  ->will($this->returnValue($children));
+        
+        return array_merge(array($container), $children);
     }
 
-    /**
-     * @test
-     */
-    public function noneFloatPositionCorrection()
-    {
-        $glyph1 = $this->getGlyphMock(0, 700, 300, 300);
-        $glyph2 = $this->getGlyphMock(0, 400, 200, 200);
-        $glyph3 = $this->getGlyphMock(0, 200, 100, 100);
 
-        $glyph1->setFloat('left');
-        $glyph2->setFloat('right');
-        $glyph3->setFloat('none');
-
-        $page = new Page(array('page-size' => '700:700:'));
-        $page->add($glyph1)
-             ->add($glyph2)
-             ->add($glyph3);
-
-
-        $this->formatter->preFormat($page);
-        $this->formatter->postFormat($page);
-
-        $this->assertEquals(array(500, 700), $glyph2->getStartDrawingPoint());
-        $this->assertEquals(array(700, 500), $glyph2->getEndDrawingPoint());
-
-        $this->assertEquals(array(0, 500), $glyph3->getStartDrawingPoint());
-    }
-
-    private function getGlyphMock($x, $y, $width, $height, array $methods = array(), $boundaryAtLeastOnce = true)
+    private function getGlyphMock($x, $y, $width, $height, array $methods = array(), $boundaryAtLeastOnce = true, $class = 'PHPPdf\Glyph\Container')
     {
         $methods = array_merge(array('getBoundary', 'getHeight', 'getWidth'), $methods);
-        $mock = $this->getMock('PHPPdf\Glyph\Container', $methods);
+        $mock = $this->getMock($class, $methods);
 
         $boundary = new Boundary();
         $boundary->setNext($x, $y)
@@ -120,45 +89,60 @@ class FloatFormatterTest extends PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function parentDimensionCorrectionWithFloatInFewRows()
+    public function correctGlyphPositionIfHasFloatSetToRight()
     {
-        $container = $this->getGlyphMock(0, 500, 500, 100, array('getChildren', 'getParent'));
+        $containers = $this->createContainerWithFloatingChildren(
+                array(0, 700, 700, 700),
+                array(0, 500, 300, 300), 'left',
+                array(0, 200, 200, 200), 'right'
+        );
 
-        $children = array();
-        $glyph = $this->getGlyphMock(0, 500, 20, 20, array('getParent'));
-        $glyph->setFloat('left');
-        $children[] = $glyph;
-        
-        $glyph = $this->getGlyphMock(0, 480, 20, 20, array('getParent'));
-        $glyph->setFloat('left');
-        $children[] = $glyph;
+        $this->formatter->preFormat($containers[0]);
+        $this->formatter->postFormat($containers[0]);
 
-        $glyph = $this->getGlyphMock(0, 460, 20, 20, array('getParent'));
-        $children[] = $glyph;
+        $this->assertEquals(array(500, 500), $containers[2]->getStartDrawingPoint());
+        $this->assertEquals(array(700, 300), $containers[2]->getEndDrawingPoint());
+    }
 
-        $glyph = $this->getGlyphMock(0, 440, 20, 20, array('getParent'));
-        $glyph->setFloat('left');
-        $children[] = $glyph;
+    /**
+     * @test
+     */
+    public function correctGlyphsPositionWithNoFloatIfPreviousSiblingsHaveFloat()
+    {
+        $containers = $this->createContainerWithFloatingChildren(
+                array(0, 700, 700, 700),
+                array(0, 700, 300, 300), 'left',
+                array(0, 400, 200, 200), 'right',
+                array(0, 200, 100, 100), 'none'
+        );
 
-        $glyph = $this->getGlyphMock(0, 420, 20, 20, array('getParent'));
-        $glyph->setFloat('left');
-        $children[] = $glyph;
+        $this->formatter->preFormat($containers[0]);
+        $this->formatter->postFormat($containers[0]);
 
-        foreach($children as $child)
-        {
-            $child->expects($this->atLeastOnce())
-                  ->method('getParent')
-                  ->will($this->returnValue($container));
-        }
+        $this->assertEquals(array(500, 700), $containers[2]->getStartDrawingPoint());
+        $this->assertEquals(array(700, 500), $containers[2]->getEndDrawingPoint());
 
-        $container->expects($this->atLeastOnce())
-                  ->method('getChildren')
-                  ->will($this->returnValue($children));
+        $this->assertEquals(array(0, 500), $containers[3]->getStartDrawingPoint());
+    }
 
-        $this->formatter->preFormat($container);
-        $this->formatter->postFormat($container);
+    /**
+     * @test
+     */
+    public function correctParentDimensionIfHaveSomeFloatingChildrenInFewRows()
+    {
+        $containers = $this->createContainerWithFloatingChildren(
+                array(0, 500, 500, 100),
+                array(0, 500, 20, 20), 'left',
+                array(0, 480, 20, 20), 'left',
+                array(0, 460, 20, 20), 'none',
+                array(0, 440, 20, 20), 'left',
+                array(0, 420, 20, 20), 'left'
+        );
 
-        $boundary = $container->getBoundary();
+        $this->formatter->preFormat($containers[0]);
+        $this->formatter->postFormat($containers[0]);
+
+        $boundary = $containers[0]->getBoundary();
 
         $this->assertEquals(array(0, 500), $boundary[0]->toArray());
         $this->assertEquals(array(500, 500), $boundary[1]->toArray());
@@ -171,32 +155,16 @@ class FloatFormatterTest extends PHPUnit_Framework_TestCase
      */
     public function parentOverflowWhileFloating($float)
     {
-        $container = $this->getGlyphMock(0, 500, 100, 40, array('getChildren', 'getParent'));
+        $containers = $this->createContainerWithFloatingChildren(
+                array(0, 500, 100, 40),
+                array(0, 500, 80, 20), $float,
+                array(0, 480, 80, 20), $float
+        );
 
-        $children = array();
-        $glyph = $this->getGlyphMock(0, 500, 80, 20, array('getParent'));
-        $glyph->setFloat($float);
-        $children[] = $glyph;
-        
-        $glyph = $this->getGlyphMock(0, 480, 80, 20, array('getParent'));
-        $glyph->setFloat($float);
-        $children[] = $glyph;
+        $this->formatter->preFormat($containers[0]);
+        $this->formatter->postFormat($containers[0]);
 
-        foreach($children as $child)
-        {
-            $child->expects($this->atLeastOnce())
-                  ->method('getParent')
-                  ->will($this->returnValue($container));
-        }
-        
-        $container->expects($this->atLeastOnce())
-                  ->method('getChildren')
-                  ->will($this->returnValue($children));
-
-        $this->formatter->preFormat($container);
-        $this->formatter->postFormat($container);
-
-        $boundary = $container->getBoundary();
+        $boundary = $containers[0]->getBoundary();
         $this->assertEquals(array(0, 500), $boundary[0]->toArray());
         $this->assertEquals(array(100, 460), $boundary[2]->toArray());
     }
@@ -212,29 +180,24 @@ class FloatFormatterTest extends PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function glyphsWithVerticalPaddings()
+    public function glyphsHaveEqualTopYCoordEvenIfHaveHeightIsDifferent()
     {
-        $container = $this->getGlyphMock(0, 500, 100, 40, array('getChildren', 'getParent'));
+        $containers = $this->createContainerWithFloatingChildren(
+                array(0, 500, 100, 40),
+                array(0, 500, 80, 20), 'left',
+                array(0, 480, 80, 20), 'right'
+        );
 
-        $children = array();
-        $glyph1 = $this->getGlyphMockWithFloatAndParent(0, 500, 80, 20, 'left', $container);
-        $glyph1->setPaddingTop(7);
-        $glyph1->setMarginBottom(15);
-        $children[] = $glyph1;
+        $containers[1]->setPaddingTop(7);
+        $containers[1]->setMarginBottom(15);
 
-        $glyph2 = $this->getGlyphMockWithFloatAndParent(0, 480, 80, 20, 'right', $container);
-        $glyph2->setPaddingTop(10);
-        $glyph2->setMarginBottom(15);
-        $children[] = $glyph2;
+        $containers[2]->setPaddingTop(10);
+        $containers[2]->setMarginBottom(15);
 
-        $container->expects($this->atLeastOnce())
-                  ->method('getChildren')
-                  ->will($this->returnValue($children));
+        $this->formatter->preFormat($containers[0]);
+        $this->formatter->postFormat($containers[0]);
 
-        $this->formatter->preFormat($container);
-        $this->formatter->postFormat($container);
-
-        $this->assertEquals($glyph1->getFirstPoint()->getY(), $glyph2->getFirstPoint()->getY());
+        $this->assertEquals($containers[1]->getFirstPoint()->getY(), $containers[2]->getFirstPoint()->getY());
     }
 
     private function getGlyphMockWithFloatAndParent($x, $y, $width, $height, $float, $parent, array $methods = array())
@@ -257,21 +220,19 @@ class FloatFormatterTest extends PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function rightFloatingWithRightPadding()
+    public function correctGlyphsPositionWithRightFloatIfRightPaddingIsSet()
     {
-        $container = $this->getGlyphMock(0, 500, 100, 40, array('getChildren', 'getParent'));
+        $containers = $this->createContainerWithFloatingChildren(
+                array(0, 500, 100, 40),
+                array(0, 500, 80, 20), 'right'
+        );
 
-        $glyph = $this->getGlyphMockWithFloatAndParent(0, 500, 80, 20, 'right', $container);
-        $glyph->setPaddingRight(20);
+        $containers[1]->setPaddingRight(20);
 
-        $container->expects($this->atLeastOnce())
-                  ->method('getChildren')
-                  ->will($this->returnValue(array($glyph)));
+        $this->formatter->preFormat($containers[0]);
+        $this->formatter->postFormat($containers[0]);
 
-        $this->formatter->preFormat($container);
-        $this->formatter->postFormat($container);
-
-        $this->assertEquals($container->getBoundary()->getDiagonalPoint()->getX(), $glyph->getBoundary()->getDiagonalPoint()->getX());
+        $this->assertEquals($containers[0]->getBoundary()->getDiagonalPoint()->getX(), $containers[1]->getBoundary()->getDiagonalPoint()->getX());
     }
 
     /**
