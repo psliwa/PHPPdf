@@ -1,8 +1,8 @@
 <?php
 
-use PHPPdf\Util\Cache;
+use PHPPdf\Cache\CacheImpl;
 
-class CacheTest extends TestCase
+class CacheImplTest extends TestCase
 {
     private $engineMock;
 
@@ -17,7 +17,7 @@ class CacheTest extends TestCase
      */
     public function throwExceptionIfPassedCacheEngineIsUnavailable()
     {
-        new Cache('Unexisted-cache-engine');
+        new CacheImpl('Unexisted-cache-engine');
     }
 
     /**
@@ -34,7 +34,7 @@ class CacheTest extends TestCase
                                     ->will($this->returnValue($returnValue));
         call_user_func_array(array($matcher, 'with'), $args);
 
-        $cache = new Cache();
+        $cache = new CacheImpl();
         $this->invokeMethod($cache, 'setBackend', array($this->engineMock));
 
         $this->assertEquals($returnValue, call_user_func_array(array($cache, $method), $args));
@@ -71,7 +71,7 @@ class CacheTest extends TestCase
                          ->method($operation)
                          ->will($this->throwException($e));
 
-        $cache = new Cache();
+        $cache = new CacheImpl();
         $this->invokeMethod($cache, 'setBackend', array($this->engineMock));
 
         $cache->load('id');

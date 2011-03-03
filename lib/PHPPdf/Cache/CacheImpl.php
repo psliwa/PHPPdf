@@ -1,13 +1,13 @@
 <?php
 
-namespace PHPPdf\Util;
+namespace PHPPdf\Cache;
 
 use PHPPdf\Exception\Exception;
 
 /**
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
-class Cache
+class CacheImpl
 {
     /**
      * @var Zend_Cache_Core
