@@ -7,7 +7,7 @@ namespace PHPPdf\Util;
  *
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
-abstract class Bag implements \Countable
+abstract class Bag implements \Countable, \Serializable
 {
     private $elements = array();
 
@@ -70,5 +70,15 @@ abstract class Bag implements \Countable
         }
 
         return $mergedBag;
+    }
+
+    public function serialize()
+    {
+        return serialize($this->elements);
+    }
+
+    public function unserialize($serialized)
+    {
+        $this->elements = \unserialize($serialized);
     }
 }

@@ -14,7 +14,7 @@ use PHPPdf\Document,
  *
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
-abstract class AbstractGlyph implements Glyph, \ArrayAccess
+abstract class AbstractGlyph implements Glyph, \ArrayAccess, \Serializable
 {
     const DISPLAY_BLOCK = 'block';
     const DISPLAY_INLINE = 'inline';
@@ -828,6 +828,25 @@ abstract class AbstractGlyph implements Glyph, \ArrayAccess
     public function setPlaceholder($name, Glyph $placeholder)
     {
         throw new \InvalidArgumentException(sprintf('Placeholder "%s" is not supported by class "%s".', $name, get_class($this)));
+    }
+
+    public function serialize()
+    {
+        $data = array(
+            'attributes' => $this->attributes,
+            'enhancementBag' => $this->enhancementBag,
+        );
+
+        return serialize($data);
+    }
+
+    public function unserialize($serialized)
+    {
+        $data = unserialize($serialized);
+
+        $this->attributes = $data['attributes'];
+        $this->enhancementBag = $data['enhancementBag'];
+        $this->boundary = new Boundary();
     }
 
     public function __toString()

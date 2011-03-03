@@ -368,4 +368,34 @@ class AbstractGlyphTest extends TestCase
         $this->assertTrue($this->glyph->getFirstPoint() === Point::getInstance(10, 10));
         $this->assertTrue($this->glyph->getDiagonalPoint() === Point::getInstance(20, 20));
     }
+
+    /**
+     * @test
+     */
+    public function serializeWithoutParentAndBoundary()
+    {
+        $parent = new StubComposeGlyph();
+        $this->glyph->setParent($parent);
+
+        $this->glyph->getBoundary()->setNext(10, 10);
+
+        $glyph = unserialize(serialize($this->glyph));
+
+        $this->assertNull($glyph->getParent());
+        $this->assertEquals(0, $glyph->getBoundary()->count());
+    }
+
+    /**
+     * @test
+     */
+    public function serializeWithAttributesAndEnhancementBag()
+    {
+        $this->glyph->mergeEnhancementAttributes('some-enhancement', array('attribute' => 'value'));
+        $this->glyph->setAttribute('display', 'inline');
+
+        $glyph = unserialize(serialize($this->glyph));
+
+        $this->assertEquals($this->glyph->getEnhancementsAttributes(), $glyph->getEnhancementsAttributes());
+        $this->assertEquals($this->glyph->getAttribute('display'), $glyph->getAttribute('display'));
+    }
 }
