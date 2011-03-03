@@ -55,7 +55,7 @@ class Facade
 
     private function loadFile($file)
     {
-        return \file_get_contents($file);
+        return \PHPPdf\Util\DataSource::fromFile($file)->read();
     }
 
     private function loadEnhancements($file)
