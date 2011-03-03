@@ -7,7 +7,7 @@ use PHPPdf\Exception\Exception;
 /**
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
-class CacheImpl
+class CacheImpl implements Cache
 {
     /**
      * @var Zend_Cache_Core
