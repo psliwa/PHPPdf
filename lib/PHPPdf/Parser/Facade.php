@@ -7,6 +7,8 @@ use PHPPdf\Parser\DocumentParser,
     PHPPdf\Parser\StylesheetParser,
     PHPPdf\Parser\EnhancementFactoryParser,
     PHPPdf\Parser\FontRegistryParser,
+    PHPPdf\Cache\Cache,
+    PHPPdf\Cache\NullCache,
     PHPPdf\Parser\GlyphFactoryParser;
 
 /**
@@ -19,6 +21,7 @@ class Facade
     private $documentParser;
     private $stylesheetParser;
     private $document;
+    private $cache;
 
     public function __construct(FacadeParameters $facadeParameters = null)
     {
@@ -27,11 +30,17 @@ class Facade
             $facadeParameters = FacadeParameters::newInstance();
         }
 
+        $this->setCache(NullCache::getInstance());
         $this->setDocumentParser(new DocumentParser());
         $this->setStylesheetParser(new StylesheetParser());
         $this->setDocument(new Document());
 
         $this->load($facadeParameters->getGlyphsConfigFile(), $facadeParameters->getEnhancementsConfigFile(), $facadeParameters->getFontsConfigFile(), $facadeParameters->getFormattersConfigFile());
+    }
+
+    public function setCache(Cache $cache)
+    {
+        $this->cache = $cache;
     }
 
     private function load($glyphFactoryConfigFile, $enhancementFactoryConfigFile, $fontRegistryConfigFile, $formattersConfigFile)
