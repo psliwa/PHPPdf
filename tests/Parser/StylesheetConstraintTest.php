@@ -181,4 +181,40 @@ class StylesheetConstraintTest extends PHPUnit_Framework_TestCase
         $this->constraint->setTag($tag);
         $this->assertEquals($tag, $this->constraint->getTag());
     }
+
+    /**
+     * @test
+     */
+    public function unserializedConstraintIsCopyOfSerializedConstraint()
+    {
+        $this->constraint->setTag('some-tag');
+        $this->constraint->addWeight(5);
+        $this->constraint->getAttributeBag()->add('someName', 'someValue');
+        $this->constraint->getEnhancementBag()->add('someName', array('someKey' => 'someValue'));
+        $this->constraint->addClass('some-class');
+
+        $childConstraint = new StylesheetConstraint();
+        $childConstraint->getAttributeBag()->add('someName', 'someValue');
+        $childConstraint->setTag('some-tag');
+        $this->constraint->addConstraint('some-constraint', $childConstraint);
+
+        $unserializedConstraint = unserialize(serialize($this->constraint));
+
+        $this->assertStylesheetConstraintEquals($this->constraint, $unserializedConstraint);
+    }
+
+    private function assertStylesheetConstraintEquals(StylesheetConstraint $expected, StylesheetConstraint $actual)
+    {
+        $this->assertEquals($expected->getTag(), $actual->getTag());
+        $this->assertEquals($expected->getWeight(), $actual->getWeight());
+        $this->assertEquals($expected->getAttributeBag()->getAll(), $actual->getAttributeBag()->getAll());
+        $this->assertEquals($expected->getEnhancementBag()->getAll(), $actual->getEnhancementBag()->getAll());
+        $this->assertEquals($expected->getClasses(), $actual->getClasses());
+
+        $actualConstraintChildren = $actual->getConstraints();
+        foreach($expected->getConstraints() as $name => $constraint)
+        {
+            $this->assertStylesheetConstraintEquals($constraint, $actualConstraintChildren[$name]);
+        }
+    }
 }

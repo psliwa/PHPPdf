@@ -10,11 +10,11 @@ use PHPPdf\Enhancement\EnhancementBag,
  *
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
-class BagContainer
+class BagContainer implements \Serializable
 {
-    private $attributeBag;
-    private $enhancementBag;
-    private $weight;
+    protected $attributeBag;
+    protected $enhancementBag;
+    protected $weight;
 
     public function __construct(AttributeBag $attributeBag = null, EnhancementBag $enhancementBag = null, $weight = 0)
     {
@@ -67,6 +67,24 @@ class BagContainer
     public function addWeight($weight)
     {
         $this->weight += $weight;
+    }
+
+    public function serialize()
+    {
+        return serialize(array(
+            'attributes' => $this->getAttributeBag()->getAll(),
+            'enhancements' => $this->getEnhancementBag()->getAll(),
+            'weight' => $this->weight,
+        ));
+    }
+
+    public function unserialize($serialized)
+    {
+        $data = unserialize($serialized);
+
+        $this->attributeBag = new AttributeBag($data['attributes']);
+        $this->enhancementBag = new EnhancementBag($data['enhancements']);
+        $this->weight = $data['weight'];
     }
 
     /**

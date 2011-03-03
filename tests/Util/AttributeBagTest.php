@@ -67,4 +67,17 @@ class AttributeBagTest extends PHPUnit_Framework_TestCase
 
         $this->assertEquals($expected, $bag->getAll());
     }
+
+    /**
+     * @test
+     */
+    public function unserializeBagsSerializationFormIsCopyOfThisBag()
+    {
+        $this->bag->add('someAttribute1', 'someValue1');
+        $this->bag->add('someAttribute2', 'someValue2');
+
+        $unserializedBag = unserialize(serialize($this->bag));
+
+        $this->assertEquals($this->bag->getAll(), $unserializedBag->getAll());
+    }
 }

@@ -2,6 +2,9 @@
 
 namespace PHPPdf\Parser;
 
+use PHPPdf\Util\AttributeBag,
+    PHPPdf\Enhancement\EnhancementBag;
+
 /**
  * Constraints encapsulate Attribute and Enhancement Bag in tree structure.
  *
@@ -158,5 +161,37 @@ class StylesheetConstraint extends BagContainer implements \Countable
         }
 
         return $matchingIndex;
+    }
+
+    public function serialize()
+    {
+        return serialize(array(
+            'attributes' => $this->getAttributeBag()->getAll(),
+            'enhancements' => $this->getEnhancementBag()->getAll(),
+            'weight' => $this->weight,
+            'tag' => $this->tag,
+            'classes' => $this->getClasses(),
+            'constraints' => $this->constraints,
+        ));
+    }
+
+    public function unserialize($serialized)
+    {
+        $data = unserialize($serialized);
+
+        $this->attributeBag = new AttributeBag($data['attributes']);
+        $this->enhancementBag = new EnhancementBag($data['enhancements']);
+        $this->weight = (int) $data['weight'];
+        $this->setTag($data['tag']);
+        
+        foreach((array) $data['classes'] as $class)
+        {
+            $this->addClass($class);
+        }
+
+        foreach((array) $data['constraints'] as $constraint)
+        {
+            $this->addConstraint($constraint->getTag(), $constraint);
+        }
     }
 }

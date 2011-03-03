@@ -31,7 +31,7 @@ class BagContainerTest extends PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function merge()
+    public function mergeSeveralBagsIntoOne()
     {
         $attributeBag1 = $this->getAttributeBagMock(array(
             'someName1' => 'someValue1',
@@ -64,5 +64,24 @@ class BagContainerTest extends PHPUnit_Framework_TestCase
              ->will($this->returnValue($attributes));
 
         return $mock;
+    }
+
+    /**
+     * @test
+     */
+    public function unserializedBagIsCopyOfSerializedBag()
+    {
+        $attributeBag = new AttributeBag();
+        $attributeBag->add('someName', 'someValue');
+
+        $enhancementBag = new EnhancementBag();
+        $enhancementBag->add('someName', array('someKey' => 'someValue'));
+
+        $container = new BagContainer($attributeBag, $enhancementBag);
+
+        $unserializedContainer = unserialize(serialize($container));
+
+        $this->assertEquals($container->getAttributeBag()->getAll(), $unserializedContainer->getAttributeBag()->getAll());
+        $this->assertEquals($container->getEnhancementBag()->getAll(), $unserializedContainer->getEnhancementBag()->getAll());
     }
 }
