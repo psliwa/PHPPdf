@@ -1,6 +1,7 @@
 <?php
 
 use PHPPdf\Font\Registry,
+    PHPPdf\Font\ResourceWrapper,
     PHPPdf\Font\Font;
 
 class FontRegistryTest extends PHPUnit_Framework_TestCase
@@ -20,10 +21,10 @@ class FontRegistryTest extends PHPUnit_Framework_TestCase
         $fontPath = dirname(__FILE__).'/../resources';
 
         $this->registry->register('verdana', array(
-            Font::STYLE_NORMAL => \Zend_Pdf_Font::fontWithPath($fontPath.'/verdana.ttf'),
-            Font::STYLE_BOLD => \Zend_Pdf_Font::fontWithPath($fontPath.'/verdanab.ttf'),
-            Font::STYLE_ITALIC => \Zend_Pdf_Font::fontWithPath($fontPath.'/verdanai.ttf'),
-            Font::STYLE_BOLD_ITALIC => \Zend_Pdf_Font::fontWithPath($fontPath.'/verdanaz.ttf'),
+            Font::STYLE_NORMAL => ResourceWrapper::fromFile($fontPath.'/verdana.ttf'),
+            Font::STYLE_BOLD => ResourceWrapper::fromFile($fontPath.'/verdanab.ttf'),
+            Font::STYLE_ITALIC => ResourceWrapper::fromFile($fontPath.'/verdanai.ttf'),
+            Font::STYLE_BOLD_ITALIC => ResourceWrapper::fromFile($fontPath.'/verdanaz.ttf'),
         ));
 
         $font = $this->registry->get('verdana');

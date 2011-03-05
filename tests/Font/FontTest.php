@@ -1,6 +1,7 @@
 <?php
 
-use PHPPdf\Font\Font;
+use PHPPdf\Font\Font,
+    PHPPdf\Font\ResourceWrapper;
 
 class FontTest extends PHPUnit_Framework_TestCase
 {
@@ -12,10 +13,10 @@ class FontTest extends PHPUnit_Framework_TestCase
         $fontPath = __DIR__.'/../resources';
         $this->fontPath = $fontPath;
         $this->font = new Font(array(
-            Font::STYLE_NORMAL => \Zend_Pdf_Font::fontWithPath($fontPath.'/verdana.ttf'),
-            Font::STYLE_BOLD => \Zend_Pdf_Font::fontWithPath($fontPath.'/verdanab.ttf'),
-            Font::STYLE_ITALIC => \Zend_Pdf_Font::fontWithPath($fontPath.'/verdanai.ttf'),
-            Font::STYLE_BOLD_ITALIC => \Zend_Pdf_Font::fontWithPath($fontPath.'/verdanaz.ttf'),
+            Font::STYLE_NORMAL => ResourceWrapper::fromFile($fontPath.'/verdana.ttf'),
+            Font::STYLE_BOLD => ResourceWrapper::fromFile($fontPath.'/verdanab.ttf'),
+            Font::STYLE_ITALIC => ResourceWrapper::fromFile($fontPath.'/verdanai.ttf'),
+            Font::STYLE_BOLD_ITALIC => ResourceWrapper::fromFile($fontPath.'/verdanaz.ttf'),
         ));
     }
 
@@ -94,9 +95,9 @@ class FontTest extends PHPUnit_Framework_TestCase
     public function creationWithInvalidFontTypes()
     {
         new Font(array(
-            Font::STYLE_BOLD => \Zend_Pdf_Font::fontWithPath($this->fontPath.'/verdana.ttf'),
-            Font::STYLE_NORMAL => \Zend_Pdf_Font::fontWithPath($this->fontPath.'/verdana.ttf'),
-            8 => \Zend_Pdf_Font::fontWithPath($this->fontPath.'/verdana.ttf'),
+            Font::STYLE_BOLD => ResourceWrapper::fromFile($this->fontPath.'/verdana.ttf'),
+            Font::STYLE_NORMAL => ResourceWrapper::fromFile($this->fontPath.'/verdana.ttf'),
+            8 => ResourceWrapper::fromFile($this->fontPath.'/verdana.ttf'),
         ));
     }
 
@@ -107,7 +108,7 @@ class FontTest extends PHPUnit_Framework_TestCase
     public function creationWithoutNormalFont()
     {
         new Font(array(
-            Font::STYLE_BOLD => \Zend_Pdf_Font::fontWithPath($this->fontPath.'/verdana.ttf'),
+            Font::STYLE_BOLD => ResourceWrapper::fromFile($this->fontPath.'/verdana.ttf'),
         ));
     }
 }

@@ -3,6 +3,7 @@
 namespace PHPPdf\Parser;
 
 use PHPPdf\Font\Font,
+    PHPPdf\Font\ResourceWrapper,
     PHPPdf\Parser\Exception\ParseException;
 
 class FontRegistryParser extends XmlParser
@@ -53,32 +54,31 @@ class FontRegistryParser extends XmlParser
 
     private function createFont(\XMLReader $reader, $name, $style)
     {
-        $file = $reader->getAttribute('file');
-        $type = $reader->getAttribute('type');
-
-        if($file)
+        try
         {
-            $file = str_replace('%resources%', __DIR__.'/../Resources', $reader->getAttribute('file'));
-            $font = \Zend_Pdf_Font::fontWithPath($file);
-        }
-        elseif($type)
-        {
-            $const = sprintf('\Zend_Pdf_Font::FONT_%s', str_replace('-', '_', strtoupper($type)));
+            $file = $reader->getAttribute('file');
+            $type = $reader->getAttribute('type');
 
-            if(!defined($const))
+            if($file)
             {
-                throw new ParseException(sprintf('Unrecognized font type: "%s" for font "%s: %s".', $type, $name, $style));
+                $file = str_replace('%resources%', __DIR__.'/../Resources', $reader->getAttribute('file'));
+                $font = ResourceWrapper::fromFile($file);
+            }
+            elseif($type)
+            {
+                $font = ResourceWrapper::fromName($type);
+            }
+            else
+            {
+                throw new ParseException(sprintf('File or type attribute are required in font "%s: %s" definition.', $name, $style));
             }
 
-            $fontName = constant($const);
-            $font = \Zend_Pdf_Font::fontWithName($fontName);
+            return $font;
         }
-        else
+        catch(\InvalidArgumentException $e)
         {
-            throw new ParseException(sprintf('File or type attribute are required in font "%s: %s" definition.', $name, $style));
+            throw new ParseException(sprintf('Invalid attributes for "%s".', $name), 0, $e);
         }
-
-        return $font;
     }
 
     protected function parseEndElement(\XMLReader $reader)

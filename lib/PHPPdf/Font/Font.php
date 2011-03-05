@@ -14,14 +14,14 @@ class Font
     const STYLE_ITALIC = 2;
     const STYLE_BOLD_ITALIC = 3;
 
-    private $fontPaths = array();
-    private $currentFont = null;
+    private $fontResourceWrappers = array();
+    private $currentResourceWrapper = null;
 
-    public function __construct(array $fonts)
+    public function __construct(array $fontResourceWrappers)
     {
-        $this->throwsExceptionIfFontsAreInvalid($fonts);
+        $this->throwsExceptionIfFontsAreInvalid($fontResourceWrappers);
 
-        $this->fontPaths = $fonts;
+        $this->fontResourceWrappers = $fontResourceWrappers;
         $this->setStyle(self::STYLE_NORMAL);
     }
 
@@ -62,9 +62,9 @@ class Font
 
         foreach($fonts as $type => $font)
         {
-            if(!$font instanceof \Zend_Pdf_Resource_Font)
+            if(!$font instanceof ResourceWrapper)
             {
-                throw new \InvalidArgumentException(sprintf('Font with type "%s" must be instance of "\Zend_Pdf_Resource_Font" class.', $type));
+                throw new \InvalidArgumentException(sprintf('Font with type "%s" must be instance of "ResourceWrapper" class.', $type));
             }
         }
     }
@@ -73,7 +73,7 @@ class Font
     {
         $style = $this->convertStyleType($style);
 
-        $this->currentFont = $this->createFont($style);
+        $this->currentResourceWrapper = $this->createFont($style);
     }
 
     private function convertStyleType($style)
@@ -99,16 +99,16 @@ class Font
     public function hasStyle($style)
     {
         $style = $this->convertStyleType($style);
-        return isset($this->fontPaths[$style]);
+        return isset($this->fontResourceWrappers[$style]);
     }
 
     private function createFont($style)
     {
-        $font = !$this->hasStyle($style) ? $this->fontPaths[self::STYLE_NORMAL] : $this->fontPaths[$style];
+        $font = !$this->hasStyle($style) ? $this->fontResourceWrappers[self::STYLE_NORMAL] : $this->fontResourceWrappers[$style];
 
-        if(!$font instanceof \Zend_Pdf_Resource_Font)
+        if(!$font instanceof ResourceWrapper)
         {
-            $font = \Zend_Pdf_Font::fontWithPath($font);
+            $font = ResourceWrapper::fromFile($font);
         }
 
         return $font;
@@ -116,7 +116,7 @@ class Font
 
     public function getFont()
     {
-        return $this->currentFont;
+        return $this->currentResourceWrapper->getResource();
     }
 
     public function getCharsWidth(array $chars, $fontSize)
