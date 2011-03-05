@@ -12,7 +12,7 @@ use PHPPdf\Enhancement\Exception\DefinitionNotFoundException;
  *
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
-class Factory
+class Factory implements \Serializable
 {
     private $definitions = array();
     private $constructors = array();
@@ -65,6 +65,17 @@ class Factory
         }
 
         return $this->definitions[$name];
+    }
+
+    /**
+     * Only for unit testing
+     *
+     * @internal
+     * @return array
+     */
+    private function getDefinitions()
+    {
+        return $this->definitions;
     }
 
     private function getConstructorParameters($name)
@@ -121,5 +132,20 @@ class Factory
         }
 
         return $this->classes[$name];
+    }
+
+    public function serialize()
+    {
+        return serialize($this->definitions);
+    }
+
+    public function unserialize($serialized)
+    {
+        $definitions = \unserialize($serialized);
+
+        foreach($definitions as $name => $className)
+        {
+            $this->addDefinition($name, $className);
+        }
     }
 }

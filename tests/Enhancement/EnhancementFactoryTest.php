@@ -4,7 +4,7 @@ require_once __DIR__.'/../Stub/Enhancement/EnhancementStub.php';
 
 use PHPPdf\Enhancement\Factory as EnhancementFactory;
 
-class EnhancementFactoryTest extends PHPUnit_Framework_TestCase
+class EnhancementFactoryTest extends TestCase
 {
     private $factory;
 
@@ -63,5 +63,23 @@ class EnhancementFactoryTest extends PHPUnit_Framework_TestCase
     public function throwExceptionIfDefinitionDosntFound()
     {
         $this->factory->create('stub');
+    }
+
+    /**
+     * @test
+     */
+    public function unserializedFactoryIsCopyOfSerializedFactory()
+    {
+        $this->factory->addDefinition('stub1', 'EnhancementStub');
+        $this->factory->addDefinition('stub2', 'EnhancementStub');
+        
+        $this->factory->create('stub1', array('color' => '#ffffff'));
+
+        $unserializedFactory = unserialize(serialize($this->factory));
+
+        $unserializedDefinitions = $this->invokeMethod($unserializedFactory, 'getDefinitions');
+        $definitions = $this->invokeMethod($this->factory, 'getDefinitions');
+
+        $this->assertEquals($definitions, $unserializedDefinitions);
     }
 }

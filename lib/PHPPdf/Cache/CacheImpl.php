@@ -5,6 +5,8 @@ namespace PHPPdf\Cache;
 use PHPPdf\Exception\Exception;
 
 /**
+ * Standard implementation of Cache
+ *
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
 class CacheImpl implements Cache
