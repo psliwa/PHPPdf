@@ -15,7 +15,8 @@ class FloatFormatterTest extends PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->formatter = new FloatFormatter(new Document());
+        $this->formatter = new FloatFormatter();
+        $this->formatter->setDocument(new Document());
     }
 
     /**

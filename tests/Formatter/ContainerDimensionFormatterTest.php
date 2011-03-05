@@ -12,7 +12,8 @@ class ContainerDimensionFormatterTest extends PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->formatter = new ContainerDimensionFormatter(new Document());
+        $this->formatter = new ContainerDimensionFormatter();
+        $this->formatter->setDocument(new Document());
     }
 
     /**

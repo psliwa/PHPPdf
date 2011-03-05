@@ -90,12 +90,25 @@ class DocumentTest extends PHPUnit_Framework_TestCase
 
         $this->assertTrue(count($formatters) === 0);
 
-        $formatter = $this->getMock('PHPPdf\Formatter\Formatter', array('preFormat', 'postFormat', 'getDocument'), array($this->document));
+        $formatter = $this->getMock('PHPPdf\Formatter\BaseFormatter');
 
         $this->document->addFormatter($formatter);
         $formatters = $this->document->getFormatters();
         
         $this->assertEquals(1, count($formatters));
+    }
+
+    /**
+     * @test
+     */
+    public function setDocumentForAddedFormatter()
+    {
+        $formatter = $this->getMock('PHPPdf\Formatter\BaseFormatter', array('preFormat', 'postFormat', 'getDocument', 'setDocument'));
+        $formatter->expects($this->once())
+                  ->method('setDocument')
+                  ->with($this->document);
+
+        $this->document->addFormatter($formatter);
     }
 
     /**

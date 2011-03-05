@@ -13,7 +13,8 @@ class StandardPositionFormatterTest extends PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->formatter = new StandardPositionFormatter(new Document());
+        $this->formatter = new StandardPositionFormatter();
+        $this->formatter->setDocument(new Document());
     }
 
     /**

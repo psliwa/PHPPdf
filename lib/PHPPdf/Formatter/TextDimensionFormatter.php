@@ -16,10 +16,8 @@ class TextDimensionFormatter extends BaseFormatter
 {
     private $getCharCodeCallback;
 
-    public function __construct(Document $document, $getCharCodeCallback = null)
+    public function __construct($getCharCodeCallback = null)
     {
-        parent::__construct($document);
-
         if($getCharCodeCallback !== null)
         {
             if(!is_callable($getCharCodeCallback))

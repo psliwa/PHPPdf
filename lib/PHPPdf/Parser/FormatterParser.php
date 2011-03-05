@@ -12,13 +12,6 @@ class FormatterParser extends XmlParser
     const ROOT_TAG = 'formatters';
     const FORMATTER_TAG = 'formatter';
 
-    private $document;
-
-    public function __construct(\PHPPdf\Document $document)
-    {
-        $this->document = $document;
-    }
-
     protected function createRoot()
     {
         return array();
@@ -54,7 +47,7 @@ class FormatterParser extends XmlParser
             throw new ParseException(sprintf('Class "%s" dosn\'t implement PHPPdf\Formatter\Formatter interface.', $className));
         }
 
-        $formatter = $class->newInstance($this->document);
+        $formatter = $class->newInstance();
 
         $root[] = $formatter;
     }

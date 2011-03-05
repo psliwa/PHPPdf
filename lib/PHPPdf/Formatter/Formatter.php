@@ -2,7 +2,8 @@
 
 namespace PHPPdf\Formatter;
 
-use PHPPdf\Glyph\Glyph;
+use PHPPdf\Glyph\Glyph,
+    PHPPdf\Document;
 
 /**
  * Glyph formatter
@@ -12,6 +13,7 @@ use PHPPdf\Glyph\Glyph;
 interface Formatter
 {
     public function getDocument();
+    public function setDocument(Document $document);
     public function preFormat(Glyph $glyph);
     public function postFormat(Glyph $glyph);
 }

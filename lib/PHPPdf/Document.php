@@ -82,6 +82,7 @@ class Document
     public function addFormatter(Formatters\Formatter $formatter)
     {
         $this->formatters[] = $formatter;
+        $formatter->setDocument($this);
     }
 
     public function getFormatters()

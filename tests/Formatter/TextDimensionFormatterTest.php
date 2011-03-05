@@ -13,7 +13,8 @@ class TextDimensionFormatterTest extends PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->formatter = new TextDimensionFormatter(new Document());
+        $this->formatter = new TextDimensionFormatter();
+        $this->formatter->setDocument(new Document());
     }
 
     /**

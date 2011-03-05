@@ -12,7 +12,8 @@ class ImageDimensionFormatterTest extends PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->formatter = new ImageDimensionFormatter(new Document());
+        $this->formatter = new ImageDimensionFormatter();
+        $this->formatter->setDocument(new Document());
     }
 
     /**

@@ -10,7 +10,8 @@ class TableFormatterTest extends PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->formatter = new TableFormatter(new Document());
+        $this->formatter = new TableFormatter();
+        $this->formatter->setDocument(new Document());
     }
 
     /**

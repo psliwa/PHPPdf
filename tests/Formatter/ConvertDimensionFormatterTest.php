@@ -11,7 +11,8 @@ class ConvertDimensionFormatterTest extends PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->formatter = new ConvertDimensionFormatter(new Document());
+        $this->formatter = new ConvertDimensionFormatter();
+        $this->formatter->setDocument(new Document());
     }
 
     /**
@@ -103,7 +104,8 @@ class ConvertDimensionFormatterTest extends PHPUnit_Framework_TestCase
                   ->method('getParent')
                   ->will($this->returnValue(new Page()));
 
-        $formatter = new ConvertDimensionFormatter($documentMock);
+        $formatter = new ConvertDimensionFormatter();
+        $formatter->setDocument($documentMock);
 
         $formatter->preFormat($glyphMock);
         $formatter->postFormat($glyphMock);

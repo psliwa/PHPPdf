@@ -94,7 +94,7 @@ class Facade
     private function loadFormatters($file)
     {
         $content = $this->loadFile($file);
-        $parser = new FormatterParser($this->getDocument());
+        $parser = new FormatterParser();
         $formatters = $parser->parse($content);
 
         foreach($formatters as $formatter)

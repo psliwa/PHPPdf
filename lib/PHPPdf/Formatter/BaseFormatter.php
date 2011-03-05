@@ -16,13 +16,18 @@ abstract class BaseFormatter implements Formatter
 {
     private $document;
 
-    public function __construct(Document $document)
+    public function setDocument(Document $document)
     {
         $this->document = $document;
     }
 
     public function getDocument()
     {
+        if($this->document === null)
+        {
+            throw new \LogicException(sprintf('PHPPdf\Document object haven\'t set in object "%s".', __CLASS__));
+        }
+
         return $this->document;
     }
 

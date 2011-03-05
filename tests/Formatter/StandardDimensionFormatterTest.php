@@ -11,7 +11,8 @@ class StandardDimensionFormatterTest extends PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->formatter = new StandardDimensionFormatter(new Document());
+        $this->formatter = new StandardDimensionFormatter();
+        $this->formatter->setDocument(new Document());
     }
 
     /**

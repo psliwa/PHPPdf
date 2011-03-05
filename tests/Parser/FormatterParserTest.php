@@ -9,7 +9,7 @@ class FormatterParserTest extends PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->parser = new FormatterParser(new Document());
+        $this->parser = new FormatterParser();
     }
 
     /**
