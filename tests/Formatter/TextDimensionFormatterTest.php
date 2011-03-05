@@ -6,6 +6,7 @@ use PHPPdf\Glyph\Container;
 use PHPPdf\Glyph\Page;
 use PHPPdf\Formatter\TextDimensionFormatter;
 use PHPPdf\Font\Font;
+use PHPPdf\Font\ResourceWrapper;
 
 class TextDimensionFormatterTest extends PHPUnit_Framework_TestCase
 {
@@ -50,7 +51,7 @@ class TextDimensionFormatterTest extends PHPUnit_Framework_TestCase
     {
         $page = new Page();
         $page['font-type'] = new Font(array(
-            Font::STYLE_NORMAL => \Zend_Pdf_Font::fontWithName(\Zend_Pdf_Font::FONT_COURIER)
+            Font::STYLE_NORMAL => ResourceWrapper::fromName(\Zend_Pdf_Font::FONT_COURIER)
         ));
         $page['font-size'] = 12;
 
