@@ -12,7 +12,7 @@ use PHPPdf\Formatter\Formatter,
  *
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
-abstract class BaseFormatter implements Formatter
+abstract class BaseFormatter implements Formatter, \Serializable
 {
     private $document;
 
@@ -36,6 +36,15 @@ abstract class BaseFormatter implements Formatter
     }
 
     public function postFormat(Glyph $glyph)
+    {
+    }
+
+    public function serialize()
+    {
+        return '';
+    }
+
+    public function unserialize($serialized)
     {
     }
 }

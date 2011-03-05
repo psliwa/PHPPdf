@@ -34,4 +34,18 @@ class BaseFormatterTest extends TestCase
 
         $this->assertTrue($document === $this->formatter->getDocument());
     }
+
+    /**
+     * @test
+     * @expectedException \LogicException
+     */
+    public function unserializedFormatterHaveDocumentDetached()
+    {
+        $document = new PHPPdf\Document();
+        $this->formatter->setDocument($document);
+
+        $unserializedFormatter = unserialize(serialize($this->formatter));
+
+        $unserializedFormatter->getDocument();
+    }
 }

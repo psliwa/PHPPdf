@@ -14,23 +14,21 @@ use PHPPdf\Formatter\BaseFormatter,
  */
 class TextDimensionFormatter extends BaseFormatter
 {
-    private $getCharCodeCallback;
+    private $charCodeMethodName;
 
-    public function __construct($getCharCodeCallback = null)
+    public function __construct($charCodeMethodName = 'ordUtf8')
     {
-        if($getCharCodeCallback !== null)
+        $this->setCharCodeMethod($charCodeMethodName);
+    }
+
+    private function setCharCodeMethod($methodName)
+    {
+        if(!is_callable(array($this, $methodName)))
         {
-            if(!is_callable($getCharCodeCallback))
-            {
-                throw new \InvalidArgumentException('Passed argument is not valid callback.');
-            }
-        }
-        else
-        {
-            $getCharCodeCallback = array($this, 'ordUtf8');
+            throw new \InvalidArgumentException('Passed argument is not valid callback.');
         }
 
-        $this->getCharCodeCallback = $getCharCodeCallback;
+        $this->charCodeMethodName = $methodName;
     }
 
     public function preFormat(Glyphs\Glyph $glyph)
@@ -142,7 +140,7 @@ class TextDimensionFormatter extends BaseFormatter
 
     private function getTextWidth(\PHPPdf\Font\Font $font, $fontSize, $text)
     {
-        $callback = $this->getCharCodeCallback;
+        $callback = array($this, $this->charCodeMethodName);
         if($fontSize)
         {
             $length = strlen($text);
@@ -210,5 +208,17 @@ class TextDimensionFormatter extends BaseFormatter
 
 
         return array($char, $bytes);
+    }
+
+    public function serialize()
+    {
+        return serialize($this->charCodeMethodName);
+    }
+
+    public function unserialize($serialized)
+    {
+        $method = unserialize($serialized);
+
+        $this->setCharCodeMethod($method);
     }
 }
