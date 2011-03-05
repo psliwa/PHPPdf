@@ -60,4 +60,18 @@ class GlyphFactoryTest extends PHPUnit_Framework_TestCase
     {
         $this->factory->getPrototype('key');
     }
+
+    /**
+     * @test
+     */
+    public function unserializedFactoryIsCopyOfSerializedFactory()
+    {
+        $key = 'key';
+        $prototype = new Container();
+        $this->factory->addPrototype($key, $prototype);
+
+        $unserializedFactory = unserialize(serialize($this->factory));
+
+        $this->assertEquals($this->factory->getPrototype($key), $unserializedFactory->getPrototype($key));
+    }
 }

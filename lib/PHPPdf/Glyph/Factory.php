@@ -7,7 +7,7 @@ namespace PHPPdf\Glyph;
  *
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
-class Factory
+class Factory implements \Serializable
 {
     private $prototypes = array();
 
@@ -54,5 +54,20 @@ class Factory
         $name = (string) $name;
 
         return isset($this->prototypes[$name]);
+    }
+
+    public function serialize()
+    {
+        return serialize($this->prototypes);
+    }
+
+    public function unserialize($serialized)
+    {
+        $prototypes = unserialize($serialized);
+
+        foreach($prototypes as $name => $prototype)
+        {
+            $this->addPrototype($name, $prototype);
+        }
     }
 }
