@@ -26,4 +26,18 @@ class FontResourceWrapperTest extends TestCase
             array(ResourceWrapper::fromName('courier')),
         );
     }
+
+    /**
+     * @test
+     */
+    public function unserializedWrapperIsCopyOfSerializedWrapper()
+    {
+        $fontPath = __DIR__.'/../resources';
+        $wrapper = ResourceWrapper::fromFile($fontPath.'/verdana.ttf');
+        $wrapper->getResource();
+
+        $unserializedWrapper = unserialize(serialize($wrapper));
+
+        $this->assertEquals($wrapper->getResource(), $unserializedWrapper->getResource());
+    }
 }

@@ -111,4 +111,18 @@ class FontTest extends PHPUnit_Framework_TestCase
             Font::STYLE_BOLD => ResourceWrapper::fromFile($this->fontPath.'/verdana.ttf'),
         ));
     }
+
+    /**
+     * @test
+     */
+    public function unserializedFontIsCopyOfSerializedFont()
+    {
+        $unserializedFont = unserialize(serialize($this->font));
+        $styles = array(Font::STYLE_NORMAL, Font::STYLE_BOLD, Font::STYLE_ITALIC, Font::STYLE_BOLD_ITALIC);
+
+        foreach($styles as $style)
+        {
+            $this->assertEquals($this->font->hasStyle($style), $unserializedFont->hasStyle($style));
+        }
+    }
 }

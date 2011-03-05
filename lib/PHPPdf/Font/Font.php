@@ -7,7 +7,7 @@ namespace PHPPdf\Font;
  *
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
-class Font
+class Font implements \Serializable
 {
     const STYLE_NORMAL = 0;
     const STYLE_BOLD = 1;
@@ -126,5 +126,22 @@ class Font
         $textWidth = (array_sum($widths) / $this->getFont()->getUnitsPerEm()) * $fontSize;
 
         return $textWidth;
+    }
+
+    public function serialize()
+    {
+        return serialize(array(
+            'resources' => $this->fontResourceWrappers,
+        ));
+    }
+
+    public function unserialize($serialized)
+    {
+        $data = \unserialize($serialized);
+
+        $fonts = $data['resources'];
+        $this->throwsExceptionIfFontsAreInvalid($fonts);
+
+        $this->fontResourceWrappers = $fonts;
     }
 }

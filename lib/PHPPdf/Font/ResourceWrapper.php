@@ -3,11 +3,11 @@
 namespace PHPPdf\Font;
 
 /**
- * Wrapper for font resources. Resource is lazy loaded.
+ * Wrapper for font resource. Resource is lazy loaded.
  *
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
-class ResourceWrapper
+class ResourceWrapper implements \Serializable
 {
     private $file;
     private $name;
@@ -93,5 +93,21 @@ class ResourceWrapper
     private function createResourceFromFile()
     {
         $this->resource = \Zend_Pdf_Font::fontWithPath($this->file);
+    }
+
+    public function serialize()
+    {
+        return serialize(array(
+            'file' => $this->file,
+            'name' => $this->name,
+        ));
+    }
+
+    public function unserialize($serialized)
+    {
+        $data = unserialize($serialized);
+
+        $this->file = $data['file'];
+        $this->name = $data['name'];
     }
 }

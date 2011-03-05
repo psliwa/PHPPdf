@@ -40,4 +40,20 @@ class FontRegistryTest extends PHPUnit_Framework_TestCase
     {
         $this->registry->get('font');
     }
+
+    /**
+     * @test
+     */
+    public function unserializedRegistryIsCopyOfSerializedRegistry()
+    {
+        $fontPath = dirname(__FILE__).'/../resources';
+
+        $this->registry->register('some-name', array(
+            Font::STYLE_NORMAL => ResourceWrapper::fromFile($fontPath.'/verdana.ttf'),
+        ));
+
+        $unserializedRegistry = unserialize(serialize($this->registry));
+
+        $this->assertEquals($this->registry->has('some-name'), $unserializedRegistry->has('some-name'));
+    }
 }

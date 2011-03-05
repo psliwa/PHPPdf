@@ -5,7 +5,7 @@ namespace PHPPdf\Font;
 /**
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
-class Registry
+class Registry implements \Serializable
 {
     private $fonts = array();
 
@@ -20,6 +20,12 @@ class Registry
             throw new \InvalidArgumentException('Font should by type of PHPPdf\Font or array');
         }
 
+        $this->add($name, $font);
+    }
+
+    private function add($name, Font $font)
+    {
+        $name = (string) $name;
         $this->fonts[$name] = $font;
     }
 
@@ -36,5 +42,24 @@ class Registry
     public function has($name)
     {
         return isset($this->fonts[$name]);
+    }
+
+    public function serialize()
+    {
+        return serialize(array(
+            'fonts' => $this->fonts,
+        ));
+    }
+
+    public function unserialize($serialized)
+    {
+        $data = \unserialize($serialized);
+
+        $fonts = $data['fonts'];
+
+        foreach($fonts as $name => $font)
+        {
+            $this->add($name, $font);
+        }
     }
 }
