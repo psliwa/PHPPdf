@@ -825,6 +825,11 @@ abstract class AbstractGlyph implements Glyph, \ArrayAccess, \Serializable
         return false;
     }
 
+    protected function getPlaceholderNames()
+    {
+        return array();
+    }
+
     public function setPlaceholder($name, Glyph $placeholder)
     {
         throw new \InvalidArgumentException(sprintf('Placeholder "%s" is not supported by class "%s".', $name, get_class($this)));
@@ -832,9 +837,17 @@ abstract class AbstractGlyph implements Glyph, \ArrayAccess, \Serializable
 
     public function serialize()
     {
+        $placeholderNames = $this->getPlaceholderNames();
+        $placeholders = array();
+        foreach($placeholderNames as $name)
+        {
+            $placeholders[$name] = $this->getPlaceholder($name);
+        }
+
         $data = array(
             'attributes' => $this->attributes,
             'enhancementBag' => $this->enhancementBag,
+            'placeholders' => $placeholders,
         );
 
         return serialize($data);
@@ -847,6 +860,13 @@ abstract class AbstractGlyph implements Glyph, \ArrayAccess, \Serializable
         $this->attributes = $data['attributes'];
         $this->enhancementBag = $data['enhancementBag'];
         $this->boundary = new Boundary();
+
+        $placeholders = $data['placeholders'];
+
+        foreach($placeholders as $name => $placeholder)
+        {
+            $this->setPlaceholder($name, $placeholder);
+        }
     }
 
     public function __toString()

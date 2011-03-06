@@ -1,8 +1,9 @@
 <?php
 
-use PHPPdf\Parser\Facade;
+use PHPPdf\Parser\Facade,
+    PHPPdf\Parser\FacadeConfiguration;
 
-class FacadeTest extends PHPUnit_Framework_TestCase
+class FacadeTest extends TestCase
 {
     private $facade;
 
@@ -90,5 +91,69 @@ class FacadeTest extends PHPUnit_Framework_TestCase
         $result = $this->facade->render($xml, $stylesheet);
 
         $this->assertEquals($content, $result);
+    }
+
+    /**
+     * @test
+     * @dataProvider configFileGetterProvider
+     */
+    public function saveCacheIfCacheIsEmpty($configFileGetterMethodName, $loaderMethodName)
+    {
+        $configuration = new PHPPdf\Parser\FacadeConfiguration();
+
+        $facade = new Facade($configuration);
+        $cache = $this->getMock('PHPPdf\Cache\NullCache', array('test', 'save'));
+
+        $cacheId = $this->invokeMethod($facade, 'getCacheId', array($configuration->$configFileGetterMethodName()));
+
+        $cache->expects($this->once())
+              ->method('test')
+              ->with($cacheId)
+              ->will($this->returnValue(false));
+
+        $cache->expects($this->once())
+              ->method('save');
+
+        $facade->setCache($cache);
+
+        $this->invokeMethod($facade, $loaderMethodName);
+    }
+
+    public function configFileGetterProvider()
+    {
+        return array(
+            array('getGlyphsConfigFile', 'loadGlyphs', new PHPPdf\Glyph\Factory()),
+            array('getEnhancementsConfigFile', 'loadEnhancements', new \PHPPdf\Enhancement\Factory()),
+            array('getFontsConfigFile', 'loadFonts', array()),
+            array('getFormattersConfigFile', 'loadFormatters', array()),
+        );
+    }
+    
+    /**
+     * @test
+     * @dataProvider configFileGetterProvider
+     */
+    public function loadCacheIfCacheIsntEmpty($configFileGetterMethodName, $loaderMethodName, $cacheContent)
+    {
+        $configuration = new PHPPdf\Parser\FacadeConfiguration();
+
+        $facade = new Facade($configuration);
+        $cache = $this->getMock('PHPPdf\Cache\NullCache', array('test', 'save', 'load'));
+
+        $cacheId = $this->invokeMethod($facade, 'getCacheId', array($configuration->$configFileGetterMethodName()));
+
+        $cache->expects($this->once())
+              ->method('test')
+              ->with($cacheId)
+              ->will($this->returnValue(true));
+
+        $cache->expects($this->once())
+              ->method('load')
+              ->with($cacheId)
+              ->will($this->returnValue($cacheContent));
+
+        $facade->setCache($cache);
+
+        $this->invokeMethod($facade, $loaderMethodName);
     }
 }

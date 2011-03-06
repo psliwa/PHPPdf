@@ -41,11 +41,7 @@ class Page extends Container
     {
         parent::__construct($attributes);
 
-        $this->getBoundary()->setNext(0, $this->getHeight())
-                            ->setNext($this->getWidth(), $this->getHeight())
-                            ->setNext($this->getWidth(), 0)
-                            ->setNext(0, 0)
-                            ->close();
+        $this->initializeBoundary();
 
         $this->setFooter(new Container(array('height' => 0)));
         $this->setHeader(new Container(array('height' => 0)));
@@ -59,6 +55,15 @@ class Page extends Container
         $this->setPageSize(self::SIZE_A4);
         $this->addAttribute('encoding', 'utf-8');
         $this->addAttribute('static-size', true);
+    }
+
+    private function initializeBoundary()
+    {
+        $this->getBoundary()->setNext(0, $this->getHeight())
+                            ->setNext($this->getWidth(), $this->getHeight())
+                            ->setNext($this->getWidth(), 0)
+                            ->setNext(0, 0)
+                            ->close();
     }
 
     public function setPageSize($pageSize)
@@ -397,6 +402,11 @@ class Page extends Container
         return null;
     }
 
+    protected function getPlaceholderNames()
+    {
+        return array('footer', 'header');
+    }
+
     public function setPlaceholder($name, Glyph $glyph)
     {
         if($name === 'footer')
@@ -414,5 +424,13 @@ class Page extends Container
     public function hasPlaceholder($name)
     {
         return in_array($name, array('footer', 'header'));
+    }
+
+    public function unserialize($serialized)
+    {
+        $this->setBoundary(new \PHPPdf\Util\Boundary());
+        $this->initializeBoundary();
+
+        parent::unserialize($serialized);
     }
 }

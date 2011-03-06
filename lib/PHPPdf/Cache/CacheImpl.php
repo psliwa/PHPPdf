@@ -27,7 +27,7 @@ class CacheImpl implements Cache
 
     public function __construct($engine = self::ENGINE_FILE, array $options = array())
     {
-        $defaultOptions = array('write_control' => false);
+        $defaultOptions = array('write_control' => false, 'automatic_serialization' => true);
         $options = array_merge($defaultOptions, $options);
 
         $this->core = new \Zend_Cache_Core($options);
@@ -91,19 +91,19 @@ class CacheImpl implements Cache
         {
             return $this->core->test($id);
         }
-        catch(\Exception $e)
+        catch(\Zend_Exception $e)
         {
             $this->wrapLowLevelException($e, __METHOD__);
         }
     }
 
-    public function save($id, $data)
+    public function save($data, $id = null)
     {
         try
         {
-            return $this->core->save($id, $data);
+            return $this->core->save($data, $id);
         }
-        catch(\Exception $e)
+        catch(\Zend_Exception $e)
         {
             $this->wrapLowLevelException($e, __METHOD__);
         }
@@ -115,7 +115,7 @@ class CacheImpl implements Cache
         {
             return $this->core->remove($id);
         }
-        catch(\Exception $e)
+        catch(\Zend_Exception $e)
         {
             $this->wrapLowLevelException($e, __METHOD__);
         }
@@ -127,7 +127,7 @@ class CacheImpl implements Cache
         {
             return $this->core->clean($mode);
         }
-        catch(\Exception $e)
+        catch(\Zend_Exception $e)
         {
             $this->wrapLowLevelException($e, __METHOD__);
         }

@@ -145,7 +145,7 @@ Ponadto obsługiwane są niestandardowe tagi:
 
 * dynamic-page - strona, która się dynamicznie dzieli gdy zostaje przepełniona
 * page - pojedyncza strona
-* page-break - złamanie strony, jest to element podrzędny dynamic-page, czyli musi być bezpośrednim dzieckiem tego elemntu! (TODO)
+* page-break - złamanie strony, jest to element podrzędny dynamic-page, czyli musi być bezpośrednim dzieckiem tego elemntu!
 * columns - podział obszaru roboczego na kolumny (TODO)
 * column-break - złamanie kolumny, jest to element podrzędny columns (TODO)
 
@@ -172,6 +172,7 @@ Istnieją tagi, które służą jedynie do określania wartości atrybutów, zbi
 * float - działanie podobne, aczkolwiek nie takie same jak w HTML/CSS. Wartości left|none|right, domyślnie none
 * line-height - działanie takie jak w HTML/CSS. Domyślna wartość to 1.2*font-size
 * text-align - działanie takie jak w HTML/CSS. Wartości left|center|right, domyślnie left. Obecnie nie działa poprawnie dla tekstu wymieszanego z tagami formatującymi (np. "span").
+* page-break - łamie stronę jeśli element jest bezpośrednim dzieckiem elementu dynamic-page
 
 7. Upiększenia (atrybuty złożone)
 =================================
@@ -249,10 +250,10 @@ Biblioteka ma 4 podstawowe pliki konfiguracyjne, które pozwalają na dostosowan
 * fonts.xml - definowanie czcionek i przypisywanie ich do nazw logicznych, które identyfikują daną czcionkę w obrębie całej biblioteki
 * formatters.xml - definiowanie używanych formaterów. Kolejność elementów ma znaczenie.
 
-Aby zmienić domyślne pliki konfiguracyjne należy użyć obiektu klasy FacadeParameters aby nowe ścieżki przekazać do obiektu fasady:
+Aby zmienić domyślne pliki konfiguracyjne należy użyć obiektu klasy FacadeBuilder aby nowe ścieżki przekazać do obiektu fasady:
 
-    $parameters = PHPPdf\Parser\FacadeParameters::newInstance()->setFormattersConfigFile('...')->setFontsConfigFile('...');
-    $facade = new PHPPdf\Parser\Facade($parameters);
+    $builder = PHPPdf\Parser\FacadeBuilder::create()->setFormattersConfigFile('...')->setFontsConfigFile('...');
+    $facade = $builder->build();
 
 10. Znane ograniczenia.
 ======================

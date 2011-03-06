@@ -22,6 +22,8 @@ class Facade
     private $stylesheetParser;
     private $document;
     private $cache;
+    private $facadeConfiguration;
+    private $loaded = false;
 
     public function __construct(FacadeConfiguration $facadeConfiguration = null)
     {
@@ -34,73 +36,12 @@ class Facade
         $this->setDocumentParser(new DocumentParser());
         $this->setStylesheetParser(new StylesheetParser());
         $this->setDocument(new Document());
-
-        $this->load($facadeConfiguration->getGlyphsConfigFile(), $facadeConfiguration->getEnhancementsConfigFile(), $facadeConfiguration->getFontsConfigFile(), $facadeConfiguration->getFormattersConfigFile());
+        $this->setFacadeConfiguration($facadeConfiguration);
     }
 
     public function setCache(Cache $cache)
     {
         $this->cache = $cache;
-    }
-
-    private function load($glyphFactoryConfigFile, $enhancementFactoryConfigFile, $fontRegistryConfigFile, $formattersConfigFile)
-    {
-        $this->loadGlyphs($glyphFactoryConfigFile);
-        $this->loadEnhancements($enhancementFactoryConfigFile);
-        $this->loadFonts($fontRegistryConfigFile);
-        $this->loadFormatters($formattersConfigFile);
-    }
-
-    private function loadGlyphs($file)
-    {
-        $content = $this->loadFile($file);
-        $glyphFactoryParser = new GlyphFactoryParser();
-
-        $glyphFactory = $glyphFactoryParser->parse($content);
-        $glyphFactory->addPrototype('dynamic-page', new \PHPPdf\Glyph\DynamicPage($glyphFactory->create('page')));
-        
-        $this->getDocumentParser()->setGlyphFactory($glyphFactory);
-    }
-
-    private function loadFile($file)
-    {
-        return \PHPPdf\Util\DataSource::fromFile($file)->read();
-    }
-
-    private function loadEnhancements($file)
-    {
-        $content = $this->loadFile($file);
-        $enhancementFactoryParser = new EnhancementFactoryParser();
-        $enhancementFactory = $enhancementFactoryParser->parse($content);
-
-        $this->getDocument()->setEnhancementFactory($enhancementFactory);
-        $this->getDocumentParser()->setEnhancementFactory($enhancementFactory);
-    }
-
-    private function loadFonts($file)
-    {
-        $content = $this->loadFile($file);
-
-        $fontRegistryParser = new FontRegistryParser();
-
-        $fonts = $fontRegistryParser->parse($content);
-
-        foreach($fonts as $name => $font)
-        {
-            $this->getDocument()->getFontRegistry()->register($name, $font);
-        }
-    }
-
-    private function loadFormatters($file)
-    {
-        $content = $this->loadFile($file);
-        $parser = new FormatterParser();
-        $formatters = $parser->parse($content);
-
-        foreach($formatters as $formatter)
-        {
-            $this->getDocument()->addFormatter($formatter);
-        }
     }
 
     /**
@@ -137,8 +78,17 @@ class Facade
         $this->document = $document;
     }
 
+    private function setFacadeConfiguration(FacadeConfiguration $facadeConfiguration)
+    {
+        $this->facadeConfiguration = $facadeConfiguration;
+    }
+
     public function render($documentXml, $stylesheetXml = null)
     {
+        $facadeConfiguration = $this->facadeConfiguration;
+        
+        $this->load();
+
         $stylesheetConstraint = null;
 
         if($stylesheetXml)
@@ -153,5 +103,128 @@ class Facade
         $this->getDocument()->initialize();
 
         return $content;
+    }
+
+
+    private function load()
+    {
+        if(!$this->loaded)
+        {
+            $this->loadGlyphs();
+            $this->loadEnhancements();
+            $this->loadFonts();
+            $this->loadFormatters();
+
+            $this->loaded = true;
+        }
+    }
+
+    private function loadGlyphs()
+    {
+        $file = $this->facadeConfiguration->getGlyphsConfigFile();
+
+        $doLoadGlyphs = function($content)
+        {
+            $glyphFactoryParser = new GlyphFactoryParser();
+
+            $glyphFactory = $glyphFactoryParser->parse($content);
+
+            return $glyphFactory;
+        };
+
+        $glyphFactory = $this->getFromCacheOrCallClosure($file, $doLoadGlyphs);
+        
+        if($glyphFactory->hasPrototype('page'))
+        {
+            $glyphFactory->addPrototype('dynamic-page', new \PHPPdf\Glyph\DynamicPage($glyphFactory->create('page')));
+        }
+
+        $this->getDocumentParser()->setGlyphFactory($glyphFactory);
+    }
+
+    private function getFromCacheOrCallClosure($file, \Closure $closure)
+    {
+        $id = $this->getCacheId($file);
+
+        if($this->cache->test($id))
+        {
+            $result = $this->cache->load($id);
+        }
+        else
+        {
+            $content = $this->loadFile($file);
+            $result = $closure($content);
+            $this->cache->save($result, $id);
+        }
+
+        return $result;
+    }
+
+    private function getCacheId($file)
+    {
+        return str_replace('-', '_', (string) crc32($file));
+    }
+
+    private function loadFile($file)
+    {
+        return \PHPPdf\Util\DataSource::fromFile($file)->read();
+    }
+
+    private function loadEnhancements()
+    {
+        $file = $this->facadeConfiguration->getEnhancementsConfigFile();
+
+        $doLoadEnhancements = function($content)
+        {
+            $enhancementFactoryParser = new EnhancementFactoryParser();
+            $enhancementFactory = $enhancementFactoryParser->parse($content);
+
+            return $enhancementFactory;
+        };
+
+        $enhancementFactory = $this->getFromCacheOrCallClosure($file, $doLoadEnhancements);
+
+        $this->getDocument()->setEnhancementFactory($enhancementFactory);
+        $this->getDocumentParser()->setEnhancementFactory($enhancementFactory);
+    }
+
+    private function loadFonts()
+    {
+        $file = $this->facadeConfiguration->getFontsConfigFile();
+
+        $doLoadFonts = function($content)
+        {
+            $fontRegistryParser = new FontRegistryParser();
+            $fonts = $fontRegistryParser->parse($content);
+
+            return $fonts;
+        };
+
+        $fonts = $this->getFromCacheOrCallClosure($file, $doLoadFonts);
+
+        foreach($fonts as $name => $font)
+        {
+            $this->getDocument()->getFontRegistry()->register($name, $font);
+        }
+    }
+
+    private function loadFormatters()
+    {
+        $file = $this->facadeConfiguration->getFormattersConfigFile();
+
+        $doLoadFormatters = function($content)
+        {
+            $parser = new FormatterParser();
+            $formatters = $parser->parse($content);
+
+            return $formatters;
+        };
+
+        $formatters = $this->getFromCacheOrCallClosure($file, $doLoadFormatters);
+
+        foreach($formatters as $formatter)
+        {
+            $this->getDocument()->addFormatter($formatter);
+        }
     }
 }

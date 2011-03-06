@@ -24,17 +24,16 @@ class CacheImplTest extends TestCase
      * @test
      * @dataProvider provideCacheOperations
      */
-    public function delegateOperationsToCacheEngine($method, array $args, $returnValue)
+    public function delegateOperationsToCacheEngine($method, array $args, $returnValue, $expectedArgs = null, $cacheOptions = array())
     {
-        $id = 'someId';
-        $value = 'value';
+        $expectedArgs = $expectedArgs ? $expectedArgs : $args;
 
         $matcher = $this->engineMock->expects($this->once())
                                     ->method($method)
                                     ->will($this->returnValue($returnValue));
-        call_user_func_array(array($matcher, 'with'), $args);
+        call_user_func_array(array($matcher, 'with'), $expectedArgs);
 
-        $cache = new CacheImpl();
+        $cache = new CacheImpl(CacheImpl::ENGINE_BLACK_HOLE, $cacheOptions);
         $this->invokeMethod($cache, 'setBackend', array($this->engineMock));
 
         $this->assertEquals($returnValue, call_user_func_array(array($cache, $method), $args));
@@ -43,9 +42,9 @@ class CacheImplTest extends TestCase
     public function provideCacheOperations()
     {
         return array(
-            array('load', array('id'), 'value'),
+            array('load', array('id'), 'value', null, array('automatic_serialization' => false)),
             array('test', array('id'), true),
-            array('save', array('id', 'value'), true),
+            array('save', array('value', 'id'), true, array(serialize('value'), 'id')),
             array('remove', array('id'), true),
             array('clean', array('all'), true),
         );
@@ -65,7 +64,7 @@ class CacheImplTest extends TestCase
      */
     public function wrapCacheEngineExceptions($operation, array $args)
     {
-        $e = new \Exception();
+        $e = new \Zend_Exception();
         
         $this->engineMock->expects($this->once())
                          ->method($operation)
