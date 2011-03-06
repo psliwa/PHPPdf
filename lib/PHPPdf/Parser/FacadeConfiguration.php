@@ -3,9 +3,11 @@
 namespace PHPPdf\Parser;
 
 /**
+ * Configuration for Facade. Contains informations about config files.
+ *
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
-class FacadeParameters
+class FacadeConfiguration
 {
     private $configFiles = array();
 
@@ -22,7 +24,7 @@ class FacadeParameters
     /**
      * Static constructor
      * 
-     * @return FacadeParameters
+     * @return FacadeConfiguration
      */
     public static function newInstance()
     {
@@ -33,7 +35,7 @@ class FacadeParameters
      * Set config file for populating glyph factory
      *
      * @param string $file
-     * @return FacadeParameters
+     * @return FacadeConfiguration
      */
     public function setGlyphsConfigFile($file)
     {
@@ -51,7 +53,7 @@ class FacadeParameters
      * Set config file for populating enhancement factory
      *
      * @param string $file
-     * @return FacadeParameters
+     * @return FacadeConfiguration
      */
     public function setEnhancementsConfigFile($file)
     {
@@ -69,7 +71,7 @@ class FacadeParameters
      * Set config file for populating pdf's formatters
      *
      * @param string $file
-     * @return FacadeParameters
+     * @return FacadeConfiguration
      */
     public function setFormattersConfigFile($file)
     {
@@ -87,7 +89,7 @@ class FacadeParameters
      * Set config file for populating font registry
      *
      * @param string $file
-     * @return FacadeParameters
+     * @return FacadeConfiguration
      */
     public function setFontsConfigFile($file)
     {

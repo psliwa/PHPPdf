@@ -23,11 +23,11 @@ class Facade
     private $document;
     private $cache;
 
-    public function __construct(FacadeParameters $facadeParameters = null)
+    public function __construct(FacadeConfiguration $facadeConfiguration = null)
     {
-        if($facadeParameters === null)
+        if($facadeConfiguration === null)
         {
-            $facadeParameters = FacadeParameters::newInstance();
+            $facadeConfiguration = FacadeConfiguration::newInstance();
         }
 
         $this->setCache(NullCache::getInstance());
@@ -35,7 +35,7 @@ class Facade
         $this->setStylesheetParser(new StylesheetParser());
         $this->setDocument(new Document());
 
-        $this->load($facadeParameters->getGlyphsConfigFile(), $facadeParameters->getEnhancementsConfigFile(), $facadeParameters->getFontsConfigFile(), $facadeParameters->getFormattersConfigFile());
+        $this->load($facadeConfiguration->getGlyphsConfigFile(), $facadeConfiguration->getEnhancementsConfigFile(), $facadeConfiguration->getFontsConfigFile(), $facadeConfiguration->getFormattersConfigFile());
     }
 
     public function setCache(Cache $cache)

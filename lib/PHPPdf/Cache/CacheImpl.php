@@ -11,12 +11,21 @@ use PHPPdf\Exception\Exception;
  */
 class CacheImpl implements Cache
 {
+    const ENGINE_FILE = 'File';
+    const ENGINE_APC = 'Apc';
+    const ENGINE_BLACK_HOLE = 'BlackHole';
+    const ENGINE_MEMCACHED = 'Memcached';
+    const ENGINE_SQLITE = 'Sqlite';
+    const ENGINE_XCACHE = 'Xcache';
+    const ENGINE_ZEND_PLATFORM = 'ZendPlatform';
+    const ENGINE_ZEND_SERVER = 'ZendServer';
+
     /**
      * @var Zend_Cache_Core
      */
     private $core = null;
 
-    public function __construct($engine = 'File', array $options = array())
+    public function __construct($engine = self::ENGINE_FILE, array $options = array())
     {
         $defaultOptions = array('write_control' => false);
         $options = array_merge($defaultOptions, $options);
