@@ -12,7 +12,7 @@ class FacadeBuilderTest extends TestCase
     public function setUp()
     {
         $this->configuration = $this->getMock('PHPPdf\Parser\FacadeConfiguration', array('setGlyphsConfigFile', 'setEnhancementsConfigFile', 'setFormattersConfigFile', 'setFontsConfigFile'));
-        $this->builder = new FacadeBuilder($this->configuration);
+        $this->builder = FacadeBuilder::create($this->configuration);
     }
 
     /**

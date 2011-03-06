@@ -17,7 +17,7 @@ class FacadeBuilder
     private $cacheType = null;
     private $cacheOptions = null;
 
-    public function __construct(FacadeConfiguration $configuration = null)
+    private function __construct(FacadeConfiguration $configuration = null)
     {
         if($configuration === null)
         {
@@ -25,6 +25,16 @@ class FacadeBuilder
         }
 
         $this->setFacadeConfiguration($configuration);
+    }
+
+    /**
+     * Static constructor
+     * 
+     * @return FacadeBuilder
+     */
+    public static function create(FacadeConfiguration $configuration = null)
+    {
+        return new self($configuration);
     }
 
     private function setFacadeConfiguration(FacadeConfiguration $configuration)
