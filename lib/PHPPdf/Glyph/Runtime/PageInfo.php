@@ -34,4 +34,11 @@ class PageInfo extends PageText
 
         return sprintf($this->getAttribute('format'), $pageNumber, $numberOfPage);
     }
+
+    public function unserialize($serialized)
+    {
+        parent::unserialize($serialized);
+
+        $this->refreshDummyText();
+    }
 }

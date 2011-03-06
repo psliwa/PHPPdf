@@ -378,11 +378,10 @@ class AbstractGlyphTest extends TestCase
         $this->glyph->setParent($parent);
 
         $this->glyph->getBoundary()->setNext(10, 10);
-
         $glyph = unserialize(serialize($this->glyph));
 
         $this->assertNull($glyph->getParent());
-        $this->assertEquals(0, $glyph->getBoundary()->count());
+        $this->assertEquals(1, $glyph->getBoundary()->count());
     }
 
     /**
@@ -392,10 +391,12 @@ class AbstractGlyphTest extends TestCase
     {
         $this->glyph->mergeEnhancementAttributes('some-enhancement', array('attribute' => 'value'));
         $this->glyph->setAttribute('display', 'inline');
+        $this->glyph->getBoundary()->setNext(0, 0);
 
         $glyph = unserialize(serialize($this->glyph));
 
         $this->assertEquals($this->glyph->getEnhancementsAttributes(), $glyph->getEnhancementsAttributes());
         $this->assertEquals($this->glyph->getAttribute('display'), $glyph->getAttribute('display'));
+        $this->assertEquals($this->glyph->getBoundary(), $glyph->getBoundary());
     }
 }

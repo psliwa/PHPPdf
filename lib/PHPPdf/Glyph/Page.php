@@ -4,6 +4,7 @@ namespace PHPPdf\Glyph;
 
 use PHPPdf\Document,
     PHPPdf\Util\DrawingTask,
+    PHPPdf\Util\Point,
     PHPPdf\Formatter\Formatter;
 
 /**
@@ -42,9 +43,7 @@ class Page extends Container
         parent::__construct($attributes);
 
         $this->initializeBoundary();
-
-        $this->setFooter(new Container(array('height' => 0)));
-        $this->setHeader(new Container(array('height' => 0)));
+        $this->initializePlaceholders();
     }
 
     public function initialize()
@@ -59,11 +58,20 @@ class Page extends Container
 
     private function initializeBoundary()
     {
-        $this->getBoundary()->setNext(0, $this->getHeight())
-                            ->setNext($this->getWidth(), $this->getHeight())
-                            ->setNext($this->getWidth(), 0)
+        $width = $this->getWidth();
+        $height = $this->getHeight();
+        
+        $this->getBoundary()->setNext(0, $height)
+                            ->setNext($width, $height)
+                            ->setNext($width, 0)
                             ->setNext(0, 0)
                             ->close();
+    }
+
+    private function initializePlaceholders()
+    {
+        $this->setFooter(new Container(array('height' => 0)));
+        $this->setHeader(new Container(array('height' => 0)));
     }
 
     public function setPageSize($pageSize)
@@ -402,11 +410,6 @@ class Page extends Container
         return null;
     }
 
-    protected function getPlaceholderNames()
-    {
-        return array('footer', 'header');
-    }
-
     public function setPlaceholder($name, Glyph $glyph)
     {
         if($name === 'footer')
@@ -428,9 +431,8 @@ class Page extends Container
 
     public function unserialize($serialized)
     {
-        $this->setBoundary(new \PHPPdf\Util\Boundary());
-        $this->initializeBoundary();
-
         parent::unserialize($serialized);
+
+        $this->initializePlaceholders();
     }
 }

@@ -7,18 +7,13 @@ namespace PHPPdf\Util;
  *
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
-class Boundary implements \Countable, \Iterator, \ArrayAccess
+class Boundary implements \Countable, \Iterator, \ArrayAccess, \Serializable
 {
-    private $points;
+    private $points = array();
     private $numberOfPoints = 0;
     private $closed = false;
     private $current = 0;
     private $diagonalPointIndex = null;
-
-    public function __construct()
-    {
-        $this->points = array();
-    }
 
     /**
      * Add next point to boundary
@@ -279,5 +274,32 @@ class Boundary implements \Countable, \Iterator, \ArrayAccess
 
     public function __clone()
     {
+    }
+
+    public function serialize()
+    {
+        $points = array();
+        foreach($this->getPoints() as $point)
+        {
+            $points[] = $point->toArray();
+        }
+
+        return serialize(array(
+            'closed' => $this->closed,
+            'points' => $points,
+        ));
+    }
+
+    public function unserialize($serialized)
+    {
+        $data = unserialize($serialized);
+        $points = $data['points'];
+
+        foreach($points as $point)
+        {
+            $this->setNext($point[0], $point[1]);
+        }
+
+        $this->closed = (bool) $data['closed'];
     }
 }
