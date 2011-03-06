@@ -4,6 +4,7 @@ namespace PHPPdf\Parser;
 
 use PHPPdf\Font\Font,
     PHPPdf\Font\ResourceWrapper,
+    PHPPdf\Font\Registry,
     PHPPdf\Parser\Exception\ParseException;
 
 class FontRegistryParser extends XmlParser
@@ -15,7 +16,7 @@ class FontRegistryParser extends XmlParser
 
     protected function createRoot()
     {
-        return array();
+        return new Registry();
     }
 
     protected function parseElement(\XMLReader $reader)
@@ -87,8 +88,10 @@ class FontRegistryParser extends XmlParser
         {
             try
             {
-                $root = &$this->getLastElementFromStack();
-                $root[$this->currentFontName] = new Font($this->currentFontStyles);
+                /* @var $registry Registry */
+                $registry = $this->getLastElementFromStack();
+                $registry->register($this->currentFontName, $this->currentFontStyles);
+                
                 $this->currentFontName = null;
                 $this->currentFontStyles = array();
             }

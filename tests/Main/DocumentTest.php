@@ -1,7 +1,8 @@
 <?php
 
-use PHPPdf\Document;
-use PHPPdf\Glyph\Page;
+use PHPPdf\Document,
+    PHPPdf\Font\Registry as FontRegistry,
+    PHPPdf\Glyph\Page;
 
 class DocumentTest extends PHPUnit_Framework_TestCase
 {
@@ -25,7 +26,7 @@ class DocumentTest extends PHPUnit_Framework_TestCase
      * @test
      * @expectedException InvalidArgumentException
      */
-    public function gettingUnexistsAttribute()
+    public function throwExceptionIfCalledAttributeDosntExist()
     {
         $this->document->getAttribute(1235566);
     }
@@ -41,11 +42,16 @@ class DocumentTest extends PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function drawing()
-    {       
-        $mock = $this->getMock('\PHPPdf\Glyph\Page', array('doDraw'));
+    public function invokeDrawingTasksOfPagesWhenDrawMethodIsInvoked()
+    {
+        $taskMock = $this->getMock('PHPPdf\Util\DrawingTask', array('__invoke'), array(), '', false);
+        $taskMock->expects($this->once())
+                 ->method('__invoke');
+
+        $mock = $this->getMock('\PHPPdf\Glyph\Page', array('getDrawingTasks'));
         $mock->expects($this->once())
-             ->method('doDraw');
+             ->method('getDrawingTasks')
+             ->will($this->returnValue(array($taskMock)));
 
         $this->document->draw(array($mock));
     }
@@ -53,18 +59,18 @@ class DocumentTest extends PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function drawingAndStatusReset()
+    public function drawMethodCanBeMultiplyCalledIfDocumentStatusHaveResetByInitializeMethod()
     {
-        $this->drawing();
+        $this->invokeDrawingTasksOfPagesWhenDrawMethodIsInvoked();
         $this->document->initialize();
-        $this->drawing();
+        $this->invokeDrawingTasksOfPagesWhenDrawMethodIsInvoked();
     }
 
     /**
      * @test
      * @expectedException \LogicException
      */
-    public function drawingFailure()
+    public function throwExceptionWhenDocumentIsDrawTwiceWithoutReset()
     {
         $drawingMethods = array('preDraw', 'doDraw', 'postDraw');
         $mock = $this->getMock('\PHPPdf\Glyph\Page', array_merge($drawingMethods));
@@ -77,7 +83,6 @@ class DocumentTest extends PHPUnit_Framework_TestCase
         }
 
         $this->document->draw(array($mock));
-
         $this->document->draw(array($mock));
     }
 
@@ -175,11 +180,21 @@ class DocumentTest extends PHPUnit_Framework_TestCase
 
     /**
      * @test
+     * @expectedException PHPPdf\Exception\Exception
      */
-    public function gettingFontRegistry()
+    public function throwExceptionIfFontRegistryIsntSet()
     {
-        $fontRegistry = $this->document->getFontRegistry();
+        $this->document->getFontRegistry();
+    }
 
-        $this->assertInstanceOf('PHPPdf\Font\Registry', $fontRegistry);
+    /**
+     * @test
+     */
+    public function getFontRegistryIfPreviouslyHasBeenSet()
+    {
+        $registry = new FontRegistry();
+        $this->document->setFontRegistry($registry);
+
+        $this->assertTrue($this->document->getFontRegistry() === $registry);
     }
 }

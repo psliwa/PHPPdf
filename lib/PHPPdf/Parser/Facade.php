@@ -68,6 +68,11 @@ class Facade
         $this->stylesheetParser = $stylesheetParser;
     }
 
+    /**
+     * Returns pdf document object
+     * 
+     * @return PHPPdf\Document
+     */
     public function getDocument()
     {
         return $this->document;
@@ -195,17 +200,13 @@ class Facade
         $doLoadFonts = function($content)
         {
             $fontRegistryParser = new FontRegistryParser();
-            $fonts = $fontRegistryParser->parse($content);
+            $fontRegistry = $fontRegistryParser->parse($content);
 
-            return $fonts;
+            return $fontRegistry;
         };
 
-        $fonts = $this->getFromCacheOrCallClosure($file, $doLoadFonts);
-
-        foreach($fonts as $name => $font)
-        {
-            $this->getDocument()->getFontRegistry()->register($name, $font);
-        }
+        $fontRegistry = $this->getFromCacheOrCallClosure($file, $doLoadFonts);
+        $this->getDocument()->setFontRegistry($fontRegistry);
     }
 
     private function loadFormatters()

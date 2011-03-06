@@ -19,9 +19,9 @@ class FontRegistryParserTest extends PHPUnit_Framework_TestCase
     {
         $xml = '<fonts></fonts>';
 
-        $fonts = $this->parser->parse($xml);
+        $fontRegistry = $this->parser->parse($xml);
 
-        $this->assertEquals(0, count($fonts));
+        $this->assertEquals(0, count($fontRegistry));
     }
 
     /**
@@ -30,11 +30,11 @@ class FontRegistryParserTest extends PHPUnit_Framework_TestCase
      */
     public function parseSimpleXml($xml)
     {
-        $fonts = $this->parser->parse($xml);
+        $fontRegistry = $this->parser->parse($xml);
 
-        $this->assertEquals(1, count($fonts));
+        $this->assertEquals(1, count($fontRegistry));
 
-        $font = $fonts['verdana'];
+        $font = $fontRegistry->get('verdana');
         $styles = array(Font::STYLE_NORMAL => true, Font::STYLE_BOLD => true, Font::STYLE_ITALIC => false, Font::STYLE_BOLD_ITALIC => true);
 
         foreach($styles as $style => $has)

@@ -5,7 +5,7 @@ namespace PHPPdf\Font;
 /**
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
-class Registry implements \Serializable
+class Registry implements \Countable, \Serializable
 {
     private $fonts = array();
 
@@ -42,6 +42,11 @@ class Registry implements \Serializable
     public function has($name)
     {
         return isset($this->fonts[$name]);
+    }
+
+    public function count()
+    {
+        return count($this->fonts);
     }
 
     public function serialize()

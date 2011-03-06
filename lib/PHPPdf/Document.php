@@ -40,6 +40,11 @@ class Document
 
     private $fontRegistry = null;
 
+    public function __construct()
+    {
+        $this->initialize();
+    }
+
     public function getEnhancements(EnhancementBag $bag)
     {
         $enhancements = array();
@@ -66,12 +71,6 @@ class Document
     {
         $this->enhancementFactory = $enhancementFactory;
     }
-    
-    public function __construct()
-    {
-        $this->initialize();
-        $this->fontRegistry = new FontRegistry();
-    }
 
     public function initialize()
     {
@@ -92,7 +91,17 @@ class Document
     
     public function getFontRegistry()
     {
+        if($this->fontRegistry === null)
+        {
+            throw new \PHPPdf\Exception\Exception(sprintf('Font registry isn\'t set in class "%s".', __CLASS__));
+        }
+
         return $this->fontRegistry;
+    }
+
+    public function setFontRegistry(FontRegistry $registry)
+    {
+        $this->fontRegistry = $registry;
     }
     
     public function setAttribute($attribute, $value)

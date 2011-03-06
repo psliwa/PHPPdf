@@ -563,7 +563,7 @@ abstract class AbstractGlyph implements Glyph, \ArrayAccess, \Serializable
      *
      * @return array Array of PHPPdf\Util\DrawingTask objects
      */
-    final public function getDrawingTasks(Document $document)
+    public function getDrawingTasks(Document $document)
     {
         if($this->getAttribute('display') == self::DISPLAY_NONE)
         {
@@ -580,7 +580,6 @@ abstract class AbstractGlyph implements Glyph, \ArrayAccess, \Serializable
         }
         catch(\Exception $e)
         {
-            echo $e;
             throw new \PHPPdf\Exception\DrawingException(sprintf('Error while drawing glyph "%s"', get_class($this)), 0, $e);
         }
     }
