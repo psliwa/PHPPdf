@@ -294,6 +294,6 @@ XML;
 
         $resultConstraint = $parser->parse($xml);
 
-        $this->assertEquals($constraint, $resultConstraint);
+        $this->assertTrue($constraint === $resultConstraint);
     }
 }
