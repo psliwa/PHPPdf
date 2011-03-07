@@ -255,6 +255,14 @@ Aby zmienić domyślne pliki konfiguracyjne należy użyć obiektu klasy FacadeB
     $builder = PHPPdf\Parser\FacadeBuilder::create()->setFormattersConfigFile('...')->setFontsConfigFile('...');
     $facade = $builder->build();
 
+Można ustawić cache dla plików konfiguracyjnych oraz szablonów stylów:
+
+    $builder = ...;
+
+    $facade = $builder->setCache('File', array('cache_dir' => './cache')) //cache będzie przechowywane w pliku w podanym folderze
+                      ->setUseCacheForStylesheetConstraint(true) //szablony stylów również będą korzystały z cache
+                      ->build();
+
 10. Znane ograniczenia.
 ======================
 
