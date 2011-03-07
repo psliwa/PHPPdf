@@ -185,7 +185,7 @@ class FacadeTest extends TestCase
         $stylesheetParserMock = $this->getMock('PHPPdf\Parser\StylesheetParser', array('parse'));
         $stylesheetParserMock->expects($this->once())
                              ->method('parse')
-                             ->will($this->returnValue(new PHPPdf\Parser\StylesheetConstraint()));
+                             ->will($this->returnValue(new PHPPdf\Parser\CachingStylesheetConstraint()));
 
         $facade->setDocumentParser($documentParserMock);
         $facade->setStylesheetParser($stylesheetParserMock);

@@ -19,6 +19,11 @@ class StylesheetParser extends XmlParser
 
     public function __construct(StylesheetConstraint $root = null)
     {
+        $this->setRoot($root);
+    }
+
+    public function setRoot(StylesheetConstraint $root = null)
+    {
         $this->root = $root;
     }
 

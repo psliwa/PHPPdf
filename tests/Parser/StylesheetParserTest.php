@@ -285,14 +285,14 @@ XML;
     /**
      * @test
      */
-    public function rootStylesheetConstraintMayByPassedByConstructor()
+    public function rootStylesheetConstraintMayByInjected()
     {
         $xml = '<stylesheet></stylesheet>';
 
         $constraint = new StylesheetConstraint();
-        $parser = new StylesheetParser($constraint);
+        $this->parser->setRoot($constraint);
 
-        $resultConstraint = $parser->parse($xml);
+        $resultConstraint = $this->parser->parse($xml);
 
         $this->assertTrue($constraint === $resultConstraint);
     }

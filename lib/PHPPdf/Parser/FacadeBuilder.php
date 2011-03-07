@@ -140,7 +140,7 @@ class FacadeBuilder
      * @param boolean $useCache Cache for Stylesheets should by used?
      * @return FacadeBuilder
      */
-    public function setUseStylesheetConstraintCache($useCache)
+    public function setUseCacheForStylesheetConstraint($useCache)
     {
         $this->useCacheForStylesheetConstraint = (bool) $useCache;
 

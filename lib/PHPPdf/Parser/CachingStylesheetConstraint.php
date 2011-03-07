@@ -8,6 +8,7 @@ class CachingStylesheetConstraint extends StylesheetConstraint
 {
     private $resultMap = array();
     private $resultMapModified = false;
+    private $cacheId = '';
 
     public function find(array $query)
     {
@@ -56,6 +57,7 @@ class CachingStylesheetConstraint extends StylesheetConstraint
         $data = parent::getDataToSerialize();
 
         $data['resultMap'] = $this->resultMap;
+        $data['cacheId'] = $this->cacheId;
 
         return $data;
     }
@@ -65,5 +67,16 @@ class CachingStylesheetConstraint extends StylesheetConstraint
         parent::restoreDataAfterUnserialize($data);
 
         $this->resultMap = $data['resultMap'];
+        $this->setCacheId($data['cacheId']);
+    }
+
+    public function setCacheId($id)
+    {
+        $this->cacheId = (string) $id;
+    }
+
+    public function getCacheId()
+    {
+        return $this->cacheId;
     }
 }

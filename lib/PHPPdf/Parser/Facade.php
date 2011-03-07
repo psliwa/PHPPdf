@@ -109,9 +109,10 @@ class Facade
         $content = $this->getDocument()->render();
         $this->getDocument()->initialize();
 
+        $this->updateStylesheetConstraintCacheIfNecessary($stylesheetConstraint);
+
         return $content;
     }
-
 
     private function load()
     {
@@ -272,10 +273,22 @@ class Facade
         }
         else
         {
+            $csc = new CachingStylesheetConstraint();
+            $csc->setCacheId($id);
+            $this->getStylesheetParser()->setRoot($csc);
+            
             $stylesheetConstraint = $this->parseStylesheet($ds);
             $this->cache->save($stylesheetConstraint, $id);
         }
 
         return $stylesheetConstraint;
+    }
+
+    private function updateStylesheetConstraintCacheIfNecessary(StylesheetConstraint $constraint = null)
+    {
+        if($constraint && $this->useCacheForStylesheetConstraint && $constraint->isResultMapModified())
+        {
+            $this->cache->save($constraint, $constraint->getCacheId());
+        }
     }
 }

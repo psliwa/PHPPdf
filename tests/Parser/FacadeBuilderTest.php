@@ -76,7 +76,7 @@ class FacadeBuilderTest extends TestCase
      */
     public function switchingOnAndOffStylesheetConstraintCache($useCache)
     {
-        $facade = $this->builder->setUseStylesheetConstraintCache($useCache)->build();
+        $facade = $this->builder->setUseCacheForStylesheetConstraint($useCache)->build();
 
         $this->assertEquals($useCache, $this->readAttribute($facade, 'useCacheForStylesheetConstraint'));
     }
