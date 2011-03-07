@@ -71,20 +71,30 @@ class BagContainer implements \Serializable
 
     public function serialize()
     {
-        return serialize(array(
+        return serialize($this->getDataToSerialize());
+    }
+
+    protected function getDataToSerialize()
+    {
+        return array(
             'attributes' => $this->getAttributeBag()->getAll(),
             'enhancements' => $this->getEnhancementBag()->getAll(),
             'weight' => $this->weight,
-        ));
+        );
     }
 
     public function unserialize($serialized)
     {
         $data = unserialize($serialized);
 
+        $this->restoreDataAfterUnserialize($data);
+    }
+
+    protected function restoreDataAfterUnserialize($data)
+    {
         $this->attributeBag = new AttributeBag($data['attributes']);
         $this->enhancementBag = new EnhancementBag($data['enhancements']);
-        $this->weight = $data['weight'];
+        $this->weight = (float) $data['weight'];
     }
 
     /**

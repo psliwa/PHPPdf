@@ -163,27 +163,23 @@ class StylesheetConstraint extends BagContainer implements \Countable
         return $matchingIndex;
     }
 
-    public function serialize()
+    protected function getDataToSerialize()
     {
-        return serialize(array(
-            'attributes' => $this->getAttributeBag()->getAll(),
-            'enhancements' => $this->getEnhancementBag()->getAll(),
-            'weight' => $this->weight,
-            'tag' => $this->tag,
-            'classes' => $this->getClasses(),
-            'constraints' => $this->constraints,
-        ));
+        $data = parent::getDataToSerialize();
+
+        $data['tag'] = $this->tag;
+        $data['classes'] = $this->getClasses();
+        $data['constraints'] = $this->constraints;
+
+        return $data;
     }
 
-    public function unserialize($serialized)
+    protected function restoreDataAfterUnserialize($data)
     {
-        $data = unserialize($serialized);
+        parent::restoreDataAfterUnserialize($data);
 
-        $this->attributeBag = new AttributeBag($data['attributes']);
-        $this->enhancementBag = new EnhancementBag($data['enhancements']);
-        $this->weight = (int) $data['weight'];
         $this->setTag($data['tag']);
-        
+
         foreach((array) $data['classes'] as $class)
         {
             $this->addClass($class);
