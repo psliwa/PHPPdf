@@ -99,7 +99,6 @@ abstract class XmlParser implements Parser
 
     protected function pushOnStack(&$element)
     {
-//        array_push($this->stack, &$element);
         $this->stack[] = &$element;
     }
 

@@ -281,4 +281,19 @@ XML;
         $this->assertEquals(array('someName1' => 'someValue1', 'someName2' => 'someValue2'), $constraint->getAttributeBag()->getAll());
         $this->assertEquals(0, count($constraint->getConstraints()));
     }
+
+    /**
+     * @test
+     */
+    public function rootStylesheetConstraintMayByPassedByConstructor()
+    {
+        $xml = '<stylesheet></stylesheet>';
+
+        $constraint = new StylesheetConstraint();
+        $parser = new StylesheetParser($constraint);
+
+        $resultConstraint = $parser->parse($xml);
+
+        $this->assertEquals($constraint, $resultConstraint);
+    }
 }

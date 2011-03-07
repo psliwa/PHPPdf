@@ -15,12 +15,19 @@ class StylesheetParser extends XmlParser
     const ENHANCEMENT_TAG = 'enhancement';
     const ANY_TAG = 'any';
 
+    private $root;
+
+    public function __construct(StylesheetConstraint $root = null)
+    {
+        $this->root = $root;
+    }
+
     /**
      * @return StylesheetConstraint
      */
     protected function createRoot()
     {
-        return new StylesheetConstraint();
+        return ($this->root ? $this->root : new StylesheetConstraint());
     }
 
     protected function parseElement(\XMLReader $reader)
