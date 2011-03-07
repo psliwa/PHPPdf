@@ -69,4 +69,23 @@ class FacadeBuilderTest extends TestCase
 
         $this->assertInstanceOf('PHPPdf\Cache\CacheImpl', $this->readAttribute($facade, 'cache'));
     }
+
+    /**
+     * @test
+     * @dataProvider booleanProvider
+     */
+    public function switchingOnAndOffStylesheetConstraintCache($useCache)
+    {
+        $facade = $this->builder->setUseStylesheetConstraintCache($useCache)->build();
+
+        $this->assertEquals($useCache, $this->readAttribute($facade, 'useCacheForStylesheetConstraint'));
+    }
+
+    public function booleanProvider()
+    {
+        return array(
+            array(false),
+            array(true),
+        );
+    }
 }

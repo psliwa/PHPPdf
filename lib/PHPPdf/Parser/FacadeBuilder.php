@@ -16,6 +16,7 @@ class FacadeBuilder
     private $configuration = null;
     private $cacheType = null;
     private $cacheOptions = null;
+    private $useCacheForStylesheetConstraint = false;
 
     private function __construct(FacadeConfiguration $configuration = null)
     {
@@ -50,6 +51,7 @@ class FacadeBuilder
     public function build()
     {
         $facade = new Facade($this->configuration);
+        $facade->setUseCacheForStylesheetConstraint($this->useCacheForStylesheetConstraint);
 
         if($this->cacheType && $this->cacheType !== 'Null')
         {
@@ -123,6 +125,24 @@ class FacadeBuilder
     {
         $this->cacheType = $type;
         $this->cacheOptions = $options;
+
+        return $this;
+    }
+
+    /**
+     * Switch on/off cache for stylesheet.
+     *
+     * If you switch on cache for stylesheet constraints,
+     * you should set cache parameters by method setCache(), otherwise NullCache as default will
+     * be used.
+     *
+     * @see setCache()
+     * @param boolean $useCache Cache for Stylesheets should by used?
+     * @return FacadeBuilder
+     */
+    public function setUseStylesheetConstraintCache($useCache)
+    {
+        $this->useCacheForStylesheetConstraint = (bool) $useCache;
 
         return $this;
     }
