@@ -27,11 +27,13 @@ class FileDataSourceTest extends TestCase
     /**
      * @test
      */
-    public function filePathIsSourceId()
+    public function sourceIdIsConstantPerFilePath()
     {
-        $filePath = __DIR__.'/../resources/sample.xml';
-        $stream = new FileDataSource($filePath);
+        $stream = new FileDataSource( __DIR__.'/../resources/sample.xml');
 
-        $this->assertEquals($filePath, $stream->getId());
+        $this->assertEquals($stream->getId(), $stream->getId());
+
+        $anotherStream = new FileDataSource(__DIR__.'/../resources/domek-min.jpg');
+        $this->assertNotEquals($stream->getId(), $anotherStream->getId());
     }
 }

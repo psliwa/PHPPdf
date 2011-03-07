@@ -9,6 +9,7 @@ use PHPPdf\Parser\DocumentParser,
     PHPPdf\Parser\FontRegistryParser,
     PHPPdf\Cache\Cache,
     PHPPdf\Cache\NullCache,
+    PHPPdf\Util\DataSource,
     PHPPdf\Parser\GlyphFactoryParser;
 
 /**
@@ -24,6 +25,7 @@ class Facade
     private $cache;
     private $facadeConfiguration;
     private $loaded = false;
+    private $useCacheForStylesheetConstraint = false;
 
     public function __construct(FacadeConfiguration $facadeConfiguration = null)
     {
@@ -88,18 +90,18 @@ class Facade
         $this->facadeConfiguration = $facadeConfiguration;
     }
 
+    public function setUseCacheForStylesheetConstraint($useCache)
+    {
+        $this->useCacheForStylesheetConstraint = (bool) $useCache;
+    }
+
     public function render($documentXml, $stylesheetXml = null)
     {
         $facadeConfiguration = $this->facadeConfiguration;
         
         $this->load();
 
-        $stylesheetConstraint = null;
-
-        if($stylesheetXml)
-        {
-            $stylesheetConstraint = $this->getStylesheetParser()->parse($stylesheetXml);
-        }
+        $stylesheetConstraint = $this->retrieveStylesheetConstraint($stylesheetXml);
 
         $pageCollection = $this->getDocumentParser()->parse($documentXml, $stylesheetConstraint);
         $this->getDocument()->draw($pageCollection);
@@ -227,5 +229,53 @@ class Facade
         {
             $this->getDocument()->addFormatter($formatter);
         }
+    }
+
+    private function retrieveStylesheetConstraint($stylesheetXml)
+    {
+       $stylesheetConstraint = null;
+
+        if($stylesheetXml)
+        {
+            if(!$stylesheetXml instanceof DataSource)
+            {
+                $stylesheetXml = DataSource::fromString($stylesheetXml);
+            }
+
+            if(!$this->useCacheForStylesheetConstraint)
+            {
+                $stylesheetConstraint = $this->parseStylesheet($stylesheetXml);
+            }
+            else
+            {
+                $stylesheetConstraint = $this->loadStylesheetConstraintFromCache($stylesheetXml);
+            }
+        }
+
+        return $stylesheetConstraint;
+    }
+
+    /**
+     * @return StylesheetConstraint
+     */
+    private function parseStylesheet(DataSource $ds)
+    {
+        return $this->getStylesheetParser()->parse($ds->read());
+    }
+
+    private function loadStylesheetConstraintFromCache(DataSource $ds)
+    {
+        $id = $ds->getId();
+        if($this->cache->test($id))
+        {
+            $stylesheetConstraint = $this->cache->load($id);
+        }
+        else
+        {
+            $stylesheetConstraint = $this->parseStylesheet($ds);
+            $this->cache->save($stylesheetConstraint, $id);
+        }
+
+        return $stylesheetConstraint;
     }
 }

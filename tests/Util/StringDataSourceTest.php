@@ -18,11 +18,15 @@ class StringDataSourceTest extends TestCase
     /**
      * @test
      */
-    public function crc32FromContentIsSourceId()
+    public function sourceIdIsConstantPerContent()
     {
         $content = 'some content';
         $stream = new StringDataSource($content);
 
-        $this->assertEquals(crc32($content), $stream->getId());
+        $this->assertEquals($stream->getId(), $stream->getId());
+
+        $anotherStream = new StringDataSource('another content');
+
+        $this->assertNotEquals($stream->getId(), $anotherStream->getId());
     }
 }

@@ -26,6 +26,6 @@ class FileDataSource extends DataSource
 
     public function getId()
     {
-        return $this->filePath;
+        return str_replace('-', '_', crc32($this->filePath));
     }
 }

@@ -21,6 +21,6 @@ class StringDataSource extends DataSource
 
     public function getId()
     {
-        return crc32($this->content);
+        return str_replace('-', '_', crc32($this->content));
     }
 }

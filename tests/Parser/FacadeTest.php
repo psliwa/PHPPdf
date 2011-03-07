@@ -156,4 +156,51 @@ class FacadeTest extends TestCase
 
         $this->invokeMethod($facade, $loaderMethodName);
     }
+
+    /**
+     * @test
+     * @dataProvider stylesheetCachingParametersProvider
+     */
+    public function dontCacheStylesheetConstraintByDefault($numberOfCacheMethodInvoking, $useCache)
+    {
+        $facade = new Facade();
+
+        //load config files owing to test stylesheet constraint caching
+        $this->invokeMethod($facade, 'load');
+
+        $cache = $this->getMock('PHPPdf\Cache\NullCache', array('test', 'save', 'load'));
+        $cache->expects($this->exactly($numberOfCacheMethodInvoking))
+              ->method('test')
+              ->will($this->returnValue(false));
+        $cache->expects($this->exactly(0))
+              ->method('load');
+        $cache->expects($this->exactly($numberOfCacheMethodInvoking))
+              ->method('save');
+
+        $documentParserMock = $this->getMock('PHPPdf\Parser\DocumentParser', array('parse'));
+        $documentParserMock->expects($this->once())
+                           ->method('parse')
+                           ->will($this->returnValue(new \PHPPdf\Glyph\PageCollection()));
+
+        $stylesheetParserMock = $this->getMock('PHPPdf\Parser\StylesheetParser', array('parse'));
+        $stylesheetParserMock->expects($this->once())
+                             ->method('parse')
+                             ->will($this->returnValue(new PHPPdf\Parser\StylesheetConstraint()));
+
+        $facade->setDocumentParser($documentParserMock);
+        $facade->setStylesheetParser($stylesheetParserMock);
+        $facade->setCache($cache);
+
+        $facade->setUseCacheForStylesheetConstraint($useCache);
+
+        $facade->render('<pdf></pdf>', '<stylesheet></stylesheet>');
+    }
+
+    public function stylesheetCachingParametersProvider()
+    {
+        return array(
+            array(0, false),
+            array(1, true),
+        );
+    }
 }
