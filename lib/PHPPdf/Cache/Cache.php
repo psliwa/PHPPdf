@@ -12,11 +12,11 @@ interface Cache
     /**
      * Saves data under passed id and returns boolean value about operation status
      *
-     * @param string $id Cache id
      * @param mixed $data Cached data
+     * @param string $id Cache id
      * @return boolean True if cache has been succesfully saved, otherwise false
      */
-    public function save($id, $data);
+    public function save($data, $id);
 
     /**
      * Loads and returns data from cache. Returns false if cache is empty
