@@ -5,6 +5,7 @@ namespace PHPPdf\Formatter;
 use PHPPdf\Glyph\Glyph,
     PHPPdf\Glyph\AbstractGlyph,
     PHPPdf\Glyph\Text,
+    PHPPdf\Document,
     PHPPdf\Util\Boundary;
 
 /**
@@ -13,7 +14,7 @@ use PHPPdf\Glyph\Glyph,
  */
 class FloatFormatter extends BaseFormatter
 {
-    public function postFormat(Glyph $glyph)
+    public function format(Glyph $glyph, Document $document)
     {
         $children = $glyph->getChildren();
         $attributesSnapshot = $glyph->getAttributesSnapshot();

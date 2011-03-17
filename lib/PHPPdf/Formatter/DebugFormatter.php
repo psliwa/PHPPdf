@@ -14,12 +14,7 @@ use PHPPdf\Formatter\BaseFormatter,
  */
 class DebugFormatter extends BaseFormatter
 {
-    public function preFormat(Glyphs\Glyph $glyph)
-    {
-        //@todo
-    }
-
-    public function postFormat(Glyphs\Glyph $glyph)
+    public function format(Glyphs\Glyph $glyph, \PHPPdf\Document $document)
     {
         //@todo
     }

@@ -125,7 +125,6 @@ class FacadeTest extends TestCase
             array('getGlyphsConfigFile', 'loadGlyphs', new PHPPdf\Glyph\Factory()),
             array('getEnhancementsConfigFile', 'loadEnhancements', new \PHPPdf\Enhancement\Factory()),
             array('getFontsConfigFile', 'loadFonts', new PHPPdf\Font\Registry()),
-            array('getFormattersConfigFile', 'loadFormatters', array()),
         );
     }
     

@@ -4,7 +4,7 @@ namespace PHPPdf\Formatter;
 
 use PHPPdf\Formatter\BaseFormatter,
     PHPPdf\Glyph as Glyphs,
-    PHPPdf\Formatter\Chain;
+    PHPPdf\Document;
 
 /**
  * Calculates real dimension of glyph
@@ -13,7 +13,7 @@ use PHPPdf\Formatter\BaseFormatter,
  */
 class StandardDimensionFormatter extends BaseFormatter
 {
-    public function preFormat(Glyphs\Glyph $glyph)
+    public function format(Glyphs\Glyph $glyph, Document $document)
     {
         $parent = $glyph->getParent();
 

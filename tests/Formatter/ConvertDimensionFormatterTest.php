@@ -8,11 +8,12 @@ use PHPPdf\Formatter\ConvertDimensionFormatter;
 class ConvertDimensionFormatterTest extends PHPUnit_Framework_TestCase
 {
     private $formatter;
+    private $document;
 
     public function setUp()
     {
         $this->formatter = new ConvertDimensionFormatter();
-        $this->formatter->setDocument(new Document());
+        $this->document = new Document();
     }
 
     /**
@@ -30,8 +31,7 @@ class ConvertDimensionFormatterTest extends PHPUnit_Framework_TestCase
         $glyph->setHeight(100);
         $glyph->setWidth(200);
 
-        $this->formatter->preFormat($child);
-        $this->formatter->postFormat($child);
+        $this->formatter->format($child, $this->document);
 
         $this->assertEquals(200*0.7, $child->getWidth());
         $this->assertEquals(100*0.5, $child->getHeight());
@@ -54,8 +54,7 @@ class ConvertDimensionFormatterTest extends PHPUnit_Framework_TestCase
 
         $mock->add($glyph);
 
-        $this->formatter->preFormat($glyph);
-        $this->formatter->postFormat($glyph);
+        $this->formatter->format($glyph, $this->document);
 
         $this->assertEquals(($mockRealWidth - $glyph->getWidth())/2, $glyph->getMarginLeft());
     }
@@ -69,8 +68,7 @@ class ConvertDimensionFormatterTest extends PHPUnit_Framework_TestCase
         $glyph = new Container(array('color' => '#ffffff'));
         $page->add($glyph);
 
-        $this->formatter->preFormat($glyph);
-        $this->formatter->postFormat($glyph);
+        $this->formatter->format($glyph, $this->document);
 
         $this->assertTrue($glyph->getColor() instanceof Zend_Pdf_Color);
     }
@@ -104,10 +102,7 @@ class ConvertDimensionFormatterTest extends PHPUnit_Framework_TestCase
                   ->method('getParent')
                   ->will($this->returnValue(new Page()));
 
-        $formatter = new ConvertDimensionFormatter();
-        $formatter->setDocument($documentMock);
 
-        $formatter->preFormat($glyphMock);
-        $formatter->postFormat($glyphMock);
+        $this->formatter->format($glyphMock, $documentMock);
     }
 }

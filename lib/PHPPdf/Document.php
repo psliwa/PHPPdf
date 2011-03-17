@@ -35,10 +35,11 @@ class Document
     /** @var Zend_Pdf */
     private $pdfEngine;
 
-    private $formatters = array();
     private $enhancementFactory = null;
 
     private $fontRegistry = null;
+
+    private $formatters = array();
 
     public function __construct()
     {
@@ -76,17 +77,6 @@ class Document
     {
         $this->processed = false;
         $this->pdfEngine = new \Zend_Pdf();
-    }
-
-    public function addFormatter(Formatters\Formatter $formatter)
-    {
-        $this->formatters[] = $formatter;
-        $formatter->setDocument($this);
-    }
-
-    public function getFormatters()
-    {
-        return $this->formatters;
     }
     
     public function getFontRegistry()
@@ -164,8 +154,7 @@ class Document
         }
 
 
-        $formatters = $this->getFormatters();
-        $pageCollection->format($formatters);
+        $pageCollection->format($this);
         
         $tasks = $pageCollection->getDrawingTasks($this);
 
@@ -204,6 +193,40 @@ class Document
     public function getDocumentEngine()
     {
         return $this->pdfEngine;
+    }
+
+    /**
+     * @param string $className Formatter class name
+     * @return PHPPdf\Formatter\Formatter
+     */
+    public function getFormatter($className)
+    {
+        if(!isset($this->formatters[$className]))
+        {
+            $this->formatters[$className] = $this->createFormatter($className);
+        }
+
+        return $this->formatters[$className];
+    }
+
+    private function createFormatter($className)
+    {
+        try
+        {
+            $class = new \ReflectionClass($className);
+            $formatter = $class->newInstance();
+
+            if(!$formatter instanceof Formatters\Formatter)
+            {
+                throw new \PHPPdf\Exception\Exception(sprintf('Class "%s" dosn\'t implement PHPPdf\Formatrer\Formatter interface.', $className));
+            }
+
+            return $formatter;
+        }
+        catch(\ReflectionException $e)
+        {
+            throw new \PHPPdf\Exception\Exception(sprintf('Class "%s" dosn\'t exist or haven\'t default constructor.', $className), 0, $e);
+        }
     }
 
     public function render()

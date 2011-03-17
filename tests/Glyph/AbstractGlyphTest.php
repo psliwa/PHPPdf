@@ -1,9 +1,9 @@
 <?php
 
-use PHPPdf\Document;
-use PHPPdf\Util\Point;
-use PHPPdf\Glyph\AbstractGlyph;
-use PHPPdf\Glyph\Container;
+use PHPPdf\Document,
+    PHPPdf\Util\Point,
+    PHPPdf\Glyph\AbstractGlyph,
+    PHPPdf\Glyph\Container;
 
 class StubGlyph extends AbstractGlyph
 {
@@ -387,16 +387,42 @@ class AbstractGlyphTest extends TestCase
     /**
      * @test
      */
-    public function serializeWithAttributesAndEnhancementBag()
+    public function serializeWithAttributesAndEnhancementBagAndFormattersNames()
     {
         $this->glyph->mergeEnhancementAttributes('some-enhancement', array('attribute' => 'value'));
         $this->glyph->setAttribute('display', 'inline');
         $this->glyph->getBoundary()->setNext(0, 0);
+        $this->glyph->addFormatterName('SomeName');
 
         $glyph = unserialize(serialize($this->glyph));
 
         $this->assertEquals($this->glyph->getEnhancementsAttributes(), $glyph->getEnhancementsAttributes());
         $this->assertEquals($this->glyph->getAttribute('display'), $glyph->getAttribute('display'));
         $this->assertEquals($this->glyph->getBoundary(), $glyph->getBoundary());
+        $this->assertEquals($this->glyph->getFormattersNames(), $glyph->getFormattersNames());
+    }
+
+    /**
+     * @test
+     */
+    public function callFormattersWhenFormatMethodHasInvoked()
+    {
+        $formatterName = 'someFormatter';
+
+        $documentMock = $this->getMock('PHPPdf\Document', array('getFormatter'));
+
+        $formatterMock = $this->getMock('PHPPdf\Formatter\Formatter', array('format'));
+        $formatterMock->expects($this->once())
+                      ->method('format')
+                      ->with($this->glyph, $documentMock);
+
+
+        $documentMock->expects($this->once())
+                     ->method('getFormatter')
+                     ->with($formatterName)
+                     ->will($this->returnValue($formatterMock));
+
+        $this->glyph->setFormattersNames(array($formatterName));
+        $this->glyph->format($documentMock);
     }
 }

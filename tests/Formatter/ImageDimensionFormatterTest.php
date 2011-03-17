@@ -9,11 +9,12 @@ use PHPPdf\Glyph\Container;
 class ImageDimensionFormatterTest extends PHPUnit_Framework_TestCase
 {
     private $formatter;
+    private $document;
 
     public function setUp()
     {
         $this->formatter = new ImageDimensionFormatter();
-        $this->formatter->setDocument(new Document());
+        $this->document = new Document();
     }
 
     /**
@@ -29,8 +30,7 @@ class ImageDimensionFormatterTest extends PHPUnit_Framework_TestCase
         $boundary = $image->getBoundary();
         $boundary->setNext(0, $page->getHeight());
         
-        $this->formatter->preFormat($image);
-        $this->formatter->postFormat($image);
+        $this->formatter->format($image, $this->document);
 
         $imageHeight = $image->getAttribute('src')->getPixelHeight();
         $imageWidth = $image->getAttribute('src')->getPixelWidth();
@@ -61,8 +61,7 @@ class ImageDimensionFormatterTest extends PHPUnit_Framework_TestCase
 
         $container->add($image);
 
-        $this->formatter->preFormat($image);
-        $this->formatter->postFormat($image);
+        $this->formatter->format($image, $this->document);
 
         $this->assertEquals($container->getHeight(), $image->getHeight());
         $this->assertTrue($container->getWidth() > $image->getWidth());
@@ -86,8 +85,7 @@ class ImageDimensionFormatterTest extends PHPUnit_Framework_TestCase
         $page->add($image);
         $image->getBoundary()->setNext(0, $page->getHeight());
 
-        $this->formatter->preFormat($image);
-        $this->formatter->postFormat($image);
+        $this->formatter->format($image, $this->document);
 
         $excepted = $imageResource->getPixelWidth()/$imageResource->getPixelHeight() * $image->getWidth();
         $this->assertEquals($excepted, $image->getHeight());

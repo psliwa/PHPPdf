@@ -31,45 +31,42 @@ class TextDimensionFormatter extends BaseFormatter
         $this->charCodeMethodName = $methodName;
     }
 
-    public function preFormat(Glyphs\Glyph $glyph)
+    public function format(Glyphs\Glyph $glyph, Document $document)
     {
-        if($glyph instanceof Glyphs\Text)
+        $realHeight = 0;
+        $page = $glyph->getPage();
+        $graphicsContext = $page->getGraphicsContext();
+
+        $fontSize = $glyph->getRecurseAttribute('font-size');
+        $lineHeight = $glyph->getAttribute('line-height');
+
+        $graphicsContext->saveGS();
+        $graphicsContext->setFont($glyph->getFont(), $fontSize);
+
+        $wordsInRows = array();
+        $lineSizes = array();
+
+        $this->separateTextFromGlyphIntoRows($glyph, $wordsInRows, $lineSizes);
+        $graphicsContext->restoreGS();
+
+        $realHeight = $lineHeight*count($wordsInRows);
+
+        $padding = $glyph->getPaddingTop() + $glyph->getPaddingBottom();
+        $glyph->setHeight($realHeight + $padding);
+
+        $display = $glyph->getAttribute('display');
+
+        if($display === Glyphs\AbstractGlyph::DISPLAY_BLOCK)
         {
-            $realHeight = 0;
-            $page = $glyph->getPage();
-            $graphicsContext = $page->getGraphicsContext();
+            $glyph->setWidth($glyph->getWidth());
+        }
 
-            $fontSize = $glyph->getRecurseAttribute('font-size');
-            $lineHeight = $glyph->getAttribute('line-height');
-
-            $graphicsContext->saveGS();
-            $graphicsContext->setFont($glyph->getFont(), $fontSize);
-
-            $wordsInRows = array();
-            $lineSizes = array();
-            
-            $this->separateTextFromGlyphIntoRows($glyph, $wordsInRows, $lineSizes);
-            $graphicsContext->restoreGS();
-
-            $realHeight = $lineHeight*count($wordsInRows);
-
-            $padding = $glyph->getPaddingTop() + $glyph->getPaddingBottom();
-            $glyph->setHeight($realHeight + $padding);
-
-            $display = $glyph->getAttribute('display');
-
-            if($display === Glyphs\AbstractGlyph::DISPLAY_BLOCK)
-            {
-                $glyph->setWidth($glyph->getWidth());
-            }
-
-            $maxLineSize = \max($lineSizes);
-            if($display === Glyphs\AbstractGlyph::DISPLAY_INLINE || $maxLineSize > $glyph->getWidth())
-            {
-                $glyph->setWidth($maxLineSize);
-                $padding = $glyph->getPaddingLeft() + $glyph->getPaddingRight();
-                $glyph->setWidth($glyph->getWidth() + $padding);
-            }
+        $maxLineSize = \max($lineSizes);
+        if($display === Glyphs\AbstractGlyph::DISPLAY_INLINE || $maxLineSize > $glyph->getWidth())
+        {
+            $glyph->setWidth($maxLineSize);
+            $padding = $glyph->getPaddingLeft() + $glyph->getPaddingRight();
+            $glyph->setWidth($glyph->getWidth() + $padding);
         }
     }
 

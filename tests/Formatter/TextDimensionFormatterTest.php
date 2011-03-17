@@ -15,7 +15,7 @@ class TextDimensionFormatterTest extends PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->formatter = new TextDimensionFormatter();
-        $this->formatter->setDocument(new Document());
+        $this->document = new Document();
     }
 
     /**
@@ -28,8 +28,7 @@ class TextDimensionFormatterTest extends PHPUnit_Framework_TestCase
         $page->add($text);
 
         $text->getBoundary()->setNext(0, $page->getHeight());
-        $this->formatter->preFormat($text);
-        $this->formatter->postFormat($text);
+        $this->formatter->format($text, $this->document);
 
         $height = $text->getHeight();
 
@@ -41,8 +40,7 @@ class TextDimensionFormatterTest extends PHPUnit_Framework_TestCase
         
         $text->setText('a a a');
 
-        $this->formatter->preFormat($text);
-        $this->formatter->postFormat($text);
+        $this->formatter->format($text, $this->document);
 
         $this->assertEquals(3*$height, $text->getHeight());
     }
@@ -71,16 +69,14 @@ class TextDimensionFormatterTest extends PHPUnit_Framework_TestCase
 
         $text->getBoundary()->setNext(0, $page->getHeight());
 
-        $this->formatter->preFormat($text);
-        $this->formatter->postFormat($text);
+        $this->formatter->format($text, $this->document);
 
         $text2->setText('ae');
         $page->add($text2);
 
         $text2->getBoundary()->setNext(0, $page->getHeight()/2);
 
-        $this->formatter->preFormat($text2);
-        $this->formatter->postFormat($text2);
+        $this->formatter->format($text2, $this->document);
 
         $this->assertEquals($text->getWidth(), $text2->getWidth());
     }

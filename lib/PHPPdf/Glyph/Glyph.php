@@ -75,7 +75,9 @@ interface Glyph
 
     public function removeAll();
 
-    public function format(array $formatters);
+    public function format(Document $document);
+
+    public function setFormattersNames(array $formatters);
 
     public function makeAttributesSnapshot();
     public function getAttributesSnapshot();

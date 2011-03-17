@@ -4,7 +4,7 @@ namespace PHPPdf\Formatter;
 
 use PHPPdf\Formatter\BaseFormatter,
     PHPPdf\Glyph as Glyphs,
-    PHPPdf\Formatter\Chain;
+    PHPPdf\Document;
 
 /**
  * Convert values of some attributes
@@ -14,7 +14,7 @@ use PHPPdf\Formatter\BaseFormatter,
  */
 class ConvertDimensionFormatter extends BaseFormatter
 {
-    public function preFormat(Glyphs\Glyph $glyph)
+    public function format(Glyphs\Glyph $glyph, Document $document)
     {
         if(!$glyph instanceof Glyphs\Page)
         {
@@ -22,7 +22,7 @@ class ConvertDimensionFormatter extends BaseFormatter
             $this->convertAutoMargins($glyph);
         }
         $this->convertColorAttributes($glyph);
-        $this->convertFontType($glyph);
+        $this->convertFontType($glyph, $document);
     }
 
     private function convertPercentageDimensions(Glyphs\Glyph $glyph)
@@ -102,12 +102,12 @@ class ConvertDimensionFormatter extends BaseFormatter
         }
     }
 
-    private function convertFontType(Glyphs\Glyph $glyph)
+    private function convertFontType(Glyphs\Glyph $glyph, Document $document)
     {
         $font = $glyph->getAttribute('font-type');
         if($font && is_string($font))
         {
-            $font = $this->getDocument()->getFontRegistry()->get($font);
+            $font = $document->getFontRegistry()->get($font);
             $glyph->setAttribute('font-type', $font);
         }
     }

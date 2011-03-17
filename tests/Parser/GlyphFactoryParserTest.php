@@ -136,4 +136,34 @@ XML;
 
         $this->assertEquals($enhancements, $glyph->getEnhancementsAttributes());
     }
+
+    /**
+     * @test
+     * @todo formatter class attribute is required
+     */
+    public function setFormattersNamesForGlyph()
+    {
+        $xml = <<<XML
+<glyphs>
+    <glyph name="tag1" class="PHPPdf\Glyph\Container">
+        <formatters>
+            <formatter class="PHPPdf\Formatter\FloatFormatter" />
+        </formatters>
+    </glyph>
+    <glyph name="tag2" class="PHPPdf\Glyph\Container">
+        <formatters>
+            <formatter class="PHPPdf\Formatter\FloatFormatter" />
+        </formatters>
+    </glyph>
+</glyphs>
+XML;
+        $glyphFactory = $this->parser->parse($xml);
+
+        foreach(array('tag1', 'tag2') as $tag)
+        {
+            $glyph = $glyphFactory->getPrototype($tag);
+
+            $this->assertEquals(array('PHPPdf\Formatter\FloatFormatter'), $glyph->getFormattersNames());
+        }
+    }
 }

@@ -2,14 +2,15 @@
 
 namespace PHPPdf\Formatter;
 
-use PHPPdf\Glyph as Glyphs;
+use PHPPdf\Glyph as Glyphs,
+    PHPPdf\Document;
 
 /**
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
 class ImageDimensionFormatter extends BaseFormatter
 {
-    public function preFormat(Glyphs\Glyph $glyph)
+    public function format(Glyphs\Glyph $glyph, Document $document)
     {
         if($this->isImageAndSizesArentSet($glyph))
         {

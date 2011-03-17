@@ -3,6 +3,7 @@
 namespace PHPPdf\Formatter;
 
 use PHPPdf\Glyph\Glyph,
+    PHPPdf\Document,
     PHPPdf\Glyph\Table;
 
 /**
@@ -11,83 +12,80 @@ use PHPPdf\Glyph\Glyph,
 class TableFormatter extends BaseFormatter
 {
     //TODO refactoring
-    public function postFormat(Glyph $glyph)
+    public function format(Glyph $glyph, Document $document)
     {
-        if($glyph instanceof Table)
+        $rows = $glyph->getChildren();
+
+        $cellMaxWidths = array();
+        $cellMaxWidthsWidthMargins = array();
+        foreach($rows as $row)
         {
-            $rows = $glyph->getChildren();
+            $cells = $row->getChildren();
 
-            $cellMaxWidths = array();
-            $cellMaxWidthsWidthMargins = array();
-            foreach($rows as $row)
+            foreach($cells as $index => $cell)
             {
-                $cells = $row->getChildren();
+                $width = $cell->getWidth();
+                $widthWidthMargin = $width + $cell->getMarginLeft() + $cell->getMarginRight();
 
-                foreach($cells as $index => $cell)
+                if(!isset($cellMaxWidths[$index]) || $cellMaxWidths[$index] < $width)
                 {
-                    $width = $cell->getWidth();
-                    $widthWidthMargin = $width + $cell->getMarginLeft() + $cell->getMarginRight();
+                    $cellMaxWidths[$index] = $width;
+                }
 
-                    if(!isset($cellMaxWidths[$index]) || $cellMaxWidths[$index] < $width)
-                    {
-                        $cellMaxWidths[$index] = $width;
-                    }
-
-                    if(!isset($cellMaxWidthsWidthMargins[$index]) || $cellMaxWidthsWidthMargins[$index] < $widthWidthMargin)
-                    {
-                        $cellMaxWidthsWidthMargins[$index] = $widthWidthMargin;
-                    }
+                if(!isset($cellMaxWidthsWidthMargins[$index]) || $cellMaxWidthsWidthMargins[$index] < $widthWidthMargin)
+                {
+                    $cellMaxWidthsWidthMargins[$index] = $widthWidthMargin;
                 }
             }
+        }
 
-            $widthOfAllCells = array_sum($cellMaxWidths);
-            $diff = $glyph->getWidth() - $widthOfAllCells;
+        $widthOfAllCells = array_sum($cellMaxWidths);
+        $diff = $glyph->getWidth() - $widthOfAllCells;
 
-            $widthWithMarginOfAllCells = array_sum($cellMaxWidthsWidthMargins);
-            $diffWithMargin = $glyph->getWidth() - $widthWithMarginOfAllCells;
+        $widthWithMarginOfAllCells = array_sum($cellMaxWidthsWidthMargins);
+        $diffWithMargin = $glyph->getWidth() - $widthWithMarginOfAllCells;
 
-            if($diffWithMargin > 0)
+        if($diffWithMargin > 0)
+        {
+            $cellsExpand = $diff/count($cellMaxWidths);
+
+            array_walk($cellMaxWidths, function(&$value, $key) use ($cellsExpand)
             {
-                $cellsExpand = $diff/count($cellMaxWidths);
+                $value += $cellsExpand;
+            });
+        }
+        else
+        {
+            $glyph->setWidth($glyph->getWidth()-$diffWithMargin);
+            $boundary = $glyph->getBoundary();
+            $boundary->pointTranslate(1, -$diffWithMargin, 0);
+            $boundary->pointTranslate(2, -$diffWithMargin, 0);
 
-                array_walk($cellMaxWidths, function(&$value, $key) use ($cellsExpand)
-                {
-                    $value += $cellsExpand;
-                });
-            }
-            else
+            foreach($glyph->getChildren() as $row)
             {
-                $glyph->setWidth($glyph->getWidth()-$diffWithMargin);
-                $boundary = $glyph->getBoundary();
+                $boundary = $row->getBoundary();
                 $boundary->pointTranslate(1, -$diffWithMargin, 0);
                 $boundary->pointTranslate(2, -$diffWithMargin, 0);
-
-                foreach($glyph->getChildren() as $row)
-                {
-                    $boundary = $row->getBoundary();
-                    $boundary->pointTranslate(1, -$diffWithMargin, 0);
-                    $boundary->pointTranslate(2, -$diffWithMargin, 0);
-                }
             }
+        }
 
-            foreach($rows as $row)
+        foreach($rows as $row)
+        {
+            $cells = $row->getChildren();
+            $translate = 0;
+            foreach($cells as $index => $cell)
             {
-                $cells = $row->getChildren();
-                $translate = 0;
-                foreach($cells as $index => $cell)
-                {
-                    $diffInHeight = $row->getHeight() - ($cell->getHeight() + $cell->getMarginTop() + $cell->getMarginBottom());
-                    $cellExpand = $cellMaxWidths[$index] - $cell->getWidth();
-                    $cell->translate($translate, 0);
-                    $boundary = $cell->getBoundary();
-                    $boundary->pointTranslate(1, $cellExpand, 0);
-                    $boundary->pointTranslate(2, $cellExpand, $diffInHeight);
-                    $boundary->pointTranslate(3, 0, $diffInHeight);
-                    $cell->setWidth($cell->getWidth() + $cellExpand);
-                    $cell->setHeight($cell->getHeight() + $diffInHeight);
+                $diffInHeight = $row->getHeight() - ($cell->getHeight() + $cell->getMarginTop() + $cell->getMarginBottom());
+                $cellExpand = $cellMaxWidths[$index] - $cell->getWidth();
+                $cell->translate($translate, 0);
+                $boundary = $cell->getBoundary();
+                $boundary->pointTranslate(1, $cellExpand, 0);
+                $boundary->pointTranslate(2, $cellExpand, $diffInHeight);
+                $boundary->pointTranslate(3, 0, $diffInHeight);
+                $cell->setWidth($cell->getWidth() + $cellExpand);
+                $cell->setHeight($cell->getHeight() + $diffInHeight);
 
-                    $translate += $cellExpand;
-                }
+                $translate += $cellExpand;
             }
         }
     }

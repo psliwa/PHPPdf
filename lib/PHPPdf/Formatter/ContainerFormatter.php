@@ -13,15 +13,12 @@ use PHPPdf\Formatter\Formatter,
  */
 class ContainerFormatter extends BaseFormatter
 {
-    public function preFormat(Glyphs\Glyph $glyph)
+    public function format(Glyphs\Glyph $glyph, \PHPPdf\Document $document)
     {
-        if($glyph instanceof Glyphs\Container)
+        foreach($glyph->getChildren() as $child)
         {
-            foreach($glyph->getChildren() as $child)
-            {
-                $child->preFormat($this->getDocument());
-                $child->format($this->getDocument()->getFormatters());
-            }
+            $child->preFormat($document);
+            $child->format($document);
         }
     }
 }

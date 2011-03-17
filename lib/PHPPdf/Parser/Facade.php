@@ -121,7 +121,7 @@ class Facade
             $this->loadGlyphs();
             $this->loadEnhancements();
             $this->loadFonts();
-            $this->loadFormatters();
+//            $this->loadFormatters();
 
             $this->loaded = true;
         }
@@ -144,7 +144,10 @@ class Facade
         
         if($glyphFactory->hasPrototype('page'))
         {
-            $glyphFactory->addPrototype('dynamic-page', new \PHPPdf\Glyph\DynamicPage($glyphFactory->create('page')));
+            $page = $glyphFactory->create('page');
+            $dynamicPage = new \PHPPdf\Glyph\DynamicPage($page);
+            $dynamicPage->setFormattersNames($page->getFormattersNames());
+            $glyphFactory->addPrototype('dynamic-page', $dynamicPage);
         }
 
         $this->getDocumentParser()->setGlyphFactory($glyphFactory);

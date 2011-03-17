@@ -13,8 +13,11 @@ class GlyphFactoryParser extends XmlParser
     const ROOT_TAG = 'glyphs';
     const GLYPH_TAG = 'glyph';
     const STYLESHEET_TAG = 'stylesheet';
+    const FORMATTERS_TAG = 'formatters';
+    const FORMATTER_TAG = 'formatter';
 
     private $stylesheetParser;
+    private $isFormattersParsing = false;
 
     public function  __construct()
     {
@@ -45,6 +48,14 @@ class GlyphFactoryParser extends XmlParser
         elseif($reader->name === self::STYLESHEET_TAG)
         {
             $this->parseStylesheet($reader);
+        }
+        elseif($reader->name === self::FORMATTERS_TAG)
+        {
+            $this->isFormattersParsing = true;
+        }
+        elseif($reader->name === self::FORMATTER_TAG)
+        {
+            $this->parseFormatter($reader);
         }
     }
 
@@ -87,8 +98,24 @@ class GlyphFactoryParser extends XmlParser
         }
     }
 
+    private function parseFormatter(\XMLReader $reader)
+    {
+        $glyph = $this->getLastElementFromStack();
+
+        $formatterClassName = $reader->getAttribute('class');
+
+        $glyph->addFormatterName($formatterClassName);
+    }
+
     protected function parseEndElement(\XMLReader $reader)
     {
-        $this->popFromStack();
+        if($reader->name === self::FORMATTERS_TAG)
+        {
+            $this->isFormattersParsing = false;
+        }
+        elseif(!$this->isFormattersParsing)
+        {
+            $this->popFromStack();
+        }
     }
 }

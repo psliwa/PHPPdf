@@ -8,11 +8,12 @@ use PHPPdf\Formatter\StandardDimensionFormatter;
 class StandardDimensionFormatterTest extends PHPUnit_Framework_TestCase
 {
     private $formatter;
+    private $document;
 
     public function setUp()
     {
         $this->formatter = new StandardDimensionFormatter();
-        $this->formatter->setDocument(new Document());
+        $this->document = new Document();
     }
 
     /**
@@ -34,8 +35,7 @@ class StandardDimensionFormatterTest extends PHPUnit_Framework_TestCase
               ->method('setHeight')
               ->with($this->equalTo(140));
 
-        $this->formatter->preFormat($glyph);
-        $this->formatter->postFormat($glyph);
+        $this->formatter->format($glyph, $this->document);
     }
 
     /**
@@ -55,7 +55,6 @@ class StandardDimensionFormatterTest extends PHPUnit_Framework_TestCase
               ->method('getFloat')
               ->will($this->returnValue('left'));
 
-        $this->formatter->preFormat($glyph);
-        $this->formatter->postFormat($glyph);
+        $this->formatter->format($glyph, $this->document);
     }
 }

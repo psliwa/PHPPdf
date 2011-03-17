@@ -7,6 +7,7 @@ use PHPPdf\Document,
     PHPPdf\Util\Boundary,
     PHPPdf\Util\DrawingTask,
     PHPPdf\Enhancement\EnhancementBag,
+    PHPPdf\Formatter\Formatter,
     PHPPdf\Util\GlyphIterator;
 
 /**
@@ -38,6 +39,7 @@ abstract class AbstractGlyph implements Glyph, \ArrayAccess, \Serializable
     private $enhancements = array();
     private $enhancementBag = null;
     private $drawingTasks = array();
+    private $formattersNames = array();
 
     public function __construct(array $attributes = array())
     {
@@ -800,18 +802,28 @@ abstract class AbstractGlyph implements Glyph, \ArrayAccess, \Serializable
     /**
      * Format glyph by given formatters.
      */
-    public function format(array $formatters)
+    public function format(Document $document)
     {
-        foreach($formatters as $formatter)
+        foreach($this->formattersNames as $formatterName)
         {
-            $formatter->preFormat($this);
+            $formatter = $document->getFormatter($formatterName);
+            $formatter->format($this, $document);
         }
+    }
 
-        for($i=count($formatters) - 1; $i>=0; $i--)
-        {
-            $formatter = $formatters[$i];
-            $formatter->postFormat($this);
-        }
+    public function setFormattersNames(array $formattersNames)
+    {
+        $this->formattersNames = $formattersNames;
+    }
+
+    public function addFormatterName($formatterName)
+    {
+        $this->formattersNames[] = $formatterName;
+    }
+
+    public function getFormattersNames()
+    {
+        return $this->formattersNames;
     }
 
     public function getPlaceholder($name)
@@ -835,6 +847,7 @@ abstract class AbstractGlyph implements Glyph, \ArrayAccess, \Serializable
             'boundary' => $this->getBoundary(),
             'attributes' => $this->attributes,
             'enhancementBag' => $this->enhancementBag->getAll(),
+            'formattersNames' => $this->formattersNames,
         );
 
         return serialize($data);
@@ -847,6 +860,7 @@ abstract class AbstractGlyph implements Glyph, \ArrayAccess, \Serializable
         $this->setBoundary($data['boundary']);
         $this->attributes = $data['attributes'];
         $this->enhancementBag = new EnhancementBag($data['enhancementBag']);
+        $this->setFormattersNames($data['formattersNames']);
     }
 
     public function __toString()

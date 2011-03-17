@@ -14,31 +14,6 @@ use PHPPdf\Formatter\Formatter,
  */
 abstract class BaseFormatter implements Formatter, \Serializable
 {
-    private $document;
-
-    public function setDocument(Document $document)
-    {
-        $this->document = $document;
-    }
-
-    public function getDocument()
-    {
-        if($this->document === null)
-        {
-            throw new \LogicException(sprintf('PHPPdf\Document object haven\'t set in object "%s".', __CLASS__));
-        }
-
-        return $this->document;
-    }
-
-    public function preFormat(Glyph $glyph)
-    {
-    }
-
-    public function postFormat(Glyph $glyph)
-    {
-    }
-
     public function serialize()
     {
         return '';

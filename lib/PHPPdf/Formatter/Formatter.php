@@ -12,8 +12,5 @@ use PHPPdf\Glyph\Glyph,
  */
 interface Formatter
 {
-    public function getDocument();
-    public function setDocument(Document $document);
-    public function preFormat(Glyph $glyph);
-    public function postFormat(Glyph $glyph);
+    public function format(Glyph $glyph, Document $document);
 }

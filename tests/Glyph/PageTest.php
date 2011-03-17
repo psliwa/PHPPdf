@@ -271,7 +271,7 @@ class PageTest extends TestCase
         $this->page->setHeader($header);
         $this->page->setHeader($footer);
 
-        $this->page->format(array());
+        $this->page->format(new PHPPdf\Document());
     }
 
     private function getHeaderOrFooterMockWithNeverFormatMethodInvocation()

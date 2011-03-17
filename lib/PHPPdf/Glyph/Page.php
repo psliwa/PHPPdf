@@ -334,34 +334,12 @@ class Page extends Container
         return $this->footer;
     }
 
-    public function format(array $formatters)
-    {
-        $acceptFormatters = array();
-        foreach($formatters as $formatter)
-        {
-            if($formatter instanceof \PHPPdf\Formatter\ContainerFormatter || $formatter instanceof \PHPPdf\Formatter\ConvertDimensionFormatter || $formatter instanceof \PHPPdf\Formatter\FloatFormatter)
-            {
-                $acceptFormatters[] = $formatter;
-            }
-        }
-
-        parent::format($acceptFormatters);
-    }
-
     public function prepareTemplate(Document $document)
     {
-        $formatters = $document->getFormatters();
-
-        foreach($formatters as $formatter)
-        {
-            if($formatter instanceof \PHPPdf\Formatter\ConvertDimensionFormatter)
-            {
-                parent::format(array($formatter));
-            }
-        }
+        $this->formatConvertAttributes($document);
         
-        $this->getHeader()->format($formatters);
-        $this->getFooter()->format($formatters);
+        $this->getHeader()->format($document);
+        $this->getFooter()->format($document);
 
         $tasks = array();
 
@@ -374,6 +352,14 @@ class Page extends Container
         $document->invokeTasks($tasks);
 
         $this->preparedTemplate = true;
+    }
+
+    private function formatConvertAttributes(Document $document)
+    {
+        $formatterName = 'PHPPdf\Formatter\ConvertDimensionFormatter';
+
+        $formatter = $document->getFormatter($formatterName);
+        $formatter->format($this, $document);
     }
 
     public function getContext()

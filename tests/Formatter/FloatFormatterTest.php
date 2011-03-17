@@ -12,11 +12,12 @@ class FloatFormatterTest extends PHPUnit_Framework_TestCase
      * @var PHPPdf\Formatter\FloatFormatter
      */
     private $formatter = null;
+    private $document;
 
     public function setUp()
     {
         $this->formatter = new FloatFormatter();
-        $this->formatter->setDocument(new Document());
+        $this->document = new Document();
     }
 
     /**
@@ -30,8 +31,7 @@ class FloatFormatterTest extends PHPUnit_Framework_TestCase
                 array(0, 400, 200, 200), 'left'
         );
 
-        $this->formatter->preFormat($containers[0]);
-        $this->formatter->postFormat($containers[0]);
+        $this->formatter->format($containers[0], $this->document);
 
         $this->assertEquals(array(300, 700), $containers[2]->getStartDrawingPoint());
         $this->assertEquals(array(500, 500), $containers[2]->getEndDrawingPoint());
@@ -98,8 +98,7 @@ class FloatFormatterTest extends PHPUnit_Framework_TestCase
                 array(0, 200, 200, 200), 'right'
         );
 
-        $this->formatter->preFormat($containers[0]);
-        $this->formatter->postFormat($containers[0]);
+        $this->formatter->format($containers[0], $this->document);
 
         $this->assertEquals(array(500, 500), $containers[2]->getStartDrawingPoint());
         $this->assertEquals(array(700, 300), $containers[2]->getEndDrawingPoint());
@@ -117,8 +116,7 @@ class FloatFormatterTest extends PHPUnit_Framework_TestCase
                 array(0, 200, 100, 100), 'none'
         );
 
-        $this->formatter->preFormat($containers[0]);
-        $this->formatter->postFormat($containers[0]);
+        $this->formatter->format($containers[0], $this->document);
 
         $this->assertEquals(array(500, 700), $containers[2]->getStartDrawingPoint());
         $this->assertEquals(array(700, 500), $containers[2]->getEndDrawingPoint());
@@ -140,8 +138,7 @@ class FloatFormatterTest extends PHPUnit_Framework_TestCase
                 array(0, 420, 20, 20), 'left'
         );
 
-        $this->formatter->preFormat($containers[0]);
-        $this->formatter->postFormat($containers[0]);
+        $this->formatter->format($containers[0], $this->document);
 
         $boundary = $containers[0]->getBoundary();
 
@@ -162,8 +159,7 @@ class FloatFormatterTest extends PHPUnit_Framework_TestCase
                 array(0, 480, 80, 20), $float
         );
 
-        $this->formatter->preFormat($containers[0]);
-        $this->formatter->postFormat($containers[0]);
+        $this->formatter->format($containers[0], $this->document);
 
         $boundary = $containers[0]->getBoundary();
         $this->assertEquals(array(0, 500), $boundary[0]->toArray());
@@ -195,8 +191,7 @@ class FloatFormatterTest extends PHPUnit_Framework_TestCase
         $containers[2]->setPaddingTop(10);
         $containers[2]->setMarginBottom(15);
 
-        $this->formatter->preFormat($containers[0]);
-        $this->formatter->postFormat($containers[0]);
+        $this->formatter->format($containers[0], $this->document);
 
         $this->assertEquals($containers[1]->getFirstPoint()->getY(), $containers[2]->getFirstPoint()->getY());
     }
@@ -230,8 +225,7 @@ class FloatFormatterTest extends PHPUnit_Framework_TestCase
 
         $containers[1]->setPaddingRight(20);
 
-        $this->formatter->preFormat($containers[0]);
-        $this->formatter->postFormat($containers[0]);
+        $this->formatter->format($containers[0], $this->document);
 
         $this->assertEquals($containers[0]->getBoundary()->getDiagonalPoint()->getX(), $containers[1]->getBoundary()->getDiagonalPoint()->getX());
     }
@@ -255,8 +249,7 @@ class FloatFormatterTest extends PHPUnit_Framework_TestCase
                   ->method('getChildren')
                   ->will($this->returnValue($children));
 
-        $this->formatter->preFormat($container);
-        $this->formatter->postFormat($container);
+        $this->formatter->format($container, $this->document);
     }
 
     /**
@@ -274,7 +267,6 @@ class FloatFormatterTest extends PHPUnit_Framework_TestCase
                   ->method('getChildren')
                   ->will($this->returnValue(array($child)));
 
-        $this->formatter->preFormat($container);
-        $this->formatter->postFormat($container);
+        $this->formatter->format($container, $this->document);
     }
 }

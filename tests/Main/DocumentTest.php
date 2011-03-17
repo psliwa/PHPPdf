@@ -42,18 +42,29 @@ class DocumentTest extends PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function invokeDrawingTasksOfPagesWhenDrawMethodIsInvoked()
+    public function invokeDrawingTasksOfPagesWhenDrawMethodIsInvoked($assertArguments = true)
     {
         $taskMock = $this->getMock('PHPPdf\Util\DrawingTask', array('__invoke'), array(), '', false);
         $taskMock->expects($this->once())
                  ->method('__invoke');
 
-        $mock = $this->getMock('\PHPPdf\Glyph\Page', array('getDrawingTasks'));
+        $mock = $this->getMock('\PHPPdf\Glyph\PageCollection', array('getDrawingTasks', 'format'));
+
+        $matcher = $mock->expects($this->once())
+                        ->method('format')
+                        ->id(1);
+        
+        if($assertArguments)
+        {
+            $matcher->with($this->document);
+        }
+
         $mock->expects($this->once())
+             ->after(1)
              ->method('getDrawingTasks')
              ->will($this->returnValue(array($taskMock)));
 
-        $this->document->draw(array($mock));
+        $this->document->draw($mock);
     }
 
     /**
@@ -61,9 +72,9 @@ class DocumentTest extends PHPUnit_Framework_TestCase
      */
     public function drawMethodCanBeMultiplyCalledIfDocumentStatusHaveResetByInitializeMethod()
     {
-        $this->invokeDrawingTasksOfPagesWhenDrawMethodIsInvoked();
+        $this->invokeDrawingTasksOfPagesWhenDrawMethodIsInvoked(false);
         $this->document->initialize();
-        $this->invokeDrawingTasksOfPagesWhenDrawMethodIsInvoked();
+        $this->invokeDrawingTasksOfPagesWhenDrawMethodIsInvoked(false);
     }
 
     /**
@@ -84,36 +95,6 @@ class DocumentTest extends PHPUnit_Framework_TestCase
 
         $this->document->draw(array($mock));
         $this->document->draw(array($mock));
-    }
-
-    /**
-     * @test
-     */
-    public function gettingAndSettingFormatters()
-    {
-        $formatters = $this->document->getFormatters();
-
-        $this->assertTrue(count($formatters) === 0);
-
-        $formatter = $this->getMock('PHPPdf\Formatter\BaseFormatter');
-
-        $this->document->addFormatter($formatter);
-        $formatters = $this->document->getFormatters();
-        
-        $this->assertEquals(1, count($formatters));
-    }
-
-    /**
-     * @test
-     */
-    public function setDocumentForAddedFormatter()
-    {
-        $formatter = $this->getMock('PHPPdf\Formatter\BaseFormatter', array('preFormat', 'postFormat', 'getDocument', 'setDocument'));
-        $formatter->expects($this->once())
-                  ->method('setDocument')
-                  ->with($this->document);
-
-        $this->document->addFormatter($formatter);
     }
 
     /**
@@ -196,5 +177,37 @@ class DocumentTest extends PHPUnit_Framework_TestCase
         $this->document->setFontRegistry($registry);
 
         $this->assertTrue($this->document->getFontRegistry() === $registry);
+    }
+
+    /**
+     * @test
+     */
+    public function createFormatterByClassName()
+    {
+        $className = 'PHPPdf\Formatter\FloatFormatter';
+
+        $formatter = $this->document->getFormatter($className);
+
+        $this->assertInstanceOf($className, $formatter);
+
+        $this->assertTrue($formatter === $this->document->getFormatter($className));
+    }
+
+    /**
+     * @test
+     * @expectedException PHPPdf\Exception\Exception
+     * @dataProvider invalidClassNamesProvider
+     */
+    public function throwExceptionIfPassInvalidFormatterClassName($className)
+    {
+        $this->document->getFormatter($className);
+    }
+
+    public function invalidClassNamesProvider()
+    {
+        return array(
+            array('stdClass'),
+            array('UnexistedClass'),
+        );
     }
 }

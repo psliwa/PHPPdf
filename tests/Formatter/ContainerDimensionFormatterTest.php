@@ -13,7 +13,6 @@ class ContainerDimensionFormatterTest extends PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->formatter = new ContainerDimensionFormatter();
-        $this->formatter->setDocument(new Document());
     }
 
     /**
@@ -32,8 +31,7 @@ class ContainerDimensionFormatterTest extends PHPUnit_Framework_TestCase
             $composeGlyph->add($child);
         }
 
-        $this->formatter->preFormat($composeGlyph);
-        $this->formatter->postFormat($composeGlyph);
+        $this->formatter->format($composeGlyph, new Document());
 
         $height = 0;
         foreach($children as $child)

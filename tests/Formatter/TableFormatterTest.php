@@ -11,7 +11,6 @@ class TableFormatterTest extends PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->formatter = new TableFormatter();
-        $this->formatter->setDocument(new Document());
     }
 
     /**
@@ -46,8 +45,7 @@ class TableFormatterTest extends PHPUnit_Framework_TestCase
             ->method('getChildren')
             ->will($this->returnValue($cells));
 
-        $this->formatter->preFormat($table);
-        $this->formatter->postFormat($table);
+        $this->formatter->format($table, new Document());
 
         $prevCellBoundary = null;
         foreach($cells as $cell)

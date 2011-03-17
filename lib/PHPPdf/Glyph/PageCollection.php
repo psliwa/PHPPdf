@@ -28,14 +28,12 @@ class PageCollection extends Container
         throw new \LogicException('PageCollection can\'t be splitted.');
     }
 
-    public function format(array $formatters)
+    public function format(Document $document)
     {
-        foreach($formatters as $formatter)
+        foreach($this->getChildren() as $page)
         {
-            if($formatter instanceof \PHPPdf\Formatter\ContainerFormatter)
-            {
-                parent::format(array($formatter));
-            }
+            $page->preFormat($document);
+            $page->format($document);
         }
     }
 }
