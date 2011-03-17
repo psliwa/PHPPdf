@@ -246,13 +246,12 @@ W nagłówku i stopce można korzystać z specjalnego tagu "<page-info></page-in
 Biblioteka ma 4 podstawowe pliki konfiguracyjne, które pozwalają na dostosowanie biblioteki do swoich potrzeb oraz do jej rozszerzenia.
 
 * enhancements.xml - przypisywanie klas upiększeń (atrybutów złożonych) pod nazwy logiczne, które identyfikują dany typ upiększenia w obrębie całej biblioteki
-* glyphs.xml - definiowanie tagów dostępnych w dokumencie xml wraz z domyślnymi stylami
+* glyphs.xml - definiowanie tagów dostępnych w dokumencie xml wraz z domyślnymi stylami oraz obiektami formatującymi
 * fonts.xml - definowanie czcionek i przypisywanie ich do nazw logicznych, które identyfikują daną czcionkę w obrębie całej biblioteki
-* formatters.xml - definiowanie używanych formaterów. Kolejność elementów ma znaczenie.
 
 Aby zmienić domyślne pliki konfiguracyjne należy użyć obiektu klasy FacadeBuilder aby nowe ścieżki przekazać do obiektu fasady:
 
-    $builder = PHPPdf\Parser\FacadeBuilder::create()->setFormattersConfigFile('...')->setFontsConfigFile('...');
+    $builder = PHPPdf\Parser\FacadeBuilder::create()->setGlyphsConfigFile('...')->setFontsConfigFile('...');
     $facade = $builder->build();
 
 Można ustawić cache dla plików konfiguracyjnych oraz szablonów stylów:
