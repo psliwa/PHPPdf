@@ -24,9 +24,6 @@ class FacadeConfigurationTest extends PHPUnit_Framework_TestCase
 
         $this->facadeConfiguration->setFontsConfigFile('c');
         $this->assertEquals('c', $this->facadeConfiguration->getFontsConfigFile());
-
-        $this->facadeConfiguration->setFormattersConfigFile('d');
-        $this->assertEquals('d', $this->facadeConfiguration->getFormattersConfigFile());
     }
 
     /**
@@ -37,7 +34,6 @@ class FacadeConfigurationTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($this->facadeConfiguration === $this->facadeConfiguration->setGlyphsConfigFile('a'));
         $this->assertTrue($this->facadeConfiguration === $this->facadeConfiguration->setEnhancementsConfigFile('a'));
         $this->assertTrue($this->facadeConfiguration === $this->facadeConfiguration->setFontsConfigFile('a'));
-        $this->assertTrue($this->facadeConfiguration === $this->facadeConfiguration->setFormattersConfigFile('a'));
     }
 
     /**
@@ -48,6 +44,5 @@ class FacadeConfigurationTest extends PHPUnit_Framework_TestCase
         $this->assertNotNull($this->facadeConfiguration->getGlyphsConfigFile());
         $this->assertNotNull($this->facadeConfiguration->getEnhancementsConfigFile());
         $this->assertNotNull($this->facadeConfiguration->getFontsConfigFile());
-        $this->assertNotNull($this->facadeConfiguration->getFormattersConfigFile());
     }
 }

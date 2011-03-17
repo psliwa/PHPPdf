@@ -17,7 +17,6 @@ class FacadeConfiguration
             'glyph' => __DIR__.'/../Resources/config/glyphs.xml',
             'enhancement' => __DIR__.'/../Resources/config/enhancements.xml',
             'font' => __DIR__.'/../Resources/config/fonts.xml',
-            'formatter' => __DIR__.'/../Resources/config/formatters.xml',
         );
     }
 
@@ -65,24 +64,6 @@ class FacadeConfiguration
     public function getEnhancementsConfigFile()
     {
         return $this->configFiles['enhancement'];
-    }
-
-    /**
-     * Set config file for populating pdf's formatters
-     *
-     * @param string $file
-     * @return FacadeConfiguration
-     */
-    public function setFormattersConfigFile($file)
-    {
-        $this->configFiles['formatter'] = $file;
-
-        return $this;
-    }
-
-    public function getFormattersConfigFile()
-    {
-        return $this->configFiles['formatter'];
     }
     
     /**

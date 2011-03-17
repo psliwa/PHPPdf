@@ -121,7 +121,6 @@ class Facade
             $this->loadGlyphs();
             $this->loadEnhancements();
             $this->loadFonts();
-//            $this->loadFormatters();
 
             $this->loaded = true;
         }
@@ -213,26 +212,6 @@ class Facade
 
         $fontRegistry = $this->getFromCacheOrCallClosure($file, $doLoadFonts);
         $this->getDocument()->setFontRegistry($fontRegistry);
-    }
-
-    private function loadFormatters()
-    {
-        $file = $this->facadeConfiguration->getFormattersConfigFile();
-
-        $doLoadFormatters = function($content)
-        {
-            $parser = new FormatterParser();
-            $formatters = $parser->parse($content);
-
-            return $formatters;
-        };
-
-        $formatters = $this->getFromCacheOrCallClosure($file, $doLoadFormatters);
-
-        foreach($formatters as $formatter)
-        {
-            $this->getDocument()->addFormatter($formatter);
-        }
     }
 
     private function retrieveStylesheetConstraint($stylesheetXml)
