@@ -2,16 +2,18 @@
 
 namespace PHPPdf\Glyph\Table;
 
-use PHPPdf\Glyph\Table\Cell;
-use PHPPdf\Glyph\Container;
-use PHPPdf\Glyph\Glyph;
+use PHPPdf\Glyph\Table\Cell,
+    PHPPdf\Glyph\Container,
+    PHPPdf\Glyph\AttributeListener,
+    PHPPdf\Glyph\Glyph;
 
 /**
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
-class Row extends Container
+class Row extends Container implements AttributeListener
 {
     private $numberOfColumns = 0;
+    private $maxHeightOfCells = 0;
 
     public function add(Glyph $glyph)
     {
@@ -27,6 +29,8 @@ class Row extends Container
         {
             $glyph->addAttributeListener($parent);
         }
+
+        $glyph->addAttributeListener($this);
 
         return parent::add($glyph);
     }
@@ -60,5 +64,23 @@ class Row extends Container
     {
         parent::reset();
         $this->numberOfColumns = 0;
+    }
+
+    public function attributeChanged(Glyph $glyph, $attributeName, $oldValue)
+    {
+        if($attributeName === 'height')
+        {
+            $height = $glyph->getHeight();
+
+            if($height > $this->maxHeightOfCells)
+            {
+                $this->maxHeightOfCells = $height;
+            }
+        }
+    }
+
+    public function getMaxHeightOfCells()
+    {
+        return $this->maxHeightOfCells;
     }
 }

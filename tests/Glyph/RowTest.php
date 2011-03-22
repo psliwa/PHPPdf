@@ -115,13 +115,63 @@ class RowTest extends TestCase
     public function addTableAsListenerWhenCellHasAddedToRow()
     {
         $table = $this->getMock('PHPPdf\Glyph\Table');
-        $cell = $this->getMock('PHPPdf\Glyph\Table\Cell', array('addAttributeListener'));
-
-        $cell->expects($this->once())
-             ->method('addAttributeListener')
-             ->with($table);
+        $cell = $this->cellWithAddAttributeListenerExpectation($table);
 
         $this->row->setParent($table);
         $this->row->add($cell);
+    }
+    
+    private function cellWithAddAttributeListenerExpectation($listener)
+    {
+        $cell = $this->getMock('PHPPdf\Glyph\Table\Cell', array('addAttributeListener'));
+
+        $cell->expects($this->at(0))
+             ->method('addAttributeListener')
+             ->with($listener);
+
+        return $cell;
+    }
+
+    /**
+     * @test
+     */
+    public function addRowAsListenerWhenCellHasAddedToRow()
+    {
+        $cell = $this->cellWithAddAttributeListenerExpectation($this->row);
+
+        $this->row->add($cell);
+    }
+
+    /**
+     * @test
+     * @dataProvider cellsHeightsProvider
+     */
+    public function setMaxHeightWhenRowIsNotifiedByCell(array $cellsHeights)
+    {
+        $cells = array();
+        foreach($cellsHeights as $height)
+        {
+            $cell = $this->getMock('PHPPdf\Glyph\Table\Cell', array('getHeight'));
+            $cell->expects($this->atLeastOnce())
+                 ->method('getHeight')
+                 ->will($this->returnValue($height));
+            $cells[] = $cell;
+        }
+
+        foreach($cells as $cell)
+        {
+            $this->row->attributeChanged($cell, 'height', null);
+        }
+
+        $this->assertEquals(max($cellsHeights), $this->row->getMaxHeightOfCells());
+    }
+
+    public function cellsHeightsProvider()
+    {
+        return array(
+            array(
+                array(10, 20, 30, 20, 10),
+            ),
+        );
     }
 }
