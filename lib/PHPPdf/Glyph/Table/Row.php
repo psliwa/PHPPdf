@@ -21,6 +21,12 @@ class Row extends Container
         }
 
         $glyph->setNumberOfColumn($this->numberOfColumns++);
+        $parent = $this->getParent();
+
+        if($parent)
+        {
+            $glyph->addAttributeListener($parent);
+        }
 
         return parent::add($glyph);
     }

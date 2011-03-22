@@ -108,4 +108,20 @@ class RowTest extends TestCase
             $this->row->add($cell);
         }
     }
+
+    /**
+     * @test
+     */
+    public function addTableAsListenerWhenCellHasAddedToRow()
+    {
+        $table = $this->getMock('PHPPdf\Glyph\Table');
+        $cell = $this->getMock('PHPPdf\Glyph\Table\Cell', array('addAttributeListener'));
+
+        $cell->expects($this->once())
+             ->method('addAttributeListener')
+             ->with($table);
+
+        $this->row->setParent($table);
+        $this->row->add($cell);
+    }
 }

@@ -4,7 +4,7 @@ use PHPPdf\Glyph\Table;
 use PHPPdf\Util\Boundary;
 use PHPPdf\Glyph as Glyphs;
 
-class TableTest extends PHPUnit_Framework_TestCase
+class TableTest extends TestCase
 {
     private $table = null;
 
@@ -132,5 +132,54 @@ class TableTest extends PHPUnit_Framework_TestCase
         }
 
         return $mock;
+    }
+
+    /**
+     * @test
+     * @dataProvider cellsInRowsWidthsProvider
+     */
+    public function setColumnsWidthsWhenTableIsNotifiedByCell(array $cellsWidthsByColumn)
+    {
+        $cells = array();
+        $columnsWidths = array();
+        foreach($cellsWidthsByColumn as $columnNumber => $cellsWidths)
+        {
+            foreach($cellsWidths as $width)
+            {
+                $cell = $this->getMock('PHPPdf\Glyph\Table\Cell', array('getWidth', 'getNumberOfColumn'));
+                $cell->expects($this->atLeastOnce())
+                     ->method('getWidth')
+                     ->will($this->returnValue($width));
+                $cell->expects($this->atLeastOnce())
+                     ->method('getNumberOfColumn')
+                     ->will($this->returnValue($columnNumber));
+
+                $cells[] = $cell;
+
+                if(!isset($columnsWidths[$columnNumber]) || $width > $columnsWidths[$columnNumber])
+                {
+                    $columnsWidths[$columnNumber] = $width;
+                }
+            }
+        }
+
+        foreach($cells as $cell)
+        {
+            $this->table->attributeChanged($cell, 'width', null);
+        }
+
+        $this->assertEquals($columnsWidths, $this->table->getWidthsOfColumns());
+    }
+
+    public function cellsInRowsWidthsProvider()
+    {
+        return array(
+            array(
+                array(
+                    array(100, 200, 110),
+                    array(30, 50, 30),
+                ),
+            ),
+        );
     }
 }

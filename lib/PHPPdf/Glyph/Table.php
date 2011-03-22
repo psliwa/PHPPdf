@@ -8,8 +8,10 @@ use PHPPdf\Glyph\Glyph,
 /**
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
-class Table extends Container
+class Table extends Container implements AttributeListener
 {
+    private $widthsOfColumns = array();
+
     public function initialize()
     {
         parent::initialize();
@@ -49,5 +51,24 @@ class Table extends Container
         }
 
         return $splited;
+    }
+
+    public function attributeChanged(Glyph $glyph, $attributeName, $oldValue)
+    {
+        if($attributeName == 'width')
+        {
+            $width = $glyph->getWidth();
+            $columnNumber = $glyph->getNumberOfColumn();
+
+            if(!isset($this->widthsOfColumns[$columnNumber]) || $width > $this->widthsOfColumns[$columnNumber])
+            {
+                $this->widthsOfColumns[$columnNumber] = $width;
+            }
+        }
+    }
+
+    public function getWidthsOfColumns()
+    {
+        return $this->widthsOfColumns;
     }
 }
