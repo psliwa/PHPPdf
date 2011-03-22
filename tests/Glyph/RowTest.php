@@ -3,7 +3,7 @@
 use PHPPdf\Glyph\Table\Row;
 use PHPPdf\Glyph as Glyphs;
 
-class RowTest extends PHPUnit_Framework_TestCase
+class RowTest extends TestCase
 {
     private $row = null;
 
@@ -86,5 +86,26 @@ class RowTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($width, $this->row->getWidth());
         $this->row->setWidth(5);
         $this->assertEquals($width, $this->row->getWidth());
+    }
+
+    /**
+     * @test
+     */
+    public function setNumberOfColumnForCells()
+    {
+        for($i=0; $i<2; $i++)
+        {
+            $cell = $this->getMock('PHPPdf\Glyph\Table\Cell', array('setNumberOfColumn'));
+            $cell->expects($this->once())
+                 ->method('setNumberOfColumn')
+                 ->with($i);
+
+            $cells[] = $cell;
+        }
+
+        foreach($cells as $cell)
+        {
+            $this->row->add($cell);
+        }
     }
 }

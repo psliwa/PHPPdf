@@ -11,12 +11,16 @@ use PHPPdf\Glyph\Glyph;
  */
 class Row extends Container
 {
+    private $numberOfColumns = 0;
+
     public function add(Glyph $glyph)
     {
         if(!$glyph instanceof Cell)
         {
             throw new \InvalidArgumentException(sprintf('Invalid child glyph type, expected PHPPdf\Glyph\Table\Cell, %s given.', get_class($glyph)));
         }
+
+        $glyph->setNumberOfColumn($this->numberOfColumns++);
 
         return parent::add($glyph);
     }
@@ -44,5 +48,11 @@ class Row extends Container
     public function split($height)
     {
         return null;
+    }
+
+    public function reset()
+    {
+        parent::reset();
+        $this->numberOfColumns = 0;
     }
 }

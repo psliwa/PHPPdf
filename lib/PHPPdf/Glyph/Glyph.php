@@ -20,6 +20,10 @@ interface Glyph
     public function getDrawingTasks(Document $document);
     
     public function setParent(Container $glyph);
+
+    /**
+     * @return Glyph
+     */
     public function getParent();
 
     public function getAttribute($name);
@@ -92,4 +96,16 @@ interface Glyph
     public function copy();
 
     public function getPlaceholder($name);
+
+    public function getPreviousSibling();
+
+    /**
+     * @return Point
+     */
+    public function getFirstPoint();
+
+    /**
+     * @return Point
+     */
+    public function getDiagonalPoint();
 }
