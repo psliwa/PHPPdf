@@ -146,24 +146,16 @@ class RowTest extends TestCase
      * @test
      * @dataProvider cellsHeightsProvider
      */
-    public function setMaxHeightWhenRowIsNotifiedByCell(array $cellsHeights)
+    public function setMaxHeightWhenRowIsNotifiedByCell(array $heights)
     {
-        $cells = array();
-        foreach($cellsHeights as $height)
-        {
-            $cell = $this->getMock('PHPPdf\Glyph\Table\Cell', array('getHeight'));
-            $cell->expects($this->atLeastOnce())
-                 ->method('getHeight')
-                 ->will($this->returnValue($height));
-            $cells[] = $cell;
-        }
+        $cells = $this->createMockedCellsWithHeights($heights);
 
         foreach($cells as $cell)
         {
             $this->row->attributeChanged($cell, 'height', null);
         }
 
-        $this->assertEquals(max($cellsHeights), $this->row->getMaxHeightOfCells());
+        $this->assertEquals(max($heights), $this->row->getMaxHeightOfCells());
     }
 
     public function cellsHeightsProvider()
@@ -173,5 +165,36 @@ class RowTest extends TestCase
                 array(10, 20, 30, 20, 10),
             ),
         );
+    }
+
+    private function createMockedCellsWithHeights(array $heights)
+    {
+        $cells = array();
+        foreach($heights as $height)
+        {
+            $cell = $this->getMock('PHPPdf\Glyph\Table\Cell', array('getHeight'));
+            $cell->expects($this->atLeastOnce())
+                 ->method('getHeight')
+                 ->will($this->returnValue($height));
+            $cells[] = $cell;
+        }
+
+        return $cells;
+    }
+
+    /**
+     * @test
+     * @dataProvider cellsHeightsProvider
+     */
+    public function setMaxHeightWhileCellAdding(array $heights)
+    {
+        $cells = $this->createMockedCellsWithHeights($heights);
+
+        foreach($cells as $cell)
+        {
+            $this->row->add($cell);
+        }
+
+        $this->assertEquals(max($heights), $this->row->getMaxHeightOfCells());
     }
 }

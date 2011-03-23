@@ -56,7 +56,7 @@ class CellTest extends PHPUnit_Framework_TestCase
         
         $listener->expects($this->at(0))
                  ->method('attributeChanged')
-                 ->with($this->cell, 'width', 0);
+                 ->with($this->cell, 'width', null);
 
         $listener->expects($this->at(1))
                  ->method('attributeChanged')

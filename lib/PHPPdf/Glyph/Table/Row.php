@@ -32,7 +32,19 @@ class Row extends Container implements AttributeListener
 
         $glyph->addAttributeListener($this);
 
+        $this->setMaxHeightOfCellsIfHeightOfPassedCellIsGreater($glyph);
+
         return parent::add($glyph);
+    }
+
+    private function setMaxHeightOfCellsIfHeightOfPassedCellIsGreater(Cell $glyph)
+    {
+        $height = $glyph->getHeight();
+
+        if($height > $this->maxHeightOfCells)
+        {
+            $this->maxHeightOfCells = $height;
+        }
     }
 
     public function getHeight()
@@ -70,12 +82,7 @@ class Row extends Container implements AttributeListener
     {
         if($attributeName === 'height')
         {
-            $height = $glyph->getHeight();
-
-            if($height > $this->maxHeightOfCells)
-            {
-                $this->maxHeightOfCells = $height;
-            }
+            $this->setMaxHeightOfCellsIfHeightOfPassedCellIsGreater($glyph);
         }
     }
 

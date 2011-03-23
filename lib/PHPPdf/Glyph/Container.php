@@ -10,7 +10,7 @@ use PHPPdf\Document,
  */
 class Container extends AbstractGlyph
 {
-    private $children = array();
+    protected $children = array();
     private $document = null;
 
     /**

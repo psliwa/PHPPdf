@@ -44,18 +44,16 @@ class Cell extends Container
         $this->attributeListeners[] = $listener;
     }
 
-    public function setAttribute($name, $value)
+    protected function setAttributeDirectly($name, $value)
     {
-        $oldValue = $this->getAttribute($name);
+        $oldValue = $this->getAttributeDirectly($name);
 
-        parent::setAttribute($name, $value);
+        parent::setAttributeDirectly($name, $value);
         
         foreach($this->attributeListeners as $listener)
         {
             $listener->attributeChanged($this, $name, $oldValue);
         }
-
-        return $this;
     }
 
     public function setNumberOfColumn($column)

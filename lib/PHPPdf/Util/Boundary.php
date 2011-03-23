@@ -188,6 +188,8 @@ class Boundary implements \Countable, \Iterator, \ArrayAccess, \Serializable
         {
             $this->points[$key] = $point->translate($x, $y);
         }
+
+        return $this;
     }
 
     /**
@@ -202,6 +204,8 @@ class Boundary implements \Countable, \Iterator, \ArrayAccess, \Serializable
         $point = $this[$pointIndex];
 
         $this->points[$pointIndex] = $point->translate($x, $y);
+
+        return $this;
     }
 
     /**

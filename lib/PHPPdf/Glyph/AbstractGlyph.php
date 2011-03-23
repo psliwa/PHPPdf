@@ -28,7 +28,7 @@ abstract class AbstractGlyph implements Glyph, \ArrayAccess, \Serializable
     const ALIGN_RIGHT = 'right';
     const ALIGN_CENTER = 'center';
 
-    private $attributes = array();
+    protected $attributes = array();
     private $attributesSnapshot = null;
 
     private $parent = null;
@@ -471,7 +471,7 @@ abstract class AbstractGlyph implements Glyph, \ArrayAccess, \Serializable
         return $this;
     }
 
-    final protected function setAttributeDirectly($name, $value)
+    protected function setAttributeDirectly($name, $value)
     {
         $this->attributes[$name] = $value;
     }
@@ -523,7 +523,7 @@ abstract class AbstractGlyph implements Glyph, \ArrayAccess, \Serializable
             return $this->$getter($name);
         }
 
-        return $this->attributes[$name];
+        return $this->getAttributeDirectly($name);
     }
 
     /**

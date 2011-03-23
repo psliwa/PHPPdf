@@ -131,6 +131,7 @@
             <formatter class="PHPPdf\Formatter\ContainerFormatter" />
             <formatter class="PHPPdf\Formatter\ContainerDimensionFormatter" />
             <formatter class="PHPPdf\Formatter\StandardPositionFormatter" />
+            <formatter class="PHPPdf\Formatter\RowDimensionFormatter" />
         </formatters>
     </glyph>
     <glyph name="td" class="PHPPdf\Glyph\Table\Cell">
