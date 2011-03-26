@@ -116,8 +116,8 @@
             <formatter class="PHPPdf\Formatter\FirstPointPositionFormatter" />
             <formatter class="PHPPdf\Formatter\ContainerFormatter" />
             <formatter class="PHPPdf\Formatter\ContainerDimensionFormatter" />
+            <formatter class="PHPPdf\Formatter\TableFormatter" />
             <formatter class="PHPPdf\Formatter\StandardPositionFormatter" />
-<!--            <formatter class="PHPPdf\Formatter\TableFormatter" />-->
         </formatters>
     </glyph>
     <glyph name="tr" class="PHPPdf\Glyph\Table\Row">
