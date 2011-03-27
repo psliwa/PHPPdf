@@ -745,6 +745,11 @@ abstract class AbstractGlyph implements Glyph, \ArrayAccess, \Serializable
         return array();
     }
 
+    public function getNumberOfChildren()
+    {
+        return count($this->getChildren());
+    }
+
     public function removeAll()
     {
     }

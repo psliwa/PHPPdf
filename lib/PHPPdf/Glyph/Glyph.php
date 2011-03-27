@@ -77,6 +77,8 @@ interface Glyph
 
     public function getChildren();
 
+    public function getNumberOfChildren();
+
     public function removeAll();
 
     public function format(Document $document);

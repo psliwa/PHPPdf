@@ -69,6 +69,33 @@ class Table extends Container implements AttributeListener
 
     public function getWidthsOfColumns()
     {
+        if(!$this->widthsOfColumns)
+        {
+            $this->widthsOfColumns = array_fill(0, $this->getNumberOfColumns(), 0);
+        }
+
         return $this->widthsOfColumns;
+    }
+
+    private function setWidthsOfColumns($widthsOfColumns)
+    {
+        $this->widthsOfColumns = $widthsOfColumns;
+    }
+
+    public function getNumberOfColumns()
+    {
+        if($this->widthsOfColumns)
+        {
+            return count($this->widthsOfColumns);
+        }
+
+        $firstRow = current($this->getChildren());
+
+        if($firstRow)
+        {
+            return $firstRow->getNumberOfChildren();
+        }
+
+        return 0;
     }
 }

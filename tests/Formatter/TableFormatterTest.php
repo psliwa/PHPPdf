@@ -4,9 +4,15 @@ use PHPPdf\Formatter\TableFormatter;
 use PHPPdf\Document;
 use PHPPdf\Util\Boundary;
 
-class TableFormatterTest extends PHPUnit_Framework_TestCase
+class TableFormatterTest extends TestCase
 {
     private $formatter;
+    private $objectMother;
+
+    protected function init()
+    {
+        $this->objectMother = new TableObjectMother($this);
+    }
 
     public function setUp()
     {
@@ -27,7 +33,7 @@ class TableFormatterTest extends PHPUnit_Framework_TestCase
             foreach($widths as $column => $width)
             {
                 $columnWidth = $columnsWidths[$column];
-                $cells[] = $this->getCellMockWithTranslateAndResizeExpectations($width, $columnWidth, $translate);
+                $cells[] = $this->objectMother->getCellMockWithTranslateAndResizeExpectations($width, $columnWidth, $translate);
                 $translate += $columnWidth;
             }
 
@@ -47,37 +53,6 @@ class TableFormatterTest extends PHPUnit_Framework_TestCase
               ->will($this->returnValue($columnsWidths));
 
         $this->formatter->format($table, new Document());
-    }
-
-    private function getCellMockWithTranslateAndResizeExpectations($width, $newWidth, $translateX)
-    {
-        $boundary = $this->getMock('PHPPdf\Util\Boundary', array('pointTranslate'));
-        $cell = $this->getMock('PHPPdf\Glyph\Table\Cell', array('getWidth', 'getBoundary', 'setWidth', 'translate'));
-
-        $cell->expects($this->atLeastOnce())
-             ->method('getWidth')
-             ->will($this->returnValue($width));
-        $cell->expects($this->once())
-             ->method('setWidth')
-             ->with($newWidth);
-        $cell->expects($this->atLeastOnce())
-             ->method('getBoundary')
-             ->will($this->returnValue($boundary));
-
-        $cell->expects($this->once())
-             ->method('translate')
-             ->with($translateX, 0);
-        $diff = $newWidth - $width;
-        $boundary->expects($this->at(0))
-                 ->method('pointTranslate')
-                 ->with(1, $diff, 0)
-                 ->will($this->returnValue($boundary));
-        $boundary->expects($this->at(1))
-                 ->method('pointTranslate')
-                 ->with(2, $diff, 0)
-                 ->will($this->returnValue($boundary));
-
-        return $cell;
     }
 
     public function cellsWidthProvider()
