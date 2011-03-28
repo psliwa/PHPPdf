@@ -4,14 +4,14 @@ namespace PHPPdf\Glyph\Table;
 
 use PHPPdf\Glyph\Container,
     PHPPdf\Glyph\Glyph,
-    PHPPdf\Glyph\AttributeListener;
+    PHPPdf\Glyph\Listener;
 
 /**
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
 class Cell extends Container
 {
-    private $attributeListeners = array();
+    private $listeners = array();
     private $numberOfColumn;
 
     public function getFloat()
@@ -39,9 +39,19 @@ class Cell extends Container
         return $this->getAncestorByType('PHPPdf\Glyph\Table');
     }
 
-    public function addAttributeListener(AttributeListener $listener)
+    public function addListener(Listener $listener)
     {
-        $this->attributeListeners[] = $listener;
+        $this->listeners[] = $listener;
+    }
+
+    public function setParent(Container $glyph)
+    {
+        parent::setParent($glyph);
+
+        foreach($this->listeners as $listener)
+        {
+            $listener->parentBind($this);
+        }
     }
 
     protected function setAttributeDirectly($name, $value)
@@ -50,7 +60,7 @@ class Cell extends Container
 
         parent::setAttributeDirectly($name, $value);
         
-        foreach($this->attributeListeners as $listener)
+        foreach($this->listeners as $listener)
         {
             $listener->attributeChanged($this, $name, $oldValue);
         }

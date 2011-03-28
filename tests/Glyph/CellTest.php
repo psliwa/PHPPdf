@@ -52,7 +52,7 @@ class CellTest extends PHPUnit_Framework_TestCase
      */
     public function notifyListenersWhenAttributeHasChanged()
     {
-        $listener = $this->getMock('PHPPdf\Glyph\AttributeListener', array('attributeChanged'));
+        $listener = $this->getMock('PHPPdf\Glyph\Listener', array('attributeChanged', 'parentBind'));
         
         $listener->expects($this->at(0))
                  ->method('attributeChanged')
@@ -62,9 +62,14 @@ class CellTest extends PHPUnit_Framework_TestCase
                  ->method('attributeChanged')
                  ->with($this->cell, 'width', 100);
 
-        $this->cell->addAttributeListener($listener);
+        $listener->expects($this->at(2))
+                 ->method('parentBind')
+                 ->with($this->cell);
+
+        $this->cell->addListener($listener);
 
         $this->cell->setAttribute('width', 100);
         $this->cell->setAttribute('width', 200);
+        $this->cell->setParent(new Cell());
     }
 }

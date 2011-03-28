@@ -184,7 +184,7 @@ class TableTest extends TestCase
     }
 
     /**
-     * @test
+     * @ test
      * @dataProvider columnsDataProvider
      */
     public function numberOfColumnsDependsOnWidthsOfColumnsPropertyOrNumberOfFirstRowChildren($widthsOfColumns, $childrenOfFirstRow, $expected)
@@ -211,5 +211,30 @@ class TableTest extends TestCase
             array(array(), 0, 0),
             array(array(0), 0, 1),
         );
+    }
+
+    /**
+     * @test
+     */
+    public function setColumnsWidthsWhenRowHasAdded()
+    {
+        $cellWidth = 120;
+        $row = $this->getMock('PHPPdf\Glyph\Table\Row', array('getChildren'));
+        $cell = $this->getMock('PHPPdf\Glyph\Table\Cell', array('getWidth', 'getNumberOfColumn'));
+
+        $row->expects($this->atLeastOnce())
+            ->method('getChildren')
+            ->will($this->returnValue(array($cell)));
+        $cell->expects($this->atLeastOnce())
+             ->method('getWidth')
+             ->will($this->returnValue($cellWidth));
+        $cell->expects($this->atLeastOnce())
+             ->method('getNumberOfColumn')
+             ->will($this->returnValue(0));
+
+
+        $this->table->add($row);
+
+        $this->assertEquals(array($cellWidth), $this->table->getWidthsOfColumns());
     }
 }

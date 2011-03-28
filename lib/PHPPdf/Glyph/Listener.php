@@ -7,7 +7,8 @@ namespace PHPPdf\Glyph;
  *
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
-interface AttributeListener
+interface Listener
 {
     public function attributeChanged(Glyph $glyph, $attributeName, $oldValue);
+    public function parentBind(Glyph $glyph);
 }

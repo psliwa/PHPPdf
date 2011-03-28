@@ -4,13 +4,13 @@ namespace PHPPdf\Glyph\Table;
 
 use PHPPdf\Glyph\Table\Cell,
     PHPPdf\Glyph\Container,
-    PHPPdf\Glyph\AttributeListener,
+    PHPPdf\Glyph\Listener,
     PHPPdf\Glyph\Glyph;
 
 /**
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
-class Row extends Container implements AttributeListener
+class Row extends Container implements Listener
 {
     private $numberOfColumns = 0;
     private $maxHeightOfCells = 0;
@@ -27,10 +27,10 @@ class Row extends Container implements AttributeListener
 
         if($parent)
         {
-            $glyph->addAttributeListener($parent);
+            $glyph->addListener($parent);
         }
 
-        $glyph->addAttributeListener($this);
+        $glyph->addListener($this);
 
         $this->setMaxHeightOfCellsIfHeightOfPassedCellIsGreater($glyph);
 
@@ -84,6 +84,11 @@ class Row extends Container implements AttributeListener
         {
             $this->setMaxHeightOfCellsIfHeightOfPassedCellIsGreater($glyph);
         }
+    }
+
+    public function parentBind(Glyph $glyph)
+    {
+        $this->setMaxHeightOfCellsIfHeightOfPassedCellIsGreater($glyph);
     }
 
     public function getMaxHeightOfCells()

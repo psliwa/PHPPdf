@@ -115,18 +115,18 @@ class RowTest extends TestCase
     public function addTableAsListenerWhenCellHasAddedToRow()
     {
         $table = $this->getMock('PHPPdf\Glyph\Table');
-        $cell = $this->cellWithAddAttributeListenerExpectation($table);
+        $cell = $this->cellWithAddListenerExpectation($table);
 
         $this->row->setParent($table);
         $this->row->add($cell);
     }
     
-    private function cellWithAddAttributeListenerExpectation($listener)
+    private function cellWithAddListenerExpectation($listener)
     {
-        $cell = $this->getMock('PHPPdf\Glyph\Table\Cell', array('addAttributeListener'));
+        $cell = $this->getMock('PHPPdf\Glyph\Table\Cell', array('addListener'));
 
         $cell->expects($this->at(0))
-             ->method('addAttributeListener')
+             ->method('addListener')
              ->with($listener);
 
         return $cell;
@@ -137,7 +137,7 @@ class RowTest extends TestCase
      */
     public function addRowAsListenerWhenCellHasAddedToRow()
     {
-        $cell = $this->cellWithAddAttributeListenerExpectation($this->row);
+        $cell = $this->cellWithAddListenerExpectation($this->row);
 
         $this->row->add($cell);
     }

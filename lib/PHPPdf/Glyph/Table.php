@@ -8,7 +8,7 @@ use PHPPdf\Glyph\Glyph,
 /**
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
-class Table extends Container implements AttributeListener
+class Table extends Container implements Listener
 {
     private $widthsOfColumns = array();
 
@@ -26,7 +26,23 @@ class Table extends Container implements AttributeListener
             throw new \InvalidArgumentException(sprintf('Invalid child glyph type, expected PHPPdf\Glyph\Table\Row, %s given.', get_class($glyph)));
         }
 
+        foreach($glyph->getChildren() as $cell)
+        {
+            $this->setColumnWidthIfNecessary($cell);
+        }
+
         return parent::add($glyph);
+    }
+
+    private function setColumnWidthIfNecessary(Glyph $glyph)
+    {
+        $width = $glyph->getWidth();
+        $columnNumber = $glyph->getNumberOfColumn();
+
+        if(!isset($this->widthsOfColumns[$columnNumber]) || $width > $this->widthsOfColumns[$columnNumber])
+        {
+            $this->widthsOfColumns[$columnNumber] = $width;
+        }
     }
 
     protected function doSplit($height)
@@ -57,14 +73,13 @@ class Table extends Container implements AttributeListener
     {
         if($attributeName == 'width')
         {
-            $width = $glyph->getWidth();
-            $columnNumber = $glyph->getNumberOfColumn();
-
-            if(!isset($this->widthsOfColumns[$columnNumber]) || $width > $this->widthsOfColumns[$columnNumber])
-            {
-                $this->widthsOfColumns[$columnNumber] = $width;
-            }
+            $this->setColumnWidthIfNecessary($glyph);
         }
+    }
+
+    public function parentBind(Glyph $glyph)
+    {
+        $this->setColumnWidthIfNecessary($glyph);
     }
 
     public function getWidthsOfColumns()
@@ -84,18 +99,6 @@ class Table extends Container implements AttributeListener
 
     public function getNumberOfColumns()
     {
-        if($this->widthsOfColumns)
-        {
-            return count($this->widthsOfColumns);
-        }
-
-        $firstRow = current($this->getChildren());
-
-        if($firstRow)
-        {
-            return $firstRow->getNumberOfChildren();
-        }
-
-        return 0;
+        return count($this->widthsOfColumns);
     }
 }
