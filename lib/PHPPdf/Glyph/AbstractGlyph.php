@@ -161,6 +161,8 @@ abstract class AbstractGlyph implements Glyph, \ArrayAccess, \Serializable
         $this->addAttribute('width');
         $this->addAttribute('height');
 
+        $this->addAttribute('min-width', 0);
+
         $this->addAttribute('margin-top');
         $this->addAttribute('margin-left');
         $this->addAttribute('margin-right');

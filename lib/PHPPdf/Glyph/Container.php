@@ -198,4 +198,16 @@ class Container extends AbstractGlyph
 
         return $splitCompose;
     }
+
+    public function getMinWidth()
+    {
+        $minWidth = $this->getAttributeDirectly('min-width');
+
+        foreach($this->getChildren() as $child)
+        {
+            $minWidth = max(array($minWidth, $child->getMinWidth()));
+        }
+
+        return $minWidth;
+    }
 }

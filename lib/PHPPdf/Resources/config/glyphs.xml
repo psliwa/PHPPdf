@@ -142,7 +142,6 @@
         <formatters>
             <formatter class="PHPPdf\Formatter\ConvertDimensionFormatter" />
             <formatter class="PHPPdf\Formatter\StandardDimensionFormatter" />
-<!--            <formatter class="PHPPdf\Formatter\FirstPointPositionFormatter" />-->
             <formatter class="PHPPdf\Formatter\CellFirstPointPositionFormatter" />
             <formatter class="PHPPdf\Formatter\ContainerFormatter" />
             <formatter class="PHPPdf\Formatter\ContainerDimensionFormatter" />

@@ -104,4 +104,25 @@ class TextTest extends PHPUnit_Framework_TestCase
             array('center', 200, self::PAGE_WIDTH / 2 - 20/2 - 200/2, 20, 0),
         );
     }
+
+    /**
+     * @test
+     * @dataProvider lineSizesProvider
+     */
+    public function minimumWidthIsTheWidestTextRow(array $lineSizes)
+    {
+        $this->text->setLineSizes($lineSizes);
+
+        $this->assertEquals(max($lineSizes), $this->text->getMinWidth());
+    }
+
+    public function lineSizesProvider()
+    {
+        return array(
+            array(
+                array(120, 100, 130),
+                array(1, 2, 0),
+            ),
+        );
+    }
 }

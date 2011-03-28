@@ -67,4 +67,32 @@ class ContainerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(array(50, 350), $children[0]->getStartDrawingPoint());
         $this->assertEquals(array(400, 300), $children[0]->getEndDrawingPoint());
     }
+
+    /**
+     * @test
+     * @dataProvider widthProvider
+     */
+    public function minWidthIsMaxValueOfMinWidthOfChildren(array $childrenMinWidths)
+    {
+        $children = array();
+        foreach($childrenMinWidths as $minWidth)
+        {
+            $child = $this->getMock('PHPPdf\Glyph\Container', array('getMinWidth'));
+            $child->expects($this->atLeastOnce())
+                  ->method('getMinWidth')
+                  ->will($this->returnValue($minWidth));
+            $this->glyph->add($child);
+        }
+
+        $this->assertEquals(max($childrenMinWidths), $this->glyph->getMinWidth());
+    }
+
+    public function widthProvider()
+    {
+        return array(
+            array(
+                array(10, 20, 30),
+            ),
+        );
+    }
 }

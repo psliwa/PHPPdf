@@ -62,6 +62,11 @@ class Text extends AbstractGlyph
         $this->wordsInRows = $wordsInRows;
     }
 
+    public function getMinWidth()
+    {
+        return \max($this->lineSizes);
+    }
+
     public function setFontSize($size)
     {
         parent::setFontSize($size);
