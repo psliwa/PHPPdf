@@ -11,8 +11,6 @@ use PHPPdf\Glyph\Glyph,
  */
 class TableFormatter extends BaseFormatter
 {
-    //TODO zmniejszenie kolumn, które mogą być zmniejszone jeśli szerokość kolumn przekracza szerokość tabeli.
-    //Jeśli komórki nie mogą być wystarczająco zmniejszone, poszerz tabelkę o brakującą wielkość
     public function format(Glyph $glyph, Document $document)
     {
         $widthsOfColumns = $glyph->getWidthsOfColumns();
