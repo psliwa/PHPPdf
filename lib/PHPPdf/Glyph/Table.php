@@ -101,4 +101,19 @@ class Table extends Container implements Listener
     {
         return count($this->widthsOfColumns);
     }
+
+    public function getMinWidthsOfColumns()
+    {
+        $minWidthsOfColumns = array();
+        foreach($this->getChildren() as $row)
+        {
+            foreach($row->getChildren() as $cell)
+            {
+                $column = $cell->getNumberOfColumn();
+                $minWidthsOfColumns[$column] = isset($minWidthsOfColumns[$column]) ? max($minWidthsOfColumns[$column], $cell->getMinWidth()) : $cell->getMinWidth();
+            }
+        }
+
+        return $minWidthsOfColumns;
+    }
 }

@@ -7,6 +7,12 @@ use PHPPdf\Glyph as Glyphs;
 class TableTest extends TestCase
 {
     private $table = null;
+    private $objectMother;
+
+    public function init()
+    {
+        $this->objectMother = new TableObjectMother($this);
+    }
 
     public function setUp()
     {
@@ -184,36 +190,6 @@ class TableTest extends TestCase
     }
 
     /**
-     * @ test
-     * @dataProvider columnsDataProvider
-     */
-    public function numberOfColumnsDependsOnWidthsOfColumnsPropertyOrNumberOfFirstRowChildren($widthsOfColumns, $childrenOfFirstRow, $expected)
-    {
-        $this->invokeMethod($this->table, 'setWidthsOfColumns', array($widthsOfColumns));
-
-        $row = $this->getMock('PHPPdf\Glyph\Table\Row', array('getNumberOfChildren'));
-        $expects = $widthsOfColumns ? $this->never() : $this->once();
-        $row->expects($expects)
-            ->method('getNumberOfChildren')
-            ->will($this->returnValue($childrenOfFirstRow));
-
-        $this->table->add($row);
-
-        $this->assertEquals($expected, $this->table->getNumberOfColumns());
-    }
-
-    public function columnsDataProvider()
-    {
-        return array(
-            array(array(0, 0, 0), 3, 3),
-            array(array(0, 0, 0), 2, 3),
-            array(array(), 2, 2),
-            array(array(), 0, 0),
-            array(array(0), 0, 1),
-        );
-    }
-
-    /**
      * @test
      */
     public function setColumnsWidthsWhenRowHasAdded()
@@ -236,5 +212,39 @@ class TableTest extends TestCase
         $this->table->add($row);
 
         $this->assertEquals(array($cellWidth), $this->table->getWidthsOfColumns());
+    }
+
+    /**
+     * @test
+     * @dataProvider cellsInRowsWidthsProvider
+     */
+    public function minWidthOfColumnIsMaxOfMinWidthOfColumnsCells(array $cellsInRowsMinWidths)
+    {
+        $expectedMinWidthsOfColumns = array_fill(0, count($cellsInRowsMinWidths[0]), 0);
+        foreach($cellsInRowsMinWidths as $cellsMinWidths)
+        {
+            $row = $this->getMock('PHPPdf\Glyph\Table\Row', array('getChildren'));
+
+            $cells = array();
+            foreach ($cellsMinWidths as $i => $minWidth)
+            {
+                $cell = $this->getMock('PHPPdf\Glyph\Table\Cell', array('getMinWidth', 'getNumberOfColumn'));
+                $cell->expects($this->atLeastOnce())
+                     ->method('getMinWidth')
+                     ->will($this->returnValue($minWidth));
+                $cell->expects($this->atLeastOnce())
+                     ->method('getNumberOfColumn')
+                     ->will($this->returnValue($i));
+                $cells[] = $cell;
+
+                $expectedMinWidthsOfColumns[$i] = max($expectedMinWidthsOfColumns[$i], $minWidth);
+            }
+            $row->expects($this->atLeastOnce())
+                ->method('getChildren')
+                ->will($this->returnValue($cells));
+            $this->table->add($row);
+        }
+
+        $this->assertEquals($expectedMinWidthsOfColumns, $this->table->getMinWidthsOfColumns());
     }
 }

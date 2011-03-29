@@ -21,4 +21,9 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
 
         return $method->invokeArgs($object, $args);
     }
+    
+    public static function assertInstanceOf($expectedClass, $actual, $message = '')
+    {
+    	self::assertTrue($actual instanceof $expectedClass, $message);
+    }
 }

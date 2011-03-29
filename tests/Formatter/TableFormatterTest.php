@@ -23,16 +23,33 @@ class TableFormatterTest extends TestCase
      * @test
      * @dataProvider cellsWidthProvider
      */
-    public function equalizeCells(array $cellsWidthInRows, array $columnsWidths)
+    public function equalizeCells(array $cellsWidthInRows, array $minWidthsOfColumns, array $columnsWidths, $tableWidth)
     {
+        $totalWidth = array_sum($columnsWidths);
+
         $rows = array();
         foreach($cellsWidthInRows as $widths)
         {
+            $diffBetweenTableAndColumnsWidths = $tableWidth - $totalWidth;
             $translate = 0;
             $cells = array();
             foreach($widths as $column => $width)
             {
                 $columnWidth = $columnsWidths[$column];
+                $minWidth = $minWidthsOfColumns[$column];
+                $widthMargin = $columnWidth - $minWidth;
+
+                if($diffBetweenTableAndColumnsWidths < 0 && -$diffBetweenTableAndColumnsWidths >= $widthMargin)
+                {
+                    $columnWidth = $minWidth;
+                    $diffBetweenTableAndColumnsWidths += $widthMargin;
+                }
+                elseif($diffBetweenTableAndColumnsWidths < 0)
+                {
+                    $columnWidth += $diffBetweenTableAndColumnsWidths;
+                    $diffBetweenTableAndColumnsWidths = 0;
+                }
+
                 $cells[] = $this->objectMother->getCellMockWithTranslateAndResizeExpectations($width, $columnWidth, $translate);
                 $translate += $columnWidth;
             }
@@ -44,13 +61,19 @@ class TableFormatterTest extends TestCase
             $rows[] = $row;
         }
 
-        $table = $this->getMock('PHPPdf\Glyph\Table', array('getChildren', 'getWidthsOfColumns'));
+        $table = $this->getMock('PHPPdf\Glyph\Table', array('getChildren', 'getWidthsOfColumns', 'getMinWidthsOfColumns', 'getWidth'));
         $table->expects($this->atLeastOnce())
               ->method('getChildren')
               ->will($this->returnValue($rows));
         $table->expects($this->atLeastOnce())
               ->method('getWidthsOfColumns')
               ->will($this->returnValue($columnsWidths));
+        $table->expects($this->atLeastOnce())
+              ->method('getMinWidthsOfColumns')
+              ->will($this->returnValue($minWidthsOfColumns));
+        $table->expects($this->atLeastOnce())
+              ->method('getWidth')
+              ->will($this->returnValue($tableWidth));
 
         $this->formatter->format($table, new Document());
     }
@@ -63,7 +86,18 @@ class TableFormatterTest extends TestCase
                     array(10, 20, 30),
                     array(40, 10, 15),
                 ),
+                array(0, 0, 0),
                 array(50, 20, 30),
+                100
+            ),
+            array(
+                array(
+                    array(10, 20, 30),
+                    array(40, 10, 15),
+                ),
+                array(5, 10, 0),
+                array(50, 20, 30),
+                90
             ),
         );
     }
