@@ -20,9 +20,9 @@ class Background extends Enhancement
     private $image = null;
     private $repeat;
 
-    public function __construct($color = null, $image = null, $repeat = self::REPEAT_NONE)
+    public function __construct($color = null, $image = null, $repeat = self::REPEAT_NONE, $radius = null)
     {
-        parent::__construct($color);
+        parent::__construct($color, $radius);
 
         if($image !== null && !$image instanceof \Zend_Pdf_Resource_Image)
         {
@@ -43,16 +43,28 @@ class Background extends Enhancement
 
     protected function doEnhance(Page $page, Glyph $glyph)
     {
+        $graphicsContext = $page->getGraphicsContext();
+
         if($this->getColor() !== null)
         {
-            $this->drawBoundary($page->getGraphicsContext(), $glyph->getBoundary(), \Zend_Pdf_Page::SHAPE_DRAW_FILL);
+            if($this->getRadius() !== null)
+            {
+                $boundary = $glyph->getBoundary();
+
+                $firstPoint = $boundary[3];
+                $diagonalPoint = $boundary[1];
+                
+                $this->drawRoundedBoundary($graphicsContext, $firstPoint[0], $firstPoint[1], $diagonalPoint[0], $diagonalPoint[1], \Zend_Pdf_Page::SHAPE_DRAW_FILL_AND_STROKE);
+            }
+            else
+            {
+                $this->drawBoundary($page->getGraphicsContext(), $glyph->getBoundary(), \Zend_Pdf_Page::SHAPE_DRAW_FILL);
+            }
         }
 
         $image = $this->getImage();
         if($image !== null)
         {
-            $graphicsContext = $page->getGraphicsContext();
-
             list($x, $y) = $glyph->getFirstPoint()->toArray();
             list($endX, $endY) = $glyph->getDiagonalPoint()->toArray();
 

@@ -35,17 +35,15 @@ class Border extends Enhancement
 
     private $type = self::TYPE_ALL;
     private $size;
-    private $radius;
     private $style = self::STYLE_SOLID;
     private $position = 0;
 
     public function __construct($color = null, $type = self::TYPE_ALL, $size = 1, $radius = null, $style = self::STYLE_SOLID, $position = 0)
     {
-        parent::__construct($color);
+        parent::__construct($color, $radius);
 
         $this->setType($type);
         $this->setStyle($style);
-        $this->setRadius($radius);
         $this->setSize($size);
         $this->setPosition($position);
     }
@@ -97,23 +95,6 @@ class Border extends Enhancement
         $this->style = $style;
     }
 
-    private function setRadius($radius)
-    {
-        if(is_string($radius) && \strpos($radius, ' ') !== false)
-        {
-            $radius = explode(' ', $radius);
-            $count = count($radius);
-
-            while($count < 4)
-            {
-                $radius[] = current($radius);
-                $count++;
-            }
-        }
-
-        $this->radius = $radius;
-    }
-
     private function setSize($size)
     {
         $this->size = $size;
@@ -134,12 +115,12 @@ class Border extends Enhancement
 
         $points = $this->getPointsWithPositionCorrection($boundary);
 
-        if($this->radius !== null)
+        if($this->getRadius() !== null)
         {
             $firstPoint = $points[3];
             $diagonalPoint = $points[1];
 
-            $graphicsContext->drawRoundedRectangle($firstPoint[0], $firstPoint[1], $diagonalPoint[0], $diagonalPoint[1], $this->radius, \Zend_Pdf_Page::SHAPE_DRAW_STROKE);
+            $this->drawRoundedBoundary($graphicsContext, $firstPoint[0], $firstPoint[1], $diagonalPoint[0], $diagonalPoint[1], \Zend_Pdf_Page::SHAPE_DRAW_STROKE);
         }
         elseif($this->type == self::TYPE_ALL)
         {
@@ -237,10 +218,5 @@ class Border extends Enhancement
     public function getStyle()
     {
         return $this->style;
-    }
-
-    public function getRadius()
-    {
-        return $this->radius;
     }
 }

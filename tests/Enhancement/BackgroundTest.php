@@ -1,12 +1,18 @@
 <?php
 
-use PHPPdf\Enhancement\Background;
-use PHPPdf\Glyph\Page;
-use PHPPdf\Util\Point;
+use PHPPdf\Enhancement\Background,
+    PHPPdf\Glyph\Page,
+    PHPPdf\Util\Point;
 
-class BackgroundTest extends PHPUnit_Framework_TestCase
+class BackgroundTest extends TestCase
 {
     private $imagePath;
+    private $objectMother;
+
+    public function init()
+    {
+        $this->objectMother = new GenericGlyphObjectMother($this);
+    }
 
     public function setUp()
     {
@@ -150,5 +156,35 @@ class BackgroundTest extends PHPUnit_Framework_TestCase
         $boundaryMock->close();
 
         return $boundaryMock;
+    }
+
+    /**
+     * @test
+     */
+    public function radiusColorBorder()
+    {
+        $radius = 50;
+
+        $gcMock = $this->getMock('PHPPdf\Glyph\GraphicsContext', array('drawRoundedRectangle', 'saveGS', 'restoreGS', 'setLineColor', 'setFillColor'), array(), '', false);
+        $gcMock->expects($this->once())
+               ->method('drawRoundedRectangle')
+               ->with(0, 70, 50, 100, $radius, Zend_Pdf_Page::SHAPE_DRAW_FILL_AND_STROKE);
+
+        $gcMock->expects($this->once())
+               ->method('saveGS');
+        $gcMock->expects($this->once())
+               ->method('restoreGS');
+        $gcMock->expects($this->once())
+               ->method('setLineColor');
+        $gcMock->expects($this->once())
+               ->method('setFillColor');
+
+        $pageMock = $this->objectMother->getEmptyPageMock($gcMock);
+
+        $glyphMock = $this->objectMother->getGlyphMock(0, 100, 50, 30);
+
+        $border = new Background('black', null, Background::REPEAT_ALL, $radius);
+
+        $border->enhance($pageMock, $glyphMock);
     }
 }

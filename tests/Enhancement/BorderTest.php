@@ -6,9 +6,15 @@ use PHPPdf\Glyph\Page;
 use PHPPdf\Util\Point;
 use PHPPdf\Glyph\GraphicsContext;
 
-class BorderTest extends PHPUnit_Framework_TestCase
+class BorderTest extends TestCase
 {
     private $border;
+    private $objectMother;
+
+    public function init()
+    {
+        $this->objectMother = new GenericGlyphObjectMother($this);
+    }
 
     public function setUp()
     {
@@ -25,69 +31,11 @@ class BorderTest extends PHPUnit_Framework_TestCase
         $width = 100;
         $height = 50;
 
-        $pageMock = $this->getPageMock(array(-0.5, 100, 100, 0, 0), array(100, 100, 50, 50, 100.5));
+        $pageMock = $this->objectMother->getPageMock(array(-0.5, 100, 100, 0, 0), array(100, 100, 50, 50, 100.5));
 
-        $glyphMock = $this->getGlyphMock($x, $y, $width, $height);
+        $glyphMock = $this->objectMother->getGlyphMock($x, $y, $width, $height);
 
         $this->border->enhance($pageMock, $glyphMock);
-    }
-
-    private function getPageMock($x, $y)
-    {
-        $gcMock = $this->getMock('PHPPdf\Glyph\GraphicsContext', array('drawPolygon', 'setLineDashingPattern', 'setLineWidth'), array(), '', false);
-        $gcMock->expects($this->once())
-                 ->method('drawPolygon')
-                 ->with($x, $y, \Zend_Pdf_Page::SHAPE_DRAW_STROKE);
-
-        $pageMock = $this->getEmptyPageMock($gcMock);
-
-        return $pageMock;
-    }
-
-    private function getEmptyPageMock($graphicsContext)
-    {
-        $pageMock = $this->getMock('PHPPdf\Glyph\Page', array('getGraphicsContext'));
-
-        $pageMock->expects($this->atLeastOnce())
-                 ->method('getGraphicsContext')
-                 ->will($this->returnValue($graphicsContext));
-
-        return $pageMock;
-    }
-
-    private function getGlyphMock($x, $y, $width, $height)
-    {
-        $boundaryMock = $this->getBoundaryStub($x, $y, $width, $height);
-
-        $glyphMock = $this->getMock('PHPPdf\Glyph\AbstractGlyph', array('getBoundary', 'getWidth', 'getHeight'));
-        
-        $glyphMock->expects($this->atLeastOnce())
-                  ->method('getBoundary')
-                  ->will($this->returnValue($boundaryMock));
-
-        $glyphMock->expects($this->any())
-                  ->method('getWidth')
-                  ->will($this->returnValue($width));
-
-        $glyphMock->expects($this->any())
-                  ->method('getHeight')
-                  ->will($this->returnValue($height));
-
-        return $glyphMock;
-    }
-
-    private function getBoundaryStub($x, $y, $width, $height)
-    {
-        $boundary = new Boundary();
-
-        $boundary->setNext($x, $y)
-                 ->setNext($x+$width, $y)
-                 ->setNext($x+$width, $y-$height)
-                 ->setNext($x, $y-$height)
-                 ->close()
-                ;
-
-        return $boundary;
     }
 
     /**
@@ -132,9 +80,9 @@ class BorderTest extends PHPUnit_Framework_TestCase
                ->method('drawLine')
                ->with(50.5, 50, -0.5, 50);
 
-        $pageMock = $this->getEmptyPageMock($gcMock);
+        $pageMock = $this->objectMother->getEmptyPageMock($gcMock);
 
-        $glyphMock = $this->getGlyphMock(0, 100, 50, 50);
+        $glyphMock = $this->objectMother->getGlyphMock(0, 100, 50, 50);
 
         $border = new Border(null, Border::TYPE_TOP | Border::TYPE_BOTTOM);
 
@@ -158,9 +106,9 @@ class BorderTest extends PHPUnit_Framework_TestCase
                ->method('drawLine')
                ->with(0, 2, 0, 11);
 
-        $pageMock = $this->getEmptyPageMock($gcMock);
+        $pageMock = $this->objectMother->getEmptyPageMock($gcMock);
 
-        $glyphMock = $this->getGlyphMock(0, 10, 5, 7);
+        $glyphMock = $this->objectMother->getGlyphMock(0, 10, 5, 7);
 
         $border = new Border(null, Border::TYPE_LEFT, $size);
 
@@ -179,9 +127,9 @@ class BorderTest extends PHPUnit_Framework_TestCase
                ->method('drawRoundedRectangle')
                ->with(0, 70, 50, 100, $radius, Zend_Pdf_Page::SHAPE_DRAW_STROKE);
 
-        $pageMock = $this->getEmptyPageMock($gcMock);
+        $pageMock = $this->objectMother->getEmptyPageMock($gcMock);
 
-        $glyphMock = $this->getGlyphMock(0, 100, 50, 30);
+        $glyphMock = $this->objectMother->getGlyphMock(0, 100, 50, 30);
 
         $border = new Border(null, Border::TYPE_ALL, 1, $radius);
 
@@ -226,9 +174,9 @@ class BorderTest extends PHPUnit_Framework_TestCase
                ->method('drawLine')
                ->with(0, 69.5, 0, 100.5);
 
-        $pageMock = $this->getEmptyPageMock($gcMock);
+        $pageMock = $this->objectMother->getEmptyPageMock($gcMock);
 
-        $glyphMock = $this->getGlyphMock(0, 100, 50, 30);
+        $glyphMock = $this->objectMother->getGlyphMock(0, 100, 50, 30);
 
         $border = new Border(null, Border::TYPE_LEFT, 1, null, $style);
 
@@ -286,7 +234,7 @@ class BorderTest extends PHPUnit_Framework_TestCase
 
         $gcMock = $this->getMock('PHPPdf\Glyph\GraphicsContext', array('setLineDashingPattern', 'drawPolygon', 'setLineWidth'), array(), '', false);
 
-        $glyphMock = $this->getGlyphMock($x, $y, $width, $height);
+        $glyphMock = $this->objectMother->getGlyphMock($x, $y, $width, $height);
         $halfSize = $size/2;
 
         $gcMock->expects($this->once())
@@ -294,7 +242,7 @@ class BorderTest extends PHPUnit_Framework_TestCase
                ->with(array($x-$halfSize-$position, $x+$width+$position, $x+$width+$position, $x-$position, $x-$position),
                       array($y+$position, $y+$position, $y-$height-$position, $y-$height-$position, $y+$halfSize+$position));
 
-        $pageMock = $this->getEmptyPageMock($gcMock);
+        $pageMock = $this->objectMother->getEmptyPageMock($gcMock);
 
         $border->enhance($pageMock, $glyphMock);
     }
@@ -318,13 +266,13 @@ class BorderTest extends PHPUnit_Framework_TestCase
 
         $gcMock = $this->getMock('PHPPdf\Glyph\GraphicsContext', array('setLineDashingPattern', 'drawLine', 'setLineWidth'), array(), '', false);
 
-        $glyphMock = $this->getGlyphMock($x, $y, $width, $height);
+        $glyphMock = $this->objectMother->getGlyphMock($x, $y, $width, $height);
 
         $gcMock->expects($this->once())
                ->method('drawLine')
                ->with($x+$width+$position+$halfSize, $y-$height-$position, $x-$position-$halfSize, $y-$height-$position);
 
-        $pageMock = $this->getEmptyPageMock($gcMock);
+        $pageMock = $this->objectMother->getEmptyPageMock($gcMock);
 
         $border->enhance($pageMock, $glyphMock);
     }

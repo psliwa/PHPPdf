@@ -15,8 +15,9 @@ use PHPPdf\Glyph\Glyph,
 abstract class Enhancement
 {
     private $color;
+    private $radius;
 
-    public function __construct($color = null)
+    public function __construct($color = null, $radius = null)
     {
         if($color !== null && !$color instanceof Zend_Pdf_Color)
         {
@@ -24,6 +25,29 @@ abstract class Enhancement
         }
 
         $this->color = $color;
+        $this->setRadius($radius);
+    }
+
+    private function setRadius($radius)
+    {
+        if(is_string($radius) && \strpos($radius, ' ') !== false)
+        {
+            $radius = explode(' ', $radius);
+            $count = count($radius);
+
+            while($count < 4)
+            {
+                $radius[] = current($radius);
+                $count++;
+            }
+        }
+
+        $this->radius = $radius;
+    }
+
+    public function getRadius()
+    {
+        return $this->radius;
     }
 
     public function getPriority()
@@ -74,5 +98,10 @@ abstract class Enhancement
         $y[$index] = $y[$index]+$shift;
 
         $gc->drawPolygon($x, $y, $drawType);
+    }
+
+    protected function drawRoundedBoundary(GraphicsContext $gc, $x1, $y1, $x2, $y2, $fillType)
+    {
+        $gc->drawRoundedRectangle($x1, $y1, $x2, $y2, $this->getRadius(), $fillType);
     }
 }
