@@ -208,6 +208,6 @@ class Container extends AbstractGlyph
             $minWidth = max(array($minWidth, $child->getMinWidth()));
         }
 
-        return $minWidth;
+        return $minWidth + $this->getPaddingLeft() + $this->getPaddingRight();
     }
 }

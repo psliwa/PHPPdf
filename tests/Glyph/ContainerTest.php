@@ -72,7 +72,7 @@ class ContainerTest extends PHPUnit_Framework_TestCase
      * @test
      * @dataProvider widthProvider
      */
-    public function minWidthIsMaxValueOfMinWidthOfChildren(array $childrenMinWidths)
+    public function minWidthIsMaxValueOfMinWidthOfChildren(array $childrenMinWidths, $paddingLeft = 0, $paddingRight = 0)
     {
         $children = array();
         foreach($childrenMinWidths as $minWidth)
@@ -84,7 +84,11 @@ class ContainerTest extends PHPUnit_Framework_TestCase
             $this->glyph->add($child);
         }
 
-        $this->assertEquals(max($childrenMinWidths), $this->glyph->getMinWidth());
+        $this->glyph->setPaddingLeft($paddingLeft);
+        $this->glyph->setPaddingRight($paddingRight);
+        $minWidth = max($childrenMinWidths) + $paddingLeft + $paddingRight;
+
+        $this->assertEquals($minWidth, $this->glyph->getMinWidth());
     }
 
     public function widthProvider()
@@ -92,6 +96,9 @@ class ContainerTest extends PHPUnit_Framework_TestCase
         return array(
             array(
                 array(10, 20, 30),
+            ),
+            array(
+                array(10, 20, 30), 20, 10
             ),
         );
     }

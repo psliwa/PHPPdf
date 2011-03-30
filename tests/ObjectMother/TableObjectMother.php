@@ -44,7 +44,7 @@ class TableObjectMother
     {
         $cell = $this->test->getMock('PHPPdf\Glyph\Table\Cell', array('getWidth', 'getBoundary', 'setWidth', 'translate'));
 
-        $cell->expects($this->test->atLeastOnce())
+        $cell->expects($this->test->any())
              ->method('getWidth')
              ->will($this->test->returnValue($width));
         $cell->expects($this->test->once())

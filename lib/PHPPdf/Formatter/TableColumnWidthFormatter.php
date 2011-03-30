@@ -15,11 +15,15 @@ class TableColumnWidthFormatter extends BaseFormatter
         $tableWidth = $glyph->getWidth();
         $enlargeColumnWidth = $numberOfColumns ? ($tableWidth - $totalColumnsWidth)/count($columnsWidths) : 0;
 
+        array_walk($columnsWidths, function(&$width) use($enlargeColumnWidth){
+            $width += $enlargeColumnWidth;
+        });
+
         foreach($glyph->getChildren() as $row)
         {
             foreach($row->getChildren() as $column => /* @var $cell PHPPdf\Glyph\Table\Cell */ $cell)
             {
-                $newWidth = $cell->getWidth() + $enlargeColumnWidth;
+                $newWidth = $columnsWidths[$column];
                 $cell->setWidth($newWidth);
             }
         }
