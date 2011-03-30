@@ -22,19 +22,19 @@ class TableColumnWidthFormatterTest extends TestCase
      * @test
      * @dataProvider columnsDataProvider
      */
-    public function spreadEventlyColumnsWidth(array $columnsWidths, $numberOfRows, $tableWidth)
+    public function spreadEventlyColumnsWidth(array $cellsInRowsWidths, array $columnsWidths, $tableWidth)
     {
         $table = $this->getMock('PHPPdf\Glyph\Table', array('getWidthsOfColumns', 'getChildren', 'getWidth', 'getNumberOfColumns'));
         $totalColumnsWidth = array_sum($columnsWidths);
         $enlargeColumnWidth = ($tableWidth - $totalColumnsWidth)/count($columnsWidths);
 
         $rows = array();
-        for($i=0; $i<$numberOfRows; $i++)
+        foreach($cellsInRowsWidths as $cellsWidths)
         {
             $cells = array();
-            foreach($columnsWidths as $width)
+            foreach($cellsWidths as $column => $width)
             {
-                $cells[] = $this->objectMother->getCellMockWithResizeExpectations($width, $width+$enlargeColumnWidth, false);
+                $cells[] = $this->objectMother->getCellMockWithResizeExpectations($width, $columnsWidths[$column] + $enlargeColumnWidth, false);
             }
 
             $row = $this->getMock('PHPPdf\Glyph\Table\Row', array('getChildren'));
@@ -68,6 +68,10 @@ class TableColumnWidthFormatterTest extends TestCase
     {
         return array(
             array(
+                array(
+                    array(10, 20, 15),
+                    array(5, 10, 10),
+                ),
                 array(10, 20, 15),
                 5,
                 50,

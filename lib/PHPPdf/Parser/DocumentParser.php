@@ -189,7 +189,7 @@ class DocumentParser extends XmlParser
         if($parentGlyph->hasPlaceholder($placeholderName))
         {
             $innerParser->setEndTag($placeholderName);
-            $collection = $innerParser->parse($reader);
+            $collection = $innerParser->parse($reader, $this->getStylesheetConstraint());
             $placeholder = current($collection->getChildren());
 
             if($placeholder)
