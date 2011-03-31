@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<stylesheet>
+    <any>
+        <attribute name="font-size" value="8" />
+    </any>
+    <p>
+        <attribute name="margin" value="0" />
+        <attribute name="padding" value="0" />
+    </p>
+    <any class="invoice-data">
+        <attribute name="float" value="right" />
+        <attribute name="width" value="200" />
+        <attribute name="padding-top" value="10" />
+    </any>
+    <h3>
+        <attribute name="font-style" value="bold" />
+        <attribute name="margin" value="0" />
+        <attribute name="font-size" value="10" />
+    </h3>
+    <div class="bill">
+        <attribute name="width" value="50%" />
+        <attribute name="float" value="left" />
+        <attribute name="margin-top" value="20" />
+    </div>
+    <table class="invoice">
+        <attribute name="margin-top" value="20" />
+        <tr class="head">
+            <td>
+                <attribute name="text-align" value="center" />
+                <enhancement name="background" color="#cccccc" />
+            </td>
+        </tr>
+        <td>
+            <enhancement name="border" type="all" size="0.5" color="#000000" />
+            <attribute name="padding" value="5" />
+        </td>
+        <td class="no-border">
+            <enhancement name="border" type="none" />
+        </td>
+    </table>
+    <any class="center">
+        <attribute name="text-align" value="center" />
+    </any>
+
+    <div class="footer">
+        <attribute name="height" value="20" />
+        <table>
+            <tr>
+                <enhancement name="border" type="none" />
+                <td>
+                    <attribute name="font-size" value="7" />
+                    <enhancement name="border" type="none" />
+                    <b>
+                        <attribute name="font-size" value="7" />
+                    </b>
+                </td>
+            </tr>
+        </table>
+    </div>
+</stylesheet>
