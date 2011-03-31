@@ -1,12 +1,12 @@
 <?php
 
-use PHPPdf\Document;
-use PHPPdf\Glyph\Image;
-use PHPPdf\Formatter\ImageDimensionFormatter;
-use PHPPdf\Glyph\Page;
-use PHPPdf\Glyph\Container;
+use PHPPdf\Document,
+    PHPPdf\Glyph\Image,
+    PHPPdf\Formatter\ImageDimensionFormatter,
+    PHPPdf\Glyph\Page,
+    PHPPdf\Glyph\Container;
 
-class ImageDimensionFormatterTest extends PHPUnit_Framework_TestCase
+class ImageDimensionFormatterTest extends TestCase
 {
     private $formatter;
     private $document;
@@ -27,8 +27,6 @@ class ImageDimensionFormatterTest extends PHPUnit_Framework_TestCase
             'src' => \Zend_Pdf_Image::imageWithPath(dirname(__FILE__).'/../resources/domek.jpg'),
         ));
         $page->add($image);
-        $boundary = $image->getBoundary();
-        $boundary->setNext(0, $page->getHeight());
         
         $this->formatter->format($image, $this->document);
 
@@ -50,14 +48,11 @@ class ImageDimensionFormatterTest extends PHPUnit_Framework_TestCase
         $image = new Image(array(
             'src' => $imageResource,
         ));
-        $boundary = $image->getBoundary();
-        $boundary->setNext(0, $page->getHeight());
 
         $container = new Container(array(
             'width' => (int) ($imageResource->getPixelWidth() * 0.7),
             'height' => (int) ($imageResource->getPixelHeight() * 0.5),
         ));
-        $container->getBoundary()->setNext(0, $page->getHeight());
 
         $container->add($image);
 
@@ -69,25 +64,40 @@ class ImageDimensionFormatterTest extends PHPUnit_Framework_TestCase
 
     /**
      * @test
-     *
-     * @todo obliczanie drugiego wymiaru, gdy ustawiony zostanie tylko jeden
+     * @dataProvider sizeProvider
      */
-    public function calculateSecondSize()
+    public function calculateSecondSize($width, $height)
     {
         $page = new Page();
 
-        $imageResource = \Zend_Pdf_Image::imageWithPath(dirname(__FILE__).'/../resources/domek.jpg');
+        $imageResource = \Zend_Pdf_Image::imageWithPath(dirname(__FILE__).'/../resources/zend.jpg');
 
         $image = new Image(array(
             'src' => $imageResource,
-            'width' => 100,
+            'width' => $width,
+            'height' => $height,
         ));
         $page->add($image);
-        $image->getBoundary()->setNext(0, $page->getHeight());
 
         $this->formatter->format($image, $this->document);
 
-        $excepted = $imageResource->getPixelWidth()/$imageResource->getPixelHeight() * $image->getWidth();
-        $this->assertEquals($excepted, $image->getHeight());
+        $ratio = $imageResource->getPixelWidth() / $imageResource->getPixelHeight();
+
+        if(!$height)
+        {
+            $ratio = 1/$ratio;
+        }
+
+        $excepted = $ratio * ($width ? $width : $height);
+
+        $this->assertEquals($excepted, $width ? $image->getHeight() : $image->getWidth());
+    }
+
+    public function sizeProvider()
+    {
+        return array(
+            array(100, null),
+            array(null, 100),
+        );
     }
 }

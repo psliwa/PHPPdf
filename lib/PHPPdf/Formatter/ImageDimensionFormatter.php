@@ -14,44 +14,61 @@ class ImageDimensionFormatter extends BaseFormatter
     {
         if($this->isImageAndSizesArentSet($glyph))
         {
-            $parent = $glyph->getParent();
-
-            $width = !$glyph->getWidth() ? $parent->getWidth() : $glyph->getWidth();
-            $height = !$glyph->getHeight() ? $parent->getHeight() : $glyph->getHeight();
-
+            $width = $glyph->getWidth();
+            $height = $glyph->getHeight();
             $src = $glyph->getAttribute('src');
-            
-            $srcWidth = $originalWidth = $src->getPixelWidth();
-            $srcHeight = $originalHeight = $src->getPixelHeight();
 
-            if($srcWidth > $width)
-            {
-                $srcWidth = $width;
-            }
+            $originalWidth = $src->getPixelWidth();
+            $originalHeight = $src->getPixelHeight();
+            $originalRatio = $originalWidth/$originalHeight;
 
-            if($srcHeight > $height)
+            if(!$width && !$height)
             {
-                $srcHeight = $height;
+                list($width, $height) = $this->setDimensionsFromParent($glyph);
             }
 
-            $ratio = $originalWidth/$originalHeight;
-            $srcRatio = !$srcHeight ? 0 : $srcWidth/$srcHeight;
-            
-            if($srcRatio > $ratio)
+            if(!$width)
             {
-                $srcWidth = $ratio * $srcHeight;
+                $width = $originalRatio * $height;
             }
-            elseif($srcRatio < $ratio)
+
+            if(!$height)
             {
-                $srcHeight = $ratio * $srcWidth;
-            }
-            $glyph->setWidth($srcWidth);
-            $glyph->setHeight($srcHeight);
+                $height = 1/$originalRatio * $width;
+            }          
+
+            $glyph->setWidth($width);
+            $glyph->setHeight($height);
         }
     }
 
     private function isImageAndSizesArentSet(Glyphs\Glyph $glyph)
     {
         return ($glyph instanceof Glyphs\Image && (!$glyph->getWidth() || !$glyph->getHeight()));
+    }
+
+    private function setDimensionsFromParent(Glyphs\Glyph $glyph)
+    {
+        $parent = $glyph->getParent();
+        $src = $glyph->getAttribute('src');
+
+        $width = $src->getPixelWidth();
+        $height = $src->getPixelHeight();
+
+        if($width > $parent->getWidth() || $height > $parent->getHeight())
+        {
+            if($parent->getWidth() > $parent->getHeight())
+            {
+                $height = $parent->getHeight();
+                $width = null;
+            }
+            else
+            {
+                $width = $parent->getWidth();
+                $height = null;
+            }
+        }
+
+        return array($width, $height);
     }
 }
