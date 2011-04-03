@@ -15,13 +15,13 @@ PHPPdf\Autoloader::register(dirname(__FILE__).'/../lib/vendor');
 $facade = PHPPdf\Parser\FacadeBuilder::create()->setCache('File', array('cache_dir' => __DIR__.'/cache/'))
                                                ->setUseCacheForStylesheetConstraint(true)
                                                ->build();
-
-if(!isset($_SERVER['argv'][1]))
+if($_SERVER['argc'] < 3) 
 {
-    die('Pass example name by `cli.php name` parameter.');
+    die('Passe example name and destination file path, for example `cli.php example-name \some\destination\file.pdf`');
 }
 
 $name = basename($_SERVER['argv'][1]);
+$destinationPath = $_SERVER['argv'][2];
 
 $documentFilename = './'.$name.'.xml';
 $stylesheetFilename = './'.$name.'-style.xml';
@@ -31,13 +31,14 @@ if(!is_readable($documentFilename) || !is_readable($stylesheetFilename))
     die(sprintf('Example "%s" dosn\'t exist.', $name));
 }
 
+if(!is_writable(dirname($destinationPath)))
+{
+    die(sprintf('"%s" isn\'t writable.', $destinationPath));
+}
+
 $xml = str_replace('dir:', __DIR__.'/', file_get_contents($documentFilename));
 $stylesheet = PHPPdf\Util\DataSource::fromFile($stylesheetFilename);
 
 $content = $facade->render($xml, $stylesheet);
 
-if (isset($_SERVER['argv'][2])) {
-	file_put_contents($_SERVER['argv'][2], $content);
-} else {
-	echo $content;
-}
+file_put_contents($destinationPath, $content);
