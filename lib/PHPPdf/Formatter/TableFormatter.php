@@ -25,8 +25,16 @@ class TableFormatter extends BaseFormatter
             foreach($row->getChildren() as /* @var $cell PHPPdf\Glyph\Table\Cell */ $cell)
             {
                 $column = $cell->getNumberOfColumn();
-                $newWidth = $widthsOfColumns[$column];
-                $minWidth = $minWidthsOfColumns[$column];
+                $colspan = $cell->getColspan();
+                $minWidth = $newWidth = 0;
+                
+                for($i=0; $i<$colspan; $i++)
+                {
+                    $realColumn = $column + $i;
+                    $minWidth += $minWidthsOfColumns[$realColumn];
+                    $newWidth += $widthsOfColumns[$realColumn];
+                }
+
                 $widthMargin = $newWidth - $minWidth;
 
                 if($diffBetweenTableAndColumnsWidths < 0 && -$diffBetweenTableAndColumnsWidths >= $widthMargin)

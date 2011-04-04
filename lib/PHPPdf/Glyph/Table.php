@@ -117,7 +117,14 @@ class Table extends Container implements Listener
             foreach($row->getChildren() as $cell)
             {
                 $column = $cell->getNumberOfColumn();
-                $minWidthsOfColumns[$column] = isset($minWidthsOfColumns[$column]) ? max($minWidthsOfColumns[$column], $cell->getMinWidth()) : $cell->getMinWidth();
+                $colspan = $cell->getColspan();
+                $minWidthPerColumn = $cell->getMinWidth() / $colspan;
+
+                for($i=0; $i<$colspan; $i++)
+                {
+                    $realColumn = $column + $i;
+                    $minWidthsOfColumns[$realColumn] = isset($minWidthsOfColumns[$realColumn]) ? max($minWidthsOfColumns[$realColumn], $minWidthPerColumn) : $minWidthPerColumn;
+                }
             }
         }
 

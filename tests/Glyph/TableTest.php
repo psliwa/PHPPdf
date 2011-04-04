@@ -243,26 +243,36 @@ class TableTest extends TestCase
      * @test
      * @dataProvider cellsInRowsWidthsProvider
      */
-    public function minWidthOfColumnIsMaxOfMinWidthOfColumnsCells(array $cellsInRowsMinWidths)
+    public function minWidthOfColumnIsMaxOfMinWidthOfColumnsCells(array $cellsInRowsMinWidths, array $colspans, $numberOfColumns)
     {
-        $expectedMinWidthsOfColumns = array_fill(0, count($cellsInRowsMinWidths[0]), 0);
-        foreach($cellsInRowsMinWidths as $cellsMinWidths)
+        $expectedMinWidthsOfColumns = array_fill(0, $numberOfColumns, 0);
+        foreach($cellsInRowsMinWidths as $rowNumber => $cellsMinWidths)
         {
             $row = $this->getMock('PHPPdf\Glyph\Table\Row', array('getChildren'));
 
             $cells = array();
-            foreach ($cellsMinWidths as $i => $minWidth)
+            foreach ($cellsMinWidths as $columnNumber => $minWidth)
             {
-                $cell = $this->getMock('PHPPdf\Glyph\Table\Cell', array('getMinWidth', 'getNumberOfColumn'));
+                $colspan = $colspans[$rowNumber][$columnNumber];
+
+                $cell = $this->getMock('PHPPdf\Glyph\Table\Cell', array('getMinWidth', 'getNumberOfColumn', 'getColspan'));
                 $cell->expects($this->atLeastOnce())
                      ->method('getMinWidth')
                      ->will($this->returnValue($minWidth));
                 $cell->expects($this->atLeastOnce())
                      ->method('getNumberOfColumn')
-                     ->will($this->returnValue($i));
+                     ->will($this->returnValue($columnNumber));
+                $cell->expects($this->atLeastOnce())
+                     ->method('getColspan')
+                     ->will($this->returnValue($colspan));
                 $cells[] = $cell;
 
-                $expectedMinWidthsOfColumns[$i] = max($expectedMinWidthsOfColumns[$i], $minWidth);
+                $minWidthPerColumn = $minWidth / $colspan;
+                for($i=0; $i<$colspan; $i++)
+                {
+                    $realColumnNumber = $columnNumber + $i;
+                    $expectedMinWidthsOfColumns[$realColumnNumber] = max($expectedMinWidthsOfColumns[$realColumnNumber], $minWidthPerColumn);
+                }
             }
             $row->expects($this->atLeastOnce())
                 ->method('getChildren')
@@ -281,6 +291,22 @@ class TableTest extends TestCase
                     array(100, 200, 110),
                     array(30, 50, 30),
                 ),
+                array(
+                    array(1, 1, 1,),
+                    array(1, 1, 1,),
+                ),
+                3
+            ),
+            array(
+                array(
+                    array(100, 200),
+                    array(30, 50, 30),
+                ),
+                array(
+                    array(1, 2),
+                    array(1, 1, 1,),
+                ),
+                3
             ),
         );
     }
