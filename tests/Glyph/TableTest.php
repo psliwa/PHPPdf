@@ -142,17 +142,17 @@ class TableTest extends TestCase
 
     /**
      * @test
-     * @dataProvider cellsInRowsWidthsProvider
+     * @dataProvider cellsInRowsWidthsAndColspansProvider
      */
-    public function setColumnsWidthsWhenTableIsNotifiedByCell(array $cellsWidthsByColumn)
+    public function setColumnsWidthsWhenTableIsNotifiedByCell(array $cellsWidthsByColumn, array $colspans)
     {
         $cells = array();
         $columnsWidths = array();
         foreach($cellsWidthsByColumn as $columnNumber => $cellsWidths)
         {
-            foreach($cellsWidths as $width)
+            foreach($cellsWidths as $rowNumber => $width)
             {
-                $cell = $this->getMock('PHPPdf\Glyph\Table\Cell', array('getWidth', 'getNumberOfColumn'));
+                $cell = $this->getMock('PHPPdf\Glyph\Table\Cell', array('getWidth', 'getNumberOfColumn', 'getColspan'));
                 $cell->expects($this->atLeastOnce())
                      ->method('getWidth')
                      ->will($this->returnValue($width));
@@ -160,11 +160,22 @@ class TableTest extends TestCase
                      ->method('getNumberOfColumn')
                      ->will($this->returnValue($columnNumber));
 
+                $colspan = $colspans[$columnNumber][$rowNumber];
+
+                $cell->expects($this->atLeastOnce())
+                     ->method('getColspan')
+                     ->will($this->returnValue($colspan));
+
                 $cells[] = $cell;
 
-                if(!isset($columnsWidths[$columnNumber]) || $width > $columnsWidths[$columnNumber])
+                $widthPerColumn = $width / $colspan;
+                for($i=0; $i < $colspan; $i++)
                 {
-                    $columnsWidths[$columnNumber] = $width;
+                    $realColumnNumber = $columnNumber + $i;
+                    if(!isset($columnsWidths[$realColumnNumber]) || $widthPerColumn > $columnsWidths[$realColumnNumber])
+                    {
+                        $columnsWidths[$realColumnNumber] = $widthPerColumn;
+                    }
                 }
             }
         }
@@ -177,13 +188,27 @@ class TableTest extends TestCase
         $this->assertEquals($columnsWidths, $this->table->getWidthsOfColumns());
     }
 
-    public function cellsInRowsWidthsProvider()
+    public function cellsInRowsWidthsAndColspansProvider()
     {
         return array(
             array(
                 array(
-                    array(100, 200, 110),
+                    array(100, 200, 110), 
                     array(30, 50, 30),
+                ),
+                array(
+                    array(1, 1, 1),
+                    array(1, 1, 1),
+                ),
+            ),
+            array(
+                array(
+                    array(100, 70, 200),
+                    array(30, 50),
+                ),
+                array(
+                    array(1, 1, 2),
+                    array(1, 1),
                 ),
             ),
         );
@@ -246,5 +271,17 @@ class TableTest extends TestCase
         }
 
         $this->assertEquals($expectedMinWidthsOfColumns, $this->table->getMinWidthsOfColumns());
+    }
+
+    public function cellsInRowsWidthsProvider()
+    {
+        return array(
+            array(
+                array(
+                    array(100, 200, 110),
+                    array(30, 50, 30),
+                ),
+            ),
+        );
     }
 }

@@ -14,6 +14,13 @@ class Cell extends Container
     private $listeners = array();
     private $numberOfColumn;
 
+    public function initialize()
+    {
+        parent::initialize();
+
+        $this->addAttribute('colspan', 1);
+    }
+
     public function getFloat()
     {
         return self::FLOAT_LEFT;

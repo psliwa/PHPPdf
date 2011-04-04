@@ -22,8 +22,9 @@ class TableFormatter extends BaseFormatter
         {
             $diffBetweenTableAndColumnsWidths = $tableWidth - $totalWidth;
             $translate = 0;
-            foreach($row->getChildren() as $column => /* @var $cell PHPPdf\Glyph\Table\Cell */ $cell)
+            foreach($row->getChildren() as /* @var $cell PHPPdf\Glyph\Table\Cell */ $cell)
             {
+                $column = $cell->getNumberOfColumn();
                 $newWidth = $widthsOfColumns[$column];
                 $minWidth = $minWidthsOfColumns[$column];
                 $widthMargin = $newWidth - $minWidth;

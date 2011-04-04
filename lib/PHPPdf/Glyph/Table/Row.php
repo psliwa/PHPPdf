@@ -22,7 +22,8 @@ class Row extends Container implements Listener
             throw new \InvalidArgumentException(sprintf('Invalid child glyph type, expected PHPPdf\Glyph\Table\Cell, %s given.', get_class($glyph)));
         }
 
-        $glyph->setNumberOfColumn($this->numberOfColumns++);
+        $glyph->setNumberOfColumn($this->numberOfColumns);
+        $this->numberOfColumns += $glyph->getAttribute('colspan');
         $parent = $this->getParent();
 
         if($parent)

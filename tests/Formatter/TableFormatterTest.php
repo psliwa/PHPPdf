@@ -50,7 +50,11 @@ class TableFormatterTest extends TestCase
                     $diffBetweenTableAndColumnsWidths = 0;
                 }
 
-                $cells[] = $this->objectMother->getCellMockWithTranslateAndResizeExpectations($width, $columnWidth, $translate);
+                $cell = $this->objectMother->getCellMockWithTranslateAndResizeExpectations($width, $columnWidth, $translate);
+                $cell->expects($this->atLeastOnce())
+                     ->method('getNumberOfColumn')
+                     ->will($this->returnValue($column));
+                $cells[] = $cell;
                 $translate += $columnWidth;
             }
 

@@ -21,8 +21,9 @@ class TableColumnWidthFormatter extends BaseFormatter
 
         foreach($glyph->getChildren() as $row)
         {
-            foreach($row->getChildren() as $column => /* @var $cell PHPPdf\Glyph\Table\Cell */ $cell)
+            foreach($row->getChildren() as /* @var $cell PHPPdf\Glyph\Table\Cell */ $cell)
             {
+                $column = $cell->getNumberOfColumn();
                 $newWidth = $columnsWidths[$column];
                 $cell->setWidth($newWidth);
             }

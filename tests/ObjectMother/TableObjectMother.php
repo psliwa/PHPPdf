@@ -42,7 +42,7 @@ class TableObjectMother
 
     public function getCellMockWithResizeExpectations($width, $newWidth)
     {
-        $cell = $this->test->getMock('PHPPdf\Glyph\Table\Cell', array('getWidth', 'getBoundary', 'setWidth', 'translate'));
+        $cell = $this->test->getMock('PHPPdf\Glyph\Table\Cell', array('getWidth', 'getBoundary', 'setWidth', 'translate', 'getNumberOfColumn'));
 
         $cell->expects($this->test->any())
              ->method('getWidth')

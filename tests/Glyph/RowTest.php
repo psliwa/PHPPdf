@@ -90,23 +90,39 @@ class RowTest extends TestCase
 
     /**
      * @test
+     * @dataProvider colspanProvider
      */
-    public function setNumberOfColumnForCells()
+    public function setNumberOfColumnForCells(array $colspans)
     {
-        for($i=0; $i<2; $i++)
+        $i = 0;
+        foreach($colspans as $colspan)
         {
-            $cell = $this->getMock('PHPPdf\Glyph\Table\Cell', array('setNumberOfColumn'));
+            $cell = $this->getMock('PHPPdf\Glyph\Table\Cell', array('setNumberOfColumn', 'getColspan'));
+            $cell->expects($this->atLeastOnce())
+                 ->method('getColspan')
+                 ->will($this->returnValue($colspan));
             $cell->expects($this->once())
                  ->method('setNumberOfColumn')
                  ->with($i);
 
             $cells[] = $cell;
+            $i += $colspan;
         }
 
         foreach($cells as $cell)
         {
             $this->row->add($cell);
         }
+    }
+
+    public function colspanProvider()
+    {
+        return array(
+            array(
+                array(1, 1),
+//                array(2, 1),
+            ),
+        );
     }
 
     /**

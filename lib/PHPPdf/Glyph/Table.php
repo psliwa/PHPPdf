@@ -38,10 +38,17 @@ class Table extends Container implements Listener
     {
         $width = $glyph->getWidth();
         $columnNumber = $glyph->getNumberOfColumn();
+        $colspan = $glyph->getAttribute('colspan');
 
-        if(!isset($this->widthsOfColumns[$columnNumber]) || $width > $this->widthsOfColumns[$columnNumber])
+        $widthPerColumn = $width / $colspan;
+
+        for($i=0; $i<$colspan; $i++)
         {
-            $this->widthsOfColumns[$columnNumber] = $width;
+            $realColumnNumber = $columnNumber + $i;
+            if(!isset($this->widthsOfColumns[$realColumnNumber]) || $widthPerColumn > $this->widthsOfColumns[$realColumnNumber])
+            {
+                $this->widthsOfColumns[$realColumnNumber] = $widthPerColumn;
+            }
         }
     }
 

@@ -34,7 +34,11 @@ class TableColumnWidthFormatterTest extends TestCase
             $cells = array();
             foreach($cellsWidths as $column => $width)
             {
-                $cells[] = $this->objectMother->getCellMockWithResizeExpectations($width, $columnsWidths[$column] + $enlargeColumnWidth, false);
+                $cell = $this->objectMother->getCellMockWithResizeExpectations($width, $columnsWidths[$column] + $enlargeColumnWidth, false);
+                $cell->expects($this->atLeastOnce())
+                     ->method('getNumberOfColumn')
+                     ->will($this->returnValue($column));
+                $cells[] = $cell;
             }
 
             $row = $this->getMock('PHPPdf\Glyph\Table\Row', array('getChildren'));
