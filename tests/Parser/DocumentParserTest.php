@@ -566,7 +566,7 @@ XML;
     /**
      * @test
      */
-    public function glyphAttributesAreSettedBeforeSettingParent()
+    public function setAttributesBeforeParent()
     {
         $xml = <<<XML
 <pdf>
