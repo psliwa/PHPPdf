@@ -562,4 +562,32 @@ XML;
 
         $this->parser->parse($xml);
     }
+
+    /**
+     * @test
+     */
+    public function glyphAttributesAreSettedBeforeSettingParent()
+    {
+        $xml = <<<XML
+<pdf>
+    <tag1 someAttribute="someValue"></tag1>
+</pdf>
+XML;
+
+        $glyphMock = $this->getMock('PHPPdf\Glyph\Container', array('setAttribute', 'setParent'));
+        $glyphMock->expects($this->once())
+                  ->method('setAttribute')
+                  ->id('attribute')
+                  ->with('someAttribute', 'someValue');
+        $glyphMock->expects($this->once())
+                  ->method('setParent')
+                  ->after('attribute');
+
+
+        $glyphFactoryMock = $this->getGlyphFactoryMock(array('tag1' => $glyphMock));
+
+        $this->parser->setGlyphFactory($glyphFactoryMock);
+
+        $this->parser->parse($xml);
+    }
 }
