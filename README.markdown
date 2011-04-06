@@ -173,6 +173,7 @@ Istnieją tagi, które służą jedynie do określania wartości atrybutów, zbi
 * line-height - działanie takie jak w HTML/CSS. Domyślna wartość to 1.2*font-size
 * text-align - działanie takie jak w HTML/CSS. Wartości left|center|right, domyślnie left. Obecnie nie działa poprawnie dla tekstu wymieszanego z tagami formatującymi (np. "span").
 * page-break - łamie stronę jeśli element jest bezpośrednim dzieckiem elementu dynamic-page
+* colspan, rowspan - działanie analogiczne do atrybutów html (rowspan jeszcze nie jest zaimplementowane)
 
 7. Upiększenia (atrybuty złożone)
 =================================
@@ -189,7 +190,7 @@ Istnieją tagi, które służą jedynie do określania wartości atrybutów, zbi
     - color: kolor tła
     - image: obrazek tła
     - repeat: sposób powtarzania obrazka (none|x|y|all)
-    - radius: zaokrąglanie rogów tła w radianach (TODO)
+    - radius: zaokrąglanie rogów tła w radianach (w chwili obecnej działa tylko dla koloru, nie obrazka)
 
 Można dodawać kilka upiększeń tego samego typu - np. 3 różne obramowania:
 
@@ -279,6 +280,8 @@ Poniżej przedstawiam listę ograniczeń obecnej wersji biblioteki:
 * obsługa metadanych dokumentu
 * obsługa zakładek
 * poprawa interpretacji wartości atrybutów i rozkładu elementów w dokumencie
+* obsługa podziału strony na kolumny
+* poprawa działania tabelek, definiowanie nagłówków i stopek dla tabeli
 
 12. Wymagania techniczne.
 =========================
