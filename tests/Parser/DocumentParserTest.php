@@ -122,20 +122,29 @@ class DocumentParserTest extends PHPUnit_Framework_TestCase
         return $factoryMock;
     }
 
-    private function getGlyphMock(array $attributes = array(), $baseClass = 'PHPPdf\Glyph\Page', $methods = array())
+    private function getGlyphMock(array $attributes = array(), $baseClass = 'PHPPdf\Glyph\Page', $methods = array(), $setParentExpectation = true)
     {
-        $glyphMock = $this->getMock($baseClass, array_merge(array('setParent', 'setAttribute'), $methods));
-        $glyphMock->expects($this->once())
-                  ->method('setParent');
-
+        $glyphMock = $this->createGlyphMock($baseClass, $methods, $setParentExpectation);
         $this->addGlyphAttributesExpectations($glyphMock, $attributes);
 
         return $glyphMock;
     }
 
-    private function addGlyphAttributesExpectations($glyph, $attributes)
+    private function createGlyphMock($baseClass = 'PHPPdf\Glyph\Page', $methods = array(), $setParentExpectation = true)
     {
-        $index = 1;
+        $glyphMock = $this->getMock($baseClass, array_merge(array('setParent', 'setAttribute'), $methods));
+        if($setParentExpectation)
+        {
+            $glyphMock->expects($this->once())
+                      ->method('setParent');
+        }
+
+        return $glyphMock;
+    }
+
+    private function addGlyphAttributesExpectations($glyph, $attributes, $attributeStartIndex = 0)
+    {
+        $index = $attributeStartIndex;
         foreach($attributes as $name => $value)
         {
             $glyph->expects($this->at($index++))
@@ -277,8 +286,8 @@ XML;
     </tag1>
 </pdf>
 XML;
-        $glyphMock1 = $this->getGlyphMock();
-        $glyphMock2 = $this->getGlyphMock();
+        $glyphMock1 = $this->getGlyphMock(array(), 'PHPPdf\Glyph\Page', array(), false);
+        $glyphMock2 = $this->getGlyphMock(array(), 'PHPPdf\Glyph\Page', array(), false);
         $factoryMock = $this->getGlyphFactoryMock(array('tag1' => $glyphMock1, 'tag2' => $glyphMock2));
 
         $this->parser->setGlyphFactory($factoryMock);
@@ -368,7 +377,8 @@ XML;
                    ->method('parse')
                    ->will($this->returnValue($constraintMock));
 
-        $glyphMock = $this->getGlyphMock($attributes, 'PHPPdf\Glyph\Page', array('mergeEnhancementAttributes'));
+        $glyphMock= $this->createGlyphMock('PHPPdf\Glyph\Page', array('mergeEnhancementAttributes'));
+        $this->addGlyphAttributesExpectations($glyphMock, $attributes, 1);
         $glyphMock->expects($this->at(3))
                   ->method('mergeEnhancementAttributes')
                   ->with($this->equalTo('someName'), $this->equalTo(array('attribute' => 'value')));
@@ -468,8 +478,8 @@ XML;
         $glyphMock1->expects($this->never())
                    ->method('mergeEnhancementAttributes');
 
-        $this->addEnhancementExpectationToGlyphMock($glyphMock2, array('someName1' => array('someAttribute1' => 'someValue1')), 1);
-        $this->addEnhancementExpectationToGlyphMock($glyphMock3, array('someName2' => array('someAttribute2' => 'someValue2')), 2);
+        $this->addEnhancementExpectationToGlyphMock($glyphMock2, array('someName1' => array('someAttribute1' => 'someValue1')), 0);
+        $this->addEnhancementExpectationToGlyphMock($glyphMock3, array('someName2' => array('someAttribute2' => 'someValue2')), 1);
 
         $glyphFactoryMock = $this->getGlyphFactoryMock(array('tag1' => $glyphMock1, 'tag2' => $glyphMock2, 'tag3' => $glyphMock3));
 
@@ -502,11 +512,11 @@ XML;
                        ->will($this->returnValue($bagContainerMock));
     }
 
-    private function addEnhancementExpectationToGlyphMock($glyph, $enhancements, $initIndex)
+    private function addEnhancementExpectationToGlyphMock($glyph, $enhancements, $initSequence)
     {
         foreach($enhancements as $name => $parameters)
         {
-            $glyph->expects($this->at($initIndex++))
+            $glyph->expects($this->at($initSequence++))
                   ->method('mergeEnhancementAttributes')
                   ->with($this->equalTo($name), $this->equalTo($parameters));
         }

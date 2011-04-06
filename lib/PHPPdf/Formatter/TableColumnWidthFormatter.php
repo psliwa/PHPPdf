@@ -26,15 +26,14 @@ class TableColumnWidthFormatter extends BaseFormatter
                 $column = $cell->getNumberOfColumn();
                 $colspan = $cell->getColspan();
 
-                $newWidth = $columnsWidths[$column];
+                $newWidth = 0;//$columnsWidths[$column];
 
-                /* TODO
+
                 for($i=0; $i<$colspan; $i++)
                 {
                     $newWidth += $columnsWidths[$column+$i];
                 }
-                 * 
-                 */
+
                 $cell->setWidth($newWidth);
             }
         }
