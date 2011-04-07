@@ -5,11 +5,16 @@ namespace PHPPdf\Formatter;
 use PHPPdf\Glyph\Glyph,
     PHPPdf\Document;
 
-class TableColumnWidthFormatter extends BaseFormatter
+class TableColumnFormatter extends BaseFormatter
 {
     public function format(Glyph $glyph, Document $document)
     {
+        $glyph->reduceColumnsWidthsByMargins();
         $columnsWidths = $glyph->getWidthsOfColumns();
+
+        $columnsMarginsLeft = $glyph->getMarginsLeftOfColumns();
+        $columnsMarginsRight = $glyph->getMarginsRightOfColumns();
+        
         $numberOfColumns = $glyph->getNumberOfColumns();
         $totalColumnsWidth = array_sum($columnsWidths);
         $tableWidth = $glyph->getWidth();
@@ -26,8 +31,7 @@ class TableColumnWidthFormatter extends BaseFormatter
                 $column = $cell->getNumberOfColumn();
                 $colspan = $cell->getColspan();
 
-                $newWidth = 0;//$columnsWidths[$column];
-
+                $newWidth = 0;
 
                 for($i=0; $i<$colspan; $i++)
                 {
@@ -35,6 +39,8 @@ class TableColumnWidthFormatter extends BaseFormatter
                 }
 
                 $cell->setWidth($newWidth);
+                $cell->setMarginLeft($columnsMarginsLeft[$column]);
+                $cell->setMarginRight($columnsMarginsRight[$column + $colspan - 1]);
             }
         }
     }

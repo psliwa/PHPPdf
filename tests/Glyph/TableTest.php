@@ -144,10 +144,10 @@ class TableTest extends TestCase
      * @test
      * @dataProvider cellsInRowsWidthsAndColspansProvider
      */
-    public function setColumnsWidthsWhenTableIsNotifiedByCell(array $cellsWidthsByColumn, array $colspans)
+    public function setColumnsWidthsWhenTableHasBeenNotifiedByCell(array $cellsWidthsByColumn, array $colspans)
     {
         $cells = array();
-        $columnsWidths = array();
+        $columnsWidths = array_fill(0, count($cellsWidthsByColumn), 0);
         foreach($cellsWidthsByColumn as $columnNumber => $cellsWidths)
         {
             foreach($cellsWidths as $rowNumber => $width)
@@ -172,10 +172,7 @@ class TableTest extends TestCase
                 for($i=0; $i < $colspan; $i++)
                 {
                     $realColumnNumber = $columnNumber + $i;
-                    if(!isset($columnsWidths[$realColumnNumber]) || $widthPerColumn > $columnsWidths[$realColumnNumber])
-                    {
-                        $columnsWidths[$realColumnNumber] = $widthPerColumn;
-                    }
+                    $columnsWidths[$realColumnNumber] = max($widthPerColumn, $columnsWidths[$realColumnNumber]);
                 }
             }
         }
@@ -216,8 +213,66 @@ class TableTest extends TestCase
 
     /**
      * @test
+     * @dataProvider cellsInRowsMarginsProvider
      */
-    public function setColumnsWidthsWhenRowHasAdded()
+    public function setColumnsMarginsWhenTableHasBeenNotifiedByCell(array $cellsMarginsLeft, array $cellsMarginsRight)
+    {
+        $numberOfColumns = count($cellsMarginsLeft);
+        $expectedMarginsLeft = array_fill(0, $numberOfColumns, 0);
+        $expectedMarginsRight = array_fill(0, $numberOfColumns, 0);
+        
+        foreach($cellsMarginsLeft as $columnNumber => $marginsLeft)
+        {
+            foreach($marginsLeft as $rowNumber => $marginLeft)
+            {
+                $marginRight = $cellsMarginsRight[$columnNumber][$rowNumber];
+                $cell = $this->getMock('PHPPdf\Glyph\Table\Cell', array('getMarginLeft', 'getMarginRight', 'getNumberOfColumn'));
+                $cell->expects($this->atLeastOnce())
+                     ->method('getMarginLeft')
+                     ->will($this->returnValue($marginLeft));
+                $cell->expects($this->atLeastOnce())
+                     ->method('getMarginRight')
+                     ->will($this->returnValue($marginRight));
+                $cell->expects($this->atLeastOnce())
+                     ->method('getNumberOfColumn')
+                     ->will($this->returnValue($columnNumber));
+
+                $expectedMarginsLeft[$columnNumber] = max($expectedMarginsLeft[$columnNumber], $marginLeft);
+                $expectedMarginsRight[$columnNumber] = max($expectedMarginsRight[$columnNumber], $marginRight);
+
+                $cells[] = $cell;
+            }
+        }
+
+        foreach($cells as $cell)
+        {
+            $this->table->attributeChanged($cell, 'margin-left', 0);
+            $this->table->attributeChanged($cell, 'margin-right', 0);
+        }
+
+        $this->assertEquals($expectedMarginsLeft, $this->table->getMarginsLeftOfColumns());
+        $this->assertEquals($expectedMarginsRight, $this->table->getMarginsRightOfColumns());
+    }
+
+    public function cellsInRowsMarginsProvider()
+    {
+        return array(
+            array(
+                array(
+                    array(10, 5, 11),
+                    array(0, 23, 6),
+                ), array(
+                    array(5, 10, 9),
+                    array(8, 11, 19),
+                )
+            ),
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function setColumnsWidthsWhenRowHasBeenAdded()
     {
         $cellWidth = 120;
         $row = $this->getMock('PHPPdf\Glyph\Table\Row', array('getChildren'));
@@ -309,5 +364,28 @@ class TableTest extends TestCase
                 3
             ),
         );
+    }
+
+    /**
+     * @test
+     */
+    public function reduceColumnsWidthsByMargins()
+    {
+        $columnsWidths = array(100, 200, 150);
+        $marginsLeft = array(0, 5, 10);
+        $marginsRight = array(5, 5, 0);
+
+        $this->invokeMethod($this->table, 'setWidthsOfColumns', array($columnsWidths));
+        $this->invokeMethod($this->table, 'setMarginsLeftOfColumns', array($marginsLeft));
+        $this->invokeMethod($this->table, 'setMarginsRightOfColumns', array($marginsRight));
+
+        $this->table->reduceColumnsWidthsByMargins();
+
+        array_walk($columnsWidths, function(&$value, $key) use($marginsLeft, $marginsRight)
+        {
+            $value -= $marginsLeft[$key] + $marginsRight[$key];
+        });
+
+        $this->assertEquals($columnsWidths, $this->table->getWidthsOfColumns());
     }
 }

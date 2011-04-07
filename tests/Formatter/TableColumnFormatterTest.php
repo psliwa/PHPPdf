@@ -1,9 +1,9 @@
 <?php
 
-use PHPPdf\Formatter\TableColumnWidthFormatter,
+use PHPPdf\Formatter\TableColumnFormatter,
     PHPPdf\Document;
 
-class TableColumnWidthFormatterTest extends TestCase
+class TableColumnFormatterTest extends TestCase
 {
     private $formatter;
     private $objectMother;
@@ -15,7 +15,7 @@ class TableColumnWidthFormatterTest extends TestCase
 
     public function setUp()
     {
-        $this->formatter = new TableColumnWidthFormatter();
+        $this->formatter = new TableColumnFormatter();
     }
 
     /**
@@ -24,9 +24,10 @@ class TableColumnWidthFormatterTest extends TestCase
      */
     public function spreadEventlyColumnsWidth(array $cellsInRowsWidths, array $columnsWidths, $tableWidth)
     {
-        $table = $this->getMock('PHPPdf\Glyph\Table', array('getWidthsOfColumns', 'getChildren', 'getWidth', 'getNumberOfColumns'));
+        $table = $this->getMock('PHPPdf\Glyph\Table', array('reduceColumnsWidthsByMargins', 'getWidthsOfColumns', 'getChildren', 'getWidth', 'getNumberOfColumns', 'getMarginsLeftOfColumns', 'getMarginsRightOfColumns'));
         $totalColumnsWidth = array_sum($columnsWidths);
-        $enlargeColumnWidth = ($tableWidth - $totalColumnsWidth)/count($columnsWidths);
+        $numberOfColumns = count($columnsWidths);
+        $enlargeColumnWidth = ($tableWidth - $totalColumnsWidth)/$numberOfColumns;
 
         $rows = array();
         foreach($cellsInRowsWidths as $cellsWidths)
@@ -48,22 +49,41 @@ class TableColumnWidthFormatterTest extends TestCase
 
             $rows[] = $row;
         }
-        
+
+        $table->expects($this->once())
+              ->id('reduceColumns')
+              ->method('reduceColumnsWidthsByMargins');
+
         $table->expects($this->atLeastOnce())
               ->method('getChildren')
+              ->after('reduceColumns')
               ->will($this->returnValue($rows));
 
         $table->expects($this->atLeastOnce())
               ->method('getWidth')
+              ->after('reduceColumns')
               ->will($this->returnValue($tableWidth));
 
         $table->expects($this->atLeastOnce())
               ->method('getWidthsOfColumns')
+              ->after('reduceColumns')
               ->will($this->returnValue($columnsWidths));
 
         $table->expects($this->atLeastOnce())
               ->method('getNumberOfColumns')
+              ->after('reduceColumns')
               ->will($this->returnValue(count($columnsWidths)));
+
+        $margins = array_fill(0, $numberOfColumns, 0);
+        $table->expects($this->atLeastOnce())
+              ->method('getMarginsLeftOfColumns')
+              ->after('reduceColumns')
+              ->will($this->returnValue($margins));
+
+        $table->expects($this->atLeastOnce())
+              ->method('getMarginsRightOfColumns')
+              ->after('reduceColumns')
+              ->will($this->returnValue($margins));
 
         $this->formatter->format($table, new Document());
     }

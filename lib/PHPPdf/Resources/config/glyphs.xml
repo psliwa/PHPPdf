@@ -113,7 +113,7 @@
         <formatters>
             <formatter class="PHPPdf\Formatter\ConvertDimensionFormatter" />
             <formatter class="PHPPdf\Formatter\StandardDimensionFormatter" />
-            <formatter class="PHPPdf\Formatter\TableColumnWidthFormatter" />
+            <formatter class="PHPPdf\Formatter\TableColumnFormatter" />
             <formatter class="PHPPdf\Formatter\FirstPointPositionFormatter" />
             <formatter class="PHPPdf\Formatter\ContainerFormatter" />
             <formatter class="PHPPdf\Formatter\ContainerDimensionFormatter" />

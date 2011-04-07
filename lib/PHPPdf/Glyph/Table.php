@@ -11,6 +11,10 @@ use PHPPdf\Glyph\Glyph,
 class Table extends Container implements Listener
 {
     private $widthsOfColumns = array();
+    private $marginsOfColumns = array(
+        'margin-left' => array(),
+        'margin-right' => array(),
+    );
 
     public function initialize()
     {
@@ -29,6 +33,8 @@ class Table extends Container implements Listener
         foreach($glyph->getChildren() as $cell)
         {
             $this->setColumnWidthIfNecessary($cell);
+            $this->setColumnMarginIfNecessary($cell, 'margin-left');
+            $this->setColumnMarginIfNecessary($cell, 'margin-right');
         }
 
         return parent::add($glyph);
@@ -49,6 +55,17 @@ class Table extends Container implements Listener
             {
                 $this->widthsOfColumns[$realColumnNumber] = $widthPerColumn;
             }
+        }
+    }
+
+    private function setColumnMarginIfNecessary(Glyph $glyph, $marginType)
+    {
+        $margin = $glyph->getAttribute($marginType);
+        $columnNumber = $glyph->getNumberOfColumn();
+
+        if(!isset($this->marginsOfColumns[$marginType][$columnNumber]) || $margin > $this->marginsOfColumns[$marginType][$columnNumber])
+        {
+            $this->marginsOfColumns[$marginType][$columnNumber] = $margin;
         }
     }
 
@@ -82,11 +99,17 @@ class Table extends Container implements Listener
         {
             $this->setColumnWidthIfNecessary($glyph);
         }
+        elseif(in_array($attributeName, array('margin-left', 'margin-right')))
+        {
+            $this->setColumnMarginIfNecessary($glyph, $attributeName);
+        }
     }
 
     public function parentBind(Glyph $glyph)
     {
         $this->setColumnWidthIfNecessary($glyph);
+        $this->setColumnMarginIfNecessary($glyph, 'margin-left');
+        $this->setColumnMarginIfNecessary($glyph, 'margin-right');
     }
 
     public function getWidthsOfColumns()
@@ -129,5 +152,36 @@ class Table extends Container implements Listener
         }
 
         return $minWidthsOfColumns;
+    }
+
+    public function getMarginsLeftOfColumns()
+    {
+        return $this->marginsOfColumns['margin-left'];
+    }
+
+    public function getMarginsRightOfColumns()
+    {
+        return $this->marginsOfColumns['margin-right'];
+    }
+
+    private function setMarginsLeftOfColumns(array $margins)
+    {
+        $this->marginsOfColumns['margin-left'] = $margins;
+    }
+    
+    private function setMarginsRightOfColumns(array $margins)
+    {
+        $this->marginsOfColumns['margin-right'] = $margins;
+    }
+
+    public function reduceColumnsWidthsByMargins()
+    {
+        $marginsLeft = $this->getMarginsLeftOfColumns();
+        $marginsRight = $this->getMarginsRightOfColumns();
+
+        array_walk($this->widthsOfColumns, function(&$widthOfColumn, $columnNumber) use($marginsLeft, $marginsRight)
+        {
+            $widthOfColumn -= $marginsLeft[$columnNumber] + $marginsRight[$columnNumber];
+        });
     }
 }
