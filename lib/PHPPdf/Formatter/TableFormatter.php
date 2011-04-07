@@ -14,13 +14,18 @@ class TableFormatter extends BaseFormatter
     public function format(Glyph $glyph, Document $document)
     {
         $widthsOfColumns = $glyph->getWidthsOfColumns();
+
+        $marginsLeft = $glyph->getMarginsLeftOfColumns();
+        $marginsRight = $glyph->getMarginsRightOfColumns();
+
         $minWidthsOfColumns = $glyph->getMinWidthsOfColumns();
         $tableWidth = $glyph->getWidth();
         $totalWidth = array_sum($widthsOfColumns);
+        $totalMargins = array_sum($marginsLeft) + array_sum($marginsRight);
 
         foreach($glyph->getChildren() as $row)
         {
-            $diffBetweenTableAndColumnsWidths = $tableWidth - $totalWidth;
+            $diffBetweenTableAndColumnsWidths = $tableWidth - $totalWidth - $totalMargins;
             $translate = 0;
             foreach($row->getChildren() as /* @var $cell PHPPdf\Glyph\Table\Cell */ $cell)
             {
@@ -31,16 +36,24 @@ class TableFormatter extends BaseFormatter
                 for($i=0; $i<$colspan; $i++)
                 {
                     $realColumn = $column + $i;
+
                     $minWidth += $minWidthsOfColumns[$realColumn];
                     $newWidth += $widthsOfColumns[$realColumn];
+
+                    if($i>0)
+                    {
+                        $margins = $marginsRight[$realColumn] + $marginsLeft[$realColumn];
+                        $minWidth += $margins;
+                        $newWidth += $margins;
+                    }
                 }
 
-                $widthMargin = $newWidth - $minWidth;
+                $diffBetweenNewAndMinWidth = $newWidth - $minWidth;
 
-                if($diffBetweenTableAndColumnsWidths < 0 && -$diffBetweenTableAndColumnsWidths >= $widthMargin)
+                if($diffBetweenTableAndColumnsWidths < 0 && -$diffBetweenTableAndColumnsWidths >= $diffBetweenNewAndMinWidth)
                 {
                     $newWidth = $minWidth;
-                    $diffBetweenTableAndColumnsWidths += $widthMargin;
+                    $diffBetweenTableAndColumnsWidths += $diffBetweenNewAndMinWidth;
                 }
                 elseif($diffBetweenTableAndColumnsWidths < 0)
                 {
@@ -54,6 +67,7 @@ class TableFormatter extends BaseFormatter
                 $minWidth = $cell->getMinWidth();
 
                 $cell->setWidth($newWidth);
+                $translate += $marginsLeft[$column];
                 $cell->translate($translate, 0);
 
                 $boundary = $cell->getBoundary();
@@ -61,7 +75,7 @@ class TableFormatter extends BaseFormatter
                 $boundary->pointTranslate(1, $diff, 0)
                          ->pointTranslate(2, $diff, 0);
 
-                $translate += $newWidth;
+                $translate += $newWidth + $marginsRight[$column];
             }
         }
     }
