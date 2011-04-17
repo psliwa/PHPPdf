@@ -1,10 +1,11 @@
 <?php
 
-use PHPPdf\Document;
-use PHPPdf\Glyph\Container;
-use PHPPdf\Glyph\AbstractGlyph;
+use PHPPdf\Document,
+    PHPPdf\Glyph\Container,
+    PHPPdf\Util\Point,
+    PHPPdf\Glyph\AbstractGlyph;
 
-class ContainerTest extends PHPUnit_Framework_TestCase
+class ContainerTest extends TestCase
 {
     /**
      * @var \PHPPdf\Glyph\Container
@@ -101,5 +102,74 @@ class ContainerTest extends PHPUnit_Framework_TestCase
                 array(10, 20, 30), 20, 10
             ),
         );
+    }
+
+    /**
+     * @test
+     * @dataProvider resizeDataProvider
+     */
+    public function widthReduceTranslateBoundaryAndChildrenGlyphIfNecessary($resizeBy, $width, $childWidth, $paddingRight, $childMarginRight)
+    {
+        $boundary = $this->createResizableBoundaryMock($width, $resizeBy);
+
+        $childResizeBy = $resizeBy + ($width- $paddingRight - ($childWidth + $childMarginRight));
+        $childBoundary = $this->createResizableBoundaryMock($childWidth, $childResizeBy < 0 ? $childResizeBy : 0, 2);
+
+        $child = new Container();
+        $child->setAttribute('margin-right', $childMarginRight);
+        $this->glyph->add($child);
+        $this->glyph->setAttribute('padding-right', $paddingRight);
+
+        $this->invokeMethod($this->glyph, 'setBoundary', array($boundary));
+        $this->invokeMethod($child, 'setBoundary', array($childBoundary));
+
+        $this->glyph->resize($resizeBy);
+    }
+
+    public function resizeDataProvider()
+    {
+        return array(
+            array(
+                -10, 100, 100, 0, 0
+            ),
+            array(
+                -10, 100, 95, 0, 0
+            ),
+            array(
+                -10, 100, 95, 1, 1
+            ),
+            array(
+                -10, 100, 90, 0, 0
+            ),
+            array(
+                -10, 100, 85, 0, 0
+            ),
+        );
+    }
+
+    public function createResizableBoundaryMock($width, $resizeBy, $initSequence = 1)
+    {
+        $boundary = $this->getMock('PHPPdf\Util\Boundary', array('pointTranslate', 'getDiagonalPoint'));
+
+        $boundary->expects($this->atLeastOnce())
+                 ->method('getDiagonalPoint')
+                 ->will($this->returnValue(Point::getInstance($width, 0)));
+
+        if($resizeBy == 0)
+        {
+            $boundary->expects($this->never())
+                     ->method('pointTranslate');
+        }
+        else
+        {
+            $boundary->expects($this->at($initSequence))
+                     ->method('pointTranslate')
+                     ->with(1, $resizeBy, 0);
+            $boundary->expects($this->at($initSequence+1))
+                     ->method('pointTranslate')
+                     ->with(2, $resizeBy, 0);
+        }
+
+        return $boundary;
     }
 }

@@ -116,7 +116,8 @@ class Table extends Container implements Listener
     {
         if(!$this->widthsOfColumns)
         {
-            $this->widthsOfColumns = array_fill(0, $this->getNumberOfColumns(), 0);
+            $numberOfColumns = $this->getNumberOfColumns();
+            $this->widthsOfColumns = $numberOfColumns > 0 ? array_fill(0, $this->getNumberOfColumns(), 0) : array();
         }
 
         return $this->widthsOfColumns;

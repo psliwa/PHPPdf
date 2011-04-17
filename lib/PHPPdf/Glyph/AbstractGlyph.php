@@ -686,6 +686,26 @@ abstract class AbstractGlyph implements Glyph, \ArrayAccess, \Serializable
         $this->getBoundary()->translate($x, $y);
     }
 
+    public function resize($size)
+    {
+        $diagonalXCoord = $this->getDiagonalPoint()->getX() - $this->getPaddingRight();
+
+        $this->getBoundary()->pointTranslate(1, $size, 0);
+        $this->getBoundary()->pointTranslate(2, $size, 0);
+
+        foreach($this->getChildren() as $child)
+        {
+            $childDiagonalXCoord = $child->getDiagonalPoint()->getX() + $child->getMarginRight();
+
+            $childResize = $size + ($diagonalXCoord - $childDiagonalXCoord);
+
+            if($childResize < 0)
+            {
+                $child->resize($childResize);
+            }
+        }
+    }
+
     /**
      * Split glyph on passed $height.
      *
