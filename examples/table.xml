@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pdf>
+    <dynamic-page>
+        <div width="100%" height="100%">
+            <stylesheet>
+                <enhancement name="border" color="green" />
+            </stylesheet>
+            <table>
+                <tr>
+                    <td>
+                        <div>
+                        </div>
+                    </td>
+                    <td>
+                        <div>
+                        </div>
+                    </td>
+                    <td>
+                        <div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div>
+                        </div>
+                    </td>
+                    <td>
+                        <div>
+                        </div>
+                    </td>
+                    <td>
+                        <div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div>
+                        </div>
+                    </td>
+                    <td colspan="2">
+                        <div>
+                            Bad width correction when td colspan and margins are set. TODO
+                        </div>
+                    </td>
+                </tr>
+            </table>
+
+            <div class="legend">
+                <h2>Legend:</h2>
+                <p>
+                    <div class="square pink"></div>
+                    <span>Background of div within td</span>
+                </p>
+                <p>
+                    <div class="square white"></div>
+                    <span>Margin between td and div</span>
+                </p>
+                <p>
+                    <div class="square yellow"></div>
+                    <span>Table background</span>
+                </p>
+                <p>
+                    <div class="square red"></div>
+                    <span>Td border</span>
+                </p>
+            </div>
+        </div>
+    </dynamic-page>
+</pdf>

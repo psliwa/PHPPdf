@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<stylesheet>
+    <any>
+        <attribute name="font-size" value="8" />
+    </any>
+    <table>
+        <enhancement name="background" color="yellow" />
+        <attribute name="width" value="100%" />
+        <tr>
+            <td>
+                <attribute name="margin" value="0 3" />
+                <attribute name="height" value="20" />
+                <attribute name="padding" value="3" />
+                <enhancement name="border" color="red" />
+                <enhancement name="background" color="white" />
+                <div>
+                    <enhancement name="background" color="pink" />
+                    <attribute name="height" value="100%" />
+                </div>
+            </td>
+        </tr>
+    </table>
+
+    <div class="legend">
+        <attribute name="width" value="100%" />
+        <attribute name="margin-top" value="20" />
+        <div class="square">
+            <attribute name="width" value="12" />
+            <attribute name="height" value="12" />
+            <attribute name="float" value="left" />
+            <attribute name="margin" value="0 10" />
+        </div>
+        <div class="pink">
+            <enhancement name="background" color="pink" />
+        </div>
+        <div class="yellow">
+            <enhancement name="background" color="yellow" />
+        </div>
+        <div class="red">
+            <enhancement name="background" color="red" />
+        </div>
+        <div class="white">
+            <enhancement name="border" color="black" />
+        </div>
+        <span>
+            <attribute name="float" value="left" />
+        </span>
+    </div>
+</stylesheet>
