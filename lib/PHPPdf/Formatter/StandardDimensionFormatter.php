@@ -25,6 +25,7 @@ class StandardDimensionFormatter extends BaseFormatter
             $marginRight = $glyph->getMarginRight();
 
             $glyph->setWidth($parentWidth - ($marginLeft + $marginRight));
+            $glyph->setRelativeWidth('100%');
         }
         elseif($glyph->getAttribute('display') === Glyphs\AbstractGlyph::DISPLAY_INLINE)
         {

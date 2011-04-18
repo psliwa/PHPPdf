@@ -41,7 +41,6 @@
                     </td>
                     <td colspan="2">
                         <div>
-                            Bad width correction when td colspan and margins are set. TODO
                         </div>
                     </td>
                 </tr>

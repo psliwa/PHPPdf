@@ -33,6 +33,7 @@ abstract class AbstractGlyph implements Glyph, \ArrayAccess, \Serializable
 
     private $parent = null;
     private $hadAutoMargins = false;
+    private $relativeWidth = null;
 
     private $boundary = null;
 
@@ -40,6 +41,7 @@ abstract class AbstractGlyph implements Glyph, \ArrayAccess, \Serializable
     private $enhancementBag = null;
     private $drawingTasks = array();
     private $formattersNames = array();
+
 
     public function __construct(array $attributes = array())
     {
@@ -245,7 +247,22 @@ abstract class AbstractGlyph implements Glyph, \ArrayAccess, \Serializable
     {
         $this->setAttributeDirectly('width', $width);
 
+        if(\strpos($width, '%') !== false)
+        {
+            $this->setRelativeWidth($width);
+        }
+
         return $this;
+    }
+
+    public function setRelativeWidth($width)
+    {
+        $this->relativeWidth = $width;
+    }
+
+    public function getRelativeWidth()
+    {
+        return $this->relativeWidth;
     }
 
     private function convertToInteger($value, $nullValue = null)
@@ -697,9 +714,20 @@ abstract class AbstractGlyph implements Glyph, \ArrayAccess, \Serializable
         {
             $childDiagonalXCoord = $child->getDiagonalPoint()->getX() + $child->getMarginRight();
 
-            $childResize = $size + ($diagonalXCoord - $childDiagonalXCoord);
+            $relativeWidth = $child->getRelativeWidth();
 
-            if($childResize < 0)
+            if($relativeWidth !== null)
+            {
+                $relativeWidth = ((int) $relativeWidth)/100;
+                $childResize = ($diagonalXCoord + $size) * $relativeWidth - $childDiagonalXCoord;
+            }
+            else
+            {
+                $childResize = $size + ($diagonalXCoord - $childDiagonalXCoord);
+                $childResize = $childResize < 0 ? $childResize : 0;
+            }
+
+            if($childResize != 0)
             {
                 $child->resize($childResize);
             }
