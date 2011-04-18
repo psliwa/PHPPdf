@@ -108,15 +108,27 @@ class ContainerTest extends TestCase
      * @test
      * @dataProvider resizeDataProvider
      */
-    public function widthReduceTranslateBoundaryAndChildrenGlyphIfNecessary($resizeBy, $width, $childWidth, $paddingRight, $childMarginRight)
+    public function widthReduceTranslateBoundaryAndChildrenGlyphIfNecessary($resizeBy, $width, $childWidth, $paddingRight, $childMarginRight, $childRelativeWidth = null)
     {
         $boundary = $this->createResizableBoundaryMock($width, $resizeBy);
 
-        $childResizeBy = $resizeBy + ($width- $paddingRight - ($childWidth + $childMarginRight));
-        $childBoundary = $this->createResizableBoundaryMock($childWidth, $childResizeBy < 0 ? $childResizeBy : 0, 2);
+        if($childRelativeWidth !== null)
+        {
+            $relativeWidth = ((int) $childRelativeWidth)/100;
+            $childResizeBy = ($width + $resizeBy) * $relativeWidth - $childWidth;
+        }
+        else
+        {
+            $childResizeBy = $resizeBy + ($width - $paddingRight - ($childWidth + $childMarginRight));
+            $childResizeBy = $childResizeBy < 0 ? $childResizeBy : 0;
+        }
+
+        $childBoundary = $this->createResizableBoundaryMock($childWidth, $childResizeBy, 2);
 
         $child = new Container();
         $child->setAttribute('margin-right', $childMarginRight);
+        $child->setRelativeWidth($childRelativeWidth);
+
         $this->glyph->add($child);
         $this->glyph->setAttribute('padding-right', $paddingRight);
 
@@ -143,6 +155,9 @@ class ContainerTest extends TestCase
             ),
             array(
                 -10, 100, 85, 0, 0
+            ),
+            array(
+                10, 100, 100, 0, 0, '100%'
             ),
         );
     }

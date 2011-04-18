@@ -112,11 +112,6 @@ class AbstractGlyphTest extends TestCase
         $this->assertEquals($width, $this->glyph->getWidth());
         $this->assertEquals($height, $this->glyph->getHeight());
 
-        //fix
-//        $this->glyph->setAttribute('display', 'inline');
-//        $this->assertEquals(0, $this->glyph->getWidth());
-//        $this->assertEquals(0, $this->glyph->getHeight());
-
         $this->glyph->setAttribute('display', 'none');
         $this->assertEquals(0, $this->glyph->getWidth());
         $this->assertEquals(0, $this->glyph->getHeight());
@@ -424,5 +419,19 @@ class AbstractGlyphTest extends TestCase
 
         $this->glyph->setFormattersNames(array($formatterName));
         $this->glyph->format($documentMock);
+    }
+
+    /**
+     * @test
+     */
+    public function setRelativeWidthAttributeWhenPercentageWidthIsSet()
+    {
+        $this->glyph->setWidth(100);
+
+        $this->assertNull($this->glyph->getRelativeWidth());
+
+        $this->glyph->setWidth('100%');
+
+        $this->assertEquals('100%', $this->glyph->getRelativeWidth());
     }
 }
