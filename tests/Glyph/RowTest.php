@@ -213,4 +213,51 @@ class RowTest extends TestCase
 
         $this->assertEquals(max($heights), $this->row->getMaxHeightOfCells());
     }
+
+    /**
+     * @test
+     * @dataProvider marginsDataProvider
+     */
+    public function setMaxVerticalMarginsWhileCellAdding(array $marginsTop, array $marginsBottom)
+    {
+        $cells = $this->createMockedCellsWidthVerticalMargins($marginsTop, $marginsBottom);
+
+        foreach($cells as $cell)
+        {
+            $this->row->add($cell);
+        }
+
+        $this->assertEquals(max($marginsTop), $this->row->getMarginsTopOfCells());
+        $this->assertEquals(max($marginsBottom), $this->row->getMarginsBottomOfCells());
+    }
+
+    public function marginsDataProvider()
+    {
+        return array(
+            array(
+                array(10, 12, 5),
+                array(5, 1, 8),
+            ),
+        );
+    }
+
+    private function createMockedCellsWidthVerticalMargins($marginsTop, $marginsBottom)
+    {
+        $cells = array();
+
+        for($i=0, $count = count($marginsTop); $i<$count; $i++)
+        {
+            $cell = $this->getMock('PHPPdf\Glyph\Table\Cell', array('getMarginTop', 'getMarginBottom'));
+            $cell->expects($this->atLeastOnce())
+                 ->method('getMarginTop')
+                 ->will($this->returnValue($marginsTop[$i]));
+            $cell->expects($this->atLeastOnce())
+                 ->method('getMarginBottom')
+                 ->will($this->returnValue($marginsBottom[$i]));
+
+            $cells[] = $cell;
+        }
+
+        return $cells;
+    }
 }

@@ -14,6 +14,10 @@ class Row extends Container implements Listener
 {
     private $numberOfColumns = 0;
     private $maxHeightOfCells = 0;
+    private $marginsOfCells = array(
+        'margin-top' => 0,
+        'margin-bottom' => 0,
+    );
 
     public function add(Glyph $glyph)
     {
@@ -34,6 +38,8 @@ class Row extends Container implements Listener
         $glyph->addListener($this);
 
         $this->setMaxHeightOfCellsIfHeightOfPassedCellIsGreater($glyph);
+        $this->setCellMarginIfNecessary($glyph, 'margin-top');
+        $this->setCellMarginIfNecessary($glyph, 'margin-bottom');
 
         return parent::add($glyph);
     }
@@ -46,6 +52,26 @@ class Row extends Container implements Listener
         {
             $this->maxHeightOfCells = $height;
         }
+    }
+
+    private function setCellMarginIfNecessary(Cell $cell, $marginType)
+    {
+        $margin = $cell->getAttribute($marginType);
+
+        if($margin > $this->marginsOfCells[$marginType])
+        {
+            $this->marginsOfCells[$marginType] = $margin;
+        }
+    }
+
+    public function getMarginsTopOfCells()
+    {
+        return $this->marginsOfCells['margin-top'];
+    }
+
+    public function getMarginsBottomOfCells()
+    {
+        return $this->marginsOfCells['margin-bottom'];
     }
 
     public function getHeight()
