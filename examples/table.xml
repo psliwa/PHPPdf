@@ -64,6 +64,10 @@
                     <div class="square red"></div>
                     <span>Td border</span>
                 </p>
+                <p>
+                    <div class="square blue"></div>
+                    <span>Tr border</span>
+                </p>
             </div>
         </div>
     </dynamic-page>

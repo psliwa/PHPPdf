@@ -40,6 +40,9 @@
         <div class="red">
             <enhancement name="background" color="red" />
         </div>
+        <div class="blue">
+            <enhancement name="background" color="blue" />
+        </div>
         <div class="white">
             <enhancement name="border" color="black" />
         </div>
