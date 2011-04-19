@@ -69,12 +69,10 @@ class TableFormatter extends BaseFormatter
                 $cell->setWidth($newWidth);
                 $translate += $marginsLeft[$column];
                 $cell->translate($translate, 0);
-                $cell->resize($diff);
+                $cell->resize($diff, 0);
 
                 $translate += $newWidth + $marginsRight[$column];
             }
         }
-
-        $width = $glyph->getWidth();
     }
 }

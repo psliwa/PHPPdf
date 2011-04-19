@@ -703,12 +703,13 @@ abstract class AbstractGlyph implements Glyph, \ArrayAccess, \Serializable
         $this->getBoundary()->translate($x, $y);
     }
 
-    public function resize($size)
+    public function resize($x, $y)
     {
         $diagonalXCoord = $this->getDiagonalPoint()->getX() - $this->getPaddingRight();
 
-        $this->getBoundary()->pointTranslate(1, $size, 0);
-        $this->getBoundary()->pointTranslate(2, $size, 0);
+        $this->getBoundary()->pointTranslate(1, $x, 0);
+        $this->getBoundary()->pointTranslate(2, $x, $y);
+        $this->getBoundary()->pointTranslate(3, 0, $y);
 
         foreach($this->getChildren() as $child)
         {
@@ -719,17 +720,17 @@ abstract class AbstractGlyph implements Glyph, \ArrayAccess, \Serializable
             if($relativeWidth !== null)
             {
                 $relativeWidth = ((int) $relativeWidth)/100;
-                $childResize = ($diagonalXCoord + $size) * $relativeWidth - $childDiagonalXCoord;
+                $childResize = ($diagonalXCoord + $x) * $relativeWidth - $childDiagonalXCoord;
             }
             else
             {
-                $childResize = $size + ($diagonalXCoord - $childDiagonalXCoord);
+                $childResize = $x + ($diagonalXCoord - $childDiagonalXCoord);
                 $childResize = $childResize < 0 ? $childResize : 0;
             }
 
             if($childResize != 0)
             {
-                $child->resize($childResize);
+                $child->resize($childResize, 0);
             }
         }
     }

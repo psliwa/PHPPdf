@@ -112,9 +112,10 @@ interface Glyph
     public function getDiagonalPoint();
 
     /**
-     * Resizes width of glyph and translates side points. Resizes also children if necessary.
+     * Resizes glyph and translates boundary points. Resizes also children if necessary.
      *
-     * @param float $size Negative value if width should by reduce, otherwise positive value.
+     * @param float $x Negative value if width should by reduce, otherwise positive value.
+     * @param float $y Behaviour as same as $x
      */
-    public function resize($size);
+    public function resize($x, $y);
 }

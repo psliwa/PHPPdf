@@ -108,22 +108,22 @@ class ContainerTest extends TestCase
      * @test
      * @dataProvider resizeDataProvider
      */
-    public function widthReduceTranslateBoundaryAndChildrenGlyphIfNecessary($resizeBy, $width, $childWidth, $paddingRight, $childMarginRight, $childRelativeWidth = null)
+    public function resizeCausesBoundaryPointsTranslations($horizontalResizeBy, $verticalResizeBy, $width, $childWidth, $paddingRight, $childMarginRight, $childRelativeWidth = null)
     {
-        $boundary = $this->createResizableBoundaryMock($width, $resizeBy);
+        $boundary = $this->createResizableBoundaryMock($width, $horizontalResizeBy, $verticalResizeBy);
 
         if($childRelativeWidth !== null)
         {
             $relativeWidth = ((int) $childRelativeWidth)/100;
-            $childResizeBy = ($width + $resizeBy) * $relativeWidth - $childWidth;
+            $childResizeBy = ($width + $horizontalResizeBy) * $relativeWidth - $childWidth;
         }
         else
         {
-            $childResizeBy = $resizeBy + ($width - $paddingRight - ($childWidth + $childMarginRight));
+            $childResizeBy = $horizontalResizeBy + ($width - $paddingRight - ($childWidth + $childMarginRight));
             $childResizeBy = $childResizeBy < 0 ? $childResizeBy : 0;
         }
 
-        $childBoundary = $this->createResizableBoundaryMock($childWidth, $childResizeBy, 2);
+        $childBoundary = $this->createResizableBoundaryMock($childWidth, $childResizeBy, 0, $childResizeBy != 0 ? 2 : false);
 
         $child = new Container();
         $child->setAttribute('margin-right', $childMarginRight);
@@ -135,34 +135,34 @@ class ContainerTest extends TestCase
         $this->invokeMethod($this->glyph, 'setBoundary', array($boundary));
         $this->invokeMethod($child, 'setBoundary', array($childBoundary));
 
-        $this->glyph->resize($resizeBy);
+        $this->glyph->resize($horizontalResizeBy, $verticalResizeBy);
     }
 
     public function resizeDataProvider()
     {
         return array(
             array(
-                -10, 100, 100, 0, 0
+                -10, 0, 100, 100, 0, 0
             ),
             array(
-                -10, 100, 95, 0, 0
+                -10, 0, 100, 95, 0, 0
             ),
             array(
-                -10, 100, 95, 1, 1
+                -10, 10, 100, 95, 1, 1
             ),
             array(
-                -10, 100, 90, 0, 0
+                -10, -10, 100, 90, 0, 0
             ),
             array(
-                -10, 100, 85, 0, 0
+                -10, 0, 100, 85, 0, 0
             ),
             array(
-                10, 100, 100, 0, 0, '100%'
+                10, 0, 100, 100, 0, 0, '100%'
             ),
         );
     }
 
-    public function createResizableBoundaryMock($width, $resizeBy, $initSequence = 1)
+    public function createResizableBoundaryMock($width, $horizontalResizeBy, $verticalResizeBy, $initSequence = 1)
     {
         $boundary = $this->getMock('PHPPdf\Util\Boundary', array('pointTranslate', 'getDiagonalPoint'));
 
@@ -170,20 +170,24 @@ class ContainerTest extends TestCase
                  ->method('getDiagonalPoint')
                  ->will($this->returnValue(Point::getInstance($width, 0)));
 
-        if($resizeBy == 0)
+        if($initSequence !== false)
+        {
+            $boundary->expects($this->at($initSequence++))
+                     ->method('pointTranslate')
+                     ->with(1, $horizontalResizeBy, 0);
+            $boundary->expects($this->at($initSequence++))
+                     ->method('pointTranslate')
+                     ->with(2, $horizontalResizeBy, $verticalResizeBy);
+            $boundary->expects($this->at($initSequence++))
+                     ->method('pointTranslate')
+                     ->with(3, 0, $verticalResizeBy);
+        }
+        else
         {
             $boundary->expects($this->never())
                      ->method('pointTranslate');
         }
-        else
-        {
-            $boundary->expects($this->at($initSequence))
-                     ->method('pointTranslate')
-                     ->with(1, $resizeBy, 0);
-            $boundary->expects($this->at($initSequence+1))
-                     ->method('pointTranslate')
-                     ->with(2, $resizeBy, 0);
-        }
+
 
         return $boundary;
     }

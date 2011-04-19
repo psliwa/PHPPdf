@@ -10,7 +10,8 @@ class RowDimensionFormatter extends BaseFormatter
     public function format(Glyph $glyph, Document $document)
     {
         $boundary = $glyph->getBoundary();
-        $newHeight = $glyph->getMaxHeightOfCells();
+        $verticalMargins = $glyph->getMarginsBottomOfCells() + $glyph->getMarginsTopOfCells();
+        $newHeight = $glyph->getMaxHeightOfCells() + $verticalMargins;
 
         $heightDiff = $newHeight - $glyph->getHeight();
 
@@ -21,10 +22,11 @@ class RowDimensionFormatter extends BaseFormatter
 
         foreach((array) $glyph->getChildren() as $cell)
         {
-            $heightDiff = $newHeight - $cell->getHeight();
-            $cell->setHeight($newHeight);
+            $heightDiff = $glyph->getMaxHeightOfCells() - $cell->getHeight();
+            $cell->setHeight($glyph->getMaxHeightOfCells());
             $cell->getBoundary()->pointTranslate(2, 0, $heightDiff)
                                 ->pointTranslate(3, 0, $heightDiff);
+            $cell->translate(0, $glyph->getMarginsTopOfCells());
         }
     }
 }

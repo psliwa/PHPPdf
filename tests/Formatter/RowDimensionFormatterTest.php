@@ -50,9 +50,11 @@ class RowDimensionFormatterTest extends TestCase
         return $boundary;
     }
 
-    private function getRowMockWithHeightAsserts($boundary, $oldHeight, $maxHeightOfCells)
+    private function getRowMockWithHeightAsserts($boundary, $oldHeight, $maxHeightOfCells, $expectedNewHeight = null)
     {
-        $row = $this->getMock('PHPPdf\Glyph\Table\Row', array('getBoundary', 'getHeight', 'setHeight', 'getMaxHeightOfCells', 'getChildren'));
+        $row = $this->getMock('PHPPdf\Glyph\Table\Row', array('getBoundary', 'getHeight', 'setHeight', 'getMaxHeightOfCells', 'getChildren', 'getMarginsBottomOfCells', 'getMarginsTopOfCells'));
+
+        $expectedNewHeight = $expectedNewHeight === null ? $maxHeightOfCells : $expectedNewHeight;
 
         $row->expects($this->atLeastOnce())
             ->method('getBoundary')
@@ -62,7 +64,7 @@ class RowDimensionFormatterTest extends TestCase
             ->will($this->returnValue($oldHeight));
         $row->expects($this->once())
             ->method('setHeight')
-            ->with($maxHeightOfCells);
+            ->with($expectedNewHeight);
         $row->expects($this->atLeastOnce())
             ->method('getMaxHeightOfCells')
             ->will($this->returnValue($maxHeightOfCells));
@@ -72,14 +74,15 @@ class RowDimensionFormatterTest extends TestCase
 
     /**
      * @test
+     * @dataProvider marginsDataProvider
      */
-    public function enlargeCellsToRowHeight()
+    public function enlargeCellsToRowHeight($rowHeight, array $cellHeights, $marginTop, $marginBottom)
     {
-        $rowHeight = 100;
-        $heights = array(30, 50);
+        $verticalMargins = $marginTop + $marginBottom;
+
         $cells = array();
 
-        foreach($heights as $height)
+        foreach($cellHeights as $height)
         {
             $boundary = $this->getBoundaryMockWithEnlargeAsserts($rowHeight - $height);
 
@@ -98,13 +101,31 @@ class RowDimensionFormatterTest extends TestCase
             $cells[] = $cell;
         }
 
-        $boundary = $this->getBoundaryMockWithEnlargeAsserts(0);
-        $row = $this->getRowMockWithHeightAsserts($boundary, $rowHeight, $rowHeight);
+        $boundary = $this->getBoundaryMockWithEnlargeAsserts($verticalMargins);
+        $row = $this->getRowMockWithHeightAsserts($boundary, $rowHeight, $rowHeight, $rowHeight + $verticalMargins);
+        $row->expects($this->atLeastOnce())
+            ->method('getMarginsBottomOfCells')
+            ->will($this->returnValue($marginBottom));
+        $row->expects($this->atLeastOnce())
+            ->method('getMarginsTopOfCells')
+            ->will($this->returnValue($marginTop));
 
         $row->expects($this->atLeastOnce())
             ->method('getChildren')
             ->will($this->returnValue($cells));
 
         $this->formatter->format($row, new Document());
+    }
+
+    public function marginsDataProvider()
+    {
+        return array(
+            array(
+                100, array(30, 50), 10, 12
+            ),
+            array(
+                100, array(30, 50), 0, 0
+            ),
+        );
     }
 }
