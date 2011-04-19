@@ -7,8 +7,9 @@
         <enhancement name="background" color="yellow" />
         <attribute name="width" value="100%" />
         <tr>
+            <enhancement name="border" color="blue" />
             <td>
-                <attribute name="margin" value="0 3" />
+                <attribute name="margin" value="3" />
                 <attribute name="height" value="20" />
                 <attribute name="padding" value="3" />
                 <enhancement name="border" color="red" />
