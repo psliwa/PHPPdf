@@ -5,7 +5,7 @@ namespace PHPPdf\Util;
 use PHPPdf\Glyph\Glyph;
 
 /**
- * TODO: refactoring and make more generic
+ * TODO: unit tests, refactoring and make more generic
  *
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
