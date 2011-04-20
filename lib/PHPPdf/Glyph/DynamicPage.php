@@ -4,8 +4,7 @@ namespace PHPPdf\Glyph;
 
 use PHPPdf\Glyph\Page,
     PHPPdf\Glyph\PageContext,
-    PHPPdf\Document,
-    PHPPdf\Util\Splitter;
+    PHPPdf\Document;
 
 /**
  * @author Piotr Śliwa <peter.pl7@gmail.com>
@@ -15,8 +14,6 @@ class DynamicPage extends Page
     private $prototype = null;
     private $currentPage = null;
     private $pages = array();
-
-    private $totalTranslation = 0;
 
     public function __construct(Page $prototype = null)
     {
@@ -89,7 +86,7 @@ class DynamicPage extends Page
 
     protected function doDraw(Document $document)
     {
-        $splitter = new Splitter($this);
+        $splitter = new PageSplitter($this);
         $splitter->split();
 
         foreach($this->getPages() as $page)

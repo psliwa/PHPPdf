@@ -1,15 +1,13 @@
 <?php
 
-namespace PHPPdf\Util;
-
-use PHPPdf\Glyph\Glyph;
+namespace PHPPdf\Glyph;
 
 /**
  * TODO: unit tests, refactoring and make more generic
  *
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
-class Splitter
+class PageSplitter
 {
     private $glyph;
     private $totalTranslation = 0;
