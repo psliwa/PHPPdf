@@ -27,25 +27,11 @@ class ContainerDimensionFormatter extends BaseFormatter
             $childMinY = $diagonalPoint->getY() - $child->getMarginBottom();
             $childMaxY = $firstPoint->getY() + $child->getMarginTop();
 
-            if($minX === null || $minX > $childMinX)
-            {
-                $minX = $childMinX;
-            }
+            $this->changeValueIfIsLess($maxX, $childMaxX);
+            $this->changeValueIfIsLess($maxY, $childMaxY);
 
-            if($maxX === null || $maxX < $childMaxX)
-            {
-                $maxX = $childMaxX;
-            }
-
-            if($maxY === null || $maxY < $childMaxY)
-            {
-                $maxY = $childMaxY;
-            }
-
-            if($minY === null || $minY > $childMinY)
-            {
-                $minY = $childMinY;
-            }
+            $this->changeValueIfIsGreater($minX, $childMinX);
+            $this->changeValueIfIsGreater($minY, $childMinY);
         }
 
         $paddingVertical = $glyph->getPaddingTop() + $glyph->getPaddingBottom();
@@ -64,6 +50,22 @@ class ContainerDimensionFormatter extends BaseFormatter
         if($display === Glyphs\AbstractGlyph::DISPLAY_INLINE || $realWidth > $glyph->getWidth())
         {
             $glyph->setWidth($realWidth);
+        }
+    }
+
+    private function changeValueIfIsLess(&$value, $valueToSet)
+    {
+        if($value === null || $value < $valueToSet)
+        {
+            $value = $valueToSet;
+        }
+    }
+
+    private function changeValueIfIsGreater(&$value, $valueToSet)
+    {
+        if($value === null || $value > $valueToSet)
+        {
+            $value = $valueToSet;
         }
     }
 }

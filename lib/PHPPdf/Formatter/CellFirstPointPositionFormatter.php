@@ -5,6 +5,9 @@ namespace PHPPdf\Formatter;
 use PHPPdf\Glyph\Glyph,
     PHPPdf\Document;
 
+/**
+ * @author Piotr Śliwa <peter.pl7@gmail.com>
+ */
 class CellFirstPointPositionFormatter extends BaseFormatter
 {
     public function format(Glyph $glyph, Document $document)
