@@ -9,18 +9,14 @@ use PHPPdf\Formatter\BaseFormatter,
 /**
  * Convert values of some attributes
  *
- * @todo change name *
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
 class ConvertAttributesFormatter extends BaseFormatter
 {
     public function format(Glyphs\Glyph $glyph, Document $document)
     {
-        if(!$glyph instanceof Glyphs\Page)
-        {
-            $this->convertPercentageDimensions($glyph);
-            $this->convertAutoMargins($glyph);
-        }
+        $this->convertPercentageDimensions($glyph);
+        $this->convertAutoMargins($glyph);
         $this->convertColorAttributes($glyph);
         $this->convertFontType($glyph, $document);
     }
@@ -29,14 +25,17 @@ class ConvertAttributesFormatter extends BaseFormatter
     {
         $parent = $glyph->getParent();
 
-        $parentWidth = $parent->getWidthWithoutPaddings();
-        $parentHeight = $parent->getHeightWithoutPaddings();
+        if($parent !== null)
+        {
+            $parentWidth = $parent->getWidthWithoutPaddings();
+            $parentHeight = $parent->getHeightWithoutPaddings();
 
-        $width = $glyph->getWidth();
-        $height = $glyph->getHeight();
+            $width = $glyph->getWidth();
+            $height = $glyph->getHeight();
 
-        $glyph->setWidth($this->convertFromPercentageValue($parentWidth, $width));
-        $glyph->setHeight($this->convertFromPercentageValue($parentHeight, $height));
+            $glyph->setWidth($this->convertFromPercentageValue($parentWidth, $width));
+            $glyph->setHeight($this->convertFromPercentageValue($parentHeight, $height));
+        }
     }
 
     private function convertFromPercentageValue($value, $percent)
@@ -55,19 +54,22 @@ class ConvertAttributesFormatter extends BaseFormatter
     {
         $parent = $glyph->getParent();
 
-        $parentWidth = $parent->getWidthWithoutPaddings();
-
-        if($this->hasAutoMargins($glyph))
+        if($parent !== null)
         {
-            $glyph->hadAutoMargins(true);
-            $width = $glyph->getWidth() === null ? $parentWidth : $glyph->getWidth();
+            $parentWidth = $parent->getWidthWithoutPaddings();
 
-            //adds horizontal paddings, becouse dimension formatter hasn't executed yet
-            $width += $glyph->getPaddingLeft() + $glyph->getPaddingRight();
-            
-            $margin = ($parentWidth - $width)/2;
-            $glyph->setMarginLeft($margin);
-            $glyph->setMarginRight($margin);
+            if($this->hasAutoMargins($glyph))
+            {
+                $glyph->hadAutoMargins(true);
+                $width = $glyph->getWidth() === null ? $parentWidth : $glyph->getWidth();
+
+                //adds horizontal paddings, becouse dimension formatter hasn't executed yet
+                $width += $glyph->getPaddingLeft() + $glyph->getPaddingRight();
+
+                $margin = ($parentWidth - $width)/2;
+                $glyph->setMarginLeft($margin);
+                $glyph->setMarginRight($margin);
+            }
         }
     }
 
