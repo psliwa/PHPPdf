@@ -356,7 +356,7 @@ class Page extends Container
 
     private function formatConvertAttributes(Document $document)
     {
-        $formatterName = 'PHPPdf\Formatter\ConvertDimensionFormatter';
+        $formatterName = 'PHPPdf\Formatter\ConvertAttributesFormatter';
 
         $formatter = $document->getFormatter($formatterName);
         $formatter->format($this, $document);

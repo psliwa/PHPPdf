@@ -12,7 +12,7 @@ use PHPPdf\Formatter\BaseFormatter,
  * @todo change name *
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
-class ConvertDimensionFormatter extends BaseFormatter
+class ConvertAttributesFormatter extends BaseFormatter
 {
     public function format(Glyphs\Glyph $glyph, Document $document)
     {

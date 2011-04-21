@@ -9,7 +9,7 @@
             <attribute name="color" value="black" />
         </stylesheet>
         <formatters>
-            <formatter class="PHPPdf\Formatter\ConvertDimensionFormatter" />
+            <formatter class="PHPPdf\Formatter\ConvertAttributesFormatter" />
             <formatter class="PHPPdf\Formatter\StandardDimensionFormatter" />
             <formatter class="PHPPdf\Formatter\ContainerFormatter" />
             <formatter class="PHPPdf\Formatter\FloatFormatter" />
@@ -17,7 +17,7 @@
     </glyph>
     <glyph name="div" class="PHPPdf\Glyph\Container">
         <formatters>
-            <formatter class="PHPPdf\Formatter\ConvertDimensionFormatter" />
+            <formatter class="PHPPdf\Formatter\ConvertAttributesFormatter" />
             <formatter class="PHPPdf\Formatter\StandardDimensionFormatter" />
             <formatter class="PHPPdf\Formatter\FirstPointPositionFormatter" />
             <formatter class="PHPPdf\Formatter\ContainerFormatter" />
@@ -31,7 +31,7 @@
             <attribute name="padding" value="5 0" />
         </stylesheet>
         <formatters>
-            <formatter class="PHPPdf\Formatter\ConvertDimensionFormatter" />
+            <formatter class="PHPPdf\Formatter\ConvertAttributesFormatter" />
             <formatter class="PHPPdf\Formatter\StandardDimensionFormatter" />
             <formatter class="PHPPdf\Formatter\FirstPointPositionFormatter" />
             <formatter class="PHPPdf\Formatter\ContainerFormatter" />
@@ -42,7 +42,7 @@
     </glyph>
     <glyph name="text" class="PHPPdf\Glyph\Text">
         <formatters>
-            <formatter class="PHPPdf\Formatter\ConvertDimensionFormatter" />
+            <formatter class="PHPPdf\Formatter\ConvertAttributesFormatter" />
             <formatter class="PHPPdf\Formatter\StandardDimensionFormatter" />
             <formatter class="PHPPdf\Formatter\FirstPointPositionFormatter" />
             <formatter class="PHPPdf\Formatter\TextDimensionFormatter" />
@@ -58,7 +58,7 @@
             <attribute name="margin" value="5 0" />
         </stylesheet>
         <formatters>
-            <formatter class="PHPPdf\Formatter\ConvertDimensionFormatter" />
+            <formatter class="PHPPdf\Formatter\ConvertAttributesFormatter" />
             <formatter class="PHPPdf\Formatter\StandardDimensionFormatter" />
             <formatter class="PHPPdf\Formatter\FirstPointPositionFormatter" />
             <formatter class="PHPPdf\Formatter\ContainerFormatter" />
@@ -74,7 +74,7 @@
             <attribute name="margin" value="4 0" />
         </stylesheet>
         <formatters>
-            <formatter class="PHPPdf\Formatter\ConvertDimensionFormatter" />
+            <formatter class="PHPPdf\Formatter\ConvertAttributesFormatter" />
             <formatter class="PHPPdf\Formatter\StandardDimensionFormatter" />
             <formatter class="PHPPdf\Formatter\FirstPointPositionFormatter" />
             <formatter class="PHPPdf\Formatter\ContainerFormatter" />
@@ -89,7 +89,7 @@
             <attribute name="margin" value="3 0" />
         </stylesheet>
         <formatters>
-            <formatter class="PHPPdf\Formatter\ConvertDimensionFormatter" />
+            <formatter class="PHPPdf\Formatter\ConvertAttributesFormatter" />
             <formatter class="PHPPdf\Formatter\StandardDimensionFormatter" />
             <formatter class="PHPPdf\Formatter\FirstPointPositionFormatter" />
             <formatter class="PHPPdf\Formatter\ContainerFormatter" />
@@ -100,7 +100,7 @@
     </glyph>
     <glyph name="page-info" class="PHPPdf\Glyph\Runtime\PageInfo">
         <formatters>
-            <formatter class="PHPPdf\Formatter\ConvertDimensionFormatter" />
+            <formatter class="PHPPdf\Formatter\ConvertAttributesFormatter" />
             <formatter class="PHPPdf\Formatter\StandardDimensionFormatter" />
             <formatter class="PHPPdf\Formatter\FirstPointPositionFormatter" />
             <formatter class="PHPPdf\Formatter\TextDimensionFormatter" />
@@ -111,7 +111,7 @@
     </glyph>
     <glyph name="table" class="PHPPdf\Glyph\Table">
         <formatters>
-            <formatter class="PHPPdf\Formatter\ConvertDimensionFormatter" />
+            <formatter class="PHPPdf\Formatter\ConvertAttributesFormatter" />
             <formatter class="PHPPdf\Formatter\StandardDimensionFormatter" />
             <formatter class="PHPPdf\Formatter\TableColumnFormatter" />
             <formatter class="PHPPdf\Formatter\FirstPointPositionFormatter" />
@@ -126,7 +126,7 @@
             <attribute name="height" value="5" />
         </stylesheet>
         <formatters>
-            <formatter class="PHPPdf\Formatter\ConvertDimensionFormatter" />
+            <formatter class="PHPPdf\Formatter\ConvertAttributesFormatter" />
             <formatter class="PHPPdf\Formatter\StandardDimensionFormatter" />
             <formatter class="PHPPdf\Formatter\FirstPointPositionFormatter" />
             <formatter class="PHPPdf\Formatter\ContainerFormatter" />
@@ -140,7 +140,7 @@
             <enhancement name="border" color="black" />
         </stylesheet>
         <formatters>
-            <formatter class="PHPPdf\Formatter\ConvertDimensionFormatter" />
+            <formatter class="PHPPdf\Formatter\ConvertAttributesFormatter" />
             <formatter class="PHPPdf\Formatter\StandardDimensionFormatter" />
             <formatter class="PHPPdf\Formatter\CellFirstPointPositionFormatter" />
             <formatter class="PHPPdf\Formatter\ContainerFormatter" />
@@ -154,7 +154,7 @@
             <attribute name="margin" value="1" />
         </stylesheet>
         <formatters>
-            <formatter class="PHPPdf\Formatter\ConvertDimensionFormatter" />
+            <formatter class="PHPPdf\Formatter\ConvertAttributesFormatter" />
             <formatter class="PHPPdf\Formatter\StandardDimensionFormatter" />
             <formatter class="PHPPdf\Formatter\FirstPointPositionFormatter" />
             <formatter class="PHPPdf\Formatter\ImageDimensionFormatter" />
@@ -166,7 +166,7 @@
             <attribute name="height" value="10" />
         </stylesheet>
         <formatters>
-            <formatter class="PHPPdf\Formatter\ConvertDimensionFormatter" />
+            <formatter class="PHPPdf\Formatter\ConvertAttributesFormatter" />
             <formatter class="PHPPdf\Formatter\StandardDimensionFormatter" />
             <formatter class="PHPPdf\Formatter\FirstPointPositionFormatter" />
             <formatter class="PHPPdf\Formatter\ContainerFormatter" />
@@ -177,7 +177,7 @@
     </glyph>
     <glyph name="nl" class="PHPPdf\Glyph\Container">
         <formatters>
-            <formatter class="PHPPdf\Formatter\ConvertDimensionFormatter" />
+            <formatter class="PHPPdf\Formatter\ConvertAttributesFormatter" />
             <formatter class="PHPPdf\Formatter\StandardDimensionFormatter" />
             <formatter class="PHPPdf\Formatter\FirstPointPositionFormatter" />
             <formatter class="PHPPdf\Formatter\ContainerFormatter" />
@@ -188,7 +188,7 @@
     </glyph>
     <glyph name="span" class="PHPPdf\Glyph\Text">
         <formatters>
-            <formatter class="PHPPdf\Formatter\ConvertDimensionFormatter" />
+            <formatter class="PHPPdf\Formatter\ConvertAttributesFormatter" />
             <formatter class="PHPPdf\Formatter\StandardDimensionFormatter" />
             <formatter class="PHPPdf\Formatter\FirstPointPositionFormatter" />
             <formatter class="PHPPdf\Formatter\TextDimensionFormatter" />
@@ -202,7 +202,7 @@
             <attribute name="font-style" value="bold" />
         </stylesheet>
         <formatters>
-            <formatter class="PHPPdf\Formatter\ConvertDimensionFormatter" />
+            <formatter class="PHPPdf\Formatter\ConvertAttributesFormatter" />
             <formatter class="PHPPdf\Formatter\StandardDimensionFormatter" />
             <formatter class="PHPPdf\Formatter\FirstPointPositionFormatter" />
             <formatter class="PHPPdf\Formatter\TextDimensionFormatter" />
@@ -216,7 +216,7 @@
             <attribute name="page-break" value="1" />
         </stylesheet>
         <formatters>
-            <formatter class="PHPPdf\Formatter\ConvertDimensionFormatter" />
+            <formatter class="PHPPdf\Formatter\ConvertAttributesFormatter" />
             <formatter class="PHPPdf\Formatter\StandardDimensionFormatter" />
             <formatter class="PHPPdf\Formatter\FirstPointPositionFormatter" />
             <formatter class="PHPPdf\Formatter\ContainerFormatter" />

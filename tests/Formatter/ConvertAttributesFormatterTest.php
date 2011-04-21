@@ -3,16 +3,16 @@
 use PHPPdf\Document;
 use PHPPdf\Glyph\Page;
 use PHPPdf\Glyph\Container;
-use PHPPdf\Formatter\ConvertDimensionFormatter;
+use PHPPdf\Formatter\ConvertAttributesFormatter;
 
-class ConvertDimensionFormatterTest extends PHPUnit_Framework_TestCase
+class ConvertAttributesFormatterTest extends PHPUnit_Framework_TestCase
 {
     private $formatter;
     private $document;
 
     public function setUp()
     {
-        $this->formatter = new ConvertDimensionFormatter();
+        $this->formatter = new ConvertAttributesFormatter();
         $this->document = new Document();
     }
 
