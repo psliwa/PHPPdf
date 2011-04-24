@@ -5,6 +5,10 @@ use PHPPdf\Glyph\ColumnableContainer,
 
 class ColumnableContainerTest extends TestCase
 {
+    const COLUMN_WIDTH = 400;
+    const COLUMN_X_COORD = 0;
+    const COLUMN_Y_COORD = 400;
+
     private $column;
     private $container;
 
@@ -12,6 +16,10 @@ class ColumnableContainerTest extends TestCase
     {
         $this->container = $this->getMock('PHPPdf\Glyph\Container', array('copy'));
         $this->column = new ColumnableContainer($this->container);
+
+        $this->column->getBoundary()->setNext(self::COLUMN_X_COORD, self::COLUMN_Y_COORD)
+                                    ->setNext(self::COLUMN_WIDTH, self::COLUMN_Y_COORD);
+        $this->column->setWidth(self::COLUMN_WIDTH);
     }
 
     /**
@@ -59,5 +67,28 @@ class ColumnableContainerTest extends TestCase
              ->will($this->returnValue($container));
 
         $this->assertEquals($container, $this->column->getCurrentContainer());
+    }
+
+    /**
+     * @test
+     */
+    public function setPositionOfColumnContainers()
+    {
+        $firstContainer = new Container();
+        $secondContainer = new Container();
+
+        foreach(array($firstContainer, $secondContainer) as $i => $container)
+        {
+            $this->container->expects($this->at($i))
+                 ->method('copy')
+                 ->will($this->returnValue($container));
+        }
+
+
+        $this->column->createNextContainer();
+        $this->column->createNextContainer();
+
+        $this->assertEquals(array(self::COLUMN_X_COORD, self::COLUMN_Y_COORD), $firstContainer->getFirstPoint()->toArray());
+        $this->assertEquals(array(self::COLUMN_X_COORD + self::COLUMN_WIDTH + $this->column->getAttribute('margin-between-columns'), self::COLUMN_Y_COORD), $secondContainer->getFirstPoint()->toArray());
     }
 }

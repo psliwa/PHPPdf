@@ -124,6 +124,9 @@ abstract class AbstractGlyph implements Glyph, \ArrayAccess, \Serializable
         return $this;
     }
 
+    /**
+     * @return Glyph
+     */
     public function getParent()
     {
         return $this->parent;

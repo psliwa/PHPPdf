@@ -44,8 +44,18 @@ class ColumnableContainer extends Container
 
     public function createNextContainer()
     {
+        $numberOfContainers = count($this->containers);
+        $translateX = ($this->getWidth() + $this->getAttribute('margin-between-columns')) * ($numberOfContainers % $this->getAttribute('number-of-columns'));
+
         $this->currentContainer = $this->containerPrototype->copy();
         $this->containers[] = $this->currentContainer;
+
+        $boundary = $this->getBoundary();
+        $firstPoint = $this->getFirstPoint();
+        $secondPoint = $boundary[1];
+        
+        $this->currentContainer->getBoundary()->setNext($firstPoint->translate($translateX, 0))
+                                              ->setNext($secondPoint->translate($translateX, 0));
     }
 
     /**

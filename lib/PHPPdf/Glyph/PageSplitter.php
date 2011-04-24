@@ -25,4 +25,10 @@ class PageSplitter extends AbstractSplitter
         $this->getSubjectOfSplitting()->createNextPage();
         $this->totalVerticalTranslation += $verticalTranslation;
     }
+    
+    protected function addChildrenToCurrentPageAndTranslate(Glyph $glyph, $translation)
+    {
+        $this->getSubjectOfSplitting()->getCurrentPage()->add($glyph);
+        $glyph->translate(0, -$translation);
+    }
 }

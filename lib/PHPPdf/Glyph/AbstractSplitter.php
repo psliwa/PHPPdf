@@ -45,7 +45,7 @@ abstract class AbstractSplitter
         }
         else
         {
-            $pageYCoordEnd = $this->glyph->getDiagonalPoint()->getY();
+            $pageYCoordEnd = $this->glyph->getPage()->getDiagonalPoint()->getY();
         }
 
         do
@@ -122,11 +122,7 @@ abstract class AbstractSplitter
         return $translation;
     }
 
-    private function addChildrenToCurrentPageAndTranslate(Glyph $glyph, $translation)
-    {
-        $this->glyph->getCurrentPage()->add($glyph);
-        $glyph->translate(0, -$translation);
-    }
+    abstract protected function addChildrenToCurrentPageAndTranslate(Glyph $glyph, $translation);
 
     abstract protected function addToSubjectOfSplitting(Glyph $glyph);
 
