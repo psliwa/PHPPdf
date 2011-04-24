@@ -2,7 +2,11 @@
 
 namespace PHPPdf\Glyph;
 
+use PHPPdf\Document;
+
 /**
+ * TODO: przeciążyć metodę doDraw(?) tak aby były rysowane obiekty zwracane przez getContainers()
+ *
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
 class ColumnableContainer extends Container
@@ -19,8 +23,13 @@ class ColumnableContainer extends Container
      */
     private $currentContainer = null;
 
-    public function __construct(Container $containerPrototype, array $attributes = array())
+    public function __construct(Container $containerPrototype = null, array $attributes = array())
     {
+        if($containerPrototype === null)
+        {
+            $containerPrototype = new Container();
+        }
+
         $this->containerPrototype = $containerPrototype;
 
         parent::__construct($attributes);
@@ -48,12 +57,14 @@ class ColumnableContainer extends Container
         $translateX = ($this->getWidth() + $this->getAttribute('margin-between-columns')) * ($numberOfContainers % $this->getAttribute('number-of-columns'));
 
         $this->currentContainer = $this->containerPrototype->copy();
+        $this->currentContainer->setParent($this);
         $this->containers[] = $this->currentContainer;
 
         $boundary = $this->getBoundary();
         $firstPoint = $this->getFirstPoint();
         $secondPoint = $boundary[1];
-        
+
+        //TODO: ustalanie wysokości i 2 ostanich punktów dla kolumn (w nowym formaterze)
         $this->currentContainer->getBoundary()->setNext($firstPoint->translate($translateX, 0))
                                               ->setNext($secondPoint->translate($translateX, 0));
     }
@@ -69,5 +80,21 @@ class ColumnableContainer extends Container
         }
 
         return $this->currentContainer;
+    }
+
+    protected function doDraw(Document $document)
+    {
+        $split = new ColumnSplitter();
+        $split->split($this);
+
+        foreach($this->getContainers() as $container)
+        {
+            $tasks = $container->getDrawingTasks($document);
+
+            foreach($tasks as $task)
+            {
+                $this->addDrawingTask($task);
+            }
+        }
     }
 }

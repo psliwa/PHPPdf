@@ -13,7 +13,7 @@ class PageSplitterTest extends TestCase
     public function setUp()
     {
         $this->page = new DynamicPage();
-        $this->splitter = new PageSplitter($this->page);
+        $this->splitter = new PageSplitter();
     }
 
     /**
@@ -28,7 +28,7 @@ class PageSplitterTest extends TestCase
         $this->page->add($container);
         $this->page->add($container2);
 
-        $this->splitter->split();
+        $this->splitter->split($this->page);
 
         $this->assertEquals(2, count($this->page->getPages()));
     }
@@ -46,7 +46,7 @@ class PageSplitterTest extends TestCase
         $this->page->add($container);
         $this->page->add($container2);
 
-        $this->splitter->split();
+        $this->splitter->split($this->page);
 
         $pages = $this->page->getPages();
 
@@ -91,7 +91,7 @@ class PageSplitterTest extends TestCase
 
         $this->page->add($mock);
 
-        $this->splitter->split();
+        $this->splitter->split($this->page);
 
         $pages = $this->page->getPages();
 
@@ -124,7 +124,7 @@ class PageSplitterTest extends TestCase
             $this->page->add($this->getContainerMock(array(0, $height), array(100, $height-$heightOfGlyph)));
         }
 
-        $this->splitter->split();
+        $this->splitter->split($this->page);
 
         $pages = $this->page->getPages();
         $this->assertEquals(5, count($pages));
@@ -157,7 +157,7 @@ class PageSplitterTest extends TestCase
 
         $this->page->add($container);
 
-        $this->splitter->split();
+        $this->splitter->split($this->page);
     }
 
     /**

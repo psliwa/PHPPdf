@@ -12,11 +12,6 @@ abstract class AbstractSplitter
     private $glyph;
     protected $totalVerticalTranslation = 0;
 
-    public function __construct(Glyph $glyph)
-    {
-        $this->glyph = $glyph;
-    }
-
     /**
      * @return Glyph
      */
@@ -25,8 +20,11 @@ abstract class AbstractSplitter
         return $this->glyph;
     }
 
-    public function split()
+    public function split(Glyph $glyph)
     {
+        $this->glyph = $glyph;
+        $this->totalVerticalTranslation = 0;
+
         foreach($this->glyph->getChildren() as $child)
         {
             $this->splitChildIfNecessary($child);

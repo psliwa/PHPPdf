@@ -86,8 +86,8 @@ class DynamicPage extends Page
 
     protected function doDraw(Document $document)
     {
-        $splitter = new PageSplitter($this);
-        $splitter->split();
+        $splitter = new PageSplitter();
+        $splitter->split($this);
 
         foreach($this->getPages() as $page)
         {

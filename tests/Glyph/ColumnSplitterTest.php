@@ -21,7 +21,7 @@ class ColumnSplitterTest extends TestCase
         $this->column->setWidth($this->page->getWidth()/2);
 
         $this->page->add($this->column);
-        $this->splitter = new ColumnSplitter($this->column);
+        $this->splitter = new ColumnSplitter();
 
         $this->injectBoundary($this->column);
     }
@@ -62,7 +62,7 @@ class ColumnSplitterTest extends TestCase
             $yStart += $height;
         }
 
-        $this->splitter->split();
+        $this->splitter->split($this->column);
 
         $this->assertEquals(2, count($this->column->getContainers()));
     }

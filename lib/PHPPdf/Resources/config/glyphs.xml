@@ -225,4 +225,15 @@
             <formatter class="PHPPdf\Formatter\FloatFormatter" />
         </formatters>
     </glyph>
+    <glyph name="column" class="PHPPdf\Glyph\ColumnableContainer">
+        <formatters>
+            <formatter class="PHPPdf\Formatter\ConvertAttributesFormatter" />
+            <formatter class="PHPPdf\Formatter\StandardDimensionFormatter" />
+            <formatter class="PHPPdf\Formatter\FirstPointPositionFormatter" />
+            <formatter class="PHPPdf\Formatter\ContainerFormatter" />
+            <formatter class="PHPPdf\Formatter\ContainerDimensionFormatter" />
+            <formatter class="PHPPdf\Formatter\StandardPositionFormatter" />
+            <formatter class="PHPPdf\Formatter\FloatFormatter" />
+        </formatters>
+    </glyph>
 </glyphs>
