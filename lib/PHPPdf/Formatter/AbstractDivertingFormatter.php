@@ -1,13 +1,14 @@
 <?php
 
-namespace PHPPdf\Glyph;
+namespace PHPPdf\Formatter;
+
+use PHPPdf\Document,
+    PHPPdf\Glyph\Glyph;
 
 /**
- * Splitter is able to split glyphs into specified glyph as parent.
- *
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
-abstract class AbstractSplitter
+abstract class AbstractDivertingFormatter extends BaseFormatter
 {
     private $glyph;
     protected $totalVerticalTranslation = 0;
@@ -20,7 +21,7 @@ abstract class AbstractSplitter
         return $this->glyph;
     }
 
-    public function split(Glyph $glyph)
+    public function format(Glyph $glyph, Document $document)
     {
         $this->glyph = $glyph;
         $this->totalVerticalTranslation = 0;

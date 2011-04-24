@@ -84,9 +84,6 @@ class ColumnableContainer extends Container
 
     protected function doDraw(Document $document)
     {
-        $split = new ColumnSplitter();
-        $split->split($this);
-
         foreach($this->getContainers() as $container)
         {
             $tasks = $container->getDrawingTasks($document);

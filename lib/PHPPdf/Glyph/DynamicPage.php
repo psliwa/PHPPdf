@@ -45,7 +45,7 @@ class DynamicPage extends Page
         return $this->prototype;
     }
 
-    private function setPrototypePage(Page $page)
+    public function setPrototypePage(Page $page)
     {
         $this->prototype = $page;
     }
@@ -86,9 +86,6 @@ class DynamicPage extends Page
 
     protected function doDraw(Document $document)
     {
-        $splitter = new PageSplitter();
-        $splitter->split($this);
-
         foreach($this->getPages() as $page)
         {
             $tasks = $page->getDrawingTasks($document);

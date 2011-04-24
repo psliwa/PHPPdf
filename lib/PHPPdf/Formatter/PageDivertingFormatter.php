@@ -1,14 +1,13 @@
 <?php
 
-namespace PHPPdf\Glyph;
+namespace PHPPdf\Formatter;
+
+use PHPPdf\Glyph\Glyph;
 
 /**
- * Object of this class has ability to split glyphs into pages. This class works on
- * DynamicPage instance.
- *
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
-class PageSplitter extends AbstractSplitter
+class PageDivertingFormatter extends AbstractDivertingFormatter
 {
     protected function shouldParentBeAutomaticallyBroken(Glyph $glyph)
     {

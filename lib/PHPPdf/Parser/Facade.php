@@ -139,14 +139,14 @@ class Facade
             return $glyphFactory;
         };
 
+        /* @var $glyphFactory PHPpdf\Glyph\Factory */
         $glyphFactory = $this->getFromCacheOrCallClosure($file, $doLoadGlyphs);
-        
-        if($glyphFactory->hasPrototype('page'))
+
+        //TODO: DI
+        if($glyphFactory->hasPrototype('page') && $glyphFactory->hasPrototype('dynamic-page'))
         {
             $page = $glyphFactory->create('page');
-            $dynamicPage = new \PHPPdf\Glyph\DynamicPage($page);
-            $dynamicPage->setFormattersNames($page->getFormattersNames());
-            $glyphFactory->addPrototype('dynamic-page', $dynamicPage);
+            $glyphFactory->getPrototype('dynamic-page')->setPrototypePage($page);
         }
 
         $this->getDocumentParser()->setGlyphFactory($glyphFactory);

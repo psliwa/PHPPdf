@@ -15,6 +15,15 @@
             <formatter class="PHPPdf\Formatter\FloatFormatter" />
         </formatters>
     </glyph>
+    <glyph name="dynamic-page" class="PHPPdf\Glyph\DynamicPage">
+        <formatters>
+            <formatter class="PHPPdf\Formatter\ConvertAttributesFormatter" />
+            <formatter class="PHPPdf\Formatter\StandardDimensionFormatter" />
+            <formatter class="PHPPdf\Formatter\ContainerFormatter" />
+            <formatter class="PHPPdf\Formatter\FloatFormatter" />
+            <formatter class="PHPPdf\Formatter\PageDivertingFormatter" />
+        </formatters>
+    </glyph>
     <glyph name="div" class="PHPPdf\Glyph\Container">
         <formatters>
             <formatter class="PHPPdf\Formatter\ConvertAttributesFormatter" />
@@ -234,6 +243,7 @@
             <formatter class="PHPPdf\Formatter\ContainerDimensionFormatter" />
             <formatter class="PHPPdf\Formatter\StandardPositionFormatter" />
             <formatter class="PHPPdf\Formatter\FloatFormatter" />
+            <formatter class="PHPPdf\Formatter\ColumnDivertingFormatter" />
         </formatters>
     </glyph>
 </glyphs>

@@ -1,11 +1,13 @@
 <?php
 
-namespace PHPPdf\Glyph;
+namespace PHPPdf\Formatter;
+
+use PHPPdf\Glyph\Glyph;
 
 /**
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
-class ColumnSplitter extends AbstractSplitter
+class ColumnDivertingFormatter extends AbstractDivertingFormatter
 {
     protected function shouldParentBeAutomaticallyBroken(Glyph $glyph)
     {
