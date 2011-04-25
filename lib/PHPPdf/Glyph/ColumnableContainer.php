@@ -5,8 +5,6 @@ namespace PHPPdf\Glyph;
 use PHPPdf\Document;
 
 /**
- * TODO: przeciążyć metodę doDraw(?) tak aby były rysowane obiekty zwracane przez getContainers()
- *
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
 class ColumnableContainer extends Container
@@ -29,7 +27,7 @@ class ColumnableContainer extends Container
         {
             $containerPrototype = new Container();
             //TODO: usunąć
-            $containerPrototype->mergeEnhancementAttributes('border', array('name' => 'border', 'color' => 'black'));
+//            $containerPrototype->mergeEnhancementAttributes('border', array('name' => 'border', 'color' => 'black'));
         }
 
         $this->containerPrototype = $containerPrototype;
@@ -65,14 +63,6 @@ class ColumnableContainer extends Container
         $boundary = $this->getBoundary();
         $firstPoint = $this->getFirstPoint();
         $secondPoint = $boundary[1];
-
-        //TODO: ustalanie wysokości i 2 ostanich punktów dla kolumn (w nowym formaterze)
-//        $this->currentContainer->getBoundary()->setNext($firstPoint->translate($translateX, 0))
-//                                              ->setNext($secondPoint->translate($translateX, 0))
-//                                              ->setNext($secondPoint->translate($translateX, 11))
-//                                              ->setNext($firstPoint->translate($translateX, 11))
-//                                              ->close()
-                ;
     }
 
     /**
@@ -99,5 +89,15 @@ class ColumnableContainer extends Container
                 $this->addDrawingTask($task);
             }
         }
+    }
+
+    public function setParent(Container $glyph)
+    {
+        parent::setParent($glyph);
+
+        $width = $glyph->getWidth() / $this->getAttribute('number-of-columns') - ($this->getAttribute('number-of-columns') - 1) * $this->getAttribute('margin-between-columns');
+        $this->setWidth($width);
+
+        return $this;
     }
 }

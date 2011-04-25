@@ -68,4 +68,21 @@ class ColumnableContainerTest extends TestCase
 
         $this->assertEquals($container, $this->column->getCurrentContainer());
     }
+
+    /**
+     * @test
+     */
+    public function setWidthAfterSettingParent()
+    {
+        $width = 500;
+        $page = $this->getMock('PHPPdf\Glyph\Page', array('getWidth'));
+        $page->expects($this->atLeastOnce())
+             ->method('getWidth')
+             ->will($this->returnValue($width));
+
+        $this->column->setParent($page);
+
+        $expectedWidth = $width / $this->column->getAttribute('number-of-columns') - ($this->column->getAttribute('number-of-columns') - 1)*$this->column->getAttribute('margin-between-columns');
+        $this->assertEquals($expectedWidth, $this->column->getWidth());
+    }
 }
