@@ -68,27 +68,4 @@ class ColumnableContainerTest extends TestCase
 
         $this->assertEquals($container, $this->column->getCurrentContainer());
     }
-
-    /**
-     * @test
-     */
-    public function setPositionOfColumnContainers()
-    {
-        $firstContainer = new Container();
-        $secondContainer = new Container();
-
-        foreach(array($firstContainer, $secondContainer) as $i => $container)
-        {
-            $this->container->expects($this->at($i))
-                 ->method('copy')
-                 ->will($this->returnValue($container));
-        }
-
-
-        $this->column->createNextContainer();
-        $this->column->createNextContainer();
-
-        $this->assertEquals(array(self::COLUMN_X_COORD, self::COLUMN_Y_COORD), $firstContainer->getFirstPoint()->toArray());
-        $this->assertEquals(array(self::COLUMN_X_COORD + self::COLUMN_WIDTH + $this->column->getAttribute('margin-between-columns'), self::COLUMN_Y_COORD), $secondContainer->getFirstPoint()->toArray());
-    }
 }

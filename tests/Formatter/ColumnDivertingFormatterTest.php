@@ -33,7 +33,7 @@ class ColumnDivertingFormatterTest extends TestCase
         $point = $parent->getFirstPoint();
 
         $boundary = new Boundary();
-        $boundary->setNext($point)
+        $boundary->setNext($point->translate(0, $yStart))
                  ->setNext($point->translate($container->getWidth(), $yStart))
                  ->setNext($point->translate($container->getWidth(), $yStart + $container->getHeight()))
                  ->setNext($point->translate(0, $yStart + $container->getHeight()))
@@ -45,12 +45,14 @@ class ColumnDivertingFormatterTest extends TestCase
     /**
      * @test
      */
-    public function splitContainersIntoColumns()
+    public function splitContainersIntoColumnsAndSetValidPosition()
     {
         $pageHeight = $this->page->getHeight();
         $width = 100;
 
         $yStart = 0;
+
+        $containers = array();
         foreach(array($pageHeight, $pageHeight/2) as $height)
         {
             $container = new Container();
@@ -61,10 +63,29 @@ class ColumnDivertingFormatterTest extends TestCase
             
             $this->injectBoundary($container, $yStart);
             $yStart += $height;
+
+            $containers[] = $container;
         }
 
         $this->formatter->format($this->column, new Document());
 
         $this->assertEquals(2, count($this->column->getContainers()));
+
+        $bottomYCoords = array();
+        foreach($containers as $container)
+        {
+            $bottomYCoords[] = $container->getDiagonalPoint()->getY();
+        }
+
+        $bottomYCoord = min($bottomYCoords);
+
+        foreach($this->column->getContainers() as $container)
+        {
+            $child = current($container->getChildren());
+            $expectedFirstPoint = $child->getFirstPoint();
+
+            $this->assertEquals($expectedFirstPoint, $container->getFirstPoint());
+            $this->assertEquals($bottomYCoord, $container->getDiagonalPoint()->getY());
+        }
     }
 }

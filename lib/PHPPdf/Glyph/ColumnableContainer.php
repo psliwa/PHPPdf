@@ -28,6 +28,8 @@ class ColumnableContainer extends Container
         if($containerPrototype === null)
         {
             $containerPrototype = new Container();
+            //TODO: usunąć
+            $containerPrototype->mergeEnhancementAttributes('border', array('name' => 'border', 'color' => 'black'));
         }
 
         $this->containerPrototype = $containerPrototype;
@@ -65,8 +67,12 @@ class ColumnableContainer extends Container
         $secondPoint = $boundary[1];
 
         //TODO: ustalanie wysokości i 2 ostanich punktów dla kolumn (w nowym formaterze)
-        $this->currentContainer->getBoundary()->setNext($firstPoint->translate($translateX, 0))
-                                              ->setNext($secondPoint->translate($translateX, 0));
+//        $this->currentContainer->getBoundary()->setNext($firstPoint->translate($translateX, 0))
+//                                              ->setNext($secondPoint->translate($translateX, 0))
+//                                              ->setNext($secondPoint->translate($translateX, 11))
+//                                              ->setNext($firstPoint->translate($translateX, 11))
+//                                              ->close()
+                ;
     }
 
     /**

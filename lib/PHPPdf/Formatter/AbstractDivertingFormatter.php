@@ -30,6 +30,8 @@ abstract class AbstractDivertingFormatter extends BaseFormatter
         {
             $this->splitChildIfNecessary($child);
         }
+
+        $this->postFormat();
     }
 
     private function splitChildIfNecessary(Glyph $glyph)
@@ -83,7 +85,7 @@ abstract class AbstractDivertingFormatter extends BaseFormatter
     {
         $originalHeight = $glyph->getFirstPoint()->getY() - $glyph->getDiagonalPoint()->getY();
         $glyphYCoordStart = $this->getChildYCoordOfFirstPoint($glyph);
-        $splitLine = $glyphYCoordStart - $this->glyph->getDiagonalPoint()->getY();
+        $splitLine = $glyphYCoordStart - $this->glyph->getPage()->getDiagonalPoint()->getY();
         $splittedGlyph = $glyph->split($splitLine);
 
         $heightAfterSplit = $glyph->getFirstPoint()->getY() - $glyph->getDiagonalPoint()->getY();
@@ -92,7 +94,7 @@ abstract class AbstractDivertingFormatter extends BaseFormatter
 
         if($splittedGlyph)
         {
-            $gapBeetwenBottomOfOriginalGlyphAndEndOfPage = $glyph->getDiagonalPoint()->getY() - $this->glyph->getDiagonalPoint()->getY();
+            $gapBeetwenBottomOfOriginalGlyphAndEndOfPage = $glyph->getDiagonalPoint()->getY() - $this->glyph->getPage()->getDiagonalPoint()->getY();
             $glyphYCoordStart = $splittedGlyph->getFirstPoint()->getY();
             $this->addToSubjectOfSplitting($glyph);
             $heightAfterSplit += $splittedGlyph->getFirstPoint()->getY() - $splittedGlyph->getDiagonalPoint()->getY();
@@ -116,7 +118,7 @@ abstract class AbstractDivertingFormatter extends BaseFormatter
 
     private function getGlyphTranslation(Glyph $glyph, $glyphYCoordStart)
     {
-        $translation = $this->glyph->getHeight() + $this->glyph->getMarginBottom() - $glyphYCoordStart;
+        $translation = $this->glyph->getPage()->getHeight() + $this->glyph->getPage()->getMarginBottom() - $glyphYCoordStart;
 
         return $translation;
     }
@@ -126,4 +128,8 @@ abstract class AbstractDivertingFormatter extends BaseFormatter
     abstract protected function addToSubjectOfSplitting(Glyph $glyph);
 
     abstract protected function breakSubjectOfSplittingIncraseTranslation($verticalTranslation);
+
+    protected function postFormat()
+    {
+    }
 }
