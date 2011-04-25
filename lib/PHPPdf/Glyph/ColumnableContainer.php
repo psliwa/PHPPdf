@@ -27,7 +27,7 @@ class ColumnableContainer extends Container
         {
             $containerPrototype = new Container();
             //TODO: usunąć
-//            $containerPrototype->mergeEnhancementAttributes('border', array('name' => 'border', 'color' => 'black'));
+            $containerPrototype->mergeEnhancementAttributes('border', array('name' => 'border', 'color' => 'black'));
         }
 
         $this->containerPrototype = $containerPrototype;

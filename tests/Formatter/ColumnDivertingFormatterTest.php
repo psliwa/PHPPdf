@@ -45,7 +45,7 @@ class ColumnDivertingFormatterTest extends TestCase
     /**
      * @test
      */
-    public function splitContainersIntoColumnsAndSetValidPosition()
+    public function formatColumnsAndSetValidPositionOfContainers()
     {
         $pageHeight = $this->page->getHeight();
         $width = 100;
@@ -53,7 +53,7 @@ class ColumnDivertingFormatterTest extends TestCase
         $yStart = 0;
 
         $containers = array();
-        foreach(array($pageHeight, $pageHeight/2) as $height)
+        foreach(array($pageHeight, $pageHeight/3, $pageHeight/3) as $height)
         {
             $container = new Container();
             $container->setHeight($height);
@@ -87,5 +87,8 @@ class ColumnDivertingFormatterTest extends TestCase
             $this->assertEquals($expectedFirstPoint, $container->getFirstPoint());
             $this->assertEquals($bottomYCoord, $container->getDiagonalPoint()->getY());
         }
+
+        //x coord of two containers within the same column is equal
+        $this->assertEquals($containers[1]->getFirstPoint()->getX(), $containers[2]->getFirstPoint()->getX());
     }
 }

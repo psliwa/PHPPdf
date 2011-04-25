@@ -30,6 +30,9 @@ class ColumnDivertingFormatter extends AbstractDivertingFormatter
         }
 
         $container->add($glyph);
+
+        $x = $container->getFirstPoint()->getX();
+        $glyph->translate($container->getFirstPoint()->getX() - $glyph->getFirstPoint()->getX(), 0);
     }
 
     protected function breakSubjectOfSplittingIncraseTranslation($verticalTranslation)
@@ -43,7 +46,7 @@ class ColumnDivertingFormatter extends AbstractDivertingFormatter
 
         $this->translateColumnContainer($this->getSubjectOfSplitting()->getCurrentContainer(), $columnNumber);
 
-        $isLastColumnInRow = $columnNumber == 0;
+        $isLastColumnInRow = $columnNumber == ($numberOfColumns - 1);
         if($isLastColumnInRow)
         {
             $this->totalVerticalTranslation += $verticalTranslation;
