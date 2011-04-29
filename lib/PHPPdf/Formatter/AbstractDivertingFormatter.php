@@ -116,7 +116,7 @@ abstract class AbstractDivertingFormatter extends BaseFormatter
         return $yCoordOfFirstPoint;
     }
 
-    private function getGlyphTranslation(Glyph $glyph, $glyphYCoordStart)
+    protected function getGlyphTranslation(Glyph $glyph, $glyphYCoordStart)
     {
         $translation = $this->glyph->getPage()->getHeight() + $this->glyph->getPage()->getMarginBottom() - $glyphYCoordStart;
 

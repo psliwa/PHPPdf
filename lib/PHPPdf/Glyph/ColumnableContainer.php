@@ -57,12 +57,12 @@ class ColumnableContainer extends Container
         $translateX = ($this->getWidth() + $this->getAttribute('margin-between-columns')) * ($numberOfContainers % $this->getAttribute('number-of-columns'));
 
         $this->currentContainer = $this->containerPrototype->copy();
+        $this->currentContainer->setAttribute('splittable', false);
         $this->currentContainer->setParent($this);
         $this->containers[] = $this->currentContainer;
 
         $boundary = $this->getBoundary();
         $firstPoint = $this->getFirstPoint();
-        $secondPoint = $boundary[1];
     }
 
     /**

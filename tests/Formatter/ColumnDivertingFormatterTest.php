@@ -50,22 +50,7 @@ class ColumnDivertingFormatterTest extends TestCase
         $pageHeight = $this->page->getHeight();
         $width = 100;
 
-        $yStart = 0;
-
-        $containers = array();
-        foreach(array($pageHeight, $pageHeight/3, $pageHeight/3) as $height)
-        {
-            $container = new Container();
-            $container->setHeight($height);
-            $container->setWidth($width);
-
-            $this->column->add($container);
-            
-            $this->injectBoundary($container, $yStart);
-            $yStart += $height;
-
-            $containers[] = $container;
-        }
+        $containers = $this->createContainers(array($pageHeight, $pageHeight/2, $pageHeight/3));
 
         $this->formatter->format($this->column, new Document());
 
@@ -90,5 +75,49 @@ class ColumnDivertingFormatterTest extends TestCase
 
         //x coord of two containers within the same column is equal
         $this->assertEquals($containers[1]->getFirstPoint()->getX(), $containers[2]->getFirstPoint()->getX());
+
+        $this->assertEquals($pageHeight, $this->column->getHeight());
+    }
+
+    private function createContainers(array $heights)
+    {
+        $width = 100;
+
+        $yStart = 0;
+
+        $containers = array();
+        foreach($heights as $height)
+        {
+            $container = new Container();
+            $container->setHeight($height);
+            $container->setWidth($width);
+
+            $this->column->add($container);
+
+            $this->injectBoundary($container, $yStart);
+            $yStart += $height;
+
+            $containers[] = $container;
+        }
+
+        return $containers;
+    }
+
+    /**
+     * @test
+     */
+    public function secondRowOfColumnsShouldBeDirectlyUnderFirstRow()
+    {
+        $pageHeight = $this->page->getHeight();
+
+        $containers = $this->createContainers(array($pageHeight, $pageHeight, $pageHeight));
+
+        $this->formatter->format($this->column, new Document());
+
+        $columns = $this->column->getContainers();
+
+        $this->assertEquals($columns[0]->getDiagonalPoint()->getY(), $columns[2]->getFirstPoint()->getY());
+
+        $this->assertEquals(2*$pageHeight, $this->column->getHeight());
     }
 }

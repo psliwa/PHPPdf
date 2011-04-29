@@ -28,7 +28,7 @@ abstract class AbstractGlyph implements Glyph, \ArrayAccess, \Serializable
     const ALIGN_RIGHT = 'right';
     const ALIGN_CENTER = 'center';
 
-    protected $attributes = array();
+    private $attributes = array();
     private $attributesSnapshot = null;
 
     private $parent = null;
