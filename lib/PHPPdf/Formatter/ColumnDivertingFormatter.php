@@ -80,10 +80,11 @@ class ColumnDivertingFormatter extends AbstractDivertingFormatter
         $numberOfContainers = count($containers);
         $numberOfColumns = $columnableContainer->getAttribute('number-of-columns');
 
-        $bottomCoordYPerContainer = array();
+        $bottomCoordYPerColumn = array();
+        $bottomCoordYPerRow = array();
         $maxRightCoordX = 0;
 
-        for($i=0; $i<$numberOfContainers; $i+=$numberOfColumns)
+        for($i=0, $row = 0; $i<$numberOfContainers; $i+=$numberOfColumns, $row++)
         {
             for($j=0, $currentIndex = $i; $j<$numberOfColumns && isset($containers[$currentIndex]); $j++, $currentIndex = $j+$i)
             {
@@ -94,9 +95,14 @@ class ColumnDivertingFormatter extends AbstractDivertingFormatter
                 if($lastChild)
                 {
                     $bottomYCoord = $lastChild->getDiagonalPoint()->getY();
-                    if(!isset($bottomCoordYPerContainer[$j]) || $bottomCoordYPerContainer[$j] > $bottomYCoord)
+                    if(!isset($bottomCoordYPerColumn[$j]) || $bottomCoordYPerColumn[$j] > $bottomYCoord)
                     {
-                        $bottomCoordYPerContainer[$j] = $bottomYCoord;
+                        $bottomCoordYPerColumn[$j] = $bottomYCoord;
+                    }
+
+                    if(!isset($bottomCoordYPerRow[$row]) || $bottomCoordYPerRow[$row] > $bottomYCoord)
+                    {
+                        $bottomCoordYPerRow[$row] = $bottomYCoord;
                     }
                 }
 
@@ -104,7 +110,7 @@ class ColumnDivertingFormatter extends AbstractDivertingFormatter
             }
         }
 
-        for($i=0; $i<$numberOfContainers; $i+=$numberOfColumns)
+        for($i=0, $row=0; $i<$numberOfContainers; $i+=$numberOfColumns, $row++)
         {
             for($j=0, $currentIndex = $i; $j<$numberOfColumns && isset($containers[$currentIndex]); $j++, $currentIndex = $j+$i)
             {
@@ -118,7 +124,7 @@ class ColumnDivertingFormatter extends AbstractDivertingFormatter
                     $previousIndex -= $numberOfColumns;
                 }
 
-                $bottomYCoord = min($columnableContainer->getPage()->getDiagonalPoint()->getY(), $bottomCoordYPerContainer[$j]);
+                $bottomYCoord = max($columnableContainer->getPage()->getDiagonalPoint()->getY(), $bottomCoordYPerRow[$row]);
 
                 $boundary = $container->getBoundary();
                 $boundary->setNext($boundary[1]->getX(), $bottomYCoord)
@@ -131,10 +137,11 @@ class ColumnDivertingFormatter extends AbstractDivertingFormatter
 
                 $container->translate(0, $translate);
 
-                $bottomCoordYPerContainer[$j] = min($container->getDiagonalPoint()->getY(), $bottomCoordYPerContainer[$j]);
+                $bottomCoordYPerColumn[$j] = min($container->getDiagonalPoint()->getY(), $bottomCoordYPerColumn[$j]);
             }
         }
-        $columnBottomCoordY = min($bottomCoordYPerContainer);
+
+        $columnBottomCoordY = min($bottomCoordYPerColumn);
         $diffVertical = $columnableContainer->getDiagonalPoint()->getY() - $columnBottomCoordY;
         $diffHorizontal = $maxRightCoordX - $columnableContainer->getDiagonalPoint()->getX();
 
@@ -143,6 +150,11 @@ class ColumnDivertingFormatter extends AbstractDivertingFormatter
         $columnableContainer->setWidth($columnableContainer->getWidth() + $diffHorizontal);
 
         $columnableContainer->removeAll();
+
+        foreach($columnableContainer->getContainers() as $container)
+        {
+            $columnableContainer->add($container);
+        }
     }
 
     protected function addChildrenToCurrentPageAndTranslate(Glyph $glyph, $translation)
@@ -152,9 +164,6 @@ class ColumnDivertingFormatter extends AbstractDivertingFormatter
         $boundary = $container->getBoundary();
 
         $container->add($glyph);
-        $x = $container->getFirstPoint()->getX();
-        $y = $container->getFirstPoint()->getY();
-        $t = $glyph->getFirstPoint()->getY() - $y;
         $glyph->translate($container->getFirstPoint()->getX() - $glyph->getFirstPoint()->getX(), -$translation);
     }
 
