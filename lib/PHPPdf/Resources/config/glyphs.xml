@@ -234,7 +234,7 @@
             <formatter class="PHPPdf\Formatter\FloatFormatter" />
         </formatters>
     </glyph>
-    <glyph name="column" class="PHPPdf\Glyph\ColumnableContainer">
+    <glyph name="column-layout" class="PHPPdf\Glyph\ColumnableContainer">
         <formatters>
             <formatter class="PHPPdf\Formatter\ConvertAttributesFormatter" />
             <formatter class="PHPPdf\Formatter\StandardDimensionFormatter" />

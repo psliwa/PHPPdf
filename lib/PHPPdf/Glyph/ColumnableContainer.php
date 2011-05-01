@@ -41,6 +41,20 @@ class ColumnableContainer extends Container
         $this->addAttribute('margin-between-columns', 10);
     }
 
+    public function setNumberOfColumns($count)
+    {
+        $count = (int) $count;
+
+        if($count < 2)
+        {
+            throw new \InvalidArgumentException(sprintf('Number of columns should be integer greater than 1, %d given.', $count));
+        }
+
+        $this->setAttributeDirectly('number-of-columns', $count);
+
+        return $this;
+    }
+
     /**
      * @return array Array of Container objects
      */

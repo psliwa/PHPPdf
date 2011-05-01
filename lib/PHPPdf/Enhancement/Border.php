@@ -155,7 +155,6 @@ class Border extends Enhancement
         $xSignMatrix = array(-1, 1, 1, -1, -1);
         $ySignMatrix = array(1, 1, -1, -1, 1);
 
-
         foreach($boundary->getPoints() as $index => $point)
         {
             $xSign = isset($xSignMatrix[$index]) ? $xSignMatrix[$index] : 1;

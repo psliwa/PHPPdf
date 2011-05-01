@@ -21,10 +21,7 @@ class ColumnDivertingFormatterTest extends TestCase
         $this->column->setHeight($this->page->getHeight()*1.5);
         $this->column->setWidth($this->page->getWidth()/2);
 
-        $this->page->add($this->column);
         $this->formatter = new ColumnDivertingFormatter();
-
-        $this->injectBoundary($this->column);
     }
 
     private function injectBoundary(Container $container, $yStart = 0)
@@ -47,6 +44,9 @@ class ColumnDivertingFormatterTest extends TestCase
      */
     public function formatColumnsAndSetValidPositionOfContainers()
     {
+        $this->page->add($this->column);
+        $this->injectBoundary($this->column);
+
         $pageHeight = $this->page->getHeight();
         $width = 100;
 
@@ -79,8 +79,9 @@ class ColumnDivertingFormatterTest extends TestCase
         $this->assertEquals($pageHeight, $this->column->getHeight());
     }
 
-    private function createContainers(array $heights)
+    private function createContainers(array $heights, $parent = null)
     {
+        $parent = $parent ? $parent : $this->column;
         $width = 100;
 
         $yStart = 0;
@@ -92,7 +93,7 @@ class ColumnDivertingFormatterTest extends TestCase
             $container->setHeight($height);
             $container->setWidth($width);
 
-            $this->column->add($container);
+            $parent->add($container);
 
             $this->injectBoundary($container, $yStart);
             $yStart += $height;
@@ -108,6 +109,9 @@ class ColumnDivertingFormatterTest extends TestCase
      */
     public function secondRowOfColumnsShouldBeDirectlyUnderFirstRow()
     {
+        $this->page->add($this->column);
+        $this->injectBoundary($this->column);
+
         $pageHeight = $this->page->getHeight();
 
         $containers = $this->createContainers(array($pageHeight, $pageHeight, $pageHeight));
@@ -119,5 +123,34 @@ class ColumnDivertingFormatterTest extends TestCase
         $this->assertEquals($columns[0]->getDiagonalPoint()->getY(), $columns[2]->getFirstPoint()->getY());
 
         $this->assertEquals(2*$pageHeight, $this->column->getHeight());
+    }
+
+    /**
+     * @test
+     */
+    public function containerInSecondColumnHasTheSameYCoordAsFirstContainer()
+    {
+        $stubs = $this->createContainers(array(20), $this->page);
+
+        $pageHeight = $this->page->getHeight();
+
+        $this->page->add($this->column);
+        $this->injectBoundary($this->column, 20);
+        $containers = $this->createContainers(array($pageHeight*1.5));
+
+        $this->formatter->format($this->column, new Document());
+
+        $columns = $this->column->getContainers();
+
+        $this->assertEquals($stubs[0]->getDiagonalPoint()->getY(), $columns[0]->getFirstPoint()->getY());
+        $this->assertEquals($columns[0]->getFirstPoint()->getY(), $columns[1]->getFirstPoint()->getY());
+
+        foreach($this->column->getChildren() as $container)
+        {
+            foreach($container->getChildren() as $child)
+            {
+                $this->assertEquals($container->getFirstPoint()->getY(), $child->getFirstPoint()->getY());
+            }
+        }
     }
 }

@@ -169,7 +169,7 @@ class ColumnDivertingFormatter extends AbstractDivertingFormatter
 
     protected function getGlyphTranslation(Glyph $glyph, $glyphYCoordStart)
     {
-        $translation = $this->getSubjectOfSplitting()->getPage()->getFirstPoint()->getY() - $glyphYCoordStart;
+        $translation = $this->getSubjectOfSplitting()->getCurrentContainer()->getFirstPoint()->getY() - $glyphYCoordStart;
 
         return $translation;
     }
