@@ -95,6 +95,11 @@ abstract class AbstractDivertingFormatter extends BaseFormatter
         if($splittedGlyph)
         {
             $gapBeetwenBottomOfOriginalGlyphAndEndOfPage = $glyph->getDiagonalPoint()->getY() - $this->glyph->getPage()->getDiagonalPoint()->getY();
+
+            $gap = $originalHeight - (($glyph->getFirstPoint()->getY() - $glyph->getDiagonalPoint()->getY()) + ($splittedGlyph->getFirstPoint()->getY() - $splittedGlyph->getDiagonalPoint()->getY()));
+            $this->totalVerticalTranslation += $gap;
+            $glyph->resize(0, $gap);
+
             $glyphYCoordStart = $splittedGlyph->getFirstPoint()->getY();
             $this->addToSubjectOfSplitting($glyph);
             $heightAfterSplit += $splittedGlyph->getFirstPoint()->getY() - $splittedGlyph->getDiagonalPoint()->getY();

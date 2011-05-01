@@ -23,8 +23,8 @@ class PageDivertingFormatterTest extends TestCase
     public function pageOverflow()
     {
         $prototype = $this->page->getPrototypePage();
-        $container = $this->getContainerMock(array(0, $prototype->getHeight()), array($prototype->getWidth(), 0));
-        $container2 = $this->getContainerMock(array(0, 0), array($prototype->getWidth(), -$prototype->getHeight()));
+        $container = $this->getContainerStub(array(0, $prototype->getHeight()), array($prototype->getWidth(), 0));
+        $container2 = $this->getContainerStub(array(0, 0), array($prototype->getWidth(), -$prototype->getHeight()));
 
         $this->page->add($container);
         $this->page->add($container2);
@@ -41,8 +41,8 @@ class PageDivertingFormatterTest extends TestCase
     {
         $prototype = $this->page->getPrototypePage();
 
-        $container = $this->getContainerMock(array(0, $prototype->getHeight()), array($prototype->getWidth(), $prototype->getHeight()/2));
-        $container2 = $this->getContainerMock(array(0, $prototype->getHeight()/2), array($prototype->getWidth(), -$prototype->getHeight()/2));
+        $container = $this->getContainerStub(array(0, $prototype->getHeight()), array($prototype->getWidth(), $prototype->getHeight()/2));
+        $container2 = $this->getContainerStub(array(0, $prototype->getHeight()/2), array($prototype->getWidth(), -$prototype->getHeight()/2));
 
         $this->page->add($container);
         $this->page->add($container2);
@@ -54,6 +54,26 @@ class PageDivertingFormatterTest extends TestCase
         $this->assertEquals(2, count($pages));
         $this->assertEquals(2, count($pages[0]->getChildren()));
         $this->assertEquals(1, count($pages[1]->getChildren()));
+    }
+
+    private function getContainerStub($start, $end, array $methods = array())
+    {
+        $stub = new Container();
+        $stub->setHeight($start[1]-$end[1]);
+        $stub->getBoundary()->setNext($start[0], $start[1])
+                            ->setNext($end[0], $start[1])
+                            ->setNext($end[0], $end[1])
+                            ->setNext($start[0], $end[1])
+                            ->close();
+
+        $boundary = new Boundary();
+        $boundary->setNext($start[0], $start[1])
+                 ->setNext($end[0], $start[1])
+                 ->setNext($end[0], $end[1])
+                 ->setNext($start[0], $end[1])
+                 ->close();
+
+        return $stub;
     }
 
     private function getContainerMock($start, $end, array $methods = array())
@@ -88,9 +108,9 @@ class PageDivertingFormatterTest extends TestCase
         $prototype = $this->page->getPrototypePage();
         $height = $prototype->getHeight();
 
-        $mock = $this->getContainerMock(array(0, $height), array(100, -($height*3)));
+        $container = $this->getContainerStub(array(0, $height), array(100, -($height*3)));
 
-        $this->page->add($mock);
+        $this->page->add($container);
 
         $this->formatter->format($this->page, new Document());
 
@@ -122,7 +142,7 @@ class PageDivertingFormatterTest extends TestCase
         $mocks = array();
         for($i=0; $i<32; $i++, $height -= $heightOfGlyph)
         {
-            $this->page->add($this->getContainerMock(array(0, $height), array(100, $height-$heightOfGlyph)));
+            $this->page->add($this->getContainerStub(array(0, $height), array(100, $height-$heightOfGlyph)));
         }
 
         $this->formatter->format($this->page, new Document());
