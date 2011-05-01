@@ -22,6 +22,7 @@ class Container extends AbstractGlyph
         $glyph->setParent($this);
         $glyph->reset();
         $this->children[] = $glyph;
+        $glyph->setPriorityFromParent();
 
         return $this;
     }

@@ -191,4 +191,21 @@ class ContainerTest extends TestCase
 
         return $boundary;
     }
+
+    /**
+     * @test
+     */
+    public function priorityOfChildIsGreaterByOneOfPriorityOfParent()
+    {
+        $child = new Container();
+        $this->glyph->add($child);
+
+        $this->assertLessThan($this->glyph->getPriority(), $child->getPriority());
+
+        $superParentContainer = new Container();
+        $superParentContainer->add($this->glyph);
+
+        $this->assertLessThan($superParentContainer->getPriority(), $this->glyph->getPriority());
+        $this->assertLessThan($this->glyph->getPriority(), $child->getPriority());
+    }
 }

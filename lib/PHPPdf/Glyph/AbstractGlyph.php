@@ -30,6 +30,7 @@ abstract class AbstractGlyph implements Glyph, \ArrayAccess, \Serializable
 
     private $attributes = array();
     private $attributesSnapshot = null;
+    private $priority = 0;
 
     private $parent = null;
     private $hadAutoMargins = false;
@@ -41,7 +42,6 @@ abstract class AbstractGlyph implements Glyph, \ArrayAccess, \Serializable
     private $enhancementBag = null;
     private $drawingTasks = array();
     private $formattersNames = array();
-
 
     public function __construct(array $attributes = array())
     {
@@ -615,7 +615,24 @@ abstract class AbstractGlyph implements Glyph, \ArrayAccess, \Serializable
         {
             $callback = array($enhancement, 'enhance');
             $args = array($this->getPage(), $this);
-            $this->addDrawingTask(new DrawingTask($callback, $args, $enhancement->getPriority()));
+            $priority = $enhancement->getPriority() + $this->getPriority();
+            $this->addDrawingTask(new DrawingTask($callback, $args, $priority));
+        }
+    }
+
+    public function getPriority()
+    {
+        return $this->priority;
+    }
+
+    protected function setPriorityFromParent()
+    {
+        $parentPriority = $this->getParent() ? $this->getParent()->getPriority() : 0;
+        $this->priority = $parentPriority - 1;
+
+        foreach($this->getChildren() as $child)
+        {
+            $child->setPriorityFromParent();
         }
     }
 
@@ -907,6 +924,7 @@ abstract class AbstractGlyph implements Glyph, \ArrayAccess, \Serializable
             'attributes' => $this->attributes,
             'enhancementBag' => $this->enhancementBag->getAll(),
             'formattersNames' => $this->formattersNames,
+            'priority' => $this->priority,
         );
 
         return serialize($data);
@@ -920,6 +938,7 @@ abstract class AbstractGlyph implements Glyph, \ArrayAccess, \Serializable
         $this->attributes = $data['attributes'];
         $this->enhancementBag = new EnhancementBag($data['enhancementBag']);
         $this->setFormattersNames($data['formattersNames']);
+        $this->priority = $data['priority'];
     }
 
     public function __toString()
