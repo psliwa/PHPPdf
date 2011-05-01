@@ -82,7 +82,7 @@ class ColumnableContainerTest extends TestCase
 
         $this->column->setParent($page);
 
-        $expectedWidth = $width / $this->column->getAttribute('number-of-columns') - ($this->column->getAttribute('number-of-columns') - 1)*$this->column->getAttribute('margin-between-columns');
+        $expectedWidth = 245;
         $this->assertEquals($expectedWidth, $this->column->getWidth());
     }
 }

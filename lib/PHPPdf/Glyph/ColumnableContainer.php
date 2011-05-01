@@ -93,7 +93,7 @@ class ColumnableContainer extends Container
     {
         parent::setParent($glyph);
 
-        $width = $glyph->getWidth() / $this->getAttribute('number-of-columns') - ($this->getAttribute('number-of-columns') - 1) * $this->getAttribute('margin-between-columns');
+        $width = ($glyph->getWidth() - ($this->getAttribute('number-of-columns')-1)*$this->getAttribute('margin-between-columns')) /$this->getAttribute('number-of-columns');
         $this->setWidth($width);
 
         return $this;
