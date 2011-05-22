@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pdf>
+    <dynamic-page>
+        <div class="outside-column">
+            Some text outside column layout
+        </div>
+        <column-layout number-of-columns="2" margin-between-columns="20">
+            <div height="1000">
+                <stylesheet>
+                    <enhancement name="background" color="gray" />
+                </stylesheet>
+                Some long container
+            </div>
+            <div height="2000">
+                <stylesheet>
+                    <enhancement name="background" color="green" />
+                </stylesheet>
+                Some another long container
+            </div>
+        </column-layout>
+        <div class="outside-column">
+            Some text outside column layout
+        </div>
+    </dynamic-page>
+</pdf>

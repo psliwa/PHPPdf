@@ -146,7 +146,7 @@ Ponadto obsługiwane są niestandardowe tagi:
 * dynamic-page - strona, która się dynamicznie dzieli gdy zostaje przepełniona
 * page - pojedyncza strona
 * page-break - złamanie strony, jest to element podrzędny dynamic-page, czyli musi być bezpośrednim dzieckiem tego elemntu!
-* columns - podział obszaru roboczego na kolumny (TODO)
+* column-layout - podział obszaru roboczego na kolumny, dodatkowe atrybuty: number-of-columns oraz margin-between-columns
 * column-break - złamanie kolumny, jest to element podrzędny columns (TODO)
 
 Istnieją tagi, które służą jedynie do określania wartości atrybutów, zbioru atrybutów lub zbioru elementów:
@@ -241,10 +241,29 @@ W nagłówku i stopce można korzystać z specjalnego tagu "<page-info></page-in
         </header>
     <!-- ciach -->
 
-9. Konfiguracja.
+9. Podział strony na kolumny.
+=============================
+
+Strona może być podzielona na kolumny.
+
+    <pdf>
+        <dynamic-page>
+            <column-layout>
+                <div width="100%" height="2500">
+                    <stylesheet>
+                        <enhancement name="background" color="green" />
+                    </stylesheet>
+                </div>
+            </column-layout>
+        </dynamic-page>
+    </pdf>
+
+Powyższy xml określa kilka stron dokumentu pdf z zielonymi prostokątami podzielonymi na 2 kolumny. Tag "column-layout" ma dwa dodatkowe atrybuty: number-of-columns oraz margin-between-columns. Domyślna wartość tych atrybutów to odpowiednio 2 oraz 10.
+
+10. Konfiguracja.
 ================
 
-Biblioteka ma 4 podstawowe pliki konfiguracyjne, które pozwalają na dostosowanie biblioteki do swoich potrzeb oraz do jej rozszerzenia.
+Biblioteka ma 3 podstawowe pliki konfiguracyjne, które pozwalają na dostosowanie biblioteki do swoich potrzeb oraz do jej rozszerzenia.
 
 * enhancements.xml - przypisywanie klas upiększeń (atrybutów złożonych) pod nazwy logiczne, które identyfikują dany typ upiększenia w obrębie całej biblioteki
 * glyphs.xml - definiowanie tagów dostępnych w dokumencie xml wraz z domyślnymi stylami oraz obiektami formatującymi
@@ -263,7 +282,7 @@ Można ustawić cache dla plików konfiguracyjnych oraz szablonów stylów:
                       ->setUseCacheForStylesheetConstraint(true) //szablony stylów również będą korzystały z cache
                       ->build();
 
-10. Znane ograniczenia.
+11. Znane ograniczenia.
 ======================
 
 Poniżej przedstawiam listę ograniczeń obecnej wersji biblioteki:
@@ -273,7 +292,7 @@ Poniżej przedstawiam listę ograniczeń obecnej wersji biblioteki:
 * brak justrowania - zostanie wprowadzone w kolejnych wersjach
 * obramowanie nie zmienia rozmiaru elementu tak jak to jest w HTML - zabieg celowy, raczej nie planuję jego zmiany
 
-11. TODO - czyli plany.
+12. TODO - czyli plany.
 =======================
 
 * obsługa adnotacji
@@ -283,7 +302,7 @@ Poniżej przedstawiam listę ograniczeń obecnej wersji biblioteki:
 * obsługa podziału strony na kolumny
 * poprawa działania tabelek, definiowanie nagłówków i stopek dla tabeli
 
-12. Wymagania techniczne.
+13. Wymagania techniczne.
 =========================
 
 Biblioteka działa pod php 5.3+.
