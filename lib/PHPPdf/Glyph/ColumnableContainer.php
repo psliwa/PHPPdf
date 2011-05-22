@@ -26,7 +26,6 @@ class ColumnableContainer extends Container
         if($containerPrototype === null)
         {
             $containerPrototype = new Container();
-            $containerPrototype->mergeEnhancementAttributes('border', array('name' => 'border', 'color' => 'pink'));
         }
 
         $this->containerPrototype = $containerPrototype;
