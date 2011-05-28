@@ -2,7 +2,7 @@
 
 use PHPPdf\Util\AttributeBag;
 
-class AttributeBagTest extends PHPUnit_Framework_TestCase
+class AttributeBagTest extends TestCase
 {
     private $bag;
 

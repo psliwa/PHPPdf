@@ -112,4 +112,19 @@ class ColumnableContainer extends Container
 
         return $this;
     }
+    
+    protected function getDataForSerialize()
+    {
+        $data = parent::getDataForSerialize();
+        $data['prototype'] = $this->containerPrototype;
+        
+        return $data;
+    }
+    
+    protected function setDataFromUnserialize(array $data)
+    {
+        parent::setDataFromUnserialize($data);
+        
+        $this->containerPrototype = $data['prototype'];
+    }
 }

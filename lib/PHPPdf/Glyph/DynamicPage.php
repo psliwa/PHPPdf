@@ -161,4 +161,19 @@ class DynamicPage extends Page
     {
         return $this->getPrototypePage()->getFirstPoint();
     }
+    
+    protected function getDataForSerialize()
+    {
+        $data = parent::getDataForSerialize();
+        $data['prototype'] = $this->prototype;
+        
+        return $data;
+    }
+    
+    protected function setDataFromUnserialize(array $data)
+    {
+        parent::setDataFromUnserialize($data);
+        
+        $this->prototype = $data['prototype'];
+    }
 }

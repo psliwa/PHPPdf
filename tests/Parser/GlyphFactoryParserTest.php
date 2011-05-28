@@ -4,7 +4,7 @@ use PHPPdf\Parser\GlyphFactoryParser,
     PHPPdf\Parser\StylesheetParser,
     PHPPdf\Glyph\Factory as GlyphFactory;
 
-class GlyphFactoryParserTest extends PHPUnit_Framework_TestCase
+class GlyphFactoryParserTest extends TestCase
 {
     private $parser;
 
