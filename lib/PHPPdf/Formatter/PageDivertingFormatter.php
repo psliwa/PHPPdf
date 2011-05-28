@@ -11,7 +11,7 @@ class PageDivertingFormatter extends AbstractDivertingFormatter
 {
     protected function shouldParentBeAutomaticallyBroken(Glyph $glyph)
     {
-        return $glyph->getPageBreak();
+        return $glyph->getAttribute('page-break');
     }
 
     protected function addToSubjectOfSplitting(Glyph $glyph)

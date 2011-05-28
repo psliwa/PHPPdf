@@ -18,7 +18,17 @@ class Cell extends Container
     {
         parent::initialize();
 
-        $this->addAttribute('colspan', 1);
+        $this->addAttribute('colspan', 1, 'getColspan', 'setColspan');
+    }
+    
+    public function getColspan()
+    {
+        return $this->getAttributeDirectly('colspan');
+    }
+    
+    public function setColspan($colspan)
+    {
+        $this->setAttributeDirectly('colspan', $colspan);
     }
 
     public function getFloat()

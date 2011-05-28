@@ -14,12 +14,13 @@ class Autoloader
             $basePath = __DIR__.'/..';
         }
         
+        $basePath .= DIRECTORY_SEPARATOR;
+        
         \spl_autoload_register(function($name) use($basePath)
         {
-            $path = \str_replace(array('\\', '_'), \DIRECTORY_SEPARATOR, $name).'.php';
-            $path = $basePath.\DIRECTORY_SEPARATOR.$path;
+            $path = sprintf('%s%s%s', $basePath, \str_replace(array('\\', '_'), \DIRECTORY_SEPARATOR, $name), '.php');
 
-            if(\is_readable($path))
+            if(\file_exists($path))
             {
                 return require $path;
             }

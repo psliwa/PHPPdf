@@ -51,7 +51,8 @@ class Page extends Container
         parent::initialize();
 
         $this->addAttribute(self::ATTR_SIZE);       
-        $this->setPageSize(self::SIZE_A4);
+        $this->addAttribute('page-size', null, null, 'setPageSize');
+        $this->setAttribute('page-size', self::SIZE_A4);
         $this->addAttribute('encoding', 'utf-8');
         $this->addAttribute('static-size', true);
     }

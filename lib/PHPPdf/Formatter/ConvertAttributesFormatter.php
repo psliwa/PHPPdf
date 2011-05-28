@@ -106,11 +106,11 @@ class ConvertAttributesFormatter extends BaseFormatter
 
     private function convertFontType(Glyphs\Glyph $glyph, Document $document)
     {
-        $font = $glyph->getAttribute('font-type');
+        $font = $glyph->getFontType();
         if($font && is_string($font))
         {
             $font = $document->getFontRegistry()->get($font);
-            $glyph->setAttribute('font-type', $font);
+            $glyph->setFontType($font);
         }
     }
 }

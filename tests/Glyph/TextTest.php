@@ -85,8 +85,8 @@ class TextTest extends PHPUnit_Framework_TestCase
     public function textAlign($align, $lineWidth, $excepted, $paddingLeft, $paddingRight)
     {       
         $this->page->setAttribute('text-align', $align);
-        $this->page->setPaddingLeft($paddingLeft);
-        $this->page->setPaddingRight($paddingRight);
+        $this->page->setAttribute('padding-left', $paddingLeft);
+        $this->page->setAttribute('padding-right', $paddingRight);
         $this->page->add($this->text);
 
         $position = $this->text->getStartLineDrawingXDimension($align, $lineWidth);

@@ -128,11 +128,11 @@ class Text extends AbstractGlyph
         switch($align)
         {
             case self::ALIGN_LEFT:
-                return $this->getPaddingLeft();
+                return $this->getAttribute('padding-left');
             case self::ALIGN_RIGHT:
-                return ($width - $lineWidth - $parent->getPaddingRight() - $parent->getPaddingLeft());
+                return ($width - $lineWidth - $parent->getAttribute('padding-right') - $parent->getAttribute('padding-left'));
             case self::ALIGN_CENTER:
-                return ($width - $parent->getPaddingRight() - $parent->getPaddingLeft() - $lineWidth)/2;
+                return ($width - $parent->getAttribute('padding-right') - $parent->getAttribute('padding-left') - $lineWidth)/2;
             default:
                 throw new \InvalidArgumentException(sprintf('Unsupported align type "%s".', $align));
         }

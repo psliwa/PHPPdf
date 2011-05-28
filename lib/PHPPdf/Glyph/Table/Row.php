@@ -27,7 +27,7 @@ class Row extends Container implements Listener
         }
 
         $glyph->setNumberOfColumn($this->numberOfColumns);
-        $this->numberOfColumns += $glyph->getAttribute('colspan');
+        $this->numberOfColumns += $glyph->getColspan();
         $parent = $this->getParent();
 
         if($parent)

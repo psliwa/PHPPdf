@@ -80,7 +80,7 @@ class TextDimensionFormatter extends BaseFormatter
         $text = $glyph->getText();
         $words = preg_split('/\s+/', $text);
 
-        $lineHeight = $glyph->getLineHeight();
+        $lineHeight = $glyph->getAttribute('line-height');
 
         $rowWidth = 0;
         $rowHeight = $y - $lineHeight;

@@ -30,6 +30,8 @@ abstract class AbstractGlyph implements Glyph, \ArrayAccess, \Serializable
 
     private $attributes = array();
     private $attributesSnapshot = null;
+    private $attributeGetters = array();
+    private $attributeSetters = array();
     private $priority = 0;
 
     private $parent = null;
@@ -163,38 +165,38 @@ abstract class AbstractGlyph implements Glyph, \ArrayAccess, \Serializable
 
     public function initialize()
     {
-        $this->addAttribute('width');
-        $this->addAttribute('height');
+        $this->addAttribute('width', null, 'getWidth', 'setWidth');
+        $this->addAttribute('height', null, 'getHeight', 'setHeight');
 
         $this->addAttribute('min-width', 0);
 
-        $this->addAttribute('margin-top');
-        $this->addAttribute('margin-left');
-        $this->addAttribute('margin-right');
-        $this->addAttribute('margin-bottom');
+        $this->addAttribute('margin-top', null, 'getMarginTop', 'setMarginTop');
+        $this->addAttribute('margin-left', null, 'getMarginLeft', 'setMarginLeft');
+        $this->addAttribute('margin-right', null, 'getMarginRight', 'setMarginRight');
+        $this->addAttribute('margin-bottom', null, 'getMarginBottom', 'setMarginBottom');
 
-        $this->addAttribute('margin');
-        $this->addAttribute('padding');
+        $this->addAttribute('margin', null, null, 'setMargin');
+        $this->addAttribute('padding', null, null, 'setPadding');
 
-        $this->addAttribute('font-type');
-        $this->addAttribute('font-size');
+        $this->addAttribute('font-type', null, 'getFontType', 'setFontType');
+        $this->addAttribute('font-size', null, null, 'setFontSize');
 
         $this->addAttribute('color');
 
-        $this->addAttribute('display', self::DISPLAY_BLOCK);
+        $this->addAttribute('display', self::DISPLAY_BLOCK, 'getDisplay', 'setDisplay');
 
-        $this->addAttribute('padding-top', 0);
-        $this->addAttribute('padding-right', 0);
-        $this->addAttribute('padding-bottom', 0);
-        $this->addAttribute('padding-left', 0);
+        $this->addAttribute('padding-top', 0, 'getPaddingTop');
+        $this->addAttribute('padding-right', 0, 'getPaddingRight');
+        $this->addAttribute('padding-bottom', 0, 'getPaddingBottom');
+        $this->addAttribute('padding-left', 0, 'getPaddingLeft');
         $this->addAttribute('splittable', true);
 
         $this->addAttribute('line-height');
         $this->addAttribute('text-align', self::ALIGN_LEFT);
 
-        $this->addAttribute('float', self::FLOAT_NONE);
+        $this->addAttribute('float', self::FLOAT_NONE, 'getFloat', 'setFloat');
         $this->addAttribute('font-style', null);
-        $this->addAttribute('static-size', false);
+        $this->addAttribute('static-size', false, null, 'setStaticSize');
         $this->addAttribute('page-break', false);
 
         $this->enhancementBag = new EnhancementBag();
@@ -239,6 +241,36 @@ abstract class AbstractGlyph implements Glyph, \ArrayAccess, \Serializable
         }
 
         return null;
+    }
+    
+    public function setFloat($float)
+    {
+        $this->setAttributeDirectly('float', $float);
+    }
+       
+    public function getFloat()
+    {
+        return $this->getAttributeDirectly('float');
+    }
+    
+    public function setFontType($fontType)
+    {
+        $this->setAttributeDirectly('font-type', $fontType);
+    }
+
+    public function getFontType()
+    {
+        return $this->getAttributeDirectly('font-type');
+    }
+    
+    public function getDisplay()
+    {
+        return $this->getAttributeDirectly('display');
+    }
+    
+    public function setDisplay($display)
+    {
+        $this->setAttributeDirectly('display', $display);
     }
 
     /**
@@ -461,7 +493,27 @@ abstract class AbstractGlyph implements Glyph, \ArrayAccess, \Serializable
 
         return $this;
     }
-
+    
+    public function getPaddingTop()
+    {
+        return $this->getAttributeDirectly('padding-top');
+    }
+    
+    public function getPaddingBottom()
+    {
+        return $this->getAttributeDirectly('padding-bottom');
+    }
+    
+    public function getPaddingLeft()
+    {
+        return $this->getAttributeDirectly('padding-left');
+    }
+    
+    public function getPaddingRight()
+    {
+        return $this->getAttributeDirectly('padding-right');
+    }
+    
     public function setFontSize($size)
     {
         $this->setAttributeDirectly('font-size', (int)$size);
@@ -480,10 +532,10 @@ abstract class AbstractGlyph implements Glyph, \ArrayAccess, \Serializable
     {
         $this->throwExceptionIfAttributeDosntExist($name);
 
-        $setter = $this->getAttributeMethodName('set', $name);
-        if(\method_exists($this, $setter))
+        if(isset($this->attributeSetters[$name]))
         {
-            $this->$setter($value);
+            $methodName = $this->attributeSetters[$name];
+            $this->$methodName($value);
         }
         else
         {
@@ -515,16 +567,27 @@ abstract class AbstractGlyph implements Glyph, \ArrayAccess, \Serializable
     {
         $parts = \explode('-', $name);
 
-        array_walk($parts, function(&$value, $key){
-            $value = \ucfirst(\strtolower($value));
-        });
-
         return sprintf('%s%s', $prefix, \implode('', $parts));
     }
 
-    protected function addAttribute($name, $default = null)
+    protected function addAttribute($name, $default = null, $getter = null, $setter = null)
     {
         $this->setAttributeDirectly($name, $default);
+        
+        if($getter !== null)
+        {
+            $this->attributeGetters[$name] = $getter;
+        }
+        
+        if($setter !== null)
+        {
+            $this->attributeSetters[$name] = $setter;
+        }
+    }
+    
+    public function setStaticSize($size)
+    {
+        $this->setAttributeDirectly('static-size', $size);
     }
 
     /**
@@ -539,13 +602,15 @@ abstract class AbstractGlyph implements Glyph, \ArrayAccess, \Serializable
     {
         $this->throwExceptionIfAttributeDosntExist($name);
 
-        $getter = $this->getAttributeMethodName('get', $name);
-        if(\method_exists($this, $getter))
+        if(isset($this->attributeGetters[$name]))
         {
-            return $this->$getter($name);
+            $methodName = $this->attributeGetters[$name];
+            return $this->$methodName();
         }
-
-        return $this->getAttributeDirectly($name);
+        else
+        {
+            return $this->getAttributeDirectly($name);
+        }        
     }
 
     /**
@@ -925,6 +990,8 @@ abstract class AbstractGlyph implements Glyph, \ArrayAccess, \Serializable
             'enhancementBag' => $this->enhancementBag->getAll(),
             'formattersNames' => $this->formattersNames,
             'priority' => $this->priority,
+            'getters' => $this->attributeGetters,
+            'setters' => $this->attributeSetters,
         );
 
         return $data;
@@ -951,6 +1018,8 @@ abstract class AbstractGlyph implements Glyph, \ArrayAccess, \Serializable
         $this->enhancementBag = new EnhancementBag($data['enhancementBag']);
         $this->setFormattersNames($data['formattersNames']);
         $this->priority = $data['priority'];
+        $this->attributeGetters = $data['getters'];
+        $this->attributeSetters = $data['setters'];
     }
 
     public function __toString()

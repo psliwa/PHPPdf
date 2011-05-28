@@ -20,7 +20,7 @@ class PageInfo extends PageText
 
     protected function refreshDummyText()
     {
-        $dummy = $this->getDummyNumber();
+        $dummy = $this->getAttribute('dummy-number');
         $this->setAttribute('dummy-text', sprintf($this->getAttribute('format'), $dummy, $dummy));
     }
 

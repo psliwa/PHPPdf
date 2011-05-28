@@ -164,16 +164,18 @@ class PageDivertingFormatterTest extends TestCase
 
         $this->invokeMethod($this->page, 'setPrototypePage', array($prototype));
 
-        $container = $this->getContainerMock(array(0, 700), array(40, 600), array('getPageBreak', 'split'));
+        $container = $this->getContainerMock(array(0, 700), array(40, 600), array('getAttribute', 'split'));
         $container->expects($this->atLeastOnce())
-                  ->method('getPageBreak')
+                  ->method('getAttribute')
+                  ->with('page-break')
                   ->will($this->returnValue(false));
 
         $this->page->add($container);
 
-        $container = $this->getContainerMock(array(0, 600), array(0, 600), array('getPageBreak', 'split'));
+        $container = $this->getContainerMock(array(0, 600), array(0, 600), array('getAttribute', 'split'));
         $container->expects($this->atLeastOnce())
-                  ->method('getPageBreak')
+                  ->method('getAttribute')
+                  ->with('page-break')
                   ->will($this->returnValue(true));
 
         $this->page->add($container);
