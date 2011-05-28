@@ -127,4 +127,12 @@ class ColumnableContainer extends Container
         
         $this->containerPrototype = $data['prototype'];
     }
+    
+    /**
+     * @return PHPPdf\Glyph\Container
+     */
+    public function getPrototypeContainer()
+    {
+        return $this->containerPrototype;
+    }
 }

@@ -70,4 +70,16 @@ class DynamicPageTest extends TestCase
             $i++;
         }
     }
+    
+    /**
+     * @test
+     */
+    public function serializePagePrototypeOnSerialization()
+    {
+        $stubPage = new Page();
+
+        $dynamicPage = new DynamicPage($stubPage);
+        $dynamicPageAfterUnserialization = unserialize(serialize($dynamicPage));
+        $this->assertNotNull($dynamicPageAfterUnserialization->getPrototypePage());
+    }
 }

@@ -85,4 +85,16 @@ class ColumnableContainerTest extends TestCase
         $expectedWidth = 245;
         $this->assertEquals($expectedWidth, $this->column->getWidth());
     }
+    
+    /**
+     * @test
+     */
+    public function serializeContainerPrototypeOnSerialization()
+    {
+        $stubContainer = new Container();
+
+        $columnableContainer = new ColumnableContainer($stubContainer);
+        $columAfterUnserialization = unserialize(serialize($columnableContainer));
+        $this->assertNotNull($columAfterUnserialization->getPrototypeContainer());
+    }
 }
