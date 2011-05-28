@@ -57,6 +57,12 @@ class Page extends Container
         $this->addAttribute('static-size', true);
     }
 
+    protected static function initializeType()
+    {
+        parent::initializeType();
+        static::setAttributeSetters(array('page-size' => 'setPageSize'));
+    }
+    
     private function initializeBoundary()
     {
         $width = $this->getWidth();
