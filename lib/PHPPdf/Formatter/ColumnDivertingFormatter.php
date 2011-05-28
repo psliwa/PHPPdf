@@ -132,9 +132,6 @@ class ColumnDivertingFormatter extends AbstractDivertingFormatter
                                          ->close();
                 $container->setHeight($container->getFirstPoint()->getY() - $bottomYCoord);
 
-                $y1 = $container->getFirstPoint()->getY();
-                $y2 = $container->getDiagonalPoint()->getY();
-
                 $container->translate(0, $translate);
 
                 $bottomCoordYPerColumn[$j] = min($container->getDiagonalPoint()->getY(), $bottomCoordYPerColumn[$j]);

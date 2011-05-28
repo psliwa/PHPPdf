@@ -634,9 +634,14 @@ abstract class AbstractGlyph implements Glyph, \ArrayAccess, \Serializable
     /**
      * Make snapshot of attribute's map
      */
-    public function makeAttributesSnapshot()
+    public function makeAttributesSnapshot(array $attributeNames = null)
     {
-        $this->attributesSnapshot = $this->attributes;
+        if($attributeNames === null)
+        {
+            $attributeNames = array_keys($this->attributes);
+        }
+               
+        $this->attributesSnapshot = array_intersect_key($this->attributes, array_flip($attributeNames));
     }
 
     /**

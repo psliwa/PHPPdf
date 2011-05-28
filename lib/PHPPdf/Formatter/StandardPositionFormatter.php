@@ -16,7 +16,7 @@ class StandardPositionFormatter extends BaseFormatter
     public function format(Glyphs\Glyph $glyph, Document $document)
     {
         $boundary = $glyph->getBoundary();
-        if(/*$glyph->getDisplay() === Glyphs\AbstractGlyph::DISPLAY_BLOCK &&*/ !$boundary->isClosed())
+        if(!$boundary->isClosed())
         {
             list($x, $y) = $boundary->getFirstPoint()->toArray();
 

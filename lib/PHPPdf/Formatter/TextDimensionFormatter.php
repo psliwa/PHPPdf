@@ -40,14 +40,12 @@ class TextDimensionFormatter extends BaseFormatter
         $fontSize = $glyph->getRecurseAttribute('font-size');
         $lineHeight = $glyph->getAttribute('line-height');
 
-        $graphicsContext->saveGS();
         $graphicsContext->setFont($glyph->getFont(), $fontSize);
 
         $wordsInRows = array();
         $lineSizes = array();
 
         $this->separateTextFromGlyphIntoRows($glyph, $wordsInRows, $lineSizes);
-        $graphicsContext->restoreGS();
 
         $realHeight = $lineHeight*count($wordsInRows);
 
@@ -85,8 +83,6 @@ class TextDimensionFormatter extends BaseFormatter
         $rowWidth = 0;
         $rowHeight = $y - $lineHeight;
 
-        $count = count($words);
-
         $rowNumber = 0;
 
         $parent = $glyph->getParent();
@@ -104,7 +100,7 @@ class TextDimensionFormatter extends BaseFormatter
         $lineSizes = array();
         $wordsInRows = array();
         $spaceWidth = $this->getTextWidth($font, $fontSize, ' ');
-        for($i=0; $i<$count; $i++)
+        for($i=0, $count = count($words); $i<$count; $i++)
         {
             $word = $words[$i];
             $width = $this->getTextWidth($font, $fontSize, $word) + $spaceWidth;

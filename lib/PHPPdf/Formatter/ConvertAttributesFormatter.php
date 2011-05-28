@@ -40,11 +40,9 @@ class ConvertAttributesFormatter extends BaseFormatter
 
     private function convertFromPercentageValue($value, $percent)
     {
-        $len = strlen($percent);
-        if(substr($percent, $len-1) === '%')
+        if(strpos($percent, '%') !== false)
         {
-            $percent = (double) substr($percent, 0, $len-1);
-
+            $percent = (double) $percent;
             $percent = $value*$percent / 100;
         }
         return $percent;

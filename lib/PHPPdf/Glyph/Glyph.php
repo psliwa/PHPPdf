@@ -85,7 +85,7 @@ interface Glyph
 
     public function setFormattersNames(array $formatters);
 
-    public function makeAttributesSnapshot();
+    public function makeAttributesSnapshot(array $attributeNames = null);
     public function getAttributesSnapshot();
 
     public function split($height);

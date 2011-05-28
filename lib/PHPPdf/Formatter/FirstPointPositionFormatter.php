@@ -10,7 +10,7 @@ class FirstPointPositionFormatter extends BaseFormatter
 {
     public function format(Glyph $glyph, Document $document)
     {
-        $glyph->makeAttributesSnapshot();
+        $glyph->makeAttributesSnapshot(array('height', 'width'));
         $boundary = $glyph->getBoundary();
         if($boundary->isClosed())
         {
