@@ -102,16 +102,6 @@ class ColumnableContainer extends Container
             }
         }
     }
-
-    public function setParent(Container $glyph)
-    {
-        parent::setParent($glyph);
-
-        $width = ($glyph->getWidth() - ($this->getAttribute('number-of-columns')-1)*$this->getAttribute('margin-between-columns')) / $this->getAttribute('number-of-columns');
-        $this->setWidth($width);
-
-        return $this;
-    }
     
     protected function getDataForSerialize()
     {
@@ -134,5 +124,13 @@ class ColumnableContainer extends Container
     public function getPrototypeContainer()
     {
         return $this->containerPrototype;
+    }
+    
+    public function preFormat(Document $document)
+    {
+        $parent = $this->getParent();
+
+        $width = ($parent->getWidth() - ($this->getAttribute('number-of-columns')-1)*$this->getAttribute('margin-between-columns')) / $this->getAttribute('number-of-columns');
+        $this->setWidth($width);
     }
 }

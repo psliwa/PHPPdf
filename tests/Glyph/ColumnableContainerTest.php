@@ -1,5 +1,6 @@
 <?php
 
+use PHPPdf\Document;
 use PHPPdf\Glyph\ColumnableContainer,
     PHPPdf\Glyph\Container;
 
@@ -72,15 +73,17 @@ class ColumnableContainerTest extends TestCase
     /**
      * @test
      */
-    public function setWidthAfterSettingParent()
+    public function setWidthOnPreFormat()
     {
         $width = 500;
         $page = $this->getMock('PHPPdf\Glyph\Page', array('getWidth'));
         $page->expects($this->atLeastOnce())
              ->method('getWidth')
              ->will($this->returnValue($width));
-
+             
         $this->column->setParent($page);
+
+        $this->column->preFormat(new Document());
 
         $expectedWidth = 245;
         $this->assertEquals($expectedWidth, $this->column->getWidth());
