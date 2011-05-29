@@ -271,12 +271,12 @@ class TableTest extends TestCase
 
     /**
      * @test
+     * @dataProvider setColumnsWidthsWhenRowHasBeenAddedProvider
      */
-    public function setColumnsWidthsWhenRowHasBeenAdded()
+    public function setColumnsWidthsWhenRowHasBeenAdded($cellWidth, $colspan, $expectedColumnsWidth)
     {
-        $cellWidth = 120;
         $row = $this->getMock('PHPPdf\Glyph\Table\Row', array('getChildren'));
-        $cell = $this->getMock('PHPPdf\Glyph\Table\Cell', array('getWidth', 'getNumberOfColumn'));
+        $cell = $this->getMock('PHPPdf\Glyph\Table\Cell', array('getWidth', 'getNumberOfColumn', 'getColspan'));
 
         $row->expects($this->atLeastOnce())
             ->method('getChildren')
@@ -287,11 +287,44 @@ class TableTest extends TestCase
         $cell->expects($this->atLeastOnce())
              ->method('getNumberOfColumn')
              ->will($this->returnValue(0));
-
+        $cell->expects($this->atLeastOnce())
+             ->method('getColspan')
+             ->will($this->returnValue($colspan));
 
         $this->table->add($row);
 
-        $this->assertEquals(array($cellWidth), $this->table->getWidthsOfColumns());
+        $this->assertEquals($expectedColumnsWidth, $this->table->getWidthsOfColumns());
+    }
+    
+    public function setColumnsWidthsWhenRowHasBeenAddedProvider()
+    {
+        return array(
+            array(120, 1, array(120)),
+            array('70%', 1, array('70%')),
+            array('70%', 2, array('35%', '35%')),
+        );
+    }
+    
+    /**
+     * @test
+     * @dataProvider convertColumnWidthsFromRelativeToAbsoluteProvider
+     */    
+    public function convertColumnWidthsFromRelativeToAbsolute($tableWidth, $actualWidthOfColumns, $expectedWidthOfColumns)
+    {
+        $this->table->setWidth($tableWidth);
+        $this->invokeMethod($this->table, 'setWidthsOfColumns', array($actualWidthOfColumns));
+        
+        $this->table->convertRelativeWidthsOfColumns();
+        
+        $this->assertEquals($expectedWidthOfColumns, $this->table->getWidthsOfColumns());
+    }
+    
+    public function convertColumnWidthsFromRelativeToAbsoluteProvider()
+    {
+        return array(
+            array(100, array(100), array(100)),
+            array(200, array('25%', '25%'), array(50, 50)),
+        );
     }
 
     /**

@@ -9,6 +9,7 @@ class TableColumnFormatter extends BaseFormatter
 {
     public function format(Glyph $glyph, Document $document)
     {
+        $glyph->convertRelativeWidthsOfColumns();
         $glyph->reduceColumnsWidthsByMargins();
         $columnsWidths = $glyph->getWidthsOfColumns();
 

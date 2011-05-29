@@ -4,6 +4,7 @@ namespace PHPPdf\Formatter;
 
 use PHPPdf\Formatter\BaseFormatter,
     PHPPdf\Glyph as Glyphs,
+    PHPPdf\Util,
     PHPPdf\Document;
 
 /**
@@ -40,12 +41,7 @@ class ConvertAttributesFormatter extends BaseFormatter
 
     private function convertFromPercentageValue($value, $percent)
     {
-        if(strpos($percent, '%') !== false)
-        {
-            $percent = (double) $percent;
-            $percent = $value*$percent / 100;
-        }
-        return $percent;
+        return Util::convertFromPercentageValue($percent, $value);
     }
 
     private function convertAutoMargins(Glyphs\Glyph $glyph)

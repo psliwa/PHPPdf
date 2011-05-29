@@ -24,7 +24,7 @@ class TableColumnFormatterTest extends TestCase
      */
     public function spreadEventlyColumnsWidth(array $cellsInRowsWidths, array $columnsWidths, $tableWidth)
     {
-        $table = $this->getMock('PHPPdf\Glyph\Table', array('reduceColumnsWidthsByMargins', 'getWidthsOfColumns', 'getChildren', 'getWidth', 'getNumberOfColumns', 'getMarginsLeftOfColumns', 'getMarginsRightOfColumns'));
+        $table = $this->getMock('PHPPdf\Glyph\Table', array('reduceColumnsWidthsByMargins', 'getWidthsOfColumns', 'getChildren', 'getWidth', 'getNumberOfColumns', 'getMarginsLeftOfColumns', 'getMarginsRightOfColumns', 'convertRelativeWidthsOfColumns'));
         $totalColumnsWidth = array_sum($columnsWidths);
         $numberOfColumns = count($columnsWidths);
         $enlargeColumnWidth = ($tableWidth - $totalColumnsWidth)/$numberOfColumns;
@@ -51,7 +51,12 @@ class TableColumnFormatterTest extends TestCase
         }
 
         $table->expects($this->once())
+              ->id('convertColumns')
+              ->method('convertRelativeWidthsOfColumns');
+
+        $table->expects($this->once())
               ->id('reduceColumns')
+              ->after('convertColumns')
               ->method('reduceColumnsWidthsByMargins');
 
         $table->expects($this->atLeastOnce())

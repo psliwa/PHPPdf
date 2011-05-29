@@ -1,8 +1,11 @@
 <?php
 
-use PHPPdf\Formatter\TableFormatter;
-use PHPPdf\Document;
-use PHPPdf\Util\Boundary;
+use PHPPdf\Formatter\TableFormatter,
+    PHPPdf\Document,
+    PHPPdf\Util\Boundary,
+    PHPPdf\Glyph\Table\Row,
+    PHPPdf\Glyph\Table,
+    PHPPdf\Glyph\Table\Cell;
 
 class TableFormatterTest extends TestCase
 {

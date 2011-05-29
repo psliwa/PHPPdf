@@ -4,6 +4,7 @@ namespace PHPPdf\Formatter;
 
 use PHPPdf\Glyph\Glyph,
     PHPPdf\Document,
+    PHPPdf\Util,
     PHPPdf\Glyph\Table;
 
 /**
@@ -14,12 +15,12 @@ class TableFormatter extends BaseFormatter
     public function format(Glyph $glyph, Document $document)
     {
         $widthsOfColumns = $glyph->getWidthsOfColumns();
+        $tableWidth = $glyph->getWidth();      
 
         $marginsLeft = $glyph->getMarginsLeftOfColumns();
         $marginsRight = $glyph->getMarginsRightOfColumns();
 
         $minWidthsOfColumns = $glyph->getMinWidthsOfColumns();
-        $tableWidth = $glyph->getWidth();
         $totalWidth = array_sum($widthsOfColumns);
         $totalMargins = array_sum($marginsLeft) + array_sum($marginsRight);
 
@@ -62,6 +63,14 @@ class TableFormatter extends BaseFormatter
                 }
 
                 $currentWidth = $cell->getWidth();
+                $currentWidthFromRelativeValue = Util::convertFromPercentageValue($currentWidth, $tableWidth);
+                
+                if($currentWidthFromRelativeValue !== $currentWidth)
+                {
+                    $cell->setWidth($currentWidthFromRelativeValue);
+                    $currentWidth = $currentWidthFromRelativeValue;
+                }
+                
                 $diff = $newWidth - $currentWidth;
 
                 $minWidth = $cell->getMinWidth();

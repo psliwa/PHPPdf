@@ -46,7 +46,14 @@ class Table extends Container implements Listener
         $columnNumber = $glyph->getNumberOfColumn();
         $colspan = $glyph->getAttribute('colspan');
 
+        $isWidthRelative = strpos($width, '%') !== false;
+        
         $widthPerColumn = $width / $colspan;
+        
+        if($isWidthRelative)
+        {
+            $widthPerColumn .= '%';
+        }
 
         for($i=0; $i<$colspan; $i++)
         {
@@ -126,6 +133,14 @@ class Table extends Container implements Listener
     private function setWidthsOfColumns($widthsOfColumns)
     {
         $this->widthsOfColumns = $widthsOfColumns;
+    }
+    
+    public function convertRelativeWidthsOfColumns()
+    {
+        $tableWidth = $this->getWidth();
+        array_walk($this->widthsOfColumns, function(&$width, $key) use($tableWidth){
+            $width = \PHPPdf\Util::convertFromPercentageValue($width, $tableWidth);
+        });
     }
 
     public function getNumberOfColumns()
