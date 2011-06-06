@@ -23,20 +23,9 @@ class ConvertAttributesFormatter extends BaseFormatter
     }
 
     private function convertPercentageDimensions(Glyphs\Glyph $glyph)
-    {
-        $parent = $glyph->getParent();
-
-        if($parent !== null)
-        {
-            $parentWidth = $parent->getWidthWithoutPaddings();
-            $parentHeight = $parent->getHeightWithoutPaddings();
-
-            $width = $glyph->getWidth();
-            $height = $glyph->getHeight();
-
-            $glyph->setWidth($this->convertFromPercentageValue($parentWidth, $width));
-            $glyph->setHeight($this->convertFromPercentageValue($parentHeight, $height));
-        }
+    {       
+        $glyph->convertScalarAttribute('width');
+        $glyph->convertScalarAttribute('height');
     }
 
     private function convertFromPercentageValue($value, $percent)

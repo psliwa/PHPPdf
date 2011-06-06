@@ -2,6 +2,11 @@
 
 namespace PHPPdf;
 
+/**
+ * Class with generic util functions
+ *
+ * @author Piotr Śliwa <peter.pl7@gmail.com>
+ */
 final class Util
 {
     private function __construct()

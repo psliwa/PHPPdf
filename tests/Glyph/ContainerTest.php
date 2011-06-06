@@ -85,8 +85,8 @@ class ContainerTest extends TestCase
             $this->glyph->add($child);
         }
 
-        $this->glyph->setPaddingLeft($paddingLeft);
-        $this->glyph->setPaddingRight($paddingRight);
+        $this->glyph->setAttribute('padding-left', $paddingLeft);
+        $this->glyph->setAttribute('padding-right', $paddingRight);
         $minWidth = max($childrenMinWidths) + $paddingLeft + $paddingRight;
 
         $this->assertEquals($minWidth, $this->glyph->getMinWidth());

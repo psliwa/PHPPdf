@@ -185,11 +185,11 @@ class FloatFormatterTest extends PHPUnit_Framework_TestCase
                 array(0, 480, 80, 20), 'right'
         );
 
-        $containers[1]->setPaddingTop(7);
-        $containers[1]->setMarginBottom(15);
+        $containers[1]->setAttribute('padding-top', 7);
+        $containers[1]->setAttribute('margin-bottom', 15);
 
-        $containers[2]->setPaddingTop(10);
-        $containers[2]->setMarginBottom(15);
+        $containers[2]->setAttribute('padding-top', 10);
+        $containers[2]->setAttribute('margin-bottom', 15);
 
         $this->formatter->format($containers[0], $this->document);
 
@@ -223,7 +223,7 @@ class FloatFormatterTest extends PHPUnit_Framework_TestCase
                 array(0, 500, 80, 20), 'right'
         );
 
-        $containers[1]->setPaddingRight(20);
+        $containers[1]->setAttribute('padding-right', 20);
 
         $this->formatter->format($containers[0], $this->document);
 

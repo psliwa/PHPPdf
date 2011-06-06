@@ -70,7 +70,7 @@ class ConvertAttributesFormatterTest extends PHPUnit_Framework_TestCase
 
         $this->formatter->format($glyph, $this->document);
 
-        $this->assertTrue($glyph->getColor() instanceof Zend_Pdf_Color);
+        $this->assertTrue($glyph->getAttribute('color') instanceof Zend_Pdf_Color);
     }
 
     /**

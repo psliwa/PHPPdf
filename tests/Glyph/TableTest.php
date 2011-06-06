@@ -46,9 +46,9 @@ class TableTest extends TestCase
     public function rowsAndCellsAttributes()
     {
         $height = 40;
-        $this->table->setRowHeight($height);
+        $this->table->setAttribute('row-height', $height);
         
-        $this->assertEquals($height, $this->table->getRowHeight());
+        $this->assertEquals($height, $this->table->getAttribute('row-height'));
     }
     
     /**

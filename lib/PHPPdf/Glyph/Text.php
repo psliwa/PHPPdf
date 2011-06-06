@@ -140,7 +140,7 @@ class Text extends AbstractGlyph
 
     protected function doSplit($height)
     {
-        $lineHeight = $this->getLineHeight();
+        $lineHeight = $this->getAttribute('line-height');
         $lineSplit = (int) ($height / $lineHeight);
 
         $clone = null;
@@ -160,11 +160,11 @@ class Text extends AbstractGlyph
 
             $clone = $this->copy();
 
-            $this->setPaddingBottom(0);
-            $this->setMarginBottom(0);
+            $this->setAttribute('padding-bottom', 0);
+            $this->setAttribute('margin-bottom', 0);
 
-            $clone->setPaddingTop(0);
-            $clone->setMarginTop(0);
+            $clone->setAttribute('padding-top', 0);
+            $clone->setAttribute('margin-top', 0);
 
             $clone->setLineSizes(\array_values($lineSizesForClone));
             $clone->setWordsInRows(\array_values($wordsInRowsForClone));
@@ -180,10 +180,10 @@ class Text extends AbstractGlyph
 
     public function reorganize(Point $leftTopCornerPoint)
     {
-        $height = $this->getLineHeight() * count($this->getLineSizes()) + $this->getPaddingTop() + $this->getPaddingBottom();
+        $height = $this->getAttribute('line-height') * count($this->getLineSizes()) + $this->getAttribute('padding-top') + $this->getAttribute('padding-bottom');
         if($this->getDisplay() === self::DISPLAY_INLINE)
         {
-            $width = \max($this->getLineSizes()) + $this->getPaddingLeft() + $this->getPaddingRight();
+            $width = \max($this->getLineSizes()) + $this->getAttribute('padding-left') + $this->getAttribute('padding-right');
         }
         else
         {

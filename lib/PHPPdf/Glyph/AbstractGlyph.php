@@ -885,7 +885,7 @@ abstract class AbstractGlyph implements Glyph, \ArrayAccess, \Serializable
      */
     public function split($height)
     {
-        if(!$this->getSplittable() || $height <= 0 || $height >= $this->getHeight())
+        if(!$this->getAttribute('splittable') || $height <= 0 || $height >= $this->getHeight())
         {
             return null;
         }
@@ -946,58 +946,21 @@ abstract class AbstractGlyph implements Glyph, \ArrayAccess, \Serializable
     public function removeAll()
     {
     }
-
-    /**
-     * @todo remove
-     * 
-     * @param string $method Method name
-     * @param array $arguments Method arguments
-     * @return mixed
-     * @throws \BadMethodCallException Attribute and method doesn\' exist
-     */
-    public function __call($method, array $arguments)
+    
+    public function convertScalarAttribute($name, $parentValue = null)
     {
-        $causedException = null;
-        try
+        if($parentValue === null && ($parent = $this->getParent()))
         {
-            $prefix = substr($method, 0, 3);
-            if(in_array($prefix, array('get', 'set')))
-            {
-                $attributeNameParts = $this->uncamelize(substr($method, 3));
-                $attributeName = implode('-', $attributeNameParts);
-
-                if($prefix === 'get')
-                {
-                    return $this->getAttribute($attributeName);
-                }
-                else
-                {
-                    return $this->setAttribute($attributeName, current($arguments));
-                }
-            }
+            $parentValue = $this->getParent()->getAttribute($name);
         }
-        catch(\InvalidArgumentException $e)
+        
+        $potentiallyRelativeValue = $this->getAttribute($name);
+        
+        $absoluteValue = \PHPPdf\Util::convertFromPercentageValue($potentiallyRelativeValue, $parentValue);
+        if($absoluteValue !== $potentiallyRelativeValue)
         {
-            $causedException = $e;
+            $this->setAttribute($name, $absoluteValue);
         }
-
-        throw new \BadMethodCallException(sprintf('Method %s::%s dosn\'t exist.', get_class($this), $method), 0, $causedException);
-    }
-
-    //TODO remove
-    private function uncamelize($string)
-    {
-        $pattern = '/[A-Z][a-z0-9]+/';
-
-        $matches = array();
-        if(preg_match_all($pattern, $string, $matches))
-        {
-            array_walk($matches[0], function(&$value){
-                $value = strtolower($value);
-            });
-        }
-
-        return (isset($matches[0]) ? $matches[0] : array());
     }
 
     /**

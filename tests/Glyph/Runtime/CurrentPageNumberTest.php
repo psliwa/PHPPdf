@@ -54,7 +54,7 @@ class CurrentPageNumberTest extends PHPUnit_Framework_TestCase
      */
     public function valueBeforeEvaluation()
     {
-        $dummyText = $this->glyph->getDummyText();
+        $dummyText = $this->glyph->getAttribute('dummy-text');
         $text = $this->glyph->getText();
 
         $this->assertNotEmpty($dummyText);

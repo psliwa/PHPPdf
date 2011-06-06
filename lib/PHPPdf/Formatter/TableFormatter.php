@@ -61,15 +61,9 @@ class TableFormatter extends BaseFormatter
                     $newWidth += $diffBetweenTableAndColumnsWidths;
                     $diffBetweenTableAndColumnsWidths = 0;
                 }
-
-                $currentWidth = $cell->getWidth();
-                $currentWidthFromRelativeValue = Util::convertFromPercentageValue($currentWidth, $tableWidth);
                 
-                if($currentWidthFromRelativeValue !== $currentWidth)
-                {
-                    $cell->setWidth($currentWidthFromRelativeValue);
-                    $currentWidth = $currentWidthFromRelativeValue;
-                }
+                $cell->convertScalarAttribute('width', $tableWidth);
+                $currentWidth = $cell->getWidth();
                 
                 $diff = $newWidth - $currentWidth;
 

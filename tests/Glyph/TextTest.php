@@ -37,7 +37,7 @@ class TextTest extends PHPUnit_Framework_TestCase
         $glyph->setWidth(3);
         $glyph->setHeight(96);
         $lineHeight = 12;
-        $glyph->setLineHeight($lineHeight);
+        $glyph->setAttribute('line-height', $lineHeight);
         $glyph->setWordsInRows(\explode(' ', $text));
 
         $glyph->getBoundary()->setNext(0, 200)

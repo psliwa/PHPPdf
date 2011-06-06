@@ -157,45 +157,9 @@ class AbstractGlyphTest extends TestCase
         try
         {
             $color = '#aaaaaa';
-            $result = $this->glyph->setColor($color);
+            $result = $this->glyph->setAttribute('color', $color);
             $this->assertEquals($this->glyph, $result);
-            $this->assertEquals($color, $this->glyph->getColor());
-        }
-        catch(BadMethodCallException $e)
-        {
-            $this->fail('exception should not be thrown');
-        }
-    }
-
-    /**
-     * @test
-     * @expectedException \BadMethodCallException
-     */
-    public function callUndefinedAttribute()
-    {
-        $this->glyph->getAttributeDosntExists();
-    }
-
-    /**
-     * @test
-     * @expectedException \BadMethodCallException
-     */
-    public function callUndefinedMethod()
-    {
-        $this->glyph->callUndefinedMethod();
-    }
-
-    /**
-     * @test
-     */
-    public function callLongAttribute()
-    {
-        try
-        {
-            $padding = 12;
-            $result = $this->glyph->setPaddingTop($padding);
-            $this->assertEquals($this->glyph, $result);
-            $this->assertEquals($padding, $this->glyph->getPaddingTop());
+            $this->assertEquals($color, $this->glyph->getAttribute('color'));
         }
         catch(BadMethodCallException $e)
         {
@@ -261,7 +225,7 @@ class AbstractGlyphTest extends TestCase
      */
     public function splitWhenSplitableAttributeIsOff()
     {
-        $this->glyph->setSplittable(false);
+        $this->glyph->setAttribute('splittable', false);
         $this->glyph->setWidth(100)->setHeight(200);
         $boundary = $this->glyph->getBoundary();
         $boundary->setNext(0, 100)
