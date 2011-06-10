@@ -6,7 +6,7 @@ use PHPPdf\Parser\DocumentParser,
     PHPPdf\Glyph\PageCollection,
     PHPPdf\Parser\StylesheetConstraint;
 
-class DocumentParserTest extends PHPUnit_Framework_TestCase
+class DocumentParserTest extends TestCase
 {
     private $parser;
 
@@ -358,6 +358,11 @@ XML;
     </tag>
 </pdf>
 XML;
+        $reader = new \XMLReader();
+        $reader->XML($xml);
+        $reader->read();
+        $reader->read();
+        
         $attributes = array('someName1' => 'someValue1', 'someName2' => 'someValue2');
 
         $attributeBagMock = $this->getAttributeBagMock($attributes);
@@ -374,8 +379,17 @@ XML;
 
         $parserMock = $this->getMock('PHPPdf\Parser\StylesheetParser', array('parse'));
         $parserMock->expects($this->once())
-                   ->method('parse')
-                   ->will($this->returnValue($constraintMock));
+                   ->method('parse') 
+                   //move after stylesheet close tag and return constraint                  
+                   ->will($this->returnCompose(array(
+                       $this->returnCallback(function() use($reader){                           
+                           while($reader->name != DocumentParser::STYLESHEET_TAG)
+                           {
+                               $reader->next();
+                           }
+                       }), $this->returnValue($constraintMock)
+                   )));
+
 
         $glyphMock= $this->createGlyphMock('PHPPdf\Glyph\Page', array('mergeEnhancementAttributes'));
         $this->addGlyphAttributesExpectations($glyphMock, $attributes, 1);
@@ -388,7 +402,7 @@ XML;
         $this->parser->setStylesheetParser($parserMock);
         $this->parser->setGlyphFactory($glyphFactoryMock);
 
-        $pageCollection = $this->parser->parse($xml);
+        $pageCollection = $this->parser->parse($reader);
     }
 
     private function getAttributeBagMock(array $attributes)
@@ -589,5 +603,29 @@ XML;
         $this->parser->setGlyphFactory($glyphFactoryMock);
 
         $this->parser->parse($xml);
+    }
+    
+    /**
+     * @test
+     * @dataProvider unknownTagProvider
+     * @expectedException \PHPPdf\Parser\Exception\ParseException
+     */
+    public function throwParseExceptionOnUnknownTag($unknownTag)
+    {
+        $xml = <<<XML
+<pdf>
+    <{$unknownTag} someAttribute="someValue"></{$unknownTag}>
+</pdf>
+XML;
+        $this->parser->parse($xml);
+    }
+    
+    public function unknownTagProvider()
+    {
+        return array(
+            array('some-tag'),
+            array('attribute'),
+            array('enhancement'),
+        );
     }
 }

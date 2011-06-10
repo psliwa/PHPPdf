@@ -21,4 +21,9 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
 
         return $method->invokeArgs($object, $args);
     }
+    
+    protected static function returnCompose(array $stubs)
+    {
+        return new PHPUnitExtension_Framework_MockObject_Stub_ComposeStub($stubs);
+    }
 }

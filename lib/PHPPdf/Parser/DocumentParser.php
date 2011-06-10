@@ -2,6 +2,8 @@
 
 namespace PHPPdf\Parser;
 
+use PHPPdf\Parser\Exception\ParseException;
+
 use PHPPdf\Glyph\Factory as GlyphFactory,
     PHPPdf\Glyph\PageCollection,
     PHPPdf\Glyph\Glyph,
@@ -36,7 +38,7 @@ class DocumentParser extends XmlParser
     public function __construct()
     {
         $factory = new GlyphFactory();        
-        $stylesheetParser = new StylesheetParser();
+        $stylesheetParser = new StylesheetParser(null, true);
         $enhancementFactory = new EnhancementFactory();
 
         $this->setGlyphFactory($factory);
@@ -165,7 +167,7 @@ class DocumentParser extends XmlParser
         {
             $this->parseStylesheet($reader, $parentGlyph);
         }
-        elseif($this->isntIgnoredTag($tag))
+        else
         {
             $this->parseGlyph($reader, $parentGlyph);
         }
@@ -226,8 +228,6 @@ class DocumentParser extends XmlParser
 
     private function parseGlyph(\XMLReader $reader, Glyph $parentGlyph)
     {
-        try
-        {
             $tag = $reader->name;
             $glyph = $this->createGlyph($reader);
 
@@ -257,11 +257,6 @@ class DocumentParser extends XmlParser
             {
                 $this->parseEndElement($reader);
             }
-        }
-        catch(\InvalidArgumentException $e)
-        {
-            throw new Exceptions\ParseException(sprintf('Tag "%s" in undefined.', $tag), 1, $e);
-        }
     }
 
     private function createGlyph(\XMLReader $reader)
@@ -281,10 +276,22 @@ class DocumentParser extends XmlParser
         }
         else
         {
-            $glyph = $this->getGlyphFactory()->create($tag);
+            $glyph = $this->createGlyphByTag($tag);            
         }
 
         return $glyph;
+    }
+    
+    private function createGlyphByTag($tag)
+    {
+        try
+        {
+            return $this->getGlyphFactory()->create($tag);
+        }
+        catch(\InvalidArgumentException $e)
+        {
+            throw new ParseException(sprintf('Unknown tag "%s".', $tag), 0, $e);
+        }
     }
 
     private function pushOnTagStack($tag, $class)

@@ -2,6 +2,8 @@
 
 namespace PHPPdf\Parser;
 
+use PHPPdf\Parser\Exception\ParseException;
+
 use PHPPdf\Parser\StylesheetConstraint,
     PHPPdf\Parser\Exception as Exceptions;
 
@@ -14,17 +16,24 @@ class StylesheetParser extends XmlParser
     const ATTRIBUTE_TAG = 'attribute';
     const ENHANCEMENT_TAG = 'enhancement';
     const ANY_TAG = 'any';
-
+    
+    private $throwsExceptionOnConstraintTag = false;
     private $root;
 
-    public function __construct(StylesheetConstraint $root = null)
+    public function __construct(StylesheetConstraint $root = null, $throwExceptionOnConstraintTag = false)
     {
         $this->setRoot($root);
+        $this->setThrowsExceptionOnConstraintTag($throwExceptionOnConstraintTag);
     }
 
     public function setRoot(StylesheetConstraint $root = null)
     {
         $this->root = $root;
+    }
+    
+    public function setThrowsExceptionOnConstraintTag($flag)
+    {
+        $this->throwsExceptionOnConstraintTag = (boolean) $flag;
     }
 
     /**
@@ -102,7 +111,12 @@ class StylesheetParser extends XmlParser
     }
 
     private function parseConstraint(\XMLReader $reader, $tag)
-    {       
+    {
+        if($this->throwsExceptionOnConstraintTag)
+        {
+            throw new ParseException(sprintf('Unknown tag "%s" in stylesheet section.', $tag));
+        }
+        
         $lastConstraint = $this->getLastElementFromStack();
 
         $constraint = new StylesheetConstraint();

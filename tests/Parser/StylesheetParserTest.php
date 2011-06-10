@@ -296,4 +296,41 @@ XML;
 
         $this->assertTrue($constraint === $resultConstraint);
     }
+    
+    /**
+     * @test
+     * @expectedException PHPPdf\Parser\Exception\ParseException
+     */
+    public function throwExceptionIfUnknownTahHasBeenEncountedInParserSimpleMode()
+    {
+        $xml = <<<XML
+<stylesheet>
+	<unknown-tag>
+		<attribute name="someName" value="value" />
+	</unknown-tag>
+</stylesheet>
+XML;
+
+        $this->parser->setThrowsExceptionOnConstraintTag(true);
+        
+        $this->parser->parse($xml);
+    }
+    
+    /**
+     * @test
+     */
+    public function parseFlatXmlStylesheetOnParserSimpleMode()
+    {
+        $xml = <<<XML
+<stylesheet>
+	<attribute name="someName" value="value" />
+</stylesheet>
+XML;
+
+        $this->parser->setThrowsExceptionOnConstraintTag(true);
+        
+        $resultConstraint = $this->parser->parse($xml);
+
+        $this->assertEquals(array('someName' => 'value'), $resultConstraint->getAttributeBag()->getAll());
+    }
 }

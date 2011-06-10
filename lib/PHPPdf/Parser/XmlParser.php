@@ -12,6 +12,7 @@ use PHPPdf\Parser\Exception as Exceptions;
 abstract class XmlParser implements Parser
 {
     private $stack = array();
+    private $xmlReaderProvidedFromOutside = false;
 
     public function parse($content)
     {
@@ -44,6 +45,11 @@ abstract class XmlParser implements Parser
         while(!$stopParsing && $reader->read());
 
         $this->stack = array();
+        
+        if(!$this->xmlReaderProvidedFromOutside)
+        {
+            $reader->close();            
+        }
 
         return $root;
     }
@@ -53,6 +59,7 @@ abstract class XmlParser implements Parser
         if($content instanceof \XMLReader)
         {
             $reader = $content;
+            $this->xmlReaderProvidedFromOutside = true;
         }
         else
         {
