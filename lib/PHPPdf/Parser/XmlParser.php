@@ -24,6 +24,7 @@ abstract class XmlParser implements Parser
         $stopParsing = false;
         do
         {
+           
             switch($reader->nodeType)
             {
                 case \XMLReader::ELEMENT:
@@ -38,6 +39,8 @@ abstract class XmlParser implements Parser
 
                     break;
                 case \XMLReader::TEXT:
+                case \XMLReader::ENTITY:
+                case \XMLReader::ENTITY_REF:
                     $this->parseText($reader);
                     break;
             }
@@ -50,8 +53,14 @@ abstract class XmlParser implements Parser
         {
             $reader->close();            
         }
+        
+        $this->reset();
 
         return $root;
+    }
+    
+    protected function reset()
+    {
     }
 
     private function getReader($content)
@@ -64,10 +73,15 @@ abstract class XmlParser implements Parser
         else
         {
             $reader = new \XMLReader();
+            
 
-            $reader->XML($content);
-
-            $reader->read();
+            $reader->XML($content, null, LIBXML_NOBLANKS | LIBXML_DTDLOAD);
+            $reader->setParserProperty(\XMLReader::SUBST_ENTITIES, true);
+ 
+            while($reader->nodeType !== \XMLReader::ELEMENT)
+            {
+                $reader->read();
+            }
 
             if($reader->name != static::ROOT_TAG)
             {
@@ -102,6 +116,11 @@ abstract class XmlParser implements Parser
     protected function &getLastElementFromStack()
     {
         return $this->stack[count($this->stack)-1];
+    }
+    
+    protected function &getFirstElementFromStack()
+    {
+        return $this->stack[0];
     }
 
     protected function pushOnStack(&$element)

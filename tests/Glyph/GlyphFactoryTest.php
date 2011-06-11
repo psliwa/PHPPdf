@@ -74,4 +74,32 @@ class GlyphFactoryTest extends PHPUnit_Framework_TestCase
 
         $this->assertEquals($this->factory->getPrototype($key), $unserializedFactory->getPrototype($key));
     }
+    
+    /**
+     * @test
+     */
+    public function invokeGlyphMethodOnCreation()
+    {
+        $key = 'key';
+        
+        $invokeMethodName = 'setMarginLeft';
+        $invokeMethodArg = 12;
+        $invokeMethodArgTag = 'tag';
+        
+        $prototype = $this->getMock('PHPPdf\Glyph\Container', array('copy'));
+        $product = $this->getMock('PHPPdf\Glyph\Container', array($invokeMethodName));
+        
+        $prototype->expects($this->once())
+                  ->method('copy')
+                  ->will($this->returnValue($product));
+                  
+        $product->expects($this->once())
+                ->method($invokeMethodName)
+                ->with($invokeMethodArg);                  
+        
+        $this->factory->addPrototype($key, $prototype, array($invokeMethodName => $invokeMethodArgTag));
+        $this->factory->addInvokeArg($invokeMethodArgTag, $invokeMethodArg);
+        
+        $this->assertTrue($product === $this->factory->create($key));        
+    }
 }

@@ -166,4 +166,21 @@ XML;
             $this->assertEquals(array('PHPPdf\Formatter\FloatFormatter'), $glyph->getFormattersNames());
         }
     }
+    
+    /**
+     * @test
+     */
+    public function setInvocationMethodsOnCreateForFactory()
+    {
+        $xml = <<<XML
+<glyphs>
+	<glyph name="tag" class="PHPPdf\Glyph\Container">
+		<invoke method="setMarginLeft" argId="marginLeft" />
+	</glyph>
+</glyphs>
+XML;
+        $glyphFactory = $this->parser->parse($xml);
+        
+        $this->assertEquals(array('tag' => array('setMarginLeft' => 'marginLeft')), $glyphFactory->invocationsMethodsOnCreate());
+    }
 }

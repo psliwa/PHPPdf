@@ -2,6 +2,8 @@
 
 namespace PHPPdf\Parser;
 
+use PHPPdf\Glyph\TextTransformator;
+
 use PHPPdf\Parser\DocumentParser,
     PHPPdf\Document,
     PHPPdf\Parser\StylesheetParser,
@@ -103,6 +105,8 @@ class Facade
 
         $stylesheetConstraint = $this->retrieveStylesheetConstraint($stylesheetXml);
 
+        $relativePathToResources = str_replace('\\', '/', realpath(__DIR__.'/../Resources'));
+        $documentXml = str_replace('%resources%', $relativePathToResources, $documentXml);
         $pageCollection = $this->getDocumentParser()->parse($documentXml, $stylesheetConstraint);
         $this->getDocument()->draw($pageCollection);
 

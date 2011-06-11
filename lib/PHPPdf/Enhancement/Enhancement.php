@@ -19,7 +19,7 @@ abstract class Enhancement
 
     public function __construct($color = null, $radius = null)
     {
-        if($color !== null && !$color instanceof Zend_Pdf_Color)
+        if($color !== null && !$color instanceof \Zend_Pdf_Color)
         {
             $color = \Zend_Pdf_Color_Html::color($color);
         }

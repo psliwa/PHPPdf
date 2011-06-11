@@ -125,4 +125,23 @@ class TextTest extends PHPUnit_Framework_TestCase
             ),
         );
     }
+    
+    /**
+     * @test
+     */    
+    public function useTextTransformatorToSettingText()
+    {
+        $textStub = 'some text';
+        
+        $transformator = $this->getMock('PHPPdf\Glyph\TextTransformator', array('transform'));
+        $transformator->expects($this->once())
+                      ->method('transform')
+                      ->will($this->returnValue($textStub));
+        
+        $this->text->setTextTransformator($transformator);
+        
+        $this->text->setText('ac');
+        
+        $this->assertEquals($textStub, $this->text->getText());
+    }
 }

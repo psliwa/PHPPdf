@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pdf SYSTEM "%resources%/dtd/doctype.dtd">
+<pdf>
+	<dynamic-page>
+		<div>
+			<p>Entities from html are working if doctype is set: &amp;, &bull;.</p> 
+			<p>Placeholder &percent;resources&percent; in doctype is replaced by absolute path to Resource directory.</p>
+		</div>
+	</dynamic-page>
+</pdf>

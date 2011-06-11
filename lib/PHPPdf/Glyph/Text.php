@@ -12,15 +12,16 @@ use PHPPdf\Glyph\AbstractGlyph,
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
 class Text extends AbstractGlyph
-{
+{   
     private $text;
     private $wordsInRows = array();
     private $lineSizes = array();
+    private $textTransformator = null;
 
     public function __construct($text = '', array $attributes = array())
     {
         $this->setText($text);
-
+        
         parent::__construct($attributes);
     }
 
@@ -31,9 +32,19 @@ class Text extends AbstractGlyph
         $this->setAttribute('display', self::DISPLAY_INLINE);
         $this->setAttribute('text-align', null);
     }
+    
+    public function setTextTransformator(TextTransformator $transformator)
+    {
+        $this->textTransformator = $transformator;
+    }
 
     public function setText($text)
     {
+        if($this->textTransformator !== null)
+        {
+            $text = $this->textTransformator->transform($text);
+        }
+        
         $this->text = (string) $text;
     }
 

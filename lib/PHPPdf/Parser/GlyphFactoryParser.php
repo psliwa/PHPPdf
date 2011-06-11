@@ -15,13 +15,21 @@ class GlyphFactoryParser extends XmlParser
     const STYLESHEET_TAG = 'stylesheet';
     const FORMATTERS_TAG = 'formatters';
     const FORMATTER_TAG = 'formatter';
+    const INVOKE_TAG = 'invoke';
 
     private $stylesheetParser;
     private $isFormattersParsing = false;
+    
+    private $lastTag = null;
 
     public function  __construct()
     {
         $this->stylesheetParser = new StylesheetParser();
+    }
+    
+    protected function reset()
+    {
+        $this->lastTag = null;
     }
 
     public function getStylesheetParser()
@@ -57,6 +65,10 @@ class GlyphFactoryParser extends XmlParser
         {
             $this->parseFormatter($reader);
         }
+        elseif($reader->name === self::INVOKE_TAG)
+        {
+            $this->parseInvoke($reader);
+        }
     }
 
     private function parseGlyph(\XMLReader $reader)
@@ -75,6 +87,8 @@ class GlyphFactoryParser extends XmlParser
         $root->addPrototype($name, $glyph);
 
         $this->pushOnStack($glyph);
+        
+        $this->lastTag = $name;
     }
 
     private function parseStylesheet(\XMLReader $reader)
@@ -105,6 +119,15 @@ class GlyphFactoryParser extends XmlParser
         $formatterClassName = $reader->getAttribute('class');
 
         $glyph->addFormatterName($formatterClassName);
+    }
+    
+    private function parseInvoke(\XMLReader $reader)
+    {
+        $method = $reader->getAttribute('method');
+        $argId = $reader->getAttribute('argId');
+        
+        $factory = $this->getFirstElementFromStack();
+        $factory->addInvocationsMethodsOnCreate($this->lastTag, $method, $argId);
     }
 
     protected function parseEndElement(\XMLReader $reader)

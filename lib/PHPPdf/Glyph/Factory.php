@@ -10,12 +10,45 @@ namespace PHPPdf\Glyph;
 class Factory implements \Serializable
 {
     private $prototypes = array();
+    private $invocationsMethodsOnCreate = array();
+    private $invokeArgs = array();
 
-    public function addPrototype($name, Glyph $glyph)
+    public function addPrototype($name, Glyph $glyph, array $invocationsMethodsOnCreate = array())
     {
         $name = (string) $name;
 
         $this->prototypes[$name] = $glyph;
+        $this->invocationsMethodsOnCreate[$name] = $invocationsMethodsOnCreate;
+    }
+    
+    /**
+     * Adds method and argument tag to invoke after creating
+     * 
+     * @see create()
+     * 
+     * @param string $name Name of prototype
+     * @param string $invocationMethodName Name of setter method
+     * @param string $invocationMethodArgId Argument id, {@see addInvokeArg()}
+     */
+    public function addInvocationsMethodsOnCreate($name, $invocationMethodName, $invocationMethodArgId)
+    {
+        $this->invocationsMethodsOnCreate[$name][$invocationMethodName] = $invocationMethodArgId;
+    }
+    
+    /**
+     * Adds argument witch can be used as argument of setter method on factory products
+     * 
+     * @param string $tag Tag of argument
+     * @param mixed $value Value of argument
+     */
+    public function addInvokeArg($tag, $value)
+    {
+        $this->invokeArgs[$tag] = $value;
+    }
+    
+    public function invocationsMethodsOnCreate()
+    {
+        return $this->invocationsMethodsOnCreate;
     }
 
     /**
@@ -29,7 +62,18 @@ class Factory implements \Serializable
     {
         $prototype = $this->getPrototype($name);
 
-        return $prototype->copy();
+        $product = $prototype->copy();
+        
+        foreach($this->invocationsMethodsOnCreate[$name] as $methodName => $argTag)
+        {
+            if(isset($this->invokeArgs[$argTag]))
+            {
+                $arg = $this->invokeArgs[$argTag];
+                $product->$methodName($arg);
+            }
+        }
+        
+        return $product;
     }
 
     /**
@@ -58,16 +102,23 @@ class Factory implements \Serializable
 
     public function serialize()
     {
-        return serialize($this->prototypes);
+        return serialize(array(
+            'prototypes' => $this->prototypes,
+            'invocationsMethodsOnCreate' => $this->invocationsMethodsOnCreate
+        ));
     }
 
     public function unserialize($serialized)
     {
-        $prototypes = unserialize($serialized);
+        $data = unserialize($serialized);
+        
+        $prototypes = $data['prototypes'];
+        $invocationsMethodsOnCreate = $data['invocationsMethodsOnCreate'];
 
         foreach($prototypes as $name => $prototype)
         {
-            $this->addPrototype($name, $prototype);
-        }
+            $invocationsMethods = isset($invocationsMethodsOnCreate[$name]) ? $invocationsMethodsOnCreate[$name] : array();
+            $this->addPrototype($name, $prototype, $invocationsMethods);
+        }    
     }
 }
