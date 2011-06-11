@@ -398,4 +398,40 @@ class AbstractGlyphTest extends TestCase
 
         $this->assertEquals('100%', $this->glyph->getRelativeWidth());
     }
+    
+    /**
+     * @test
+     */
+    public function convertBooleanAttributes()
+    {
+        $testData = array(
+            array('page-break', 'true', true),
+            array('page-break', '1', true),
+            array('page-break', 'yes', true),
+            array('page-break', 'false', false),
+            array('page-break', '0', false),
+            array('page-break', 'no', false),
+            array('static-size', 'true', true),
+            array('static-size', '1', true),
+            array('static-size', 'yes', true),
+            array('static-size', 'false', false),
+            array('static-size', '0', false),
+            array('static-size', 'no', false),
+            array('splittable', 'true', true),
+            array('splittable', '1', true),
+            array('splittable', 'yes', true),
+            array('splittable', 'false', false),
+            array('splittable', '0', false),
+            array('splittable', 'no', false),
+        );
+        
+        foreach($testData as $data)
+        {
+            list($attributeName, $attributeValue, $expectedValue) = $data;
+            
+            $this->glyph->setAttribute($attributeName, $attributeValue);
+        
+            $this->assertTrue($expectedValue === $this->glyph->getAttribute($attributeName));
+        }    
+    }
 }

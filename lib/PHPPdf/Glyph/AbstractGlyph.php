@@ -71,7 +71,7 @@ abstract class AbstractGlyph implements Glyph, \ArrayAccess, \Serializable
     {
         //TODO refactoring
         $attributeWithGetters = array('width', 'height', 'margin-left', 'margin-right', 'margin-top', 'margin-bottom', 'padding-left', 'padding-right', 'padding-top', 'padding-bottom', 'display', 'font-type', 'float');
-        $attributeWithSetters = array('width', 'height', 'margin-left', 'margin-right', 'margin-top', 'margin-bottom', 'display', 'font-type', 'float', 'static-size', 'font-size', 'margin', 'padding');
+        $attributeWithSetters = array('width', 'height', 'margin-left', 'margin-right', 'margin-top', 'margin-bottom', 'display', 'font-type', 'float', 'static-size', 'font-size', 'margin', 'padding', 'page-break', 'splittable');
         
         $attributeWithGetters = array_flip($attributeWithGetters);
         array_walk($attributeWithGetters, function(&$value, $key){
@@ -635,9 +635,29 @@ abstract class AbstractGlyph implements Glyph, \ArrayAccess, \Serializable
         $this->setAttributeDirectly($name, $default);
     }
     
-    public function setStaticSize($size)
+    public function setSplittable($flag)
     {
-        $this->setAttributeDirectly('static-size', $size);
+        $flag = $this->filterBooleanValue($flag);
+        $this->setAttributeDirectly('splittable', $flag);
+    }
+    
+    public function setStaticSize($flag)
+    {
+        $flag = $this->filterBooleanValue($flag);
+        $this->setAttributeDirectly('static-size', $flag);
+    }
+    
+    public function setPageBreak($flag)
+    {
+        $flag = $this->filterBooleanValue($flag);
+        $this->setAttributeDirectly('page-break', $flag);
+    }
+    
+    final protected function filterBooleanValue($value)
+    {
+        $knownValues = array('true' => true, 'false' => false, 1 => true, 0 => false, '1' => true, '0' => false, 'yes' => true, 'no' => false);
+
+        return isset($knownValues[$value]) ? $knownValues[$value] : (boolean) $value;
     }
 
     /**

@@ -98,7 +98,7 @@ XML;
 </glyphs>
 XML;
 
-        $attributes = array('display' => 'inline', 'splittable' => '0');
+        $attributes = array('display' => 'inline', 'splittable' => false);
         $enhancements = array('name' => array('name' => 'value'));
         $attributeBagMock = $this->getMock('PHPPdf\Util\AttributeBag', array('getAll'));
         $attributeBagMock->expects($this->once())
