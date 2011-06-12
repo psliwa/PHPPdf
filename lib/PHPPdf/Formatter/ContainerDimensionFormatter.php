@@ -47,7 +47,7 @@ class ContainerDimensionFormatter extends BaseFormatter
             $glyph->setHeight($realHeight);
         }
 
-        if($display === Glyphs\AbstractGlyph::DISPLAY_INLINE || $realWidth > $glyph->getWidth())
+        if($display === Glyphs\Glyph::DISPLAY_INLINE || $realWidth > $glyph->getWidth())
         {
             $glyph->setWidth($realWidth);
         }

@@ -59,7 +59,7 @@ class FirstPointPositionFormatter extends BaseFormatter
 
     private function isGlyphInSameRowAsPreviousSibling(Glyph $glyph, Glyph $previousSibling)
     {
-        $oneOfGlyphsIsInline = $previousSibling->getAttribute('display') === Glyphs\AbstractGlyph::DISPLAY_INLINE && $glyph->getDisplay() === Glyphs\AbstractGlyph::DISPLAY_INLINE;
+        $oneOfGlyphsIsInline = $previousSibling->getAttribute('display') === Glyphs\Glyph::DISPLAY_INLINE && $glyph->getDisplay() === Glyphs\Glyph::DISPLAY_INLINE;
 
         $parent = $glyph->getParent();
         $parentBoundary = $parent->getBoundary();
@@ -68,7 +68,7 @@ class FirstPointPositionFormatter extends BaseFormatter
         $endX = $prevX + $previousSibling->getMarginRight() + $glyph->getMarginLeft() + $glyph->getWidth();
         $parentEndX = $parentBoundary->getFirstPoint()->getX() + $parent->getWidth();
 
-        $rowIsOverflowed = !$glyph instanceof Glyphs\Text && $parentEndX < $endX && $previousSibling->getFloat() !== Glyphs\AbstractGlyph::FLOAT_RIGHT;
+        $rowIsOverflowed = !$glyph instanceof Glyphs\Text && $parentEndX < $endX && $previousSibling->getFloat() !== Glyphs\Glyph::FLOAT_RIGHT;
 
         return !$rowIsOverflowed && $oneOfGlyphsIsInline;
     }

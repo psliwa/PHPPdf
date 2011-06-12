@@ -1,7 +1,7 @@
 <?php
 
 use PHPPdf\Glyph\Table\Cell;
-use PHPPdf\Glyph\AbstractGlyph;
+use PHPPdf\Glyph\Glyph;
 use PHPPdf\Glyph\Table;
 
 class CellTest extends PHPUnit_Framework_TestCase
@@ -18,9 +18,9 @@ class CellTest extends PHPUnit_Framework_TestCase
      */
     public function unmodifableFloat()
     {
-        $this->assertEquals(AbstractGlyph::FLOAT_LEFT, $this->cell->getFloat());
-        $this->cell->setFloat(AbstractGlyph::FLOAT_RIGHT);
-        $this->assertEquals(AbstractGlyph::FLOAT_LEFT, $this->cell->getFloat());
+        $this->assertEquals(Glyph::FLOAT_LEFT, $this->cell->getFloat());
+        $this->cell->setFloat(Glyph::FLOAT_RIGHT);
+        $this->assertEquals(Glyph::FLOAT_LEFT, $this->cell->getFloat());
     }
 
     /**

@@ -2,7 +2,7 @@
 
 use PHPPdf\Document,
     PHPPdf\Util\Point,
-    PHPPdf\Glyph\AbstractGlyph,
+    PHPPdf\Glyph\Glyph,
     PHPPdf\Glyph\Container,
     PHPPdf\Glyph\Page,
     PHPPdf\Formatter\StandardPositionFormatter;

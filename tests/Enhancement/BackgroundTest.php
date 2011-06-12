@@ -123,7 +123,7 @@ class BackgroundTest extends TestCase
     {
         $boundaryMock = $this->getBoundaryStub($x, $y, $width, $height);
 
-        $glyphMock = $this->getMock('PHPPdf\Glyph\AbstractGlyph', array('getBoundary', 'getWidth', 'getHeight'));
+        $glyphMock = $this->getMock('PHPPdf\Glyph\Glyph', array('getBoundary', 'getWidth', 'getHeight'));
         $glyphMock->expects($this->atLeastOnce())
                   ->method('getBoundary')
                   ->will($this->returnValue($boundaryMock));

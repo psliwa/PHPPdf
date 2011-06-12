@@ -2,10 +2,10 @@
 
 use PHPPdf\Document,
     PHPPdf\Util\Point,
-    PHPPdf\Glyph\AbstractGlyph,
+    PHPPdf\Glyph\Glyph,
     PHPPdf\Glyph\Container;
 
-class StubGlyph extends AbstractGlyph
+class StubGlyph extends Glyph
 {
     public function initialize()
     {
@@ -24,7 +24,7 @@ class StubComposeGlyph extends Container
 {
 }
 
-class AbstractGlyphTest extends TestCase
+class GlyphTest extends TestCase
 {
     private $glyph;
 

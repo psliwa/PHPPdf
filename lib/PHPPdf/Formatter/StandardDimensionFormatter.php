@@ -17,7 +17,7 @@ class StandardDimensionFormatter extends BaseFormatter
     {
         $parent = $glyph->getParent();
 
-        if($glyph->getWidth() === null && $glyph->getAttribute('display') === Glyphs\AbstractGlyph::DISPLAY_BLOCK && $glyph->getFloat() === Glyphs\AbstractGlyph::FLOAT_NONE)
+        if($glyph->getWidth() === null && $glyph->getAttribute('display') === Glyphs\Glyph::DISPLAY_BLOCK && $glyph->getFloat() === Glyphs\Glyph::FLOAT_NONE)
         {
             $parentWidth = $parent->getWidthWithoutPaddings();
 
@@ -27,7 +27,7 @@ class StandardDimensionFormatter extends BaseFormatter
             $glyph->setWidth($parentWidth - ($marginLeft + $marginRight));
             $glyph->setRelativeWidth('100%');
         }
-        elseif($glyph->getAttribute('display') === Glyphs\AbstractGlyph::DISPLAY_INLINE)
+        elseif($glyph->getAttribute('display') === Glyphs\Glyph::DISPLAY_INLINE)
         {
             $glyph->setWidth(0);
         }

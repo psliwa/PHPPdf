@@ -3,7 +3,7 @@
 use PHPPdf\Document,
     PHPPdf\Glyph\Container,
     PHPPdf\Util\Point,
-    PHPPdf\Glyph\AbstractGlyph;
+    PHPPdf\Glyph\Glyph;
 
 class ContainerTest extends TestCase
 {

@@ -54,13 +54,13 @@ class TextDimensionFormatter extends BaseFormatter
 
         $display = $glyph->getAttribute('display');
 
-        if($display === Glyphs\AbstractGlyph::DISPLAY_BLOCK)
+        if($display === Glyphs\Glyph::DISPLAY_BLOCK)
         {
             $glyph->setWidth($glyph->getWidth());
         }
 
         $maxLineSize = \max($lineSizes);
-        if($display === Glyphs\AbstractGlyph::DISPLAY_INLINE || $maxLineSize > $glyph->getWidth())
+        if($display === Glyphs\Glyph::DISPLAY_INLINE || $maxLineSize > $glyph->getWidth())
         {
             $glyph->setWidth($maxLineSize);
             $padding = $glyph->getPaddingLeft() + $glyph->getPaddingRight();
@@ -90,12 +90,12 @@ class TextDimensionFormatter extends BaseFormatter
 
         $blockParent = $parent;
 
-        while($blockParent && $blockParent->getDisplay() !== Glyphs\AbstractGlyph::DISPLAY_BLOCK)
+        while($blockParent && $blockParent->getDisplay() !== Glyphs\Glyph::DISPLAY_BLOCK)
         {
             $blockParent = $blockParent->getParent();
         }
 
-        $comparationWidth = $glyph->getAttribute('display') === Glyphs\AbstractGlyph::DISPLAY_BLOCK ? $glyph->getWidthWithoutPaddings() : ($blockParent->getWidthWithoutPaddings() - ($x - $parentX));
+        $comparationWidth = $glyph->getAttribute('display') === Glyphs\Glyph::DISPLAY_BLOCK ? $glyph->getWidthWithoutPaddings() : ($blockParent->getWidthWithoutPaddings() - ($x - $parentX));
 
         $lineSizes = array();
         $wordsInRows = array();
@@ -115,7 +115,7 @@ class TextDimensionFormatter extends BaseFormatter
 
                 $rowNumber++;
 
-                if($glyph->getAttribute('display') === Glyphs\AbstractGlyph::DISPLAY_INLINE)
+                if($glyph->getAttribute('display') === Glyphs\Glyph::DISPLAY_INLINE)
                 {
                     $comparationWidth = $glyph->getParent()->getWidth() - $glyph->getMarginLeft() - $glyph->getMarginRight();
                 }

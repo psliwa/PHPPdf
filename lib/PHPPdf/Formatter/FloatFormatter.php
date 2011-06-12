@@ -3,7 +3,6 @@
 namespace PHPPdf\Formatter;
 
 use PHPPdf\Glyph\Glyph,
-    PHPPdf\Glyph\AbstractGlyph,
     PHPPdf\Glyph\Text,
     PHPPdf\Document,
     PHPPdf\Util\Boundary;
@@ -53,7 +52,7 @@ class FloatFormatter extends BaseFormatter
                 {
                     $siblingY = $previousSibling->getDiagonalPoint()->getY();
                     $translateY = -($siblingY - $y - $previousSibling->getMarginBottom() - $child->getMarginTop() - $child->getPaddingTop());
-                    if($child->getDisplay() === AbstractGlyph::DISPLAY_INLINE && $previousSibling->getDisplay() === AbstractGlyph::DISPLAY_INLINE)
+                    if($child->getDisplay() === Glyph::DISPLAY_INLINE && $previousSibling->getDisplay() === Glyph::DISPLAY_INLINE)
                     {
                         $translateY -= $child instanceof Text ? $child->getLineHeight() : $child->getHeight();
                     }
@@ -97,7 +96,7 @@ class FloatFormatter extends BaseFormatter
 
     private function hasFloat(Glyph $glyph)
     {
-        return $glyph->getFloat() !== AbstractGlyph::FLOAT_NONE;
+        return $glyph->getFloat() !== Glyph::FLOAT_NONE;
     }
 
     private function getPreviousSiblingWithFloat(Glyph $glyph, $float)
@@ -110,7 +109,7 @@ class FloatFormatter extends BaseFormatter
             {
                 $floatedSibling = $siblings[$i];
             }
-            elseif($siblings[$i]->getFloat() === AbstractGlyph::FLOAT_NONE)
+            elseif($siblings[$i]->getFloat() === Glyph::FLOAT_NONE)
             {
                 $floatedSibling = null;
             }
@@ -127,7 +126,7 @@ class FloatFormatter extends BaseFormatter
         if($sibling)
         {
             $originalPreferredXCoord = $preferredXCoord;
-            if($glyph->getFloat() === AbstractGlyph::FLOAT_LEFT)
+            if($glyph->getFloat() === Glyph::FLOAT_LEFT)
             {
                 $preferredXCoord = $sibling->getDiagonalPoint()->getX() + $sibling->getMarginRight() + $glyph->getMarginLeft() + $glyph->getPaddingLeft();
             }
@@ -172,7 +171,7 @@ class FloatFormatter extends BaseFormatter
         {
             $previousSibling = $glyph->getPreviousSibling();
 
-            if($previousSibling && $previousSibling->getFloat() !== AbstractGlyph::FLOAT_NONE)
+            if($previousSibling && $previousSibling->getFloat() !== Glyph::FLOAT_NONE)
             {
                 $preferredYCoord += $previousSibling->getHeight() + $glyph->getMarginTop() + $previousSibling->getMarginBottom();
             }
@@ -184,7 +183,7 @@ class FloatFormatter extends BaseFormatter
     private function correctXCoordWithParent(Glyph $glyph)
     {
         $parent = $glyph->getParent();
-        if($glyph->getFloat() === AbstractGlyph::FLOAT_LEFT)
+        if($glyph->getFloat() === Glyph::FLOAT_LEFT)
         {
             $preferredXCoord = $parent->getFirstPoint()->getX() + $parent->getPaddingLeft() + $glyph->getMarginLeft() + $glyph->getPaddingLeft();
         }

@@ -61,7 +61,7 @@ class ConvertAttributesFormatter extends BaseFormatter
         $marginLeft = $glyph->getMarginLeft();
         $marginRight = $glyph->getMarginRight();
 
-        return ($marginLeft === Glyphs\AbstractGlyph::MARGIN_AUTO && $marginRight === Glyphs\AbstractGlyph::MARGIN_AUTO);
+        return ($marginLeft === Glyphs\Glyph::MARGIN_AUTO && $marginRight === Glyphs\Glyph::MARGIN_AUTO);
     }
 
     private function convertColorAttributes(Glyphs\Glyph $glyph)

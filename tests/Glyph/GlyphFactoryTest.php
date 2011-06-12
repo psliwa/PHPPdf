@@ -17,7 +17,7 @@ class GlyphFactoryTest extends PHPUnit_Framework_TestCase
      */
     public function glyphCreating()
     {
-        $mock = $this->getMock('PHPPdf\Glyph\AbstractGlyph', array('copy'));
+        $mock = $this->getMock('PHPPdf\Glyph\Glyph', array('copy'));
 
         $mock->expects($this->once())
              ->method('copy')

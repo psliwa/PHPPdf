@@ -2,6 +2,8 @@
 
 namespace PHPPdf\Glyph;
 
+return;
+
 use PHPPdf\Document,
     PHPPdf\Glyph\Container,
     PHPPdf\Util\Boundary,
@@ -15,7 +17,7 @@ use PHPPdf\Document,
  *
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
-abstract class AbstractGlyph implements Glyph, \ArrayAccess, \Serializable
+abstract class Glyph implements Glyph, \ArrayAccess, \Serializable
 {
     const DISPLAY_BLOCK = 'block';
     const DISPLAY_INLINE = 'inline';

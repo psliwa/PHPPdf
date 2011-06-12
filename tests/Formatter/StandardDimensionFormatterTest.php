@@ -1,7 +1,7 @@
 <?php
 
 use PHPPdf\Document;
-use PHPPdf\Glyph\AbstractGlyph;
+use PHPPdf\Glyph\Glyph;
 use PHPPdf\Glyph\Container;
 use PHPPdf\Formatter\StandardDimensionFormatter;
 
@@ -21,7 +21,7 @@ class StandardDimensionFormatterTest extends PHPUnit_Framework_TestCase
      */
     public function glyphFormatter()
     {
-        $glyph = $this->getMock('PHPPdf\Glyph\AbstractGlyph', array('getWidth', 'getHeight', 'setWidth', 'setHeight'));
+        $glyph = $this->getMock('PHPPdf\Glyph\Glyph', array('getWidth', 'getHeight', 'setWidth', 'setHeight'));
         $glyph->expects($this->atLeastOnce())
               ->method('getWidth')
               ->will($this->returnValue(120));

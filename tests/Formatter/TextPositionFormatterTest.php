@@ -27,7 +27,7 @@ class TextPositionFormatterTest extends TestCase
 
     private function getTextMock($lineSizes, $parentFirstPoint, $firstXCoord = null)
     {
-        $parentMock = $this->getMock('\PHPPdf\Glyph\AbstractGlyph', array('getStartDrawingPoint'));
+        $parentMock = $this->getMock('\PHPPdf\Glyph\Glyph', array('getStartDrawingPoint'));
         $parentMock->expects($this->once())
                    ->method('getStartDrawingPoint')
                    ->will($this->returnValue(array(0, 700)));

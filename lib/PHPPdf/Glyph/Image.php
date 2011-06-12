@@ -4,12 +4,12 @@ namespace PHPPdf\Glyph;
 
 use PHPPdf\Document,
     PHPPdf\Util\DrawingTask,
-    PHPPdf\Glyph\AbstractGlyph;
+    PHPPdf\Glyph\Glyph;
 
 /**
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
-class Image extends AbstractGlyph
+class Image extends Glyph
 {
     public function initialize()
     {

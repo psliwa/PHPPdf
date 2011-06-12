@@ -1,7 +1,7 @@
 <?php
 
 use PHPPdf\Document;
-use PHPPdf\Glyph\AbstractGlyph;
+use PHPPdf\Glyph\Glyph;
 use PHPPdf\Glyph\Container;
 use PHPPdf\Glyph\Page;
 use PHPPdf\Formatter\TextDimensionFormatter;

@@ -2,7 +2,7 @@
 
 namespace PHPPdf\Glyph;
 
-use PHPPdf\Glyph\AbstractGlyph,
+use PHPPdf\Glyph\Glyph,
     PHPPdf\Formatter\Formatter,
     PHPPdf\Document,
     PHPPdf\Util\Point,
@@ -11,7 +11,7 @@ use PHPPdf\Glyph\AbstractGlyph,
 /**
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
-class Text extends AbstractGlyph
+class Text extends Glyph
 {   
     private $text;
     private $wordsInRows = array();

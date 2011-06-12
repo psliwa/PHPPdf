@@ -2,7 +2,7 @@
 
 use PHPPdf\Document;
 use PHPPdf\Util\Boundary;
-use PHPPdf\Glyph\AbstractGlyph;
+use PHPPdf\Glyph\Glyph;
 use PHPPdf\Glyph\Container;
 use PHPPdf\Formatter\ContainerDimensionFormatter;
 
@@ -51,7 +51,7 @@ class ContainerDimensionFormatterTest extends PHPUnit_Framework_TestCase
             $methods[] = 'getWidth';
         }
 
-        $mock = $this->getMock('PHPPdf\Glyph\AbstractGlyph', $methods);
+        $mock = $this->getMock('PHPPdf\Glyph\Glyph', $methods);
 
         if($sizeAssert)
         {

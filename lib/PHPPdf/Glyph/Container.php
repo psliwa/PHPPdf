@@ -8,7 +8,7 @@ use PHPPdf\Document,
 /**
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
-class Container extends AbstractGlyph
+class Container extends Glyph
 {
     protected $children = array();
     private $document = null;

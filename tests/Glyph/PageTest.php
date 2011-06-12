@@ -37,7 +37,7 @@ class PageTest extends TestCase
      */
     public function failureDrawing()
     {
-        $child = $this->getMock('\PHPPdf\Glyph\AbstractGlyph', array('doDraw'));
+        $child = $this->getMock('\PHPPdf\Glyph\Glyph', array('doDraw'));
         $child->expects($this->any())
               ->method('doDraw')
               ->will($this->throwException(new \Exception('exception')));
