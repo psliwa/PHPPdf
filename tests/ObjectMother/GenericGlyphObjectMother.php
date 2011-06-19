@@ -32,11 +32,11 @@ class GenericGlyphObjectMother
         return $pageMock;
     }
 
-    public function getGlyphMock($x, $y, $width, $height)
+    public function getGlyphMock($x, $y, $width, $height, array $methods = array())
     {
         $boundaryMock = $this->getBoundaryStub($x, $y, $width, $height);
 
-        $glyphMock = $this->test->getMock('PHPPdf\Glyph\Glyph', array('getBoundary', 'getWidth', 'getHeight'));
+        $glyphMock = $this->test->getMock('PHPPdf\Glyph\Glyph', array_merge($methods, array('getBoundary', 'getWidth', 'getHeight')));
 
         $glyphMock->expects($this->test->atLeastOnce())
                   ->method('getBoundary')

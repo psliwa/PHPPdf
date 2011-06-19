@@ -34,8 +34,7 @@ class TextDimensionFormatter extends BaseFormatter
     public function format(Glyphs\Glyph $glyph, Document $document)
     {
         $realHeight = 0;
-        $page = $glyph->getPage();
-        $graphicsContext = $page->getGraphicsContext();
+        $graphicsContext = $glyph->getGraphicsContext();
 
         $fontSize = $glyph->getRecurseAttribute('font-size');
         $lineHeight = $glyph->getAttribute('line-height');

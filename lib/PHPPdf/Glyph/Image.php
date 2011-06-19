@@ -21,8 +21,7 @@ class Image extends Glyph
     {
         $callback = function($glyph)
         {
-            $page = $glyph->getPage();
-            $graphicsContext = $page->getGraphicsContext();
+            $graphicsContext = $glyph->getGraphicsContext();
 
             list($x, $y) = $glyph->getStartDrawingPoint();
             $image = $glyph->getAttribute('src');

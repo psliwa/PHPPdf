@@ -1009,6 +1009,11 @@ abstract class Glyph implements \ArrayAccess, \Serializable
     {
         return $this->formattersNames;
     }
+    
+    public function getGraphicsContext()
+    {
+        return $this->getPage()->getGraphicsContext();
+    }
 
     public function getPlaceholder($name)
     {

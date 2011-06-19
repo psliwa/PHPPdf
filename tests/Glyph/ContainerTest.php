@@ -208,4 +208,22 @@ class ContainerTest extends TestCase
         $this->assertLessThan($superParentContainer->getPriority(), $this->glyph->getPriority());
         $this->assertLessThan($this->glyph->getPriority(), $child->getPriority());
     }
+    
+    /**
+     * @test
+     */
+    public function graphicContextIfFetchedFromPage()
+    {
+        $graphicContextStub = 'some stub';
+        
+        $pageMock = $this->getMock('PHPPdf\Glyph\Page', array('getGraphicsContext'));
+        
+        $pageMock->expects($this->once())
+                 ->method('getGraphicsContext')
+                 ->will($this->returnValue($graphicContextStub));
+                 
+         $this->glyph->setParent($pageMock);
+         
+         $this->assertEquals($graphicContextStub, $this->glyph->getGraphicsContext());
+    }
 }

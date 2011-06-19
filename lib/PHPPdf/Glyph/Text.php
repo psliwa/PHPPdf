@@ -94,8 +94,7 @@ class Text extends Glyph
     {
         $drawingTask = new DrawingTask(function(Text $glyph)
         {
-            $page = $glyph->getPage();
-            $graphicsContext = $page->getGraphicsContext();
+            $graphicsContext = $glyph->getGraphicsContext();
 
             $graphicsContext->saveGS();
 
@@ -121,7 +120,7 @@ class Text extends Glyph
             foreach($glyph->getWordsInRows() as $rowNumber => $words)
             {
                 $start = $glyph->getStartLineDrawingXDimension($textAlign, $lineSizes[$rowNumber]);
-                $graphicsContext->drawText(implode(' ', $words), $start+$x, $rowHeight, $page->getAttribute('encoding'));
+                $graphicsContext->drawText(implode(' ', $words), $start+$x, $rowHeight, $glyph->getPage()->getAttribute('encoding'));
                 $rowHeight -=$lineHeight;
                 $x = $parentX + $glyph->getMarginLeft();
             }
