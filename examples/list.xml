@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pdf SYSTEM "%resources%/dtd/doctype.dtd">
+<pdf>
+    <dynamic-page>
+    	<div>
+	    	<ul>
+	    		<li>Some text</li>
+	    		<li>some another text</li>
+	    	</ul>
+    	</div>
+    </dynamic-page>
+</pdf>

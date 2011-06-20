@@ -35,6 +35,32 @@
             <formatter class="PHPPdf\Formatter\FloatFormatter" />
         </formatters>
     </glyph>
+    <glyph name="ul" class="PHPPdf\Glyph\BasicList">
+        <formatters>
+            <formatter class="PHPPdf\Formatter\ConvertAttributesFormatter" />
+            <formatter class="PHPPdf\Formatter\StandardDimensionFormatter" />
+            <formatter class="PHPPdf\Formatter\FirstPointPositionFormatter" />
+            <!-- TODO: list formatter -->
+            <formatter class="PHPPdf\Formatter\ContainerFormatter" />
+            <formatter class="PHPPdf\Formatter\ContainerDimensionFormatter" />
+            <formatter class="PHPPdf\Formatter\StandardPositionFormatter" />
+            <formatter class="PHPPdf\Formatter\FloatFormatter" />
+        </formatters>
+    </glyph>
+    <glyph name="li" class="PHPPdf\Glyph\Container">
+    	<stylesheet>
+    		<attribute name="padding-left" value="10" />
+    	</stylesheet>
+        <formatters>
+            <formatter class="PHPPdf\Formatter\ConvertAttributesFormatter" />
+            <formatter class="PHPPdf\Formatter\StandardDimensionFormatter" />
+            <formatter class="PHPPdf\Formatter\FirstPointPositionFormatter" />
+            <formatter class="PHPPdf\Formatter\ContainerFormatter" />
+            <formatter class="PHPPdf\Formatter\ContainerDimensionFormatter" />
+            <formatter class="PHPPdf\Formatter\StandardPositionFormatter" />
+            <formatter class="PHPPdf\Formatter\FloatFormatter" />
+        </formatters>
+    </glyph>
     <glyph name="p" class="PHPPdf\Glyph\Container">
         <stylesheet>
             <attribute name="padding" value="5 0" />

@@ -32,10 +32,21 @@ class BasicList extends Container
         $glyph = $this;
         $task = new DrawingTask(function() use($glyph){
             $gc = $glyph->getGraphicsContext();
+            
+            $font = $glyph->getAttribute('font-type');
+            
+            $type = $glyph->getRecurseAttribute('type');
+            $fontSize = $glyph->getRecurseAttribute('font-size');
+            $widthOfTypeChar = $font->getCharsWidth(array(ord($type)), $fontSize);
+            $encoding = $glyph->getPage()->getAttribute('encoding');
+            $position = $glyph->getAttribute('position');
+            
             foreach($glyph->getChildren() as $child)
             {
-                $boundary = $child->getBoundary();
-                $gc->drawText($glyph->getAttribute('type'), 0, 10, $glyph->getPage()->getAttribute('encoding'));
+                $firstPoint = $child->getFirstPoint();
+                $x = $firstPoint->getX() + ($position == BasicList::POSITION_OUTSIDE ? -$widthOfTypeChar : $widthOfTypeChar);
+                $y = $firstPoint->getY() - $fontSize;
+                $gc->drawText($glyph->getAttribute('type'), $x, $y, $encoding);
             }
         });
         

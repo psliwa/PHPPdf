@@ -20,10 +20,11 @@ class BasicListTest extends TestCase
     
     /**
      * @test
+     * @dataProvider sizesProvider
      */
-    public function renderListTypeForEachChildren()
+    public function renderListTypeForEachChildren(array $childrenSizes, $listPosition, $fontSize, $widthStub, $enumMargin)
     {
-        $page = $this->getMock('PHPPdf\Glyph\Page', array('getGraphicsContext'));
+        $page = $this->getMock('PHPPdf\Glyph\Page', array('getGraphicsContext', 'getAttribute'));
         
         $gc = $this->getMock('PHPPdf\Glyph\GraphicsContext', array('drawText'), array(), '', false);
         
@@ -31,21 +32,36 @@ class BasicListTest extends TestCase
              ->method('getGraphicsContext')
              ->will($this->returnValue($gc));
              
-        $this->list->setParent($page);
-        
-        $children = array(
-            $this->objectMother->getGlyphMock(20, 100, 100, 20, array('draw')),
-            $this->objectMother->getGlyphMock(20, 80, 100, 20, array('draw')),
-        );
-        
+        $encodingStub = 'utf-8';
+        $page->expects($this->once())
+             ->method('getAttribute')
+             ->with('encoding')
+             ->will($this->returnValue($encodingStub));
+             
         $listType = BasicList::TYPE_CIRCLE;
-        $listPosition = BasicList::POSITION_OUTSIDE;
-        
-        $gc->expects($this->exactly(\count($children)))
-           ->method('drawText');
-        
-        $this->list->setAttribute('type', $listType)
+        $font = $this->getMock('PHPPdf\Font\Font', array('getCharsWidth'), array(), '', false);
+        $font->expects($this->once())
+             ->method('getCharsWidth')
+             ->with(array(ord($listType)), $fontSize)
+             ->will($this->returnValue($widthStub));
+             
+        $this->list->setParent($page);
+        $this->list->setAttribute('font-type', $font)
+                   ->setAttribute('font-size', $fontSize)
+                   ->setAttribute('type', $listType)
                    ->setAttribute('position', $listPosition);
+
+        $children = array();
+        foreach($childrenSizes as $at => $sizes)
+        {
+            $child = $this->objectMother->getGlyphMock($sizes[0], $sizes[1], $sizes[2], $sizes[3], array('draw', 'getMarginLeft'));
+            $children[] = $child;
+            
+            $expectedXCoord = $sizes[0] + ($listPosition == BasicList::POSITION_OUTSIDE ? -$widthStub : $widthStub);
+            $gc->expects($this->at($at))
+               ->method('drawText')
+               ->with($listType, $expectedXCoord, $sizes[1] - $fontSize, $encodingStub);
+        }
         
         foreach($children as $child)
         {
@@ -58,5 +74,31 @@ class BasicListTest extends TestCase
         {
             $task->invoke();
         }
+    }
+    
+    public function sizesProvider()
+    {
+        return array(
+            array(
+                array(
+                    array(20, 100, 100, 20),
+                    array(20, 80, 100, 20),
+                ),
+                BasicList::POSITION_OUTSIDE,
+                12,
+                6,
+                10,
+            ),
+            array(
+                array(
+                    array(20, 100, 100, 20),
+                    array(20, 80, 100, 20),
+                ),
+                BasicList::POSITION_INSIDE,
+                12,
+                6,
+                10,
+            ),
+        );
     }
 }
