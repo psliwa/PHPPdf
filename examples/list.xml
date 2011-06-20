@@ -3,7 +3,19 @@
 <pdf>
     <dynamic-page>
     	<div>
+	    	<p>Position: outside</p>
 	    	<ul>
+	    		<stylesheet>
+	    			<enhancement name="border" color="blue" />
+	    		</stylesheet>
+	    		<li>Some text</li>
+	    		<li>some another text</li>
+	    	</ul>
+	    	<p>Position: inside</p>
+	    	<ul position="inside">
+	    		<stylesheet>
+	    			<enhancement name="border" color="green" />
+	    		</stylesheet>
 	    		<li>Some text</li>
 	    		<li>some another text</li>
 	    	</ul>

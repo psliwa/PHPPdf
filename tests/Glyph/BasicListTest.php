@@ -54,10 +54,14 @@ class BasicListTest extends TestCase
         $children = array();
         foreach($childrenSizes as $at => $sizes)
         {
+            $marginLeft = 10;
             $child = $this->objectMother->getGlyphMock($sizes[0], $sizes[1], $sizes[2], $sizes[3], array('draw', 'getMarginLeft'));
+            $child->expects($this->atLeastOnce())
+                  ->method('getMarginLeft')
+                  ->will($this->returnValue($marginLeft));
             $children[] = $child;
             
-            $expectedXCoord = $sizes[0] + ($listPosition == BasicList::POSITION_OUTSIDE ? -$widthStub : $widthStub);
+            $expectedXCoord = $sizes[0] + ($listPosition == BasicList::POSITION_OUTSIDE ? -$widthStub : 0) - $marginLeft;
             $gc->expects($this->at($at))
                ->method('drawText')
                ->with($listType, $expectedXCoord, $sizes[1] - $fontSize, $encodingStub);

@@ -33,23 +33,29 @@ class BasicList extends Container
         $task = new DrawingTask(function() use($glyph){
             $gc = $glyph->getGraphicsContext();
             
-            $font = $glyph->getAttribute('font-type');
-            
-            $type = $glyph->getRecurseAttribute('type');
             $fontSize = $glyph->getRecurseAttribute('font-size');
-            $widthOfTypeChar = $font->getCharsWidth(array(ord($type)), $fontSize);
+            $widthOfTypeChar = $glyph->getWidthOfEnumerationChar();
             $encoding = $glyph->getPage()->getAttribute('encoding');
             $position = $glyph->getAttribute('position');
             
             foreach($glyph->getChildren() as $child)
             {
                 $firstPoint = $child->getFirstPoint();
-                $x = $firstPoint->getX() + ($position == BasicList::POSITION_OUTSIDE ? -$widthOfTypeChar : $widthOfTypeChar);
+                $x = $firstPoint->getX() + ($position == BasicList::POSITION_OUTSIDE ? -$widthOfTypeChar : 0) - $child->getMarginLeft();
                 $y = $firstPoint->getY() - $fontSize;
                 $gc->drawText($glyph->getAttribute('type'), $x, $y, $encoding);
             }
         });
         
         $this->addDrawingTask($task);
+    }
+    
+    public function getWidthOfEnumerationChar()
+    {
+        $type = $this->getAttribute('type');
+        $font = $this->getRecurseAttribute('font-type');
+        $fontSize = $this->getRecurseAttribute('font-size');
+        
+        return $font->getCharsWidth(array(ord($type)), $fontSize);
     }
 }
