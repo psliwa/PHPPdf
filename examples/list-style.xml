@@ -1,3 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <stylesheet>
+	<p>
+		<attribute name="margin-top" value="10" />
+	</p>
+	<ul>
+		<enhancement name="border" color="blue" />
+	</ul>
 </stylesheet>

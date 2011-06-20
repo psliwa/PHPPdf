@@ -5,17 +5,31 @@
     	<div>
 	    	<p>Position: outside</p>
 	    	<ul>
-	    		<stylesheet>
-	    			<enhancement name="border" color="blue" />
-	    		</stylesheet>
 	    		<li>Some text</li>
 	    		<li>some another text</li>
 	    	</ul>
 	    	<p>Position: inside</p>
 	    	<ul position="inside">
-	    		<stylesheet>
-	    			<enhancement name="border" color="green" />
-	    		</stylesheet>
+	    		<li>Some text</li>
+	    		<li>some another text</li>
+	    	</ul>
+	    	<p>Type: square</p>
+	    	<ul type="square">
+	    		<li>Some text</li>
+	    		<li>some another text</li>
+	    	</ul>
+	    	<p>Type: disc</p>
+	    	<ul type="disc">
+	    		<li>Some text</li>
+	    		<li>some another text</li>
+	    	</ul>
+	    	<p>Type: none</p>
+	    	<ul type="none">
+	    		<li>Some text</li>
+	    		<li>some another text</li>
+	    	</ul>
+	    	<p>Custom char as type ("+")</p>
+	    	<ul type="+">
 	    		<li>Some text</li>
 	    		<li>some another text</li>
 	    	</ul>

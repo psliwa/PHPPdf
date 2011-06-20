@@ -9,8 +9,8 @@ use PHPPdf\Util\DrawingTask;
 class BasicList extends Container
 {
     const TYPE_CIRCLE = '•';
-    const TYPE_SQUARE = '▫';
-    const TYPE_DISC = 'ο';
+    const TYPE_SQUARE = '▪';
+    const TYPE_DISC = '◦';
     const TYPE_NONE = '';
     
     const POSITION_INSIDE = 'inside';
@@ -23,6 +23,25 @@ class BasicList extends Container
         $this->addAttribute('type', self::TYPE_CIRCLE);
         $this->addAttribute('image');
         $this->addAttribute('position', self::POSITION_OUTSIDE);
+    }
+    
+    protected static function initializeType()
+    {
+        parent::initializeType();
+        
+        static::setAttributeSetters(array('type' => 'setType'));
+    }
+    
+    public function setType($type)
+    {
+        $const = sprintf('%s::TYPE_%s', __CLASS__, strtoupper($type));
+        
+        if(defined($const))
+        {
+            $type = constant($const);
+        }
+        
+        $this->setAttributeDirectly('type', $type);
     }
     
     protected function doDraw(Document $document)

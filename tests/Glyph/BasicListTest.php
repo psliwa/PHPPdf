@@ -105,4 +105,24 @@ class BasicListTest extends TestCase
             ),
         );
     }
+    
+    /**
+     * @test
+     */
+    public function acceptHumanReadableTypeAttributeValue()
+    {
+        $types = array(
+            'circle' => BasicList::TYPE_CIRCLE,
+            'disc' => BasicList::TYPE_DISC,
+            'square' => BasicList::TYPE_SQUARE,
+            'none' => BasicList::TYPE_NONE,
+        );
+        
+        foreach($types as $name => $value)
+        {
+            $this->list->setAttribute('type', $name);
+            
+            $this->assertEquals($value, $this->list->getAttribute('type'));
+        }
+    }
 }
