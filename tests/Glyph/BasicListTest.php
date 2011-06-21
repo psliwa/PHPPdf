@@ -125,4 +125,30 @@ class BasicListTest extends TestCase
             $this->assertEquals($value, $this->list->getAttribute('type'));
         }
     }
+    
+    /**
+     * @test
+     * @dataProvider enumerationProvider
+     */
+    public function determineEnumerationStrategyOnType($type, $expectedEnumerationStrategyClass)
+    {
+        $this->list->setAttribute('type', $type);
+        
+        $font = $this->getMock('PHPPdf\Font\Font', array(), array(), '', false);
+        $this->list->setAttribute('font-type', $font);
+        $enumerationStrategy = $this->list->getEnumerationStrategy();
+        
+        $this->assertInstanceOf($expectedEnumerationStrategyClass, $enumerationStrategy);
+    }
+    
+    public function enumerationProvider()
+    {
+        return array(
+            array(BasicList::TYPE_CIRCLE, 'PHPPdf\Glyph\BasicList\UnorderedEnumerationStrategy'),
+            array(BasicList::TYPE_SQUARE, 'PHPPdf\Glyph\BasicList\UnorderedEnumerationStrategy'),
+            array(BasicList::TYPE_DISC, 'PHPPdf\Glyph\BasicList\UnorderedEnumerationStrategy'),
+            array(BasicList::TYPE_NONE, 'PHPPdf\Glyph\BasicList\UnorderedEnumerationStrategy'),
+            array(BasicList::TYPE_NUMERIC, 'PHPPdf\Glyph\BasicList\OrderedEnumerationStrategy'),
+        );
+    }
 }

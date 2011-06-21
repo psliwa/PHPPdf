@@ -2,6 +2,10 @@
 
 namespace PHPPdf\Glyph;
 
+use PHPPdf\Glyph\BasicList\OrderedEnumerationStrategy;
+
+use PHPPdf\Glyph\BasicList\UnorderedEnumerationStrategy;
+
 use PHPPdf\Document;
 
 use PHPPdf\Util\DrawingTask;
@@ -12,6 +16,7 @@ class BasicList extends Container
     const TYPE_SQUARE = '▪';
     const TYPE_DISC = '◦';
     const TYPE_NONE = '';
+    const TYPE_NUMERIC = 'numeric';
     
     const POSITION_INSIDE = 'inside';
     const POSITION_OUTSIDE = 'outside';
@@ -53,20 +58,48 @@ class BasicList extends Container
             $gc = $glyph->getGraphicsContext();
             
             $fontSize = $glyph->getRecurseAttribute('font-size');
-            $widthOfTypeChar = $glyph->getWidthOfEnumerationChar();
             $encoding = $glyph->getPage()->getAttribute('encoding');
             $position = $glyph->getAttribute('position');
             
+            $enumerationStrategy = $glyph->getEnumerationStrategy();
+            
             foreach($glyph->getChildren() as $child)
             {
+                $widthOfTypeChar = $enumerationStrategy->getWidthOfCurrentEnumerationChars();
                 $firstPoint = $child->getFirstPoint();
                 $x = $firstPoint->getX() + ($position == BasicList::POSITION_OUTSIDE ? -$widthOfTypeChar : 0) - $child->getMarginLeft();
                 $y = $firstPoint->getY() - $fontSize;
-                $gc->drawText($glyph->getAttribute('type'), $x, $y, $encoding);
+
+                $enumerationText = $enumerationStrategy->getCurrentEnumerationText();
+                $gc->drawText($enumerationText, $x, $y, $encoding);
+                $enumerationStrategy->next();
             }
         });
         
         $this->addDrawingTask($task);
+    }
+    
+    /**
+     * TODO
+     * 
+     * @return PHPPdf\Glyph\BasicList\EnumerationStrategy
+     */
+    public function getEnumerationStrategy()
+    {
+        if($this->getAttribute('type') === self::TYPE_NUMERIC)
+        {
+            $font = $this->getRecurseAttribute('font-type');
+            $strategy = new OrderedEnumerationStrategy($this, $font);
+        }
+        else
+        {
+            $font = $this->getRecurseAttribute('font-type');
+            $chars = (array) $this->getAttribute('type');
+            
+            $strategy = new UnorderedEnumerationStrategy($this, $font, $chars);            
+        }
+
+        return $strategy;
     }
     
     public function getWidthOfEnumerationChar()

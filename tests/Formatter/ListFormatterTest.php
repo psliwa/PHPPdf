@@ -38,15 +38,22 @@ class ListFormatterTest extends TestCase
     {
         $widthOfEnumerationChar = 7;
         
-        $list = $this->getMock('PHPPdf\Glyph\BasicList', array('getChildren', 'getWidthOfEnumerationChar', 'getAttribute'));
+        $list = $this->getMock('PHPPdf\Glyph\BasicList', array('getChildren', 'getEnumerationStrategy', 'getAttribute'));
+        
+        $enumerationStrategy = $this->getMock('PHPPdf\Glyph\BasicList\EnumerationStrategy', array('getWidthOfLastEnumerationChars', 'next', 'getCurrentEnumerationText', 'getWidthOfCurrentEnumerationChars'));
         
         $list->expects($this->once())
-             ->method('getWidthOfEnumerationChar')
-             ->will($this->returnValue($widthOfEnumerationChar));
+             ->method('getEnumerationStrategy')
+             ->will($this->returnValue($enumerationStrategy));
+            
         $list->expects($this->at(0))
              ->method('getAttribute')
              ->with('position')
              ->will($this->returnValue(BasicList::POSITION_INSIDE));
+             
+        $enumerationStrategy->expects($this->once())
+                            ->method('getWidthOfLastEnumerationChars') 
+                            ->will($this->returnValue($widthOfEnumerationChar));
 
         $children = array();
         $leftMargin = 10;

@@ -14,7 +14,7 @@ class ListFormatter extends BaseFormatter
         
         if($position === BasicList::POSITION_INSIDE)
         {
-            $widthOfEnumerationChar = $glyph->getWidthOfEnumerationChar();
+            $widthOfEnumerationChar = $glyph->getEnumerationStrategy()->getWidthOfLastEnumerationChars();
             
             foreach($glyph->getChildren() as $child)
             {
