@@ -2,6 +2,8 @@
 
 namespace PHPPdf\Glyph;
 
+use PHPPdf\Glyph\BasicList\EnumerationStrategy;
+
 use PHPPdf\Glyph\BasicList\OrderedEnumerationStrategy;
 
 use PHPPdf\Glyph\BasicList\UnorderedEnumerationStrategy;
@@ -20,6 +22,8 @@ class BasicList extends Container
     
     const POSITION_INSIDE = 'inside';
     const POSITION_OUTSIDE = 'outside';
+    
+    private $enumerationStrategy;
     
     public function initialize()
     {
@@ -47,6 +51,8 @@ class BasicList extends Container
         }
         
         $this->setAttributeDirectly('type', $type);
+        
+        $this->enumerationStrategy = null;
     }
     
     protected function doDraw(Document $document)
@@ -86,20 +92,30 @@ class BasicList extends Container
      */
     public function getEnumerationStrategy()
     {
-        if($this->getAttribute('type') === self::TYPE_NUMERIC)
+        if($this->enumerationStrategy === null)
         {
-            $font = $this->getRecurseAttribute('font-type');
-            $strategy = new OrderedEnumerationStrategy($this, $font);
-        }
-        else
-        {
-            $font = $this->getRecurseAttribute('font-type');
-            $chars = (array) $this->getAttribute('type');
+            if($this->getAttribute('type') === self::TYPE_NUMERIC)
+            {
+                $font = $this->getRecurseAttribute('font-type');
+                $strategy = new OrderedEnumerationStrategy($this, $font);
+            }
+            else
+            {
+                $font = $this->getRecurseAttribute('font-type');
+                $chars = (array) $this->getAttribute('type');
+                
+                $strategy = new UnorderedEnumerationStrategy($this, $font, $chars);            
+            }
             
-            $strategy = new UnorderedEnumerationStrategy($this, $font, $chars);            
+            $this->enumerationStrategy = $strategy;
         }
 
-        return $strategy;
+        return $this->enumerationStrategy;
+    }
+    
+    public function setEnumerationStrategy(EnumerationStrategy $enumerationStrategy)
+    {
+        $this->enumerationStrategy = $enumerationStrategy;
     }
     
     public function getWidthOfEnumerationChar()

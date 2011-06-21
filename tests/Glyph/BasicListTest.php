@@ -151,4 +151,23 @@ class BasicListTest extends TestCase
             array(BasicList::TYPE_NUMERIC, 'PHPPdf\Glyph\BasicList\OrderedEnumerationStrategy'),
         );
     }
+    
+    /**
+     * @test
+     */
+    public function createNewEnumerationStrategyOnlyWhenTypeWasChanged()
+    {
+        $font = $this->getMock('PHPPdf\Font\Font', array(), array(), '', false);
+        $this->list->setAttribute('font-type', $font);
+        
+        $this->list->setAttribute('type', BasicList::TYPE_CIRCLE);
+        
+        $this->assertTrue($this->list->getEnumerationStrategy() === $this->list->getEnumerationStrategy());
+        
+        $enumerationStrategy = $this->list->getEnumerationStrategy();
+        
+        $this->list->setAttribute('type', BasicList::TYPE_NUMERIC);
+        
+        $this->assertFalse($enumerationStrategy === $this->list->getEnumerationStrategy());
+    }
 }
