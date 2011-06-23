@@ -4,7 +4,7 @@ Documentation draft (PL)
 1. Parsowanie dokumentu i tworzenie pdf'a.
 ==========================================
 
-Oto najprostrzy sposób wykorzystania biblioteki:
+Najprostrzy sposób wykorzystania biblioteki:
 
     //zarejestrowanie autoloadera PHPPdf oraz vendor (Zend_Pdf)
     require_once 'PHPPdf/Autoloader.php';
@@ -37,8 +37,22 @@ Biblioteka bazuje na formacie XML przypominającym HTML, ale w żadnym wypadku n
             </table>
         </dynamic-page>
     </pdf>
+    
+Zalecane jest dodawanie następującej deklaracji DOCTYPE do dokumentów, pozwala ona na zaminę encji na wartości:
 
-Korzeń dokumentu musi się nazywać "pdf". Element "dynamic-page" jest stroną, która się dynamicznie dzieli gdy zostanie przepełniona. Alternatywą jest tag "page", czyli pojedyńcza niepodzielna strona. Są istotne różnice w nadawaniu atrybutom wartości w stosunku do HTML. Aby nadać obramowanie i tło warstwie, należy użyć specjalnego elementu "stylesheet". Przykład:
+    <!DOCTYPE pdf SYSTEM "%resources%/dtd/doctype.dtd">
+
+Korzeń dokumentu musi się nazywać "pdf". Element "dynamic-page" jest stroną, która się dynamicznie dzieli gdy zostanie przepełniona. Alternatywą jest tag "page", czyli pojedyńcza niepodzielna strona. Są różnice w nadawaniu atrybutom wartości w stosunku do HTML. Aby nadać obramowanie i tło warstwie należy posłużyć się atrybutem złożonym "border" oraz "background", atrybuty te mają swoje własne właściwości, np. kolor, rozmiar, zaokrąglenie. Alternatywną składnią do ustawiania atrybutów oraz atrybutów złożonych (enhancement) jest element "stylesheet". Przykład:
+
+    <pdf>
+        <dynamic-page>
+            <div color="red" border.color="black" background.color="pink">
+                Ten tekst jest czerwony na różowym tle w czarnym obramowaniu
+            </div>
+        </dynamic-page>
+    </pdf>
+    
+Alternatywna składnia (element stylesheet):
 
     <pdf>
         <dynamic-page>
@@ -53,7 +67,7 @@ Korzeń dokumentu musi się nazywać "pdf". Element "dynamic-page" jest stroną,
         </dynamic-page>
     </pdf>
 
-Atrybuty elementom można nadawać za pomocą atrybutów XML bezpośrednio po nazwie tagu lub też za pomocą wspomnianego tagu "stylesheet". Upiększenia, czyli rodzaj atrybutów złożonych, można dodawać tylko poprzez tag "enhancement" zagniezdżony w "stylesheet". Nie istnieje atrybut "style" znany z HTML'a.
+Atrybuty można nadawać za pomocą atrybutów XML bezpośrednio po nazwie tagu lub też za pomocą wspomnianego tagu "stylesheet". Nie istnieje atrybut "style" znany z HTML'a.
 
 Biblioteka jest bardzo rygorystyczna pod względem poprawności tagów i atrybutów. Jeśli zostanie użyty nieistniejący tag lub atrybut, dokument się nie sparsuje - zostanie wyrzucony wyjątek z odpowiednią treścią.
 
@@ -71,7 +85,7 @@ Atrybut "id" ma całkowicie inne znaczenie niż w HTML'u. Id musi być unikalne 
                 Warstwa 1
             </div>
             <div extends="warstwa-1">
-                Warstwa 2 dziedzicząca style (typ, atrybuty i upiększenia) po warstwie 1)
+                Warstwa 2 dziedzicząca style (typ, atrybuty proste i złożone) po warstwie 1)
             </div>
         </dynamic-page>
     </pdf>
@@ -107,13 +121,14 @@ Drugi "div" będzie miał następujące atrybuty:
 4. Struktura arkusza stylów.
 ============================
 
-Arkusze stylów muszą się znajdować w osobnym pliku. Składnia arkusza stylów:
+Arkusze stylów muszą się znajdować w osobnym pliku, nie ma wsparcia krótkiej deklaracji atrybutów prostych i złożonych bezpośrednio w tagu. Składnia arkusza stylów:
 
     <stylesheet>
         <div class="klasa">
             <!-- atrybuty i upiększenia zagnieżdzone w ścieżce selektora div.klasa -->
             <attribute name="font-size" value="12" />
             <attribute name="color" value="grey" />
+            <!-- odpowiednik atrybutu background.color -->
             <enhancement name="background" color="yellow" />
 
             <!-- kolejny element, odpowiadająca składnia selektora z CSS: "div.klasa p" -->
@@ -140,7 +155,7 @@ Arkusze stylów muszą się znajdować w osobnym pliku. Składnia arkusza styló
 5. Standardowe tagi.
 ====================
 
-Biblioteka obsługuje podstawowe tagi zaczerpnięte z języka HTML: div, p, table, tr, td, b, strong, span, h1, h2, h3, h4, h5, img, br
+Biblioteka obsługuje podstawowe tagi zaczerpnięte z języka HTML: div, p, table, tr, td, b, strong, span, h1, h2, h3, h4, h5, img, br, ul, li
 Ponadto obsługiwane są niestandardowe tagi:
 
 * dynamic-page - strona, która się dynamicznie dzieli gdy zostaje przepełniona
@@ -160,11 +175,11 @@ Istnieją tagi, które służą jedynie do określania wartości atrybutów, zbi
 6. Atrybuty.
 ============
 
-* width oraz height: ustawienie wysokości i szerokości na sztywno
+* width oraz height: ustawienie wysokości i szerokości na sztywno, nie są obsługiwane jednostki. Jest możliwe użycie wartości relatywnych wyrażonych w procentach
 * margin (margin-top, margin-bottom, margin-left, margin-right): margines podobny jak w HTML/CSS z taką różnicą, że marginesy sąsiadów się sumują. Dla marginesów bocznym możliwa jest wartość "auto" - działa podobnie jak w HTML/CSS
 * padding (padding-top, padding-bottom, padding-left, padding-right): dopełnienie wewnętrzne - tak jak w HTML/CSS
 * font-type - typ czcionki. Nazwa czcionki musi występować w pliku konfiguracyjnym fonts.xml, w przeciwnym wypadku zostanie wyrzucony wyjątek
-* font-size - rozmiar czcionki w punktach
+* font-size - rozmiar czcionki w punktach, brak obsługi jednostek wielkości
 * font-style - styl czcionki, dozwolone wartości: normal, bold, italic, bold-italic
 * color - kolor tekstu. Przyjmowane wartości takie jak w HTML/CSS
 * display - sposób wyświetlenia (block|inline|none)
@@ -175,8 +190,8 @@ Istnieją tagi, które służą jedynie do określania wartości atrybutów, zbi
 * page-break - łamie stronę jeśli element jest bezpośrednim dzieckiem elementu dynamic-page
 * colspan, rowspan - działanie analogiczne do atrybutów html (rowspan jeszcze nie jest zaimplementowane)
 
-7. Upiększenia (atrybuty złożone)
-=================================
+7. Atrybuty złożone
+===================
 
 * border:
     - color: kolor obramowania
@@ -192,7 +207,7 @@ Istnieją tagi, które służą jedynie do określania wartości atrybutów, zbi
     - repeat: sposób powtarzania obrazka (none|x|y|all)
     - radius: zaokrąglanie rogów tła w radianach (w chwili obecnej działa tylko dla koloru, nie obrazka)
 
-Można dodawać kilka upiększeń tego samego typu - np. 3 różne obramowania:
+Można dodawać kilka upiększeń tego samego typu (np. 3 różne obramowania) używając tagu "stylesheet" zamiast krótkiej notacji ("border.color"):
 
     <pdf>
         <dynamic-page>
@@ -299,8 +314,12 @@ Poniżej przedstawiam listę ograniczeń obecnej wersji biblioteki:
 * obsługa metadanych dokumentu
 * obsługa zakładek
 * poprawa interpretacji wartości atrybutów i rozkładu elementów w dokumencie
-* obsługa podziału strony na kolumny
+* obsługa podziału strony na kolumny w taki sposób, że wszystkie kolumny mają tą samą wysokość
 * poprawa działania tabelek, definiowanie nagłówków i stopek dla tabeli
+* obsługa rowspan, nagłówka i stopki dla tabeli
+* poprawienie wyliczania minimalnej wielkości komórki tabeli gdy jest użyty colspan
+* bundle do integracji z Symfony2
+* refaktoryzacja
 
 13. Wymagania techniczne.
 =========================
