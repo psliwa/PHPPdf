@@ -93,15 +93,11 @@ class BasicList extends Container
         {
             if($this->getAttribute('type') === self::TYPE_NUMERIC)
             {
-                $font = $this->getRecurseAttribute('font-type');
-                $strategy = new OrderedEnumerationStrategy($this, $font);
+                $strategy = new OrderedEnumerationStrategy();
             }
             else
-            {
-                $font = $this->getRecurseAttribute('font-type');
-                $chars = (array) $this->getAttribute('type');
-                
-                $strategy = new UnorderedEnumerationStrategy($this, $font, $chars);            
+            {                
+                $strategy = new UnorderedEnumerationStrategy();            
             }
             
             $this->enumerationStrategy = $strategy;
