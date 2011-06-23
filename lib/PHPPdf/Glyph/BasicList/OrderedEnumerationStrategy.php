@@ -2,64 +2,34 @@
 
 namespace PHPPdf\Glyph\BasicList;
 
+use PHPPdf\Glyph\GraphicsContext;
+
 use PHPPdf\Font\Font;
 
 use PHPPdf\Glyph\BasicList;
 
-class OrderedEnumerationStrategy implements EnumerationStrategy
-{
-    private $list;
-    private $font;
+class OrderedEnumerationStrategy extends TextEnumerationStrategy
+{      
+    private $initialIndex;
     
-    private $current = 1;
-    
-    public function __construct(BasicList $list, Font $font)
+    public function __construct($initialIndex = 1)
     {
-        $this->list = $list;
-        $this->font = $font;
+        $this->setInitialIndex($initialIndex);
     }
     
-	public function getCurrentEnumerationText()
+    public function setInitialIndex($initialIndex)
     {
-        return $this->assembleEnumerationText($this->current);
+        $this->initialIndex = $initialIndex;
     }
     
-    private function assembleEnumerationText($number)
+    protected function assembleEnumerationText(BasicList $list, $number)
     {
-        return $number.'.';
-    }
-
-	public function getWidthOfCurrentEnumerationChars()
-    {
-        $text = $this->getCurrentEnumerationText();
-        
-        return $this->getWidthOfText($text);        
-    }
-
-	public function getWidthOfLastEnumerationChars()
-    {
-        $numberOfChildren = count($this->list->getChildren());
-
-        $text = $this->assembleEnumerationText($numberOfChildren);
-        
-        return $this->getWidthOfText($text);
+        return ($number+$this->initialIndex).'.';
     }
     
-    private function getWidthOfText($text)
+    public function getWidthOfTheBiggestPosibleEnumerationElement(BasicList $list)
     {
-        $fontSize = $this->list->getRecurseAttribute('font-size');
-        
-        $charCodes = array();
-        foreach(str_split($text) as $char)
-        {
-            $charCodes[] = ord($char);
-        }
-
-        return $this->font->getCharsWidth($charCodes, $fontSize);
-    }
-
-	public function next()
-    {
-        $this->current++;
+        $enumerationText = $this->assembleEnumerationText($list, count($list->getChildren()));
+        return $this->getWidthOfText($enumerationText, $list->getFontType(true), $list->getRecurseAttribute('font-size'));
     }
 }

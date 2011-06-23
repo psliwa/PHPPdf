@@ -70,7 +70,7 @@ abstract class Glyph implements \ArrayAccess, \Serializable
     protected static function initializeType()
     {
         //TODO refactoring
-        $attributeWithGetters = array('width', 'height', 'margin-left', 'margin-right', 'margin-top', 'margin-bottom', 'padding-left', 'padding-right', 'padding-top', 'padding-bottom', 'display', 'font-type', 'float');
+        $attributeWithGetters = array('width', 'height', 'margin-left', 'margin-right', 'margin-top', 'margin-bottom', 'padding-left', 'padding-right', 'padding-top', 'padding-bottom', 'display', 'font-type', 'font-size', 'float');
         $attributeWithSetters = array('width', 'height', 'margin-left', 'margin-right', 'margin-top', 'margin-bottom', 'display', 'font-type', 'float', 'static-size', 'font-size', 'margin', 'padding', 'page-break', 'splittable');
         
         $attributeWithGetters = array_flip($attributeWithGetters);
@@ -317,9 +317,21 @@ abstract class Glyph implements \ArrayAccess, \Serializable
         $this->setAttributeDirectly('font-type', $fontType);
     }
 
-    public function getFontType()
+    public function getFontType($recurse = false)
     {
-        return $this->getAttributeDirectly('font-type');
+        if(!$recurse)
+        {
+            return $this->getAttributeDirectly('font-type');
+        }
+        else
+        {
+            return $this->getRecurseAttribute('font-type');
+        }
+    }
+    
+    public function getFontSize()
+    {
+        return $this->getAttributeDirectly('font-size');
     }
     
     public function getDisplay()
@@ -573,6 +585,11 @@ abstract class Glyph implements \ArrayAccess, \Serializable
         return $this->getAttributeDirectly('padding-right');
     }
     
+    public function getEncoding()
+    {
+        return $this->getPage()->getAttribute('encoding');
+    }
+    
     public function setFontSize($size)
     {
         $this->setAttributeDirectly('font-size', (int)$size);
@@ -687,7 +704,7 @@ abstract class Glyph implements \ArrayAccess, \Serializable
 
     /**
      * Getting attribute from this glyph or parents. If value of attribute is null,
-     * this method is recurse invking on parent.
+     * this method is recurse invoking on parent.
      */
     public function getRecurseAttribute($name)
     {
@@ -702,7 +719,7 @@ abstract class Glyph implements \ArrayAccess, \Serializable
 
         return $value;
     }
-
+    
     /**
      * Make snapshot of attribute's map
      */
@@ -956,6 +973,13 @@ abstract class Glyph implements \ArrayAccess, \Serializable
     public function getChildren()
     {
         return array();
+    }
+    
+    public function getChild($index)
+    {
+        //TODO: exception
+        $children = $this->getChildren();
+        return $children[$index];
     }
 
     public function getNumberOfChildren()

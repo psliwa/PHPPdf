@@ -434,4 +434,20 @@ class GlyphTest extends TestCase
             $this->assertTrue($expectedValue === $this->glyph->getAttribute($attributeName));
         }    
     }
+    
+    /**
+     * @test
+     */
+    public function getEncodingIsDelegatedToPage()
+    {
+        $encoding = 'some-encoding';
+        $page = $this->getMock('PHPPdf\Glyph\Page', array('getAttribute'));
+        $page->expects($this->once())
+             ->method('getAttribute')
+             ->will($this->returnValue($encoding));
+        
+        $this->glyph->setParent($page);
+
+        $this->assertEquals($encoding, $this->glyph->getEncoding());
+    }
 }

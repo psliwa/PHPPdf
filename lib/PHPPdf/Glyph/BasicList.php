@@ -39,6 +39,7 @@ class BasicList extends Container
         parent::initializeType();
         
         static::setAttributeSetters(array('type' => 'setType'));
+        static::setAttributeGetters(array('type' => 'getType'));
     }
     
     public function setType($type)
@@ -55,6 +56,11 @@ class BasicList extends Container
         $this->enumerationStrategy = null;
     }
     
+    public function getType()
+    {
+        return $this->getAttributeDirectly('type');
+    }
+    
     protected function doDraw(Document $document)
     {
         parent::doDraw($document);
@@ -62,24 +68,15 @@ class BasicList extends Container
         $glyph = $this;
         $task = new DrawingTask(function() use($glyph){
             $gc = $glyph->getGraphicsContext();
-            
-            $fontSize = $glyph->getRecurseAttribute('font-size');
-            $encoding = $glyph->getPage()->getAttribute('encoding');
-            $position = $glyph->getAttribute('position');
-            
+
             $enumerationStrategy = $glyph->getEnumerationStrategy();
             
-            foreach($glyph->getChildren() as $child)
+            foreach($glyph->getChildren() as $i => $child)
             {
-                $widthOfTypeChar = $enumerationStrategy->getWidthOfCurrentEnumerationChars();
-                $firstPoint = $child->getFirstPoint();
-                $x = $firstPoint->getX() + ($position == BasicList::POSITION_OUTSIDE ? -$widthOfTypeChar : 0) - $child->getMarginLeft();
-                $y = $firstPoint->getY() - $fontSize;
-
-                $enumerationText = $enumerationStrategy->getCurrentEnumerationText();
-                $gc->drawText($enumerationText, $x, $y, $encoding);
-                $enumerationStrategy->next();
+                $enumerationStrategy->drawEnumeration($glyph, $gc, $i);
             }
+
+            $enumerationStrategy->reset();
         });
         
         $this->addDrawingTask($task);
