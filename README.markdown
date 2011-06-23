@@ -1,7 +1,7 @@
 Documentation draft (PL)
 ========================
 
-1. Parsowanie dokumentu i tworzenie pdf'a.
+1. Parsowanie dokumentu i tworzenie pdf'a
 ==========================================
 
 Najprostrzy sposób wykorzystania biblioteki:
