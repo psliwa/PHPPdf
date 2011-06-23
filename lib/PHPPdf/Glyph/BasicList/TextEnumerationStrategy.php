@@ -9,17 +9,15 @@ use PHPPdf\Glyph\GraphicsContext,
 /**
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
-abstract class TextEnumerationStrategy implements EnumerationStrategy
+abstract class TextEnumerationStrategy extends AbstractEnumerationStrategy
 {
     private $widthOfTextCache = array();
     private $initialIndex = 1;
     
-    public function drawEnumeration(BasicList $list, GraphicsContext $gc, $elementIndex)
+    private $enumerationText = null;
+        
+    protected function getEnumerationElementTranslations(BasicList $list, $elementIndex)
     {
-        $child = $list->getChild($elementIndex);
-        
-        $point = $child->getFirstPoint();
-        
         $enumerationText = $this->assembleEnumerationText($list, $elementIndex);
 
         $fontSize = $list->getRecurseAttribute('font-size');
@@ -33,11 +31,18 @@ abstract class TextEnumerationStrategy implements EnumerationStrategy
             $xTranslation -= $widthOfEnumerationText;
         }
         
-        $xCoord = $point->getX() - $child->getMarginLeft() + $xTranslation;
-        $yCoord = $point->getY() - $fontSize;
+        $this->enumerationText = $enumerationText;
+        
+        return array($xTranslation, $fontSize);
+    }
+    
+    protected function doDrawEnumeration(BasicList $list, GraphicsContext $gc, $xCoord, $yCoord)
+    {
         $encoding = $list->getEncoding();
         
-        $gc->drawText($enumerationText, $xCoord, $yCoord, $encoding);
+        $gc->drawText($this->enumerationText, $xCoord, $yCoord, $encoding);
+        
+        $this->enumerationText = null;
     }
        
     abstract protected function assembleEnumerationText(BasicList $list, $number);
@@ -66,15 +71,5 @@ abstract class TextEnumerationStrategy implements EnumerationStrategy
     public function reset()
     {
         $this->widthOfTextCache = array();
-    }
-	public function getInitialIndex()
-    {
-        return $this->initialIndex;
-        
-    }
-
-	public function setInitialIndex($index)
-    {
-        $this->initialIndex = $index;
     }
 }
