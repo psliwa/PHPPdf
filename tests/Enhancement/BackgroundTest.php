@@ -16,7 +16,7 @@ class BackgroundTest extends TestCase
 
     public function setUp()
     {
-        $this->imagePath = dirname(__FILE__).'/../resources/domek-min.jpg';
+        $this->imagePath = __DIR__.'/../resources/domek-min.jpg';
     }
 
     /**

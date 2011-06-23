@@ -975,10 +975,18 @@ abstract class Glyph implements \ArrayAccess, \Serializable
         return array();
     }
     
+    /**
+     * @return PHPPdf\Glyph\Glyph
+     */
     public function getChild($index)
     {
-        //TODO: exception
         $children = $this->getChildren();
+        
+        if(!isset($children[$index]))
+        {
+            throw new \OutOfBoundsException(sprintf('Child "%s" dosn\'t exist.', $index));
+        }
+
         return $children[$index];
     }
 

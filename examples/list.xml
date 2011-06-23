@@ -34,6 +34,12 @@
 	    		<li>Some text</li>
 	    		<li>some another text</li>
 	    	</ul>
+	    	
+	    	<p>Type: image</p>
+	    	<ul type="image" image="dir:list_icon.jpg">
+	    		<li>Some text</li>
+	    		<li>some another text</li>
+	    	</ul>
 
 	    	<p>Ordered list</p>
 	    	<ul type="numeric" position="inside">

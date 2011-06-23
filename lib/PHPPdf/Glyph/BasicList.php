@@ -2,16 +2,16 @@
 
 namespace PHPPdf\Glyph;
 
-use PHPPdf\Glyph\BasicList\EnumerationStrategy;
+use PHPPdf\Glyph\BasicList\ImageEnumerationStrategy,
+    PHPPdf\Glyph\BasicList\EnumerationStrategy,
+    PHPPdf\Glyph\BasicList\OrderedEnumerationStrategy,
+    PHPPdf\Glyph\BasicList\UnorderedEnumerationStrategy,
+    PHPPdf\Document,
+    PHPPdf\Util\DrawingTask;
 
-use PHPPdf\Glyph\BasicList\OrderedEnumerationStrategy;
-
-use PHPPdf\Glyph\BasicList\UnorderedEnumerationStrategy;
-
-use PHPPdf\Document;
-
-use PHPPdf\Util\DrawingTask;
-
+/**
+ * @author Piotr Śliwa <peter.pl7@gmail.com>
+ */
 class BasicList extends Container
 {
     const TYPE_CIRCLE = '•';
@@ -19,6 +19,7 @@ class BasicList extends Container
     const TYPE_DISC = '◦';
     const TYPE_NONE = '';
     const TYPE_NUMERIC = 'numeric';
+    const TYPE_IMAGE = 'image';
     
     const POSITION_INSIDE = 'inside';
     const POSITION_OUTSIDE = 'outside';
@@ -38,8 +39,8 @@ class BasicList extends Container
     {
         parent::initializeType();
         
-        static::setAttributeSetters(array('type' => 'setType'));
-        static::setAttributeGetters(array('type' => 'getType'));
+        static::setAttributeSetters(array('type' => 'setType', 'image' => 'setImage'));
+        static::setAttributeGetters(array('type' => 'getType', 'image' => 'getImage'));
     }
     
     public function setType($type)
@@ -59,6 +60,21 @@ class BasicList extends Container
     public function getType()
     {
         return $this->getAttributeDirectly('type');
+    }
+    
+    public function setImage($image)
+    {
+        if(!$image instanceof \Zend_Pdf_Resource_Image)
+        {
+            $image = \Zend_Pdf_Image::imageWithPath($image);
+        }
+        
+        $this->setAttributeDirectly('image', $image);
+    }
+    
+    public function getImage()
+    {
+        return $this->getAttributeDirectly('image');
     }
     
     protected function doDraw(Document $document)
@@ -83,7 +99,7 @@ class BasicList extends Container
     }
     
     /**
-     * TODO
+     * TODO: use factory
      * 
      * @return PHPPdf\Glyph\BasicList\EnumerationStrategy
      */
@@ -94,6 +110,10 @@ class BasicList extends Container
             if($this->getAttribute('type') === self::TYPE_NUMERIC)
             {
                 $strategy = new OrderedEnumerationStrategy();
+            }
+            elseif($this->getAttribute('type') === self::TYPE_IMAGE)
+            {
+                $strategy = new ImageEnumerationStrategy();
             }
             else
             {                

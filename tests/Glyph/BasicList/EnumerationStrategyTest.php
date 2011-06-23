@@ -19,7 +19,7 @@ abstract class EnumerationStrategyTest extends TestCase
      * @test
      * @dataProvider integerProvider
      */
-    public function lastEnumerationCharsAreNumberOfListElements($elementIndex, Point $point, $position, $childMarginLeft, $elementPattern)
+    public function drawEnumerationInValidPosition($elementIndex, Point $point, $position, $childMarginLeft, $elementPattern)
     {
         $listMock = $this->getMock('PHPPdf\Glyph\BasicList', array_merge($this->getListMockedMethod(), array('getChild', 'getAttribute', 'getEncoding', 'getRecurseAttribute', 'getFontType')));
         $fontMock = $this->getMock('PHPPdf\Font\Font', array(), array(), '', false);
