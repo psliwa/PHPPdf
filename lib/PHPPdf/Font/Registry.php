@@ -20,7 +20,7 @@ class Registry implements \Countable, \Serializable
             throw new \InvalidArgumentException('Font should by type of PHPPdf\Font or array');
         }
 
-        $this->add($name, $font);
+            $this->add($name, $font);
     }
 
     private function add($name, Font $font)
