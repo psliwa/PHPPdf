@@ -165,7 +165,7 @@ class Container extends Glyph
             else
             {
                 $translates[] = ($yChildStart - $yChildEnd) - ($child->getHeight() - $childSplitLine);
-                $childrenToMove[] = $child;
+                array_unshift($childrenToMove, $child);
             }
         }
 

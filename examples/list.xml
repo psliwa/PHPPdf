@@ -3,6 +3,7 @@
 <pdf>
     <dynamic-page>
     	<div>
+
 	    	<p>Position: outside</p>
 	    	<ul>
 	    		<li>Some text</li>
@@ -33,6 +34,7 @@
 	    		<li>Some text</li>
 	    		<li>some another text</li>
 	    	</ul>
+
 	    	<p>Ordered list</p>
 	    	<ul type="numeric" position="inside">
 	    		<li>Some text</li>
@@ -51,6 +53,37 @@
 	    		<li>some another text</li>
 	    		<li>Some text</li>
 	    		<li>some another text</li>
+	    		<li>Some text</li>
+	    		<li>some another text</li>
+	    		<li>Some text</li>
+	    		<li>some another text</li>
+	    		<li>Some text</li>
+	    		<li>some another text</li>
+	    		<li>Some text</li>
+	    		<li>some another text</li>
+	    		<li>Some text</li>
+	    		<li>some another text</li>
+	    		<li>Some text</li>
+	    		<li>some another text</li>
+	    		<li>Some text</li>
+	    		<li>some another text</li>
+	    		<li>Some text</li>
+	    		<li>some another text</li>
+	    		<li>Some text 1</li>
+	    		<li>some another text</li>
+	    		<li>Some text</li>
+	    		<li>some another text</li>
+	    		<li>Some text</li>
+	    		<li>some another text</li>
+	    		<li>Some text</li>
+	    		<li>some another text</li>
+	    		<li>Some text</li>
+	    		<li>some another text</li>
+	    		<li>Some text</li>
+	    		<li>some another text</li>
+	    		<li>Some text</li>
+	    		<li>some another text</li>
+	    		<li>Some text</li>
 	    	</ul>
     	</div>
     </dynamic-page>

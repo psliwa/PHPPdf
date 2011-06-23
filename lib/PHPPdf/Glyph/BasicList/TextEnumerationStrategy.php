@@ -12,6 +12,7 @@ use PHPPdf\Glyph\GraphicsContext,
 abstract class TextEnumerationStrategy implements EnumerationStrategy
 {
     private $widthOfTextCache = array();
+    private $initialIndex = 1;
     
     public function drawEnumeration(BasicList $list, GraphicsContext $gc, $elementIndex)
     {
@@ -65,5 +66,15 @@ abstract class TextEnumerationStrategy implements EnumerationStrategy
     public function reset()
     {
         $this->widthOfTextCache = array();
+    }
+	public function getInitialIndex()
+    {
+        return $this->initialIndex;
+        
+    }
+
+	public function setInitialIndex($index)
+    {
+        $this->initialIndex = $index;
     }
 }

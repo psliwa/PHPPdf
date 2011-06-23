@@ -40,7 +40,7 @@ class ListFormatterTest extends TestCase
         
         $list = $this->getMock('PHPPdf\Glyph\BasicList', array('getChildren', 'getEnumerationStrategy', 'getAttribute'));
         
-        $enumerationStrategy = $this->getMock('PHPPdf\Glyph\BasicList\EnumerationStrategy', array('getWidthOfTheBiggestPosibleEnumerationElement', 'drawEnumeration', 'reset'));
+        $enumerationStrategy = $this->getMock('PHPPdf\Glyph\BasicList\EnumerationStrategy', array('getWidthOfTheBiggestPosibleEnumerationElement', 'drawEnumeration', 'reset', 'setInitialIndex', 'getInitialIndex'));
         
         $list->expects($this->once())
              ->method('getEnumerationStrategy')
