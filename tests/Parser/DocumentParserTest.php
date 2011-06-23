@@ -628,4 +628,31 @@ XML;
             array('enhancement'),
         );
     }
+    
+    /**
+     * @test
+     */
+    public function readEnhancementsInAttributeStyle()
+    {
+        $xml = <<<XML
+<pdf>
+	<tag someAttribute="someValue" someEnhancement.property="propertyValue"></tag>
+</pdf>
+XML;
+
+        $glyphMock = $this->getMock('PHPPdf\Glyph\Container', array('setAttribute', 'mergeEnhancementAttributes'));
+        $glyphMock->expects($this->once())
+                  ->method('setAttribute')
+                  ->id('attribute')
+                  ->with('someAttribute', 'someValue');
+        $glyphMock->expects($this->once())
+                  ->method('mergeEnhancementAttributes')
+                  ->with('someEnhancement', array('name' => 'someEnhancement', 'property' => 'propertyValue'));
+
+        $glyphFactoryMock = $this->getGlyphFactoryMock(array('tag' => $glyphMock));
+
+        $this->parser->setGlyphFactory($glyphFactoryMock);
+
+        $this->parser->parse($xml);
+    }
 }

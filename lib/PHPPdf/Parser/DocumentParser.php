@@ -228,35 +228,35 @@ class DocumentParser extends XmlParser
 
     private function parseGlyph(\XMLReader $reader, Glyph $parentGlyph)
     {
-            $tag = $reader->name;
-            $glyph = $this->createGlyph($reader);
-
-            $class = $reader->getAttribute('class');
-            $this->pushOnTagStack($tag, $class);
-
-            $bagContainer = $this->getStylesheetConstraint()->find($this->tagStack);
-            $this->setGlyphStylesheet($glyph, $bagContainer);
-
-            $id = $reader->getAttribute('id');
-
-            if($id)
+        $tag = $reader->name;
+        $glyph = $this->createGlyph($reader);
+    
+        $class = $reader->getAttribute('class');
+        $this->pushOnTagStack($tag, $class);
+    
+        $bagContainer = $this->getStylesheetConstraint()->find($this->tagStack);
+        $this->setGlyphStylesheet($glyph, $bagContainer);
+    
+        $id = $reader->getAttribute('id');
+    
+        if($id)
+        {
+            if(isset($this->prototypes[$id]))
             {
-                if(isset($this->prototypes[$id]))
-                {
-                    throw new Exceptions\DuplicatedIdException(sprintf('Duplicate of id "%s".', $id));
-                }
-
-                $this->prototypes[$id] = $glyph;
+                throw new Exceptions\DuplicatedIdException(sprintf('Duplicate of id "%s".', $id));
             }
-            $this->setGlyphAttributesFromReader($reader, $glyph);
-
-            $parentGlyph->add($glyph);
-            $this->pushOnStack($glyph);
-
-            if($reader->isEmptyElement)
-            {
-                $this->parseEndElement($reader);
-            }
+    
+            $this->prototypes[$id] = $glyph;
+        }
+        $this->setGlyphAttributesFromReader($reader, $glyph);
+    
+        $parentGlyph->add($glyph);
+        $this->pushOnStack($glyph);
+    
+        if($reader->isEmptyElement)
+        {
+            $this->parseEndElement($reader);
+        }
     }
 
     private function createGlyph(\XMLReader $reader)
@@ -304,17 +304,26 @@ class DocumentParser extends XmlParser
 
     private function setGlyphAttributesFromReader(\XMLReader $reader, Glyph $glyph)
     {
+        $bagContainer = new BagContainer();
         while($reader->moveToNextAttribute())
         {
             $name = $reader->name;
 
             if(!in_array($name, array(self::ATTRIBUTE_ID, self::ATTRIBUTE_EXTENDS, self::ATTRIBUTE_CLASS)))
             {
-
-                $attributes[$reader->name] = $reader->value;
-                $glyph->setAttribute($reader->name, $reader->value);
+                if(false === ($index = strpos($name, '.')))
+                {
+                    $bagContainer->getAttributeBag()->add($name, $reader->value);
+                }
+                else
+                {
+                    list($enhancementName, $propertyName) = explode('.', $name);
+                    $bagContainer->getEnhancementBag()->add($enhancementName, array($propertyName => $reader->value, 'name' => $enhancementName));
+                }
             }
         }
+
+        $this->setGlyphStylesheet($glyph, $bagContainer);
     }
 
     protected function parseEndElement(\XMLReader $reader)
