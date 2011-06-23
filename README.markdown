@@ -1,8 +1,8 @@
 Documentation draft (PL)
 ========================
 
-1. Parsowanie dokumentu i tworzenie pdf'a.
-------------------------------------------
+Parsowanie dokumentu i tworzenie pdf'a.
+---------------------------------------
 
 Najprostrzy sposób wykorzystania biblioteki:
 
@@ -19,8 +19,8 @@ Najprostrzy sposób wykorzystania biblioteki:
     header('Content-Type: application/pdf');
     echo $content;
 
-2. Podstawowa struktura dokumentu.
-----------------------------------
+Podstawowa struktura dokumentu.
+-------------------------------
 
 Biblioteka bazuje na formacie XML przypominającym HTML, ale w żadnym wypadku nie jest to HTML - niektóre tagi się różnią, interpretacja niektórych atrybutów jest inna niż w standardzie HTML i CSS, sposób dodawania atrybutów również jest inny. Najprostrzy dokument ma następującą strukturę:
 
@@ -71,8 +71,8 @@ Atrybuty można nadawać za pomocą atrybutów XML bezpośrednio po nazwie tagu 
 
 Biblioteka jest bardzo rygorystyczna pod względem poprawności tagów i atrybutów. Jeśli zostanie użyty nieistniejący tag lub atrybut, dokument się nie sparsuje - zostanie wyrzucony wyjątek z odpowiednią treścią.
 
-3. Dziedziczenie.
------------------
+Dziedziczenie.
+--------------
 
 Atrybut "id" ma całkowicie inne znaczenie niż w HTML'u. Id musi być unikalne w obrębie dokumentu, w przeciwnym wypadku wystąpi błąd parsowania. Służy on do identyfikowania elementów przy dziedziczeniu. Przykład:
 
@@ -118,8 +118,8 @@ Drugi "div" będzie miał następujące atrybuty:
 - color: #aaaaaa
 - height: 200
 
-4. Struktura arkusza stylów.
-----------------------------
+Struktura arkusza stylów.
+-------------------------
 
 Arkusze stylów muszą się znajdować w osobnym pliku, nie ma wsparcia krótkiej deklaracji atrybutów prostych i złożonych bezpośrednio w tagu. Składnia arkusza stylów:
 
@@ -152,8 +152,8 @@ Arkusze stylów muszą się znajdować w osobnym pliku, nie ma wsparcia krótkie
         </h2>
     </stylesheet>
 
-5. Standardowe tagi.
---------------------
+Standardowe tagi.
+-----------------
 
 Biblioteka obsługuje podstawowe tagi zaczerpnięte z języka HTML: div, p, table, tr, td, b, strong, span, h1, h2, h3, h4, h5, img, br, ul, li
 Ponadto obsługiwane są niestandardowe tagi:
@@ -172,8 +172,8 @@ Istnieją tagi, które służą jedynie do określania wartości atrybutów, zbi
 * placeholders - definiuje wartości "slotów" dla elementu podrzędnego. Elementy podrzędne "placeholders" są specyficzne dla tagu nadrzędnego.
 * metadata - definiuje dane meta dla dokumentu pdf, bezpośredni element podrzędny korzenia dokumentu (TODO)
 
-6. Atrybuty.
-------------
+Atrybuty.
+---------
 
 * width oraz height: ustawienie wysokości i szerokości na sztywno, nie są obsługiwane jednostki. Jest możliwe użycie wartości relatywnych wyrażonych w procentach
 * margin (margin-top, margin-bottom, margin-left, margin-right): margines podobny jak w HTML/CSS z taką różnicą, że marginesy sąsiadów się sumują. Dla marginesów bocznym możliwa jest wartość "auto" - działa podobnie jak w HTML/CSS
@@ -190,8 +190,8 @@ Istnieją tagi, które służą jedynie do określania wartości atrybutów, zbi
 * page-break - łamie stronę jeśli element jest bezpośrednim dzieckiem elementu dynamic-page
 * colspan, rowspan - działanie analogiczne do atrybutów html (rowspan jeszcze nie jest zaimplementowane)
 
-7. Atrybuty złożone
--------------------
+Atrybuty złożone
+----------------
 
 * border:
     - color: kolor obramowania
@@ -224,8 +224,8 @@ Można dodawać kilka upiększeń tego samego typu (np. 3 różne obramowania) u
 
 W tym przykładzie drugie obramowanie ma identyfikator "borderLeftAndRight", jakby go nie było to atrybuty drugiego obramowania zostały by złączone z atrybutami z pierwszego obramowania. Domyślny identyfikator "id" jest równy atrybutowi "name". Identyfikatory "id" dla upiększeń (enhancements) nie mają nic wspólnego z atrybutami "id" dla elementów (glyphów). Można tworzyć obramowania złożone manipulując pozycją, tak jak w powyższym przykładzie (outerBorderLeftAndRight).
 
-8. Powtarzalne nagłówki i stopki.
----------------------------------
+Powtarzalne nagłówki i stopki.
+------------------------------
 
 Aby dodać powtarzalny nagłówek i/bądź stopkę należy wykorzystać tag "placeholders". Niektóre elementy mają specjalne "sloty": strona ma nagłówek i stopkę, tabela może mieć nagłówek (TODO: jeszcze nie zaimplementowane) itp.
 
@@ -256,8 +256,8 @@ W nagłówku i stopce można korzystać z specjalnego tagu "<page-info></page-in
         </header>
     <!-- ciach -->
 
-9. Podział strony na kolumny.
------------------------------
+Podział strony na kolumny.
+--------------------------
 
 Strona może być podzielona na kolumny.
 
@@ -275,8 +275,8 @@ Strona może być podzielona na kolumny.
 
 Powyższy xml określa kilka stron dokumentu pdf z zielonymi prostokątami podzielonymi na 2 kolumny. Tag "column-layout" ma dwa dodatkowe atrybuty: number-of-columns oraz margin-between-columns. Domyślna wartość tych atrybutów to odpowiednio 2 oraz 10.
 
-10. Konfiguracja.
------------------
+Konfiguracja.
+-------------
 
 Biblioteka ma 3 podstawowe pliki konfiguracyjne, które pozwalają na dostosowanie biblioteki do swoich potrzeb oraz do jej rozszerzenia.
 
@@ -297,8 +297,8 @@ Można ustawić cache dla plików konfiguracyjnych oraz szablonów stylów:
                       ->setUseCacheForStylesheetConstraint(true) //szablony stylów również będą korzystały z cache
                       ->build();
 
-11. Znane ograniczenia.
------------------------
+Znane ograniczenia.
+-------------------
 
 Poniżej przedstawiam listę ograniczeń obecnej wersji biblioteki:
 
@@ -307,8 +307,8 @@ Poniżej przedstawiam listę ograniczeń obecnej wersji biblioteki:
 * brak justrowania - zostanie wprowadzone w kolejnych wersjach
 * obramowanie nie zmienia rozmiaru elementu tak jak to jest w HTML - zabieg celowy, raczej nie planuję jego zmiany
 
-12. TODO - czyli plany.
------------------------
+TODO - czyli plany.
+-------------------
 
 * obsługa adnotacji
 * obsługa metadanych dokumentu
@@ -321,7 +321,7 @@ Poniżej przedstawiam listę ograniczeń obecnej wersji biblioteki:
 * bundle do integracji z Symfony2
 * refaktoryzacja
 
-13. Wymagania techniczne.
--------------------------
+Wymagania techniczne.
+---------------------
 
 Biblioteka działa pod php 5.3+.
