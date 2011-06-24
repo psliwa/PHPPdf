@@ -162,7 +162,7 @@ class GlyphFactoryParser extends XmlParser
         {
             $this->isFormattersParsing = false;
         }
-        elseif(!$this->isFormattersParsing)
+        elseif(!$this->isFormattersParsing && $reader->name === self::GLYPH_TAG)
         {
             $this->popFromStack();
         }

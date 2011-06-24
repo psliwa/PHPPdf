@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <factory>
+	<invoke-args>
+		<invoke-arg id="list.enumeration_factory" class="PHPPdf\Glyph\BasicList\EnumerationStrategyFactory" />
+	</invoke-args>
 	<glyphs>
 	    <glyph name="page" class="PHPPdf\Glyph\Page">
 	        <stylesheet>
@@ -37,6 +40,7 @@
 	        </formatters>
 	    </glyph>
 	    <glyph name="ul" class="PHPPdf\Glyph\BasicList">
+	    	<invoke method="setEnumerationStrategyFactory" argId="list.enumeration_factory" />
 	        <formatters>
 	            <formatter class="PHPPdf\Formatter\ConvertAttributesFormatter" />
 	            <formatter class="PHPPdf\Formatter\StandardDimensionFormatter" />

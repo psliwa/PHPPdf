@@ -12,6 +12,7 @@ require_once 'PHPPdf/Autoloader.php';
 PHPPdf\Autoloader::register();
 PHPPdf\Autoloader::register(dirname(__FILE__).'/../lib/vendor');
 
+//$facade = PHPPdf\Parser\FacadeBuilder::create(new PHPPdf\Configuration\DependencyInjection\LoaderImpl())->setCache('File', array('cache_dir' => __DIR__.'/cache/'))
 $facade = PHPPdf\Parser\FacadeBuilder::create()->setCache('File', array('cache_dir' => __DIR__.'/cache/'))
                                                ->setUseCacheForStylesheetConstraint(true)
                                                ->build();

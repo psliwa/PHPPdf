@@ -54,6 +54,8 @@
 				</argument>
 			</call>
 		</service>
+
+		<service id="phppdf.glyph.ul.enumeration_factory" class="PHPPdf\Glyph\BasicList\EnumerationStrategyFactory" />
 		<service id="phppdf.glyph.ul" class="PHPPdf\Glyph\BasicList" public="false">
 			<tag name="phppdf.glyph" />
 			<call method="setFormattersNames">
@@ -67,6 +69,9 @@
 					<argument>PHPPdf\Formatter\StandardPositionFormatter</argument>
 					<argument>PHPPdf\Formatter\FloatFormatter</argument>
 				</argument>
+			</call>
+			<call method="setEnumerationStrategyFactory">
+				<argument id="phppdf.glyph.ul.enumeration_factory" type="service" />
 			</call>
 		</service>
 		<service id="phppdf.glyph.li" class="PHPPdf\Glyph\Container" public="false">

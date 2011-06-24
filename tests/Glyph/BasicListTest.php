@@ -96,11 +96,19 @@ class BasicListTest extends TestCase
     {
         $this->list->setAttribute('type', $type);
         
-        $font = $this->getMock('PHPPdf\Font\Font', array(), array(), '', false);
-        $this->list->setAttribute('font-type', $font);
+        $factory = $this->getMock('PHPPdf\Glyph\BasicList\EnumerationStrategyFactory', array('create'));
+        
+        $expectedStrategy = new $expectedEnumerationStrategyClass();
+        $factory->expects($this->once())
+                ->method('create')
+                ->with($type)
+                ->will($this->returnValue($expectedStrategy));
+                
+        $this->list->setEnumerationStrategyFactory($factory);
+        
         $enumerationStrategy = $this->list->getEnumerationStrategy();
         
-        $this->assertInstanceOf($expectedEnumerationStrategyClass, $enumerationStrategy);
+        $this->assertTrue($expectedStrategy === $enumerationStrategy);
     }
     
     public function enumerationProvider()
@@ -110,7 +118,7 @@ class BasicListTest extends TestCase
             array(BasicList::TYPE_SQUARE, 'PHPPdf\Glyph\BasicList\UnorderedEnumerationStrategy'),
             array(BasicList::TYPE_DISC, 'PHPPdf\Glyph\BasicList\UnorderedEnumerationStrategy'),
             array(BasicList::TYPE_NONE, 'PHPPdf\Glyph\BasicList\UnorderedEnumerationStrategy'),
-            array(BasicList::TYPE_NUMERIC, 'PHPPdf\Glyph\BasicList\OrderedEnumerationStrategy'),
+            array(BasicList::TYPE_DECIMAL, 'PHPPdf\Glyph\BasicList\OrderedEnumerationStrategy'),
         );
     }
     
@@ -122,13 +130,34 @@ class BasicListTest extends TestCase
         $font = $this->getMock('PHPPdf\Font\Font', array(), array(), '', false);
         $this->list->setAttribute('font-type', $font);
         
-        $this->list->setAttribute('type', BasicList::TYPE_CIRCLE);
+        $type = BasicList::TYPE_CIRCLE;
+        $this->list->setAttribute('type', $type);
         
-        $this->assertTrue($this->list->getEnumerationStrategy() === $this->list->getEnumerationStrategy());
+        $factory = $this->getMock('PHPPdf\Glyph\BasicList\EnumerationStrategyFactory', array('create'));
+        
+        $strategyStub = 'some-stub1';
+        $factory->expects($this->once())
+                ->method('create')
+                ->with($type)
+                ->will($this->returnValue($strategyStub));
+        $this->list->setEnumerationStrategyFactory($factory);
+        
+        $this->assertTrue($strategyStub === $this->list->getEnumerationStrategy());
+        $this->assertTrue($strategyStub === $this->list->getEnumerationStrategy());
         
         $enumerationStrategy = $this->list->getEnumerationStrategy();
         
-        $this->list->setAttribute('type', BasicList::TYPE_NUMERIC);
+        $type = BasicList::TYPE_DECIMAL;
+        $strategyStub = 'some-stub2';
+        
+        $factory = $this->getMock('PHPPdf\Glyph\BasicList\EnumerationStrategyFactory', array('create'));
+        $factory->expects($this->once())
+                ->method('create')
+                ->with($type)
+                ->will($this->returnValue($strategyStub));
+        $this->list->setEnumerationStrategyFactory($factory);
+        
+        $this->list->setAttribute('type', $type);
         
         $this->assertFalse($enumerationStrategy === $this->list->getEnumerationStrategy());
     }

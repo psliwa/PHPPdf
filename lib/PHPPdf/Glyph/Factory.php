@@ -109,7 +109,8 @@ class Factory implements \Serializable
     {
         return serialize(array(
             'prototypes' => $this->prototypes,
-            'invocationsMethodsOnCreate' => $this->invocationsMethodsOnCreate
+            'invocationsMethodsOnCreate' => $this->invocationsMethodsOnCreate,
+            'invokeArgs' => $this->invokeArgs,
         ));
     }
 
@@ -119,11 +120,17 @@ class Factory implements \Serializable
         
         $prototypes = $data['prototypes'];
         $invocationsMethodsOnCreate = $data['invocationsMethodsOnCreate'];
+        $invokeArgs = $data['invokeArgs'];
 
         foreach($prototypes as $name => $prototype)
         {
             $invocationsMethods = isset($invocationsMethodsOnCreate[$name]) ? $invocationsMethodsOnCreate[$name] : array();
             $this->addPrototype($name, $prototype, $invocationsMethods);
-        }    
+        }   
+
+        foreach($invokeArgs as $tag => $value)
+        {
+            $this->addInvokeArg($tag, $value);
+        }
     }
 }

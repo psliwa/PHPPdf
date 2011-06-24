@@ -42,54 +42,27 @@
 	    	</ul>
 
 	    	<p>Ordered list</p>
-	    	<ul type="numeric" position="inside">
+	    	<ul type="decimal" position="inside">
 	    		<li>Some text</li>
 	    		<li>some another text</li>
+	    	</ul>
+	    	
+	    	<p>Ordered list</p>
+	    	<ul type="decimal-leading-zero" position="outside">
 	    		<li>Some text</li>
 	    		<li>some another text</li>
+	    	</ul>
+	    	
+	    	<p>Ordered list</p>
+	    	<ul type="lower-alpha" position="inside">
 	    		<li>Some text</li>
 	    		<li>some another text</li>
+	    	</ul>
+	    	
+	    	<p>Ordered list</p>
+	    	<ul type="upper-alpha" position="inside">
 	    		<li>Some text</li>
 	    		<li>some another text</li>
-	    		<li>Some text</li>
-	    		<li>some another text</li>
-	    		<li>Some text</li>
-	    		<li>some another text</li>
-	    		<li>Some text</li>
-	    		<li>some another text</li>
-	    		<li>Some text</li>
-	    		<li>some another text</li>
-	    		<li>Some text</li>
-	    		<li>some another text</li>
-	    		<li>Some text</li>
-	    		<li>some another text</li>
-	    		<li>Some text</li>
-	    		<li>some another text</li>
-	    		<li>Some text</li>
-	    		<li>some another text</li>
-	    		<li>Some text</li>
-	    		<li>some another text</li>
-	    		<li>Some text</li>
-	    		<li>some another text</li>
-	    		<li>Some text</li>
-	    		<li>some another text</li>
-	    		<li>Some text</li>
-	    		<li>some another text</li>
-	    		<li>Some text 1</li>
-	    		<li>some another text</li>
-	    		<li>Some text</li>
-	    		<li>some another text</li>
-	    		<li>Some text</li>
-	    		<li>some another text</li>
-	    		<li>Some text</li>
-	    		<li>some another text</li>
-	    		<li>Some text</li>
-	    		<li>some another text</li>
-	    		<li>Some text</li>
-	    		<li>some another text</li>
-	    		<li>Some text</li>
-	    		<li>some another text</li>
-	    		<li>Some text</li>
 	    	</ul>
     	</div>
     </dynamic-page>

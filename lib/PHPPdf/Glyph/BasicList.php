@@ -2,6 +2,8 @@
 
 namespace PHPPdf\Glyph;
 
+use PHPPdf\Glyph\BasicList\EnumerationStrategyFactory;
+
 use PHPPdf\Glyph\BasicList\ImageEnumerationStrategy,
     PHPPdf\Glyph\BasicList\EnumerationStrategy,
     PHPPdf\Glyph\BasicList\OrderedEnumerationStrategy,
@@ -18,7 +20,10 @@ class BasicList extends Container
     const TYPE_SQUARE = '▪';
     const TYPE_DISC = '◦';
     const TYPE_NONE = '';
-    const TYPE_NUMERIC = 'numeric';
+    const TYPE_DECIMAL = 'decimal';
+    const TYPE_DECIMAL_LEADING_ZERO = 'decimal-leading-zero';
+    const TYPE_LOWER_ALPHA = 'lower-alpha';
+    const TYPE_UPPER_ALPHA = 'upper-alpha';
     const TYPE_IMAGE = 'image';
     
     const POSITION_INSIDE = 'inside';
@@ -108,23 +113,15 @@ class BasicList extends Container
     {
         if($this->enumerationStrategy === null)
         {
-            if($this->getAttribute('type') === self::TYPE_NUMERIC)
-            {
-                $strategy = new OrderedEnumerationStrategy();
-            }
-            elseif($this->getAttribute('type') === self::TYPE_IMAGE)
-            {
-                $strategy = new ImageEnumerationStrategy();
-            }
-            else
-            {                
-                $strategy = new UnorderedEnumerationStrategy();            
-            }
-            
-            $this->enumerationStrategy = $strategy;
+            $this->enumerationStrategy = $this->enumerationStrategyFactory->create($this->getAttribute('type'));
         }
 
         return $this->enumerationStrategy;
+    }
+    
+    public function setEnumerationStrategyFactory(EnumerationStrategyFactory $factory)
+    {
+        $this->enumerationStrategyFactory = $factory;
     }
     
     public function setEnumerationStrategy(EnumerationStrategy $enumerationStrategy)
@@ -140,29 +137,4 @@ class BasicList extends Container
         
         return $font->getCharsWidth(array(ord($type)), $fontSize);
     }
-    
-//    protected function doSplit($height)
-//    {
-//        $product = parent::doSplit($height);
-//        
-//        if($product !== null)
-//        {
-//            $initialIndex = count($this->getChildren()) + $this->getEnumerationStrategy()->getInitialIndex();
-//            $product->getEnumerationStrategy()->setInitialIndex($initialIndex);
-//        }
-//        
-//        return $product;
-//    }
-//    
-//    public function copy()
-//    {
-//        $copy = parent::copy();
-//        
-//        if($copy->enumerationStrategy !== null)
-//        {
-//            $copy->enumerationStrategy = clone $this->enumerationStrategy;
-//        }
-//        
-//        return $copy;
-//    }
 }
