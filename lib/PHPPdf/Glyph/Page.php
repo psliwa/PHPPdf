@@ -274,7 +274,10 @@ class Page extends Container
 
         foreach($indexes as $index)
         {
-            $boundary->pointTranslate($index, $x, $y);
+            if(isset($boundary[$index]))
+            {
+                $boundary->pointTranslate($index, $x, $y);
+            }
         }
     }
 

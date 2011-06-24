@@ -284,18 +284,20 @@ Biblioteka ma 3 podstawowe pliki konfiguracyjne, które pozwalają na dostosowan
 * glyphs.xml - definiowanie tagów dostępnych w dokumencie xml wraz z domyślnymi stylami oraz obiektami formatującymi
 * fonts.xml - definowanie czcionek i przypisywanie ich do nazw logicznych, które identyfikują daną czcionkę w obrębie całej biblioteki
 
-Aby zmienić domyślne pliki konfiguracyjne należy użyć obiektu klasy FacadeBuilder aby nowe ścieżki przekazać do obiektu fasady:
+Aby zmienić domyślne pliki konfiguracyjne należy przekazać do konstruktora fasady odpowiednio skonfigurowany obiekt ładujący konfigurację.
 
-    $builder = PHPPdf\Parser\FacadeBuilder::create()->setGlyphsConfigFile('...')->setFontsConfigFile('...');
+    $loader = new PHPPdf\Configuration\LoaderImpl('/sciezka/do/pliku/glyphs.xml', '/sciezka/do/pliku/enhancements.xml', '/sciezka/do/pliku/fonts.xml');
+    $facade = new PHPPdf\Parser\Facade($loader);
+
+Można wykorzystać budowniczego fasady, który jak narazie ma opcje do ustawiania cache.
+    
+    $builder = PHPPdf\Parser\FacadeBuilder::create(/* można przekazać obiekt loadera konfiguracji */)
+                                          ->setCache('File', array('cache_dir' => './cache'))
+                                          ->setUseCacheForStylesheetConstraint(true); //szablony stylów również będą korzystały z cache
+
     $facade = $builder->build();
 
-Można ustawić cache dla plików konfiguracyjnych oraz szablonów stylów:
-
-    $builder = ...;
-
-    $facade = $builder->setCache('File', array('cache_dir' => './cache')) //cache będzie przechowywane w pliku w podanym folderze
-                      ->setUseCacheForStylesheetConstraint(true) //szablony stylów również będą korzystały z cache
-                      ->build();
+Są dwie implementacje loaderów konfiguracji, zwykła oraz korzystająca z komponentu DependencyInjection z Symfony2. Druga implementacja daje większą elastyczność w konfigurowaniu biblioteki. Domyślnie używany jest loader, który nie korzysta z DI.
 
 Znane ograniczenia.
 -------------------

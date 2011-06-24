@@ -18,6 +18,14 @@ class Factory implements \Serializable
     private $constructors = array();
     private $classes = array();
     private $constructorParameters = array();
+    
+    public function __construct(array $definitions = array())
+    {
+        foreach($definitions as $name => $className)
+        {
+            $this->addDefinition($name, $className);
+        }
+    }
 
     public function addDefinition($name, $className)
     {

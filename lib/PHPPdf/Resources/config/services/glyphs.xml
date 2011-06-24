@@ -1,0 +1,354 @@
+<?xml version="1.0" ?>
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+	<services>
+		<service id="phppdf.glyph_factory" class="PHPPdf\Glyph\Factory" public="false">
+		</service>
+		<service id="phppdf.glyph.page" class="PHPPdf\Glyph\Page" public="false">
+			<tag name="phppdf.glyph" />
+			<argument type="collection">
+				<argument key="font-type">verdana</argument>
+				<argument key="font-size">10</argument>
+				<argument key="font-style">normal</argument>
+				<argument key="color">black</argument>
+			</argument>
+			<call method="setMargin">
+				<argument>40 40</argument>
+			</call>
+			<call method="setFormattersNames">
+				<argument type="collection">
+					<argument>PHPPdf\Formatter\ConvertAttributesFormatter</argument>
+					<argument>PHPPdf\Formatter\StandardDimensionFormatter</argument>
+					<argument>PHPPdf\Formatter\ContainerFormatter</argument>
+					<argument>PHPPdf\Formatter\FloatFormatter</argument>
+				</argument>
+			</call>
+		</service>
+		<service id="phppdf.glyph.dynamic-page" class="PHPPdf\Glyph\DynamicPage" public="false">
+			<tag name="phppdf.glyph" />
+			<argument type="service" id="phppdf.glyph.page" />
+			<call method="setFormattersNames">
+				<argument type="collection">
+					<argument>PHPPdf\Formatter\ConvertAttributesFormatter</argument>
+					<argument>PHPPdf\Formatter\StandardDimensionFormatter</argument>
+					<argument>PHPPdf\Formatter\ContainerFormatter</argument>
+					<argument>PHPPdf\Formatter\FloatFormatter</argument>
+					<argument>PHPPdf\Formatter\PageDivertingFormatter</argument>
+				</argument>
+			</call>
+		</service>
+		
+		<service id="phppdf.glyph.div" class="PHPPdf\Glyph\Container" public="false">
+			<tag name="phppdf.glyph" />
+			<call method="setFormattersNames">
+				<argument type="collection">
+					<argument>PHPPdf\Formatter\ConvertAttributesFormatter</argument>
+					<argument>PHPPdf\Formatter\StandardDimensionFormatter</argument>
+					<argument>PHPPdf\Formatter\FirstPointPositionFormatter</argument>
+					<argument>PHPPdf\Formatter\ContainerFormatter</argument>
+					<argument>PHPPdf\Formatter\ContainerDimensionFormatter</argument>
+					<argument>PHPPdf\Formatter\StandardPositionFormatter</argument>
+					<argument>PHPPdf\Formatter\FloatFormatter</argument>
+				</argument>
+			</call>
+		</service>
+		<service id="phppdf.glyph.ul" class="PHPPdf\Glyph\BasicList" public="false">
+			<tag name="phppdf.glyph" />
+			<call method="setFormattersNames">
+				<argument type="collection">
+					<argument>PHPPdf\Formatter\ConvertAttributesFormatter</argument>
+					<argument>PHPPdf\Formatter\StandardDimensionFormatter</argument>
+					<argument>PHPPdf\Formatter\FirstPointPositionFormatter</argument>
+					<argument>PHPPdf\Formatter\ListFormatter</argument>
+					<argument>PHPPdf\Formatter\ContainerFormatter</argument>
+					<argument>PHPPdf\Formatter\ContainerDimensionFormatter</argument>
+					<argument>PHPPdf\Formatter\StandardPositionFormatter</argument>
+					<argument>PHPPdf\Formatter\FloatFormatter</argument>
+				</argument>
+			</call>
+		</service>
+		<service id="phppdf.glyph.li" class="PHPPdf\Glyph\Container" public="false">
+			<tag name="phppdf.glyph" />
+			<argument type="collection">
+				<argument key="margin-left">10</argument>
+				<argument key="splittable">false</argument>
+			</argument>
+			<call method="setFormattersNames">
+				<argument type="collection">
+					<argument>PHPPdf\Formatter\ConvertAttributesFormatter</argument>
+					<argument>PHPPdf\Formatter\StandardDimensionFormatter</argument>
+					<argument>PHPPdf\Formatter\FirstPointPositionFormatter</argument>
+					<argument>PHPPdf\Formatter\ContainerFormatter</argument>
+					<argument>PHPPdf\Formatter\ContainerDimensionFormatter</argument>
+					<argument>PHPPdf\Formatter\StandardPositionFormatter</argument>
+					<argument>PHPPdf\Formatter\FloatFormatter</argument>
+				</argument>
+			</call>
+		</service>
+		
+		<service id="phppdf.glyph.p" class="PHPPdf\Glyph\Container" public="false">
+			<tag name="phppdf.glyph" />
+			<argument type="collection">
+				<argument key="padding">5 0</argument>
+			</argument>
+			<call method="setFormattersNames">
+				<argument type="collection">
+					<argument>PHPPdf\Formatter\ConvertAttributesFormatter</argument>
+					<argument>PHPPdf\Formatter\StandardDimensionFormatter</argument>
+					<argument>PHPPdf\Formatter\FirstPointPositionFormatter</argument>
+					<argument>PHPPdf\Formatter\ContainerFormatter</argument>
+					<argument>PHPPdf\Formatter\ContainerDimensionFormatter</argument>
+					<argument>PHPPdf\Formatter\StandardPositionFormatter</argument>
+					<argument>PHPPdf\Formatter\FloatFormatter</argument>
+				</argument>
+			</call>
+		</service>
+		<service id="phppdf.glyph.text" class="PHPPdf\Glyph\Text" public="false">
+			<tag name="phppdf.glyph" />
+			<call method="setFormattersNames">
+				<argument type="collection">
+					<argument>PHPPdf\Formatter\ConvertAttributesFormatter</argument>
+					<argument>PHPPdf\Formatter\StandardDimensionFormatter</argument>
+					<argument>PHPPdf\Formatter\FirstPointPositionFormatter</argument>
+					<argument>PHPPdf\Formatter\TextDimensionFormatter</argument>
+					<argument>PHPPdf\Formatter\TextResetPositionFormatter</argument>
+					<argument>PHPPdf\Formatter\StandardPositionFormatter</argument>
+					<argument>PHPPdf\Formatter\FloatFormatter</argument>
+				</argument>
+			</call>
+		</service>
+		<service id="phppdf.glyph.span" class="PHPPdf\Glyph\Text" public="false">
+			<tag name="phppdf.glyph" />
+			<call method="setFormattersNames">
+				<argument type="collection">
+					<argument>PHPPdf\Formatter\ConvertAttributesFormatter</argument>
+					<argument>PHPPdf\Formatter\StandardDimensionFormatter</argument>
+					<argument>PHPPdf\Formatter\FirstPointPositionFormatter</argument>
+					<argument>PHPPdf\Formatter\TextDimensionFormatter</argument>
+					<argument>PHPPdf\Formatter\TextResetPositionFormatter</argument>
+					<argument>PHPPdf\Formatter\StandardPositionFormatter</argument>
+					<argument>PHPPdf\Formatter\FloatFormatter</argument>
+				</argument>
+			</call>
+		</service>
+		
+		<service id="phppdf.glyph.h1" class="PHPPdf\Glyph\Container" public="false">
+			<tag name="phppdf.glyph" />
+			<argument type="collection">
+				<argument key="font-size">16</argument>
+				<argument key="font-style">bold</argument>
+				<argument key="margin">5 0</argument>
+			</argument>
+			<call method="setFormattersNames">
+				<argument type="collection">
+					<argument>PHPPdf\Formatter\ConvertAttributesFormatter</argument>
+					<argument>PHPPdf\Formatter\StandardDimensionFormatter</argument>
+					<argument>PHPPdf\Formatter\FirstPointPositionFormatter</argument>
+					<argument>PHPPdf\Formatter\ContainerFormatter</argument>
+					<argument>PHPPdf\Formatter\ContainerDimensionFormatter</argument>
+					<argument>PHPPdf\Formatter\StandardPositionFormatter</argument>
+					<argument>PHPPdf\Formatter\FloatFormatter</argument>
+				</argument>
+			</call>
+		</service>
+		<service id="phppdf.glyph.h2" class="PHPPdf\Glyph\Container" public="false">
+			<tag name="phppdf.glyph" />
+			<argument type="collection">
+				<argument key="font-size">14</argument>
+				<argument key="font-style">bold</argument>
+				<argument key="margin">4 0</argument>
+			</argument>
+			<call method="setFormattersNames">
+				<argument type="collection">
+					<argument>PHPPdf\Formatter\ConvertAttributesFormatter</argument>
+					<argument>PHPPdf\Formatter\StandardDimensionFormatter</argument>
+					<argument>PHPPdf\Formatter\FirstPointPositionFormatter</argument>
+					<argument>PHPPdf\Formatter\ContainerFormatter</argument>
+					<argument>PHPPdf\Formatter\ContainerDimensionFormatter</argument>
+					<argument>PHPPdf\Formatter\StandardPositionFormatter</argument>
+					<argument>PHPPdf\Formatter\FloatFormatter</argument>
+				</argument>
+			</call>
+		</service>
+		<service id="phppdf.glyph.h3" class="PHPPdf\Glyph\Container" public="false">
+			<tag name="phppdf.glyph" />
+			<argument type="collection">
+				<argument key="font-size">12</argument>
+				<argument key="margin">3 0</argument>
+			</argument>
+			<call method="setFormattersNames">
+				<argument type="collection">
+					<argument>PHPPdf\Formatter\ConvertAttributesFormatter</argument>
+					<argument>PHPPdf\Formatter\StandardDimensionFormatter</argument>
+					<argument>PHPPdf\Formatter\FirstPointPositionFormatter</argument>
+					<argument>PHPPdf\Formatter\ContainerFormatter</argument>
+					<argument>PHPPdf\Formatter\ContainerDimensionFormatter</argument>
+					<argument>PHPPdf\Formatter\StandardPositionFormatter</argument>
+					<argument>PHPPdf\Formatter\FloatFormatter</argument>
+				</argument>
+			</call>
+		</service>
+		
+		<service id="phppdf.glyph.page-info" class="PHPPdf\Glyph\Runtime\PageInfo" public="false">
+			<tag name="phppdf.glyph" />
+			<call method="setFormattersNames">
+				<argument type="collection">
+					<argument>PHPPdf\Formatter\ConvertAttributesFormatter</argument>
+					<argument>PHPPdf\Formatter\StandardDimensionFormatter</argument>
+					<argument>PHPPdf\Formatter\FirstPointPositionFormatter</argument>
+					<argument>PHPPdf\Formatter\TextDimensionFormatter</argument>
+					<argument>PHPPdf\Formatter\TextResetPositionFormatter</argument>
+					<argument>PHPPdf\Formatter\StandardPositionFormatter</argument>
+					<argument>PHPPdf\Formatter\FloatFormatter</argument>
+				</argument>
+			</call>
+		</service>
+		<service id="phppdf.glyph.table" class="PHPPdf\Glyph\Table" public="false">
+			<tag name="phppdf.glyph" />
+			<call method="setFormattersNames">
+				<argument type="collection">
+					<argument>PHPPdf\Formatter\ConvertAttributesFormatter</argument>
+					<argument>PHPPdf\Formatter\StandardDimensionFormatter</argument>
+					<argument>PHPPdf\Formatter\TableColumnFormatter</argument>
+					<argument>PHPPdf\Formatter\FirstPointPositionFormatter</argument>
+					<argument>PHPPdf\Formatter\ContainerFormatter</argument>
+					<argument>PHPPdf\Formatter\ContainerDimensionFormatter</argument>
+					<argument>PHPPdf\Formatter\TableFormatter</argument>
+					<argument>PHPPdf\Formatter\StandardPositionFormatter</argument>
+				</argument>
+			</call>
+		</service>
+		<service id="phppdf.glyph.tr" class="PHPPdf\Glyph\Table\Row" public="false">
+			<tag name="phppdf.glyph" />
+			<argument type="collection">
+				<argument key="height">5</argument>
+			</argument>
+			<call method="setFormattersNames">
+				<argument type="collection">
+					<argument>PHPPdf\Formatter\ConvertAttributesFormatter</argument>
+					<argument>PHPPdf\Formatter\StandardDimensionFormatter</argument>
+					<argument>PHPPdf\Formatter\FirstPointPositionFormatter</argument>
+					<argument>PHPPdf\Formatter\ContainerFormatter</argument>
+					<argument>PHPPdf\Formatter\ContainerDimensionFormatter</argument>
+					<argument>PHPPdf\Formatter\StandardPositionFormatter</argument>
+					<argument>PHPPdf\Formatter\RowDimensionFormatter</argument>
+				</argument>
+			</call>
+		</service>
+		<service id="phppdf.glyph.td" class="PHPPdf\Glyph\Table\Cell" public="false">
+			<tag name="phppdf.glyph" />
+			<!--  TODO: enhancements -->
+
+			<call method="setFormattersNames">
+				<argument type="collection">
+					<argument>PHPPdf\Formatter\ConvertAttributesFormatter</argument>
+					<argument>PHPPdf\Formatter\StandardDimensionFormatter</argument>
+					<argument>PHPPdf\Formatter\CellFirstPointPositionFormatter</argument>
+					<argument>PHPPdf\Formatter\ContainerFormatter</argument>
+					<argument>PHPPdf\Formatter\ContainerDimensionFormatter</argument>
+					<argument>PHPPdf\Formatter\StandardPositionFormatter</argument>
+					<argument>PHPPdf\Formatter\FloatFormatter</argument>
+				</argument>
+			</call>
+		</service>
+		<service id="phppdf.glyph.img" class="PHPPdf\Glyph\Image" public="false">
+			<tag name="phppdf.glyph" />
+			<argument type="collection">
+				<argument key="margin">1</argument>
+			</argument>
+
+			<call method="setFormattersNames">
+				<argument type="collection">
+					<argument>PHPPdf\Formatter\ConvertAttributesFormatter</argument>
+					<argument>PHPPdf\Formatter\StandardDimensionFormatter</argument>
+					<argument>PHPPdf\Formatter\FirstPointPositionFormatter</argument>
+					<argument>PHPPdf\Formatter\ImageDimensionFormatter</argument>
+					<argument>PHPPdf\Formatter\StandardPositionFormatter</argument>
+				</argument>
+			</call>
+		</service>
+		<service id="phppdf.glyph.br" class="PHPPdf\Glyph\Container" public="false">
+			<tag name="phppdf.glyph" />
+			<argument type="collection">
+				<argument key="height">10</argument>
+			</argument>
+			<call method="setFormattersNames">
+				<argument type="collection">
+					<argument>PHPPdf\Formatter\ConvertAttributesFormatter</argument>
+					<argument>PHPPdf\Formatter\StandardDimensionFormatter</argument>
+					<argument>PHPPdf\Formatter\FirstPointPositionFormatter</argument>
+					<argument>PHPPdf\Formatter\ContainerFormatter</argument>
+					<argument>PHPPdf\Formatter\ContainerDimensionFormatter</argument>
+					<argument>PHPPdf\Formatter\StandardPositionFormatter</argument>
+					<argument>PHPPdf\Formatter\FloatFormatter</argument>
+				</argument>
+			</call>
+		</service>
+		
+		<service id="phppdf.glyph.br" class="PHPPdf\Glyph\Container" public="false">
+			<tag name="phppdf.glyph" />
+			<call method="setFormattersNames">
+				<argument type="collection">
+					<argument>PHPPdf\Formatter\ConvertAttributesFormatter</argument>
+					<argument>PHPPdf\Formatter\StandardDimensionFormatter</argument>
+					<argument>PHPPdf\Formatter\FirstPointPositionFormatter</argument>
+					<argument>PHPPdf\Formatter\ContainerFormatter</argument>
+					<argument>PHPPdf\Formatter\ContainerDimensionFormatter</argument>
+					<argument>PHPPdf\Formatter\StandardPositionFormatter</argument>
+					<argument>PHPPdf\Formatter\FloatFormatter</argument>
+				</argument>
+			</call>
+		</service>
+		<service id="phppdf.glyph.b" class="PHPPdf\Glyph\Text" public="false">
+			<tag name="phppdf.glyph" />
+			<argument type="collection">
+				<argument key="font-style">bold</argument>
+			</argument>
+			<call method="setFormattersNames">
+				<argument type="collection">
+					<argument>PHPPdf\Formatter\ConvertAttributesFormatter</argument>
+					<argument>PHPPdf\Formatter\StandardDimensionFormatter</argument>
+					<argument>PHPPdf\Formatter\FirstPointPositionFormatter</argument>
+					<argument>PHPPdf\Formatter\TextDimensionFormatter</argument>
+					<argument>PHPPdf\Formatter\TextResetPositionFormatter</argument>
+					<argument>PHPPdf\Formatter\StandardPositionFormatter</argument>
+					<argument>PHPPdf\Formatter\FloatFormatter</argument>
+				</argument>
+			</call>
+		</service>
+		<service id="phppdf.glyph.page-break" class="PHPPdf\Glyph\Container" public="false">
+			<tag name="phppdf.glyph" />
+			<argument type="collection">
+				<argument key="page-break">true</argument>
+			</argument>
+			<call method="setFormattersNames">
+				<argument type="collection">
+					<argument>PHPPdf\Formatter\ConvertAttributesFormatter</argument>
+					<argument>PHPPdf\Formatter\StandardDimensionFormatter</argument>
+					<argument>PHPPdf\Formatter\FirstPointPositionFormatter</argument>
+					<argument>PHPPdf\Formatter\ContainerFormatter</argument>
+					<argument>PHPPdf\Formatter\ContainerDimensionFormatter</argument>
+					<argument>PHPPdf\Formatter\StandardPositionFormatter</argument>
+					<argument>PHPPdf\Formatter\FloatFormatter</argument>
+				</argument>
+			</call>
+		</service>
+		<service id="phppdf.glyph.column-layout" class="PHPPdf\Glyph\ColumnableContainer"  public="false">
+			<tag name="phppdf.glyph" />
+			<call method="setFormattersNames">
+				<argument type="collection">
+					<argument>PHPPdf\Formatter\ConvertAttributesFormatter</argument>
+					<argument>PHPPdf\Formatter\StandardDimensionFormatter</argument>
+					<argument>PHPPdf\Formatter\FirstPointPositionFormatter</argument>
+					<argument>PHPPdf\Formatter\ContainerFormatter</argument>
+					<argument>PHPPdf\Formatter\ContainerDimensionFormatter</argument>
+					<argument>PHPPdf\Formatter\StandardPositionFormatter</argument>
+					<argument>PHPPdf\Formatter\FloatFormatter</argument>
+					<argument>PHPPdf\Formatter\ColumnDivertingFormatter</argument>
+				</argument>
+			</call>
+		</service>
+	</services>
+</container>

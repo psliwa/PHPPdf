@@ -56,7 +56,7 @@ class LoaderImpl implements Loader
     {
         if($this->enhancementFactory === null)
         {
-            $this->loadEnhancements();
+            $this->enhancementFactory = $this->loadEnhancements();
         }        
 
         return $this->enhancementFactory;
@@ -66,7 +66,7 @@ class LoaderImpl implements Loader
     {
         if($this->fontRegistry === null)
         {
-            $this->loadFonts();
+            $this->fontRegistry = $this->loadFonts();
         }        
 
         return $this->fontRegistry;
@@ -77,13 +77,13 @@ class LoaderImpl implements Loader
     {
         if($this->glyphFactory === null)
         {
-            $this->loadGlyphs();
+            $this->glyphFactory = $this->loadGlyphs();
         }        
 
         return $this->glyphFactory;
     }
 
-    private function loadGlyphs()
+    protected function loadGlyphs()
     {
         $file = $this->glyphFile;
 
@@ -106,10 +106,10 @@ class LoaderImpl implements Loader
             $glyphFactory->getPrototype('dynamic-page')->setPrototypePage($page);
         }
         
-        $this->glyphFactory = $glyphFactory;
+        return $glyphFactory;
     }
 
-    private function getFromCacheOrCallClosure($file, \Closure $closure)
+    protected function getFromCacheOrCallClosure($file, \Closure $closure)
     {
         $id = $this->getCacheId($file);
 
@@ -149,10 +149,10 @@ class LoaderImpl implements Loader
             return $enhancementFactory;
         };
 
-        $this->enhancementFactory = $this->getFromCacheOrCallClosure($file, $doLoadEnhancements);
+        return $this->getFromCacheOrCallClosure($file, $doLoadEnhancements);
     }
 
-    private function loadFonts()
+    protected function loadFonts()
     {
         $file = $this->fontFile;
 
@@ -164,6 +164,6 @@ class LoaderImpl implements Loader
             return $fontRegistry;
         };
 
-        $this->fontRegistry = $this->getFromCacheOrCallClosure($file, $doLoadFonts);
+        return $this->getFromCacheOrCallClosure($file, $doLoadFonts);
     }   
 }
