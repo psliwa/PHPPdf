@@ -7,12 +7,12 @@ use PHPPdf\Parser\FacadeBuilder,
 class FacadeBuilderTest extends TestCase
 {
     private $builder;
-    private $configuration;
+    private $configurationLoader;
 
     public function setUp()
     {
-        $this->configuration = $this->getMock('PHPPdf\Parser\FacadeConfiguration', array('setGlyphsConfigFile', 'setEnhancementsConfigFile', 'setFormattersConfigFile', 'setFontsConfigFile'));
-        $this->builder = FacadeBuilder::create($this->configuration);
+        $this->configurationLoader = $this->getMock('PHPPdf\Configuration\Loader', array('createGlyphFactory', 'createEnhancementFactory', 'createFontRegistry', 'setCache'));
+        $this->builder = FacadeBuilder::create($this->configurationLoader);
     }
 
     /**
@@ -20,34 +20,10 @@ class FacadeBuilderTest extends TestCase
      */
     public function returnFacadeOnBuildMethod()
     {
-        $this->assertInstanceOf('PHPPdf\Parser\Facade', $this->builder->build());
-    }
-
-    /**
-     * @test
-     * @dataProvider configFileSettersProvider
-     */
-    public function delegateConfigFileSettersToFacadeConfigurationObject($configFileSetters)
-    {
-        $at = 0;
-        foreach($configFileSetters as $method => $file)
-        {
-            $this->configuration->expects($this->at($at++))
-                                ->method($method)
-                                ->with($file);
-        }
-
-        foreach($configFileSetters as $method => $arg)
-        {
-            $this->assertTrue($this->builder === $this->builder->$method($arg));
-        }
-    }
-
-    public function configFileSettersProvider()
-    {
-        return array(
-            array(array('setGlyphsConfigFile' => 'file1', 'setEnhancementsConfigFile' => 'file2', 'setFormattersConfigFile' => 'file3', 'setFontsConfigFile' => 'file4')),
-        );
+        $facade = $this->builder->build();
+        $this->assertInstanceOf('PHPPdf\Parser\Facade', $facade);
+        $configurationLoader = $this->readAttribute($facade, 'configurationLoader');
+        $this->assertTrue($configurationLoader === $this->configurationLoader);
     }
 
     /**
@@ -65,6 +41,8 @@ class FacadeBuilderTest extends TestCase
      */
     public function settingCacheConfiguration()
     {
+        $this->configurationLoader->expects($this->once())
+                                  ->method('setCache');
         $facade = $this->builder->setCache(CacheImpl::ENGINE_FILE, array())->build();
 
         $this->assertInstanceOf('PHPPdf\Cache\CacheImpl', $this->readAttribute($facade, 'cache'));

@@ -46,6 +46,11 @@ class Factory implements \Serializable
         $this->invokeArgs[$tag] = $value;
     }
     
+    public function getInvokeArgs()
+    {
+        return $this->invokeArgs;
+    }
+    
     public function invocationsMethodsOnCreate()
     {
         return $this->invocationsMethodsOnCreate;

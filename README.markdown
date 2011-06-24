@@ -11,7 +11,7 @@ Najprostrzy sposób wykorzystania biblioteki:
     PHPPdf\Autoloader::register();
     PHPPdf\Autoloader::register('sciezka/do/biblioteki/lib/vendor');
 
-    $facade = new PHPPdf\Parser\Facade();
+    $facade = new PHPPdf\Parser\Facade(new PHPPdf\Configuration\Loader());
 
     //$documentXml i $stylesheetXml to ciągi znaków zawierające dokumenty XML, $stylesheetXml jest opcjonalne
     $content = $facade->render($documentXml, $stylesheetXml);

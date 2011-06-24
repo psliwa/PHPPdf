@@ -2,6 +2,10 @@
 
 namespace PHPPdf\Parser;
 
+use PHPPdf\Configuration\LoaderImpl;
+
+use PHPPdf\Configuration\Loader;
+
 use PHPPdf\Cache\CacheImpl;
 
 /**
@@ -13,19 +17,19 @@ use PHPPdf\Cache\CacheImpl;
  */
 class FacadeBuilder
 {
-    private $configuration = null;
+    private $configurationLoader = null;
     private $cacheType = null;
     private $cacheOptions = null;
     private $useCacheForStylesheetConstraint = false;
 
-    private function __construct(FacadeConfiguration $configuration = null)
+    private function __construct(Loader $configurationLoader = null)
     {
-        if($configuration === null)
+        if($configurationLoader === null)
         {
-            $configuration = new FacadeConfiguration();
+            $configurationLoader = new LoaderImpl();
         }
 
-        $this->setFacadeConfiguration($configuration);
+        $this->setConfigurationLoader($configurationLoader);
     }
 
     /**
@@ -33,14 +37,14 @@ class FacadeBuilder
      * 
      * @return FacadeBuilder
      */
-    public static function create(FacadeConfiguration $configuration = null)
+    public static function create(Loader $configuration = null)
     {
         return new self($configuration);
     }
 
-    private function setFacadeConfiguration(FacadeConfiguration $configuration)
+    private function setConfigurationLoader(Loader $configurationLoader)
     {
-        $this->configuration = $configuration;
+        $this->configurationLoader = $configurationLoader;
     }
 
     /**
@@ -50,68 +54,17 @@ class FacadeBuilder
      */
     public function build()
     {
-        $facade = new Facade($this->configuration);
+        $facade = new Facade($this->configurationLoader);
         $facade->setUseCacheForStylesheetConstraint($this->useCacheForStylesheetConstraint);
 
         if($this->cacheType && $this->cacheType !== 'Null')
         {
             $cache = new CacheImpl($this->cacheType, $this->cacheOptions);
             $facade->setCache($cache);
+            $this->configurationLoader->setCache($cache);
         }
 
         return $facade;
-    }
-
-    /**
-     * @see PHPPdf\Parser\FacadeConfiguration::setGlyphsConfigFile()
-     *
-     * @param string $file
-     * @return FacadeBuilder
-     */
-    public function setGlyphsConfigFile($file)
-    {
-        $this->configuration->setGlyphsConfigFile($file);
-
-        return $this;
-    }
-
-    /**
-     * @see PHPPdf\Parser\FacadeConfiguration::setEnhancementsConfigFile()
-     *
-     * @param string $file
-     * @return FacadeBuilder
-     */
-    public function setEnhancementsConfigFile($file)
-    {
-        $this->configuration->setEnhancementsConfigFile($file);
-
-        return $this;
-    }
-
-    /**
-     * @see PHPPdf\Parser\FacadeConfiguration::setFormattersConfigFile()
-     *
-     * @param string $file
-     * @return FacadeBuilder
-     */
-    public function setFormattersConfigFile($file)
-    {
-        $this->configuration->setFormattersConfigFile($file);
-
-        return $this;
-    }
-
-    /**
-     * @see PHPPdf\Parser\FacadeConfiguration::setFontsConfigFile()
-     *
-     * @param string $file
-     * @return FacadeBuilder
-     */
-    public function setFontsConfigFile($file)
-    {
-        $this->configuration->setFontsConfigFile($file);
-
-        return $this;
     }
 
     /**

@@ -10,7 +10,10 @@ use PHPPdf\Glyph\Factory as GlyphFactory,
  */
 class GlyphFactoryParser extends XmlParser
 {
-    const ROOT_TAG = 'glyphs';
+    const ROOT_TAG = 'factory';
+    const INVOKE_ARGS_TAG = 'invoke-args';
+    const INVOKE_ARG_TAG = 'invoke-arg';
+    const GLYPHS_TAG = 'glyphs';
     const GLYPH_TAG = 'glyph';
     const STYLESHEET_TAG = 'stylesheet';
     const FORMATTERS_TAG = 'formatters';
@@ -20,9 +23,12 @@ class GlyphFactoryParser extends XmlParser
     private $stylesheetParser;
     private $isFormattersParsing = false;
     
+    private $invokeArgsDefinitions = array();
+    private $currentArg = null;
+    
     private $lastTag = null;
 
-    public function  __construct()
+    public function __construct()
     {
         $this->stylesheetParser = new StylesheetParser();
     }
@@ -68,6 +74,10 @@ class GlyphFactoryParser extends XmlParser
         elseif($reader->name === self::INVOKE_TAG)
         {
             $this->parseInvoke($reader);
+        }
+        elseif($reader->name === self::INVOKE_ARG_TAG)
+        {
+            $this->parseInvokeArg($reader);
         }
     }
 
@@ -128,6 +138,22 @@ class GlyphFactoryParser extends XmlParser
         
         $factory = $this->getFirstElementFromStack();
         $factory->addInvocationsMethodsOnCreate($this->lastTag, $method, $argId);
+    }
+    
+    private function parseInvokeArg(\XMLReader $reader)
+    {
+        $id = $reader->getAttribute('id');
+        $value = $reader->getAttribute('value');
+        $class = $reader->getAttribute('class');
+        
+        $factory = $this->getFirstElementFromStack();
+        
+        if($class)
+        {
+            $value = new $class();
+        }
+        
+        $factory->addInvokeArg($id, $value);
     }
 
     protected function parseEndElement(\XMLReader $reader)

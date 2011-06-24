@@ -1,15 +1,19 @@
 <?php
 
+use PHPPdf\Configuration\LoaderImpl;
 use PHPPdf\Parser\Facade,
     PHPPdf\Parser\FacadeConfiguration;
 
 class FacadeTest extends TestCase
 {
     private $facade;
+    
+    private $loaderMock;
 
     public function setUp()
     {
-        $this->facade = new Facade();
+        $this->loaderMock = $this->getMock('PHPPdf\Configuration\Loader', array('createGlyphFactory', 'createEnhancementFactory', 'createFontRegistry', 'setCache'));
+        $this->facade = new Facade($this->loaderMock);
     }
 
     /**
@@ -59,11 +63,38 @@ class FacadeTest extends TestCase
         $stylesheet = '<stylesheet></stylesheet>';
         $content = 'pdf content';
 
-        $documentMock = $this->getMock('PHPPdf\Document', array('draw', 'initialize', 'render'));
-        $parserMock = $this->getMock('PHPPdf\Parser\DocumentParser', array('parse'));
+        $documentMock = $this->getMock('PHPPdf\Document', array('draw', 'initialize', 'render', 'setFontRegistry', 'setEnhancementFactory'));
+        $parserMock = $this->getMock('PHPPdf\Parser\DocumentParser', array('parse', 'setEnhancementFactory', 'setGlyphFactory'));
         $stylesheetParserMock = $this->getMock('PHPPdf\Parser\StylesheetParser', array('parse'));
         $constraintMock = $this->getMock('PHPPdf\Parser\StylesheetConstraint');
         $pageCollectionMock = $this->getMock('PHPPdf\Glyph\PageCollection', array());
+        
+        $glyphFactoryMock = $this->getMock('PHPPdf\Glyph\Factory');
+        $enhancementFactoryMock = $this->getMock('PHPPdf\Enhancement\Factory');
+        $fontRegistryMock = $this->getMock('PHPPdf\Font\Registry');
+        
+        $this->loaderMock->expects($this->atLeastOnce())
+                         ->method('createGlyphFactory')
+                         ->will($this->returnValue($glyphFactoryMock));
+        $this->loaderMock->expects($this->atLeastOnce())
+                         ->method('createEnhancementFactory')
+                         ->will($this->returnValue($enhancementFactoryMock));
+        $this->loaderMock->expects($this->atLeastOnce())
+                         ->method('createFontRegistry')
+                         ->will($this->returnValue($fontRegistryMock));
+                         
+        $documentMock->expects($this->once())
+                     ->method('setFontRegistry')
+                     ->with($fontRegistryMock);
+        $documentMock->expects($this->once())
+                     ->method('setEnhancementFactory')
+                     ->with($enhancementFactoryMock);
+        $parserMock->expects($this->once())
+                   ->method('setEnhancementFactory')
+                   ->with($enhancementFactoryMock);
+        $parserMock->expects($this->once())
+                   ->method('setGlyphFactory')
+                   ->with($glyphFactoryMock);
 
         $parserMock->expects($this->once())
                    ->method('parse')
@@ -75,13 +106,13 @@ class FacadeTest extends TestCase
                              ->with($this->equalTo($stylesheet))
                              ->will($this->returnValue($constraintMock));
 
-        $documentMock->expects($this->at(0))
+        $documentMock->expects($this->at(2))
                 ->method('draw')
                 ->with($this->equalTo($pageCollectionMock));
-        $documentMock->expects($this->at(1))
+        $documentMock->expects($this->at(3))
                 ->method('render')
                 ->will($this->returnValue($content));
-        $documentMock->expects($this->at(2))
+        $documentMock->expects($this->at(4))
                 ->method('initialize');
 
         $this->facade->setDocumentParser($parserMock);
@@ -92,80 +123,14 @@ class FacadeTest extends TestCase
 
         $this->assertEquals($content, $result);
     }
-
-    /**
-     * @test
-     * @dataProvider configFileGetterProvider
-     */
-    public function saveCacheIfCacheIsEmpty($configFileGetterMethodName, $loaderMethodName)
-    {
-        $configuration = new PHPPdf\Parser\FacadeConfiguration();
-
-        $facade = new Facade($configuration);
-        $cache = $this->getMock('PHPPdf\Cache\NullCache', array('test', 'save'));
-
-        $cacheId = $this->invokeMethod($facade, 'getCacheId', array($configuration->$configFileGetterMethodName()));
-
-        $cache->expects($this->once())
-              ->method('test')
-              ->with($cacheId)
-              ->will($this->returnValue(false));
-
-        $cache->expects($this->once())
-              ->method('save');
-
-        $facade->setCache($cache);
-
-        $this->invokeMethod($facade, $loaderMethodName);
-    }
-
-    public function configFileGetterProvider()
-    {
-        return array(
-            array('getGlyphsConfigFile', 'loadGlyphs', new PHPPdf\Glyph\Factory()),
-            array('getEnhancementsConfigFile', 'loadEnhancements', new \PHPPdf\Enhancement\Factory()),
-            array('getFontsConfigFile', 'loadFonts', new PHPPdf\Font\Registry()),
-        );
-    }
     
-    /**
-     * @test
-     * @dataProvider configFileGetterProvider
-     */
-    public function loadCacheIfCacheIsntEmpty($configFileGetterMethodName, $loaderMethodName, $cacheContent)
-    {
-        $configuration = new PHPPdf\Parser\FacadeConfiguration();
-
-        $facade = new Facade($configuration);
-        $cache = $this->getMock('PHPPdf\Cache\NullCache', array('test', 'save', 'load'));
-
-        $cacheId = $this->invokeMethod($facade, 'getCacheId', array($configuration->$configFileGetterMethodName()));
-
-        $cache->expects($this->once())
-              ->method('test')
-              ->with($cacheId)
-              ->will($this->returnValue(true));
-
-        $cache->expects($this->once())
-              ->method('load')
-              ->with($cacheId)
-              ->will($this->returnValue($cacheContent));
-
-        $facade->setCache($cache);
-
-        $this->invokeMethod($facade, $loaderMethodName);
-    }
-
     /**
      * @test
      * @dataProvider stylesheetCachingParametersProvider
      */
     public function dontCacheStylesheetConstraintByDefault($numberOfCacheMethodInvoking, $useCache)
     {
-        $facade = new Facade();
-
-        //load config files owing to test stylesheet constraint caching
-        $this->invokeMethod($facade, 'load');
+        $facade = new Facade(new LoaderImpl());
 
         $cache = $this->getMock('PHPPdf\Cache\NullCache', array('test', 'save', 'load'));
         $cache->expects($this->exactly($numberOfCacheMethodInvoking))

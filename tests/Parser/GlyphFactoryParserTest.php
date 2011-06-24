@@ -1,5 +1,7 @@
 <?php
 
+require_once __DIR__.'/../Stub/ClassWithTwoArguments.php';
+
 use PHPPdf\Parser\GlyphFactoryParser,
     PHPPdf\Parser\StylesheetParser,
     PHPPdf\Glyph\Factory as GlyphFactory;
@@ -18,7 +20,7 @@ class GlyphFactoryParserTest extends TestCase
      */
     public function parseValidEmptyXml()
     {
-        $xml = '<glyphs></glyphs>';
+        $xml = '<factory></factory>';
 
         $glyphFactory = $this->parser->parse($xml);
 
@@ -52,12 +54,14 @@ class GlyphFactoryParserTest extends TestCase
     public function parseSimpleXml()
     {
         $xml = <<<XML
-<glyphs>
-    <glyph name="div" class="PHPPdf\Glyph\Container">
-    </glyph>
-    <glyph name="p" class="PHPPdf\Glyph\Container">
-    </glyph>
-</glyphs>
+<factory>
+    <glyphs>
+        <glyph name="div" class="PHPPdf\Glyph\Container">
+        </glyph>
+        <glyph name="p" class="PHPPdf\Glyph\Container">
+        </glyph>
+    </glyphs>
+</factory>
 XML;
         $glyphFactory = $this->parser->parse($xml);
 
@@ -76,10 +80,12 @@ XML;
     public function throwExceptionIfRequiredAttributesAreMissing()
     {
         $xml = <<<XML
-<glyphs>
-    <glyph name="div">
-    </glyph>
-</glyphs>
+<factory>
+    <glyphs>
+        <glyph name="div">
+        </glyph>
+    </glyphs>
+</factory>
 XML;
         $this->parser->parse($xml);
     }
@@ -90,12 +96,14 @@ XML;
     public function useStylesheetParserForStylesheetParsing()
     {
         $xml = <<<XML
-<glyphs>
-    <glyph name="div" class="PHPPdf\Glyph\Container">
-        <stylesheet>
-        </stylesheet>
-    </glyph>
-</glyphs>
+<factory>
+    <glyphs>
+        <glyph name="div" class="PHPPdf\Glyph\Container">
+            <stylesheet>
+            </stylesheet>
+        </glyph>
+    </glyphs>
+</factory>
 XML;
 
         $attributes = array('display' => 'inline', 'splittable' => false);
@@ -144,18 +152,20 @@ XML;
     public function setFormattersNamesForGlyph()
     {
         $xml = <<<XML
-<glyphs>
-    <glyph name="tag1" class="PHPPdf\Glyph\Container">
-        <formatters>
-            <formatter class="PHPPdf\Formatter\FloatFormatter" />
-        </formatters>
-    </glyph>
-    <glyph name="tag2" class="PHPPdf\Glyph\Container">
-        <formatters>
-            <formatter class="PHPPdf\Formatter\FloatFormatter" />
-        </formatters>
-    </glyph>
-</glyphs>
+<factory>
+    <glyphs>
+        <glyph name="tag1" class="PHPPdf\Glyph\Container">
+            <formatters>
+                <formatter class="PHPPdf\Formatter\FloatFormatter" />
+            </formatters>
+        </glyph>
+        <glyph name="tag2" class="PHPPdf\Glyph\Container">
+            <formatters>
+                <formatter class="PHPPdf\Formatter\FloatFormatter" />
+            </formatters>
+        </glyph>
+    </glyphs>
+</factory>
 XML;
         $glyphFactory = $this->parser->parse($xml);
 
@@ -173,14 +183,56 @@ XML;
     public function setInvocationMethodsOnCreateForFactory()
     {
         $xml = <<<XML
-<glyphs>
-	<glyph name="tag" class="PHPPdf\Glyph\Container">
-		<invoke method="setMarginLeft" argId="marginLeft" />
-	</glyph>
-</glyphs>
+<factory>
+    <glyphs>
+    	<glyph name="tag" class="PHPPdf\Glyph\Container">
+    		<invoke method="setMarginLeft" argId="marginLeft" />
+    	</glyph>
+    </glyphs>
+</factory>
 XML;
         $glyphFactory = $this->parser->parse($xml);
         
         $this->assertEquals(array('tag' => array('setMarginLeft' => 'marginLeft')), $glyphFactory->invocationsMethodsOnCreate());
+    }
+    
+    /**
+     * @test
+     */
+    public function setScalarInvokeArgs()
+    {
+        $xml = <<<XML
+<factory>
+	<invoke-args>
+		<invoke-arg id="some-id-1" value="someValue-1" />
+		<invoke-arg id="some-id-2" value="someValue-2" />
+	</invoke-args>
+</factory>
+XML;
+
+        $glyphFactory = $this->parser->parse($xml);
+        
+        $this->assertEquals(array('some-id-1' => 'someValue-1', 'some-id-2' => 'someValue-2'), $glyphFactory->getInvokeArgs());
+    }
+    
+    /**
+     * @test
+     */
+    public function setObjectInvokeArgs()
+    {
+        $xml = <<<XML
+<factory>
+	<invoke-args>
+		<invoke-arg id="some-id" class="stdClass" />
+	</invoke-args>
+</factory>
+XML;
+
+        $glyphFactory = $this->parser->parse($xml);
+
+        $invokeArgs = $glyphFactory->getInvokeArgs();
+
+        $this->assertEquals(1, count($invokeArgs));
+        $this->assertInstanceOf('stdClass', $invokeArgs['some-id']);
     }
 }
