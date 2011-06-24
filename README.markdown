@@ -1,6 +1,13 @@
 Documentation draft (PL)
 ========================
 
+Instalacja
+----------
+
+Biblioteka opcjonalnie korzysta z innych bibliotek (komponent Symfony2 do DependencyInjection), które można pobrać wywołując polecenie:
+
+    php vendors.php
+
 Parsowanie dokumentu i tworzenie pdf'a.
 ---------------------------------------
 
