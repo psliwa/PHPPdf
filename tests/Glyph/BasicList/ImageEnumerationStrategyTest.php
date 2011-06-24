@@ -84,7 +84,8 @@ class ImageEnumerationStrategyTest extends TestCase
            ->method('drawImage')
            ->with($image, $expectedX1Coord, $expectedY1Coord, $expectedX2Coord, $expectedY2Coord);
            
-        $this->strategy->drawEnumeration($listMock, $gc, $elementIndex);
+        $this->strategy->setIndex($elementIndex);
+        $this->strategy->drawEnumeration($listMock, $gc);
     }
 
     public function enumerationProvider()
@@ -115,6 +116,7 @@ class ImageEnumerationStrategyTest extends TestCase
                  ->will($this->returnValue($child));
                  
         $gc = $this->getMock('PHPPdf\Glyph\GraphicsContext', array(), array(), '', false, false);
-        $this->strategy->drawEnumeration($listMock, $gc, $elementIndex);
+        $this->strategy->setIndex($elementIndex);
+        $this->strategy->drawEnumeration($listMock, $gc);
     }
 }

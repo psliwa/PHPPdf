@@ -11,9 +11,9 @@ use PHPPdf\Glyph\GraphicsContext,
  */
 interface EnumerationStrategy
 {
-    public function drawEnumeration(BasicList $list, GraphicsContext $gc, $elementIndex);
+    public function drawEnumeration(BasicList $list, GraphicsContext $gc);
     public function reset();
     public function getWidthOfTheBiggestPosibleEnumerationElement(BasicList $list);
-    public function getInitialIndex();
-    public function setInitialIndex($index);
+    public function setIndex($index);
+    public function setVisualIndex($visualIndex);
 }

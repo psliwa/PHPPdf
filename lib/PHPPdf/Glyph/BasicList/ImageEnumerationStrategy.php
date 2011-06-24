@@ -20,7 +20,7 @@ class ImageEnumerationStrategy extends AbstractEnumerationStrategy
         $gc->drawImage($image, $xCoord, $yCoord - $this->imageWidth, $xCoord + $this->imageHeight, $yCoord);
     }
 
-    protected function getEnumerationElementTranslations(BasicList $list, $elementIndex)
+    protected function getEnumerationElementTranslations(BasicList $list)
     {
         $image = $this->getImage($list);
         $fontSize = $list->getRecurseAttribute('font-size');

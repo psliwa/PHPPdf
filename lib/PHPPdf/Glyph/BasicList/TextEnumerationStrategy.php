@@ -16,9 +16,9 @@ abstract class TextEnumerationStrategy extends AbstractEnumerationStrategy
     
     private $enumerationText = null;
         
-    protected function getEnumerationElementTranslations(BasicList $list, $elementIndex)
+    protected function getEnumerationElementTranslations(BasicList $list)
     {
-        $enumerationText = $this->assembleEnumerationText($list, $elementIndex);
+        $enumerationText = $this->assembleEnumerationText($list, $this->visualIndex);
 
         $fontSize = $list->getRecurseAttribute('font-size');
         $font = $list->getFontType(true);
@@ -41,8 +41,6 @@ abstract class TextEnumerationStrategy extends AbstractEnumerationStrategy
         $encoding = $list->getEncoding();
         
         $gc->drawText($this->enumerationText, $xCoord, $yCoord, $encoding);
-        
-        $this->enumerationText = null;
     }
        
     abstract protected function assembleEnumerationText(BasicList $list, $number);

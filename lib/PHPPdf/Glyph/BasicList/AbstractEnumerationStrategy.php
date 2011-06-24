@@ -7,33 +7,42 @@ use PHPPdf\Glyph\GraphicsContext,
 
 abstract class AbstractEnumerationStrategy implements EnumerationStrategy
 {
-    private $initialIndex = 1;
+    protected $index = 0;
+    protected $visualIndex = 1;
     
 	public function getInitialIndex()
     {
-        return $this->initialIndex;
+        return $this->index;
     }
 
-	public function setInitialIndex($index)
+	public function setIndex($index, $visualIndex = null)
     {
-        $this->initialIndex = $index;
+        $this->index = $index;
     }
     
-    public function drawEnumeration(BasicList $list, GraphicsContext $gc, $elementIndex)
+    public function setVisualIndex($visualIndex)
     {
-        $child = $list->getChild($elementIndex);
+        $this->visualIndex = $visualIndex;
+    }
+    
+    public function drawEnumeration(BasicList $list, GraphicsContext $gc)
+    {
+        $child = $list->getChild($this->index);
         
         $point = $child->getFirstPoint();        
         
-        list($xTranslation, $yTranslation) = $this->getEnumerationElementTranslations($list, $elementIndex);
+        list($xTranslation, $yTranslation) = $this->getEnumerationElementTranslations($list);
         
         $xCoord = $point->getX() - $child->getMarginLeft() + $xTranslation;
         $yCoord = $point->getY() - $yTranslation;
         
         $this->doDrawEnumeration($list, $gc, $xCoord, $yCoord);
+        
+        $this->index++;
+        $this->visualIndex++;
     }
     
-    abstract protected function getEnumerationElementTranslations(BasicList $list, $elementIndex);
+    abstract protected function getEnumerationElementTranslations(BasicList $list);
     
     abstract protected function doDrawEnumeration(BasicList $list, GraphicsContext $gc, $xCoord, $yCoord);
     

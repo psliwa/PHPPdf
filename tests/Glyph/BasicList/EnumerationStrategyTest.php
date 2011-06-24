@@ -90,7 +90,9 @@ abstract class EnumerationStrategyTest extends TestCase
            ->method('drawText')
            ->with($expectedText, $expectedXCoord, $expectedYCoord, $encoding);
 
-        $this->strategy->drawEnumeration($listMock, $gc, $elementIndex);
+        $this->strategy->setIndex($elementIndex);
+        $this->strategy->setVisualIndex($elementIndex+1);
+        $this->strategy->drawEnumeration($listMock, $gc);
     }
     
     public function integerProvider()

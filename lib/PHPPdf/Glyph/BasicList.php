@@ -86,6 +86,7 @@ class BasicList extends Container
             $gc = $glyph->getGraphicsContext();
 
             $enumerationStrategy = $glyph->getEnumerationStrategy();
+            $enumerationStrategy->setIndex(0);
             
             foreach($glyph->getChildren() as $i => $child)
             {
@@ -140,28 +141,28 @@ class BasicList extends Container
         return $font->getCharsWidth(array(ord($type)), $fontSize);
     }
     
-    protected function doSplit($height)
-    {
-        $product = parent::doSplit($height);
-        
-        if($product !== null)
-        {
-            $initialIndex = count($this->getChildren()) + $this->getEnumerationStrategy()->getInitialIndex();
-            $product->getEnumerationStrategy()->setInitialIndex($initialIndex);
-        }
-        
-        return $product;
-    }
-    
-    public function copy()
-    {
-        $copy = parent::copy();
-        
-        if($copy->enumerationStrategy !== null)
-        {
-            $copy->enumerationStrategy = clone $this->enumerationStrategy;
-        }
-        
-        return $copy;
-    }
+//    protected function doSplit($height)
+//    {
+//        $product = parent::doSplit($height);
+//        
+//        if($product !== null)
+//        {
+//            $initialIndex = count($this->getChildren()) + $this->getEnumerationStrategy()->getInitialIndex();
+//            $product->getEnumerationStrategy()->setInitialIndex($initialIndex);
+//        }
+//        
+//        return $product;
+//    }
+//    
+//    public function copy()
+//    {
+//        $copy = parent::copy();
+//        
+//        if($copy->enumerationStrategy !== null)
+//        {
+//            $copy->enumerationStrategy = clone $this->enumerationStrategy;
+//        }
+//        
+//        return $copy;
+//    }
 }

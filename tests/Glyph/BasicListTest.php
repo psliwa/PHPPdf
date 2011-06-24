@@ -35,13 +35,17 @@ class BasicListTest extends TestCase
              ->will($this->returnValue($gc));
              
         $this->list->setParent($page);
-        $enumerationStrategy = $this->getMock('PHPPdf\Glyph\BasicList\EnumerationStrategy', array('drawEnumeration', 'reset', 'getWidthOfTheBiggestPosibleEnumerationElement', 'getInitialIndex', 'setInitialIndex'));
+        $enumerationStrategy = $this->getMock('PHPPdf\Glyph\BasicList\EnumerationStrategy', array('drawEnumeration', 'reset', 'getWidthOfTheBiggestPosibleEnumerationElement', 'setIndex', 'setVisualIndex'));
+        $enumerationStrategy->expects($this->once())
+                            ->method('setIndex')
+                            ->with(0);
+        
         $this->list->setEnumerationStrategy($enumerationStrategy);
 
         for($i=0; $i<$numberOfChildren; $i++)
         {
             $this->list->add(new Container());
-            $enumerationStrategy->expects($this->at($i))
+            $enumerationStrategy->expects($this->at($i+1))
                                 ->method('drawEnumeration')
                                 ->with($this->list, $gc, $i);
         }
@@ -127,43 +131,5 @@ class BasicListTest extends TestCase
         $this->list->setAttribute('type', BasicList::TYPE_NUMERIC);
         
         $this->assertFalse($enumerationStrategy === $this->list->getEnumerationStrategy());
-    }
-    
-    /**
-     * @test
-     */
-    public function setInitialIndexForEnumerationStrategyOnProductOfSplitting()
-    {
-        $height = 400;
-        $width = 500;
-        $this->setPositionAndDimension($this->list, 0, $height, $width, $height);
-        
-        $numberOfChildren = 4;
-        $heightOfChild = $height / $numberOfChildren;
-        
-        for($i=$numberOfChildren; $i>=0; $i--)
-        {
-            $child = new Container();
-            $this->setPositionAndDimension($child, 0, $i*$heightOfChild, $width, $heightOfChild);
-            $this->list->add($child);
-        }
-        
-        $splitHeight = $heightOfChild * $numberOfChildren/2;
-        $splitProduct = $this->list->split($splitHeight);
-        
-        $this->assertEquals(1, $this->list->getEnumerationStrategy()->getInitialIndex());
-        $expectedInitialIndex = count($this->list->getChildren()) + 1;
-        $this->assertEquals($expectedInitialIndex, $splitProduct->getEnumerationStrategy()->getInitialIndex());
-    }
-    
-    private function setPositionAndDimension(Glyph $glyph, $x, $y, $width, $height)
-    {
-        $glyph->getBoundary()->setNext($x, $y)
-                             ->setNext($x + $width, $y)
-                             ->setNext($x + $width, $y - $height)
-                             ->setNext($x, $y-$height)
-                             ->close();
-        $glyph->setHeight($height);
-        $glyph->setWidth($width);
     }
 }

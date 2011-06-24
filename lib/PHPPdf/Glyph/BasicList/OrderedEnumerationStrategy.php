@@ -9,13 +9,19 @@ use PHPPdf\Font\Font;
 use PHPPdf\Glyph\BasicList;
 
 class OrderedEnumerationStrategy extends TextEnumerationStrategy
-{   
+{
+    private $pattern = '%s.';
+    
     protected function assembleEnumerationText(BasicList $list, $number)
     {
-        $initialIndex = $this->getInitialIndex();
-        return ($number+$initialIndex).'.';
+        return sprintf($this->pattern, $number);
     }
-    
+
+    public function setPattern($pattern)
+    {
+        $this->pattern = $pattern;
+    }
+
     public function getWidthOfTheBiggestPosibleEnumerationElement(BasicList $list)
     {
         $enumerationText = $this->assembleEnumerationText($list, count($list->getChildren()));
