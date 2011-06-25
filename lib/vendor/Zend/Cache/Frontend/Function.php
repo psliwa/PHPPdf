@@ -20,13 +20,6 @@
  * @version    $Id: Function.php 22648 2010-07-20 14:43:27Z mabe $
  */
 
-
-/**
- * @see Zend_Cache_Core
- */
-require_once 'Zend/Cache/Core.php';
-
-
 /**
  * @package    Zend_Cache
  * @subpackage Zend_Cache_Frontend

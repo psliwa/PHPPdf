@@ -19,12 +19,6 @@
  * @version    $Id: Movable.php 20096 2010-01-06 02:05:09Z bkarwin $
  */
 
-/** Zend_Memory_Container */
-require_once 'Zend/Memory/Container.php';
-
-/** Zend_Memory_Value */
-require_once 'Zend/Memory/Value.php';
-
 /**
  * Memory value container
  *
@@ -135,7 +129,6 @@ class Zend_Memory_Container_Movable extends Zend_Memory_Container {
     public function __get($property)
     {
         if ($property != 'value') {
-            require_once 'Zend/Memory/Exception.php';
             throw new Zend_Memory_Exception('Unknown property: Zend_Memory_container::$' . $property);
         }
 
@@ -157,7 +150,6 @@ class Zend_Memory_Container_Movable extends Zend_Memory_Container {
     public function __set($property, $value)
     {
         if ($property != 'value') {
-            require_once 'Zend/Memory/Exception.php';
             throw new Zend_Memory_Exception('Unknown property: Zend_Memory_container::$' . $property);
         }
 

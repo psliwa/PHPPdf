@@ -21,12 +21,6 @@
  */
 
 /**
- * @see Zend_Cache_Core
- */
-require_once 'Zend/Cache/Core.php';
-
-
-/**
  * @package    Zend_Cache
  * @subpackage Zend_Cache_Frontend
  * @copyright  Copyright (c) 2005-2010 Zend Technologies USA Inc. (http://www.zend.com)

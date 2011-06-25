@@ -20,18 +20,6 @@
  * @version    $Id: Memcached.php 22207 2010-05-20 16:47:16Z mabe $
  */
 
-
-/**
- * @see Zend_Cache_Backend_Interface
- */
-require_once 'Zend/Cache/Backend/ExtendedInterface.php';
-
-/**
- * @see Zend_Cache_Backend
- */
-require_once 'Zend/Cache/Backend.php';
-
-
 /**
  * @package    Zend_Cache
  * @subpackage Zend_Cache_Backend

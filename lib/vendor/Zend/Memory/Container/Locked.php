@@ -19,9 +19,6 @@
  * @version    $Id: Locked.php 20096 2010-01-06 02:05:09Z bkarwin $
  */
 
-/** Zend_Memory_Container */
-require_once 'Zend/Memory/Container.php';
-
 /**
  * Memory value container
  *

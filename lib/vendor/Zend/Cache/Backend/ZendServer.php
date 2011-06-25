@@ -20,14 +20,6 @@
  * @version    $Id: ZendServer.php 20096 2010-01-06 02:05:09Z bkarwin $
  */
 
-
-/** @see Zend_Cache_Backend_Interface */
-require_once 'Zend/Cache/Backend/Interface.php';
-
-/** @see Zend_Cache_Backend */
-require_once 'Zend/Cache/Backend.php';
-
-
 /**
  * @package    Zend_Cache
  * @subpackage Zend_Cache_Backend

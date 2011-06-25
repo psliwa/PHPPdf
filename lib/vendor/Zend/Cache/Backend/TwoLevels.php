@@ -20,18 +20,6 @@
  * @version    $Id: TwoLevels.php 22736 2010-07-30 16:25:54Z andyfowler $
  */
 
-
-/**
- * @see Zend_Cache_Backend_ExtendedInterface
- */
-require_once 'Zend/Cache/Backend/ExtendedInterface.php';
-
-/**
- * @see Zend_Cache_Backend
- */
-require_once 'Zend/Cache/Backend.php';
-
-
 /**
  * @package    Zend_Cache
  * @subpackage Zend_Cache_Backend

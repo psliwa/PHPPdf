@@ -20,13 +20,6 @@
  * @version    $Id: Output.php 20096 2010-01-06 02:05:09Z bkarwin $
  */
 
-
-/**
- * @see Zend_Cache_Core
- */
-require_once 'Zend/Cache/Core.php';
-
-
 /**
  * @package    Zend_Cache
  * @subpackage Zend_Cache_Frontend

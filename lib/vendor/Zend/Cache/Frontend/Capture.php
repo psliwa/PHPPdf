@@ -20,13 +20,6 @@
  * @version    $Id: Capture.php 22662 2010-07-24 17:37:36Z mabe $
  */
 
-
-/**
- * @see Zend_Cache_Core
- */
-require_once 'Zend/Cache/Core.php';
-
-
 /**
  * @package    Zend_Cache
  * @subpackage Zend_Cache_Frontend
