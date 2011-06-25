@@ -32,7 +32,7 @@ class LoaderImpl extends BaseLoader
 
             $this->container = $container;           
         }
-        
-        return $container->get('phppdf.glyph_factory');
+
+        return $this->container->get('phppdf.glyph_factory');
     }
 }
