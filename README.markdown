@@ -1,65 +1,65 @@
-Documentation draft (PL)
-========================
+Documentation
+=============
 
-Instalacja
-----------
+Installation
+------------
 
-Biblioteka opcjonalnie korzysta z innych bibliotek (komponent Symfony2 do DependencyInjection), które można pobrać wywołując polecenie:
+Library optionally uses external libraries (DependencyInjection from Symfony2) that be able to download by command:
 
     php vendors.php
 
-Parsowanie dokumentu i tworzenie pdf'a.
----------------------------------------
+Document parsing and creating pdf file
+--------------------------------------
 
-Najprostrzy sposób wykorzystania biblioteki:
+The simplest way of library using:
 
-    //zarejestrowanie autoloadera PHPPdf oraz vendor (Zend_Pdf)
+    //register PHPPdf and vendor (Zend_Pdf) autoloaders
     require_once 'PHPPdf/Autoloader.php';
     PHPPdf\Autoloader::register();
     PHPPdf\Autoloader::register('sciezka/do/biblioteki/lib/vendor');
 
     $facade = new PHPPdf\Parser\Facade(new PHPPdf\Configuration\Loader());
 
-    //$documentXml i $stylesheetXml to ciągi znaków zawierające dokumenty XML, $stylesheetXml jest opcjonalne
+    //$documentXml and $stylesheetXml are strings contains XML documents, $stylesheetXml is optional
     $content = $facade->render($documentXml, $stylesheetXml);
 
     header('Content-Type: application/pdf');
     echo $content;
 
-Podstawowa struktura dokumentu.
--------------------------------
+Basic document structure
+------------------------
 
-Biblioteka bazuje na formacie XML przypominającym HTML, ale w żadnym wypadku nie jest to HTML - niektóre tagi się różnią, interpretacja niektórych atrybutów jest inna niż w standardzie HTML i CSS, sposób dodawania atrybutów również jest inny. Najprostrzy dokument ma następującą strukturę:
+Library bases on XML format similar to HTML but this format isnt HTML - some tags are diffrent, interpretation of some attributes is not same as in HTML and CSS standard, way of attributes adding is also diffrent. The simplest document has following structure:
 
     <pdf>
         <dynamic-page>
-            <h1>Nagłówek</h1>
-            <p>paragraf</p>
-            <div color="red">Warstwa</div>
+            <h1>Header</h1>
+            <p>paragraph</p>
+            <div color="red">Layer</div>
             <table>
                 <tr>
-                    <td>kolumna</td>
-                    <td>kolumna</td>
+                    <td>Column</td>
+                    <td>Column</td>
                 </tr>
             </table>
         </dynamic-page>
     </pdf>
-    
-Zalecane jest dodawanie następującej deklaracji DOCTYPE do dokumentów, pozwala ona na zaminę encji na wartości:
+
+Adding DOCTYPE declaration is strongly recommended in order to replace html entities on values:
 
     <!DOCTYPE pdf SYSTEM "%resources%/dtd/doctype.dtd">
 
-Korzeń dokumentu musi się nazywać "pdf". Element "dynamic-page" jest stroną, która się dynamicznie dzieli gdy zostanie przepełniona. Alternatywą jest tag "page", czyli pojedyńcza niepodzielna strona. Są różnice w nadawaniu atrybutom wartości w stosunku do HTML. Aby nadać obramowanie i tło warstwie należy posłużyć się atrybutem złożonym "border" oraz "background", atrybuty te mają swoje własne właściwości, np. kolor, rozmiar, zaokrąglenie. Alternatywną składnią do ustawiania atrybutów oraz atrybutów złożonych (enhancement) jest element "stylesheet". Przykład:
+Root of document has to be "pdf". "dynamic-page" tag is auto breakable. "page" tag is alternative, represents only single, no breakable page. Attributes setting is different as in HTML. In order to set background and border you have to use complex attributes, where first part of attribute name is complex attribute type, second part is property of this attribute. Complex attribute parts are separate by dot ("."). Other way to setting complex attributes is using "enhancement" tag. Example:
 
     <pdf>
         <dynamic-page>
             <div color="red" border.color="black" background.color="pink">
-                Ten tekst jest czerwony na różowym tle w czarnym obramowaniu
+                This text is red on pink backgroun into black border
             </div>
         </dynamic-page>
     </pdf>
     
-Alternatywna składnia (element stylesheet):
+Alternative syntax ("stylesheet" tag):
 
     <pdf>
         <dynamic-page>
@@ -69,44 +69,44 @@ Alternatywna składnia (element stylesheet):
                     <enhancement name="border" color="black" />
                     <enhancement name="background" color="pink" />
                 </stylesheet>
-                Ten tekst jest czerwony na różowym tle w czarnym obramowaniu
+                This text is red on pink backgroun into black border
             </div>
         </dynamic-page>
     </pdf>
 
-Atrybuty można nadawać za pomocą atrybutów XML bezpośrednio po nazwie tagu lub też za pomocą wspomnianego tagu "stylesheet". Nie istnieje atrybut "style" znany z HTML'a.
+Attributes can by setted as XML attributes directly after tag name or by means of mentioned "stylesheet" tag. HTML "style" attribute dosn't exist.
 
-Biblioteka jest bardzo rygorystyczna pod względem poprawności tagów i atrybutów. Jeśli zostanie użyty nieistniejący tag lub atrybut, dokument się nie sparsuje - zostanie wyrzucony wyjątek z odpowiednią treścią.
+Library is very strict in respect of corectness of tags and attributes. If unexisted tag or attribute is used, document won't parse - siutable exception will be thrown.
 
-Dziedziczenie.
---------------
+Inheritance
+------------
 
-Atrybut "id" ma całkowicie inne znaczenie niż w HTML'u. Id musi być unikalne w obrębie dokumentu, w przeciwnym wypadku wystąpi błąd parsowania. Służy on do identyfikowania elementów przy dziedziczeniu. Przykład:
+"id" attribute has entirly different mean than in HTML. Id must by unique in whole document, otherwise parsing error occurs. Id attribute is used to identify tags in inheritance. Example:
 
     <pdf>
         <dynamic-page>
-            <div id="warstwa-1" color="red" font-type="verdana" font-size="16">
+            <div id="layer-1" color="red" font-type="verdana" font-size="16">
                 <stylesheet>
                     <enhancement name="border" color="green" />
                 </stylesheet>
-                Warstwa 1
+                Layer 1
             </div>
             <div extends="warstwa-1">
-                Warstwa 2 dziedzicząca style (typ, atrybuty proste i złożone) po warstwie 1)
+                Layer 2 inherits style (type, simple and complex attributes) from layer 1)
             </div>
         </dynamic-page>
     </pdf>
 
-Druga warstwa dziedziczy wszstkie atrybuty proste i złożone (upiększenia) po pierwszej, nawet te które zostały nadane z zewnętrznego arkuszu stylów.
+Second layer inherits all attributes (simple and complex), also these from external stylesheet.
 
-Priorytety nadawania wartości atrybutom:
+Priorites in attributes setting:
 
-1. Tag stylesheet wewnątrz elementu
-2. Zdefiniowanie atrybutów bezpośrednio po nazwie tagu
-3. Atrybuty pobrane z arkusza stylów
-4. Atrybuty odziedziczone po innym elemencie
+1. Stylesheet tag directly in element tag
+2. Attributes directly after tag name (XML attributes)
+3. Attributes from external stylesheet
+4. Inherited attributes from another tag
 
-Przykład:
+Example:
 
     <pdf>
         <page>
@@ -120,36 +120,36 @@ Przykład:
         </page>
     </pdf>
 
-Drugi "div" będzie miał następujące atrybuty:
+Second "div" will have following attributes:
 - text-align: right
 - color: #aaaaaa
 - height: 200
 
-Struktura arkusza stylów.
--------------------------
+Stylesheet structure
+--------------------
 
-Arkusze stylów muszą się znajdować w osobnym pliku, nie ma wsparcia krótkiej deklaracji atrybutów prostych i złożonych bezpośrednio w tagu. Składnia arkusza stylów:
+Stylesheets have to be in external file, in stylesheet short declaration of attributes (simple and complex) isn't supported. Syntax od stylesheet:
 
     <stylesheet>
-        <div class="klasa">
-            <!-- atrybuty i upiększenia zagnieżdzone w ścieżce selektora div.klasa -->
+        <div class="class">
+            <!-- simple and complex (enhancements) attributes are nested in "div.class" selector path -->
             <attribute name="font-size" value="12" />
             <attribute name="color" value="grey" />
-            <!-- odpowiednik atrybutu background.color -->
+            <!-- equivalent of background.color attribute -->
             <enhancement name="background" color="yellow" />
 
-            <!-- kolejny element, odpowiadająca składnia selektora z CSS: "div.klasa p" -->
+            <!-- another nested element, equivalent CSS selector syntax: "div.class p" -->
             <p>
                 <attribute name="margin" value="10 15" />
             </p>
         </div>
 
-        <!-- odpowiednik selektora ".inna-klasa" z CSS, tag "any" oznacza dowolny tag -->
-        <any class="inna-klasa">
+        <!-- equivalent CSS selector syntax: ".another-class", "any" tag is wildcard (mean any tag) -->
+        <any class="another-class">
             <attribute name="text-align" value="right" />
         </any>
 
-        <h2 class="naglowek">
+        <h2 class="header">
             <span>
                 <attribute name="font-size" value="9" />
             </span>
@@ -159,68 +159,68 @@ Arkusze stylów muszą się znajdować w osobnym pliku, nie ma wsparcia krótkie
         </h2>
     </stylesheet>
 
-Standardowe tagi.
------------------
+Standard tags
+-------------
 
-Biblioteka obsługuje podstawowe tagi zaczerpnięte z języka HTML: div, p, table, tr, td, b, strong, span, h1, h2, h3, h4, h5, img, br, ul, li
-Ponadto obsługiwane są niestandardowe tagi:
+Library supports primary HTML tags: div, p, table, tr, td, b, span, h1, h2, h3, img, br, ul, li
+In addition there are not standard tags:
 
-* dynamic-page - strona, która się dynamicznie dzieli gdy zostaje przepełniona
-* page - pojedyncza strona
-* page-break - złamanie strony, jest to element podrzędny dynamic-page, czyli musi być bezpośrednim dzieckiem tego elemntu!
-* column-layout - podział obszaru roboczego na kolumny, dodatkowe atrybuty: number-of-columns oraz margin-between-columns
-* column-break - złamanie kolumny, jest to element podrzędny columns (TODO)
+* dynamic-page - auto breakable page
+* page - single page
+* page-break - page break, this tag must be direct child of "dynamic-page"!
+* column-layout - separate workspace on columns, additional attributes: number-of-columns and margin-between-columns
+* column-break - column break,this tag must be direct child of "column-layout"! (TODO: not implemented yet)
 
-Istnieją tagi, które służą jedynie do określania wartości atrybutów, zbioru atrybutów lub zbioru elementów:
+There are tags that only are bags for attributes, set of tags etc:
 
-* stylesheet - style dla elementu nadrzędnego
-* attribute - atrybut, bezpośredni element podrzędny dla "stylesheet". Wymagane atrybute tego elementu: name - nazwa atrybutu, value - wartość atrybutu
-* enhancement - atrybut złożony (upiększenie), bezpośredni element podrzędny dla "stylesheet". Wymagany atrybut tego elementu: name - nazwa.
-* placeholders - definiuje wartości "slotów" dla elementu podrzędnego. Elementy podrzędne "placeholders" są specyficzne dla tagu nadrzędnego.
-* metadata - definiuje dane meta dla dokumentu pdf, bezpośredni element podrzędny korzenia dokumentu (TODO)
+* stylesheet - styleshet for parent
+* attribute - simple attribute declaration, direct child of "stylesheet" tag. Required attributes of this element: name - attribute name, value - attribute value
+* enhancement - complex attribute declaration, direct child of "stylesheet" tag. Required attributes of this element: name - complex attribute name
+* placeholders - defines placeholders for parent tag. Children tags of placeholder are specyfic for every parent tag.
+* metadata - defines metadata of pdf document, direct child of document root (TODO: not implemented yet)
 
-Atrybuty.
----------
+Attributes
+----------
 
-* width oraz height: ustawienie wysokości i szerokości na sztywno, nie są obsługiwane jednostki. Jest możliwe użycie wartości relatywnych wyrażonych w procentach
-* margin (margin-top, margin-bottom, margin-left, margin-right): margines podobny jak w HTML/CSS z taką różnicą, że marginesy sąsiadów się sumują. Dla marginesów bocznym możliwa jest wartość "auto" - działa podobnie jak w HTML/CSS
-* padding (padding-top, padding-bottom, padding-left, padding-right): dopełnienie wewnętrzne - tak jak w HTML/CSS
-* font-type - typ czcionki. Nazwa czcionki musi występować w pliku konfiguracyjnym fonts.xml, w przeciwnym wypadku zostanie wyrzucony wyjątek
-* font-size - rozmiar czcionki w punktach, brak obsługi jednostek wielkości
-* font-style - styl czcionki, dozwolone wartości: normal, bold, italic, bold-italic
-* color - kolor tekstu. Przyjmowane wartości takie jak w HTML/CSS
-* display - sposób wyświetlenia (block|inline|none)
-* splittable - określa czy element może zostać podzielony na dwie strony, dla większości elementów domyślna wartość to true
-* float - działanie podobne, aczkolwiek nie takie same jak w HTML/CSS. Wartości left|none|right, domyślnie none
-* line-height - działanie takie jak w HTML/CSS. Domyślna wartość to 1.2*font-size
-* text-align - działanie takie jak w HTML/CSS. Wartości left|center|right, domyślnie left. Obecnie nie działa poprawnie dla tekstu wymieszanego z tagami formatującymi (np. "span").
-* page-break - łamie stronę jeśli element jest bezpośrednim dzieckiem elementu dynamic-page
-* colspan, rowspan - działanie analogiczne do atrybutów html (rowspan jeszcze nie jest zaimplementowane)
+* width and height: rigidly sets height and width, there are no units. Relative values in percent are supported. 
+* margin (margin-top, margin-bottom, margin-left, margin-right): margin similar to margin from HTML/CSS. Margins of simblings are pooled. For side margins possible is "auto" value, it works similar as in HTML/CSS.
+* padding (padding-top, padding-bottom, padding-left, padding-right): works similiar as in HTML/CSS
+* font-type - font name must occurs in fonts.xml config file, otherwise exception will be thrown
+* font-size - file size in points, there are no any unit
+* font-style - allowed values: normal, bold, italic, bold-italic
+* color - text color. HTML/CSS style values are supported
+* display - way of displaying (block|inline|none)
+* splittable - if true, element is able to be splitted in several pages. Default value for most tags is true..
+* float - works similar but not the same as in HTML/CSS. Allowed values: left|none|right, default none
+* line-height - works similar as in HTML/CSS. Default value: 1.2*font-size
+* text-align - works as same as in HTML/CSS. Allowed values: left|center|right, default left. Nowday isn't work properly with text mixed with inline tags (for example "span")
+* page-break - breaks page in the end of the owner of this attribute. Owner of this attribute must by directly child of dynamic-page tag!
+* colspan, rowspan - works similar as in HTML (TODO: rowspan isn't implemented yet)
 
-Atrybuty złożone
-----------------
+Complex attributes
+------------------
 
 * border:
-    - color: kolor obramowania
-    - style: styl obramowania, możliwe wartości: solid (linia ciągła), dotted (predefiniowana linia przerywana) lub własna definicja w postaci ciągu liczb oddzielonych spacjami
-    - type: które krawędzie mają mieć obramowanie - domyślnie "top+bottom+left+right", czyli każda krawędź. Możliwa wartość none (wyłączenie obramowania)
-    - size: rozmiar obramowania
-    - radius: zaokrąglenie rogów w radianach (uwaga: przy ustawionym tym parametrze ignorowany jest parametr typu - zawsze obramowanie z zaokrąglonymi rogami jest pełne)
-    - position: przesunięcie obramowania względem orginalnego położenia. Wartości dodatnie rozszerzają obramowanie, wartości ujemnie zwężają. Dzięki manipulacji tym parametrem i dodaniu kilku obramowań, można uzyskać złożone i skomplikowane obramowania.
+    - color: border color
+    - style: posible values: solid (solid line), dotted (predefined dotted line) or any definition in the form of integers separated by space
+    - type: which edges will be shown - default "top+bottom+left+right" (all edges). "none" value is possible (it disable border)
+    - size: border size, there are no unit
+    - radius: corner rounding in radians (attention: if this parameter is set, type paramete will be ignored, rounded border always will be full - this will be fixed in future)
+    - position: border translation relative to original position. Positive values extends border, negative values decrases border. Owing to manipulation of this parameter, you can obtain complex pattern as border if you add another borders with different styles and positions. 
 
 * background:
-    - color: kolor tła
-    - image: obrazek tła
-    - repeat: sposób powtarzania obrazka (none|x|y|all)
-    - radius: zaokrąglanie rogów tła w radianach (w chwili obecnej działa tylko dla koloru, nie obrazka)
+    - color: background color
+    - image: background image
+    - repeat: way of image repeating (none|x|y|all)
+    - radius: rounding background corners (for now only works with color background)
 
-Można dodawać kilka upiększeń tego samego typu (np. 3 różne obramowania) używając tagu "stylesheet" zamiast krótkiej notacji ("border.color"):
+It is possible to add several complex attributes in the same type (for instance 3 different borders). You can achieve that by using "stylesheet" tag instead of short notation.
 
     <pdf>
         <dynamic-page>
             <div>
                 <stylesheet>
-                    <!-- Górna i dolna krawędź czerwona, boczne żółto-szare -->
+                    <!-- Top and bootom edges are red, side edges are yellow-gray --> 
                     <enhancement name="border" color="red" type="top+bottom" />
                     <enhancement id="borderLeftAndRight" name="border" color="yellow" type="left+right" size="4" />
                     <enhancement id="outerBorderLeftAndRight" name="border" color="gray" type="left+right" size="2" position="1" />
@@ -229,44 +229,44 @@ Można dodawać kilka upiększeń tego samego typu (np. 3 różne obramowania) u
         </dynamic-page>
     </pdf>
 
-W tym przykładzie drugie obramowanie ma identyfikator "borderLeftAndRight", jakby go nie było to atrybuty drugiego obramowania zostały by złączone z atrybutami z pierwszego obramowania. Domyślny identyfikator "id" jest równy atrybutowi "name". Identyfikatory "id" dla upiększeń (enhancements) nie mają nic wspólnego z atrybutami "id" dla elementów (glyphów). Można tworzyć obramowania złożone manipulując pozycją, tak jak w powyższym przykładzie (outerBorderLeftAndRight).
+In this example second border has "borderLeftAndRight" indentifie, if this border had not id, attributes from second border would be merged with attributes from first border. Default identifier "id" is as same as "name" attribute. "id" attributes for complex attributes hasn't nothing to attribute "id" of tags (using in inheritance). It is possible to create complex borders as same as in previous example (outerBorderLeftAndRight).
 
-Powtarzalne nagłówki i stopki.
+Repetitive headers and footers
 ------------------------------
 
-Aby dodać powtarzalny nagłówek i/bądź stopkę należy wykorzystać tag "placeholders". Niektóre elementy mają specjalne "sloty": strona ma nagłówek i stopkę, tabela może mieć nagłówek (TODO: jeszcze nie zaimplementowane) itp.
+"placeholders" can be used in order to adding repetitive header or/and footer. Some elemnts has special "placeholders": page has header and footer, table also has header and footer (TODO: not implemented yet) etc.
 
     <pdf>
         <dynamic-page>
             <placeholders>
                 <header>
                     <div height="50" width="100%">
-                        Nagłówek
+                        Header
                     </div>
                 </header>
                 <footer>
                     <div height="50" width="100%">
-                        Stopka
+                        Footer
                     </div>
                 </footer>
             </placeholders>
         </dynamic-page>
     </pdf>
 
-Nagłówek i stopka muszą mieć bezpośrednio określoną wysokość. Wysokość ta sumuje się z marginesami górnym i dolnym, czyli rozmiar roboczy strony jest to rozmiar pomniejszony o marginesy górny i dolny oraz o wysokość stopki i nagłówka.
+Header and footer has to have directly setted height. This height is pooled with page top and bottom margins. Workspace is page size reduced by page margins and placeholders (footer and header) height.
 
-W nagłówku i stopce można korzystać z specjalnego tagu "<page-info></page-info>" który wyświetla informacje o obecnym numerze strony oraz łącznej liczbie stron w obrębie obecnego elementu "dynamic-page" (nie łączną liczbę stron w całym dokumencie!). Element ten ma swoje atrybuty, z których najważniejszym jest format.
+In header and footer is special tab "page-info". It display current page information is configurable format. This element works only with dynamic-page, not single pages. This tah has some attributes, the most important is "format".
 
-    <!-- ciach -->
+    <!-- ... -->
         <header>
-            <page-info format="strona %s na %s"></page-info>
+            <page-info format="page %s from %s"></page-info>
         </header>
-    <!-- ciach -->
+    <!-- ... -->
 
-Podział strony na kolumny.
---------------------------
+Separate page on columns
+-------------------------
 
-Strona może być podzielona na kolumny.
+Page can be separated on columns:
 
     <pdf>
         <dynamic-page>
@@ -280,57 +280,54 @@ Strona może być podzielona na kolumny.
         </dynamic-page>
     </pdf>
 
-Powyższy xml określa kilka stron dokumentu pdf z zielonymi prostokątami podzielonymi na 2 kolumny. Tag "column-layout" ma dwa dodatkowe atrybuty: number-of-columns oraz margin-between-columns. Domyślna wartość tych atrybutów to odpowiednio 2 oraz 10.
+Above XML describes several pages of pdf document with green rectangles separated on two columns. "column-layout" tag has two additional parameters: number-of-columns and margin-between-columns. Default values for this attributes are 2 and 10 respectlivy.
 
-Konfiguracja.
+Configuration
 -------------
 
-Biblioteka ma 3 podstawowe pliki konfiguracyjne, które pozwalają na dostosowanie biblioteki do swoich potrzeb oraz do jej rozszerzenia.
+Library has three primary config files that allow to adopt library to specyfic needs and to extending.
 
-* enhancements.xml - przypisywanie klas upiększeń (atrybutów złożonych) pod nazwy logiczne, które identyfikują dany typ upiększenia w obrębie całej biblioteki
-* glyphs.xml - definiowanie tagów dostępnych w dokumencie xml wraz z domyślnymi stylami oraz obiektami formatującymi
-* fonts.xml - definowanie czcionek i przypisywanie ich do nazw logicznych, które identyfikują daną czcionkę w obrębie całej biblioteki
+* enhancements.xml - declarations of complex attributes classes to logical names that identify attribute in whole library.
+* glyphs.xml - definitions of allowed tags in xml document with default attributes and formatting objects.
+* fonts.xml - definitions of fonts and assigning them to logical names that identify font in whole library.
 
-Aby zmienić domyślne pliki konfiguracyjne należy przekazać do konstruktora fasady odpowiednio skonfigurowany obiekt ładujący konfigurację.
+In order to change default config files, you must pass to Facade constructor configured Loader object:
 
-    $loader = new PHPPdf\Configuration\LoaderImpl('/sciezka/do/pliku/glyphs.xml', '/sciezka/do/pliku/enhancements.xml', '/sciezka/do/pliku/fonts.xml');
+    $loader = new PHPPdf\Configuration\LoaderImpl('/path/to/file/glyphs.xml', '/path/to/file/enhancements.xml', '/path/to/file/fonts.xml');
     $facade = new PHPPdf\Parser\Facade($loader);
 
-Można wykorzystać budowniczego fasady, który jak narazie ma opcje do ustawiania cache.
+FacadeBuilder can be uset to build and configure Facade. Nowaday builder has only cache setting responsibilites:
     
-    $builder = PHPPdf\Parser\FacadeBuilder::create(/* można przekazać obiekt loadera konfiguracji */)
+    $builder = PHPPdf\Parser\FacadeBuilder::create(/* you can pass specyfic configuration loader object */)
                                           ->setCache('File', array('cache_dir' => './cache'))
-                                          ->setUseCacheForStylesheetConstraint(true); //szablony stylów również będą korzystały z cache
+                                          ->setUseCacheForStylesheetConstraint(true); //stylesheets will be also use cache
 
     $facade = $builder->build();
 
-Są dwie implementacje loaderów konfiguracji, zwykła oraz korzystająca z komponentu DependencyInjection z Symfony2. Druga implementacja daje większą elastyczność w konfigurowaniu biblioteki. Domyślnie używany jest loader, który nie korzysta z DI.
+There are two implementation of configuration loaders, standard and using DependencyInjection component from Symfony2. Second implementation is more flexible in configuration, but is less efficently. Default loader dosn't use DI container.
 
-Znane ograniczenia.
+Known limitations
+-----------------
+
+Below is list of known limitations of library current version:
+
+* there no way to insert inject image into text with floating - will be introduced in next releases
+* malfunction of aligning text with neasted tags to center and to right (for instance "Some text <span>some another text</span>") - will be fixed in next releases
+* lack of justification - will be introduced in next releases
+* border doesn't change dimensions of the element (in HTML do)
+
+TODO - plans.
 -------------------
 
-Poniżej przedstawiam listę ograniczeń obecnej wersji biblioteki:
+* annotations
+* document metadata
+* bookmarks
+* improve interpretations of attributes and fixing found bugs
+* column feature with equal columns strategy
+* improve table, header and footer for table, rowspan. Fix calculation of cell's min height when colspan is used.
+* refactoring
 
-* brak możliwości wstawiania zdjęcia do tekstu z opływem (float) - zostanie wprowadzone w kolejnych wersjach
-* niepoprawne działanie wyrównania do środka i do prawej testu z zagnieżdżonymi tagami (np. "Jakiś takst <span>inny tekst</span>") - zostanie poprawione w kolejnych wersjach
-* brak justrowania - zostanie wprowadzone w kolejnych wersjach
-* obramowanie nie zmienia rozmiaru elementu tak jak to jest w HTML - zabieg celowy, raczej nie planuję jego zmiany
+Technical requirements
+----------------------
 
-TODO - czyli plany.
--------------------
-
-* obsługa adnotacji
-* obsługa metadanych dokumentu
-* obsługa zakładek
-* poprawa interpretacji wartości atrybutów i rozkładu elementów w dokumencie
-* obsługa podziału strony na kolumny w taki sposób, że wszystkie kolumny mają tą samą wysokość
-* poprawa działania tabelek, definiowanie nagłówków i stopek dla tabeli
-* obsługa rowspan, nagłówka i stopki dla tabeli
-* poprawienie wyliczania minimalnej wielkości komórki tabeli gdy jest użyty colspan
-* bundle do integracji z Symfony2
-* refaktoryzacja
-
-Wymagania techniczne.
----------------------
-
-Biblioteka działa pod php 5.3+.
+Library works on php 5.3+
