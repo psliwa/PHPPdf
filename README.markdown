@@ -7,6 +7,11 @@ Installation
 Library optionally uses external libraries (DependencyInjection from Symfony2) that be able to download by command:
 
     php vendors.php
+    
+Symfony2 bundle
+---------------
+
+There is [Symfony2 bundle][1] integrates this library with Symfony2 framework.
 
 Document parsing and creating pdf file
 --------------------------------------
@@ -331,3 +336,5 @@ Technical requirements
 ----------------------
 
 Library works on php 5.3+
+
+[1]: https://github.com/psliwa/PdfBundle
