@@ -13,21 +13,6 @@ class Extension implements ExtensionInterface
     {
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__ . '/../../Resources/config/services'));
         $loader->load('glyphs.xml');
-        
-        $this->loadGlyphs($container);
-    }
-    
-    private function loadGlyphs(ContainerBuilder $container)
-    {
-        $ids = $container->findTaggedServiceIds('phppdf.glyph');
-        
-        $glyphFactory = $container->get('phppdf.glyph_factory');
-        
-        foreach($ids as $id => $def)
-        {
-            $name = substr($id, strrpos($id, '.')+1);
-            $glyphFactory->addPrototype($name, $container->get($id));
-        }
     }
     
     public function getNamespace()

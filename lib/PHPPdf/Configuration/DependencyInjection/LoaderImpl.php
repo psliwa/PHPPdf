@@ -24,11 +24,14 @@ class LoaderImpl extends BaseLoader
     
     protected function loadGlyphs()
     {
-        $container = $this->container ? : new ContainerBuilder();
+        if(!$this->container)
+        {
+            $container = new ContainerBuilder();    
+            $extension = new Extension();
+            $extension->load(array(), $container);
 
-        $extension = new Extension();
-        $container->registerExtension($extension);
-        $extension->load(array(), $container);
+            $this->container = $container;           
+        }
         
         return $container->get('phppdf.glyph_factory');
     }

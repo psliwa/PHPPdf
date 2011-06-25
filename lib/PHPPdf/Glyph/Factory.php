@@ -21,6 +21,14 @@ class Factory implements \Serializable
         $this->invocationsMethodsOnCreate[$name] = $invocationsMethodsOnCreate;
     }
     
+    public function addPrototypes(array $prototypes)
+    {
+        foreach($prototypes as $name => $glyph)
+        {
+            $this->addPrototype($name, $glyph);
+        }
+    }
+    
     /**
      * Adds method and argument tag to invoke after creating
      * 
