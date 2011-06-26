@@ -21,7 +21,7 @@ The simplest way of library using:
     //register PHPPdf and vendor (Zend_Pdf) autoloaders
     require_once 'PHPPdf/Autoloader.php';
     PHPPdf\Autoloader::register();
-    PHPPdf\Autoloader::register('sciezka/do/biblioteki/lib/vendor');
+    PHPPdf\Autoloader::register('/path/to/library/lib/vendor');
 
     $facade = new PHPPdf\Parser\Facade(new PHPPdf\Configuration\Loader());
 
@@ -34,7 +34,7 @@ The simplest way of library using:
 Basic document structure
 ------------------------
 
-Library bases on XML format similar to HTML but this format isnt HTML - some tags are diffrent, interpretation of some attributes is not same as in HTML and CSS standard, way of attributes adding is also diffrent. The simplest document has following structure:
+Library bases on XML format similar to HTML but this format isn't HTML - some tags are diffrent, interpretation of some attributes is not as same as in HTML and CSS standards, way of attributes adding is also diffrent. The simplest document has following structure:
 
     <pdf>
         <dynamic-page>
@@ -54,7 +54,7 @@ Adding DOCTYPE declaration is strongly recommended in order to replace html enti
 
     <!DOCTYPE pdf SYSTEM "%resources%/dtd/doctype.dtd">
 
-Root of document has to be "pdf". "dynamic-page" tag is auto breakable. "page" tag is alternative, represents only single, no breakable page. Attributes setting is different as in HTML. In order to set background and border you have to use complex attributes, where first part of attribute name is complex attribute type, second part is property of this attribute. Complex attribute parts are separate by dot ("."). Other way to setting complex attributes is using "enhancement" tag. Example:
+Root of document has to be "pdf". "dynamic-page" tag is auto breakable page. "page" tag is an alternative, represents only single, no breakable page. Way of attribute setting is different than in HTML. In order to set background and border you have to use complex attributes, where first part of attribute name is complex attribute type, second part is property of this attribute. Complex attribute parts are separate by dot ("."). Other way to setting complex attributes is using "enhancement" tag. Example:
 
     <pdf>
         <dynamic-page>
@@ -81,12 +81,12 @@ Alternative syntax ("stylesheet" tag):
 
 Attributes can by setted as XML attributes directly after tag name or by means of mentioned "stylesheet" tag. HTML "style" attribute dosn't exist.
 
-Library is very strict in respect of corectness of tags and attributes. If unexisted tag or attribute is used, document won't parse - siutable exception will be thrown.
+Library is very strict in respect of corectness of tags and attributes. If unexisted tag or attribute is used, document won't parse - suitable exception will be thrown.
 
 Inheritance
 ------------
 
-"id" attribute has entirly different mean than in HTML. Id must by unique in whole document, otherwise parsing error occurs. Id attribute is used to identify tags in inheritance. Example:
+"id" attribute has entirely different mean than in HTML. Id must by unique in whole document, otherwise parsing error occurs. Id attribute is used to identify tags in inheritance. Example:
 
     <pdf>
         <dynamic-page>
@@ -133,7 +133,7 @@ Second "div" will have following attributes:
 Stylesheet structure
 --------------------
 
-Stylesheets have to be in external file, in stylesheet short declaration of attributes (simple and complex) isn't supported. Syntax od stylesheet:
+Stylesheets have to be in external file, in stylesheet short declarations of attributes (simple and complex) aren't supported. Syntax od stylesheet:
 
     <stylesheet>
         <div class="class">
@@ -174,11 +174,11 @@ In addition there are not standard tags:
 * page - single page
 * page-break - page break, this tag must be direct child of "dynamic-page"!
 * column-layout - separate workspace on columns, additional attributes: number-of-columns and margin-between-columns
-* column-break - column break,this tag must be direct child of "column-layout"! (TODO: not implemented yet)
+* column-break - column break, this tag must be direct child of "column-layout"! (TODO: not implemented yet)
 
 There are tags that only are bags for attributes, set of tags etc:
 
-* stylesheet - styleshet for parent
+* stylesheet - stylesheet for parent
 * attribute - simple attribute declaration, direct child of "stylesheet" tag. Required attributes of this element: name - attribute name, value - attribute value
 * enhancement - complex attribute declaration, direct child of "stylesheet" tag. Required attributes of this element: name - complex attribute name
 * placeholders - defines placeholders for parent tag. Children tags of placeholder are specyfic for every parent tag.
@@ -260,7 +260,7 @@ Repetitive headers and footers
 
 Header and footer has to have directly setted height. This height is pooled with page top and bottom margins. Workspace is page size reduced by page margins and placeholders (footer and header) height.
 
-In header and footer is special tab "page-info". It display current page information is configurable format. This element works only with dynamic-page, not single pages. This tah has some attributes, the most important is "format".
+In header and footer is special tag "page-info". It displays current page information in configurable format. This element works only with dynamic-page, not single pages. This tag has some attributes, the most important is "format".
 
     <!-- ... -->
         <header>
@@ -290,7 +290,7 @@ Above XML describes several pages of pdf document with green rectangles separate
 Configuration
 -------------
 
-Library has three primary config files that allow to adopt library to specyfic needs and to extending.
+Library has three primary config files that allow you to adopt library to specyfic needs and to extending.
 
 * enhancements.xml - declarations of complex attributes classes to logical names that identify attribute in whole library.
 * glyphs.xml - definitions of allowed tags in xml document with default attributes and formatting objects.
@@ -316,7 +316,7 @@ Known limitations
 
 Below is list of known limitations of library current version:
 
-* there no way to insert inject image into text with floating - will be introduced in next releases
+* there no way to inject image into text with floating - will be introduced in next releases
 * malfunction of aligning text with neasted tags to center and to right (for instance "Some text <span>some another text</span>") - will be fixed in next releases
 * lack of justification - will be introduced in next releases
 * border doesn't change dimensions of the element (in HTML do)
@@ -327,7 +327,7 @@ TODO - plans.
 * annotations
 * document metadata
 * bookmarks
-* improve interpretations of attributes and fixing found bugs
+* improve interpretation of attributes and fixing found bugs
 * column feature with equal columns strategy
 * improve table, header and footer for table, rowspan. Fix calculation of cell's min height when colspan is used.
 * refactoring
