@@ -1,5 +1,11 @@
 <?php
 
+/*
+ * Copyright 2011 Piotr Śliwa <peter.pl7@gmail.com>
+ *
+ * License information is in LICENSE file
+ */
+
 namespace PHPPdf;
 
 /**
@@ -9,7 +15,7 @@ namespace PHPPdf;
  */
 final class Version
 {
-    const VERSION = '1.0.0-DEV';
+    const VERSION = '1.0.0-BETA';
 
     private function __construct()
     {

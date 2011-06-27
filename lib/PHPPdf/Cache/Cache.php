@@ -1,5 +1,11 @@
 <?php
 
+/*
+ * Copyright 2011 Piotr Śliwa <peter.pl7@gmail.com>
+ *
+ * License information is in LICENSE file
+ */
+
 namespace PHPPdf\Cache;
 
 /**
@@ -17,7 +23,7 @@ interface Cache
      * @return boolean True if cache has been succesfully saved, otherwise false
      */
     public function save($data, $id);
-
+    
     /**
      * Loads and returns data from cache. Returns false if cache is empty
      *
@@ -25,7 +31,7 @@ interface Cache
      * @return mixed Cached data
      */
     public function load($id);
-
+    
     /**
      * Tests if cache have value under passed id
      *
@@ -33,7 +39,7 @@ interface Cache
      * @return bollean Cache is fresh?
      */
     public function test($id);
-
+    
     /**
      * Clean cache in passed mode
      *
@@ -41,7 +47,7 @@ interface Cache
      * @param boolean True on success, otherwise false
      */
     public function clean($mode);
-
+    
     /**
      * Remove cache stored under passed id
      *
