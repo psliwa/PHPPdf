@@ -98,6 +98,11 @@ class Text extends Glyph
 
     protected function doDraw(Document $document)
     {
+        if($this->isEmptyText())
+        {
+            return;
+        }
+        
         $drawingTask = new DrawingTask(function(Text $glyph)
         {
             $graphicsContext = $glyph->getGraphicsContext();
@@ -135,6 +140,11 @@ class Text extends Glyph
         }, array($this));
 
         $this->addDrawingTask($drawingTask);
+    }
+    
+    private function isEmptyText()
+    {
+        return !$this->getWordsInRows();
     }
 
     public function getStartLineDrawingXDimension($align, $lineWidth)

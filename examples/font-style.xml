@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<stylesheet>
+	<table>
+		<tr>
+			<td>
+				<attribute name="padding" value="5" />
+				<attribute name="text-align" value="center" />
+			</td>
+			<td class="first">
+				<attribute name="font-type" value="verdana" />
+			</td>
+		</tr>
+	</table>
+</stylesheet>

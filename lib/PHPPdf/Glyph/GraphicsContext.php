@@ -28,7 +28,6 @@ class GraphicsContext
     );
 
     private $memento = null;
-    private $lastFontState = null;
 
     /**
      * @var Zend_Pdf_Page
@@ -71,12 +70,7 @@ class GraphicsContext
     public function setFont(\PHPPdf\Font\Font $font, $size)
     {
         $fontResource = $font->getFont();
-        $key = spl_object_hash($fontResource).$size;
-        if($this->lastFontState != $key)
-        {
-            $this->page->setFont($fontResource, $size);
-            $this->lastFontState = $key;
-        }        
+        $this->page->setFont($fontResource, $size);
     }
 
     public function setFillColor($color)

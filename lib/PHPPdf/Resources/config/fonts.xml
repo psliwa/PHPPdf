@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <fonts>
+	<!-- verdana is with utf-8 support -->
     <font name="verdana">
         <normal file="%resources%/fonts/verdana/normal.ttf" />
         <bold file="%resources%/fonts/verdana/bold.ttf" />
@@ -11,5 +12,28 @@
         <normal type="courier" />
         <bold type="courier-bold" />
         <italic type="courier-oblique" />
+        <bold-italic type="courier-bold-italic" />
+    </font>
+
+    <font name="times-roman">
+        <normal type="times-roman" />
+        <bold type="times-bold" />
+        <italic type="times-italic" />
+        <bold-italic type="times-bold-italic" />
+    </font>
+    
+    <font name="helvetica">
+        <normal type="helvetica" />
+        <bold type="helvetica-bold" />
+        <italic type="helvetica-oblique" />
+        <bold-italic type="helvetica-bold-oblique" />
+    </font>
+
+    <font name="zapf-dingbats">
+        <normal type="zapfDingbats" />
+    </font>
+
+    <font name="symbol">
+        <normal type="symbol" />
     </font>
 </fonts>
