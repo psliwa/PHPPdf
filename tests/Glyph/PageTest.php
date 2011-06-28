@@ -285,4 +285,45 @@ class PageTest extends TestCase
 
         return $header;
     }
+    
+    /**
+     * @test
+     */
+    public function pageCopingDosntCreateGraphicContextIfNotExists()
+    {
+        $this->assertNull($this->readAttribute($this->page, 'graphicsContext'));
+        
+        $copyPage = $this->page->copy();
+        
+        $this->assertNull($this->readAttribute($this->page, 'graphicsContext'));
+        $this->assertNull($this->readAttribute($copyPage, 'graphicsContext'));
+    }
+    
+    /**
+     * @test
+     * @dataProvider pageSizesProvider
+     */
+    public function resizeBoundaryWhenPageSizeIsSet($width, $height, array $margins)
+    {        
+        foreach($margins as $name => $value)
+        {
+            $this->page->setAttribute($name, $value);
+        }
+
+        $this->page->setAttribute('page-size', sprintf('%d:%d', $width, $height));
+        
+        $expectedTopLeftPoint = array($this->page->getMarginLeft(), $height - $this->page->getMarginTop());
+        $expectedBottomRightPoint = array($width - $this->page->getMarginRight(), $this->page->getMarginBottom());
+
+        $this->assertEquals($expectedTopLeftPoint, $this->page->getFirstPoint()->toArray());
+        $this->assertEquals($expectedBottomRightPoint, $this->page->getDiagonalPoint()->toArray());
+    }
+    
+    public function pageSizesProvider()
+    {
+        return array(
+            array(100, 50, array('margin' => array(0))),
+            array(77, 55, array('margin' => array(2, 3, 4, 5))),
+        );
+    }
 }

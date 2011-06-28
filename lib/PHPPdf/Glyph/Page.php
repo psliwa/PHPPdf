@@ -71,14 +71,26 @@ class Page extends Container
     
     private function initializeBoundary()
     {
-        $width = $this->getWidth();
-        $height = $this->getHeight();
+        $width = $this->getRealWidth();
+        $height = $this->getRealHeight();
         
-        $this->getBoundary()->setNext(0, $height)
-                            ->setNext($width, $height)
-                            ->setNext($width, 0)
-                            ->setNext(0, 0)
-                            ->close();
+        $boundary = $this->getBoundary();
+        if($boundary->isClosed())
+        {
+            $boundary->reset();
+        }
+        
+        $boundary->setNext(0, $height)
+                 ->setNext($width, $height)
+                 ->setNext($width, 0)
+                 ->setNext(0, 0)
+                 ->close();
+                 
+        foreach(array('margin-top', 'margin-bottom', 'margin-left', 'margin-right') as $name)
+        {
+            $value = $this->getAttribute($name);
+            $this->translateMargin($name, $value);
+        }
     }
 
     private function initializePlaceholders()
@@ -102,6 +114,8 @@ class Page extends Container
         $this->setHeight($height);
 
         $this->setAttributeDirectly('page-size', $pageSize);
+        
+        $this->initializeBoundary();
 
         return $this;
     }
@@ -182,16 +196,6 @@ class Page extends Container
         return null;
     }
 
-    protected function preDraw(Document $document)
-    {
-        foreach($this->getEnhancements() as $enhancement)
-        {
-            $callback = array($enhancement, 'enhance');
-            $args = array($this->getPage(), $this);
-            $this->addDrawingTask(new DrawingTask($callback, $args, $enhancement->getPriority()));
-        }
-    }
-
     public function split($height)
     {
         throw new \LogicException('Page can\'t be splitted.');
@@ -202,9 +206,12 @@ class Page extends Container
         $boundary = clone $this->getBoundary();
         $copy = parent::copy();
         
-        $graphicsContext = $this->getGraphicsContext();
-        $clonedGraphicsContext = clone $graphicsContext;
-        $copy->graphicsContext = $clonedGraphicsContext;
+        if($this->graphicsContext)
+        {
+            $graphicsContext = $this->getGraphicsContext();
+            $clonedGraphicsContext = clone $graphicsContext;
+            $copy->graphicsContext = $clonedGraphicsContext;
+        }
 
         $copy->setBoundary($boundary);
 
