@@ -36,7 +36,22 @@ class Background extends Enhancement
         }
 
         $this->image = $image;
+        $this->setRepeat($repeat);
+    }
+    
+    private function setRepeat($repeat)
+    {
+        if(!is_numeric($repeat))
+        {
+            $repeat = $this->getConstantValue('REPEAT', $repeat);
+        }
+        
         $this->repeat = $repeat;
+    }
+    
+    public function getRepeat()
+    {
+        return $this->repeat;
     }
 
     /**
@@ -79,7 +94,7 @@ class Background extends Enhancement
 
             $graphicsContext->saveGS();
             $graphicsContext->clipRectangle($x, $y, $x+$glyph->getWidth(), $y-$glyph->getHeight());
-
+ 
             $repeatX = $this->repeat & self::REPEAT_X;
             $repeatY = $this->repeat & self::REPEAT_Y;
 

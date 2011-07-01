@@ -187,4 +187,25 @@ class BackgroundTest extends TestCase
 
         $border->enhance($pageMock, $glyphMock);
     }
+    
+    /**
+     * @test
+     * @dataProvider repeatProvider
+     */
+    public function convertRepeatAsStringToConstat($string, $expected)
+    {
+        $enhancement = new Background(null, null, $string);
+        
+        $this->assertEquals($expected, $enhancement->getRepeat());
+    }
+    
+    public function repeatProvider()
+    {
+        return array(
+            array('none', Background::REPEAT_NONE),
+            array('x', Background::REPEAT_X),
+            array('y', Background::REPEAT_Y),
+            array('all', Background::REPEAT_ALL),
+        );
+    }
 }

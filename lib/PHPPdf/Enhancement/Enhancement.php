@@ -110,4 +110,16 @@ abstract class Enhancement
     {
         $gc->drawRoundedRectangle($x1, $y1, $x2, $y2, $this->getRadius(), $fillType);
     }
+    
+    protected function getConstantValue($majorName, $miniorName)
+    {
+        $const = sprintf('%s::%s_%s', get_class($this), $majorName, strtoupper($miniorName));
+
+        if(!defined($const))
+        {
+            throw new \InvalidArgumentException(sprintf('Invalid value for "%s" property, "%s" given.', strtolower($majorName), $miniorName));
+        }
+
+        return constant($const);
+    }
 }

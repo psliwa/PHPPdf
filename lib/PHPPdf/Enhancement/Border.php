@@ -72,18 +72,6 @@ class Border extends Enhancement
         }
     }
 
-    private function getConstantValue($majorName, $miniorName)
-    {
-        $const = sprintf('%s::%s_%s', __CLASS__, $majorName, strtoupper($miniorName));
-
-        if(!defined($const))
-        {
-            throw new \InvalidArgumentException(sprintf('Invalid value for "%s" property, "%s" given.', strtolower($majorName), $miniorName));
-        }
-
-        return constant($const);
-    }
-
     private function setStyle($style)
     {
         if(!is_numeric($style) && !is_array($style))
