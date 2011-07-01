@@ -386,6 +386,16 @@ abstract class Glyph implements \ArrayAccess, \Serializable
     {
         return $this->getWidthOrHeight('width');
     }
+    
+    public function getRealWidth()
+    {
+        return $this->getWidth();
+    }
+    
+    public function getRealHeight()
+    {
+        return $this->getHeight();
+    }
 
     private function getWidthOrHeight($sizeType)
     {

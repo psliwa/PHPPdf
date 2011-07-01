@@ -57,4 +57,61 @@ class StandardDimensionFormatterTest extends PHPUnit_Framework_TestCase
 
         $this->formatter->format($glyph, $this->document);
     }
+    
+    /**
+     * @test
+     * @dataProvider dimensionProvider
+     */
+    public function useRealWidthAndHeightToIncraseDimensionsByPaddings($realWidth, $realHeight, array $paddings)
+    {
+        $glyph = $this->getMockBuilder('PHPPdf\Glyph\Container')
+                      ->setMethods(array('getRealWidth', 'getRealHeight', 'getWidth', 'getHeight', 'setHeight', 'setWidth', 'getPaddingLeft', 'getPaddingTop', 'getPaddingRight', 'getPaddingBottom'))
+                      ->getMock();
+                      
+        foreach($paddings as $method => $value)
+        {
+            $glyph->expects($this->atLeastOnce())
+                  ->method($method)
+                  ->will($this->returnValue($value));
+        }
+        
+        //width and height might be random, becouse real width and height will be used
+        //to incrase dimension
+        foreach(array('getWidth', 'getHeight') as $method)
+        {
+            $glyph->expects($this->atLeastOnce())
+                  ->method($method)
+                  ->will($this->returnValue(rand(1, 200)));
+        }        
+        
+        $glyph->expects($this->atLeastOnce())
+              ->method('getRealWidth')
+              ->will($this->returnValue($realWidth));
+
+        $glyph->expects($this->atLeastOnce())
+              ->method('getRealHeight')
+              ->will($this->returnValue($realHeight));
+              
+        $glyph->expects($this->once())
+              ->method('setWidth')
+              ->with($realWidth + $paddings['getPaddingLeft'] + $paddings['getPaddingRight']);
+
+        $glyph->expects($this->once())
+              ->method('setHeight')
+              ->with($realHeight + $paddings['getPaddingTop'] + $paddings['getPaddingBottom']);
+
+        $this->formatter->format($glyph, $this->document);
+    }
+    
+    public function dimensionProvider()
+    {
+        return array(
+            array(200, 300, array(
+                'getPaddingLeft' => 10,
+                'getPaddingTop' => 11,
+                'getPaddingRight' => 12,
+                'getPaddingBottom' => 13,
+            )),
+        );
+    }
 }

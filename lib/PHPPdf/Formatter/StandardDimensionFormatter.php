@@ -48,7 +48,7 @@ class StandardDimensionFormatter extends BaseFormatter
         $paddingTop = $glyph->getPaddingTop();
         $paddingBottom = $glyph->getPaddingBottom();
 
-        $glyph->setWidth($glyph->getWidth() + $paddingLeft + $paddingRight);
-        $glyph->setHeight($glyph->getHeight() + $paddingTop + $paddingBottom);
+        $glyph->setWidth($glyph->getRealWidth() + $paddingLeft + $paddingRight);
+        $glyph->setHeight($glyph->getRealHeight() + $paddingTop + $paddingBottom);
     }
 }
