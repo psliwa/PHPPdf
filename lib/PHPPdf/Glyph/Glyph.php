@@ -150,6 +150,14 @@ abstract class Glyph implements \ArrayAccess, \Serializable
     {
         return $this->boundary;
     }
+    
+    /**
+     * @return PHPPdf\Util\Boundary Boundary with no translated points by margins, paddings etc.
+     */
+    public function getRealBoundary()
+    {
+        return $this->getBoundary();
+    }
 
     protected function setBoundary(Boundary $boundary)
     {
@@ -157,7 +165,7 @@ abstract class Glyph implements \ArrayAccess, \Serializable
     }
 
     /**
-     * Get point of left upper corner of this glyph or null if boundaries have not been
+     * Gets point of left upper corner of this glyph or null if boundaries have not been
      * calculated yet.
      *
      * @return PHPPdf\Util\Point
@@ -165,6 +173,17 @@ abstract class Glyph implements \ArrayAccess, \Serializable
     public function getFirstPoint()
     {
         return $this->getBoundary()->getFirstPoint();
+    }
+    
+    /**
+     * Gets point of left upper corner of this glyph, this method works on boundary from {@see getRealBoundary()}
+     * on contrast to {@see getFirstPoint()} method.
+     * 
+     * @return PHPPdf\Util\Point
+     */
+    public function getRealFirstPoint()
+    {
+        return $this->getRealBoundary()->getFirstPoint();
     }
 
     /**
@@ -177,6 +196,17 @@ abstract class Glyph implements \ArrayAccess, \Serializable
     {
         return $this->getBoundary()->getDiagonalPoint();
     }
+    
+    /**
+     * Gets point of right bottom corner of this glyph, this method works on boundary from {@see getRealBoundary()}
+     * on contrast to {@see getDiagonalPoint()} method.
+     * 
+     * @return PHPPdf\Util\Point
+     */
+    public function getRealDiagonalPoint()
+    {
+        return $this->getRealBoundary()->getDiagonalPoint();
+    }    
 
     public function setParent(Container $glyph)
     {
@@ -387,11 +417,17 @@ abstract class Glyph implements \ArrayAccess, \Serializable
         return $this->getWidthOrHeight('width');
     }
     
+    /**
+     * @return int Real width not modified by margins, paddings etc.
+     */
     public function getRealWidth()
     {
         return $this->getWidth();
     }
     
+    /**
+     * @return int Real height not modified by margins, paddings etc.
+     */
     public function getRealHeight()
     {
         return $this->getHeight();

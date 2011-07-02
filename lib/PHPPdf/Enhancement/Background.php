@@ -25,8 +25,9 @@ class Background extends Enhancement
 
     private $image = null;
     private $repeat;
+    private $useRealDimension;
 
-    public function __construct($color = null, $image = null, $repeat = self::REPEAT_NONE, $radius = null)
+    public function __construct($color = null, $image = null, $repeat = self::REPEAT_NONE, $radius = null, $useRealDimension = false)
     {
         parent::__construct($color, $radius);
 
@@ -37,6 +38,7 @@ class Background extends Enhancement
 
         $this->image = $image;
         $this->setRepeat($repeat);
+        $this->useRealDimension = (boolean) $useRealDimension;
     }
     
     private function setRepeat($repeat)
@@ -68,10 +70,9 @@ class Background extends Enhancement
 
         if($this->getColor() !== null)
         {
+            $boundary = $this->getBoundary($glyph);
             if($this->getRadius() !== null)
             {
-                $boundary = $glyph->getBoundary();
-
                 $firstPoint = $boundary[3];
                 $diagonalPoint = $boundary[1];
                 
@@ -79,21 +80,21 @@ class Background extends Enhancement
             }
             else
             {
-                $this->drawBoundary($page->getGraphicsContext(), $glyph->getBoundary(), \Zend_Pdf_Page::SHAPE_DRAW_FILL);
+                $this->drawBoundary($page->getGraphicsContext(), $boundary, \Zend_Pdf_Page::SHAPE_DRAW_FILL);
             }
         }
 
         $image = $this->getImage();
         if($image !== null)
         {
-            list($x, $y) = $glyph->getFirstPoint()->toArray();
-            list($endX, $endY) = $glyph->getDiagonalPoint()->toArray();
+            list($x, $y) = $this->getFirstPoint($glyph)->toArray();
+            list($endX, $endY) = $this->getDiagonalPoint($glyph)->toArray();
 
             $height = $image->getPixelHeight();
             $width = $image->getPixelWidth();
 
             $graphicsContext->saveGS();
-            $graphicsContext->clipRectangle($x, $y, $x+$glyph->getWidth(), $y-$glyph->getHeight());
+            $graphicsContext->clipRectangle($x, $y, $x+$this->getWidth($glyph), $y-$this->getHeight($glyph));
  
             $repeatX = $this->repeat & self::REPEAT_X;
             $repeatY = $this->repeat & self::REPEAT_Y;
@@ -117,5 +118,55 @@ class Background extends Enhancement
             
             $graphicsContext->restoreGS();
         }
+    }
+    
+    private function getFirstPoint(Glyph $glyph)
+    {
+        if($this->useRealDimension)
+        {
+            return $glyph->getRealFirstPoint();
+        }
+        
+        return $glyph->getFirstPoint();
+    }
+    
+    private function getDiagonalPoint(Glyph $glyph)
+    {
+        if($this->useRealDimension)
+        {
+            return $glyph->getRealDiagonalPoint();
+        }
+        
+        return $glyph->getDiagonalPoint();
+    }
+    
+    private function getBoundary(Glyph $glyph)
+    {
+        if($this->useRealDimension)
+        {
+            return $glyph->getRealBoundary();
+        }
+        
+        return $glyph->getBoundary();
+    }
+    
+    private function getWidth(Glyph $glyph)
+    {
+        if($this->useRealDimension)
+        {
+            return $glyph->getRealWidth();
+        }
+        
+        return $glyph->getWidth();
+    }
+
+    private function getHeight(Glyph $glyph)
+    {
+        if($this->useRealDimension)
+        {
+            return $glyph->getRealHeight();
+        }
+        
+        return $glyph->getHeight();
     }
 }

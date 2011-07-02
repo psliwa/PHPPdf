@@ -208,4 +208,62 @@ class BackgroundTest extends TestCase
             array('all', Background::REPEAT_ALL),
         );
     }
+    
+    /**
+     * @test
+     */
+    public function useRealBoundaryWhenRealDimensionParameterIsSetted()
+    {
+        $enhancement = new Background('black', null, Background::REPEAT_ALL, null, true);
+        
+        $glyph = $this->getMockBuilder('PHPPdf\Glyph\Container')
+                      ->setMethods(array('getRealBoundary', 'getBoundary'))
+                      ->getMock();
+
+        $height = 100;
+        $width = 100;        
+        $boundary = $this->getBoundaryStub(0, 100, $width, $height);
+                      
+        $glyph->expects($this->atLeastOnce())
+              ->method('getRealBoundary')
+              ->will($this->returnValue($boundary));
+
+        $glyph->expects($this->never())
+              ->method('getBoundary');
+        
+        $page = $this->getMockBuilder('PHPPdf\Glyph\Page')
+                     ->setMethods(array('getGraphicsContext'))
+                     ->getMock();
+                     
+        $gc = $this->getMockBuilder('PHPPdf\Glyph\GraphicsContext')
+                   ->disableOriginalConstructor()
+                   ->disableOriginalClone()
+                   ->setMethods(array('drawPolygon', 'saveGS', 'restoreGS', 'setLineColor', 'setFillColor'))
+                   ->getMock();
+                   
+        $expectedXCoords = array(
+            $boundary[0]->getX() - 0.5,
+            $boundary[1]->getX(),
+            $boundary[1]->getX(),
+            $boundary[0]->getX(),
+            $boundary[0]->getX(),
+        );
+        $expectedYCoords = array(
+            $boundary[0]->getY(),
+            $boundary[0]->getY(),
+            $boundary[2]->getY(),
+            $boundary[2]->getY(),
+            $boundary[0]->getY() + 0.5,
+        );
+
+        $gc->expects($this->once())
+           ->method('drawPolygon')
+           ->with($expectedXCoords, $expectedYCoords, $this->anything());
+                     
+        $page->expects($this->atLeastOnce())
+             ->method('getGraphicsContext')
+             ->will($this->returnValue($gc));
+             
+        $enhancement->enhance($page, $glyph);
+    }
 }

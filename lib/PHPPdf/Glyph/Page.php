@@ -225,6 +225,9 @@ class Page extends Container
         return $copy;
     }
 
+    /**
+     * @return int Height without vertical margins
+     */
     public function getHeight()
     {
         $verticalMargins = $this->getMarginTop() + $this->getMarginBottom();
@@ -232,6 +235,9 @@ class Page extends Container
         return (parent::getHeight() - $verticalMargins);
     }
 
+    /**
+     * @return int Width without horizontal margins
+     */
     public function getWidth()
     {
         $horizontalMargins = $this->getMarginLeft() + $this->getMarginRight();
@@ -239,14 +245,32 @@ class Page extends Container
         return (parent::getWidth() - $horizontalMargins);
     }
 
+    /**
+     * @return int Height with vertical margins
+     */
     public function getRealHeight()
     {
         return parent::getHeight();
     }
 
+    /**
+     * @return int Width with horizontal margins
+     */
     public function getRealWidth()
     {
         return parent::getWidth();
+    }
+    
+    public function getRealBoundary()
+    {
+        $boundary = clone $this->getBoundary();
+        $boundary->pointTranslate(0, -$this->getMarginLeft(), -$this->getMarginTop());
+        $boundary->pointTranslate(1, $this->getMarginRight(), -$this->getMarginTop());
+        $boundary->pointTranslate(2, $this->getMarginRight(), $this->getMarginBottom());
+        $boundary->pointTranslate(3, -$this->getMarginLeft(), $this->getMarginBottom());
+        $boundary->pointTranslate(4, -$this->getMarginLeft(), -$this->getMarginTop());
+        
+        return $boundary;
     }
 
     protected function setMarginAttribute($name, $value)
