@@ -119,18 +119,78 @@ class Factory implements \Serializable
 
         foreach($constructorParameters as $parameter)
         {
-            $parameterName = $parameter->getName();
-            if(!isset($parameters[$parameterName]) && !$parameter->isOptional())
-            {
-                throw new \InvalidArgumentException(sprintf('Parameter "%s" is required for "%s" enhancement.', $parameterName, $name));
-            }
+            $value = $this->getParameterValue($parameter, $parameters, $name);
 
-            $value = isset($parameters[$parameterName]) ? $parameters[$parameterName] : $parameter->getDefaultValue();
-
-            $args[$parameterName] = $value;
+            $args[$parameter->getName()] = $value;
         }
         $class = $this->getClass($name);
         return $class->newInstanceArgs($args);
+    }
+    
+    private function getParameterValue(\ReflectionParameter $parameter, array $values, $enhancementName)
+    {
+        $acceptableNames = $this->getAcceptableParameterNames($parameter);
+        if(!$this->existsAtLeastOneKey($acceptableNames, $values) && !$parameter->isOptional())
+        {
+            throw new \InvalidArgumentException(sprintf('Parameter "%s" is required for "%s" enhancement.', $parameter->getName(), $enhancementName));
+        }
+
+        foreach($acceptableNames as $name)
+        {
+            if(isset($values[$name]))
+            {
+                $value = $values[$name];
+                break;
+            }
+        }
+        
+        if(!isset($value))
+        {
+            $value = $parameter->getDefaultValue();
+        }
+
+        return $value;
+    }
+    
+    private function getAcceptableParameterNames(\ReflectionParameter $parameter)
+    {
+        $names[] = $parameter->getName();
+        
+        $uncamelizedName = $this->uncamelizeParameterName($parameter->getName());
+        
+        if($uncamelizedName != $parameter->getName())
+        {
+            $names[] = $uncamelizedName;
+        }
+        
+        return $names;
+    }
+    
+    private function uncamelizeParameterName($name)
+    {
+        $name = ucfirst($name);
+        $matches = array();
+        preg_match_all('([A-Z]{1}[a-z0-9]*)', $name, $matches);
+               
+        $parts = $matches[0];
+        array_walk($parts, function(&$value){
+            $value = lcfirst($value);
+        });
+        
+        return implode('-', $parts);
+    }
+    
+    private function existsAtLeastOneKey(array $keys, array $array)
+    {
+        foreach($keys as $key)
+        {
+            if(isset($array[$key]))
+            {
+                return true;
+            }
+        }
+        
+        return false;
     }
 
     /**

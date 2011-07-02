@@ -29,4 +29,11 @@ final class Util
         }
         return $percent;
     }    
+    
+    public static function convertBooleanValue($value)
+    {
+        $knownValues = array('true' => true, 'false' => false, 1 => true, 0 => false, '1' => true, '0' => false, 'yes' => true, 'no' => false);
+
+        return isset($knownValues[$value]) ? $knownValues[$value] : (boolean) $value;
+    }
 }

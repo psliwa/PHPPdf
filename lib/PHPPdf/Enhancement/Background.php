@@ -9,6 +9,7 @@
 namespace PHPPdf\Enhancement;
 
 use PHPPdf\Glyph\Page,
+    PHPPdf\Util,
     PHPPdf\Glyph\Glyph;
 
 /**
@@ -38,7 +39,7 @@ class Background extends Enhancement
 
         $this->image = $image;
         $this->setRepeat($repeat);
-        $this->useRealDimension = (boolean) $useRealDimension;
+        $this->useRealDimension = Util::convertBooleanValue($useRealDimension);
     }
     
     private function setRepeat($repeat)

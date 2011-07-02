@@ -46,14 +46,24 @@ class EnhancementFactoryTest extends TestCase
 
     /**
      * @test
+     * @dataProvider parameterNamesProvider
      */
-    public function createUsingValidParameters()
+    public function createUsingValidParameters($parameterName, $parameterValue, $propertyName)
     {
         $this->factory->addDefinition('stub', 'EnhancementStub');
-        $enhancement = $this->factory->create('stub', array('color' => '#bbbbbb', 'someParameter' => 'dupa'));
+        $enhancement = $this->factory->create('stub', array('color' => '#cccccc', $parameterName => $parameterValue));
 
         $this->assertNotNull($enhancement);
         $this->assertInstanceOf('EnhancementStub', $enhancement);
+        $this->assertEquals($parameterValue, $this->readAttribute($enhancement, $propertyName));
+    }
+    
+    public function parameterNamesProvider()
+    {
+        return array(
+            array('someParameter', 'some value', 'someParameter'),
+            array('some-parameter', 'some value', 'someParameter'),
+        );
     }
 
     /**

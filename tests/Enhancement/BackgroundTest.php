@@ -266,4 +266,27 @@ class BackgroundTest extends TestCase
              
         $enhancement->enhance($page, $glyph);
     }
+    
+    /**
+     * @test
+     * @dataProvider booleanProvider
+     */
+    public function convertStringBooleanValuesToBooleanTypeForUseRealDimensionParameter($value, $expected)
+    {
+        $enhancement = new Background('black', null, Background::REPEAT_ALL, null, $value);
+        
+        $this->assertTrue($expected === $this->readAttribute($enhancement, 'useRealDimension'));
+    }
+    
+    public function booleanProvider()
+    {
+        return array(
+            array('1', true),
+            array('0', false),
+            array('true', true),
+            array('false', false),
+            array('no', false),
+            array('yes', true),
+        );
+    }
 }

@@ -9,6 +9,7 @@
 namespace PHPPdf\Glyph;
 
 use PHPPdf\Document,
+    PHPPdf\Util,
     PHPPdf\Glyph\Container,
     PHPPdf\Util\Boundary,
     PHPPdf\Util\DrawingTask,
@@ -724,9 +725,7 @@ abstract class Glyph implements \ArrayAccess, \Serializable
     
     final protected function filterBooleanValue($value)
     {
-        $knownValues = array('true' => true, 'false' => false, 1 => true, 0 => false, '1' => true, '0' => false, 'yes' => true, 'no' => false);
-
-        return isset($knownValues[$value]) ? $knownValues[$value] : (boolean) $value;
+        return Util::convertBooleanValue($value);
     }
 
     /**
