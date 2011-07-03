@@ -6,16 +6,10 @@
             Some text outside column layout
         </div>
         <column-layout number-of-columns="2" margin-between-columns="20">
-            <div height="1000">
-                <stylesheet>
-                    <enhancement name="background" color="gray" />
-                </stylesheet>
+            <div height="1000" background.color="gray">
                 Some long container
             </div>
-            <div height="2000">
-                <stylesheet>
-                    <enhancement name="background" color="green" />
-                </stylesheet>
+            <div height="2000" background.color="green">
                 Some another long container
             </div>
         </column-layout>
