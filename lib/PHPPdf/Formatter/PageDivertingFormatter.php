@@ -11,6 +11,8 @@ namespace PHPPdf\Formatter;
 use PHPPdf\Glyph\Glyph;
 
 /**
+ * TODO: refactoring and rename
+ * 
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
 class PageDivertingFormatter extends AbstractDivertingFormatter
@@ -25,14 +27,14 @@ class PageDivertingFormatter extends AbstractDivertingFormatter
         $this->getSubjectOfSplitting()->getCurrentPage()->add($glyph);
     }
 
-    protected function breakSubjectOfSplittingIncraseTranslation($verticalTranslation)
+    protected function breakSubjectOfSplittingIncraseTranslation(Glyph $glyph, $glyphYCoordStart, $gapBeetwenBottomOfOriginalGlyphAndEndOfPage)
     {
+        $translation = $this->glyph->getPage()->getHeight() + $this->glyph->getPage()->getMarginBottom() - $glyphYCoordStart;
+        $verticalTranslation = $translation - $gapBeetwenBottomOfOriginalGlyphAndEndOfPage;
+        
         $this->getSubjectOfSplitting()->createNextPage();
         $this->totalVerticalTranslation += $verticalTranslation;
-    }
-    
-    protected function addChildrenToCurrentPageAndTranslate(Glyph $glyph, $translation)
-    {
+        
         $this->getSubjectOfSplitting()->getCurrentPage()->add($glyph);
         $glyph->translate(0, -$translation);
     }

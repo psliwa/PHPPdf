@@ -2,9 +2,23 @@
 <!DOCTYPE pdf SYSTEM "%resources%/dtd/doctype.dtd">
 <pdf>
     <dynamic-page>
-        <div class="outside-column">
+    	<placeholders>
+    		<header>
+    			<div height="14" background.color="black" color="white">
+    				header
+    			</div>
+    		</header>
+    		<footer>
+    			<div height="14" background.color="black" color="white">
+    				footer
+    			</div>
+    		</footer>
+    	</placeholders>
+
+        <div class="outside-column" height="100">
             Some text outside column layout
         </div>
+
         <column-layout number-of-columns="2" margin-between-columns="20">
             <div height="1000" background.color="gray">
                 Some long container
@@ -13,6 +27,7 @@
                 Some another long container
             </div>
         </column-layout>
+
         <div class="outside-column">
             Some text outside column layout
         </div>

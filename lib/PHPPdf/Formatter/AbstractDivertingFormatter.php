@@ -16,7 +16,7 @@ use PHPPdf\Document,
  */
 abstract class AbstractDivertingFormatter extends BaseFormatter
 {
-    private $glyph;
+    protected $glyph;
     protected $totalVerticalTranslation = 0;
 
     /**
@@ -52,7 +52,7 @@ abstract class AbstractDivertingFormatter extends BaseFormatter
         }
         else
         {
-            $pageYCoordEnd = $this->glyph->getPage()->getDiagonalPoint()->getY();
+            $pageYCoordEnd = $this->getPageYCoordEnd();
         }
 
         do
@@ -66,13 +66,20 @@ abstract class AbstractDivertingFormatter extends BaseFormatter
             {
                 if(!$childHasBeenSplitted)
                 {
-                    $this->addToSubjectOfSplitting($glyph);
+                $this->addToSubjectOfSplitting($glyph);
                 }
 
                 $childMayBeSplitted = false;
             }
+            
+            $pageYCoordEnd = $this->getPageYCoordEnd();
         }
         while($childMayBeSplitted);
+    }
+    
+    protected function getPageYCoordEnd()
+    {
+        return $this->glyph->getPage()->getDiagonalPoint()->getY();
     }
 
     /**
@@ -91,14 +98,15 @@ abstract class AbstractDivertingFormatter extends BaseFormatter
     {
         $originalHeight = $glyph->getFirstPoint()->getY() - $glyph->getDiagonalPoint()->getY();
         $glyphYCoordStart = $this->getChildYCoordOfFirstPoint($glyph);
-        $splitLine = $glyphYCoordStart - $this->glyph->getPage()->getDiagonalPoint()->getY();
+        $end = $this->getPageYCoordEnd();
+        $splitLine = $glyphYCoordStart - $end;
         $splittedGlyph = $glyph->split($splitLine);
 
         $gapBeetwenBottomOfOriginalGlyphAndEndOfPage = 0;
 
         if($splittedGlyph)
         {           
-            $gapBeetwenBottomOfOriginalGlyphAndEndOfPage = $glyph->getDiagonalPoint()->getY() - $this->glyph->getPage()->getDiagonalPoint()->getY();
+            $gapBeetwenBottomOfOriginalGlyphAndEndOfPage = $glyph->getDiagonalPoint()->getY() - $end;
 
             $gap = $originalHeight - (($glyph->getFirstPoint()->getY() - $glyph->getDiagonalPoint()->getY()) + ($splittedGlyph->getFirstPoint()->getY() - $splittedGlyph->getDiagonalPoint()->getY()));
             $this->totalVerticalTranslation += $gap;
@@ -109,10 +117,7 @@ abstract class AbstractDivertingFormatter extends BaseFormatter
             $glyph = $splittedGlyph;
         }
 
-        $translation = $this->getGlyphTranslation($glyph, $glyphYCoordStart);
-
-        $this->breakSubjectOfSplittingIncraseTranslation($translation - $gapBeetwenBottomOfOriginalGlyphAndEndOfPage);
-        $this->addChildrenToCurrentPageAndTranslate($glyph, $translation);
+        $this->breakSubjectOfSplittingIncraseTranslation($glyph, $glyphYCoordStart, $gapBeetwenBottomOfOriginalGlyphAndEndOfPage);
 
         return $glyph;
     }
@@ -124,18 +129,7 @@ abstract class AbstractDivertingFormatter extends BaseFormatter
         return $yCoordOfFirstPoint;
     }
 
-    protected function getGlyphTranslation(Glyph $glyph, $glyphYCoordStart)
-    {
-        $translation = $this->glyph->getPage()->getHeight() + $this->glyph->getPage()->getMarginBottom() - $glyphYCoordStart;
-
-        return $translation;
-    }
-
-    abstract protected function addChildrenToCurrentPageAndTranslate(Glyph $glyph, $translation);
-
     abstract protected function addToSubjectOfSplitting(Glyph $glyph);
-
-    abstract protected function breakSubjectOfSplittingIncraseTranslation($verticalTranslation);
 
     protected function postFormat()
     {

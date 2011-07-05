@@ -15,30 +15,6 @@ use PHPPdf\Document;
  */
 class ColumnableContainer extends Container
 {
-    /**
-     * @var Container
-     */
-    private $containerPrototype;
-
-    private $containers = array();
-
-    /**
-     * @var Container
-     */
-    private $currentContainer = null;
-
-    public function __construct(Container $containerPrototype = null, array $attributes = array())
-    {
-        if($containerPrototype === null)
-        {
-            $containerPrototype = new Container();
-        }
-
-        $this->containerPrototype = $containerPrototype;
-
-        parent::__construct($attributes);
-    }
-
     public function initialize()
     {
         parent::initialize();
@@ -59,77 +35,6 @@ class ColumnableContainer extends Container
         $this->setAttributeDirectly('number-of-columns', $count);
 
         return $this;
-    }
-
-    /**
-     * @return array Array of Container objects
-     */
-    public function getContainers()
-    {
-        return $this->containers;
-    }
-
-    public function createNextContainer()
-    {
-        $numberOfContainers = count($this->containers);
-        $translateX = ($this->getWidth() + $this->getAttribute('margin-between-columns')) * ($numberOfContainers % $this->getAttribute('number-of-columns'));
-
-        $this->currentContainer = $this->containerPrototype->copy();
-        $this->currentContainer->setAttribute('splittable', false);
-        $this->currentContainer->setParent($this);
-        $this->containers[] = $this->currentContainer;
-
-        $boundary = $this->getBoundary();
-        $firstPoint = $this->getFirstPoint();
-    }
-
-    /**
-     * @return Container
-     */
-    public function getCurrentContainer()
-    {
-        if($this->currentContainer === null)
-        {
-            $this->createNextContainer();
-        }
-
-        return $this->currentContainer;
-    }
-
-    protected function doDraw(Document $document)
-    {
-        foreach($this->getContainers() as $container)
-        {
-            $tasks = $container->getDrawingTasks($document);
-
-            foreach($tasks as $task)
-            {
-                $this->addDrawingTask($task);
-            }
-        }
-    }
-    
-    protected function getDataForSerialize()
-    {
-        $data = parent::getDataForSerialize();
-        $data['prototype'] = $this->containerPrototype;
-        
-        return $data;
-    }
-    
-    protected function setDataFromUnserialize(array $data)
-    {
-        parent::setDataFromUnserialize($data);
-        
-        $this->containerPrototype = $data['prototype'];
-    }
-    
-    /**
-     * @return PHPPdf\Glyph\Container
-     */
-    public function getPrototypeContainer()
-    {
-        return $this->containerPrototype;
     }
     
     public function preFormat(Document $document)

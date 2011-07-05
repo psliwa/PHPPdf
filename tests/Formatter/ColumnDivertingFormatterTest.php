@@ -16,7 +16,7 @@ class ColumnDivertingFormatterTest extends TestCase
     public function setUp()
     {
         $this->page = new Page();
-        $this->column = new ColumnableContainer(new Container());
+        $this->column = new ColumnableContainer();
 
         $this->column->setHeight($this->page->getHeight()*1.5);
         $this->column->setWidth($this->page->getWidth()/2);
@@ -45,36 +45,36 @@ class ColumnDivertingFormatterTest extends TestCase
     public function formatColumnsAndSetValidPositionOfContainers()
     {
         $this->page->add($this->column);
-        $this->injectBoundary($this->column);
 
         $pageHeight = $this->page->getHeight();
         $width = 100;
 
-        $containers = $this->createContainers(array($pageHeight, $pageHeight/2, $pageHeight/3));
+        $containersHeight = array($pageHeight, $pageHeight/2, $pageHeight/3);
+        $this->column->setHeight(array_sum($containersHeight));
+        $this->injectBoundary($this->column);
+        
+        $containers = $this->createContainers($containersHeight);
 
         $this->formatter->format($this->column, new Document());
 
-        $this->assertEquals(2, count($this->column->getContainers()));
+        $this->assertEquals(2, count($this->column->getChildren()));
 
-        $bottomYCoords = array();
-        foreach($containers as $container)
+        foreach($this->column->getChildren() as $container)
         {
-            $bottomYCoords[] = $container->getDiagonalPoint()->getY();
-        }
-
-        $bottomYCoord = min($bottomYCoords);
-
-        foreach($this->column->getContainers() as $container)
-        {
-            $child = current($container->getChildren());
-            $expectedFirstPoint = $child->getFirstPoint();
+            $children = $container->getChildren();
+            $firstChild = current($children);
+            $expectedFirstPoint = $firstChild->getFirstPoint();
+            
+            $lastIndex = count($children) - 1;
+            $lastChild = $children[$lastIndex];
+            $expectedDiagonalYCoord = min($lastChild->getDiagonalPoint()->getY(), $firstChild->getDiagonalPoint()->getY());
+            $actualDiagonalYCoord = $container->getDiagonalPoint()->getY();
 
             $this->assertEquals($expectedFirstPoint, $container->getFirstPoint());
-            $this->assertEquals($bottomYCoord, $container->getDiagonalPoint()->getY());
+            $this->assertEquals($expectedDiagonalYCoord, $actualDiagonalYCoord);
         }
 
-        //x coord of two containers within the same column is equal
-        $this->assertEquals($containers[1]->getFirstPoint()->getX(), $containers[2]->getFirstPoint()->getX());
+        $this->assertEquals($containers[1]->getFirstPoint()->getX(), $containers[2]->getFirstPoint()->getX(), 'x coord of two containers within the same column is not equal');
 
         $this->assertEquals($pageHeight, $this->column->getHeight());
     }
@@ -110,15 +110,18 @@ class ColumnDivertingFormatterTest extends TestCase
     public function secondRowOfColumnsShouldBeDirectlyUnderFirstRow()
     {
         $this->page->add($this->column);
-        $this->injectBoundary($this->column);
 
         $pageHeight = $this->page->getHeight();
 
-        $containers = $this->createContainers(array($pageHeight, $pageHeight, $pageHeight));
+        $containersHeights = array($pageHeight, $pageHeight, $pageHeight);
+        $this->column->setHeight(array_sum($containersHeights));
+        $this->injectBoundary($this->column);       
+        
+        $containers = $this->createContainers($containersHeights);
 
         $this->formatter->format($this->column, new Document());
 
-        $columns = $this->column->getContainers();
+        $columns = $this->column->getChildren();
 
         $this->assertEquals($columns[0]->getDiagonalPoint()->getY(), $columns[2]->getFirstPoint()->getY());
 
@@ -140,7 +143,7 @@ class ColumnDivertingFormatterTest extends TestCase
 
         $this->formatter->format($this->column, new Document());
 
-        $columns = $this->column->getContainers();
+        $columns = $this->column->getChildren();
 
         $this->assertEquals($stubs[0]->getDiagonalPoint()->getY(), $columns[0]->getFirstPoint()->getY());
         $this->assertEquals($columns[0]->getFirstPoint()->getY(), $columns[1]->getFirstPoint()->getY());
@@ -151,6 +154,32 @@ class ColumnDivertingFormatterTest extends TestCase
             {
                 $this->assertEquals($container->getFirstPoint()->getY(), $child->getFirstPoint()->getY());
             }
+        }
+    }
+    
+    /**
+     * @test
+     */
+    public function calculateCorrectBreakPointWhenColumnStartsInMiddleOfPage()
+    {
+        $pageHeight = $this->page->getHeight();
+        
+        $heightOfFirstContainer = 20;
+               
+        list($fistContainer, $columnableContainerChild) = $this->createContainers(array($heightOfFirstContainer, 4*$pageHeight - 2*$heightOfFirstContainer), $this->page);
+        $this->column->add($columnableContainerChild);
+        $this->page->add($this->column);
+        
+        $this->column->setHeight($columnableContainerChild->getHeight());
+        $this->injectBoundary($this->column, 20);
+        
+        $this->formatter->format($this->column, new Document());
+        
+        $this->assertEquals(4, count($this->column->getChildren()));
+        
+        foreach($this->column->getChildren() as $container)
+        {
+            $this->assertEquals(0, $container->getDiagonalPoint()->getY() % $pageHeight, 'y coord of one container\'s bottom is not equal to page bottom');
         }
     }
 }
