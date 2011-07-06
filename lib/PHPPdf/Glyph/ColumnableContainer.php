@@ -8,6 +8,8 @@
 
 namespace PHPPdf\Glyph;
 
+use PHPPdf\Util;
+
 use PHPPdf\Document;
 
 /**
@@ -21,6 +23,7 @@ class ColumnableContainer extends Container
 
         $this->addAttribute('number-of-columns', 2);
         $this->addAttribute('margin-between-columns', 10);
+        $this->addAttribute('equals-columns', false);
     }
 
     public function setNumberOfColumns($count)
@@ -43,5 +46,19 @@ class ColumnableContainer extends Container
 
         $width = ($parent->getWidth() - ($this->getAttribute('number-of-columns')-1)*$this->getAttribute('margin-between-columns')) / $this->getAttribute('number-of-columns');
         $this->setWidth($width);
+    }
+    
+    protected static function initializeType()
+    {
+        parent::initializeType();
+        
+        static::setAttributeSetters(array('equals-columns' => 'setEqualsColumns'));
+    }
+
+    public function setEqualsColumns($flag)
+    {
+        $flag = Util::convertBooleanValue($flag);
+        
+        $this->setAttributeDirectly('equals-columns', $flag);
     }
 }

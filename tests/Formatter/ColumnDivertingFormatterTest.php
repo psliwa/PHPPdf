@@ -171,7 +171,7 @@ class ColumnDivertingFormatterTest extends TestCase
         $this->page->add($this->column);
         
         $this->column->setHeight($columnableContainerChild->getHeight());
-        $this->injectBoundary($this->column, 20);
+        $this->injectBoundary($this->column, $heightOfFirstContainer);
         
         $this->formatter->format($this->column, new Document());
         
@@ -180,6 +180,62 @@ class ColumnDivertingFormatterTest extends TestCase
         foreach($this->column->getChildren() as $container)
         {
             $this->assertEquals(0, $container->getDiagonalPoint()->getY() % $pageHeight, 'y coord of one container\'s bottom is not equal to page bottom');
+        }
+    }
+    
+    /**
+     * @test
+     */
+    public function columnsShouldBeEqualIfEqualsColumnsAttributeIsSet()
+    {
+        $this->page->add($this->column);
+        $pageHeight = $this->page->getHeight();
+        $this->column->setAttribute('equals-columns', true);
+        
+        $containerHeights = array($pageHeight/4, $pageHeight/4);
+        $this->column->setHeight(array_sum($containerHeights));
+        $this->injectBoundary($this->column);
+        
+        $containers = $this->createContainers($containerHeights);
+        
+        $this->formatter->format($this->column, new Document());
+        
+        $this->assertEquals(2, count($this->column->getChildren()));
+    }
+    
+    /**
+     * @test
+     */
+    public function calculateValidColumnsPositionAndDimensionWhenEqualsColumnsAttributeIsSetAndColumnStartsInMiddleOnPage()
+    {
+        $pageHeight = $this->page->getHeight();
+        $this->column->setAttribute('equals-columns', true);
+        
+        $heightOfFirstContainer = 20;
+               
+        list($fistContainer, $columnableContainerChild) = $this->createContainers(array($heightOfFirstContainer, 2*$pageHeight), $this->page);
+        $this->column->add($columnableContainerChild);
+        $this->page->add($this->column);
+        
+        $this->column->setHeight($columnableContainerChild->getHeight());
+        $this->injectBoundary($this->column, $heightOfFirstContainer);
+        
+        $this->formatter->format($this->column, new Document());
+        
+        $this->assertEquals(4, count($this->column->getChildren()));
+        
+        foreach($this->column->getChildren() as $i => $container)
+        {
+            if($i < 2)
+            {
+                $expectedYCoord = $this->page->getFirstPoint()->getY() - $heightOfFirstContainer;
+            }
+            else
+            {
+                $expectedYCoord = $this->page->getDiagonalPoint()->getY();
+            }
+            
+            $this->assertEquals($expectedYCoord, $container->getFirstPoint()->getY());
         }
     }
 }

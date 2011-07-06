@@ -23,6 +23,8 @@ use PHPPdf\Glyph\Glyph,
  */
 class ColumnDivertingFormatter extends BaseFormatter
 {
+    private $staticBreakYCoord = null;
+    
     public function format(Glyph $glyph, Document $document)
     {
         $container = $this->moveAllChildrenToSingleContainer($glyph);
@@ -30,11 +32,14 @@ class ColumnDivertingFormatter extends BaseFormatter
         $this->splitContainerIntoColumns($glyph, $container);
         
         $this->resizeColumnableContainer($glyph);
+        
+        $this->staticBreakYCoord = null;
     }
 
     private function moveAllChildrenToSingleContainer(ColumnableContainer $columnableContainer)
     {
         $container = new Container();
+        $container->mergeEnhancementAttributes('border', array('name' => 'border', 'color' => 'black'));
         
         foreach($columnableContainer->getChildren() as $child)
         {
@@ -78,7 +83,7 @@ class ColumnDivertingFormatter extends BaseFormatter
                 $container = $this->breakContainer($container, $breakYCoord);
                 $childHasBeenSplitted = true;
 
-                $breakYCoord = $this->getBreakYCoord($columnableContainer, $numberOfBreaks++);
+                $breakYCoord = $this->getBreakYCoord($columnableContainer, $numberOfBreaks++, $container);
             }
             else
             {
@@ -89,15 +94,52 @@ class ColumnDivertingFormatter extends BaseFormatter
         while($container);
     }
     
-    private function getBreakYCoord(ColumnableContainer $columnableContainer, $numberOfBreaks)
+    private function getBreakYCoord(ColumnableContainer $columnableContainer, $numberOfBreaks, Container $container = null)
     {
+        if($this->staticBreakYCoord !== null)
+        {
+            return $this->staticBreakYCoord;
+        }
+        
         $numberOfColumns = $columnableContainer->getAttribute('number-of-columns');
         
-        $numberOfRow = floor($numberOfBreaks/$numberOfColumns) + 1;
+        $rowNumber = floor($numberOfBreaks/$numberOfColumns);
+        $columnNumber = $numberOfBreaks % $numberOfColumns;
+        
+        $container = $container ? : $columnableContainer;
         
         $page = $columnableContainer->getPage();
         
-        return $page->getDiagonalPoint()->getY() - ($numberOfRow-1)*$page->getHeight();
+        if($this->shouldColumnsBeEqual($columnableContainer, $container, $columnNumber, $rowNumber))
+        {
+            $prefferedContainerSize = $container->getHeight() / $numberOfColumns;
+            
+            $this->staticBreakYCoord = $container->getFirstPoint()->getY() - $prefferedContainerSize;
+            
+            return $this->staticBreakYCoord;
+        }
+        else
+        {
+            return $this->getPageDiagonalYCoord($columnableContainer) - ($rowNumber)*$page->getHeight();
+        }
+    }
+    
+    private function getPageDiagonalYCoord(ColumnableContainer $columnableContainer)
+    {
+        $page = $columnableContainer->getPage();
+        
+        $numberOfPage = (int) (($page->getFirstPoint()->getY()-$columnableContainer->getFirstPoint()->getY()) / $page->getHeight());
+        
+        return $page->getDiagonalPoint()->getY() - $numberOfPage*$page->getHeight();
+    }
+    
+    private function shouldColumnsBeEqual(ColumnableContainer $columnableContainer, Container $container, $columnNumber, $rowNumber)
+    {       
+        $parent = $columnableContainer->getParent();
+        $height = $container->getFirstPoint()->getY() - ($this->getPageDiagonalYCoord($columnableContainer) - ($rowNumber*$parent->getHeight()));
+        $freeSpace = $height * ($columnableContainer->getAttribute('number-of-columns') - $columnNumber);
+        
+        return $columnNumber == 0 && $columnableContainer->getAttribute('equals-columns') && $container->getHeight() < $freeSpace;
     }
     
     private function shouldBeBroken(Container $container, $pageYCoordEnd)

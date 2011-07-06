@@ -16,20 +16,28 @@
     	</placeholders>
 
         <div class="outside-column" height="100">
-            Some text outside column layout
+            Column with "equals-columns" attribute off
         </div>
 
-        <column-layout number-of-columns="2" margin-between-columns="20">
-            <div height="1000" background.color="gray">
+        <column-layout id="column" number-of-columns="2" margin-between-columns="20">
+            <div height="1500" background.color="gray">
                 Some long container
             </div>
-            <div height="2000" background.color="green">
+           <div height="2000" background.color="green">
                 Some another long container
             </div>
         </column-layout>
 
         <div class="outside-column">
-            Some text outside column layout
+            Column with "equals-columns" attribute on
         </div>
+        
+        <column-layout extends="column" equals-columns="true">
+            <div height="400" background.color="gray">
+                Some container
+            </div>
+        </column-layout>
+        
+        
     </dynamic-page>
 </pdf>
