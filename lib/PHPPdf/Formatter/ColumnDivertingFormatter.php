@@ -24,6 +24,7 @@ use PHPPdf\Glyph\Glyph,
 class ColumnDivertingFormatter extends BaseFormatter
 {
     private $staticBreakYCoord = null;
+    private $stopBreaking = false;
     
     public function format(Glyph $glyph, Document $document)
     {
@@ -34,12 +35,15 @@ class ColumnDivertingFormatter extends BaseFormatter
         $this->resizeColumnableContainer($glyph);
         
         $this->staticBreakYCoord = null;
+        $this->stopBreaking = false;
     }
 
     private function moveAllChildrenToSingleContainer(ColumnableContainer $columnableContainer)
     {
         $container = new Container();
-        $container->mergeEnhancementAttributes('border', array('name' => 'border', 'color' => 'black'));
+
+        $container->mergeEnhancementAttributes('border', array('name' => 'border', 'color' => 'violet'));
+        $container->setPriority(-100);
         
         foreach($columnableContainer->getChildren() as $child)
         {
@@ -96,15 +100,19 @@ class ColumnDivertingFormatter extends BaseFormatter
     
     private function getBreakYCoord(ColumnableContainer $columnableContainer, $numberOfBreaks, Container $container = null)
     {
-        if($this->staticBreakYCoord !== null)
-        {
-            return $this->staticBreakYCoord;
-        }
-        
         $numberOfColumns = $columnableContainer->getAttribute('number-of-columns');
         
         $rowNumber = floor($numberOfBreaks/$numberOfColumns);
         $columnNumber = $numberOfBreaks % $numberOfColumns;
+        
+        if($this->staticBreakYCoord !== null)
+        {
+            if($columnNumber == ($numberOfColumns - 1))
+            {
+                $this->stopBreaking = true;
+            }
+            return $this->staticBreakYCoord;
+        }
         
         $container = $container ? : $columnableContainer;
         
@@ -144,6 +152,11 @@ class ColumnDivertingFormatter extends BaseFormatter
     
     private function shouldBeBroken(Container $container, $pageYCoordEnd)
     {
+        if($this->stopBreaking)
+        {
+            return false;
+        }
+        
         $yEnd = $container->getDiagonalPoint()->getY();
 
         return ($yEnd < $pageYCoordEnd);
@@ -158,11 +171,8 @@ class ColumnDivertingFormatter extends BaseFormatter
         
         if($productOfBroke)
         {
-            $gapBetweenBottomOfContainerAndBreakYCoord = $container->getDiagonalPoint()->getY() - $breakYCoord;
-            
-            $gap = $originalHeightOfContainer - ($container->getHeight() + $productOfBroke->getHeight());
-            
-            $container->resize(0, $gap);
+//            $gap = $originalHeightOfContainer - ($container->getHeight() + $productOfBroke->getHeight());
+//            $container->resize(0, $gap);
             
             $container->getParent()->add($productOfBroke);
             

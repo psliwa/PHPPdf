@@ -32,6 +32,7 @@ abstract class AbstractDivertingFormatter extends BaseFormatter
         $this->glyph = $glyph;
         $this->totalVerticalTranslation = 0;
 
+        $children = $this->glyph->getChildren();
         foreach($this->glyph->getChildren() as $child)
         {
             $this->splitChildIfNecessary($child);

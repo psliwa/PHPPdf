@@ -136,12 +136,14 @@ class Container extends Glyph
         $childrenToMove = array();
 
         list(,$splitLine) = $this->getStartDrawingPoint();
-        $splitLine -= $height;
+        $splitLine = $this->getFirstPoint()->getY() - $height;
 
         foreach($this->getChildren() as $child)
         {
-            list(,$childStart) = $child->getStartDrawingPoint();
-            list(,$childEnd) = $child->getEndDrawingPoint();
+//            list(,$childStart) = $child->getStartDrawingPoint();
+//            list(,$childEnd) = $child->getEndDrawingPoint();
+            $childStart = $child->getFirstPoint()->getY();
+            $childEnd = $child->getDiagonalPoint()->getY();
 
             if($splitLine < $childStart && $splitLine > $childEnd)
             {
@@ -154,18 +156,25 @@ class Container extends Glyph
         }
 
         $splitProducts = array();
-        $translates = array();
+        $translates = array(0);
+//        $differences = array();        
+        
         foreach($childrenToSplit as $child)
         {
-            list(,$childStart) = $child->getStartDrawingPoint();
+            $childStart = $child->getFirstPoint()->getY();
+            $childEnd = $child->getDiagonalPoint()->getY();
             $childSplitLine = $childStart - $splitLine;
+            
+            $originalChildHeight = $child->getHeight();
+            
             $splitProduct = $child->split($childSplitLine);
 
-            list(,$yChildStart) = $child->getStartDrawingPoint();
-            list(,$yChildEnd) = $child->getEndDrawingPoint();
+            $yChildStart = $child->getFirstPoint()->getY();
+            $yChildEnd = $child->getDiagonalPoint()->getY();
             if($splitProduct)
-            {
-                $translates[] = $childSplitLine - ($yChildStart - $yChildEnd);
+            {                
+                $translates[] = ($yChildEnd - $splitProduct->getFirstPoint()->getY());
+//                $translates[] = $originalChildHeight - ($child->getHeight() + $splitProduct->getHeight());
                 $splitProducts[] = $splitProduct;
             }
             else
@@ -178,23 +187,35 @@ class Container extends Glyph
         $splitCompose->removeAll();
 
         $splitProducts = array_merge($splitProducts, $childrenToMove);
+        
+        $bottomYCoord = $splitCompose->getDiagonalPoint()->getY();
         foreach($splitProducts as $child)
         {
             $splitCompose->add($child);
-        }
-
+            
+            $childBottomYCoord = $child->getDiagonalPoint()->getY() - $child->getMarginBottom();
+            
+            if($childBottomYCoord < $bottomYCoord)
+            {
+                $bottomYCoord = $childBottomYCoord;
+            }
+        }        
+              
         if(count($translates))
         {
             $translate = \max($translates);
-            $splitCompose->setHeight($splitCompose->getHeight() + $translate);
 
             $boundary = $splitCompose->getBoundary();
             $points = $splitCompose->getBoundary()->getPoints();
+            $diff = ($splitCompose->getDiagonalPoint()->getY() - $bottomYCoord);
+
+            $splitCompose->setHeight($splitCompose->getHeight() + $translate + $diff);
+            
             $boundary->reset();
             $boundary->setNext($points[0])
                      ->setNext($points[1])
-                     ->setNext($points[2]->translate(0, $translate))
-                     ->setNext($points[3]->translate(0, $translate))
+                     ->setNext($points[2]->translate(0, $translate+$diff))
+                     ->setNext($points[3]->translate(0, $translate+$diff))
                      ->close();
 
             foreach($childrenToMove as $child)

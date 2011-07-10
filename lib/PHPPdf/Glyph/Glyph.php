@@ -834,6 +834,11 @@ abstract class Glyph implements \ArrayAccess, \Serializable
     {
         return $this->priority;
     }
+    
+    public function setPriority($priority)
+    {
+        $this->priority = $priority;
+    }
 
     protected function setPriorityFromParent()
     {
