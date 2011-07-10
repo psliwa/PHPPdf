@@ -426,6 +426,11 @@ abstract class Glyph implements \ArrayAccess, \Serializable
         return $this->getWidth();
     }
     
+    public function getMinWidth()
+    {
+        return 0;
+    }
+    
     /**
      * @return int Real height not modified by margins, paddings etc.
      */

@@ -140,8 +140,6 @@ class Container extends Glyph
 
         foreach($this->getChildren() as $child)
         {
-//            list(,$childStart) = $child->getStartDrawingPoint();
-//            list(,$childEnd) = $child->getEndDrawingPoint();
             $childStart = $child->getFirstPoint()->getY();
             $childEnd = $child->getDiagonalPoint()->getY();
 
@@ -156,8 +154,7 @@ class Container extends Glyph
         }
 
         $splitProducts = array();
-        $translates = array(0);
-//        $differences = array();        
+        $translates = array(0);    
         
         foreach($childrenToSplit as $child)
         {
@@ -174,7 +171,6 @@ class Container extends Glyph
             if($splitProduct)
             {                
                 $translates[] = ($yChildEnd - $splitProduct->getFirstPoint()->getY());
-//                $translates[] = $originalChildHeight - ($child->getHeight() + $splitProduct->getHeight());
                 $splitProducts[] = $splitProduct;
             }
             else
@@ -201,27 +197,24 @@ class Container extends Glyph
             }
         }        
               
-        if(count($translates))
+        $translate = \max($translates);
+
+        $boundary = $splitCompose->getBoundary();
+        $points = $splitCompose->getBoundary()->getPoints();
+        $diff = ($splitCompose->getDiagonalPoint()->getY() - $bottomYCoord);
+
+        $splitCompose->setHeight($splitCompose->getHeight() + $translate + $diff);
+        
+        $boundary->reset();
+        $boundary->setNext($points[0])
+                 ->setNext($points[1])
+                 ->setNext($points[2]->translate(0, $translate+$diff))
+                 ->setNext($points[3]->translate(0, $translate+$diff))
+                 ->close();
+
+        foreach($childrenToMove as $child)
         {
-            $translate = \max($translates);
-
-            $boundary = $splitCompose->getBoundary();
-            $points = $splitCompose->getBoundary()->getPoints();
-            $diff = ($splitCompose->getDiagonalPoint()->getY() - $bottomYCoord);
-
-            $splitCompose->setHeight($splitCompose->getHeight() + $translate + $diff);
-            
-            $boundary->reset();
-            $boundary->setNext($points[0])
-                     ->setNext($points[1])
-                     ->setNext($points[2]->translate(0, $translate+$diff))
-                     ->setNext($points[3]->translate(0, $translate+$diff))
-                     ->close();
-
-            foreach($childrenToMove as $child)
-            {
-                $child->translate(0, $translate);
-            }
+            $child->translate(0, $translate);
         }
 
         return $splitCompose;

@@ -42,9 +42,6 @@ class ColumnDivertingFormatter extends BaseFormatter
     {
         $container = new Container();
 
-        $container->mergeEnhancementAttributes('border', array('name' => 'border', 'color' => 'violet'));
-        $container->setPriority(-100);
-        
         foreach($columnableContainer->getChildren() as $child)
         {
             $container->add($child);
@@ -171,9 +168,6 @@ class ColumnDivertingFormatter extends BaseFormatter
         
         if($productOfBroke)
         {
-//            $gap = $originalHeightOfContainer - ($container->getHeight() + $productOfBroke->getHeight());
-//            $container->resize(0, $gap);
-            
             $container->getParent()->add($productOfBroke);
             
             $this->translateProductOfBroke($productOfBroke, $container);
