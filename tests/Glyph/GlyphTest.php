@@ -450,4 +450,39 @@ class GlyphTest extends TestCase
 
         $this->assertEquals($encoding, $this->glyph->getEncoding());
     }
+    
+    /**
+     * @test
+     * @dataProvider splittableProvider
+     */
+    public function glyphIsSplittableIfSplittableAttributeIsSetOrGlyphIsHigherThanPage($splittable, $pageHeight, $glyphHeight, $expectedSplittable)
+    {
+        $page = $this->getMockBuilder('PHPPdf\Glyph\Page')
+                     ->setMethods(array('getHeight'))
+                     ->getMock();
+
+        $page->expects($this->atLeastOnce())
+             ->method('getHeight')
+             ->will($this->returnValue($pageHeight));
+             
+        $this->glyph->setParent($page);
+        $this->glyph->setSplittable($splittable);
+        $this->glyph->setHeight($glyphHeight);
+        
+        $this->assertEquals($expectedSplittable, $this->glyph->isSplittable());
+    }
+    
+    public function splittableProvider()
+    {
+        return array(
+            array(
+                false, 100, 50, false,
+                true, 100, 50, true,
+                true, 100, 100, true,
+                false, 100, 100, false,
+                false, 100, 101, true,
+                true, 100, 101, true,
+            ),
+        );
+    }
 }

@@ -77,12 +77,15 @@ abstract class Glyph implements \ArrayAccess, \Serializable
     protected static function initializeType()
     {
         //TODO refactoring
-        $attributeWithGetters = array('width', 'height', 'margin-left', 'margin-right', 'margin-top', 'margin-bottom', 'padding-left', 'padding-right', 'padding-top', 'padding-bottom', 'display', 'font-type', 'font-size', 'float');
+        $attributeWithGetters = array('width', 'height', 'margin-left', 'margin-right', 'margin-top', 'margin-bottom', 'padding-left', 'padding-right', 'padding-top', 'padding-bottom', 'display', 'font-type', 'font-size', 'float', 'splittable');
         $attributeWithSetters = array('width', 'height', 'margin-left', 'margin-right', 'margin-top', 'margin-bottom', 'display', 'font-type', 'float', 'static-size', 'font-size', 'margin', 'padding', 'page-break', 'splittable');
+
+        $predicateGetters = array('splittable');
         
         $attributeWithGetters = array_flip($attributeWithGetters);
-        array_walk($attributeWithGetters, function(&$value, $key){
-            $value = 'get'.str_replace('-', '', $key);
+        array_walk($attributeWithGetters, function(&$value, $key) use($predicateGetters){
+            $method = in_array($key, $predicateGetters) ? 'is' : 'get';
+            $value = $method.str_replace('-', '', $key);
         });
         
         $attributeWithSetters = array_flip($attributeWithSetters);
@@ -714,6 +717,25 @@ abstract class Glyph implements \ArrayAccess, \Serializable
     {
         $flag = $this->filterBooleanValue($flag);
         $this->setAttributeDirectly('splittable', $flag);
+    }
+    
+    public function isSplittable()
+    {
+        try
+        {
+            $page = $this->getPage();
+            
+            if($page->getHeight() < $this->getHeight())
+            {
+                return true;
+            }            
+        }
+        catch (\LogicException $e)
+        {
+            //ignore, original attribute value will be returned
+        }
+        
+        return $this->getAttributeDirectly('splittable');
     }
     
     public function setStaticSize($flag)
