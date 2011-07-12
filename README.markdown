@@ -173,7 +173,7 @@ In addition there are not standard tags:
 * dynamic-page - auto breakable page
 * page - single page
 * page-break - page break, this tag must be direct child of "dynamic-page"!
-* column-layout - separate workspace on columns, additional attributes: number-of-columns and margin-between-columns
+* column-layout - separate workspace on columns, additional attributes: number-of-columns, margin-between-columns, equals-columns
 * column-break - column break, this tag must be direct child of "column-layout"! (TODO: not implemented yet)
 
 There are tags that only are bags for attributes, set of tags etc:
@@ -218,6 +218,8 @@ Complex attributes
     - image: background image
     - repeat: way of image repeating (none|x|y|all)
     - radius: rounding background corners (for now only works with color background)
+    - image-width: custom width of background image, percentage values are allowed
+    - image-height: custom height of background image, percentage values are allowed
 
 It is possible to add several complex attributes in the same type (for instance 3 different borders). You can achieve that by using "stylesheet" tag instead of short notation.
 
@@ -285,7 +287,7 @@ Page can be separated on columns:
         </dynamic-page>
     </pdf>
 
-Above XML describes several pages of pdf document with green rectangles separated on two columns. "column-layout" tag has two additional parameters: number-of-columns and margin-between-columns. Default values for this attributes are 2 and 10 respectlivy.
+Above XML describes several pages of pdf document with green rectangles separated on two columns. "column-layout" tag has three additional parameters: number-of-columns, margin-between-columns and equals-columns. Default values for this attributes are 2, 10 and false respectlivy. If equals-columns attribute is set, columns will have more or less equals height.
 
 Configuration
 -------------
@@ -324,11 +326,11 @@ Below is list of known limitations of library current version:
 TODO - plans.
 -------------------
 
+* rewrite and improve text rendering
 * annotations
 * document metadata
 * bookmarks
 * improve interpretation of attributes and fixing found bugs
-* column feature with equal columns strategy
 * improve table, header and footer for table, rowspan. Fix calculation of cell's min height when colspan is used.
 * refactoring
 

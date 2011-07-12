@@ -139,6 +139,51 @@
 	            <formatter class="PHPPdf\Formatter\FloatFormatter" />
 	        </formatters>
 	    </glyph>
+	    <glyph name="h4" class="PHPPdf\Glyph\Container">
+	        <stylesheet>
+	            <attribute name="font-size" value="12" />
+	            <attribute name="margin" value="3 0" />
+	        </stylesheet>
+	        <formatters>
+	            <formatter class="PHPPdf\Formatter\ConvertAttributesFormatter" />
+	            <formatter class="PHPPdf\Formatter\StandardDimensionFormatter" />
+	            <formatter class="PHPPdf\Formatter\FirstPointPositionFormatter" />
+	            <formatter class="PHPPdf\Formatter\ContainerFormatter" />
+	            <formatter class="PHPPdf\Formatter\ContainerDimensionFormatter" />
+	            <formatter class="PHPPdf\Formatter\StandardPositionFormatter" />
+	            <formatter class="PHPPdf\Formatter\FloatFormatter" />
+	        </formatters>
+	    </glyph>
+	    <glyph name="h5" class="PHPPdf\Glyph\Container">
+	        <stylesheet>
+	            <attribute name="font-size" value="12" />
+	            <attribute name="margin" value="3 0" />
+	        </stylesheet>
+	        <formatters>
+	            <formatter class="PHPPdf\Formatter\ConvertAttributesFormatter" />
+	            <formatter class="PHPPdf\Formatter\StandardDimensionFormatter" />
+	            <formatter class="PHPPdf\Formatter\FirstPointPositionFormatter" />
+	            <formatter class="PHPPdf\Formatter\ContainerFormatter" />
+	            <formatter class="PHPPdf\Formatter\ContainerDimensionFormatter" />
+	            <formatter class="PHPPdf\Formatter\StandardPositionFormatter" />
+	            <formatter class="PHPPdf\Formatter\FloatFormatter" />
+	        </formatters>
+	    </glyph>
+	    <glyph name="h6" class="PHPPdf\Glyph\Container">
+	        <stylesheet>
+	            <attribute name="font-size" value="12" />
+	            <attribute name="margin" value="3 0" />
+	        </stylesheet>
+	        <formatters>
+	            <formatter class="PHPPdf\Formatter\ConvertAttributesFormatter" />
+	            <formatter class="PHPPdf\Formatter\StandardDimensionFormatter" />
+	            <formatter class="PHPPdf\Formatter\FirstPointPositionFormatter" />
+	            <formatter class="PHPPdf\Formatter\ContainerFormatter" />
+	            <formatter class="PHPPdf\Formatter\ContainerDimensionFormatter" />
+	            <formatter class="PHPPdf\Formatter\StandardPositionFormatter" />
+	            <formatter class="PHPPdf\Formatter\FloatFormatter" />
+	        </formatters>
+	    </glyph>
 	    <glyph name="page-info" class="PHPPdf\Glyph\Runtime\PageInfo">
 	        <formatters>
 	            <formatter class="PHPPdf\Formatter\ConvertAttributesFormatter" />
