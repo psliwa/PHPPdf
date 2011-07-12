@@ -8,6 +8,8 @@
 
 namespace PHPPdf\Formatter;
 
+use PHPPdf\Util;
+
 use PHPPdf\Glyph as Glyphs,
     PHPPdf\Document;
 
@@ -32,17 +34,9 @@ class ImageDimensionFormatter extends BaseFormatter
             {
                 list($width, $height) = $this->setDimensionsFromParent($glyph);
             }
-
-            if(!$width)
-            {
-                $width = $originalRatio * $height;
-            }
-
-            if(!$height)
-            {
-                $height = 1/$originalRatio * $width;
-            }          
-
+            
+            list($width, $height) = Util::calculateDependantSizes($width, $height, $originalRatio);
+            
             $glyph->setWidth($width);
             $glyph->setHeight($height);
         }

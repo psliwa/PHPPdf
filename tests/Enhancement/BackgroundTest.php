@@ -6,6 +6,9 @@ use PHPPdf\Enhancement\Background,
 
 class BackgroundTest extends TestCase
 {
+    const IMAGE_WIDTH = 30;
+    const IMAGE_HEIGHT = 30;
+    
     private $imagePath;
     private $objectMother;
 
@@ -170,14 +173,7 @@ class BackgroundTest extends TestCase
                ->method('drawRoundedRectangle')
                ->with(0, 70, 50, 100, $radius, Zend_Pdf_Page::SHAPE_DRAW_FILL_AND_STROKE);
 
-        $gcMock->expects($this->once())
-               ->method('saveGS');
-        $gcMock->expects($this->once())
-               ->method('restoreGS');
-        $gcMock->expects($this->once())
-               ->method('setLineColor');
-        $gcMock->expects($this->once())
-               ->method('setFillColor');
+        $this->addStandardExpectationsToGraphicContext($gcMock);
 
         $pageMock = $this->objectMother->getEmptyPageMock($gcMock);
 
@@ -186,6 +182,18 @@ class BackgroundTest extends TestCase
         $border = new Background('black', null, Background::REPEAT_ALL, $radius);
 
         $border->enhance($pageMock, $glyphMock);
+    }
+    
+    private function addStandardExpectationsToGraphicContext($gcMock)
+    {
+        $gcMock->expects($this->once())
+               ->method('saveGS');
+        $gcMock->expects($this->once())
+               ->method('restoreGS');
+        $gcMock->expects($this->once())
+               ->method('setLineColor');
+        $gcMock->expects($this->once())
+               ->method('setFillColor');
     }
     
     /**
@@ -287,6 +295,49 @@ class BackgroundTest extends TestCase
             array('false', false),
             array('no', false),
             array('yes', true),
+        );
+    }
+    
+    /**
+     * @test
+     * @dataProvider imageDimensionProvider
+     */
+    public function useBackgrounImageDimension($imageWidth, $imageHeight, $expectedHorizontalTranslation, $expectedVertiacalTranslation, $glyphWidth = 100, $glyphHeight = 100)
+    {
+        $image = \Zend_Pdf_Image::imageWithPath($this->imagePath);
+               
+        $x = 0;
+        $y = $glyphHeight;
+
+        $glyphMock = $this->getGlyphMock($x, $y, $glyphWidth, $glyphHeight);
+        
+        $enhancement = new Background(null, $image, Background::REPEAT_NONE, null, false, $imageWidth, $imageHeight);
+        
+        $gcMock = $this->getMockBuilder('PHPPdf\Glyph\GraphicsContext')
+                       ->setMethods(array('drawImage', 'clipRectangle', 'saveGS', 'restoreGS'))
+                       ->disableOriginalConstructor()
+                       ->getMock();
+
+        $pageMock = $this->getMock('PHPPdf\Glyph\Page', array('getGraphicsContext'));
+
+        $pageMock->expects($this->atLeastOnce())
+                 ->method('getGraphicsContext')
+                 ->will($this->returnValue($gcMock));
+        
+        $gcMock->expects($this->once())
+               ->method('drawImage')
+               ->with($enhancement->getImage(), $x, $y-$expectedVertiacalTranslation, $x+$expectedHorizontalTranslation, $y);
+               
+        $enhancement->enhance($pageMock, $glyphMock);
+    }
+    
+    public function imageDimensionProvider()
+    {
+        return array(
+            array(self::IMAGE_WIDTH / 2, null, self::IMAGE_WIDTH / 2, self::IMAGE_HEIGHT / 2),
+            array(null, self::IMAGE_HEIGHT / 2, self::IMAGE_WIDTH / 2, self::IMAGE_HEIGHT / 2),
+            array('30%', null, 60, 60, 200, 200),
+            array(null, '40%', 80, 80, 200, 200),
         );
     }
 }

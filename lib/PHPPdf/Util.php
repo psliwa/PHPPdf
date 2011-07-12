@@ -36,4 +36,19 @@ final class Util
 
         return isset($knownValues[$value]) ? $knownValues[$value] : (boolean) $value;
     }
+    
+    public static function calculateDependantSizes($width, $height, $ratio)
+    {
+        if(!$width && $height)
+        {
+            $width = $ratio * $height;
+        }
+    
+        if(!$height && $width)
+        {
+            $height = 1/$ratio * $width;
+        }
+
+        return array($width, $height);
+    }
 }

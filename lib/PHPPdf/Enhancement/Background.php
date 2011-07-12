@@ -27,8 +27,10 @@ class Background extends Enhancement
     private $image = null;
     private $repeat;
     private $useRealDimension;
+    private $imageWidth = null;
+    private $imageHeight = null;
 
-    public function __construct($color = null, $image = null, $repeat = self::REPEAT_NONE, $radius = null, $useRealDimension = false)
+    public function __construct($color = null, $image = null, $repeat = self::REPEAT_NONE, $radius = null, $useRealDimension = false, $imageWidth = null, $imageHeight = null)
     {
         parent::__construct($color, $radius);
 
@@ -40,6 +42,7 @@ class Background extends Enhancement
         $this->image = $image;
         $this->setRepeat($repeat);
         $this->useRealDimension = Util::convertBooleanValue($useRealDimension);
+        $this->setImageDimension($imageWidth, $imageHeight);
     }
     
     private function setRepeat($repeat)
@@ -55,6 +58,17 @@ class Background extends Enhancement
     public function getRepeat()
     {
         return $this->repeat;
+    }
+    
+    private function setImageDimension($width, $height)
+    {
+        if($this->image === null)
+        {
+            return;
+        }
+        
+        $this->imageWidth = $width;
+        $this->imageHeight = $height;
     }
 
     /**
@@ -90,9 +104,8 @@ class Background extends Enhancement
         {
             list($x, $y) = $this->getFirstPoint($glyph)->toArray();
             list($endX, $endY) = $this->getDiagonalPoint($glyph)->toArray();
-
-            $height = $image->getPixelHeight();
-            $width = $image->getPixelWidth();
+                    
+            list($width, $height) = $this->getImageDimension($glyph);
 
             $graphicsContext->saveGS();
             $graphicsContext->clipRectangle($x, $y, $x+$this->getWidth($glyph), $y-$this->getHeight($glyph));
@@ -121,6 +134,33 @@ class Background extends Enhancement
         }
     }
     
+    private function getImageDimension(Glyph $glyph)
+    {
+        $width = $this->imageWidth;
+        $height = $this->imageHeight;
+        
+        if(!$width && !$height)
+        {
+            return array($this->image->getPixelWidth(), $this->image->getPixelHeight());
+        }
+        
+        list($width, $height) = $this->convertPercentageDimension($glyph, $width, $height);
+        
+        $ratio = $this->image->getPixelWidth() / $this->image->getPixelHeight();
+            
+        list($width, $height) = Util::calculateDependantSizes($width, $height, $ratio);
+        
+        return array($width, $height);
+    }
+    
+    private function convertPercentageDimension(Glyph $glyph, $width, $height)
+    {
+        $width = Util::convertFromPercentageValue($width, $this->getWidth($glyph));
+        $height = Util::convertFromPercentageValue($height, $this->getHeight($glyph));
+        
+        return array($width, $height);
+    }
+
     private function getFirstPoint(Glyph $glyph)
     {
         if($this->useRealDimension)
