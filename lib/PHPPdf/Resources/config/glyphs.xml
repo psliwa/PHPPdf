@@ -195,6 +195,17 @@
 	            <formatter class="PHPPdf\Formatter\FloatFormatter" />
 	        </formatters>
 	    </glyph>
+	    <glyph name="page-number" class="PHPPdf\Glyph\Runtime\CurrentPageNumber">
+	        <formatters>
+	            <formatter class="PHPPdf\Formatter\ConvertAttributesFormatter" />
+	            <formatter class="PHPPdf\Formatter\StandardDimensionFormatter" />
+	            <formatter class="PHPPdf\Formatter\FirstPointPositionFormatter" />
+	            <formatter class="PHPPdf\Formatter\TextDimensionFormatter" />
+	            <formatter class="PHPPdf\Formatter\TextResetPositionFormatter" />
+	            <formatter class="PHPPdf\Formatter\StandardPositionFormatter" />
+	            <formatter class="PHPPdf\Formatter\FloatFormatter" />
+	        </formatters>
+	    </glyph>
 	    <glyph name="table" class="PHPPdf\Glyph\Table">
 	        <formatters>
 	            <formatter class="PHPPdf\Formatter\ConvertAttributesFormatter" />

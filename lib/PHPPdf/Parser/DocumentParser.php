@@ -235,6 +235,8 @@ class DocumentParser extends XmlParser
     private function parseGlyph(\XMLReader $reader, Glyph $parentGlyph)
     {
         $tag = $reader->name;
+        $isEmptyElement = $reader->isEmptyElement;
+
         $glyph = $this->createGlyph($reader);
     
         $class = $reader->getAttribute('class');
@@ -258,8 +260,8 @@ class DocumentParser extends XmlParser
     
         $parentGlyph->add($glyph);
         $this->pushOnStack($glyph);
-    
-        if($reader->isEmptyElement)
+
+        if($isEmptyElement)
         {
             $this->parseEndElement($reader);
         }

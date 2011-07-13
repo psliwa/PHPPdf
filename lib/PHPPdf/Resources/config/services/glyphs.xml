@@ -22,6 +22,7 @@
 					<argument key="h5" type="service" id="phppdf.glyph.h5" />
 					<argument key="h6" type="service" id="phppdf.glyph.h6" />
 					<argument key="page-info" type="service" id="phppdf.glyph.page-info" />
+					<argument key="page-number" type="service" id="phppdf.glyph.page-number" />
 					<argument key="table" type="service" id="phppdf.glyph.table" />
 					<argument key="tr" type="service" id="phppdf.glyph.tr" />
 					<argument key="td" type="service" id="phppdf.glyph.td" />
@@ -279,6 +280,20 @@
 		</service>
 		
 		<service id="phppdf.glyph.page-info" class="PHPPdf\Glyph\Runtime\PageInfo" public="false">
+			<tag name="phppdf.glyph" />
+			<call method="setFormattersNames">
+				<argument type="collection">
+					<argument>PHPPdf\Formatter\ConvertAttributesFormatter</argument>
+					<argument>PHPPdf\Formatter\StandardDimensionFormatter</argument>
+					<argument>PHPPdf\Formatter\FirstPointPositionFormatter</argument>
+					<argument>PHPPdf\Formatter\TextDimensionFormatter</argument>
+					<argument>PHPPdf\Formatter\TextResetPositionFormatter</argument>
+					<argument>PHPPdf\Formatter\StandardPositionFormatter</argument>
+					<argument>PHPPdf\Formatter\FloatFormatter</argument>
+				</argument>
+			</call>
+		</service>
+		<service id="phppdf.glyph.page-number" class="PHPPdf\Glyph\Runtime\CurrentPageNumber" public="false">
 			<tag name="phppdf.glyph" />
 			<call method="setFormattersNames">
 				<argument type="collection">

@@ -655,4 +655,30 @@ XML;
 
         $this->parser->parse($xml);
     }
+    
+    /**
+     * @test
+     */
+    public function allowShortTagsWithAttributes()
+    {
+        $xml = <<<XML
+<pdf>
+	<tag1 attribute="value" />
+	<tag2></tag2>
+</pdf>
+XML;
+        $tag1GlyphMock = $this->getMock('PHPPdf\Glyph\Container', array('setPriorityFromParent', 'setAttribute'));
+        $tag2GlyphMock = $this->getMock('PHPPdf\Glyph\Container', array('setPriorityFromParent', 'setAttribute'));
+        
+        $glyphFactoryMock = $this->getGlyphFactoryMock(array('tag1' => $tag1GlyphMock, 'tag2' => $tag2GlyphMock));
+        
+        $this->parser->setGlyphFactory($glyphFactoryMock);
+
+        $pages = $this->parser->parse($xml);
+        
+        $this->assertEquals(2, count($pages->getChildren()));
+        $children = $pages->getChildren();
+        $this->assertTrue($tag1GlyphMock === $children[0]);
+        $this->assertTrue($tag2GlyphMock === $children[1]);
+    }
 }
