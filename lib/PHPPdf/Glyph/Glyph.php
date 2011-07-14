@@ -250,6 +250,9 @@ abstract class Glyph implements \ArrayAccess, \Serializable
         return $parent;
     }
 
+    /**
+     * @return array Siblings with current object
+     */
     public function getSiblings()
     {
         $parent = $this->getParent();
@@ -926,7 +929,7 @@ abstract class Glyph implements \ArrayAccess, \Serializable
 
         return isset($siblings[$i-1]) ? $siblings[$i-1] : null;
     }
-
+    
     public function getEndDrawingPoint()
     {
         list($x, $y) = $this->getDiagonalPoint()->toArray();

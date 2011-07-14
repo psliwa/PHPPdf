@@ -53,12 +53,25 @@ class FloatFormatter extends BaseFormatter
             }
             elseif($positionCorrection)
             {
-                $previousSibling = $child->getPreviousSibling();
-                if($previousSibling)
+                $siblings = $child->getSiblings();
+                
+                $minYCoord = null;
+                $previousSiblingWithMinBottomYCoord = null;
+                for($i=0, $count = count($siblings); $i<$count && $siblings[$i] !== $child; $i++)
                 {
-                    $siblingY = $previousSibling->getDiagonalPoint()->getY();
-                    $translateY = -($siblingY - $y - $previousSibling->getMarginBottom() - $child->getMarginTop() - $child->getPaddingTop());
-                    if($child->getDisplay() === Glyph::DISPLAY_INLINE && $previousSibling->getDisplay() === Glyph::DISPLAY_INLINE)
+                    $previousSibling = $siblings[$i];
+                    $bottomYCoord = $previousSibling->getDiagonalPoint()->getY() - $previousSibling->getMarginBottom();
+                    
+                    if($minYCoord === null || $bottomYCoord < $minYCoord)
+                    {
+                        $minYCoord = $bottomYCoord;
+                        $previousSiblingWithMinBottomYCoord = $previousSibling;
+                    }                    
+                }
+                if($minYCoord !== null)
+                {
+                    $translateY = -($minYCoord - $y - $child->getMarginTop() - $child->getPaddingTop());
+                    if($child->getDisplay() === Glyph::DISPLAY_INLINE && $previousSiblingWithMinBottomYCoord->getDisplay() === Glyph::DISPLAY_INLINE)
                     {
                         $translateY -= $child instanceof Text ? $child->getLineHeight() : $child->getHeight();
                     }

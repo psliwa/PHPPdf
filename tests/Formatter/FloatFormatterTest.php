@@ -121,7 +121,7 @@ class FloatFormatterTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(array(500, 700), $containers[2]->getStartDrawingPoint());
         $this->assertEquals(array(700, 500), $containers[2]->getEndDrawingPoint());
 
-        $this->assertEquals(array(0, 500), $containers[3]->getStartDrawingPoint());
+        $this->assertEquals(array(0, 400), $containers[3]->getStartDrawingPoint());
     }
 
     /**
@@ -268,5 +268,25 @@ class FloatFormatterTest extends PHPUnit_Framework_TestCase
                   ->will($this->returnValue(array($child)));
 
         $this->formatter->format($container, $this->document);
+    }
+    
+    /**
+     * @test
+     */
+    public function containerWithoutFloatShouldBeBelowAllOfPreviousSiblingsWithFloat()
+    {
+        $container = $this->getGlyphMock(0, 500, 100, 500, array('getChildren', 'setHeight'), false);
+        
+        $containerLeftFloated = $this->getGlyphMockWithFloatAndParent(0, 500, 10, 200, 'left', $container);
+        $containerRightFloated = $this->getGlyphMockWithFloatAndParent(0, 300, 10, 100, 'right', $container);
+        $containerWithoutFloat = $this->getGlyphMockWithFloatAndParent(0, 200, 10, 100, 'none', $container);
+        
+        $container->expects($this->atLeastOnce())
+                  ->method('getChildren')
+                  ->will($this->returnValue(array($containerLeftFloated, $containerRightFloated, $containerWithoutFloat)));
+                  
+        $this->formatter->format($container, $this->document);
+        
+        $this->assertEquals($containerLeftFloated->getDiagonalPoint()->getY(), $containerWithoutFloat->getFirstPoint()->getY());
     }
 }
