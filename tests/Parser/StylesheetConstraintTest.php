@@ -217,4 +217,36 @@ class StylesheetConstraintTest extends PHPUnit_Framework_TestCase
             $this->assertStylesheetConstraintEquals($constraint, $actualConstraintChildren[$name]);
         }
     }
+    
+    /**
+     * @test
+     */
+    public function laterAddedConstraintsOverwritePreviouslyConstraints()
+    {
+        $constraint1 = $this->createContainer(array(
+            'someName1' => 'someValue1',
+            'someName2' => 'someValue2',
+        ));
+
+        $constraint2 = $this->createContainer(array(
+            'someName1' => 'anotherValue1',
+            'someName3' => 'someValue3',
+        ));
+        
+        $this->constraint->addConstraint('tag1', $constraint1);
+        $this->constraint->addConstraint('tag1', $constraint2);
+        
+        $constraint = $this->constraint->find(array(array('tag' => 'tag1')));
+
+        $expectedAttributes = array(
+            'someName1' => 'anotherValue1',
+            'someName2' => 'someValue2',
+            'someName3' => 'someValue3',
+        );
+        
+        $actualAttributes = $constraint->getAttributeBag()->getAll();
+        ksort($actualAttributes);
+        
+        $this->assertEquals($expectedAttributes, $actualAttributes);
+    }
 }

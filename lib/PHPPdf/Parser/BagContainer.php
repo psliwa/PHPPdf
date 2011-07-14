@@ -21,6 +21,7 @@ class BagContainer implements \Serializable
     protected $attributeBag;
     protected $enhancementBag;
     protected $weight;
+    protected $order = 0;
 
     public function __construct(AttributeBag $attributeBag = null, EnhancementBag $enhancementBag = null, $weight = 0)
     {
@@ -63,6 +64,16 @@ class BagContainer implements \Serializable
     public function setEnhancementBag(EnhancementBag $enhancementBag)
     {
         $this->enhancementBag = $enhancementBag;
+    }
+    
+    public function setOrder($order)
+    {
+        $this->order = (int) $order;
+    }
+    
+    public function getOrder()
+    {
+        return $this->order;
     }
 
     public function getWeight()

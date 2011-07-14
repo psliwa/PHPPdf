@@ -109,20 +109,28 @@ class StylesheetConstraint extends BagContainer implements \Countable
             $tag = $this->getTagFromQueryElement($queryElement);
             $classes = $this->getClassesFromQueryElement($queryElement);
 
-            foreach($this->constraints as $constraint)
+            foreach($this->constraints as $order => $constraint)
             {
                 $matchingIndex = $this->getMatchingIndex($constraint, $tag, $classes);
                 if($matchingIndex > 0)
                 {
                     $container = $constraint->find($query);
                     $container->addWeight($matchingIndex);
+                    $container->setOrder($order);
                     $containers[] = $container;
                 }
             }
         }
 
         usort($containers, function($container1, $container2){
-            return ($container1->getWeight() - $container2->getWeight());
+            $result = $container1->getWeight() - $container2->getWeight();
+            
+            if($result == 0)
+            {
+                $result = $container1->getOrder() - $container2->getOrder();
+            }
+            
+            return $result;
         });
 
         return BagContainer::merge($containers);
