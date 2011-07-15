@@ -84,6 +84,7 @@ abstract class XmlParser implements Parser
             $reader->XML($content, null, LIBXML_NOBLANKS | LIBXML_DTDLOAD);
             $reader->setParserProperty(\XMLReader::SUBST_ENTITIES, true);
  
+            $nodeType = $reader->nodeType;
             while($reader->nodeType !== \XMLReader::ELEMENT)
             {
                 $reader->read();
@@ -106,7 +107,7 @@ abstract class XmlParser implements Parser
         {
             $result = $reader->read();
         }
-        while($result && $reader->nodeType !== \XMLReader::ELEMENT);
+        while($result && $reader->nodeType !== \XMLReader::ELEMENT && $reader->nodeType !== \XMLReader::TEXT);
     }
 
     abstract protected function createRoot();

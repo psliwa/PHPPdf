@@ -76,7 +76,8 @@ class DocumentParserTest extends TestCase
         $tag = 'tag';
 
         $glyphMock = $this->getGlyphMock();
-        $factoryMock = $this->getGlyphFactoryMock(array($tag => $glyphMock));
+        $mocks = array(array($tag, $glyphMock));
+        $factoryMock = $this->getGlyphFactoryMock($mocks);
 
         $this->parser->setGlyphFactory($factoryMock);
 
@@ -103,14 +104,16 @@ class DocumentParserTest extends TestCase
             array($reader),
         );
     }
-
+    
     private function getGlyphFactoryMock(array $mocks = array(), $indexStep = 1, $excatly = false)
     {
         $factoryMock = $this->getMock('PHPPdf\Glyph\Factory', array('create'));
         
         $index = 0;
-        foreach($mocks as $tag => $mock)
+        foreach($mocks as $mockData)
         {
+            list($tag, $mock) = $mockData;
+            
             $expection = $excatly ? $this->exactly($excatly) : $this->at($index);
             $factoryMock->expects($expection)
                         ->method('create')
@@ -163,8 +166,8 @@ class DocumentParserTest extends TestCase
 
         $glyphMock = $this->getGlyphMock(array('someName' => 'someValue', 'anotherName' => 'anotherValue'));
 
-
-        $factoryMock = $this->getGlyphFactoryMock(array('tag' => $glyphMock));
+        $mocks = array(array('tag', $glyphMock));
+        $factoryMock = $this->getGlyphFactoryMock($mocks);
 
         $this->parser->setGlyphFactory($factoryMock);
 
@@ -191,7 +194,8 @@ XML;
         $glyphMock1 = $this->getGlyphMock(array('someName' => 'someValue'));
         $glyphMock2 = $this->getGlyphMock(array('anotherName' => 'anotherValue'));
 
-        $factoryMock = $this->getGlyphFactoryMock(array('tag1' => $glyphMock1, 'tag2' => $glyphMock2));
+        $mocks = array(array('tag1', $glyphMock1), array('tag2', $glyphMock2));
+        $factoryMock = $this->getGlyphFactoryMock($mocks);
 
         $this->parser->setGlyphFactory($factoryMock);
         
@@ -224,20 +228,82 @@ XML;
 XML;
         $glyphMock = $this->getGlyphMock();
         $textMock = $this->getGlyphMock(array(), 'PHPPdf\Glyph\Text', array('setText'));
+        $paragraphMock = $this->getGlyphMock(array(), 'PHPPdf\Glyph\Paragraph');
 
         $textMock->expects($this->once())
                  ->method('setText')
                  ->with($this->equalTo('Some text'))
                  ->will($this->returnValue($textMock));
 
-        $factoryMock = $this->getGlyphFactoryMock(array('tag' => $glyphMock, 'text' => $textMock));
+        $mocks = array(array('tag', $glyphMock), array('paragraph', $paragraphMock), array('text', $textMock));
+        $factoryMock = $this->getGlyphFactoryMock($mocks);
 
         $this->parser->setGlyphFactory($factoryMock);
 
         $pageCollection = $this->parser->parse($xml);
 
         $this->assertOnlyChild($glyphMock, $pageCollection);
-        $this->assertOnlyChild($textMock, $glyphMock);
+        $this->assertOnlyChild($paragraphMock, $glyphMock);
+        $this->assertOnlyChild($textMock, $paragraphMock);
+    }
+    
+    /**
+     * @test
+     */
+    public function createParagraphForEachSingleText()
+    {
+        $xml = <<<XML
+<pdf>
+    <tag1>
+        Some text
+        <tag2></tag2>
+        Some text
+    </tag1>
+</pdf>
+XML;
+
+        $tag1Mock = $this->getGlyphMock();
+        $tag2Mock = $this->getGlyphMock();
+        $paragraph1Mock = $this->getGlyphMock(array(), 'PHPPdf\Glyph\Paragraph');
+        $text1Mock = $this->getGlyphMock(array(), 'PHPPdf\Glyph\Text', array('setText'));
+        $paragraph2Mock = $this->getGlyphMock(array(), 'PHPPdf\Glyph\Paragraph');
+        $text2Mock = $this->getGlyphMock(array(), 'PHPPdf\Glyph\Text', array('setText'));
+        
+        $mocks = array(array('tag1', $tag1Mock), array('paragraph', $paragraph1Mock), array('text', $text1Mock), array('tag2', $tag2Mock), array('paragraph', $paragraph2Mock), array('text', $text2Mock));
+        
+        $factoryMock = $this->getGlyphFactoryMock($mocks);
+
+        $this->parser->setGlyphFactory($factoryMock);
+
+        $pageCollection = $this->parser->parse($xml);
+    }
+    
+    /**
+     * @test
+     */
+    public function wrapTwoTextSiblingsIntoTheSameParagraph()
+    {
+        $xml = <<<XML
+<pdf>
+    Some text <span>Some another text</span>
+</pdf>
+XML;
+        $paragraphMock = $this->getGlyphMock(array(), 'PHPPdf\Glyph\Paragraph');
+        $text1Mock = $this->getGlyphMock(array(), 'PHPPdf\Glyph\Text', array('setText'));
+        $text2Mock = $this->getGlyphMock(array(), 'PHPPdf\Glyph\Text', array('setText'));
+        $text3Mock = $this->getGlyphMock(array(), 'PHPPdf\Glyph\Text', array('setText'), false);
+        
+        $mocks = array(array('paragraph', $paragraphMock), array('text', $text1Mock), array('span', $text2Mock), array('text', $text3Mock));
+        
+        $factoryMock = $this->getGlyphFactoryMock($mocks);
+
+        $this->parser->setGlyphFactory($factoryMock);
+
+        $pages = $this->parser->parse($xml);
+        
+        $this->assertOnlyChild($paragraphMock, $pages);
+        $children = $paragraphMock->getChildren();
+        $this->assertEquals(2, count($children));
     }
 
     /**
@@ -266,7 +332,8 @@ XML;
                    ->method('copy')
                    ->will($this->returnValue($glyphMock2));
 
-        $factoryMock = $this->getGlyphFactoryMock(array('tag' => $glyphMock1));
+        $mocks = array(array('tag', $glyphMock1));
+        $factoryMock = $this->getGlyphFactoryMock($mocks);
 
         $this->parser->setGlyphFactory($factoryMock);
 
@@ -288,7 +355,9 @@ XML;
 XML;
         $glyphMock1 = $this->getGlyphMock(array(), 'PHPPdf\Glyph\Page', array(), false);
         $glyphMock2 = $this->getGlyphMock(array(), 'PHPPdf\Glyph\Page', array(), false);
-        $factoryMock = $this->getGlyphFactoryMock(array('tag1' => $glyphMock1, 'tag2' => $glyphMock2));
+        
+        $mocks = array(array('tag1', $glyphMock1), array('tag2', $glyphMock2));
+        $factoryMock = $this->getGlyphFactoryMock($mocks);
 
         $this->parser->setGlyphFactory($factoryMock);
 
@@ -335,7 +404,8 @@ XML;
         $glyphMock2->expects($this->once())
                    ->method('removeAll');
 
-        $factoryMock = $this->getGlyphFactoryMock(array('tag1' => $glyphMock1, 'tag2' => $glyphMock3));
+        $mocks = array(array('tag1', $glyphMock1), array('tag2', $glyphMock3));
+        $factoryMock = $this->getGlyphFactoryMock($mocks);
 
         $this->parser->setGlyphFactory($factoryMock);
 
@@ -397,7 +467,7 @@ XML;
                   ->method('mergeEnhancementAttributes')
                   ->with($this->equalTo('someName'), $this->equalTo(array('attribute' => 'value')));
 
-        $glyphFactoryMock = $this->getGlyphFactoryMock(array('tag' => $glyphMock));
+        $glyphFactoryMock = $this->getGlyphFactoryMock(array(array('tag', $glyphMock)));
 
         $this->parser->setStylesheetParser($parserMock);
         $this->parser->setGlyphFactory($glyphFactoryMock);
@@ -495,7 +565,8 @@ XML;
         $this->addEnhancementExpectationToGlyphMock($glyphMock2, array('someName1' => array('someAttribute1' => 'someValue1')), 0);
         $this->addEnhancementExpectationToGlyphMock($glyphMock3, array('someName2' => array('someAttribute2' => 'someValue2')), 1);
 
-        $glyphFactoryMock = $this->getGlyphFactoryMock(array('tag1' => $glyphMock1, 'tag2' => $glyphMock2, 'tag3' => $glyphMock3));
+        $mocks = array(array('tag1', $glyphMock1), array('tag2', $glyphMock2), array('tag3', $glyphMock3));
+        $glyphFactoryMock = $this->getGlyphFactoryMock($mocks);
 
         $this->parser->setGlyphFactory($glyphFactoryMock);
 
@@ -570,7 +641,8 @@ XML;
                   ->method('setPlaceholder')
                   ->with($this->equalTo('placeholder'), $this->equalTo($placeholderMock1));
 
-        $glyphFactoryMock = $this->getGlyphFactoryMock(array('tag1' => $glyphMock, 'tag2' => $placeholderMock1, 'tag3' => $placeholderMock2));
+        $mocks = array(array('tag1', $glyphMock), array('tag2', $placeholderMock1), array('tag3', $placeholderMock2));
+        $glyphFactoryMock = $this->getGlyphFactoryMock($mocks);
 
         $this->parser->setGlyphFactory($glyphFactoryMock);
 
@@ -598,7 +670,7 @@ XML;
                   ->after('attribute');
 
 
-        $glyphFactoryMock = $this->getGlyphFactoryMock(array('tag1' => $glyphMock));
+        $glyphFactoryMock = $this->getGlyphFactoryMock(array(array('tag1', $glyphMock)));
 
         $this->parser->setGlyphFactory($glyphFactoryMock);
 
@@ -649,7 +721,7 @@ XML;
                   ->method('mergeEnhancementAttributes')
                   ->with('someEnhancement', array('name' => 'someEnhancement', 'property' => 'propertyValue'));
 
-        $glyphFactoryMock = $this->getGlyphFactoryMock(array('tag' => $glyphMock));
+        $glyphFactoryMock = $this->getGlyphFactoryMock(array(array('tag', $glyphMock)));
 
         $this->parser->setGlyphFactory($glyphFactoryMock);
 
@@ -670,7 +742,8 @@ XML;
         $tag1GlyphMock = $this->getMock('PHPPdf\Glyph\Container', array('setPriorityFromParent', 'setAttribute'));
         $tag2GlyphMock = $this->getMock('PHPPdf\Glyph\Container', array('setPriorityFromParent', 'setAttribute'));
         
-        $glyphFactoryMock = $this->getGlyphFactoryMock(array('tag1' => $tag1GlyphMock, 'tag2' => $tag2GlyphMock));
+        $mocks = array(array('tag1', $tag1GlyphMock), array('tag2', $tag2GlyphMock));
+        $glyphFactoryMock = $this->getGlyphFactoryMock($mocks);
         
         $this->parser->setGlyphFactory($glyphFactoryMock);
 
@@ -681,4 +754,27 @@ XML;
         $this->assertTrue($tag1GlyphMock === $children[0]);
         $this->assertTrue($tag2GlyphMock === $children[1]);
     }
+    
+//    /**
+//     * @test
+//     */
+//    public function wrapTextIntoParagraphObject()
+//    {
+//        $xml = <<<XML
+//<pdf>
+//	Some text
+//</pdf>
+//XML;
+//        $textGlyph = $this->getMock('PHPPdf\Glyph\Text', array('setPriorityFromParent'));
+//        $paragraphGlyph = $this->getMock('PHPPdf\Glyph\Paragraph', array('setPriorityFromParent'));
+//        
+//        $glyphFactoryMock = $this->getGlyphFactoryMock(array('paragraph' => $paragraphGlyph, 'text' => $textGlyph));
+//        
+//        $this->parser->setGlyphFactory($glyphFactoryMock);
+//        
+//        $pages = $this->parser->parse($xml);
+//        
+//        $children = $pages->getChildren();
+//        $this->assertEquals(1, count($children));
+//    }
 }

@@ -8,6 +8,8 @@
 
 namespace PHPPdf\Parser;
 
+use PHPPdf\Glyph\Text;
+
 use PHPPdf\Parser\Exception\ParseException;
 
 use PHPPdf\Glyph\Factory as GlyphFactory,
@@ -40,6 +42,8 @@ class DocumentParser extends XmlParser
     private $innerParser = null;
     private $inPlaceholder = false;
     private $endTag = self::ROOT_TAG;
+    
+    private $currentParagraph = null;
 
     public function __construct()
     {
@@ -238,7 +242,12 @@ class DocumentParser extends XmlParser
         $isEmptyElement = $reader->isEmptyElement;
 
         $glyph = $this->createGlyph($reader);
-    
+        
+        if($this->isntTextGlyph($glyph))
+        {
+            $this->currentParagraph = null;
+        }
+
         $class = $reader->getAttribute('class');
         $this->pushOnTagStack($tag, $class);
     
@@ -258,6 +267,11 @@ class DocumentParser extends XmlParser
         }
         $this->setGlyphAttributesFromReader($reader, $glyph);
     
+        if($this->isTextGlyph($glyph) && $this->isntTextGlyph($parentGlyph))
+        {
+            $parentGlyph = $this->getCurrentParagraph();
+        }
+
         $parentGlyph->add($glyph);
         $this->pushOnStack($glyph);
 
@@ -300,6 +314,16 @@ class DocumentParser extends XmlParser
         {
             throw new ParseException(sprintf('Unknown tag "%s".', $tag), 0, $e);
         }
+    }
+    
+    private function isTextGlyph(Glyph $glyph)
+    {
+        return $glyph instanceof Text;
+    }
+    
+    private function isntTextGlyph(Glyph $glyph)
+    {
+        return !$this->isTextGlyph($glyph);
     }
 
     private function pushOnTagStack($tag, $class)
@@ -354,19 +378,36 @@ class DocumentParser extends XmlParser
 
     protected function parseText(\XMLReader $reader)
     {
-        $text = $reader->value;
-        $text = str_replace(array("\n", "\t", "\r"), '', $text);
-        $text = trim($text);
+        $text = trim($reader->value);
 
         if($text)
-        {
+        {       
             $parentGlyph = $this->getLastElementFromStack();
+
+            if($this->isntTextGlyph($parentGlyph))
+            {
+                $parentGlyph = $this->getCurrentParagraph();
+            }
 
             $textGlyph = $this->getGlyphFactory()->create('text');
             $textGlyph->setText($text);
-
+            
             $parentGlyph->add($textGlyph);
         }
+    }
+    
+    private function getCurrentParagraph()
+    {
+        if($this->currentParagraph === null)
+        {
+            $this->currentParagraph = $this->getGlyphFactory()->create('paragraph');
+            
+            $parentGlyph = $this->getLastElementFromStack();
+            
+            $parentGlyph->add($this->currentParagraph);
+        }
+        
+        return $this->currentParagraph;
     }
 
     protected function isEndOfParsedDocument(\XMLReader $reader)
