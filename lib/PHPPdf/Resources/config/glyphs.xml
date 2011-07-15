@@ -81,6 +81,19 @@
 	            <formatter class="PHPPdf\Formatter\FloatFormatter" />
 	        </formatters>
 	    </glyph>
+	    
+	    <glyph name="paragraph" class="PHPPdf\Glyph\Paragraph">
+	        <formatters>
+	            <formatter class="PHPPdf\Formatter\ConvertAttributesFormatter" />
+	            <formatter class="PHPPdf\Formatter\StandardDimensionFormatter" />
+	            <formatter class="PHPPdf\Formatter\FirstPointPositionFormatter" />
+	            <formatter class="PHPPdf\Formatter\ContainerFormatter" />
+	            <formatter class="PHPPdf\Formatter\ContainerDimensionFormatter" />
+	            <formatter class="PHPPdf\Formatter\StandardPositionFormatter" />
+	            <formatter class="PHPPdf\Formatter\FloatFormatter" />
+	        </formatters>
+	    </glyph>
+	    
 	    <glyph name="text" class="PHPPdf\Glyph\Text">
 	        <formatters>
 	            <formatter class="PHPPdf\Formatter\ConvertAttributesFormatter" />

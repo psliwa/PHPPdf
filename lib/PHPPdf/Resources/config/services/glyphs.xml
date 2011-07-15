@@ -13,6 +13,7 @@
 					<argument key="ul" type="service" id="phppdf.glyph.ul" />
 					<argument key="li" type="service" id="phppdf.glyph.li" />
 					<argument key="p" type="service" id="phppdf.glyph.p" />
+					<argument key="parahraph" type="service" id="phppdf.glyph.paragraph" />
 					<argument key="text" type="service" id="phppdf.glyph.text" />
 					<argument key="span" type="service" id="phppdf.glyph.span" />
 					<argument key="h1" type="service" id="phppdf.glyph.h1" />
@@ -139,6 +140,22 @@
 				</argument>
 			</call>
 		</service>
+		
+		<service id="phppdf.glyph.paragraph" class="PHPPdf\Glyph\Paragraph" public="false">
+			<tag name="phppdf.glyph" />
+			<call method="setFormattersNames">
+				<argument type="collection">
+					<argument>PHPPdf\Formatter\ConvertAttributesFormatter</argument>
+					<argument>PHPPdf\Formatter\StandardDimensionFormatter</argument>
+					<argument>PHPPdf\Formatter\FirstPointPositionFormatter</argument>
+					<argument>PHPPdf\Formatter\ContainerFormatter</argument>
+					<argument>PHPPdf\Formatter\ContainerDimensionFormatter</argument>
+					<argument>PHPPdf\Formatter\StandardPositionFormatter</argument>
+					<argument>PHPPdf\Formatter\FloatFormatter</argument>
+				</argument>
+			</call>
+		</service>
+		
 		<service id="phppdf.glyph.text" class="PHPPdf\Glyph\Text" public="false">
 			<tag name="phppdf.glyph" />
 			<call method="setFormattersNames">
