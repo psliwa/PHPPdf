@@ -23,6 +23,9 @@ class Text extends Glyph
     private $wordsInRows = array();
     private $lineSizes = array();
     private $textTransformator = null;
+    
+    private $words = array();
+    private $wordsSizes = array();
 
     public function __construct($text = '', array $attributes = array())
     {
@@ -77,6 +80,12 @@ class Text extends Glyph
     public function setWordsInRows(array $wordsInRows)
     {
         $this->wordsInRows = $wordsInRows;
+    }
+    
+    public function addLineOfWords(array $words, $widthOfLine)
+    {
+        $this->wordsInRows[] = $words;
+        $this->lineSizes[] = $widthOfLine;
     }
 
     public function getMinWidth()
@@ -236,5 +245,26 @@ class Text extends Glyph
         }
 
         $this->setText($this->getText().$glyph->getText());
+    }
+    
+    public function setWordsSizes(array $words, array $sizes)
+    {
+        if(count($words) != count($sizes))
+        {
+            throw new \InvalidArgumentException(sprintf('Words and sizes of words arrays have to have the same length.'));
+        }
+
+        $this->words = $words;
+        $this->wordsSizes = $sizes;
+    }
+    
+    public function getWords()
+    {
+        return $this->words;
+    }
+    
+    public function getWordsSizes()
+    {
+        return $this->wordsSizes;
     }
 }

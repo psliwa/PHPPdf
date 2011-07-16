@@ -78,21 +78,21 @@ class TextTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($oldText.$anotherText, $this->text->getText());
     }
 
-    /**
-     * @test
-     * @dataProvider alignDataProvider
-     */
-    public function textAlign($align, $lineWidth, $excepted, $paddingLeft, $paddingRight)
-    {       
-        $this->page->setAttribute('text-align', $align);
-        $this->page->setAttribute('padding-left', $paddingLeft);
-        $this->page->setAttribute('padding-right', $paddingRight);
-        $this->page->add($this->text);
-
-        $position = $this->text->getStartLineDrawingXDimension($align, $lineWidth);
-
-        $this->assertEquals($excepted, $position);
-    }
+//    /**
+//     * @test
+//     * @dataProvider alignDataProvider
+//     */
+//    public function textAlign($align, $lineWidth, $excepted, $paddingLeft, $paddingRight)
+//    {       
+//        $this->page->setAttribute('text-align', $align);
+//        $this->page->setAttribute('padding-left', $paddingLeft);
+//        $this->page->setAttribute('padding-right', $paddingRight);
+//        $this->page->add($this->text);
+//
+//        $position = $this->text->getStartLineDrawingXDimension($align, $lineWidth);
+//
+//        $this->assertEquals($excepted, $position);
+//    }
 
     public function alignDataProvider()
     {
@@ -143,5 +143,48 @@ class TextTest extends PHPUnit_Framework_TestCase
         $this->text->setText('ac');
         
         $this->assertEquals($textStub, $this->text->getText());
+    }
+    
+    /**
+     * @test
+     * @dataProvider wordsSizesProvider
+     */
+    public function setWordsSizes(array $words, array $sizes, $expectedException)
+    {
+        try
+        {
+            $this->text->setWordsSizes($words, $sizes);
+            
+            if($expectedException)
+            {
+                $this->fail('expected exception');
+            }
+            
+            $this->assertEquals($words, $this->text->getWords());
+            $this->assertEquals($sizes, $this->text->getWordsSizes());
+        }
+        catch(\InvalidArgumentException $e)
+        {
+            if(!$expectedException)
+            {
+                $this->fail('unexpected exception');
+            }
+        }
+    }
+    
+    public function wordsSizesProvider()
+    {
+        return array(
+            array(
+                array('some', 'another'),
+                array(100, 120),
+                false
+            ),
+            array(
+                array('some'),
+                array(100, 120),
+                true
+            ),
+        );
     }
 }

@@ -61,8 +61,7 @@ class GenericGlyphObjectMother
                  ->setNext($x+$width, $y)
                  ->setNext($x+$width, $y-$height)
                  ->setNext($x, $y-$height)
-                 ->close()
-                ;
+                 ->close();
 
         return $boundary;
     }
