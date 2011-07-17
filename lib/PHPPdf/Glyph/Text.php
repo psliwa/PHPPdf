@@ -26,6 +26,7 @@ class Text extends Glyph
     
     private $words = array();
     private $wordsSizes = array();
+    private $pointsOfWordsLines = array();
 
     public function __construct($text = '', array $attributes = array())
     {
@@ -82,10 +83,11 @@ class Text extends Glyph
         $this->wordsInRows = $wordsInRows;
     }
     
-    public function addLineOfWords(array $words, $widthOfLine)
+    public function addLineOfWords(array $words, $widthOfLine, Point $point)
     {
         $this->wordsInRows[] = $words;
         $this->lineSizes[] = $widthOfLine;
+        $this->pointsOfWordsLines[] = $point;
     }
 
     public function getMinWidth()
@@ -140,7 +142,7 @@ class Text extends Glyph
             foreach($glyph->getWordsInRows() as $rowNumber => $words)
             {
                 $start = $glyph->getStartLineDrawingXDimension($textAlign, $lineSizes[$rowNumber]);
-                $graphicsContext->drawText(implode(' ', $words), $start+$x, $rowHeight, $glyph->getPage()->getAttribute('encoding'));
+                $graphicsContext->drawText(implode('', $words), $start+$x, $rowHeight, $glyph->getPage()->getAttribute('encoding'));
                 $rowHeight -=$lineHeight;
                 $x = $parentX + $glyph->getMarginLeft();
             }
@@ -266,5 +268,10 @@ class Text extends Glyph
     public function getWordsSizes()
     {
         return $this->wordsSizes;
+    }
+    
+    public function getPointsOfWordsLines()
+    {
+        return $this->pointsOfWordsLines;
     }
 }

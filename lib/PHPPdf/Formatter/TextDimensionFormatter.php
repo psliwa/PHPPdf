@@ -39,101 +39,26 @@ class TextDimensionFormatter extends BaseFormatter
 
     public function format(Glyphs\Glyph $glyph, Document $document)
     {
-        $realHeight = 0;
-        $graphicsContext = $glyph->getGraphicsContext();
-
-        $fontSize = $glyph->getRecurseAttribute('font-size');
-        $lineHeight = $glyph->getAttribute('line-height');
-
-        $graphicsContext->setFont($glyph->getFont(), $fontSize);
-
-        $wordsInRows = array();
-        $lineSizes = array();
-
-        $this->separateTextFromGlyphIntoRows($glyph, $wordsInRows, $lineSizes);
-
-        $realHeight = $lineHeight*count($wordsInRows);
-
-        $padding = $glyph->getPaddingTop() + $glyph->getPaddingBottom();
-        $glyph->setHeight($realHeight + $padding);
-
-        $display = $glyph->getAttribute('display');
-
-        if($display === Glyphs\Glyph::DISPLAY_BLOCK)
-        {
-            $glyph->setWidth($glyph->getWidth());
-        }
-
-        $maxLineSize = \max($lineSizes);
-        if($display === Glyphs\Glyph::DISPLAY_INLINE || $maxLineSize > $glyph->getWidth())
-        {
-            $glyph->setWidth($maxLineSize);
-            $padding = $glyph->getPaddingLeft() + $glyph->getPaddingRight();
-            $glyph->setWidth($glyph->getWidth() + $padding);
-        }
-    }
-
-    private function separateTextFromGlyphIntoRows(Glyphs\Text $glyph, array &$wordsInRows, array &$lineSizes)
-    {
+        $words = preg_split('/\s+/', $glyph->getText());
+        
+        array_walk($words, function(&$value){
+            $value .= ' ';
+        });
+        
+        $lastIndex = count($words) - 1;
+        $words[$lastIndex] = rtrim($words[$lastIndex]);
+        
+        $wordsSizes = array();
+        
         $font = $glyph->getFont();
         $fontSize = $glyph->getRecurseAttribute('font-size');
-
-        list($x, $y) = $glyph->getStartDrawingPoint();
-
-        $text = $glyph->getText();
-        $words = preg_split('/\s+/', $text);
-
-        $lineHeight = $glyph->getAttribute('line-height');
-
-        $rowWidth = 0;
-        $rowHeight = $y - $lineHeight;
-
-        $rowNumber = 0;
-
-        $parent = $glyph->getParent();
-        list($parentX, $parentY) = $parent->getStartDrawingPoint();
-
-        $blockParent = $parent;
-
-        while($blockParent && $blockParent->getDisplay() !== Glyphs\Glyph::DISPLAY_BLOCK)
+        
+        foreach($words as $word)
         {
-            $blockParent = $blockParent->getParent();
+            $wordsSizes[] = $this->getTextWidth($font, $fontSize, $word);
         }
-
-        $comparationWidth = $glyph->getAttribute('display') === Glyphs\Glyph::DISPLAY_BLOCK ? $glyph->getWidthWithoutPaddings() : ($blockParent->getWidthWithoutPaddings() - ($x - $parentX));
-
-        $lineSizes = array();
-        $wordsInRows = array();
-        $spaceWidth = $this->getTextWidth($font, $fontSize, ' ');
-        for($i=0, $count = count($words); $i<$count; $i++)
-        {
-            $word = $words[$i];
-            $width = $this->getTextWidth($font, $fontSize, $word) + $spaceWidth;
-            $newRowWidth = $rowWidth + $width;
-
-            if($comparationWidth < $newRowWidth)
-            {
-                $lineSizes[$rowNumber] = $rowWidth;
-                $rowWidth = 0;
-                $newRowWidth = $width;
-                $rowHeight -= $lineHeight;
-
-                $rowNumber++;
-
-                if($glyph->getAttribute('display') === Glyphs\Glyph::DISPLAY_INLINE)
-                {
-                    $comparationWidth = $glyph->getParent()->getWidth() - $glyph->getMarginLeft() - $glyph->getMarginRight();
-                }
-            }
-
-            $wordsInRows[$rowNumber][] = $word;
-
-            $rowWidth = $newRowWidth;
-        }
-        $lineSizes[$rowNumber] = $rowWidth - $spaceWidth;
-
-        $glyph->setLineSizes($lineSizes);
-        $glyph->setWordsInRows($wordsInRows);
+        
+        $glyph->setWordsSizes($words, $wordsSizes);
     }
 
     private function getTextWidth(\PHPPdf\Font\Font $font, $fontSize, $text)

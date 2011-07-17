@@ -1,5 +1,6 @@
 <?php
 
+use PHPPdf\Glyph\Container;
 use PHPPdf\Document;
 use PHPPdf\Util\Point;
 use PHPPdf\Glyph\Text;
@@ -30,8 +31,10 @@ class ParagraphFormatterTest extends TestCase
      */
     public function calculateTextsPositions($width, $height, array $fontSizes, array $wordsSizes, array $expectedPositions)
     {
-        //TODO: implementacja do testów
+        $parent = new Container();
+        $parent->setWidth($width);
         $paragraph = new Paragraph();
+        $parent->add($paragraph);
         
         $x = 0;
         $y = $height;

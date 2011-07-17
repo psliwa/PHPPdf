@@ -88,6 +88,7 @@
 	            <formatter class="PHPPdf\Formatter\StandardDimensionFormatter" />
 	            <formatter class="PHPPdf\Formatter\FirstPointPositionFormatter" />
 	            <formatter class="PHPPdf\Formatter\ContainerFormatter" />
+	            <formatter class="PHPPdf\Formatter\ParagraphFormatter" />
 	            <formatter class="PHPPdf\Formatter\ContainerDimensionFormatter" />
 	            <formatter class="PHPPdf\Formatter\StandardPositionFormatter" />
 	            <formatter class="PHPPdf\Formatter\FloatFormatter" />
@@ -97,12 +98,7 @@
 	    <glyph name="text" class="PHPPdf\Glyph\Text">
 	        <formatters>
 	            <formatter class="PHPPdf\Formatter\ConvertAttributesFormatter" />
-	            <formatter class="PHPPdf\Formatter\StandardDimensionFormatter" />
-	            <formatter class="PHPPdf\Formatter\FirstPointPositionFormatter" />
 	            <formatter class="PHPPdf\Formatter\TextDimensionFormatter" />
-	            <formatter class="PHPPdf\Formatter\TextResetPositionFormatter" />
-	            <formatter class="PHPPdf\Formatter\StandardPositionFormatter" />
-	            <formatter class="PHPPdf\Formatter\FloatFormatter" />
 	        </formatters>
 	    </glyph>
 	    <glyph name="h1" class="PHPPdf\Glyph\Container">
@@ -200,23 +196,13 @@
 	    <glyph name="page-info" class="PHPPdf\Glyph\Runtime\PageInfo">
 	        <formatters>
 	            <formatter class="PHPPdf\Formatter\ConvertAttributesFormatter" />
-	            <formatter class="PHPPdf\Formatter\StandardDimensionFormatter" />
-	            <formatter class="PHPPdf\Formatter\FirstPointPositionFormatter" />
 	            <formatter class="PHPPdf\Formatter\TextDimensionFormatter" />
-	            <formatter class="PHPPdf\Formatter\TextResetPositionFormatter" />
-	            <formatter class="PHPPdf\Formatter\StandardPositionFormatter" />
-	            <formatter class="PHPPdf\Formatter\FloatFormatter" />
 	        </formatters>
 	    </glyph>
 	    <glyph name="page-number" class="PHPPdf\Glyph\Runtime\CurrentPageNumber">
 	        <formatters>
 	            <formatter class="PHPPdf\Formatter\ConvertAttributesFormatter" />
-	            <formatter class="PHPPdf\Formatter\StandardDimensionFormatter" />
-	            <formatter class="PHPPdf\Formatter\FirstPointPositionFormatter" />
 	            <formatter class="PHPPdf\Formatter\TextDimensionFormatter" />
-	            <formatter class="PHPPdf\Formatter\TextResetPositionFormatter" />
-	            <formatter class="PHPPdf\Formatter\StandardPositionFormatter" />
-	            <formatter class="PHPPdf\Formatter\FloatFormatter" />
 	        </formatters>
 	    </glyph>
 	    <glyph name="table" class="PHPPdf\Glyph\Table">
@@ -299,12 +285,7 @@
 	    <glyph name="span" class="PHPPdf\Glyph\Text">
 	        <formatters>
 	            <formatter class="PHPPdf\Formatter\ConvertAttributesFormatter" />
-	            <formatter class="PHPPdf\Formatter\StandardDimensionFormatter" />
-	            <formatter class="PHPPdf\Formatter\FirstPointPositionFormatter" />
 	            <formatter class="PHPPdf\Formatter\TextDimensionFormatter" />
-	            <formatter class="PHPPdf\Formatter\TextResetPositionFormatter" />
-	            <formatter class="PHPPdf\Formatter\StandardPositionFormatter" />
-	            <formatter class="PHPPdf\Formatter\FloatFormatter" />
 	        </formatters>
 	    </glyph>
 	    <glyph name="b" class="PHPPdf\Glyph\Text">
@@ -313,12 +294,7 @@
 	        </stylesheet>
 	        <formatters>
 	            <formatter class="PHPPdf\Formatter\ConvertAttributesFormatter" />
-	            <formatter class="PHPPdf\Formatter\StandardDimensionFormatter" />
-	            <formatter class="PHPPdf\Formatter\FirstPointPositionFormatter" />
 	            <formatter class="PHPPdf\Formatter\TextDimensionFormatter" />
-	            <formatter class="PHPPdf\Formatter\TextResetPositionFormatter" />
-	            <formatter class="PHPPdf\Formatter\StandardPositionFormatter" />
-	            <formatter class="PHPPdf\Formatter\FloatFormatter" />
 	        </formatters>
 	    </glyph>
 	    <glyph name="page-break" class="PHPPdf\Glyph\Container">

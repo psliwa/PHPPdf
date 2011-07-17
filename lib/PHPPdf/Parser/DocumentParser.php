@@ -390,7 +390,7 @@ class DocumentParser extends XmlParser
             }
 
             $textGlyph = $this->getGlyphFactory()->create('text');
-            $textGlyph->setText($text);
+            $textGlyph->setText($reader->value);
             
             $parentGlyph->add($textGlyph);
         }
@@ -401,7 +401,6 @@ class DocumentParser extends XmlParser
         if($this->currentParagraph === null)
         {
             $this->currentParagraph = $this->getGlyphFactory()->create('paragraph');
-            
             $parentGlyph = $this->getLastElementFromStack();
             
             $parentGlyph->add($this->currentParagraph);

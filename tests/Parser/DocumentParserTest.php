@@ -227,13 +227,16 @@ XML;
 </pdf>
 XML;
         $glyphMock = $this->getGlyphMock();
-        $textMock = $this->getGlyphMock(array(), 'PHPPdf\Glyph\Text', array('setText'));
+        $textMock = $this->getGlyphMock(array(), 'PHPPdf\Glyph\Text', array('setText', 'getText'));
         $paragraphMock = $this->getGlyphMock(array(), 'PHPPdf\Glyph\Paragraph');
 
-        $textMock->expects($this->once())
+        $textMock->expects($this->atLeastOnce())
                  ->method('setText')
-                 ->with($this->equalTo('Some text'))
+                 ->with($this->stringContains('Some text', false))
                  ->will($this->returnValue($textMock));
+        $textMock->expects($this->atLeastOnce())
+                 ->method('getText')
+                 ->will($this->returnValue('        Some text'));
 
         $mocks = array(array('tag', $glyphMock), array('paragraph', $paragraphMock), array('text', $textMock));
         $factoryMock = $this->getGlyphFactoryMock($mocks);

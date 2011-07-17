@@ -25,9 +25,6 @@ class ParagraphFormatter extends BaseFormatter
     	    $words = $textGlyph->getWords();
     	    $wordsSizes = $textGlyph->getWordsSizes();
     	               
-    	    $wordsLines = array();
-    	    $lineSizes = array();
-    	    $lineWidth = 0;
     
     	    $currentWordLine = array();
     	    $currentWidthOfLine = 0;
@@ -36,6 +33,7 @@ class ParagraphFormatter extends BaseFormatter
     	    
     	    $first = true;
     	    
+    	    $lineWidth = 0;
     	    foreach($words as $index => $word)
     	    {
     	        $wordSize = $wordsSizes[$index];
@@ -43,50 +41,31 @@ class ParagraphFormatter extends BaseFormatter
     	        
     	        $isLastWord = $index == ($numberOfWords - 1);
     	        $endXCoord = $newLineWidth + $currentPoint->getX();
-    	        $isEndOfLine = $endXCoord > $glyph->getDiagonalPoint()->getX();
-    	        
-    	        if($first)
-    	        {
-    	            if($isEndOfLine)
-    	            {
-    	                $currentPoint = Point::getInstance($glyph->getFirstPoint()->getX(), $currentPoint->getY() - $previousTextLineHeight);
-    	            }
-    	            $boundary = $textGlyph->getBoundary();
-    	            $boundary->setNext($currentPoint);
-    	            $isEndOfLine = false;
-    	        }
-    	        
-    	        $first = false;
+    	        $isEndOfLine = $endXCoord > ($glyph->getFirstPoint()->getX() + $glyph->getWidth());
     	        
     	        if($isEndOfLine)
     	        {
-    	            $currentPoint = Point::getInstance($glyph->getFirstPoint()->getX(), $currentPoint->getY() - $textGlyph->getAttribute('line-height'));
+    	            if($currentWordLine)
+    	            {
+    	                //TODO: wyznaczać $currentPoint tak, aby wyrównywać tekst do rządanej strony (lewo, prawo, środek)
+        	            $textGlyph->addLineOfWords($currentWordLine, $currentWidthOfLine, $currentPoint);
+        	            $currentWidthOfLine = 0;
+        	            $currentWordLine = array();
+    	            }
+    	            //jeśli jest to pierwsze słowo to przesun o lineHeight poprzedniego textGlyph
+    	            $lineHeight = $index == 0 ? $previousTextLineHeight : $textGlyph->getAttribute('line-height');
+    	            $currentPoint = Point::getInstance($glyph->getFirstPoint()->getX(), $currentPoint->getY() - $lineHeight);
     	        }
-    	        elseif($isLastWord)
-    	        {
-    	            $currentWidthOfLine = $newLineWidth;
-    	            $currentWordLine[] = $word;
-    	        }
-    	        
-    	        if($isEndOfLine || $isLastWord)
-    	        {
-    	            $textGlyph->addLineOfWords($currentWordLine, $currentWidthOfLine);
-    	            $currentPoint = $currentPoint->translate($currentWidthOfLine, 0);
-    	            $currentWidthOfLine = 0;
-    	            $currentWordLine = array();
-    	        }
-    	        
-    	        if($isLastWord && $isEndOfLine)
-    	        {
-    	            $textGlyph->addLineOfWords(array($word), $wordSize);
-    	        }
-    
-    	        if(!$isEndOfLine && !$isLastWord)
-    	        {
-    	            $currentWidthOfLine = $newLineWidth;
-    	            $currentWordLine[] = $word;
-    	        }
+
+	            $currentWidthOfLine = $currentWidthOfLine + $wordSize;
+	            $currentWordLine[] = $word;
     	    }
+    	    
+            if($currentWordLine)
+            {
+	            $textGlyph->addLineOfWords($currentWordLine, $currentWidthOfLine, $currentPoint);
+	            $currentPoint = $currentPoint->translate($currentWidthOfLine, 0);
+            }
     	    
     	    $previousTextLineHeight = $textGlyph->getAttribute('line-height');
     	}
@@ -102,8 +81,10 @@ class ParagraphFormatter extends BaseFormatter
     }
     
     private function setTextBoundary(Text $text)
-    {
-        list($x, $y) = $text->getFirstPoint()->toArray();
+    {       
+        $points = $text->getPointsOfWordsLines();
+        list($x, $y) = $points[0]->toArray();
+        $text->getBoundary()->setNext($points[0]);
         list($parentX, $parentY) = $text->getParent()->getStartDrawingPoint();
 
         $lineSizes = $text->getLineSizes();
