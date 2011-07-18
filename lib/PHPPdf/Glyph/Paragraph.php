@@ -13,6 +13,12 @@ namespace PHPPdf\Glyph;
  */
 class Paragraph extends Container
 {
+    public function initialize()
+    {
+        parent::initialize();
+        $this->setAttribute('text-align', null);
+    }
+    
     public function getWidth()
     {
         return $this->getParent()->getWidth();
@@ -26,7 +32,7 @@ class Paragraph extends Container
 
         $text->setText(preg_replace('/\s+/', ' ', $text->getText()));
 
-        if($previousText && $this->startsWithWhiteChars($text) && $this->endsWithWhiteChars($previousText))
+        if(!$previousText || $this->startsWithWhiteChars($text) && $this->endsWithWhiteChars($previousText))
         {
             $text->setText(ltrim($text->getText()));
         }        

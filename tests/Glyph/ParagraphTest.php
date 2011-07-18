@@ -32,6 +32,10 @@ class ParagraphTest extends TestCase
             
             $isPreviousTextEndsWithWhiteChars = rtrim($textGlyph->getText()) != $textGlyph->getText();
         }
+        
+        $firstText = $this->paragraph->getChild(0);
+        
+        $this->assertTrue($firstText->getText() == ltrim($firstText->getText()), 'first text element isnt left trimmed');
     }
     
     public function textProvider()
@@ -39,6 +43,9 @@ class ParagraphTest extends TestCase
         return array(
             array(
                 array('some text ', ' some another text'),
+            ),
+            array(
+                array('   some text ', '    some another text    ', '    some another text'),
             ),
         );
     }

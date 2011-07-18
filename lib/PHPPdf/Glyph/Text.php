@@ -139,10 +139,12 @@ class Text extends Glyph
             $lineSizes = $glyph->getLineSizes();
 
             $textAlign = $glyph->getRecurseAttribute('text-align');
+            $points = $glyph->getPointsOfWordsLines();
             foreach($glyph->getWordsInRows() as $rowNumber => $words)
             {
-                $start = $glyph->getStartLineDrawingXDimension($textAlign, $lineSizes[$rowNumber]);
-                $graphicsContext->drawText(implode('', $words), $start+$x, $rowHeight, $glyph->getPage()->getAttribute('encoding'));
+//                $start = $glyph->getStartLineDrawingXDimension($textAlign, $lineSizes[$rowNumber]);
+                $start = $points[$rowNumber]->getX();
+                $graphicsContext->drawText(implode('', $words), $start, $rowHeight, $glyph->getPage()->getAttribute('encoding'));
                 $rowHeight -=$lineHeight;
                 $x = $parentX + $glyph->getMarginLeft();
             }
@@ -273,5 +275,15 @@ class Text extends Glyph
     public function getPointsOfWordsLines()
     {
         return $this->pointsOfWordsLines;
+    }
+    
+    public function translate($x, $y)
+    {
+        parent::translate($x, $y);
+        
+        foreach($this->pointsOfWordsLines as $i => $point)
+        {
+            $this->pointsOfWordsLines[$i] = $point->translate($x, $y);
+        }
     }
 }

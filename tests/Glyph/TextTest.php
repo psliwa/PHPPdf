@@ -1,5 +1,6 @@
 <?php
 
+use PHPPdf\Util\Point;
 use PHPPdf\Document;
 use PHPPdf\Glyph\Text;
 use PHPPdf\Glyph\Page;
@@ -186,5 +187,23 @@ class TextTest extends PHPUnit_Framework_TestCase
                 true
             ),
         );
+    }
+    
+    /**
+     * @test
+     */
+    public function startPointOfEachLineShouldBeMovedWhileTranlateing()
+    {
+        $x = 10;
+        $y = 15;
+        $transX = 3;
+        $transY = 5;
+        
+        $this->text->addLineOfWords(array('word'), 10, Point::getInstance($x, $y));
+        
+        $this->text->translate($transX, $transY);
+        
+        list($point) = $this->text->getPointsOfWordsLines();
+        $this->assertEquals(array($x+$transX, $y - $transY), $point->toArray());
     }
 }

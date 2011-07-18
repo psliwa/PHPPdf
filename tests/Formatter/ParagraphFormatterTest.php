@@ -1,5 +1,6 @@
 <?php
 
+use PHPPdf\Glyph\Glyph;
 use PHPPdf\Glyph\Container;
 use PHPPdf\Document;
 use PHPPdf\Util\Point;
@@ -29,54 +30,26 @@ class ParagraphFormatterTest extends TestCase
      * @test
      * @dataProvider dataProvider
      */
-    public function calculateTextsPositions($width, $height, array $fontSizes, array $wordsSizes, array $expectedPositions)
+    public function calculateTextsPositions($x, $width, $height, $align, array $fontSizes, array $wordsSizes, array $expectedPositions)
     {
-        $parent = new Container();
-        $parent->setWidth($width);
-        $paragraph = new Paragraph();
-        $parent->add($paragraph);
-        
-        $x = 0;
-        $y = $height;
-        $height = $y;
-        
-        $boundary = $this->objectMother->getBoundaryStub($x, $y, $width, $height);
-        $this->invokeMethod($paragraph, 'setBoundary', array($boundary));
-        
-        $textGlyphs = array();
-
-        foreach($wordsSizes as $index => $wordsSizesForGlyph)
-        {
-            $textGlyph = new Text();
-            
-            list($words, $sizes) = $wordsSizesForGlyph;
-            $textGlyph->setWordsSizes($words, $sizes);
-            $textGlyph->setFontSize($fontSizes[$index]);
-            
-            $paragraph->add($textGlyph);
-            $textGlyphs[] = $textGlyph;
-        }
+        $paragraph = $this->createParagraph($x, $height, $width, $height, $align);
+        $this->createTextGlyphAndAddToParagraph($wordsSizes, $fontSizes, $paragraph);
         
         $this->formatter->format($paragraph, $this->document);
         
-        foreach($textGlyphs as $i => $textGlyph)
+        foreach($paragraph->getChildren() as $i => $textGlyph)
         {
-            $expectedXCoordOfFirstPoint = $expectedPositions[$i][0][0];
-            $expectedYCoordOfFirstPoint = $expectedPositions[$i][0][1];            
-            list($actualXCoordOfFirstPoint, $actualYCoordOfFirstPoint) = $textGlyph->getFirstPoint()->toArray();
-            
-            $this->assertEquals($expectedXCoordOfFirstPoint, $actualXCoordOfFirstPoint, '', 1);
-            $this->assertEquals($expectedYCoordOfFirstPoint, $actualYCoordOfFirstPoint, '', 1);
-
-            $expectedXCoordOfDiagonalPoint = $expectedPositions[$i][1][0];
-            $expectedYCoordOfDiagonalPoint = $expectedPositions[$i][1][1];            
-            list($actualXCoordOfDiagonalPoint, $actualYCoordOfDiagonalPoint) = $textGlyph->getDiagonalPoint()->toArray();
-            
-            $this->assertEquals($expectedXCoordOfDiagonalPoint, $actualXCoordOfDiagonalPoint, '', 1);
-            $this->assertEquals($expectedYCoordOfDiagonalPoint, $actualYCoordOfDiagonalPoint, '', 1);
+            $this->assertPointEquals($expectedPositions[$i][0], $textGlyph->getFirstPoint());
+            $this->assertPointEquals($expectedPositions[$i][1], $textGlyph->getDiagonalPoint());
         }
     }
     
+    private function assertPointEquals($expectedPoint, $actualPoint)
+    {
+        $this->assertEquals($expectedPoint[0], $actualPoint[0], '', 1);
+        $this->assertEquals($expectedPoint[1], $actualPoint[1], '', 1);
+    }
+        
     public function dataProvider()
     {
         $lineHeightFor15 = $this->getLineHeight(15);
@@ -84,8 +57,10 @@ class ParagraphFormatterTest extends TestCase
         
         return array(
             array(
+                2,
                 25, 
                 200,
+                Glyph::ALIGN_LEFT,
                 array(15, 12),
                 array(
                     array(
@@ -99,16 +74,71 @@ class ParagraphFormatterTest extends TestCase
                 ),
                 array(
                     array(
-                        array(0, 200),
-                        array(22, 200 - $lineHeightFor15),
+                        array(2, 200),
+                        array(24, 200 - $lineHeightFor15),
                     ),
                     array(
-                        array(0, 200 - $lineHeightFor15),
-                        array(15, 200 - ($lineHeightFor15 + 2*$lineHeightFor12)),
+                        array(2, 200 - $lineHeightFor15),
+                        array(17, 200 - ($lineHeightFor15 + 2*$lineHeightFor12)),
+                    ),
+                ),
+            ),
+            array(
+                2,
+                25, 
+                200,
+                Glyph::ALIGN_RIGHT,
+                array(15, 12),
+                array(
+                    array(
+                        array('some', 'another'),
+                        array(10, 12),
+                    ),                    
+                    array(
+                        array('some', 'another', 'anotherYet'),
+                        array(10, 12, 15),
+                    ),                    
+                ),
+                array(
+                    array(
+                        array(5, 200),
+                        array(27, 200 - $lineHeightFor15),
+                    ),
+                    array(
+                        array(5, 200 - $lineHeightFor15),
+                        array(27, 200 - ($lineHeightFor15 + 2*$lineHeightFor12)),
                     ),
                 ),
             ),
         );
+    }
+    
+    private function createParagraph($x, $y, $width, $height, $align)
+    {
+        $parent = new Container();
+        $parent->setWidth($width);
+        $paragraph = new Paragraph();
+        $paragraph->setAttribute('text-align', $align);
+        $parent->add($paragraph);
+        
+        $boundary = $this->objectMother->getBoundaryStub($x, $y, $width, $height);
+        $this->invokeMethod($paragraph, 'setBoundary', array($boundary));
+        
+        return $paragraph;
+    }
+    
+    private function createTextGlyphAndAddToParagraph(array $wordsSizes, array $fontSizes, Paragraph $paragraph)
+    {
+        foreach($wordsSizes as $index => $wordsSizesForGlyph)
+        {
+            $textGlyph = new Text();
+            
+            list($words, $sizes) = $wordsSizesForGlyph;
+            $textGlyph->setWordsSizes($words, $sizes);
+            $textGlyph->setFontSize($fontSizes[$index]);
+            
+            $paragraph->add($textGlyph);
+        }
     }
     
     private function getLineHeight($fontSize)

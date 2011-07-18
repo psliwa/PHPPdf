@@ -23,8 +23,7 @@ class ParagraphFormatter extends BaseFormatter
     	foreach($glyph->getChildren() as $textGlyph)
     	{
     	    $words = $textGlyph->getWords();
-    	    $wordsSizes = $textGlyph->getWordsSizes();
-    	               
+    	    $wordsSizes = $textGlyph->getWordsSizes();    	               
     
     	    $currentWordLine = array();
     	    $currentWidthOfLine = 0;
@@ -41,14 +40,15 @@ class ParagraphFormatter extends BaseFormatter
     	        
     	        $isLastWord = $index == ($numberOfWords - 1);
     	        $endXCoord = $newLineWidth + $currentPoint->getX();
-    	        $isEndOfLine = $endXCoord > ($glyph->getFirstPoint()->getX() + $glyph->getWidth());
+    	        $maxLineXCoord = $glyph->getFirstPoint()->getX() + $glyph->getWidth();
+    	        $isEndOfLine = $endXCoord > $maxLineXCoord;
     	        
     	        if($isEndOfLine)
     	        {
     	            if($currentWordLine)
     	            {
-    	                //TODO: wyznaczać $currentPoint tak, aby wyrównywać tekst do rządanej strony (lewo, prawo, środek)
-        	            $textGlyph->addLineOfWords($currentWordLine, $currentWidthOfLine, $currentPoint);
+        	            $startPoint = $this->getStartPoint($glyph->getRecurseAttribute('text-align'), $currentWidthOfLine, $maxLineXCoord, $currentPoint);
+    	                $textGlyph->addLineOfWords($currentWordLine, $currentWidthOfLine, $startPoint);
         	            $currentWidthOfLine = 0;
         	            $currentWordLine = array();
     	            }
@@ -63,14 +63,29 @@ class ParagraphFormatter extends BaseFormatter
     	    
             if($currentWordLine)
             {
-	            $textGlyph->addLineOfWords($currentWordLine, $currentWidthOfLine, $currentPoint);
+                $startPoint = $this->getStartPoint($glyph->getRecurseAttribute('text-align'), $currentWidthOfLine, $maxLineXCoord, $currentPoint);
+	            $textGlyph->addLineOfWords($currentWordLine, $currentWidthOfLine, $startPoint);
 	            $currentPoint = $currentPoint->translate($currentWidthOfLine, 0);
             }
     	    
     	    $previousTextLineHeight = $textGlyph->getAttribute('line-height');
     	}
     }
-
+    
+    private function getStartPoint($align, $widthOfWordsLine, $maxAllowedXCoordOfLine, Point $firstPoint)
+    {
+        switch($align)
+        {
+            case Glyph::ALIGN_LEFT:
+                return $firstPoint;
+            case Glyph::ALIGN_RIGHT:
+                return $firstPoint->translate(($maxAllowedXCoordOfLine - $firstPoint->getX()) - $widthOfWordsLine, 0);
+            case Glyph::ALIGN_CENTER:
+                return $firstPoint->translate((($maxAllowedXCoordOfLine - $firstPoint->getX()) - $widthOfWordsLine)/2, 0);
+            default:
+                throw new \InvalidArgumentException(sprintf('Unsupported align type "%s".', $align));
+        }
+    }
     
     private function setTextBoundaries(array $textGlyphs)
     {
@@ -97,7 +112,8 @@ class ParagraphFormatter extends BaseFormatter
         $boundary = $text->getBoundary();
         foreach($lineSizes as $rowNumber => $width)
         {
-            $newX = $x + $width;
+            $startPoint = $points[$rowNumber];
+            $newX = $startPoint->getX() + $width;
             $newY = $currentY - $lineHeight;
             if($currentX !== $newX)
             {
@@ -107,7 +123,7 @@ class ParagraphFormatter extends BaseFormatter
             $boundary->setNext($newX, $newY);
             $currentX = $newX;
             $currentY = $newY;
-            $x = $parentX + $text->getMarginLeft();
+            $x = $startPoint->getX();
         }
 
         $boundary->setNext($x, $currentY);
