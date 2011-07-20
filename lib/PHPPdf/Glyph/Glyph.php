@@ -22,7 +22,7 @@ use PHPPdf\Document,
  *
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
-abstract class Glyph implements \ArrayAccess, \Serializable
+abstract class Glyph implements Drawable, \ArrayAccess, \Serializable
 {
     const DISPLAY_BLOCK = 'block';
     const DISPLAY_INLINE = 'inline';

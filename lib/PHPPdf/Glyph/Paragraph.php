@@ -11,8 +11,14 @@ namespace PHPPdf\Glyph;
 /**
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
+use PHPPdf\Document;
+
+use PHPPdf\Glyph\Paragraph\Line;
+
 class Paragraph extends Container
 {
+    private $lines = array();
+    
     public function initialize()
     {
         parent::initialize();
@@ -59,5 +65,31 @@ class Paragraph extends Container
     private function startsWithWhiteChars(Text $text)
     {
         return ltrim($text->getText()) != $text->getText();
+    }
+    
+    public function addLine(Line $line)
+    {
+        $this->lines[] = $line;
+    }
+    
+    public function getLines()
+    {
+        return $this->lines;
+    }
+    
+    public function getDrawingTasks(Document $document)
+    {
+        $tasks = array();
+        
+        foreach($this->lines as $line)
+        {
+            $lineTasks = $line->getDrawingTasks($document);
+            foreach($lineTasks as $task)
+            {
+                $tasks[] = $task;
+            }
+        }
+        
+        return $tasks;
     }
 }

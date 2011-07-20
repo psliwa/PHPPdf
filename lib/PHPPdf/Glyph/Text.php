@@ -8,6 +8,8 @@
 
 namespace PHPPdf\Glyph;
 
+use PHPPdf\Glyph\Paragraph\LinePart;
+
 use PHPPdf\Glyph\Glyph,
     PHPPdf\Formatter\Formatter,
     PHPPdf\Document,
@@ -27,6 +29,8 @@ class Text extends Glyph
     private $words = array();
     private $wordsSizes = array();
     private $pointsOfWordsLines = array();
+    
+    private $lineParts = array();
 
     public function __construct($text = '', array $attributes = array())
     {
@@ -285,5 +289,15 @@ class Text extends Glyph
         {
             $this->pointsOfWordsLines[$i] = $point->translate($x, $y);
         }
+    }
+    
+    public function addLinePart(LinePart $linePart)
+    {
+        $this->lineParts[] = $linePart;
+    }
+    
+    public function getLineParts()
+    {
+        return $this->lineParts;
     }
 }

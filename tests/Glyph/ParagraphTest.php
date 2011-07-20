@@ -1,5 +1,6 @@
 <?php
 
+use PHPPdf\Document;
 use PHPPdf\Glyph\Text;
 use PHPPdf\Glyph\Paragraph;
 
@@ -48,5 +49,37 @@ class ParagraphTest extends TestCase
                 array('   some text ', '    some another text    ', '    some another text'),
             ),
         );
+    }
+    
+    /**
+     * @test
+     */
+    public function getDrawingTasksFromLineObjects()
+    {
+        $documentStub = new Document();
+        
+        $expectedTasks = array();
+        
+        for($i=0; $i<3; $i++)
+        {
+            $line = $this->getMockBuilder('PHPPdf\Glyph\Paragraph\Line')
+                         ->setMethods(array('getDrawingTasks'))
+                         ->disableOriginalConstructor()
+                         ->getMock();
+            
+            $taskStub = 'task '.$i;
+            $expectedTasks[] = $taskStub;
+                             
+            $line->expects($this->once())
+                 ->method('getDrawingTasks')
+                 ->with($documentStub)
+                 ->will($this->returnValue(array($taskStub)));
+                     
+            $this->paragraph->addLine($line);
+        }
+        
+        $actualTasks = $this->paragraph->getDrawingTasks($documentStub);
+        
+        $this->assertEquals($expectedTasks, $actualTasks);
     }
 }
