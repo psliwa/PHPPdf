@@ -94,4 +94,9 @@ class LinePart implements Drawable
     {
         return $this->line->getHeight();
     }
+    
+    public function horizontalTranslate($translate)
+    {
+        $this->xTranslation += $translate;
+    }
 }

@@ -30,6 +30,16 @@ class Paragraph extends Container
         return $this->getParent()->getWidth();
     }
     
+    public function getParentPaddingLeft()
+    {
+        return $this->getParent()->getPaddingLeft();
+    }
+    
+    public function getParentPaddingRight()
+    {
+        return $this->getParent()->getPaddingRight();
+    }
+
     public function add(Glyph $text)
     {
         $previousText = $this->getLastChild();

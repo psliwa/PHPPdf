@@ -8,6 +8,8 @@
 
 namespace PHPPdf\Glyph\Paragraph;
 
+use PHPPdf\Glyph\Glyph;
+
 use PHPPdf\Glyph\Paragraph;
 
 use PHPPdf\Util\Point;
@@ -60,6 +62,9 @@ class Line implements Drawable
     {
         $tasks = array();
         
+        $horizontalTranslation = $this->getHorizontalTranslation();
+        $this->xTranslation = $horizontalTranslation;
+        
         foreach($this->parts as $part)
         {
             $partTasks = $part->getDrawingTasks($document);
@@ -70,6 +75,38 @@ class Line implements Drawable
         }
         
         return $tasks;
+    }
+    
+    private function getHorizontalTranslation()
+    {
+        $align = $this->paragraph->getRecurseAttribute('text-align');
+        switch($align)
+        {
+            case Glyph::ALIGN_LEFT:
+                return 0;
+            case Glyph::ALIGN_RIGHT:
+                return  $this->getRealWidth() - $this->getTotalWidth();
+            case Glyph::ALIGN_CENTER:
+                return ($this->getRealWidth() - $this->getTotalWidth())/2;
+            default:
+                throw new \InvalidArgumentException(sprintf('Unsupported align type "%s".', $align));
+        }
+    }
+    
+    private function getRealWidth()
+    {
+        return $this->paragraph->getWidth() - $this->paragraph->getParentPaddingLeft() - $this->paragraph->getParentPaddingRight();
+    }
+    
+    private function getTotalWidth()
+    {
+        $width = 0;
+        foreach($this->parts as $part)
+        {
+            $width += $part->getWidth();
+        }
+        
+        return $width;
     }
     
     /**
