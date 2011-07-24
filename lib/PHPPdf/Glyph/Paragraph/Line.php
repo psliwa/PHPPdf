@@ -46,6 +46,11 @@ class Line implements Drawable
         }
     }
     
+    public function setYTranslation($translation)
+    {
+        $this->yTranslation = $translation;
+    }
+    
     public function getParts()
     {
         return $this->parts;
@@ -73,5 +78,17 @@ class Line implements Drawable
     public function getFirstPoint()
     {
         return $this->paragraph->getFirstPoint()->translate($this->xTranslation, $this->yTranslation);
+    }
+    
+    public function getHeight()
+    {
+        $height = 0;
+        
+        foreach($this->parts as $part)
+        {
+            $height = max($height, $part->getHeight());
+        }
+        
+        return $height;
     }
 }

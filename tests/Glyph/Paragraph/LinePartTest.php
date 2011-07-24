@@ -78,7 +78,8 @@ class LinePartTest extends TestCase
              ->method('getFirstPoint')
              ->will($this->returnValue($startPoint));
         
-        $linePart = new LinePart($words, $xTranslationInLine, $text);
+        $linePartWidth = 100;
+        $linePart = new LinePart($words, $linePartWidth, $xTranslationInLine, $text);
         $linePart->setLine($line);
         
         $tasks = $linePart->getDrawingTasks($documentStub);
@@ -105,7 +106,7 @@ class LinePartTest extends TestCase
              ->with('line-height')
              ->will($this->returnValue($lineHeight));
         
-        $linePart = new LinePart('', 0, $text);
+        $linePart = new LinePart('', 0, 0, $text);
         
         $this->assertEquals($lineHeight, $linePart->getHeight());
     }
@@ -123,6 +124,6 @@ class LinePartTest extends TestCase
              ->method('addLinePart')
              ->with($this->anything());
         
-        $linePart = new LinePart('', 0, $text);
+        $linePart = new LinePart('', 0, 0, $text);
     }
 }

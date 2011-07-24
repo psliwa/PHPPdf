@@ -30,9 +30,9 @@ class ParagraphFormatterTest extends TestCase
      * @test
      * @dataProvider dataProvider
      */
-    public function calculateTextsPositions($x, $width, $height, $align, array $fontSizes, array $wordsSizes, array $expectedPositions)
+    public function calculateTextsPositions($x, $width, $height, array $fontSizes, array $wordsSizes, array $expectedPositions)
     {
-        $paragraph = $this->createParagraph($x, $height, $width, $height, $align);
+        $paragraph = $this->createParagraph($x, $height, $width, $height);
         $this->createTextGlyphAndAddToParagraph($wordsSizes, $fontSizes, $paragraph);
         
         $this->formatter->format($paragraph, $this->document);
@@ -60,7 +60,6 @@ class ParagraphFormatterTest extends TestCase
                 2,
                 25, 
                 200,
-                Glyph::ALIGN_LEFT,
                 array(15, 12),
                 array(
                     array(
@@ -83,42 +82,14 @@ class ParagraphFormatterTest extends TestCase
                     ),
                 ),
             ),
-//            array(
-//                2,
-//                25, 
-//                200,
-//                Glyph::ALIGN_RIGHT,
-//                array(15, 12),
-//                array(
-//                    array(
-//                        array('some', 'another'),
-//                        array(10, 12),
-//                    ),                    
-//                    array(
-//                        array('some', 'another', 'anotherYet'),
-//                        array(10, 12, 15),
-//                    ),                    
-//                ),
-//                array(
-//                    array(
-//                        array(5, 200),
-//                        array(27, 200 - $lineHeightFor15),
-//                    ),
-//                    array(
-//                        array(5, 200 - $lineHeightFor15),
-//                        array(27, 200 - ($lineHeightFor15 + 2*$lineHeightFor12)),
-//                    ),
-//                ),
-//            ),
         );
     }
     
-    private function createParagraph($x, $y, $width, $height, $align)
+    private function createParagraph($x, $y, $width, $height)
     {
         $parent = new Container();
         $parent->setWidth($width);
         $paragraph = new Paragraph();
-        $paragraph->setAttribute('text-align', $align);
         $parent->add($paragraph);
         
         $boundary = $this->objectMother->getBoundaryStub($x, $y, $width, $height);

@@ -2,6 +2,8 @@
 
 namespace PHPPdf\Formatter;
 
+use PHPPdf\Glyph\Paragraph\Line;
+use PHPPdf\Glyph\Paragraph\LinePart;
 use PHPPdf\Glyph\Glyph;
 use PHPPdf\Document;
 use PHPPdf\Glyph\Text;
@@ -19,7 +21,10 @@ class ParagraphFormatter extends BaseFormatter
 	{
     	$currentPoint = $glyph->getFirstPoint();
     	
-    	$previousTextLineHeight = 0;
+    	$partsOfLine = array();
+    	$yTranslation = 0;
+    	$line = new Line($glyph, 0, $yTranslation);
+    	
     	foreach($glyph->getChildren() as $textGlyph)
     	{
     	    $words = $textGlyph->getWords();
@@ -38,7 +43,6 @@ class ParagraphFormatter extends BaseFormatter
     	        $wordSize = $wordsSizes[$index];
     	        $newLineWidth = $currentWidthOfLine + $wordSize;
     	        
-    	        $isLastWord = $index == ($numberOfWords - 1);
     	        $endXCoord = $newLineWidth + $currentPoint->getX();
     	        $maxLineXCoord = $glyph->getFirstPoint()->getX() + $glyph->getWidth();
     	        $isEndOfLine = $endXCoord > $maxLineXCoord;
@@ -47,14 +51,30 @@ class ParagraphFormatter extends BaseFormatter
     	        {
     	            if($currentWordLine)
     	            {
-        	            $startPoint = $this->getStartPoint($glyph->getRecurseAttribute('text-align'), $currentWidthOfLine, $maxLineXCoord, $currentPoint);
-    	                $textGlyph->addLineOfWords($currentWordLine, $currentWidthOfLine, $startPoint);
+        	            $partOfLine = new LinePart($currentWordLine, $currentWidthOfLine, $currentPoint->getX() - $glyph->getFirstPoint()->getX(), $textGlyph);
+    	                $partsOfLine[] = $partOfLine;
+    	                
+    	                $line->addParts($partsOfLine);
+    	                $glyph->addLine($line);
+    	                
+    	                $yTranslation += $line->getHeight();
+    	                $line = new Line($glyph, 0, $yTranslation);
+    	                $partsOfLine = array();
+        	            
         	            $currentWidthOfLine = 0;
         	            $currentWordLine = array();
     	            }
-    	            //jeśli jest to pierwsze słowo to przesun o lineHeight poprzedniego textGlyph
-    	            $lineHeight = $index == 0 ? $previousTextLineHeight : $textGlyph->getAttribute('line-height');
-    	            $currentPoint = Point::getInstance($glyph->getFirstPoint()->getX(), $currentPoint->getY() - $lineHeight);
+    	            else
+    	            {
+    	                $line->addParts($partsOfLine);
+    	                $glyph->addLine($line);
+    	                
+    	                $yTranslation += $line->getHeight();
+    	                $line = new Line($glyph, 0, $yTranslation);
+    	                $partsOfLine = array();
+    	            }
+
+    	            $currentPoint = Point::getInstance($glyph->getFirstPoint()->getX(), 0);
     	        }
 
 	            $currentWidthOfLine = $currentWidthOfLine + $wordSize;
@@ -63,17 +83,25 @@ class ParagraphFormatter extends BaseFormatter
     	    
             if($currentWordLine)
             {
-                $startPoint = $this->getStartPoint($glyph->getRecurseAttribute('text-align'), $currentWidthOfLine, $maxLineXCoord, $currentPoint);
-	            $textGlyph->addLineOfWords($currentWordLine, $currentWidthOfLine, $startPoint);
+                $partOfLine = new LinePart($currentWordLine, $currentWidthOfLine, $currentPoint->getX() - $glyph->getFirstPoint()->getX(), $textGlyph);
+                $partsOfLine[] = $partOfLine;
+                
 	            $currentPoint = $currentPoint->translate($currentWidthOfLine, 0);
             }
-    	    
-    	    $previousTextLineHeight = $textGlyph->getAttribute('line-height');
+    	}
+    	
+    	if($partsOfLine)
+    	{
+    	    $yTranslation += $line->getHeight();
+    	    $line = new Line($glyph, 0, $yTranslation);
+            $line->addParts($partsOfLine);
+            $glyph->addLine($line);
     	}
     }
     
     private function getStartPoint($align, $widthOfWordsLine, $maxAllowedXCoordOfLine, Point $firstPoint)
     {
+        return $firstPoint;
         switch($align)
         {
             case Glyph::ALIGN_LEFT:
@@ -96,25 +124,35 @@ class ParagraphFormatter extends BaseFormatter
     }
     
     private function setTextBoundary(Text $text)
-    {       
-        $points = $text->getPointsOfWordsLines();
+    {
+        $lineParts = $text->getLineParts();
+        
+        $points = array();
+        foreach($lineParts as $part)
+        {
+            $points[] = $part->getFirstPoint();
+        }
+        
         list($x, $y) = $points[0]->toArray();
         $text->getBoundary()->setNext($points[0]);
-        list($parentX, $parentY) = $text->getParent()->getStartDrawingPoint();
-
-        $lineSizes = $text->getLineSizes();
-        $lineHeight = $text->getAttribute('line-height');
+        list($parentX, $parentY) = $text->getParent()->getFirstPoint()->toArray();
 
         $startX = $x;
 
         $currentX = $x;
         $currentY = $y;
         $boundary = $text->getBoundary();
-        foreach($lineSizes as $rowNumber => $width)
+        $totalHeight = 0;
+        
+        foreach($lineParts as $rowNumber => $part)
         {
+            $height = $part->getLineHeight();
+            $totalHeight += $height;
+            $width = $part->getWidth();
+
             $startPoint = $points[$rowNumber];
             $newX = $startPoint->getX() + $width;
-            $newY = $currentY - $lineHeight;
+            $newY = $currentY - $height;
             if($currentX !== $newX)
             {
                 $boundary->setNext($newX, $currentY);
@@ -127,7 +165,7 @@ class ParagraphFormatter extends BaseFormatter
         }
 
         $boundary->setNext($x, $currentY);
-        $currentY = $currentY + (count($lineSizes) - 1)*$lineHeight;
+        $currentY = $currentY + $totalHeight;
         $boundary->setNext($x, $currentY);
         $boundary->setNext($startX, $currentY);
 

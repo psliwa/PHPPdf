@@ -1,5 +1,6 @@
 <?php
 
+use PHPPdf\Glyph\Paragraph\LinePart;
 use PHPPdf\Util\Point;
 use PHPPdf\Document;
 use PHPPdf\Glyph\Text;
@@ -110,9 +111,12 @@ class TextTest extends PHPUnit_Framework_TestCase
      * @test
      * @dataProvider lineSizesProvider
      */
-    public function minimumWidthIsTheWidestTextRow(array $lineSizes)
+    public function minimumWidthIsTheWidestLinePart(array $lineSizes)
     {
-        $this->text->setLineSizes($lineSizes);
+        foreach($lineSizes as $width)
+        {
+            $linePart = new LinePart('', $width, 0, $this->text);
+        }
 
         $this->assertEquals(max($lineSizes), $this->text->getMinWidth());
     }

@@ -96,7 +96,12 @@ class Text extends Glyph
 
     public function getMinWidth()
     {
-        return \max($this->lineSizes);
+        $minWidth = 0;
+        foreach($this->lineParts as $part)
+        {
+            $minWidth = max($minWidth, $part->getWidth());
+        }
+        return $minWidth;
     }
 
     public function setFontSize($size)

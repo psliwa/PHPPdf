@@ -23,13 +23,25 @@ class LinePart implements Drawable
     private $words;
     private $line;
     private $xTranslation;
+    private $width;
     
-    public function __construct($words, $xTranslation, Text $text)
+    public function __construct($words, $width, $xTranslation, Text $text)
     {
-        $this->words = (string) $words;
+        $this->setWords($words);
+        $this->width = $width;
         $text->addLinePart($this);
         $this->text = $text;
         $this->xTranslation = $xTranslation;
+    }
+    
+    private function setWords($words)
+    {
+        if(is_array($words))
+        {
+            $words = implode('', $words);
+        }
+        
+        $this->words = (string) $words;
     }
     
     public function setLine(Line $line)
@@ -45,7 +57,7 @@ class LinePart implements Drawable
             $fontSize = $text->getFontSize();
             
             $gc->setFont($text->getFont(), $fontSize);
-            $color = $text->getAttribute('color');
+            $color = $text->getRecurseAttribute('color');
             
             if($color)
             {
@@ -71,5 +83,15 @@ class LinePart implements Drawable
     public function getText()
     {
         return $this->text;
+    }
+    
+    public function getWidth()
+    {
+        return $this->width;
+    }
+    
+    public function getLineHeight()
+    {
+        return $this->line->getHeight();
     }
 }

@@ -33,7 +33,7 @@ class LineTest extends TestCase
                      ->with($documentStub)
                      ->will($this->returnValue(array($taskStub)));
                      
-            $line->addLine($linePart);
+            $line->addPart($linePart);
         }
         
         $actualTasks = $line->getDrawingTasks($documentStub);
