@@ -20,7 +20,7 @@ use PHPPdf\Document,
 /**
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
-class Line implements Drawable
+class Line
 {
     private $parts = array();
     private $yTranslation;
@@ -53,28 +53,19 @@ class Line implements Drawable
         $this->yTranslation = $translation;
     }
     
+    public function setXTranslation($translation)
+    {
+        $this->xTranslation = $translation;
+    }
+    
     public function getParts()
     {
         return $this->parts;
     }
     
-    public function getDrawingTasks(Document $document)
+    public function applyHorizontalTranslation()
     {
-        $tasks = array();
-        
-        $horizontalTranslation = $this->getHorizontalTranslation();
-        $this->xTranslation = $horizontalTranslation;
-        
-        foreach($this->parts as $part)
-        {
-            $partTasks = $part->getDrawingTasks($document);
-            foreach($partTasks as $task)
-            {
-                $tasks[] = $task;
-            }
-        }
-        
-        return $tasks;
+         $this->setXTranslation($this->getHorizontalTranslation());
     }
     
     private function getHorizontalTranslation()

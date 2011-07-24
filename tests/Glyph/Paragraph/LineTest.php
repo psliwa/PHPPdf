@@ -7,48 +7,12 @@ use PHPPdf\Util\Point,
     PHPPdf\Glyph\Paragraph\Line;
 
 class LineTest extends TestCase
-{
-    /**
-     * @test
-     */
-    public function getDrawingTasksFromLineParts()
-    {
-        $paragraph = new Paragraph();
-        $paragraph->setAttribute('text-align', Glyph::ALIGN_LEFT);
-        $line = new Line($paragraph, 0, 0);
-        
-        $documentStub = new Document();
-        
-        $expectedTasks = array();
-        
-        for($i=0; $i<3; $i++)
-        {
-            $linePart = $this->getMockBuilder('PHPPdf\Glyph\Paragraph\LinePart')
-                             ->setMethods(array('getDrawingTasks'))
-                             ->disableOriginalConstructor()
-                             ->getMock();
-            
-            $taskStub = 'task '.$i;
-            $expectedTasks[] = $taskStub;
-                             
-            $linePart->expects($this->once())
-                     ->method('getDrawingTasks')
-                     ->with($documentStub)
-                     ->will($this->returnValue(array($taskStub)));
-                     
-            $line->addPart($linePart);
-        }
-        
-        $actualTasks = $line->getDrawingTasks($documentStub);
-        
-        $this->assertEquals($expectedTasks, $actualTasks);
-    }
-    
+{    
     /**
      * @test
      * @dataProvider textAlignProvider
      */
-    public function applyAlignOnLinePartsWhileDrawing($paragraphFirstPoint, $width, $align, $widthOfParts, $expectedTranslation)
+    public function applyAlignOnLineParts($paragraphFirstPoint, $width, $align, $widthOfParts, $expectedTranslation)
     {        
         $paragraph = $this->createParagraph($paragraphFirstPoint, $width, 0, 0, $align);
         
@@ -58,13 +22,10 @@ class LineTest extends TestCase
         foreach($widthOfParts as $widthOfPart)
         {
             $linePart = $this->getMockBuilder('PHPPdf\Glyph\Paragraph\LinePart')
-                             ->setMethods(array('getDrawingTasks', 'getWidth'))
+                             ->setMethods(array('getWidth'))
                              ->disableOriginalConstructor()
                              ->getMock();
-                             
-            $linePart->expects($this->once())
-                     ->method('getDrawingTasks')
-                     ->will($this->returnValue(array()));
+
             $linePart->expects($this->any())
                      ->method('getWidth')
                      ->will($this->returnValue($widthOfPart));
@@ -72,7 +33,7 @@ class LineTest extends TestCase
             $line->addPart($linePart);
         }
         
-        $line->getDrawingTasks(new Document());
+        $line->applyHorizontalTranslation();
         
         $expectedXCoord = $paragraphFirstPoint->getX() + $expectedTranslation;
         $actualXCoord = $line->getFirstPoint()->getX();

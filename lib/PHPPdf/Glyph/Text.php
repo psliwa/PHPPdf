@@ -30,7 +30,7 @@ class Text extends Glyph
     private $wordsSizes = array();
     private $pointsOfWordsLines = array();
     
-    private $lineParts = array();
+    protected $lineParts = array();
 
     public function __construct($text = '', array $attributes = array())
     {
@@ -122,51 +122,19 @@ class Text extends Glyph
         {
             return;
         }
-        
-        $drawingTask = new DrawingTask(function(Text $glyph)
+
+        foreach($this->lineParts as $part)
         {
-            $graphicsContext = $glyph->getGraphicsContext();
-
-            $graphicsContext->saveGS();
-
-            $font = $glyph->getFont();
-            $fontSize = $glyph->getRecurseAttribute('font-size');
-            $lineHeight = $glyph->getAttribute('line-height');
-            $color = $glyph->getRecurseAttribute('color');
-
-            $graphicsContext->setFont($font, $fontSize);
-
-            if($color)
+            foreach($part->getDrawingTasks($document) as $task)
             {
-                $graphicsContext->setFillColor($color);
+                $this->addDrawingTask($task);
             }
-
-            list($x, $y) = $glyph->getStartDrawingPoint();
-            $x -= $glyph->getPaddingLeft();
-            $rowHeight = $y - $fontSize;
-            list($parentX, $parentY) = $glyph->getParent()->getStartDrawingPoint();
-            $lineSizes = $glyph->getLineSizes();
-
-            $textAlign = $glyph->getRecurseAttribute('text-align');
-            $points = $glyph->getPointsOfWordsLines();
-            foreach($glyph->getWordsInRows() as $rowNumber => $words)
-            {
-//                $start = $glyph->getStartLineDrawingXDimension($textAlign, $lineSizes[$rowNumber]);
-                $start = $points[$rowNumber]->getX();
-                $graphicsContext->drawText(implode('', $words), $start, $rowHeight, $glyph->getPage()->getAttribute('encoding'));
-                $rowHeight -=$lineHeight;
-                $x = $parentX + $glyph->getMarginLeft();
-            }
-
-            $graphicsContext->restoreGS();
-        }, array($this));
-
-        $this->addDrawingTask($drawingTask);
+        }
     }
     
     private function isEmptyText()
     {
-        return !$this->getWordsInRows();
+        return !$this->text;
     }
 
     public function getStartLineDrawingXDimension($align, $lineWidth)
@@ -304,5 +272,36 @@ class Text extends Glyph
     public function getLineParts()
     {
         return $this->lineParts;
+    }
+    
+    protected function setDataFromUnserialize(array $data)
+    {
+        parent::setDataFromUnserialize($data);
+        
+        $this->text = $data['text'];
+    }
+    
+    protected function getDataForSerialize()
+    {
+        $data = parent::getDataForSerialize();
+        
+        $data['text'] = $this->text;
+        
+        return $data;
+    }
+    
+    public function copy()
+    {
+        $copy = parent::copy();
+        
+        foreach($this->lineParts as $i => $part)
+        {
+            $copyPart = clone $part;
+            
+            $copy->lineParts[$i] = $copyPart;
+            $copyPart->setText($copy);
+        }
+        
+        return $copy;
     }
 }

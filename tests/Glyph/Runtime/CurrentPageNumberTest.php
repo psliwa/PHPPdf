@@ -1,5 +1,6 @@
 <?php
 
+use PHPPdf\Util\DrawingTask;
 use PHPPdf\Glyph\Runtime\CurrentPageNumber,
     PHPPdf\Document,
     PHPPdf\Glyph\DynamicPage,
@@ -79,12 +80,26 @@ class CurrentPageNumberTest extends PHPUnit_Framework_TestCase
                     ->will($this->returnValue(5));
 
         $this->glyph->setParent($pageMock);
+        $linePart = $this->getMockBuilder('PHPPdf\Glyph\Paragraph\LinePart')
+                         ->setMethods(array('setWords', 'getDrawingTasks'))
+                         ->disableOriginalConstructor()
+                         ->getMock();
+                         
+        $linePart->expects($this->at(0))
+                 ->method('setWords')
+                 ->with($pageNumber);
+                         
+        $drawingTaskStub = new DrawingTask(function(){});
+        $linePart->expects($this->at(1))
+                 ->method('getDrawingTasks')
+                 ->will($this->returnValue(array($drawingTaskStub)));
+                 
+        $this->glyph->addLinePart($linePart);
 
         $this->glyph->evaluate();
         $tasks = $this->glyph->getDrawingTasks(new Document());
-        $this->assertEquals(1, count($tasks));
+        $this->assertEquals(array($drawingTaskStub), $tasks);
         $this->assertEquals($pageNumber, $this->glyph->getText());
-        $this->assertEquals(array(array($pageNumber)), $this->glyph->getWordsInRows());
     }
 
     /**

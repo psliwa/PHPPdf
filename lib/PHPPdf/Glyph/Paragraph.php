@@ -89,11 +89,16 @@ class Paragraph extends Container
     
     public function getDrawingTasks(Document $document)
     {
-        $tasks = array();
-        
         foreach($this->lines as $line)
         {
-            $lineTasks = $line->getDrawingTasks($document);
+            $line->applyHorizontalTranslation();
+        }
+        
+        $tasks = array();
+        
+        foreach($this->getChildren() as $text)
+        {
+            $lineTasks = $text->getDrawingTasks($document);
             foreach($lineTasks as $task)
             {
                 $tasks[] = $task;

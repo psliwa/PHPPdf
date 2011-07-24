@@ -98,6 +98,11 @@ abstract class PageText extends Text implements Runtime
         $this->setWordsInRows(array(
             0 => array($text),
         ));
+        
+        foreach($this->lineParts as $part)
+        {
+            $part->setWords($text);
+        }
 
         $this->evaluated = true;
     }

@@ -34,7 +34,7 @@ class LinePart implements Drawable
         $this->xTranslation = $xTranslation;
     }
     
-    private function setWords($words)
+    public function setWords($words)
     {
         if(is_array($words))
         {
@@ -83,6 +83,11 @@ class LinePart implements Drawable
     public function getText()
     {
         return $this->text;
+    }
+    
+    public function setText(Text $text)
+    {
+        $this->text = $text;
     }
     
     public function getWidth()

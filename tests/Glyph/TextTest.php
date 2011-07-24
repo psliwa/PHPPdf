@@ -1,5 +1,6 @@
 <?php
 
+use PHPPdf\Util\DrawingTask;
 use PHPPdf\Glyph\Paragraph\LinePart;
 use PHPPdf\Util\Point;
 use PHPPdf\Document;
@@ -209,5 +210,37 @@ class TextTest extends PHPUnit_Framework_TestCase
         
         list($point) = $this->text->getPointsOfWordsLines();
         $this->assertEquals(array($x+$transX, $y - $transY), $point->toArray());
+    }
+    
+    /**
+     * @test
+     */
+    public function getDrawingTasksFromLineParts()
+    {       
+        $documentStub = new Document();
+        
+        $expectedTasks = array();
+        
+        for($i=0; $i<3; $i++)
+        {
+            $linePart = $this->getMockBuilder('PHPPdf\Glyph\Paragraph\LinePart')
+                             ->setMethods(array('getDrawingTasks'))
+                             ->disableOriginalConstructor()
+                             ->getMock();
+            
+            $taskStub = new DrawingTask(function(){});
+            $expectedTasks[] = $taskStub;
+                             
+            $linePart->expects($this->once())
+                     ->method('getDrawingTasks')
+                     ->with($documentStub)
+                     ->will($this->returnValue(array($taskStub)));
+                     
+            $this->text->addLinePart($linePart);
+        }
+        
+        $actualTasks = $this->text->getDrawingTasks($documentStub);
+        
+        $this->assertEquals($expectedTasks, $actualTasks);
     }
 }

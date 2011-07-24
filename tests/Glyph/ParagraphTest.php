@@ -54,7 +54,7 @@ class ParagraphTest extends TestCase
     /**
      * @test
      */
-    public function getDrawingTasksFromLineObjects()
+    public function translateLinesWhileGettingTasks()
     {
         $documentStub = new Document();
         
@@ -63,6 +63,31 @@ class ParagraphTest extends TestCase
         for($i=0; $i<3; $i++)
         {
             $line = $this->getMockBuilder('PHPPdf\Glyph\Paragraph\Line')
+                         ->setMethods(array('applyHorizontalTranslation'))
+                         ->disableOriginalConstructor()
+                         ->getMock();
+                             
+            $line->expects($this->once())
+                 ->method('applyHorizontalTranslation');
+                     
+            $this->paragraph->addLine($line);
+        }
+        
+        $this->paragraph->getDrawingTasks($documentStub);
+    }
+    
+    /**
+     * @test
+     */
+    public function getDrawingTasksFromTextObjects()
+    {
+        $documentStub = new Document();
+        
+        $expectedTasks = array();
+        
+        for($i=0; $i<3; $i++)
+        {
+            $text = $this->getMockBuilder('PHPPdf\Glyph\Text')
                          ->setMethods(array('getDrawingTasks'))
                          ->disableOriginalConstructor()
                          ->getMock();
@@ -70,12 +95,12 @@ class ParagraphTest extends TestCase
             $taskStub = 'task '.$i;
             $expectedTasks[] = $taskStub;
                              
-            $line->expects($this->once())
+            $text->expects($this->once())
                  ->method('getDrawingTasks')
                  ->with($documentStub)
                  ->will($this->returnValue(array($taskStub)));
                      
-            $this->paragraph->addLine($line);
+            $this->paragraph->add($text);
         }
         
         $actualTasks = $this->paragraph->getDrawingTasks($documentStub);
