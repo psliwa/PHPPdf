@@ -95,9 +95,6 @@ abstract class PageText extends Text implements Runtime
         $text = $this->getTextAfterEvaluating();
 
         $this->setText($text);
-        $this->setWordsInRows(array(
-            0 => array($text),
-        ));
         
         foreach($this->lineParts as $part)
         {

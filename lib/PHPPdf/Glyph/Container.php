@@ -135,7 +135,6 @@ class Container extends Glyph
         $childrenToSplit = array();
         $childrenToMove = array();
 
-        list(,$splitLine) = $this->getStartDrawingPoint();
         $splitLine = $this->getFirstPoint()->getY() - $height;
 
         foreach($this->getChildren() as $child)

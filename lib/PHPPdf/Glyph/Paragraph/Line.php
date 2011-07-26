@@ -53,6 +53,11 @@ class Line
         $this->yTranslation = $translation;
     }
     
+    public function getYTranslation()
+    {
+        return $this->yTranslation;
+    }
+    
     public function setXTranslation($translation)
     {
         $this->xTranslation = $translation;
@@ -61,6 +66,11 @@ class Line
     public function getParts()
     {
         return $this->parts;
+    }
+    
+    public function setParagraph($paragraph)
+    {
+        $this->paragraph = $paragraph;
     }
     
     public function applyHorizontalTranslation()

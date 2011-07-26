@@ -39,9 +39,6 @@ class TextTest extends PHPUnit_Framework_TestCase
         $glyph = new Text($text);
         $glyph->setWidth(3);
         $glyph->setHeight(96);
-        $lineHeight = 12;
-        $glyph->setAttribute('line-height', $lineHeight);
-        $glyph->setWordsInRows(\explode(' ', $text));
 
         $glyph->getBoundary()->setNext(0, 200)
                              ->setNext(3, 200)
@@ -49,21 +46,14 @@ class TextTest extends PHPUnit_Framework_TestCase
                              ->setNext(0, 104)
                              ->close();
 
-        $lineSizes = array_combine(range(0, count($words) - 1), array_fill(0, count($words), 3));
-        $glyph->setLineSizes($lineSizes);
-
         $lineSplit = 30;
         $result = $glyph->split($lineSplit);
 
-        $this->assertEquals(24, $glyph->getHeight());
-        list(,$y) = $glyph->getEndDrawingPoint();
-        $this->assertEquals(176, $y);
-        $this->assertEquals(2, count($glyph->getLineSizes()));
+        $this->assertEquals(30, $glyph->getHeight());
+        $this->assertEquals(170, $glyph->getDiagonalPoint()->getY());
 
-        $this->assertEquals(72, $result->getHeight());
-        list(,$y) = $result->getStartDrawingPoint();
-        $this->assertEquals(176 - $lineSplit % $lineHeight, $y);
-        $this->assertEquals(6, count($result->getLineSizes()));
+        $this->assertEquals(66, $result->getHeight());
+        $this->assertEquals(170, $result->getFirstPoint()->getY());
     }
 
     /**
@@ -79,33 +69,6 @@ class TextTest extends PHPUnit_Framework_TestCase
         $this->text->add($text);
 
         $this->assertEquals($oldText.$anotherText, $this->text->getText());
-    }
-
-//    /**
-//     * @test
-//     * @dataProvider alignDataProvider
-//     */
-//    public function textAlign($align, $lineWidth, $excepted, $paddingLeft, $paddingRight)
-//    {       
-//        $this->page->setAttribute('text-align', $align);
-//        $this->page->setAttribute('padding-left', $paddingLeft);
-//        $this->page->setAttribute('padding-right', $paddingRight);
-//        $this->page->add($this->text);
-//
-//        $position = $this->text->getStartLineDrawingXDimension($align, $lineWidth);
-//
-//        $this->assertEquals($excepted, $position);
-//    }
-
-    public function alignDataProvider()
-    {
-        return array(
-            array('right', 100, self::PAGE_WIDTH - 120, 10, 10),
-            array('right', 100, self::PAGE_WIDTH - 100, 0, 0),
-            array('left', 100, 0, 0, 0),
-            array('center', 100, self::PAGE_WIDTH / 2 - 20/2 - 100/2, 10, 10),
-            array('center', 200, self::PAGE_WIDTH / 2 - 20/2 - 200/2, 20, 0),
-        );
     }
 
     /**

@@ -22,8 +22,6 @@ use PHPPdf\Glyph\Glyph,
 class Text extends Glyph
 {   
     private $text;
-    private $wordsInRows = array();
-    private $lineSizes = array();
     private $textTransformator = null;
     
     private $words = array();
@@ -65,26 +63,6 @@ class Text extends Glyph
     public function getText()
     {
         return $this->text;
-    }
-
-    public function setLineSizes(array $lineSizes)
-    {
-        $this->lineSizes = $lineSizes;
-    }
-
-    public function getLineSizes()
-    {
-        return $this->lineSizes;
-    }
-
-    public function getWordsInRows()
-    {
-        return $this->wordsInRows;
-    }
-
-    public function setWordsInRows(array $wordsInRows)
-    {
-        $this->wordsInRows = $wordsInRows;
     }
     
     public function addLineOfWords(array $words, $widthOfLine, Point $point)
@@ -156,24 +134,9 @@ class Text extends Glyph
 
     protected function doSplit($height)
     {
-        $lineHeight = $this->getAttribute('line-height');
-        $lineSplit = (int) ($height / $lineHeight);
-
         $clone = null;
-        if($lineSplit > 0)
+        if($height > 0)
         {
-            $lineSizes = $this->getLineSizes();
-            $wordsInRows = $this->wordsInRows;
-
-            $wordsInRowsForClone = \array_splice($wordsInRows, $lineSplit);
-            $lineSizesForClone = \array_splice($lineSizes, $lineSplit);
-
-            $lineSizes = \array_splice($lineSizes, 0, $lineSplit);
-            $wordsInRows = \array_splice($wordsInRows, 0, $lineSplit);
-
-            $this->setLineSizes($lineSizes);
-            $this->setWordsInRows($wordsInRows);
-
             $clone = $this->copy();
 
             $this->setAttribute('padding-bottom', 0);
@@ -182,13 +145,13 @@ class Text extends Glyph
             $clone->setAttribute('padding-top', 0);
             $clone->setAttribute('margin-top', 0);
 
-            $clone->setLineSizes(\array_values($lineSizesForClone));
-            $clone->setWordsInRows(\array_values($wordsInRowsForClone));
-
             $startDrawingPoint = $this->getFirstPoint();
+            $oldHeight = $this->getHeight();
+            $this->setHeight($height);
             $this->reorganize($startDrawingPoint);
             $endDrawingPoint = $this->getDiagonalPoint();
-            $clone->reorganize($endDrawingPoint->translate(-$this->getWidth(), $height - count($wordsInRows)*$lineHeight));
+            $clone->setHeight($oldHeight - $height);
+            $clone->reorganize($endDrawingPoint->translate(-$this->getWidth(), 0));
         }
 
         return $clone;
@@ -196,25 +159,12 @@ class Text extends Glyph
 
     public function reorganize(Point $leftTopCornerPoint)
     {
-        $height = $this->getAttribute('line-height') * count($this->getLineSizes()) + $this->getAttribute('padding-top') + $this->getAttribute('padding-bottom');
-        if($this->getDisplay() === self::DISPLAY_INLINE)
-        {
-            $width = \max($this->getLineSizes()) + $this->getAttribute('padding-left') + $this->getAttribute('padding-right');
-        }
-        else
-        {
-            $width = $this->getWidth();
-        }
-
-        $this->setWidth($width);
-        $this->setHeight($height);
-
         $boundary = $this->getBoundary();
         $boundary->reset();
         $boundary->setNext($leftTopCornerPoint)
-                 ->setNext($leftTopCornerPoint->translate($width, 0))
-                 ->setNext($leftTopCornerPoint->translate($width, $height))
-                 ->setNext($leftTopCornerPoint->translate(0, $height))
+                 ->setNext($leftTopCornerPoint->translate($this->getWidth(), 0))
+                 ->setNext($leftTopCornerPoint->translate($this->getWidth(), $this->getHeight()))
+                 ->setNext($leftTopCornerPoint->translate(0, $this->getHeight()))
                  ->close();
     }
 
@@ -293,14 +243,7 @@ class Text extends Glyph
     public function copy()
     {
         $copy = parent::copy();
-        
-        foreach($this->lineParts as $i => $part)
-        {
-            $copyPart = clone $part;
-            
-            $copy->lineParts[$i] = $copyPart;
-            $copyPart->setText($copy);
-        }
+        $copy->lineParts = array();
         
         return $copy;
     }

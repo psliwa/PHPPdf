@@ -1,5 +1,11 @@
 <?php
 
+/*
+ * Copyright 2011 Piotr Śliwa <peter.pl7@gmail.com>
+ *
+ * License information is in LICENSE file
+ */
+
 namespace PHPPdf\Formatter;
 
 use PHPPdf\Glyph\Paragraph\Line;
@@ -9,6 +15,11 @@ use PHPPdf\Document;
 use PHPPdf\Glyph\Text;
 use PHPPdf\Util\Point;
 
+/**
+ * TODO: refactoring
+ * 
+ * @author Piotr Śliwa <peter.pl7@gmail.com>
+ */
 class ParagraphFormatter extends BaseFormatter
 {
     public function format(Glyph $glyph, Document $document)
@@ -170,5 +181,7 @@ class ParagraphFormatter extends BaseFormatter
         $boundary->setNext($startX, $currentY);
 
         $boundary->close();
+        
+        $text->setHeight($text->getFirstPoint()->getY() - $text->getDiagonalPoint()->getY());
     }
 }

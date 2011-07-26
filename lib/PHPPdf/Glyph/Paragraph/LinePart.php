@@ -88,6 +88,7 @@ class LinePart implements Drawable
     public function setText(Text $text)
     {
         $this->text = $text;
+        $text->addLinePart($this);
     }
     
     public function getWidth()
