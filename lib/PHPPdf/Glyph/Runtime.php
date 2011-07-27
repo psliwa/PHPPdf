@@ -15,4 +15,5 @@ interface Runtime
 {
     public function evaluate();
     public function setPage(Page $page);
+    public function copyAsRuntime();
 }

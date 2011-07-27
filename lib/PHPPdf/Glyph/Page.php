@@ -217,7 +217,7 @@ class Page extends Container
 
         foreach($this->runtimeGlyphs as $index => $glyph)
         {
-            $clonedGlyph = $glyph->copy();
+            $clonedGlyph = $glyph->copyAsRuntime();
             $clonedGlyph->setPage($copy);
             $copy->runtimeGlyphs[$index] = $clonedGlyph;
         }

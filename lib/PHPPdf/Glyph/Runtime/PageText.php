@@ -106,12 +106,21 @@ abstract class PageText extends Text implements Runtime
 
     abstract protected function getTextAfterEvaluating();
 
-    public function copy()
+    public function copyAsRuntime()
     {
         $boundary = $this->getBoundary();
         $parent = $this->getParent();
-        $copy = parent::copy();
+        $lineParts = $this->lineParts;
+        
+        $copy = $this->copy();
 
+        foreach($lineParts as $part)
+        {
+            $copyPart = clone $part;
+            $copyPart->setText($copy);
+            $copy->lineParts[] = $copyPart;
+        }
+        
         $copy->setBoundary(clone $boundary);
         if($parent)
         {
@@ -120,7 +129,7 @@ abstract class PageText extends Text implements Runtime
 
         return $copy;
     }
-
+    
     public function mergeEnhancementAttributes($name, array $parameters = array())
     {
     }
