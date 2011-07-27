@@ -243,8 +243,14 @@ class Text extends Glyph
     public function copy()
     {
         $copy = parent::copy();
-        $copy->lineParts = array();
-        
+
+        foreach($copy->lineParts as $i => $part)
+        {
+            $copyPart = clone $part;
+            $copyPart->setText($copy);
+            $copy->lineParts[$i] = $copyPart;
+        }
+
         return $copy;
     }
 }
