@@ -30,7 +30,6 @@ abstract class XmlParser implements Parser
         $stopParsing = false;
         do
         {
-           
             switch($reader->nodeType)
             {
                 case \XMLReader::ELEMENT:
@@ -45,6 +44,9 @@ abstract class XmlParser implements Parser
 
                     break;
                 case \XMLReader::TEXT:
+                case \XMLReader::SIGNIFICANT_WHITESPACE:
+                case \XMLReader::WHITESPACE:                    
+                case \XMLReader::CDATA:
                 case \XMLReader::ENTITY:
                 case \XMLReader::ENTITY_REF:
                     $this->parseText($reader);
@@ -78,11 +80,7 @@ abstract class XmlParser implements Parser
         }
         else
         {
-            $reader = new \XMLReader();
-            
-
-            $reader->XML($content, null, LIBXML_NOBLANKS | LIBXML_DTDLOAD);
-            $reader->setParserProperty(\XMLReader::SUBST_ENTITIES, true);
+            $reader = $this->createReader($content);
  
             $nodeType = $reader->nodeType;
             while($reader->nodeType !== \XMLReader::ELEMENT)
@@ -97,6 +95,16 @@ abstract class XmlParser implements Parser
             $this->seekReaderToNextTag($reader);
         }
 
+        return $reader;
+    }
+    
+    protected function createReader($content)
+    {
+        $reader = new \XMLReader();
+        
+        $reader->XML($content, null, LIBXML_NOBLANKS | LIBXML_DTDLOAD);
+        $reader->setParserProperty(\XMLReader::SUBST_ENTITIES, true);
+        
         return $reader;
     }
 

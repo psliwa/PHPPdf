@@ -41,13 +41,14 @@ class TextDimensionFormatter extends BaseFormatter
     {
         $words = preg_split('/\s+/', $glyph->getText());
         
-        array_walk($words, function(&$value){
-            $value .= ' ';
-        });
-        
         $lastIndex = count($words) - 1;
-        $words[$lastIndex] = rtrim($words[$lastIndex]);
-        
+        array_walk($words, function(&$value, $index) use($lastIndex){
+            if($index != $lastIndex)
+            {
+                $value .= ' ';
+            }
+        });
+
         $wordsSizes = array();
         
         $font = $glyph->getFont();

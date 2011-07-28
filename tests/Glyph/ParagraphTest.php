@@ -57,6 +57,23 @@ class ParagraphTest extends TestCase
     /**
      * @test
      */
+    public function dontTrimAllWhiteSpacesFromTheMiddleText()
+    {
+        $firstText = new Text('abc');
+        $emptyText = new Text('    ');
+        $lastText = new Text('abc');
+        
+        foreach(array($firstText, $emptyText, $lastText) as $text)
+        {
+            $this->paragraph->add($text);
+        }
+        
+        $this->assertEquals(' ', $emptyText->getText());
+    }
+    
+    /**
+     * @test
+     */
     public function translateLinesWhileGettingTasks()
     {
         $documentStub = new Document();

@@ -122,7 +122,7 @@ class CurrentPageNumberTest extends PHPUnit_Framework_TestCase
         $page = new Page();
 
         $this->glyph->setParent($page);
-        $copy = $this->glyph->copy();
+        $copy = $this->glyph->copyAsRuntime();
 
         $this->assertTrue($copy->getParent() === $page);
     }

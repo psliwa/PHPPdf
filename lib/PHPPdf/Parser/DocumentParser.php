@@ -43,6 +43,8 @@ class DocumentParser extends XmlParser
     private $inPlaceholder = false;
     private $endTag = self::ROOT_TAG;
     
+    private $isPreviousText = false;
+    
     private $currentParagraph = null;
 
     public function __construct()
@@ -62,6 +64,18 @@ class DocumentParser extends XmlParser
     {
         $stylesheetConstraint = new StylesheetConstraint();
         $this->setStylesheetConstraint($stylesheetConstraint);
+        $this->isPreviousText = false;
+        $this->currentParagraph = null;
+    }
+    
+    protected function createReader($content)
+    {
+        $reader = new \XMLReader();
+
+        $reader->XML($content, null, LIBXML_DTDLOAD);
+        $reader->setParserProperty(\XMLReader::SUBST_ENTITIES, true);
+        
+        return $reader;
     }
 
     private function setEndTag($tag)
@@ -246,6 +260,11 @@ class DocumentParser extends XmlParser
         if($this->isntTextGlyph($glyph))
         {
             $this->currentParagraph = null;
+            $this->isPreviousText = false;
+        }
+        else
+        {
+            $this->isPreviousText = true;
         }
 
         $class = $reader->getAttribute('class');
@@ -378,10 +397,17 @@ class DocumentParser extends XmlParser
 
     protected function parseText(\XMLReader $reader)
     {
-        $text = trim($reader->value);
+        $text = $reader->value;
+        
+        $text = str_replace(array("\n", "\r", "\t"), '', $text);
+        if(!$this->isPreviousText)
+        {
+            $text = trim($text);
+        }
 
         if($text)
-        {       
+        {
+            $this->isPreviousText = true;
             $parentGlyph = $this->getLastElementFromStack();
 
             if($this->isntTextGlyph($parentGlyph))
@@ -390,7 +416,7 @@ class DocumentParser extends XmlParser
             }
 
             $textGlyph = $this->getGlyphFactory()->create('text');
-            $textGlyph->setText($reader->value);
+            $textGlyph->setText($text);
             
             $parentGlyph->add($textGlyph);
         }

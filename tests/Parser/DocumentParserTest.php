@@ -758,26 +758,56 @@ XML;
         $this->assertTrue($tag2GlyphMock === $children[1]);
     }
     
-//    /**
-//     * @test
-//     */
-//    public function wrapTextIntoParagraphObject()
-//    {
-//        $xml = <<<XML
-//<pdf>
-//	Some text
-//</pdf>
-//XML;
-//        $textGlyph = $this->getMock('PHPPdf\Glyph\Text', array('setPriorityFromParent'));
-//        $paragraphGlyph = $this->getMock('PHPPdf\Glyph\Paragraph', array('setPriorityFromParent'));
-//        
-//        $glyphFactoryMock = $this->getGlyphFactoryMock(array('paragraph' => $paragraphGlyph, 'text' => $textGlyph));
-//        
-//        $this->parser->setGlyphFactory($glyphFactoryMock);
-//        
-//        $pages = $this->parser->parse($xml);
-//        
-//        $children = $pages->getChildren();
-//        $this->assertEquals(1, count($children));
-//    }
+    /**
+     * @test
+     */
+    public function wrapTextIntoParagraphObject()
+    {
+        $xml = <<<XML
+<pdf>
+	Some text
+</pdf>
+XML;
+        $textGlyph = $this->getMock('PHPPdf\Glyph\Text', array('setPriorityFromParent'));
+        $paragraphGlyph = $this->getMock('PHPPdf\Glyph\Paragraph', array('setPriorityFromParent'));
+        
+        $glyphFactoryMock = $this->getGlyphFactoryMock(array(array('paragraph', $paragraphGlyph), array('text', $textGlyph)));
+        
+        $this->parser->setGlyphFactory($glyphFactoryMock);
+        
+        $pages = $this->parser->parse($xml);
+        
+        $children = $pages->getChildren();
+        $this->assertEquals(1, count($children));
+    }
+    
+    /**
+     * @test
+     */
+    public function parseSignificantWhitespaces()
+    {
+        $xml = <<<XML
+<pdf>
+<tag1></tag1> <tag2></tag2>
+</pdf>
+XML;
+
+        $textGlyphTag1 = $this->getMock('PHPPdf\Glyph\Text', array('setPriorityFromParent'));
+        $textGlyphSpace = $this->getMock('PHPPdf\Glyph\Text', array('setPriorityFromParent', 'setText', 'getText'));
+        $paragraphGlyph = $this->getMock('PHPPdf\Glyph\Paragraph', array('setPriorityFromParent'));
+        $textGlyphTag2 = $this->getMock('PHPPdf\Glyph\Text', array('setPriorityFromParent'));
+        
+        $textGlyphSpace->expects($this->atLeastOnce())
+                       ->method('setText')
+                       ->with(' ');
+        $textGlyphSpace->expects($this->atLeastOnce())
+                       ->method('getText')
+                       ->will($this->returnValue(' '));
+        
+        $glyphFactoryMock = $this->getGlyphFactoryMock(array(array('tag1', $textGlyphTag1), array('paragraph', $paragraphGlyph), array('text', $textGlyphSpace), array('tag2', $textGlyphTag2)));
+        
+        $this->parser->setGlyphFactory($glyphFactoryMock);
+        
+        $pages = $this->parser->parse($xml);
+    }
 }
