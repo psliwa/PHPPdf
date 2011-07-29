@@ -319,14 +319,13 @@ Known limitations
 Below is list of known limitations of library current version:
 
 * there no way to inject image into text with floating - will be introduced in next releases
-* malfunction of aligning text with neasted tags to center and to right (for instance "Some text <span>some another text</span>") - will be fixed in next releases
 * lack of justification - will be introduced in next releases
 * border doesn't change dimensions of the element (in HTML do)
 
 TODO - plans.
 -------------------
 
-* rewrite and improve text rendering
+* rewrite and improve text rendering - done
 * annotations
 * document metadata
 * bookmarks
