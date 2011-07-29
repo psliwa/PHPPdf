@@ -82,6 +82,58 @@ class ParagraphFormatterTest extends TestCase
                     ),
                 ),
             ),
+            array(
+                0,
+                25,
+                200,
+                array(15, 12),
+                array(
+                    array(
+                        array('word'),
+                        array(10),
+                    ),
+                    array(
+                        array('some'),
+                        array(10),
+                    )
+                ),
+                array(
+                    array(
+                        array(0, 200),
+                        array(10, 200 - $lineHeightFor15),
+                    ),
+                    array(
+                        array(10, 200 - ($lineHeightFor15 - $lineHeightFor12)),
+                        array(20, 200 - ($lineHeightFor15 - $lineHeightFor12) - $lineHeightFor12),
+                    ),
+                ),
+            ),
+            array(
+                0,
+                25,
+                200,
+                array(12, 15),
+                array(
+                    array(
+                        array('word'),
+                        array(10),
+                    ),
+                    array(
+                        array('some'),
+                        array(10),
+                    )
+                ),
+                array(
+                    array(
+                        array(0, 200 - ($lineHeightFor15 - $lineHeightFor12)),
+                        array(10, 200 - ($lineHeightFor15 - $lineHeightFor12) - $lineHeightFor12),
+                    ),
+                    array(
+                        array(10, 200),
+                        array(20, 200 - $lineHeightFor15),
+                    ),
+                ),
+            ),
         );
     }
     

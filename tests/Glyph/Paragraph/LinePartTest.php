@@ -22,8 +22,11 @@ class LinePartTest extends TestCase
         $documentStub = new Document();
         $xTranslationInLine = 5;
         
+        $lineHeightOfText = 15;
+        $heightOfLine = 18;        
+        
         $text = $this->getMockBuilder('PHPPdf\Glyph\Text')
-                     ->setMethods(array('getFont', 'getAttribute', 'getGraphicsContext', 'getEncoding', 'getFontSize'))
+                     ->setMethods(array('getFont', 'getAttribute', 'getRecurseAttribute', 'getGraphicsContext', 'getEncoding', 'getFontSize'))
                      ->getMock();                     
                          
         $text->expects($this->atLeastOnce())
@@ -33,12 +36,16 @@ class LinePartTest extends TestCase
         $text->expects($this->atLeastOnce())
              ->method('getFontSize')
              ->will($this->returnValue($fontSize));
-        
+             
+        $text->expects($this->atLeastOnce())
+             ->method('getRecurseAttribute')
+             ->with('color')
+             ->will($this->returnValue($colorStub));
              
         $text->expects($this->atLeastOnce())
              ->method('getAttribute')
-             ->with('color')
-             ->will($this->returnValue($colorStub));
+             ->with('line-height')
+             ->will($this->returnValue($lineHeightOfText));
              
         $text->expects($this->atLeastOnce())
              ->method('getEncoding')
@@ -51,7 +58,7 @@ class LinePartTest extends TestCase
                    
         $gc->expects($this->once())
            ->method('drawText')
-           ->with($words, $startPoint->getX() + $xTranslationInLine, $startPoint->getY() - $fontSize, $encodingStub);
+           ->with($words, $startPoint->getX() + $xTranslationInLine, $startPoint->getY() - $fontSize - ($heightOfLine - $lineHeightOfText), $encodingStub);
            
         $gc->expects($this->once())
            ->method('setFont')
@@ -71,12 +78,16 @@ class LinePartTest extends TestCase
              ->will($this->returnValue($gc));
              
         $line = $this->getMockBuilder('PHPPdf\Glyph\Paragraph\Line')
-                     ->setMethods(array('getFirstPoint'))
+                     ->setMethods(array('getFirstPoint', 'getHeight'))
                      ->disableOriginalConstructor()
                      ->getMock();
         $line->expects($this->atLeastOnce())
              ->method('getFirstPoint')
              ->will($this->returnValue($startPoint));
+             
+        $line->expects($this->atLeastOnce())
+             ->method('getHeight')
+             ->will($this->returnValue($heightOfLine));
         
         $linePartWidth = 100;
         $linePart = new LinePart($words, $linePartWidth, $xTranslationInLine, $text);

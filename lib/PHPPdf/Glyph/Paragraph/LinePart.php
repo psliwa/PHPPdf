@@ -23,6 +23,7 @@ class LinePart implements Drawable
     private $words;
     private $line;
     private $xTranslation;
+    private $yTranslation;
     private $width;
     
     public function __construct($words, $width, $xTranslation, Text $text)
@@ -51,7 +52,7 @@ class LinePart implements Drawable
     
     public function getDrawingTasks(Document $document)
     {
-        return array(new DrawingTask(function(Text $text, $xTranslation, $point, $words) {
+        return array(new DrawingTask(function(Text $text, $point, $words) {
             $gc = $text->getGraphicsContext();
             $gc->saveGS();
             $fontSize = $text->getFontSize();
@@ -64,15 +65,16 @@ class LinePart implements Drawable
                 $gc->setFillColor($color);
             }
             
-            $gc->drawText($words, $point->getX() + $xTranslation, $point->getY() - $fontSize, $text->getEncoding());
+            $gc->drawText($words, $point->getX(), $point->getY() - $fontSize, $text->getEncoding());
             
-            $gc->restoreGS();          
-        }, array($this->text, $this->xTranslation, $this->line->getFirstPoint(), $this->words)));
+            $gc->restoreGS();
+        }, array($this->text, $this->getFirstPoint(), $this->words)));
     }
     
     public function getFirstPoint()
     {
-        return $this->line->getFirstPoint()->translate($this->xTranslation, 0);
+        $yTranslation = $this->line->getHeight() - $this->text->getAttribute('line-height');
+        return $this->line->getFirstPoint()->translate($this->xTranslation, $yTranslation);
     }
     
     public function getHeight()
@@ -104,5 +106,10 @@ class LinePart implements Drawable
     public function horizontalTranslate($translate)
     {
         $this->xTranslation += $translate;
+    }
+    
+    public function verticalTranslate($translate)
+    {
+        $this->yTranslation += $translate;
     }
 }

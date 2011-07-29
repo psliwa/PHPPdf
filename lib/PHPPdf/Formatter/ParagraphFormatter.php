@@ -157,7 +157,7 @@ class ParagraphFormatter extends BaseFormatter
         
         foreach($lineParts as $rowNumber => $part)
         {
-            $height = $part->getLineHeight();
+            $height = $part->getText()->getRecurseAttribute('line-height');
             $totalHeight += $height;
             $width = $part->getWidth();
 

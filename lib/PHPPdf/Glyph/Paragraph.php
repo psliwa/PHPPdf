@@ -80,6 +80,7 @@ class Paragraph extends Container
     public function addLine(Line $line)
     {
         $this->lines[] = $line;
+        $line->reorganizeParts();
     }
     
     public function getLines()

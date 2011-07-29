@@ -129,4 +129,20 @@ class Line
         
         return $height;
     }
+    
+    public function reorganizeParts()
+    {
+//        $lineHeight = null;
+//        foreach($this->parts as $part)
+//        {
+//            if(!$lineHeight)
+//            {
+//                $lineHeight = $part->getHeight();
+//            }
+//            else
+//            {
+//                $part->verticalTranslate($lineHeight - $part->getHeight());
+//            }
+//        }
+    }
 }
