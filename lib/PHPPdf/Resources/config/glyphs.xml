@@ -297,6 +297,15 @@
 	            <formatter class="PHPPdf\Formatter\TextDimensionFormatter" />
 	        </formatters>
 	    </glyph>
+	    <glyph name="i" class="PHPPdf\Glyph\Text">
+	        <stylesheet>
+	            <attribute name="font-style" value="italic" />
+	        </stylesheet>
+	        <formatters>
+	            <formatter class="PHPPdf\Formatter\ConvertAttributesFormatter" />
+	            <formatter class="PHPPdf\Formatter\TextDimensionFormatter" />
+	        </formatters>
+	    </glyph>
 	    <glyph name="page-break" class="PHPPdf\Glyph\Container">
 	        <stylesheet>
 	            <attribute name="page-break" value="1" />
