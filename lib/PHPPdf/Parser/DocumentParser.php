@@ -385,7 +385,14 @@ class DocumentParser extends XmlParser
         }
         else
         {
-            $this->popFromStack();
+            $glyph = $this->popFromStack();
+            
+            if($this->isntTextGlyph($glyph))
+            {
+                $this->isPreviousText = false;
+                $this->currentParagraph = null;
+            }
+            
             $this->popFromTagStack();
         }
     }

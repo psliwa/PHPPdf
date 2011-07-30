@@ -810,4 +810,34 @@ XML;
         
         $pages = $this->parser->parse($xml);
     }
+    
+    /**
+     * @test
+     */
+    public function validInterpretationOfParagraphs()
+    {
+        $xml = <<<XML
+<pdf>
+	<tag1><text1></text1></tag1>
+	<text2></text2>
+</pdf>
+XML;
+
+        $text1Glyph = $this->getMock('PHPPdf\Glyph\Text', array('setPriorityFromParent'));
+        $text2Glyph = $this->getMock('PHPPdf\Glyph\Text', array('setPriorityFromParent'));
+        $tag1Glyph = $this->getMock('PHPPdf\Glyph\Container', array('setPriorityFromParent'));
+        $paragraph1Glyph = $this->getMock('PHPPdf\Glyph\Paragraph', array('setPriorityFromParent'));
+        $paragraph2Glyph = $this->getMock('PHPPdf\Glyph\Paragraph', array('setPriorityFromParent'));
+        
+        $glyphFactoryMock = $this->getGlyphFactoryMock(array(array('tag1', $tag1Glyph), array('text1', $text1Glyph), array('paragraph', $paragraph1Glyph), array('text2', $text2Glyph), array('paragraph', $paragraph2Glyph)));
+        
+        $this->parser->setGlyphFactory($glyphFactoryMock);
+        
+        $pages = $this->parser->parse($xml);
+        
+        $this->assertEquals(2, count($pages->getChildren()));
+        
+        $this->assertInstanceOf('PHPPdf\Glyph\Container', $pages->getChild(0));
+        $this->assertInstanceOf('PHPPdf\Glyph\Paragraph', $pages->getChild(1));
+    }
 }
