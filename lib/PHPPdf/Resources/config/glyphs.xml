@@ -17,6 +17,7 @@
 	            <formatter class="PHPPdf\Formatter\StandardDimensionFormatter" />
 	            <formatter class="PHPPdf\Formatter\ContainerFormatter" />
 	            <formatter class="PHPPdf\Formatter\FloatFormatter" />
+	            <formatter class="PHPPdf\Formatter\ColumnDivertingFormatter" />
 	        </formatters>
 	    </glyph>
 	    <glyph name="dynamic-page" class="PHPPdf\Glyph\DynamicPage">
@@ -329,7 +330,6 @@
 	            <formatter class="PHPPdf\Formatter\ContainerDimensionFormatter" />
 	            <formatter class="PHPPdf\Formatter\StandardPositionFormatter" />
 	            <formatter class="PHPPdf\Formatter\FloatFormatter" />
-	            <formatter class="PHPPdf\Formatter\ColumnDivertingFormatter" />
 	        </formatters>
 	    </glyph>
 	</glyphs>

@@ -26,16 +26,28 @@ class ColumnDivertingFormatter extends BaseFormatter
     private $staticBreakYCoord = null;
     private $stopBreaking = false;
     
+    private $lastVerticalTranslation = 0;
+    
     public function format(Glyph $glyph, Document $document)
     {
-        $container = $this->moveAllChildrenToSingleContainer($glyph);
+        $this->lastVerticalTranslation = 0;
+
+        $glyphs = $glyph instanceof ColumnableContainer ? array($glyph) : $glyph->getChildren();
         
-        $this->splitContainerIntoColumns($glyph, $container);
-        
-        $this->resizeColumnableContainer($glyph);
-        
-        $this->staticBreakYCoord = null;
-        $this->stopBreaking = false;
+        foreach($glyphs as $glyph)
+        {
+            if($glyph instanceof ColumnableContainer)
+            {
+                $container = $this->moveAllChildrenToSingleContainer($glyph);
+                
+                $this->splitContainerIntoColumns($glyph, $container);
+                
+                $this->resizeColumnableContainer($glyph);
+                
+                $this->staticBreakYCoord = null;
+                $this->stopBreaking = false;
+            }
+        }
     }
 
     private function moveAllChildrenToSingleContainer(ColumnableContainer $columnableContainer)
@@ -203,6 +215,8 @@ class ColumnDivertingFormatter extends BaseFormatter
     
     private function resizeColumnableContainer(ColumnableContainer $columnableContainer)
     {
+        $originalHeight = $columnableContainer->getHeight();
+        
         $containers = $columnableContainer->getChildren();
 
         $parentWidth = $columnableContainer->getParent()->getWidth();
@@ -219,6 +233,13 @@ class ColumnDivertingFormatter extends BaseFormatter
 
         $columnableContainer->setWidth($parentWidth);
         $columnableContainer->setHeight($firstPoint->getY() - $columnableContainer->getDiagonalPoint()->getY());
+        
+        $this->lastVerticalTranslation = $columnableContainer->getHeight() - $originalHeight;
+    }
+    
+    public function getLastVerticalTranslation()
+    {
+        return $this->lastVerticalTranslation;
     }
     
     private function getMinBottomYCoordOfContainer(array $containers)

@@ -55,7 +55,7 @@ class ColumnDivertingFormatterTest extends TestCase
         
         $containers = $this->createContainers($containersHeight);
 
-        $this->formatter->format($this->column, new Document());
+        $this->formatter->format($this->page, new Document());
 
         $this->assertEquals(2, count($this->column->getChildren()));
 
@@ -119,7 +119,7 @@ class ColumnDivertingFormatterTest extends TestCase
         
         $containers = $this->createContainers($containersHeights);
 
-        $this->formatter->format($this->column, new Document());
+        $this->formatter->format($this->page, new Document());
 
         $columns = $this->column->getChildren();
 
@@ -141,7 +141,7 @@ class ColumnDivertingFormatterTest extends TestCase
         $this->injectBoundary($this->column, 20);
         $containers = $this->createContainers(array($pageHeight*1.5));
 
-        $this->formatter->format($this->column, new Document());
+        $this->formatter->format($this->page, new Document());
 
         $columns = $this->column->getChildren();
 
@@ -173,7 +173,7 @@ class ColumnDivertingFormatterTest extends TestCase
         $this->column->setHeight($columnableContainerChild->getHeight());
         $this->injectBoundary($this->column, $heightOfFirstContainer);
         
-        $this->formatter->format($this->column, new Document());
+        $this->formatter->format($this->page, new Document());
         
         $this->assertEquals(4, count($this->column->getChildren()));
         
@@ -198,7 +198,7 @@ class ColumnDivertingFormatterTest extends TestCase
         
         $containers = $this->createContainers($containerHeights);
         
-        $this->formatter->format($this->column, new Document());
+        $this->formatter->format($this->page, new Document());
         
         $this->assertEquals(2, count($this->column->getChildren()));
     }
@@ -220,7 +220,7 @@ class ColumnDivertingFormatterTest extends TestCase
         $this->column->setHeight($columnableContainerChild->getHeight());
         $this->injectBoundary($this->column, $heightOfFirstContainer);
         
-        $this->formatter->format($this->column, new Document());
+        $this->formatter->format($this->page, new Document());
         
         $this->assertEquals(4, count($this->column->getChildren()));
         

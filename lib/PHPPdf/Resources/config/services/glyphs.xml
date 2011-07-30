@@ -54,6 +54,7 @@
 					<argument>PHPPdf\Formatter\StandardDimensionFormatter</argument>
 					<argument>PHPPdf\Formatter\ContainerFormatter</argument>
 					<argument>PHPPdf\Formatter\FloatFormatter</argument>
+					<argument>PHPPdf\Formatter\ColumnDivertingFormatter</argument>
 				</argument>
 			</call>
 		</service>
