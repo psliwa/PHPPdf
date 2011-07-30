@@ -1021,7 +1021,9 @@ abstract class Glyph implements Drawable, \ArrayAccess, \Serializable
         $boundary = $this->getBoundary();
         $clonedBoundary = clone $boundary;
 
-        $heightComplement = $this->getHeight() - $height;
+        $trueHeight = $boundary->getFirstPoint()->getY() - $boundary->getDiagonalPoint()->getY();
+        
+        $heightComplement = $trueHeight - $height;
 
         $boundary->reset();
         $clone = $this->copy();
