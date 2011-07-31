@@ -61,6 +61,7 @@ class Page extends Container
         $this->setAttribute('page-size', self::SIZE_A4);
         $this->addAttribute('encoding', 'utf-8');
         $this->addAttribute('static-size', true);
+        $this->setAttribute('text-align', self::ALIGN_LEFT);
     }
 
     protected static function initializeType()

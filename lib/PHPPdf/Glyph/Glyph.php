@@ -294,7 +294,7 @@ abstract class Glyph implements Drawable, \ArrayAccess, \Serializable
         $this->addAttribute('splittable', true);
 
         $this->addAttribute('line-height');
-        $this->addAttribute('text-align', self::ALIGN_LEFT);
+        $this->addAttribute('text-align', null);
 
         $this->addAttribute('float', self::FLOAT_NONE);
         $this->addAttribute('font-style', null);
