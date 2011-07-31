@@ -39,24 +39,40 @@ class ConvertAttributesFormatterTest extends PHPUnit_Framework_TestCase
 
     /**
      * @test
+     * @dataProvider autoMarginConvertProvider
      */
-    public function autoMarginConvert()
+    public function autoMarginConvert($glyphWidth, $parentWidth, $expectedMarginLeft, $expectedMarginRight)
     {
-        $glyph = new Container(array('width' => 100));
-        $glyph->setWidth(100);
+        $glyph = new Container(array('width' => $glyphWidth));
+        $glyph->setWidth($glyphWidth);
         $glyph->setMargin(0, 'auto');
 
-        $mockRealWidth = 200;
-        $mock = $this->getMock('\PHPPdf\Glyph\Page', array('getWidth'));
-        $mock->expects($this->exactly(2))
+        $mock = $this->getMock('\PHPPdf\Glyph\Page', array('getWidth', 'setWidth'));
+        $mock->expects($this->atLeastOnce())
              ->method('getWidth')
-             ->will($this->returnValue($mockRealWidth));
+             ->will($this->returnValue($parentWidth));
+             
+        if($glyphWidth > $parentWidth)
+        {
+            $mock->expects($this->once())
+                 ->method('setWidth')
+                 ->with($glyphWidth);
+        }
 
         $mock->add($glyph);
 
         $this->formatter->format($glyph, $this->document);
 
-        $this->assertEquals(($mockRealWidth - $glyph->getWidth())/2, $glyph->getMarginLeft());
+        $this->assertEquals($expectedMarginLeft, $glyph->getMarginLeft());
+        $this->assertEquals($expectedMarginRight, $glyph->getMarginRight());
+    }
+    
+    public function autoMarginConvertProvider()
+    {
+        return array(
+            array(100, 200, 50, 50),
+            array(200, 100, 0, 0), // if child is wider than parent, margins should be set as "0" and parent width should be set as child width
+        );
     }
 
     /**

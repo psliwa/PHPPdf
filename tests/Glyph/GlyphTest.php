@@ -273,18 +273,24 @@ class GlyphTest extends TestCase
      * @test
      * @dataProvider pseudoAttributes
      */
-    public function marginAndPaddingAsPseudoAttribute($attribute)
+    public function marginAndPaddingAsPseudoAttribute($attribute, $value, $expectedTop, $expectedRight, $expectedBottom, $expectedLeft)
     {
-        $this->glyph->setAttribute($attribute, '10 20');
-        $this->assertEquals(20, $this->glyph->getAttribute($attribute.'-left'));
-        $this->assertEquals(10, $this->glyph->getAttribute($attribute.'-bottom'));
+        $this->glyph->setAttribute($attribute, $value);
+        
+        $this->assertEquals($expectedTop, $this->glyph->getAttribute($attribute.'-top'));
+        $this->assertEquals($expectedRight, $this->glyph->getAttribute($attribute.'-right'));
+        $this->assertEquals($expectedBottom, $this->glyph->getAttribute($attribute.'-bottom'));
+        $this->assertEquals($expectedLeft, $this->glyph->getAttribute($attribute.'-left'));
     }
 
     public function pseudoAttributes()
     {
         return array(
-            array('margin'),
-            array('padding'),
+            array('margin', '10 20', 10, 20, 10, 20),
+            array('padding', '10 20', 10, 20, 10, 20),
+            array('margin', '10', 10, 10, 10, 10),
+            array('margin', '10 20 30 40', 10, 20, 30, 40),
+//            array('margin', '10 20 30', 10, 20, 30, 20),
         );
     }
 

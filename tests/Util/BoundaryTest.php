@@ -163,13 +163,25 @@ class BoundaryTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($this->boundary->intersects($this->boundary));
 
         $clone = clone $this->boundary;
+        
+        $clone->pointTranslate(2, 0, 100);
+        $clone->pointTranslate(3, 0, 100);
+        
         $clone->translate(99, 0);
         $this->assertTrue($this->boundary->intersects($clone));
-        $clone->translate(1, 0);
+        $this->assertTrue($clone->intersects($this->boundary));
+        
+        $clone->translate(-19, 0);
+        $this->assertTrue($this->boundary->intersects($clone));
+        $this->assertTrue($clone->intersects($this->boundary));
+        
+        $clone->translate(21, 0);
         $this->assertFalse($this->boundary->intersects($clone));
+        $this->assertFalse($clone->intersects($this->boundary));
 
         $clone->translate(-50, -20);
         
         $this->assertTrue($this->boundary->intersects($clone));
+        $this->assertTrue($clone->intersects($this->boundary));
     }
 }

@@ -180,7 +180,7 @@ class FloatFormatterTest extends PHPUnit_Framework_TestCase
     public function glyphsHaveEqualTopYCoordEvenIfHaveHeightIsDifferent()
     {
         $containers = $this->createContainerWithFloatingChildren(
-                array(0, 500, 100, 40),
+                array(0, 500, 200, 40),
                 array(0, 500, 80, 20), 'left',
                 array(0, 480, 80, 20), 'right'
         );
@@ -288,5 +288,27 @@ class FloatFormatterTest extends PHPUnit_Framework_TestCase
         $this->formatter->format($container, $this->document);
         
         $this->assertEquals($containerLeftFloated->getDiagonalPoint()->getY(), $containerWithoutFloat->getFirstPoint()->getY());
+    }
+    
+    /**
+     * @test
+     */
+    public function moveGlyphWithRightFloatUnderPreviousSiblingIfPreviousSiblingHasLeftFloatAndBothElementsDontFit()
+    {
+        $container = $this->getGlyphMock(0, 500, 500, 500, array('getChildren', 'setHeight'), false);
+        
+        $containerLeftFloated = $this->getGlyphMockWithFloatAndParent(0, 500, 300, 200, 'left', $container);
+        $containerRightFloated = $this->getGlyphMockWithFloatAndParent(0, 300, 300, 100, 'right', $container);
+        
+        $container->expects($this->atLeastOnce())
+                  ->method('getChildren')
+                  ->will($this->returnValue(array($containerLeftFloated, $containerRightFloated)));
+                  
+        $this->formatter->format($container, $this->document);
+        
+        $this->assertEquals(0, $containerLeftFloated->getFirstPoint()->getX());
+        $this->assertEquals(200, $containerRightFloated->getFirstPoint()->getX());
+        $this->assertEquals(500, $containerLeftFloated->getFirstPoint()->getY());
+        $this->assertEquals(300, $containerRightFloated->getFirstPoint()->getY());
     }
 }

@@ -43,22 +43,26 @@ class ConvertAttributesFormatter extends BaseFormatter
     {
         $parent = $glyph->getParent();
 
-        if($parent !== null)
+        if($parent !== null && $this->hasAutoMargins($glyph))
         {
             $parentWidth = $parent->getWidthWithoutPaddings();
+            $glyphWidth = $glyph->getWidth();
 
-            if($this->hasAutoMargins($glyph))
+            if($glyphWidth > $parentWidth)
             {
-                $glyph->hadAutoMargins(true);
-                $width = $glyph->getWidth() === null ? $parentWidth : $glyph->getWidth();
-
-                //adds horizontal paddings, becouse dimension formatter hasn't executed yet
-                $width += $glyph->getPaddingLeft() + $glyph->getPaddingRight();
-
-                $margin = ($parentWidth - $width)/2;
-                $glyph->setMarginLeft($margin);
-                $glyph->setMarginRight($margin);
+                $parentWidth = $glyphWidth;
+                $parent->setWidth($glyphWidth);
             }
+
+            $glyph->hadAutoMargins(true);
+            $width = $glyph->getWidth() === null ? $parentWidth : $glyph->getWidth();
+            
+            //adds horizontal paddings, becouse dimension formatter hasn't executed yet
+            $width += $glyph->getPaddingLeft() + $glyph->getPaddingRight();
+
+            $margin = ($parentWidth - $width)/2;
+            $glyph->setMarginLeft($margin);
+            $glyph->setMarginRight($margin);
         }
     }
 

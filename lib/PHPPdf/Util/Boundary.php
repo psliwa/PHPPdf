@@ -120,6 +120,15 @@ class Boundary implements \Countable, \Iterator, \ArrayAccess, \Serializable
         {
             return true;
         }
+        
+        $centerPoint = $this->getPointBetween($compareFirstPoint, $diagonalPoint);
+
+        if($this->contains($centerPoint) && $boundary->contains($centerPoint))
+        {
+            return true;
+        }
+        
+        
 
         return false;
     }

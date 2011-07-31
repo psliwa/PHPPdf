@@ -162,11 +162,7 @@ class FloatFormatter extends BaseFormatter
             }
             else
             {
-                $dummyBoundary = new Boundary();
-                $dummyBoundary->setNext($preferredXCoord, $preferredYCoord)
-                              ->setNext($preferredXCoord + $glyph->getWidth(), $preferredYCoord)
-                              ->setNext($preferredXCoord + $glyph->getWidth(), $preferredYCoord - $glyph->getHeight())
-                              ->setNext($preferredXCoord, $preferredYCoord - $glyph->getHeight());
+                $dummyBoundary = $this->createBoundary($glyph, $preferredXCoord, $preferredYCoord);
 
                 $siblings = $glyph->getSiblings();
                 $overflowed = false;
@@ -190,13 +186,34 @@ class FloatFormatter extends BaseFormatter
         {
             $previousSibling = $glyph->getPreviousSibling();
 
+            $preferredXCoord = $this->correctXCoordWithParent($glyph);
+            
             if($previousSibling && $previousSibling->getFloat() !== Glyph::FLOAT_NONE)
             {
-                $preferredYCoord += $previousSibling->getHeight() + $glyph->getMarginTop() + $previousSibling->getMarginBottom();
+                $yCoord = $preferredYCoord + $previousSibling->getHeight() + $glyph->getMarginTop() + $previousSibling->getMarginBottom();
+                
+                $boundary = $this->createBoundary($glyph, $preferredXCoord, $yCoord);
+                
+                if(!$boundary->intersects($previousSibling->getBoundary()))
+                {
+                    $preferredYCoord += $previousSibling->getHeight() + $glyph->getMarginTop() + $previousSibling->getMarginBottom();
+                }
             }
-
-            $preferredXCoord = $this->correctXCoordWithParent($glyph);
         }
+    }
+    
+    /**
+     * @return Boundary
+     */
+    private function createBoundary(Glyph $glyph, $preferredXCoord, $preferredYCoord)
+    {
+        $dummyBoundary = new Boundary();
+        $dummyBoundary->setNext($preferredXCoord, $preferredYCoord)
+                      ->setNext($preferredXCoord + $glyph->getWidth(), $preferredYCoord)
+                      ->setNext($preferredXCoord + $glyph->getWidth(), $preferredYCoord - $glyph->getHeight())
+                      ->setNext($preferredXCoord, $preferredYCoord - $glyph->getHeight());
+                      
+        return $dummyBoundary;
     }
 
     private function correctXCoordWithParent(Glyph $glyph)
