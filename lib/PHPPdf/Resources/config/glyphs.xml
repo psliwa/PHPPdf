@@ -272,6 +272,22 @@
 	            <formatter class="PHPPdf\Formatter\FloatFormatter" />
 	        </formatters>
 	    </glyph>
+	    <glyph name="hr" class="PHPPdf\Glyph\Container">
+	        <stylesheet>
+	            <attribute name="height" value="0.5" />
+	            <attribute name="margin" value="8 0" />
+	            <enhancement name="background" color="black" />
+	        </stylesheet>
+	        <formatters>
+	            <formatter class="PHPPdf\Formatter\ConvertAttributesFormatter" />
+	            <formatter class="PHPPdf\Formatter\StandardDimensionFormatter" />
+	            <formatter class="PHPPdf\Formatter\FirstPointPositionFormatter" />
+	            <formatter class="PHPPdf\Formatter\ContainerFormatter" />
+	            <formatter class="PHPPdf\Formatter\ContainerDimensionFormatter" />
+	            <formatter class="PHPPdf\Formatter\StandardPositionFormatter" />
+	            <formatter class="PHPPdf\Formatter\FloatFormatter" />
+	        </formatters>
+	    </glyph>
 	    <glyph name="nl" class="PHPPdf\Glyph\Container">
 	        <formatters>
 	            <formatter class="PHPPdf\Formatter\ConvertAttributesFormatter" />

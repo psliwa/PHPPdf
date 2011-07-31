@@ -29,6 +29,7 @@
 					<argument key="td" type="service" id="phppdf.glyph.td" />
 					<argument key="img" type="service" id="phppdf.glyph.img" />
 					<argument key="br" type="service" id="phppdf.glyph.br" />
+					<argument key="hr" type="service" id="phppdf.glyph.hr" />
 					<argument key="nl" type="service" id="phppdf.glyph.nl" />
 					<argument key="b" type="service" id="phppdf.glyph.b" />
 					<argument key="i" type="service" id="phppdf.glyph.i" />
@@ -341,8 +342,13 @@
 		</service>
 		<service id="phppdf.glyph.td" class="PHPPdf\Glyph\Table\Cell" public="false">
 			<tag name="phppdf.glyph" />
-			<!--  TODO: enhancements -->
-
+			<call method="mergeEnhancementAttributes">
+				<argument>border</argument>
+				<argument type="collection">
+					<argument key="name">border</argument>
+					<argument key="color">black</argument>
+				</argument>
+			</call>
 			<call method="setFormattersNames">
 				<argument type="collection">
 					<argument>PHPPdf\Formatter\ConvertAttributesFormatter</argument>
@@ -376,6 +382,31 @@
 			<argument type="collection">
 				<argument key="height">10</argument>
 			</argument>
+			<call method="setFormattersNames">
+				<argument type="collection">
+					<argument>PHPPdf\Formatter\ConvertAttributesFormatter</argument>
+					<argument>PHPPdf\Formatter\StandardDimensionFormatter</argument>
+					<argument>PHPPdf\Formatter\FirstPointPositionFormatter</argument>
+					<argument>PHPPdf\Formatter\ContainerFormatter</argument>
+					<argument>PHPPdf\Formatter\ContainerDimensionFormatter</argument>
+					<argument>PHPPdf\Formatter\StandardPositionFormatter</argument>
+					<argument>PHPPdf\Formatter\FloatFormatter</argument>
+				</argument>
+			</call>
+		</service>
+		<service id="phppdf.glyph.hr" class="PHPPdf\Glyph\Container" public="false">
+			<tag name="phppdf.glyph" />
+			<argument type="collection">
+				<argument key="height">0.5</argument>
+				<argument key="margin">8 0</argument>
+			</argument>
+			<call method="mergeEnhancementAttributes">
+				<argument>background</argument>
+				<argument type="collection">
+					<argument key="name">background</argument>
+					<argument key="color">black</argument>
+				</argument>
+			</call>
 			<call method="setFormattersNames">
 				<argument type="collection">
 					<argument>PHPPdf\Formatter\ConvertAttributesFormatter</argument>
