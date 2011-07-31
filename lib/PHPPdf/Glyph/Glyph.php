@@ -377,6 +377,11 @@ abstract class Glyph implements Drawable, \ArrayAccess, \Serializable
         return $this->getAttributeDirectly('font-size');
     }
     
+    public function getFontSizeRecursively()
+    {
+        return $this->getRecurseAttribute('font-size');
+    }
+    
     public function getDisplay()
     {
         return $this->getAttributeDirectly('display');

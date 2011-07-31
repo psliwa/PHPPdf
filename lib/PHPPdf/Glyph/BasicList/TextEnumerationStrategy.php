@@ -26,7 +26,7 @@ abstract class TextEnumerationStrategy extends AbstractEnumerationStrategy
     {
         $enumerationText = $this->assembleEnumerationText($list, $this->visualIndex);
 
-        $fontSize = $list->getRecurseAttribute('font-size');
+        $fontSize = $list->getFontSizeRecursively();
         $font = $list->getFontType(true);
         
         $xTranslation = 0;
@@ -46,7 +46,26 @@ abstract class TextEnumerationStrategy extends AbstractEnumerationStrategy
     {
         $encoding = $list->getEncoding();
         
+        $gc->saveGS();
+        
+        $color = $list->getRecurseAttribute('color');
+        
+        if($color)
+        {
+            $gc->setLineColor($color);
+        }
+        
+        $font = $list->getFont();
+        $size = $list->getFontSizeRecursively();
+        
+        if($font && $size)
+        {
+            $gc->setFont($font, $size);
+        }
+        
         $gc->drawText($this->enumerationText, $xCoord, $yCoord, $encoding);
+        
+        $gc->restoreGS();
     }
        
     abstract protected function assembleEnumerationText(BasicList $list, $number);

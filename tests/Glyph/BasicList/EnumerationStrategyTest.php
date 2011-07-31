@@ -21,8 +21,17 @@ abstract class EnumerationStrategyTest extends TestCase
      */
     public function drawEnumerationInValidPosition($elementIndex, Point $point, $position, $childMarginLeft, $elementPattern)
     {
-        $listMock = $this->getMock('PHPPdf\Glyph\BasicList', array_merge($this->getListMockedMethod(), array('getChild', 'getAttribute', 'getEncoding', 'getRecurseAttribute', 'getFontType')));
-        $fontMock = $this->getMock('PHPPdf\Font\Font', array(), array(), '', false);
+        $listMock = $this->getMockBuilder('PHPPdf\Glyph\BasicList')
+                         ->setMethods(array_merge($this->getListMockedMethod(), array('getChild', 'getAttribute', 'getEncoding', 'getFontSizeRecursively', 'getRecurseAttribute', 'getFontType', 'getFont')))
+                         ->getMock();
+        $fontTypeMock = $this->getMockBuilder('PHPPdf\Font\Font')
+                             ->disableOriginalConstructor()
+                             ->getMock();
+        $fontMock = $this->getMockBuilder('PHPPdf\Font\Font')
+                         ->setMethods(array())
+                         ->disableOriginalConstructor()
+                         ->getMock();
+        $colorStub = \Zend_Pdf_Color_Html::color('white');
         
         $this->setElementPattern($listMock, $elementPattern);
         
@@ -52,15 +61,15 @@ abstract class EnumerationStrategyTest extends TestCase
             $expectedWidth = rand(3, 7);
             $positionTranslation -= $expectedWidth;
             
-            $fontMock->expects($this->once())
-                           ->method('getCharsWidth')
-                           ->with($charCodes, $fontSize)
-                           ->will($this->returnValue($expectedWidth));                       
+            $fontTypeMock->expects($this->once())
+                         ->method('getCharsWidth')
+                         ->with($charCodes, $fontSize)
+                         ->will($this->returnValue($expectedWidth));                       
         }
         else
         {
-            $fontMock->expects($this->never())
-                           ->method('getCharsWidth');
+            $fontTypeMock->expects($this->never())
+                          ->method('getCharsWidth');
         }
                        
         $listMock->expects($this->atLeastOnce())
@@ -68,27 +77,47 @@ abstract class EnumerationStrategyTest extends TestCase
                        ->with('position')
                        ->will($this->returnValue($position));
         $listMock->expects($this->atLeastOnce())
-                       ->method('getRecurseAttribute')
-                       ->with('font-size')
+                       ->method('getFontSizeRecursively')
                        ->will($this->returnValue($fontSize));
+        $listMock->expects($this->atLeastOnce())
+                       ->method('getRecurseAttribute')
+                       ->with('color')
+                       ->will($this->returnValue($colorStub));
                        
         $listMock->expects($this->once())
                        ->method('getEncoding')
                        ->will($this->returnValue($encoding));
+        $listMock->expects($this->atLeastOnce())
+                 ->method('getFont')
+                 ->will($this->returnValue($fontMock));
                        
         $listMock->expects($this->once())
              ->method('getFontType')
              ->with(true)
-             ->will($this->returnValue($fontMock));
+             ->will($this->returnValue($fontTypeMock));
                        
-        $gc = $this->getMock('PHPPdf\Glyph\GraphicsContext', array('drawText'), array(), '', false);
+        $gc = $this->getMockBuilder('PHPPdf\Glyph\GraphicsContext')
+                   ->setMethods(array('drawText', 'setLineColor', 'setFont', 'saveGS', 'restoreGS'))
+                   ->disableOriginalConstructor()
+                   ->getMock();
 
         $expectedXCoord = $point->getX() + $positionTranslation - $childMarginLeft;
         $expectedYCoord = $point->getY() - $fontSize;
         
-        $gc->expects($this->once())
+        $gc->expects($this->at(0))
+           ->method('saveGS');
+        $gc->expects($this->at(1))
+           ->method('setLineColor')
+           ->with($colorStub);
+        $gc->expects($this->at(2))
+           ->method('setFont')
+           ->with($fontMock, $fontSize);
+        
+        $gc->expects($this->at(3))
            ->method('drawText')
            ->with($expectedText, $expectedXCoord, $expectedYCoord, $encoding);
+        $gc->expects($this->at(4))
+           ->method('restoreGS');
 
         $this->strategy->setIndex($elementIndex);
         $this->strategy->setVisualIndex($elementIndex+1);
