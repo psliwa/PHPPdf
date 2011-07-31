@@ -409,7 +409,7 @@ class DocumentParser extends XmlParser
         $text = str_replace(array("\n", "\r", "\t"), '', $text);
         if(!$this->isPreviousText)
         {
-            $text = trim($text);
+            $text = ltrim($text);
         }
 
         if($text)

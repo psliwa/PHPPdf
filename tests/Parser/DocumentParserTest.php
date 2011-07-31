@@ -1,5 +1,7 @@
 <?php
 
+use PHPPdf\Glyph\Paragraph;
+use PHPPdf\Glyph\Text;
 use PHPPdf\Parser\DocumentParser,
     PHPPdf\Glyph\Factory as GlyphFactory,
     PHPPdf\Enhancement\Factory as EnhancementFactory,
@@ -839,5 +841,31 @@ XML;
         
         $this->assertInstanceOf('PHPPdf\Glyph\Container', $pages->getChild(0));
         $this->assertInstanceOf('PHPPdf\Glyph\Paragraph', $pages->getChild(1));
+    }
+    
+    /**
+     * @test
+     */
+    public function dontTrimLastSpaceOfTextIfNextElementAlsoIsTextNode()
+    {
+        $xml = <<<XML
+<pdf>
+	Some text <text1>another text</text1>
+</pdf>
+XML;
+
+        $text1Glyph = new Text();
+        $text2Glyph = new Text();
+        $text3Glyph = new Text();
+        $paragraphGlyph = new Paragraph();
+        
+        $glyphFactoryMock = $this->getGlyphFactoryMock(array(array('paragraph', $paragraphGlyph), array('text', $text1Glyph), array('text1', $text2Glyph), array('text', $text3Glyph)));
+        
+        $this->parser->setGlyphFactory($glyphFactoryMock);
+        
+        $pages = $this->parser->parse($xml);
+        
+        $this->assertEquals('another text', $text2Glyph->getText());
+        $this->assertEquals('Some text ', $text1Glyph->getText());
     }
 }
