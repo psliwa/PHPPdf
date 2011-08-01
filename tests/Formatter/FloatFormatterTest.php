@@ -4,6 +4,7 @@ use PHPPdf\Formatter\FloatFormatter,
     PHPPdf\Util\Boundary,
     PHPPdf\Formatter\Chain,
     PHPPdf\Document,
+    PHPPdf\Glyph\Glyph,
     PHPPdf\Glyph\Page;
 
 class FloatFormatterTest extends PHPUnit_Framework_TestCase
@@ -310,5 +311,35 @@ class FloatFormatterTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(200, $containerRightFloated->getFirstPoint()->getX());
         $this->assertEquals(500, $containerLeftFloated->getFirstPoint()->getY());
         $this->assertEquals(300, $containerRightFloated->getFirstPoint()->getY());
+    }
+    
+    /**
+     * @test
+     * @dataProvider floatAndMarginProvider
+     */
+    public function marginIsRespectedEvenIfGlyphHasFloat($float, $marginLeft, $marginRight, $parentWidth, $width, $expectedXCoord)
+    {
+        $container = $this->getGlyphMock(0, 500, $parentWidth, 500, array('getChildren'), false);
+        $containerFloated = $this->getGlyphMockWithFloatAndParent(0, 500, $width, 200, $float, $container);
+        $containerFloated->setAttribute('margin-left', $marginLeft);
+        $containerFloated->setAttribute('margin-right', $marginRight);
+        
+        $container->expects($this->atLeastOnce())
+                  ->method('getChildren')
+                  ->will($this->returnValue(array($containerFloated)));
+                  
+        $this->formatter->format($container, $this->document);
+        
+        $this->assertEquals($expectedXCoord, $containerFloated->getFirstPoint()->getX());
+    }
+    
+    public function floatAndMarginProvider()
+    {
+        return array(
+            array(Glyph::FLOAT_LEFT, 100, 0, 500, 100, 100),
+            array(Glyph::FLOAT_RIGHT, 100, 100, 500, 100, 300),
+            array(Glyph::FLOAT_RIGHT, 0, 0, 500, 100, 400),
+            array(Glyph::FLOAT_LEFT, 0, 0, 500, 100, 0),
+        );
     }
 }

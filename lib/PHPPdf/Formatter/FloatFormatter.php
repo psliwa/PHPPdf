@@ -225,7 +225,7 @@ class FloatFormatter extends BaseFormatter
         }
         else
         {
-            $preferredXCoord = $parent->getDiagonalPoint()->getX() - $glyph->getWidth() + $glyph->getPaddingLeft();
+            $preferredXCoord = $parent->getDiagonalPoint()->getX() - $glyph->getWidth() + $glyph->getPaddingLeft() - $glyph->getMarginRight();
         }
 
         return $preferredXCoord;
