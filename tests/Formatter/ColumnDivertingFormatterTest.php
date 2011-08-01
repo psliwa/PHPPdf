@@ -70,13 +70,14 @@ class ColumnDivertingFormatterTest extends TestCase
             $expectedDiagonalYCoord = min($lastChild->getDiagonalPoint()->getY(), $firstChild->getDiagonalPoint()->getY());
             $actualDiagonalYCoord = $container->getDiagonalPoint()->getY();
 
-            $this->assertEquals($expectedFirstPoint, $container->getFirstPoint());
-            $this->assertEquals($expectedDiagonalYCoord, $actualDiagonalYCoord);
+            $this->assertEquals($expectedFirstPoint->getX(), $container->getFirstPoint()->getX(), 'x coord of columns\' first point isn\'t equals', 0.000001);
+            $this->assertEquals($expectedFirstPoint->getY(), $container->getFirstPoint()->getY(), 'y coord of columns\' first point isn\'t equals', 0.000001);
+            $this->assertEquals($expectedDiagonalYCoord, $actualDiagonalYCoord, 'two columns haven\'t the same height', 0.000001);
         }
 
-        $this->assertEquals($containers[1]->getFirstPoint()->getX(), $containers[2]->getFirstPoint()->getX(), 'x coord of two containers within the same column is not equal');
+        $this->assertEquals($containers[1]->getFirstPoint()->getX(), $containers[2]->getFirstPoint()->getX(), 'x coord of two containers within the same column is not equal', 0.000001);
 
-        $this->assertEquals($pageHeight, $this->column->getHeight());
+        $this->assertEquals($pageHeight, $this->column->getHeight(), 'height of page isn\'t equals to the highest column', 0.000001);
     }
 
     private function createContainers(array $heights, $parent = null)

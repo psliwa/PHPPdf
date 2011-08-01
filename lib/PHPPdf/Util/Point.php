@@ -33,13 +33,15 @@ final class Point implements \ArrayAccess
      */
     public static function getInstance($x, $y)
     {
-        if(!isset(self::$pool[$x][$y]))
+        $sX = (string) $x;
+        $sY = (string) $y;
+        if(!isset(self::$pool[$sX][$sY]))
         {
             $point = new self($x, $y);
-            self::$pool[$x][$y] = $point;
+            self::$pool[$sX][$sY] = $point;
         }
         
-        return self::$pool[$x][$y];
+        return self::$pool[$sX][$sY];
     }
 
     public function getX()
@@ -50,6 +52,54 @@ final class Point implements \ArrayAccess
     public function getY()
     {
         return $this->y;
+    }
+    
+    /**
+     * Compares y coord in given precision
+     * 
+     * @param Point $point Point to compare
+     * @param integer $precision Precision of comparision
+     * 
+     * @return integer Positive number if y coord of owner is greater, 0 if values are equal or negative integer if owner is less
+     */
+    public function compareYCoord(Point $point, $precision = 1000)
+    {
+        return $this->compare($this->getY(), $point->getY(), $precision);
+    }
+    
+    private function compare($firstNumber, $secondNumber, $precision)
+    {
+        $firstNumberAsInteger = $this->convertToInteger($firstNumber, $precision);
+        $secondNumberAsInteger = $this->convertToInteger($secondNumber, $precision);
+        
+        if($firstNumberAsInteger > $secondNumberAsInteger)
+        {
+            return 1;
+        }
+        elseif($firstNumberAsInteger == $secondNumberAsInteger)
+        {
+            return 0;
+        }
+        
+        return -1;
+    }
+    
+    private function convertToInteger($double, $precision)
+    {
+        return (int) ($double * $precision);
+    }
+    
+    /**
+     * Compares x coord in given precision
+     * 
+     * @param Point $point Point to compare
+     * @param integer $precision Precision of comparision
+     * 
+     * @return integer Positive number if x coord of owner is greater, 0 if values are equal or negative integer if owner is less
+     */
+    public function compareXCoord(Point $point, $precision = 1000)
+    {
+        return $this->compare($this->getX(), $point->getX(), $precision);
     }
 
     /**

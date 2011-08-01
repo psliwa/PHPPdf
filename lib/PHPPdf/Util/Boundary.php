@@ -53,7 +53,7 @@ class Boundary implements \Countable, \Iterator, \ArrayAccess, \Serializable
 
         $diagonalPoint = $this->diagonalPointIndex === null ? null : $this->points[$this->diagonalPointIndex];
 
-        if(!$diagonalPoint || ($diagonalPoint->getY() > $point->getY() || $diagonalPoint->getY() === $point->getY() && $diagonalPoint->getX() < $point->getX()))
+        if(!$diagonalPoint || ($diagonalPoint->compareYCoord($point) > 0 || $diagonalPoint->compareYCoord($point) == 0 && $diagonalPoint->compareXCoord($point) < 0))
         {
             $this->diagonalPointIndex = $this->numberOfPoints;
         }
@@ -127,8 +127,6 @@ class Boundary implements \Countable, \Iterator, \ArrayAccess, \Serializable
         {
             return true;
         }
-        
-        
 
         return false;
     }

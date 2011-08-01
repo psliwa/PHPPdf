@@ -63,4 +63,26 @@ class PointTest extends PHPUnit_Framework_TestCase
         $point = Point::getInstance(10, 10);
         $point[1] = 5;
     }
+    
+    /**
+     * @test
+     * @dataProvider compareCoordinationsProvider
+     */
+    public function compareCoordinations(Point $firstPoint, Point $secondPoint, $precision, $expectedXCompare, $expectedYCompare)
+    {
+        $actualXCompare = $firstPoint->compareXCoord($secondPoint, $precision);
+        $actualYCompare = $firstPoint->compareYCoord($secondPoint, $precision);
+        
+        $this->assertEquals($expectedXCompare, $actualXCompare);
+        $this->assertEquals($expectedYCompare, $actualYCompare);
+    }
+    
+    public function compareCoordinationsProvider()
+    {
+        return array(
+            array(Point::getInstance(1.12345678, 2.98765421), Point::getInstance(1.12345611, 2.98765422), 100000, 0, 0),
+            array(Point::getInstance(1.12345678, 2.98765421), Point::getInstance(1.12345611, 2.98765432), 10000000, 1, -1),
+            array(Point::getInstance(1.123456781, 2.987654291), Point::getInstance(1.123456791, 2.98765428), 100000000, -1, 1),
+        );
+    }
 }
