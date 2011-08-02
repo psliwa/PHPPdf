@@ -1,5 +1,5 @@
-Documentation draft (PL)
-========================
+Dokumentacja
+============
 
 Instalacja
 ----------
@@ -128,11 +128,36 @@ Drugi "div" będzie miał następujące atrybuty:
 Struktura arkusza stylów.
 -------------------------
 
-Arkusze stylów muszą się znajdować w osobnym pliku, nie ma wsparcia krótkiej deklaracji atrybutów prostych i złożonych bezpośrednio w tagu. Składnia arkusza stylów:
+Arkusze stylów muszą się znajdować w osobnym pliku, krótki (jako atrybut xml) oraz długi (jako osobne tagi) sposób definicji stylów jest wspierany. Składnia arkusza stylów:
+
+Krótki sposób:
+
+    <stylesheet>
+        <!-- style są wbudowane w tag jako atrybuty xml, atrybut "class" ma takie samo znaczenie co w HTML/CSS -->
+        <div class="class" font-size="12" color="gray" background.color="yellow">
+            <!-- element zagnieżdżony, odpowiednik selektora z CSS: "div.class p" -->
+            <p margin="10 15">
+            </p>
+        </div>
+
+        <!-- odpowiednik selektora z CSS: ".another-class", tag "any" jest wildcardem (każdy tag do niego pasuje) -->
+        <any class="another-class" text-align="right">
+        </any>
+
+        <h2 class="header">
+            <span font-size="9">
+            </span>
+            
+            <div font-style="bold">
+            </div>
+        </h2>
+    </stylesheet>
+
+Długi sposób:
 
     <stylesheet>
         <div class="klasa">
-            <!-- atrybuty i upiększenia zagnieżdzone w ścieżce selektora div.klasa -->
+            <!-- atrybuty proste i złożone zagnieżdzone w ścieżce selektora div.klasa -->
             <attribute name="font-size" value="12" />
             <attribute name="color" value="grey" />
             <!-- odpowiednik atrybutu background.color -->
@@ -213,6 +238,8 @@ Atrybuty złożone
     - image: obrazek tła
     - repeat: sposób powtarzania obrazka (none|x|y|all)
     - radius: zaokrąglanie rogów tła w radianach (w chwili obecnej działa tylko dla koloru, nie obrazka)
+    - image-width: szerokość obrazka tła, może być wartością procentową
+    - image-height: wysokość obrazka tła, może być wartością procentową
 
 Można dodawać kilka upiększeń tego samego typu (np. 3 różne obramowania) używając tagu "stylesheet" zamiast krótkiej notacji ("border.color"):
 
@@ -312,18 +339,17 @@ Znane ograniczenia.
 Poniżej przedstawiam listę ograniczeń obecnej wersji biblioteki:
 
 * brak możliwości wstawiania zdjęcia do tekstu z opływem (float) - zostanie wprowadzone w kolejnych wersjach
-* niepoprawne działanie wyrównania do środka i do prawej testu z zagnieżdżonymi tagami (np. "Jakiś takst <span>inny tekst</span>") - zostanie poprawione w kolejnych wersjach
 * brak justrowania - zostanie wprowadzone w kolejnych wersjach
 * obramowanie nie zmienia rozmiaru elementu tak jak to jest w HTML - zabieg celowy, raczej nie planuję jego zmiany
 
 TODO - czyli plany.
 -------------------
 
-* obsługa adnotacji
+* poprawienie i przepisanie obsługi tekstu - gotowe
+* obsługa adnotacji (hiperlinki, spis treści)
 * obsługa metadanych dokumentu
 * obsługa zakładek
 * poprawa interpretacji wartości atrybutów i rozkładu elementów w dokumencie
-* obsługa podziału strony na kolumny w taki sposób, że wszystkie kolumny mają tą samą wysokość
 * poprawa działania tabelek, definiowanie nagłówków i stopek dla tabeli
 * obsługa rowspan, nagłówka i stopki dla tabeli
 * poprawienie wyliczania minimalnej wielkości komórki tabeli gdy jest użyty colspan

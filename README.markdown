@@ -133,7 +133,32 @@ Second "div" will have following attributes:
 Stylesheet structure
 --------------------
 
-Stylesheets have to be in external file, in stylesheet short declarations of attributes (simple and complex) aren't supported. Syntax od stylesheet:
+Stylesheets have to be in external file, stylesheet short and long declarations of attributes are supported. Syntax of stylesheet:
+
+Short style:
+
+    <stylesheet>
+        <!-- style attributes are embeded as xml attributes, class attribute has the same meaning as in HTML/CSS -->
+        <div class="class" font-size="12" color="gray" background.color="yellow">
+            <!-- nested element, equivalent CSS selector syntax: "div.class p" -->
+            <p margin="10 15">
+            </p>
+        </div>
+
+        <!-- equivalent CSS selector syntax: ".another-class", "any" tag is wildcard (mean any tag) -->
+        <any class="another-class" text-align="right">
+        </any>
+
+        <h2 class="header">
+            <span font-size="9">
+            </span>
+            
+            <div font-style="bold">
+            </div>
+        </h2>
+    </stylesheet>
+
+Long style:
 
     <stylesheet>
         <div class="class">
@@ -326,7 +351,7 @@ TODO - plans.
 -------------------
 
 * rewrite and improve text rendering - done
-* annotations
+* annotations (hyperlinks, table of contents)
 * document metadata
 * bookmarks
 * improve interpretation of attributes and fixing found bugs
