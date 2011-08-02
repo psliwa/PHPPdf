@@ -51,23 +51,23 @@
                 <h2>Legend:</h2>
                 <p>
                     <div class="square pink"></div>
-                    <span>Background of div within td</span>
+                    <p class="desc">Background of div within td</p>
                 </p>
                 <p>
                     <div class="square white"></div>
-                    <span>Margin between td and div</span>
+                    <p class="desc">Margin between td and div</p>
                 </p>
                 <p>
                     <div class="square yellow"></div>
-                    <span>Table background</span>
+                    <p class="desc">Table background</p>
                 </p>
                 <p>
                     <div class="square red"></div>
-                    <span>Td border</span>
+                    <p class="desc">Td border</p>
                 </p>
                 <p>
                     <div class="square blue"></div>
-                    <span>Tr border ddd</span>
+                    <p class="desc">Tr border ddd</p>
                 </p>
             </div>
         </div>

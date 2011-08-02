@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <stylesheet>
-    <div class="outside-column">
-        <enhancement name="background" color="red" />
-        <attribute name="margin" value="10 0" />
+    <div class="outside-column" background.color="red" margin="10 0">
     </div>
 </stylesheet>

@@ -4,17 +4,20 @@ error_reporting(E_ALL | E_NOTICE);
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 
-set_include_path(dirname(__FILE__).'/../lib' . PATH_SEPARATOR. dirname(__FILE__).'/../lib/vendor' . PATH_SEPARATOR . dirname(__FILE__).'/../lib/vendor/Zend' . PATH_SEPARATOR . get_include_path());
-mb_internal_encoding('utf-8');
+set_time_limit(240);
 
-require_once 'PHPPdf/Autoloader.php';
+require_once __DIR__.'/../lib/PHPPdf/Autoloader.php';
 
 PHPPdf\Autoloader::register();
 PHPPdf\Autoloader::register(dirname(__FILE__).'/../lib/vendor');
 
+// set different way of configuration
 //$facade = PHPPdf\Parser\FacadeBuilder::create(new PHPPdf\Configuration\DependencyInjection\LoaderImpl())->setCache('File', array('cache_dir' => __DIR__.'/cache/'))
-$facade = PHPPdf\Parser\FacadeBuilder::create()->setCache('File', array('cache_dir' => __DIR__.'/cache/'))
-                                               ->setUseCacheForStylesheetConstraint(true)
+$facade = PHPPdf\Parser\FacadeBuilder::create()
+// set cache
+//                                               ->setCache('File', array('cache_dir' => __DIR__.'/cache/'))
+//                                               ->setUseCacheForStylesheetConstraint(false)
+//                                               ->setUseCacheForStylesheetConstraint(true)
                                                ->build();
 
 if(!isset($_GET['name']))
@@ -33,9 +36,14 @@ if(!is_readable($documentFilename) || !is_readable($stylesheetFilename))
 }
 
 $xml = str_replace('dir:', __DIR__.'/', file_get_contents($documentFilename));
-$stylesheet = PHPPdf\Util\DataSource::fromFile($stylesheetFilename);
+$stylesheetXml = str_replace('dir:', __DIR__.'/', file_get_contents($stylesheetFilename));
+$stylesheet = PHPPdf\Util\DataSource::fromString($stylesheetXml);
+
+$start = microtime(true);
 
 $content = $facade->render($xml, $stylesheet);
+
+//echo (microtime(true) - $start);
 
 header('Content-Type: application/pdf');
 echo $content;

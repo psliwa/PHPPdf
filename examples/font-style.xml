@@ -2,12 +2,10 @@
 <stylesheet>
 	<table>
 		<tr>
-			<td>
-				<attribute name="padding" value="5" />
-				<attribute name="text-align" value="center" />
+			<td padding="5" text-align="center">
 			</td>
-			<td class="first">
-				<attribute name="font-type" value="verdana" />
+			
+			<td class="first" font-type="verdana">
 			</td>
 		</tr>
 	</table>

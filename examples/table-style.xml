@@ -1,53 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <stylesheet>
-    <any>
-        <attribute name="font-size" value="8" />
+    <any font-size="8">
     </any>
-    <table>
-        <enhancement name="background" color="yellow" />
-        <attribute name="width" value="100%" />
-        <tr>
-            <enhancement name="border" color="blue" />
-            <td>
-                <attribute name="margin" value="3" />
-                <attribute name="height" value="20" />
-                <attribute name="padding" value="3" />
-                <enhancement name="border" color="red" />
-                <enhancement name="background" color="white" />
-                <div>
-                    <enhancement name="background" color="pink" />
-                    <attribute name="height" value="100%" />
+    
+    <table background.color="yellow" width="100%">
+        <tr border.color="blue">
+            <td margin="3" padding="3" height="20" border.color="red" background.color="white">
+                <div background.color="pink" height="100%">
                 </div>
             </td>
         </tr>
     </table>
 
-    <div class="legend">
-        <attribute name="width" value="100%" />
-        <attribute name="margin-top" value="20" />
-        <div class="square">
-            <attribute name="width" value="12" />
-            <attribute name="height" value="12" />
-            <attribute name="float" value="left" />
-            <attribute name="margin" value="0 10" />
+    <div class="legend" width="100%" margin-top="20">
+        <div class="square" width="12" height="12" float="left" margin="0 10">
         </div>
-        <div class="pink">
-            <enhancement name="background" color="pink" />
+        
+        <div class="pink" background.color="pink">
         </div>
-        <div class="yellow">
-            <enhancement name="background" color="yellow" />
+        
+        <div class="yellow" background.color="yellow">
         </div>
-        <div class="red">
-            <enhancement name="background" color="red" />
+        
+        <div class="red" background.color="red">
         </div>
-        <div class="blue">
-            <enhancement name="background" color="blue" />
+        
+        <div class="blue" background.color="blue">
         </div>
-        <div class="white">
-            <enhancement name="border" color="black" />
+        
+        <div class="white" border.color="black">
         </div>
-        <span>
-            <attribute name="float" value="left" />
-        </span>
+        
+        <p class="desc" float="left" width="300">
+        </p>
     </div>
 </stylesheet>

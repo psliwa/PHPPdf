@@ -1,57 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <stylesheet>
-    <any>
-        <attribute name="font-size" value="8" />
+    <any font-size="8">
     </any>
-    <p>
-        <attribute name="margin" value="0" />
-        <attribute name="padding" value="0" />
+    
+    <p margin="0" padding="0">
     </p>
-    <any class="invoice-data">
-        <attribute name="float" value="right" />
-        <attribute name="width" value="200" />
-        <attribute name="padding-top" value="10" />
+    
+    <any class="invoice-data" float="right" width="200" padding-top="10">
     </any>
-    <h3>
-        <attribute name="font-style" value="bold" />
-        <attribute name="margin" value="0" />
-        <attribute name="font-size" value="10" />
+    
+    <h3 font-style="bold" margin="0" font-size="10">
     </h3>
-    <div class="bill">
-        <attribute name="width" value="50%" />
-        <attribute name="float" value="left" />
-        <attribute name="margin-top" value="20" />
+    
+    <div class="bill" width="50%" float="left" margin-top="20">
     </div>
-    <table class="invoice">
-        <attribute name="margin-top" value="20" />
+    
+    <table class="invoice" margin-top="20">
         <tr class="head">
-            <td>
-                <attribute name="text-align" value="center" />
-                <enhancement name="background" color="#cccccc" />
+            <td text-align="center" background.color="#cccccc">
             </td>
         </tr>
-        <td>
-            <enhancement name="border" type="all" size="0.5" color="#000000" />
-            <attribute name="padding" value="5" />
+        
+        <td border.type="all" border.size="0.5" border.color="#000000" padding="5">
         </td>
-        <td class="no-border">
-            <enhancement name="border" type="none" />
+
+        <td class="no-border" border.type="none">
         </td>
     </table>
-    <any class="center">
-        <attribute name="text-align" value="center" />
+
+    <any class="center" text-align="center">
     </any>
 
-    <div class="footer">
-        <attribute name="height" value="20" />
+    <div class="footer" height="20">
         <table>
-            <tr>
-                <enhancement name="border" type="none" />
-                <td>
-                    <attribute name="font-size" value="7" />
-                    <enhancement name="border" type="none" />
-                    <b>
-                        <attribute name="font-size" value="7" />
+            <tr border.type="none">
+                <td font-size="7" border.type="none">
+                    <b font-size="7">
                     </b>
                 </td>
             </tr>
