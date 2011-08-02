@@ -84,6 +84,7 @@
 					<argument>PHPPdf\Formatter\ContainerDimensionFormatter</argument>
 					<argument>PHPPdf\Formatter\StandardPositionFormatter</argument>
 					<argument>PHPPdf\Formatter\FloatFormatter</argument>
+					<argument>PHPPdf\Formatter\VerticalAlignFormatter</argument>
 				</argument>
 			</call>
 		</service>
@@ -140,6 +141,7 @@
 					<argument>PHPPdf\Formatter\ContainerDimensionFormatter</argument>
 					<argument>PHPPdf\Formatter\StandardPositionFormatter</argument>
 					<argument>PHPPdf\Formatter\FloatFormatter</argument>
+					<argument>PHPPdf\Formatter\VerticalAlignFormatter</argument>
 				</argument>
 			</call>
 		</service>
@@ -195,6 +197,7 @@
 					<argument>PHPPdf\Formatter\ContainerDimensionFormatter</argument>
 					<argument>PHPPdf\Formatter\StandardPositionFormatter</argument>
 					<argument>PHPPdf\Formatter\FloatFormatter</argument>
+					<argument>PHPPdf\Formatter\VerticalAlignFormatter</argument>
 				</argument>
 			</call>
 		</service>
@@ -214,6 +217,7 @@
 					<argument>PHPPdf\Formatter\ContainerDimensionFormatter</argument>
 					<argument>PHPPdf\Formatter\StandardPositionFormatter</argument>
 					<argument>PHPPdf\Formatter\FloatFormatter</argument>
+					<argument>PHPPdf\Formatter\VerticalAlignFormatter</argument>
 				</argument>
 			</call>
 		</service>
@@ -232,6 +236,7 @@
 					<argument>PHPPdf\Formatter\ContainerDimensionFormatter</argument>
 					<argument>PHPPdf\Formatter\StandardPositionFormatter</argument>
 					<argument>PHPPdf\Formatter\FloatFormatter</argument>
+					<argument>PHPPdf\Formatter\VerticalAlignFormatter</argument>
 				</argument>
 			</call>
 		</service>
@@ -250,6 +255,7 @@
 					<argument>PHPPdf\Formatter\ContainerDimensionFormatter</argument>
 					<argument>PHPPdf\Formatter\StandardPositionFormatter</argument>
 					<argument>PHPPdf\Formatter\FloatFormatter</argument>
+					<argument>PHPPdf\Formatter\VerticalAlignFormatter</argument>
 				</argument>
 			</call>
 		</service>
@@ -268,6 +274,7 @@
 					<argument>PHPPdf\Formatter\ContainerDimensionFormatter</argument>
 					<argument>PHPPdf\Formatter\StandardPositionFormatter</argument>
 					<argument>PHPPdf\Formatter\FloatFormatter</argument>
+					<argument>PHPPdf\Formatter\VerticalAlignFormatter</argument>
 				</argument>
 			</call>
 		</service>
@@ -286,6 +293,7 @@
 					<argument>PHPPdf\Formatter\ContainerDimensionFormatter</argument>
 					<argument>PHPPdf\Formatter\StandardPositionFormatter</argument>
 					<argument>PHPPdf\Formatter\FloatFormatter</argument>
+					<argument>PHPPdf\Formatter\VerticalAlignFormatter</argument>
 				</argument>
 			</call>
 		</service>
@@ -436,6 +444,7 @@
 		</service>
 		<service id="phppdf.glyph.b" class="PHPPdf\Glyph\Text" public="false">
 			<tag name="phppdf.glyph" />
+			<argument></argument>
 			<argument type="collection">
 				<argument key="font-style">bold</argument>
 			</argument>
@@ -486,7 +495,6 @@
 					<argument>PHPPdf\Formatter\ContainerDimensionFormatter</argument>
 					<argument>PHPPdf\Formatter\StandardPositionFormatter</argument>
 					<argument>PHPPdf\Formatter\FloatFormatter</argument>
-					<argument>PHPPdf\Formatter\ColumnDivertingFormatter</argument>
 				</argument>
 			</call>
 		</service>

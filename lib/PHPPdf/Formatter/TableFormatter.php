@@ -30,6 +30,8 @@ class TableFormatter extends BaseFormatter
         $totalWidth = array_sum($widthsOfColumns);
         $totalMargins = array_sum($marginsLeft) + array_sum($marginsRight);
 
+        $verticalAlignFormatter = $document->getFormatter('PHPPdf\Formatter\VerticalAlignFormatter');
+        
         foreach($glyph->getChildren() as $row)
         {
             $diffBetweenTableAndColumnsWidths = $tableWidth - $totalWidth - $totalMargins;
@@ -81,6 +83,8 @@ class TableFormatter extends BaseFormatter
                 $cell->resize($diff, 0);
 
                 $translate += $newWidth + $marginsRight[$column];
+                
+                $verticalAlignFormatter->format($cell, $document);
             }
         }
     }

@@ -38,6 +38,7 @@
 	            <formatter class="PHPPdf\Formatter\ContainerDimensionFormatter" />
 	            <formatter class="PHPPdf\Formatter\StandardPositionFormatter" />
 	            <formatter class="PHPPdf\Formatter\FloatFormatter" />
+	            <formatter class="PHPPdf\Formatter\VerticalAlignFormatter" />
 	        </formatters>
 	    </glyph>
 	    <glyph name="ul" class="PHPPdf\Glyph\BasicList">
@@ -80,6 +81,7 @@
 	            <formatter class="PHPPdf\Formatter\ContainerDimensionFormatter" />
 	            <formatter class="PHPPdf\Formatter\StandardPositionFormatter" />
 	            <formatter class="PHPPdf\Formatter\FloatFormatter" />
+	            <formatter class="PHPPdf\Formatter\VerticalAlignFormatter" />
 	        </formatters>
 	    </glyph>
 	    
@@ -116,6 +118,7 @@
 	            <formatter class="PHPPdf\Formatter\ContainerDimensionFormatter" />
 	            <formatter class="PHPPdf\Formatter\StandardPositionFormatter" />
 	            <formatter class="PHPPdf\Formatter\FloatFormatter" />
+	            <formatter class="PHPPdf\Formatter\VerticalAlignFormatter" />
 	        </formatters>
 	    </glyph>
 	    <glyph name="h2" class="PHPPdf\Glyph\Container">
@@ -132,6 +135,7 @@
 	            <formatter class="PHPPdf\Formatter\ContainerDimensionFormatter" />
 	            <formatter class="PHPPdf\Formatter\StandardPositionFormatter" />
 	            <formatter class="PHPPdf\Formatter\FloatFormatter" />
+	            <formatter class="PHPPdf\Formatter\VerticalAlignFormatter" />
 	        </formatters>
 	    </glyph>
 	    <glyph name="h3" class="PHPPdf\Glyph\Container">
@@ -147,6 +151,7 @@
 	            <formatter class="PHPPdf\Formatter\ContainerDimensionFormatter" />
 	            <formatter class="PHPPdf\Formatter\StandardPositionFormatter" />
 	            <formatter class="PHPPdf\Formatter\FloatFormatter" />
+	            <formatter class="PHPPdf\Formatter\VerticalAlignFormatter" />
 	        </formatters>
 	    </glyph>
 	    <glyph name="h4" class="PHPPdf\Glyph\Container">
@@ -162,6 +167,7 @@
 	            <formatter class="PHPPdf\Formatter\ContainerDimensionFormatter" />
 	            <formatter class="PHPPdf\Formatter\StandardPositionFormatter" />
 	            <formatter class="PHPPdf\Formatter\FloatFormatter" />
+	            <formatter class="PHPPdf\Formatter\VerticalAlignFormatter" />
 	        </formatters>
 	    </glyph>
 	    <glyph name="h5" class="PHPPdf\Glyph\Container">
@@ -177,6 +183,7 @@
 	            <formatter class="PHPPdf\Formatter\ContainerDimensionFormatter" />
 	            <formatter class="PHPPdf\Formatter\StandardPositionFormatter" />
 	            <formatter class="PHPPdf\Formatter\FloatFormatter" />
+	            <formatter class="PHPPdf\Formatter\VerticalAlignFormatter" />
 	        </formatters>
 	    </glyph>
 	    <glyph name="h6" class="PHPPdf\Glyph\Container">
@@ -192,6 +199,7 @@
 	            <formatter class="PHPPdf\Formatter\ContainerDimensionFormatter" />
 	            <formatter class="PHPPdf\Formatter\StandardPositionFormatter" />
 	            <formatter class="PHPPdf\Formatter\FloatFormatter" />
+	            <formatter class="PHPPdf\Formatter\VerticalAlignFormatter" />
 	        </formatters>
 	    </glyph>
 	    <glyph name="page-info" class="PHPPdf\Glyph\Runtime\PageInfo">

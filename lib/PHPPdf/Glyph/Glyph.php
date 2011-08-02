@@ -34,6 +34,9 @@ abstract class Glyph implements Drawable, \ArrayAccess, \Serializable
     const ALIGN_LEFT = 'left';
     const ALIGN_RIGHT = 'right';
     const ALIGN_CENTER = 'center';
+    const VERTICAL_ALIGN_TOP = 'top';
+    const VERTICAL_ALIGN_MIDDLE = 'middle';
+    const VERTICAL_ALIGN_BOTTOM = 'bottom';
     
     private static $attributeSetters = array();
     private static $attributeGetters = array();
@@ -300,6 +303,8 @@ abstract class Glyph implements Drawable, \ArrayAccess, \Serializable
         $this->addAttribute('font-style', null);
         $this->addAttribute('static-size', false);
         $this->addAttribute('page-break', false);
+        
+        $this->addAttribute('vertical-align', null);
 
         $this->enhancementBag = new EnhancementBag();
     }
