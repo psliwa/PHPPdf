@@ -22,6 +22,7 @@ class StylesheetParser extends XmlParser
     const ATTRIBUTE_TAG = 'attribute';
     const ENHANCEMENT_TAG = 'enhancement';
     const ANY_TAG = 'any';
+    const ATTRIBUTE_CLASS = 'class';
     
     private $throwsExceptionOnConstraintTag = false;
     private $root;
@@ -127,7 +128,7 @@ class StylesheetParser extends XmlParser
 
         $constraint = new StylesheetConstraint();
 
-        $class = $reader->getAttribute('class');
+        $class = $reader->getAttribute(self::ATTRIBUTE_CLASS);
         $classes = preg_split('/\s+/', $class);
 
         if(!$tag)
@@ -144,7 +145,30 @@ class StylesheetParser extends XmlParser
             }
         }
         
+        $this->addConstraintsFromAttributes($constraint, $reader);
+        
         $this->pushOnStack($constraint);
+    }
+    
+    public function addConstraintsFromAttributes(BagContainer $constraint, \XMLReader $reader, array $ignoredAttributes = array(self::ATTRIBUTE_CLASS))
+    {
+        while($reader->moveToNextAttribute())
+        {
+            $name = $reader->name;
+            
+            if(!in_array($name, $ignoredAttributes))
+            {
+                if(false === ($index = strpos($name, '.')))
+                {
+                    $constraint->getAttributeBag()->add($name, $reader->value);
+                }
+                else
+                {
+                    list($enhancementName, $propertyName) = explode('.', $name);
+                    $constraint->getEnhancementBag()->add($enhancementName, array($propertyName => $reader->value, 'name' => $enhancementName));
+                }
+            }
+        }
     }
 
     protected function parseEndElement(\XMLReader $reader)

@@ -50,6 +50,9 @@ XML;
         return ($this->getConstraint($constraint, $tag, $classes) !== false);
     }
 
+    /**
+     * @return StylesheetConstraint
+     */
     private function getConstraint(StylesheetConstraint $constraint, $tag, array $classes = array())
     {
         foreach($constraint->getConstraints() as $child)
@@ -332,5 +335,43 @@ XML;
         $resultConstraint = $this->parser->parse($xml);
 
         $this->assertEquals(array('someName' => 'value'), $resultConstraint->getAttributeBag()->getAll());
+    }
+    
+    /**
+     * @test
+     */
+    public function parseAttributesFromXmlAttributes()
+    {
+        $xml = <<<XML
+<stylesheet>
+	<some-tag someAttribute="someValue" />
+</stylesheet>
+XML;
+
+        $resultConstraint = $this->parser->parse($xml);
+
+        $constraint = $this->getConstraint($resultConstraint, 'some-tag');
+        
+        $this->assertNotNull($constraint);
+        $this->assertEquals(array('someAttribute' => 'someValue'), $constraint->getAttributeBag()->getAll());
+    }
+    
+    /**
+     * @test
+     */
+    public function parseEnhancementsFromXmlAttributes()
+    {
+        $xml = <<<XML
+<stylesheet>
+	<some-tag someEnhancement.attribute="value" />
+</stylesheet>
+XML;
+
+        $resultConstraint = $this->parser->parse($xml);
+
+        $constraint = $this->getConstraint($resultConstraint, 'some-tag');
+        
+        $this->assertNotNull($constraint);
+        $this->assertEquals(array('someEnhancement' => array('name' => 'someEnhancement', 'attribute' => 'value')), $constraint->getEnhancementBag()->getAll());
     }
 }

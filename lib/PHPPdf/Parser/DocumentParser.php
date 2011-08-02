@@ -356,23 +356,9 @@ class DocumentParser extends XmlParser
     private function setGlyphAttributesFromReader(\XMLReader $reader, Glyph $glyph)
     {
         $bagContainer = new BagContainer();
-        while($reader->moveToNextAttribute())
-        {
-            $name = $reader->name;
-
-            if(!in_array($name, array(self::ATTRIBUTE_ID, self::ATTRIBUTE_EXTENDS, self::ATTRIBUTE_CLASS)))
-            {
-                if(false === ($index = strpos($name, '.')))
-                {
-                    $bagContainer->getAttributeBag()->add($name, $reader->value);
-                }
-                else
-                {
-                    list($enhancementName, $propertyName) = explode('.', $name);
-                    $bagContainer->getEnhancementBag()->add($enhancementName, array($propertyName => $reader->value, 'name' => $enhancementName));
-                }
-            }
-        }
+        
+        $stylesheetParser = $this->getStylesheetParser();
+        $stylesheetParser->addConstraintsFromAttributes($bagContainer, $reader, array(self::ATTRIBUTE_ID, self::ATTRIBUTE_EXTENDS, self::ATTRIBUTE_CLASS));
 
         $this->setGlyphStylesheet($glyph, $bagContainer);
     }
