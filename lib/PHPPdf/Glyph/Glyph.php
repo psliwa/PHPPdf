@@ -8,6 +8,8 @@
 
 namespace PHPPdf\Glyph;
 
+use PHPPdf\Util\Point;
+
 use PHPPdf\Document,
     PHPPdf\Util,
     PHPPdf\Glyph\Container,
@@ -125,6 +127,14 @@ abstract class Glyph implements Drawable, \ArrayAccess, \Serializable
         self::$attributeSetters[$class] = $setters + self::$attributeSetters[$class];
     }
 
+    protected function addDrawingTasks(array $tasks)
+    {
+        foreach($tasks as $task)
+        {
+            $this->addDrawingTask($task);
+        }
+    }
+    
     protected function addDrawingTask(DrawingTask $task)
     {
         $this->drawingTasks[] = $task;
@@ -213,7 +223,18 @@ abstract class Glyph implements Drawable, \ArrayAccess, \Serializable
     public function getRealDiagonalPoint()
     {
         return $this->getRealBoundary()->getDiagonalPoint();
-    }    
+    }
+    
+    /**
+     * @return PHPPdf\Util\Point Point that divides line between first and diagonal points on half
+     */
+    public function getMiddlePoint()
+    {
+        $x = $this->getFirstPoint()->getX() + ($this->getDiagonalPoint()->getX() - $this->getFirstPoint()->getX())/2;
+        $y = $this->getDiagonalPoint()->getY() + ($this->getFirstPoint()->getY() - $this->getDiagonalPoint()->getY())/2;
+        
+        return Point::getInstance($x, $y);
+    }
 
     public function setParent(Container $glyph)
     {

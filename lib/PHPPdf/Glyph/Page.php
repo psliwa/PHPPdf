@@ -134,7 +134,9 @@ class Page extends Container
 
         if(!$this->preparedTemplate)
         {
-            $this->prepareTemplate($document);
+            $tasks = $this->getTemplateDrawingTasksAndFormatPlaceholders($document);
+            
+            $this->addDrawingTasks($tasks);
         }
         
         parent::doDraw($document);
@@ -144,10 +146,7 @@ class Page extends Container
             $glyph->evaluate();
             $tasks = $glyph->getDrawingTasks($document);
 
-            foreach($tasks as $task)
-            {
-                $this->addDrawingTask($task);
-            }
+            $this->addDrawingTasks($tasks);
         }
     }
 
@@ -384,6 +383,15 @@ class Page extends Container
 
     public function prepareTemplate(Document $document)
     {
+        $tasks = $this->getTemplateDrawingTasksAndFormatPlaceholders($document);
+
+        $document->invokeTasks($tasks);
+
+        $this->preparedTemplate = true;
+    }
+    
+    private function getTemplateDrawingTasksAndFormatPlaceholders(Document $document)
+    {
         $this->formatConvertAttributes($document);
         
         $this->getHeader()->format($document);
@@ -396,10 +404,8 @@ class Page extends Container
 
         $this->footer->removeAll();
         $this->header->removeAll();
-
-        $document->invokeTasks($tasks);
-
-        $this->preparedTemplate = true;
+        
+        return $tasks;
     }
 
     private function formatConvertAttributes(Document $document)

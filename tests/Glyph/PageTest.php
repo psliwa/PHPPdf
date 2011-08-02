@@ -1,5 +1,6 @@
 <?php
 
+use PHPPdf\Util\DrawingTask;
 use PHPPdf\Document;
 use PHPPdf\Glyph\Page;
 use PHPPdf\Glyph\PageContext;
@@ -245,19 +246,43 @@ class PageTest extends TestCase
 
     /**
      * @test
+     * @dataProvider booleanProvider
      */
-    public function prepareTemplateMethodIsCalledDuringDrawing()
+    public function drawingTasksFromPlaceholderAreInResultOfGetDrawingTasksIfPrepareTemplateMethodHasNotBeenInvoked($invoke)
     {
-        $header = $this->getMock('PHPPdf\Glyph\Container', array('format', 'getHeight'));
+        $tasks = array(new DrawingTask(function(){}), new DrawingTask(function(){}));
+        
+        $header = $this->getMock('PHPPdf\Glyph\Container', array('format', 'getHeight', 'getDrawingTasks'));
         $header->expects($this->once())
                ->method('format');
         $header->expects($this->atLeastOnce())
                ->method('getHeight')
                ->will($this->returnValue(10));
+        $header->expects($this->once())
+               ->method('getDrawingTasks')
+               ->will($this->returnValue($tasks));
         
         $this->page->setHeader($header);
+        
+        if($invoke)
+        {
+            $this->page->prepareTemplate($this->document);
+        }
 
-        $this->page->getDrawingTasks($this->document);
+        $actualTasks = $this->page->getDrawingTasks($this->document);
+        
+        foreach($actualTasks as $task)
+        {
+            $this->assertEquals(!$invoke, in_array($task, $tasks));
+        }
+    }
+    
+    public function booleanProvider()
+    {
+        return array(
+            array(false),
+            array(true),
+        );
     }
 
     /**
