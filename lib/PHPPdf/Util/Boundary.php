@@ -19,7 +19,6 @@ class Boundary implements \Countable, \Iterator, \ArrayAccess, \Serializable
     private $numberOfPoints = 0;
     private $closed = false;
     private $current = 0;
-    private $diagonalPointIndex = null;
     private $diagonalPointXIndex = null;
     private $diagonalPointYIndex = null;
 
@@ -264,7 +263,6 @@ class Boundary implements \Countable, \Iterator, \ArrayAccess, \Serializable
         $this->points = array();
         $this->rewind();
         $this->numberOfPoints = 0;
-        $this->diagonalPointIndex = null;
         $this->diagonalPointXIndex = null;
         $this->diagonalPointYIndex = null;
     }
