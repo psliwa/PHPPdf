@@ -78,7 +78,7 @@ class ParagraphFormatterTest extends TestCase
                     ),
                     array(
                         array(2, 200 - $lineHeightFor15),
-                        array(17, 200 - ($lineHeightFor15 + 2*$lineHeightFor12)),
+                        array(24, 200 - ($lineHeightFor15 + 2*$lineHeightFor12)),
                     ),
                 ),
             ),

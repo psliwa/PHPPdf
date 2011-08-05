@@ -20,6 +20,8 @@ class Boundary implements \Countable, \Iterator, \ArrayAccess, \Serializable
     private $closed = false;
     private $current = 0;
     private $diagonalPointIndex = null;
+    private $diagonalPointXIndex = null;
+    private $diagonalPointYIndex = null;
 
     /**
      * Add next point to boundary
@@ -49,16 +51,22 @@ class Boundary implements \Countable, \Iterator, \ArrayAccess, \Serializable
             throw new \InvalidArgumentException('Passed argument(s) should be coordinations or Point object.');
         }
 
-        $this->points[$this->numberOfPoints] = $point;
+        $oldNumberOfPoints = $this->numberOfPoints;
+        $this->points[$oldNumberOfPoints] = $point;
+        $this->numberOfPoints++;
 
-        $diagonalPoint = $this->diagonalPointIndex === null ? null : $this->points[$this->diagonalPointIndex];
+        $diagonalPoint = $this->getDiagonalPoint();
 
-        if(!$diagonalPoint || ($diagonalPoint->compareYCoord($point) > 0 || $diagonalPoint->compareYCoord($point) == 0 && $diagonalPoint->compareXCoord($point) < 0))
+        if(!$diagonalPoint || $diagonalPoint->compareYCoord($point) > 0)
         {
-            $this->diagonalPointIndex = $this->numberOfPoints;
+            $this->diagonalPointYIndex = $oldNumberOfPoints;
+        }
+        
+        if(!$diagonalPoint || $diagonalPoint->compareXCoord($point) < 0)
+        {
+            $this->diagonalPointXIndex = $oldNumberOfPoints;
         }
 
-        $this->numberOfPoints++;
 
         return $this;
     }
@@ -239,9 +247,9 @@ class Boundary implements \Countable, \Iterator, \ArrayAccess, \Serializable
      */
     public function getDiagonalPoint()
     {
-        if($this->diagonalPointIndex !== null)
+        if($this->diagonalPointXIndex !== null && $this->diagonalPointYIndex !== null)
         {
-            return $this->points[$this->diagonalPointIndex];
+            return Point::getInstance($this[$this->diagonalPointXIndex]->getX(), $this[$this->diagonalPointYIndex]->getY());
         }
 
         return null;
@@ -257,6 +265,8 @@ class Boundary implements \Countable, \Iterator, \ArrayAccess, \Serializable
         $this->rewind();
         $this->numberOfPoints = 0;
         $this->diagonalPointIndex = null;
+        $this->diagonalPointXIndex = null;
+        $this->diagonalPointYIndex = null;
     }
 
     public function isClosed()

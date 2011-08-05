@@ -30,6 +30,12 @@ class Paragraph extends Container
         return $this->getParent()->getWidth();
     }
     
+    public function setWidth($width)
+    {
+        $this->getParent()->setWidth($width);
+        return $this;
+    }
+    
     public function getParentPaddingLeft()
     {
         return $this->getParent()->getPaddingLeft();
@@ -105,6 +111,8 @@ class Paragraph extends Container
                 $tasks[] = $task;
             }
         }
+        
+        $tasks = array_merge($tasks, $this->getDrawingTasksFromEnhancements($document));
         
         return $tasks;
     }

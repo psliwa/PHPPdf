@@ -99,16 +99,50 @@ class BoundaryTest extends PHPUnit_Framework_TestCase
     
     /**
      * @test
+     * @dataProvider pointsProvider
      */
-    public function diagonal()
+    public function diagonalPointIsPointWithMinYCoordAndMaxXCoord(array $points)
     {
-        $this->boundary->setNext(10, 10)
-               ->setNext(20, 10)
-               ->setNext(20, 5)
-               ->setNext(10, 5);
+        $maxX = -(PHP_INT_MAX - 1);
+        $minY = PHP_INT_MAX;
+        
+        foreach($points as $point)
+        {
+            $this->boundary->setNext($point[0], $point[1]);
+            
+            $maxX = max($maxX, $point[0]);
+            $minY = min($minY, $point[1]);
+        }
+        
+        $diagonalPoint = $this->boundary->getDiagonalPoint();
+        
+        $this->assertEquals($maxX, $diagonalPoint->getX());
+        $this->assertEquals($minY, $diagonalPoint->getY());
 
-        $this->assertEquals(array(20, 5), $this->boundary->getDiagonalPoint()->toArray());
-        $this->assertEquals(array(10, 10), $this->boundary->getFirstPoint()->toArray());
+        $this->assertEquals($points[0], $this->boundary->getFirstPoint()->toArray());
+    }
+    
+    public function pointsProvider()
+    {
+        return array(
+            array(
+                array(
+                    array(10, 10),
+                    array(20, 10),
+                    array(20, 5),
+                    array(10, 5),
+                ),
+            ),
+            array(
+                array(
+                    array(10, 10),
+                    array(20, 10),
+                    array(20, 5),
+                    array(25, 5),
+                    array(14, 7),
+                ),
+            ),
+        );
     }
 
     /**
