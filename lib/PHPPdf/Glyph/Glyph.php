@@ -327,7 +327,12 @@ abstract class Glyph implements Drawable, \ArrayAccess, \Serializable
         
         $this->addAttribute('vertical-align', null);
 
-        $this->enhancementBag = new EnhancementBag();
+        $this->setEnhancementBag(new EnhancementBag());
+    }
+    
+    protected function setEnhancementBag(EnhancementBag $bag)
+    {
+        $this->enhancementBag = $bag;
     }
 
     public function reset()
@@ -881,14 +886,24 @@ abstract class Glyph implements Drawable, \ArrayAccess, \Serializable
 
     protected function preDraw(Document $document)
     {
+        $tasks = $this->getDrawingTasksFromEnhancements($document);
+        $this->addDrawingTasks($tasks);
+    }
+    
+    protected function getDrawingTasksFromEnhancements(Document $document)
+    {
+        $tasks = array();
+        
         $enhancements = $document->getEnhancements($this->enhancementBag);
         foreach($enhancements as $enhancement)
         {
             $callback = array($enhancement, 'enhance');
             $args = array($this->getPage(), $this);
             $priority = $enhancement->getPriority() + $this->getPriority();
-            $this->addDrawingTask(new DrawingTask($callback, $args, $priority));
+            $tasks[] = new DrawingTask($callback, $args, $priority);
         }
+        
+        return $tasks;
     }
 
     public function getPriority()

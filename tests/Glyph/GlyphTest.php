@@ -1,6 +1,9 @@
 <?php
 
-use PHPPdf\Document,
+use PHPPdf\Glyph\Page;
+use PHPPdf\Enhancement\Background,
+    PHPPdf\Enhancement\Border,
+    PHPPdf\Document,
     PHPPdf\Util\Point,
     PHPPdf\Glyph\Glyph,
     PHPPdf\Glyph\Container;
@@ -488,6 +491,46 @@ class GlyphTest extends TestCase
                 false, 100, 100, false,
                 false, 100, 101, true,
                 true, 100, 101, true,
+            ),
+        );
+    }
+    
+    /**
+     * @test
+     * @dataProvider enhancementStubsProvider
+     */
+    public function forEachEnhancementAddOneDrawingTask(array $enhancementStubs)
+    {
+        $page = new Page();
+        $page->add($this->glyph);
+        
+        $document = $this->getMockBuilder('PHPPdf\Document')
+                         ->setMethods(array('getEnhancements'))
+                         ->getMock();
+        $bag = $this->getMockBuilder('PHPPdf\Enhancement\EnhancementBag')
+                    ->getMock();
+                         
+                         
+        $this->invokeMethod($this->glyph, 'setEnhancementBag', array($bag));
+        
+        $document->expects($this->once())
+                 ->method('getEnhancements')
+                 ->with($bag)
+                 ->will($this->returnValue($enhancementStubs));
+
+        $drawingTasks = $this->glyph->getDrawingTasks($document);
+        
+        $this->assertEquals(count($enhancementStubs), count($drawingTasks));
+    }
+    
+    public function enhancementStubsProvider()
+    {
+        return array(
+            array(
+                array(new Border(), new Border(), new Background()),
+            ),
+            array(
+                array(),
             ),
         );
     }

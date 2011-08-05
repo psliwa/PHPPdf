@@ -399,13 +399,16 @@ class Page extends Container
 
         $tasks = array();
 
-        $tasks = array_merge($tasks, $this->footer->getDrawingTasks($document));
-        $tasks = array_merge($tasks, $this->header->getDrawingTasks($document));
+        $tasks = array_merge($this->getDrawingTasksFromEnhancements($document), $this->footer->getDrawingTasks($document), $this->header->getDrawingTasks($document));
 
         $this->footer->removeAll();
         $this->header->removeAll();
         
         return $tasks;
+    }
+    
+    protected function preDraw(Document $document)
+    {
     }
 
     private function formatConvertAttributes(Document $document)

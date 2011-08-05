@@ -73,6 +73,36 @@ class DynamicPageTest extends TestCase
     
     /**
      * @test
+     * @dataProvider methodsProvider
+     */
+    public function delegateMethodInvocationsToPrototype($methodName, $arg1, $arg2)
+    {        
+        $prototype = $this->getMockBuilder('PHPPdf\Glyph\Page')
+                          ->setMethods(array($methodName))
+                          ->getMock();
+                          
+        $prototype->expects($this->once())
+                  ->method($methodName)
+                  ->with($arg1, $arg2);
+                  
+        $this->page->setPrototypePage($prototype);
+        $this->page->$methodName($arg1, $arg2);
+    }
+    
+    public function methodsProvider()
+    {
+        return array(
+            array(
+                'setAttribute', 'color', 'white',
+            ),
+            array(
+                'mergeEnhancementAttributes', 'border', array(),
+            ),
+        );
+    }
+    
+    /**
+     * @test
      */
     public function serializePagePrototypeOnSerialization()
     {
