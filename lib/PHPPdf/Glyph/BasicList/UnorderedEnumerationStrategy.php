@@ -29,6 +29,6 @@ class UnorderedEnumerationStrategy extends TextEnumerationStrategy
     
     public function getWidthOfTheBiggestPosibleEnumerationElement(BasicList $list)
     {
-        return $this->getWidthOfText($list->getType(), $list->getFontType(true), $list->getRecurseAttribute('font-size'));
+        return $this->getWidthOfText($list->getType(), $list->getFontType(true), $list->getFontSizeRecursively());
     }
 }

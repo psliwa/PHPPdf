@@ -25,6 +25,7 @@ abstract class EnumerationStrategyTest extends TestCase
                          ->setMethods(array_merge($this->getListMockedMethod(), array('getChild', 'getAttribute', 'getEncoding', 'getFontSizeRecursively', 'getRecurseAttribute', 'getFontType', 'getFont')))
                          ->getMock();
         $fontTypeMock = $this->getMockBuilder('PHPPdf\Font\Font')
+                             ->setMethods(array('getCharsWidth'))
                              ->disableOriginalConstructor()
                              ->getMock();
         $fontMock = $this->getMockBuilder('PHPPdf\Font\Font')
@@ -68,10 +69,10 @@ abstract class EnumerationStrategyTest extends TestCase
         }
         else
         {
-            $fontTypeMock->expects($this->never())
-                          ->method('getCharsWidth');
+            $fontTypeMock->expects($this->atLeastOnce())
+                         ->method('getCharsWidth');
         }
-                       
+
         $listMock->expects($this->atLeastOnce())
                        ->method('getAttribute')
                        ->with('position')
@@ -91,7 +92,7 @@ abstract class EnumerationStrategyTest extends TestCase
                  ->method('getFont')
                  ->will($this->returnValue($fontMock));
                        
-        $listMock->expects($this->once())
+        $listMock->expects($this->atLeastOnce())
              ->method('getFontType')
              ->with(true)
              ->will($this->returnValue($fontTypeMock));

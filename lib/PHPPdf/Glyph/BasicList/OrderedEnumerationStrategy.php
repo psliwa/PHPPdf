@@ -31,6 +31,6 @@ class OrderedEnumerationStrategy extends TextEnumerationStrategy
     public function getWidthOfTheBiggestPosibleEnumerationElement(BasicList $list)
     {
         $enumerationText = $this->assembleEnumerationText($list, count($list->getChildren()));
-        return $this->getWidthOfText($enumerationText, $list->getFontType(true), $list->getRecurseAttribute('font-size'));
+        return $this->getWidthOfText($enumerationText, $list->getFontType(true), $list->getFontSizeRecursively());
     }
 }

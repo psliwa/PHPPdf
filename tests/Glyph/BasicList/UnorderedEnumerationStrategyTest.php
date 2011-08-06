@@ -27,7 +27,7 @@ class UnorderedEnumerationStrategyTest extends EnumerationStrategyTest
     
     protected function setElementPattern($list, $pattern)
     {
-        $list->expects($this->once())
+        $list->expects($this->atLeastOnce())
                  ->method('getType')
                  ->will($this->returnValue($pattern));
     }

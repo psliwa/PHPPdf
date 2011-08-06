@@ -36,6 +36,11 @@ abstract class TextEnumerationStrategy extends AbstractEnumerationStrategy
             $widthOfEnumerationText = $this->getWidthOfText($enumerationText, $font, $fontSize);
             $xTranslation -= $widthOfEnumerationText;
         }
+        else
+        {
+            $widthOfEnumerationText = $this->getWidthOfTheBiggestPosibleEnumerationElement($list) - $this->getWidthOfText($enumerationText, $font, $fontSize);
+            $xTranslation += $widthOfEnumerationText;
+        }
         
         $this->enumerationText = $enumerationText;
         
