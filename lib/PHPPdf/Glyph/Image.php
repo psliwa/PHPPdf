@@ -61,4 +61,9 @@ class Image extends Glyph
     {
         return null;
     }
+    
+    public function getMinWidth()
+    {
+        return $this->getWidth() + $this->getMarginLeft() + $this->getMarginRight();
+    }
 }

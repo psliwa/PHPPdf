@@ -64,4 +64,27 @@ class ImageTest extends PHPUnit_Framework_TestCase
             $task->invoke();
         }
     }
+    
+    /**
+     * @test
+     * @dataProvider dataProvider
+     */
+    public function minWidthOfImageIsWidthIncraseByHorizontalMargins($width, $marginLeft, $marginRight)
+    {
+        $this->image->setWidth($width);
+        $this->image->setMarginLeft($marginLeft);
+        $this->image->setMarginRight($marginRight);
+        
+        $expectedMinWidth = $width + $marginLeft + $marginRight;
+        
+        $this->assertEquals($expectedMinWidth, $this->image->getMinWidth());
+    }
+    
+    public function dataProvider()
+    {
+        return array(
+            array(100, 0, 0),
+            array(100, 5, 6),
+        );
+    }
 }
