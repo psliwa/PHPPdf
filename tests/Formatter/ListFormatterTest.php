@@ -18,7 +18,7 @@ class ListFormatterTest extends TestCase
      */
     public function ifListsPositionIsOutsidePositionOfChildrenWontBeTranslated()
     {
-        $list = $this->getMock('PHPPdf\Glyph\BasicList', array('getChildren', 'getAttribute'));
+        $list = $this->getMock('PHPPdf\Glyph\BasicList', array('getChildren', 'getAttribute', 'assignEnumerationStrategyFromFactory'));
         
         $list->expects($this->once())
              ->method('getAttribute')
@@ -27,6 +27,9 @@ class ListFormatterTest extends TestCase
 
         $list->expects($this->never())
              ->method('getChildren');
+             
+        $list->expects($this->once())
+             ->method('assignEnumerationStrategyFromFactory');
              
         $this->formatter->format($list, new Document());
     }
@@ -38,11 +41,12 @@ class ListFormatterTest extends TestCase
     {
         $widthOfEnumerationChar = 7;
         
-        $list = $this->getMock('PHPPdf\Glyph\BasicList', array('getChildren', 'getEnumerationStrategy', 'getAttribute'));
+        $list = $this->getMock('PHPPdf\Glyph\BasicList', array('getChildren', 'getEnumerationStrategy', 'getAttribute', 'assignEnumerationStrategyFromFactory'));
         
         $enumerationStrategy = $this->getMock('PHPPdf\Glyph\BasicList\EnumerationStrategy', array('getWidthOfTheBiggestPosibleEnumerationElement', 'drawEnumeration', 'reset', 'setIndex', 'setVisualIndex'));
         
         $list->expects($this->once())
+             ->after('assign')
              ->method('getEnumerationStrategy')
              ->will($this->returnValue($enumerationStrategy));
             
@@ -50,6 +54,10 @@ class ListFormatterTest extends TestCase
              ->method('getAttribute')
              ->with('position')
              ->will($this->returnValue(BasicList::POSITION_INSIDE));
+             
+        $list->expects($this->once())
+             ->id('assign')
+             ->method('assignEnumerationStrategyFromFactory');
              
         $enumerationStrategy->expects($this->once())
                             ->method('getWidthOfTheBiggestPosibleEnumerationElement') 

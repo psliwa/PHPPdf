@@ -106,6 +106,8 @@ class BasicListTest extends TestCase
                 
         $this->list->setEnumerationStrategyFactory($factory);
         
+        $this->list->assignEnumerationStrategyFromFactory();
+        
         $enumerationStrategy = $this->list->getEnumerationStrategy();
         
         $this->assertTrue($expectedStrategy === $enumerationStrategy);

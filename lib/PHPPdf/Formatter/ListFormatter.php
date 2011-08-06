@@ -18,6 +18,8 @@ class ListFormatter extends BaseFormatter
     {
         $position = $glyph->getAttribute('position');
         
+        $glyph->assignEnumerationStrategyFromFactory();
+        
         if($position === BasicList::POSITION_INSIDE)
         {
             $widthOfEnumerationChar = $glyph->getEnumerationStrategy()->getWidthOfTheBiggestPosibleEnumerationElement($glyph);

@@ -119,10 +119,15 @@ class BasicList extends Container
     {
         if($this->enumerationStrategy === null)
         {
-            $this->enumerationStrategy = $this->enumerationStrategyFactory->create($this->getAttribute('type'));
+            $this->assignEnumerationStrategyFromFactory();
         }
-
+        
         return $this->enumerationStrategy;
+    }
+    
+    public function assignEnumerationStrategyFromFactory()
+    {
+        $this->enumerationStrategy = $this->enumerationStrategyFactory->create($this->getAttribute('type'));
     }
     
     public function setEnumerationStrategyFactory(EnumerationStrategyFactory $factory)
