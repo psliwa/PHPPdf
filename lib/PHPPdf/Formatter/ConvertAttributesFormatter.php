@@ -24,7 +24,7 @@ class ConvertAttributesFormatter extends BaseFormatter
     {
         $this->convertPercentageDimensions($glyph);
         $this->convertAutoMargins($glyph);
-        $this->convertColorAttributes($glyph);
+        $this->convertColorAttributes($glyph, $document);
         $this->convertFontType($glyph, $document);
     }
 
@@ -74,24 +74,24 @@ class ConvertAttributesFormatter extends BaseFormatter
         return ($marginLeft === Glyphs\Glyph::MARGIN_AUTO && $marginRight === Glyphs\Glyph::MARGIN_AUTO);
     }
 
-    private function convertColorAttributes(Glyphs\Glyph $glyph)
+    private function convertColorAttributes(Glyphs\Glyph $glyph, Document $document)
     {
         $colorAttributes = array('color');
 
         foreach($colorAttributes as $attribute)
         {
-            $this->convertColorAttribute($glyph, $attribute);
+            $this->convertColorAttribute($glyph, $attribute, $document);
         }
     }
 
-    private function convertColorAttribute(Glyphs\Glyph $glyph, $attribute)
+    private function convertColorAttribute(Glyphs\Glyph $glyph, $attribute, Document $document)
     {
         if($glyph->hasAttribute($attribute))
         {
             $color = $glyph->getAttribute($attribute);
             if(is_string($color))
             {
-                $color = new \Zend_Pdf_Color_Html($color);
+                $color = $document->createColor($color);
                 $glyph->setAttribute($attribute, $color);
             }
         }
@@ -102,7 +102,7 @@ class ConvertAttributesFormatter extends BaseFormatter
         $font = $glyph->getFontType();
         if($font && is_string($font))
         {
-            $font = $document->getFontRegistry()->get($font);
+            $font = $document->getFont($font);
             $glyph->setFontType($font);
         }
     }

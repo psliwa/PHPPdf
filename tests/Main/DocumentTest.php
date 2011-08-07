@@ -16,32 +16,6 @@ class DocumentTest extends PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function settingAttribte()
-    {
-        $this->document->setAttribute(Document::ATTR_PAGE_SIZE, Document::SIZE_A4);
-        $this->assertEquals(Document::SIZE_A4, $this->document->getAttribute(Document::ATTR_PAGE_SIZE));
-    }
-
-    /**
-     * @test
-     * @expectedException InvalidArgumentException
-     */
-    public function throwExceptionIfCalledAttributeDosntExist()
-    {
-        $this->document->getAttribute(1235566);
-    }
-
-    /**
-     * @test
-     */
-    public function attributesDefaultValues()
-    {
-        $this->assertEquals(Document::SIZE_A4, $this->document->getAttribute(Document::ATTR_PAGE_SIZE));
-    }
-
-    /**
-     * @test
-     */
     public function invokeDrawingTasksOfPagesWhenDrawMethodIsInvoked($assertArguments = true)
     {
         $taskMock = $this->getMock('PHPPdf\Util\DrawingTask', array('__invoke'), array(), '', false);
@@ -157,26 +131,6 @@ class DocumentTest extends PHPUnit_Framework_TestCase
         $this->document->setEnhancementFactory($enhancementFactoryMock);
 
         $this->document->getEnhancements($enhancementBagMock);
-    }
-
-    /**
-     * @test
-     * @expectedException PHPPdf\Exception\Exception
-     */
-    public function throwExceptionIfFontRegistryIsntSet()
-    {
-        $this->document->getFontRegistry();
-    }
-
-    /**
-     * @test
-     */
-    public function getFontRegistryIfPreviouslyHasBeenSet()
-    {
-        $registry = new FontRegistry();
-        $this->document->setFontRegistry($registry);
-
-        $this->assertTrue($this->document->getFontRegistry() === $registry);
     }
 
     /**

@@ -8,8 +8,7 @@
 
 namespace PHPPdf\Glyph\BasicList;
 
-use PHPPdf\Glyph\GraphicsContext,
-    PHPPdf\Font\Font,
+use PHPPdf\Engine\GraphicsContext,
     PHPPdf\Glyph\BasicList;
 
 /**
@@ -75,7 +74,7 @@ abstract class TextEnumerationStrategy extends AbstractEnumerationStrategy
        
     abstract protected function assembleEnumerationText(BasicList $list, $number);
     
-    protected function getWidthOfText($text, Font $font, $fontSize)
+    protected function getWidthOfText($text, $font, $fontSize)
     {
         if(!isset($this->widthOfTextCache[$text]))
         {

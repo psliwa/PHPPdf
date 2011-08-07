@@ -13,6 +13,8 @@ namespace PHPPdf\Glyph;
  *
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
+use PHPPdf\Exception\UnregisteredGlyphException;
+
 class Factory implements \Serializable
 {
     private $prototypes = array();
@@ -75,7 +77,7 @@ class Factory implements \Serializable
      *
      * @param string Name/key of prototype
      * @return PHPPdf\Glyph\Glyph Deep copy of glyph stored under passed name
-     * @throws \InvalidArgumentException If prototype with passed name dosn't exist
+     * @throws PHPPdf\Exception\UnregisteredGlyphException If prototype with passed name dosn't exist
      */
     public function create($name)
     {
@@ -97,8 +99,7 @@ class Factory implements \Serializable
 
     /**
      * @return PHPPdf\Glyph\Glyph
-     * @throws \InvalidArgumentException If prototype with passed name dosn't exist
-     * @todo change type of exception
+     * @throws PHPPdf\Exception\UnregisteredGlyphException If prototype with passed name dosn't exist
      */
     public function getPrototype($name)
     {
@@ -106,7 +107,7 @@ class Factory implements \Serializable
 
         if(!$this->hasPrototype($name))
         {
-            throw new \InvalidArgumentException(sprintf('Prototype under key "%s" dosn\'t exist.', $name));
+            UnregisteredGlyphException::glyphNotRegisteredException($name);
         }
 
         return $this->prototypes[$name];

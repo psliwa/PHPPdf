@@ -3,24 +3,13 @@
 use PHPPdf\Document;
 use PHPPdf\Glyph\Image;
 
-class Zend_Pdf_Page_Stub extends \Zend_Pdf_Page
-{
-    public function __construct()
-    {
-        parent::__construct(\Zend_Pdf_Page::SIZE_A4);
-    }
-}
-
 class ImageTest extends PHPUnit_Framework_TestCase
 {
     private $image;
-    private $filePath;
 
     public function setUp()
     {
-        $this->filePath = __DIR__.'/../resources/domek.jpg';
         $this->image = new Image(array(
-            'src' => \Zend_Pdf_Image::imageWithPath($this->filePath),
             'width' => 100,
             'height' => 100,
         ));
@@ -31,7 +20,6 @@ class ImageTest extends PHPUnit_Framework_TestCase
                  ->setNext(100, 0)
                  ->setNext(0, 0)
                  ->close();
-
     }
     
     /**
@@ -41,9 +29,12 @@ class ImageTest extends PHPUnit_Framework_TestCase
     {
         $pageMock = $this->getMock('PHPPdf\Glyph\Page', array('getGraphicsContext'));
 
-        $imageResource = $this->image->getAttribute('src');
+        $imageResource = $this->getMockBuilder('PHPPdf\Engine\Image')
+                              ->getMock();
+        $this->image->setAttribute('src', $imageResource);
 
-        $gcMock = $this->getMock('PHPPdf\Glyph\GraphicsContext', array('drawImage'), array(), '', false);
+        $gcMock = $this->getMockBuilder('PHPPdf\Engine\GraphicsContext')
+        			   ->getMock();
 
         $gcMock->expects($this->once())
                ->method('drawImage')

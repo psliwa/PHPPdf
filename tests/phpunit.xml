@@ -10,6 +10,7 @@
             <directory>Cache</directory>
             <directory>Configuration</directory>
             <directory>Enhancement</directory>
+            <directory>Engine</directory>
             <directory>Font</directory>
             <directory>Formatter</directory>
             <directory>Glyph</directory>

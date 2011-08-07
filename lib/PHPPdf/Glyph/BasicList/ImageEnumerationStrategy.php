@@ -9,7 +9,7 @@
 namespace PHPPdf\Glyph\BasicList;
 
 use PHPPdf\Glyph\BasicList,
-    PHPPdf\Glyph\GraphicsContext;
+    PHPPdf\Engine\GraphicsContext;
 
 /**
  * @author Piotr Śliwa <peter.pl7@gmail.com>
@@ -59,8 +59,8 @@ class ImageEnumerationStrategy extends AbstractEnumerationStrategy
     {
         if($this->imageWidth === null && $this->imageHeight === null)
         {
-            $imageHeight = $image->getPixelHeight();
-            $imageWidth = $image->getPixelWidth();
+            $imageHeight = $image->getOriginalHeight();
+            $imageWidth = $image->getOriginalWidth();
             
             if($imageWidth > $fontSize)
             {

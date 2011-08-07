@@ -8,9 +8,7 @@
 
 namespace PHPPdf\Parser;
 
-use PHPPdf\Font\Font,
-    PHPPdf\Font\ResourceWrapper,
-    PHPPdf\Font\Registry,
+use PHPPdf\Font\Registry,
     PHPPdf\Parser\Exception\ParseException;
 
 class FontRegistryParser extends XmlParser
@@ -22,7 +20,7 @@ class FontRegistryParser extends XmlParser
 
     protected function createRoot()
     {
-        return new Registry();
+        return array();
     }
 
     protected function parseElement(\XMLReader $reader)
@@ -53,7 +51,7 @@ class FontRegistryParser extends XmlParser
     {
         $name = $reader->name;
 
-        $const = sprintf('PHPPdf\Font\Font::STYLE_%s', str_replace('-', '_', strtoupper($name)));
+        $const = sprintf('PHPPdf\Engine\Font::STYLE_%s', str_replace('-', '_', strtoupper($name)));
         $style = \constant($const);
 
         $this->currentFontStyles[$style] = $this->createFont($reader, $name, $style);
@@ -61,50 +59,29 @@ class FontRegistryParser extends XmlParser
 
     private function createFont(\XMLReader $reader, $name, $style)
     {
-        try
-        {
-            $file = $reader->getAttribute('file');
-            $type = $reader->getAttribute('type');
+        $src = $reader->getAttribute('src');
 
-            if($file)
-            {
-                $file = str_replace('%resources%', __DIR__.'/../Resources', $reader->getAttribute('file'));
-                $font = ResourceWrapper::fromFile($file);
-            }
-            elseif($type)
-            {
-                $font = ResourceWrapper::fromName($type);
-            }
-            else
-            {
-                throw new ParseException(sprintf('File or type attribute are required in font "%s: %s" definition.', $name, $style));
-            }
-
-            return $font;
-        }
-        catch(\InvalidArgumentException $e)
+        if($src)
         {
-            throw new ParseException(sprintf('Invalid attributes for "%s".', $name), 0, $e);
+            $font = $src;
         }
+        else
+        {
+            throw new ParseException(sprintf('File or type attribute are required in font "%s: %s" definition.', $name, $style));
+        }
+
+        return $font;
     }
 
     protected function parseEndElement(\XMLReader $reader)
     {
         if($reader->name === 'font')
         {
-            try
-            {
-                /* @var $registry Registry */
-                $registry = $this->getLastElementFromStack();
-                $registry->register($this->currentFontName, $this->currentFontStyles);
-                
-                $this->currentFontName = null;
-                $this->currentFontStyles = array();
-            }
-            catch(\InvalidArgumentException $e)
-            {
-                throw new ParseException('Invalid font types or filepaths', 1, $e);
-            }
+            $registry = &$this->getLastElementFromStack();
+            $registry[$this->currentFontName] = $this->currentFontStyles;
+
+            $this->currentFontName = null;
+            $this->currentFontStyles = array();
         }
     }
 }

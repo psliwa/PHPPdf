@@ -1,5 +1,7 @@
 <?php
 
+use PHPPdf\Engine\GraphicsContext;
+
 class GenericGlyphObjectMother
 {
     private $test;
@@ -11,10 +13,11 @@ class GenericGlyphObjectMother
 
     public function getPageMock($x, $y)
     {
-        $gcMock = $this->test->getMock('PHPPdf\Glyph\GraphicsContext', array('drawPolygon', 'setLineDashingPattern', 'setLineWidth'), array(), '', false);
+        $gcMock = $this->getMockBuilder('PHPPdf\Engine\GraphicsContext')
+        			   ->getMock();
         $gcMock->expects($this->test->once())
                  ->method('drawPolygon')
-                 ->with($x, $y, \Zend_Pdf_Page::SHAPE_DRAW_STROKE);
+                 ->with($x, $y, GraphicsContext::SHAPE_DRAW_STROKE);
 
         $pageMock = $this->getEmptyPageMock($gcMock);
 
@@ -32,11 +35,11 @@ class GenericGlyphObjectMother
         return $pageMock;
     }
 
-    public function getGlyphMock($x, $y, $width, $height, array $methods = array())
+    public function getGlyphMock($x, $y, $width, $height, $gc = null)
     {
         $boundaryMock = $this->getBoundaryStub($x, $y, $width, $height);
 
-        $glyphMock = $this->test->getMock('PHPPdf\Glyph\Glyph', array_merge($methods, array('getBoundary', 'getWidth', 'getHeight')));
+        $glyphMock = $this->test->getMock('PHPPdf\Glyph\Glyph', array('getBoundary', 'getWidth', 'getHeight', 'getGraphicsContext'));
 
         $glyphMock->expects($this->test->atLeastOnce())
                   ->method('getBoundary')
@@ -49,6 +52,13 @@ class GenericGlyphObjectMother
         $glyphMock->expects($this->test->any())
                   ->method('getHeight')
                   ->will($this->test->returnValue($height));
+                  
+        if($gc)
+        {
+            $glyphMock->expects($this->test->atLeastOnce())
+                      ->method('getGraphicsContext')
+                      ->will($this->test->returnValue($gc));
+        }
 
         return $glyphMock;
     }

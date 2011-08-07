@@ -6,12 +6,10 @@ use PHPPdf\Glyph\BasicList\ImageEnumerationStrategy;
 
 class ImageEnumerationStrategyTest extends TestCase
 {
-    private $imagePath;
     private $strategy;
     
     public function setUp()
     {
-        $this->imagePath = __DIR__.'/../../resources/domek-min.jpg';
         $this->strategy = new ImageEnumerationStrategy();
     }
     
@@ -24,10 +22,10 @@ class ImageEnumerationStrategyTest extends TestCase
         $elementIndex = 1;
         
         $listMock = $this->getMock('PHPPdf\Glyph\BasicList', array('getChild', 'getAttribute', 'getRecurseAttribute', 'getImage'));
-        $image = \Zend_Pdf_Image::imageWithPath($this->imagePath);
         
-        $imageWidth = $image->getPixelWidth();
-        $imageHeight = $image->getPixelHeight();
+        $imageWidth = 100;
+        $imageHeight = 100;
+        $image = $this->createImageMock($imageWidth, $imageHeight);
         
         if($imageWidth > $fontSize)
         {
@@ -79,13 +77,31 @@ class ImageEnumerationStrategyTest extends TestCase
         $expectedX2Coord = $point->getX() + $imageWidth - $childMarginLeft - $xTranslation;
         $expectedY2Coord = $point->getY();
 
-        $gc = $this->getMock('PHPPdf\Glyph\GraphicsContext', array('drawImage'), array(), '', false, false);
+        $gc = $this->getMockBuilder('PHPPdf\Engine\GraphicsContext')
+                       ->getMock();
         $gc->expects($this->once())
            ->method('drawImage')
            ->with($image, $expectedX1Coord, $expectedY1Coord, $expectedX2Coord, $expectedY2Coord);
            
         $this->strategy->setIndex($elementIndex);
         $this->strategy->drawEnumeration($listMock, $gc);
+    }
+    
+    private function createImageMock($width, $height)
+    {
+        $image = $this->getMockBuilder('PHPPdf\Engine\Image')
+                      ->setMethods(array('getOriginalHeight', 'getOriginalWidth'))
+                      ->disableOriginalConstructor()
+                      ->getMock();
+                      
+        $image->expects($this->atLeastOnce())
+              ->method('getOriginalHeight')
+              ->will($this->returnValue($height));
+        $image->expects($this->atLeastOnce())
+              ->method('getOriginalWidth')
+              ->will($this->returnValue($width));
+              
+        return $image;
     }
 
     public function enumerationProvider()
@@ -115,7 +131,8 @@ class ImageEnumerationStrategyTest extends TestCase
                  ->with($elementIndex)
                  ->will($this->returnValue($child));
                  
-        $gc = $this->getMock('PHPPdf\Glyph\GraphicsContext', array(), array(), '', false, false);
+        $gc = $this->getMockBuilder('PHPPdf\Engine\GraphicsContext')
+                   ->getMock();
         $this->strategy->setIndex($elementIndex);
         $this->strategy->drawEnumeration($listMock, $gc);
     }

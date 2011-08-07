@@ -45,7 +45,7 @@ class GlyphFactoryTest extends PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @expectedException \InvalidArgumentException
+     * @expectedException PHPPdf\Exception\UnregisteredGlyphException
      */
     public function creatingNotExistedGlyph()
     {
@@ -54,7 +54,7 @@ class GlyphFactoryTest extends PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @expectedException \InvalidArgumentException
+     * @expectedException PHPPdf\Exception\UnregisteredGlyphException
      */
     public function gettingNotExistingPrototype()
     {

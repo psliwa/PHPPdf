@@ -12,8 +12,9 @@ class LinePartTest extends TestCase
     public function drawLinePartUsingTextGlyphAttributes()
     {
         $encodingStub = 'utf-16';
-        $colorStub = Zend_Pdf_Color_Html::namedColor('black');
-        $fontStub = $this->getMockBuilder('PHPPdf\Font\Font')
+        $colorStub = $this->getMockBuilder('PHPPdf\Engine\Color')
+                          ->getMock();
+        $fontStub = $this->getMockBuilder('PHPPdf\Engine\Font')
                          ->disableOriginalConstructor()
                          ->getMock();
         $words = 'some words';
@@ -51,10 +52,8 @@ class LinePartTest extends TestCase
              ->method('getEncoding')
              ->will($this->returnValue($encodingStub));
              
-        $gc = $this->getMockBuilder('PHPPdf\Glyph\GraphicsContext')
-                   ->setMethods(array('drawText', 'setFont', 'setFillColor', 'saveGS', 'restoreGS'))
-                   ->disableOriginalConstructor()
-                   ->getMock();
+        $gc = $this->getMockBuilder('PHPPdf\Engine\GraphicsContext')
+        		   ->getMock();
                    
         $gc->expects($this->once())
            ->method('drawText')

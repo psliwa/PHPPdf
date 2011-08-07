@@ -86,7 +86,7 @@ class ConvertAttributesFormatterTest extends PHPUnit_Framework_TestCase
 
         $this->formatter->format($glyph, $this->document);
 
-        $this->assertTrue($glyph->getAttribute('color') instanceof Zend_Pdf_Color);
+        $this->assertTrue($glyph->getAttribute('color') instanceof PHPPdf\Engine\Color);
     }
 
     /**
@@ -96,16 +96,11 @@ class ConvertAttributesFormatterTest extends PHPUnit_Framework_TestCase
     {
         $fontStub = 'fontStub';
 
-        $registryMock = $this->getMock('PHPPdf\Font\Registry', array('get'));
-        $registryMock->expects($this->once())
-                     ->method('get')
-                     ->with($this->equalTo('verdana'))
-                     ->will($this->returnValue($fontStub));
-
-        $documentMock = $this->getMock('PHPPdf\Document', array('getFontRegistry'));
+        $documentMock = $this->getMock('PHPPdf\Document', array('getFont'));
         $documentMock->expects($this->once())
-                ->method('getFontRegistry')
-                ->will($this->returnValue($registryMock));
+                ->method('getFont')
+                ->with('verdana')
+                ->will($this->returnValue($fontStub));
 
         $glyphMock = $this->getMock('PHPPdf\Glyph\Container', array('setFontType', 'getFontType', 'getParent'));
         $glyphMock->expects($this->once())
@@ -117,7 +112,6 @@ class ConvertAttributesFormatterTest extends PHPUnit_Framework_TestCase
         $glyphMock->expects($this->any())
                   ->method('getParent')
                   ->will($this->returnValue(new Page()));
-
 
         $this->formatter->format($glyphMock, $documentMock);
     }

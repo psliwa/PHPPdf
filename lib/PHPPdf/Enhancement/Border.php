@@ -11,7 +11,7 @@ namespace PHPPdf\Enhancement;
 use PHPPdf\Glyph\Page,
     PHPPdf\Glyph\Glyph,
     PHPPdf\Util\Boundary,
-    PHPPdf\Glyph\GraphicsContext,
+    PHPPdf\Engine\GraphicsContext,
     PHPPdf\Document;
 
 /**
@@ -99,10 +99,8 @@ class Border extends Enhancement
         $this->position = $position;
     }
 
-    protected function doEnhance(Page $page, Glyph $glyph)
+    protected function doEnhance($graphicsContext, Glyph $glyph, Document $document)
     {
-        $graphicsContext = $page->getGraphicsContext();
-
         $graphicsContext->setLineDashingPattern($this->style);
         $graphicsContext->setLineWidth($this->size);
         $boundary = $glyph->getBoundary();
@@ -114,15 +112,14 @@ class Border extends Enhancement
             $firstPoint = $points[3];
             $diagonalPoint = $points[1];
 
-            $this->drawRoundedBoundary($graphicsContext, $firstPoint[0], $firstPoint[1], $diagonalPoint[0], $diagonalPoint[1], \Zend_Pdf_Page::SHAPE_DRAW_STROKE);
+            $this->drawRoundedBoundary($graphicsContext, $firstPoint[0], $firstPoint[1], $diagonalPoint[0], $diagonalPoint[1], GraphicsContext::SHAPE_DRAW_STROKE);
         }
         elseif($this->type == self::TYPE_ALL)
         {
-            $this->drawBoundary($page->getGraphicsContext(), $points, \Zend_Pdf_Page::SHAPE_DRAW_STROKE, $this->size/2);
+            $this->drawBoundary($graphicsContext, $points, GraphicsContext::SHAPE_DRAW_STROKE, $this->size/2);
         }
         else
         {
-            $graphicsContext = $page->getGraphicsContext();
             $halfSize = $this->size/2;
             foreach(array(self::TYPE_TOP, self::TYPE_RIGHT, self::TYPE_BOTTOM, self::TYPE_LEFT) as $type)
             {

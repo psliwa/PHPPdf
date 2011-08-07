@@ -31,10 +31,39 @@ class VerticalAlignFormatter extends BaseFormatter
     private function processVerticalAlign(Glyph $glyph, $verticalAlign)
     {
         $minYCoord = $this->getMinimumYCoordOfChildren($glyph);
-
+//        $sortedGlyphs = $this->sortChildren($glyph);
+//        
+//        foreach($sortedGlyphs as $child)
+//        {
+//            $translation = $child->getMiddlePoint()->getY() - $glyph->getMiddlePoint()->getY();
+//            $child->translate(0, $translation);
+//        }
+        
+//
         $translation = $this->getVerticalTranslation($glyph, $minYCoord, $verticalAlign);
 
         $this->verticalTranslateOfGlyphs($glyph->getChildren(), $translation);
+    }
+    
+    private function sortChildren($glyph)
+    {
+        $children = $glyph->getChildren();
+        
+        usort($children, function($firstChild, $secondChild){
+            if($firstChild->getDiagonalPoint()->getY() < $secondChild->getDiagonalPoint()->getY())
+            {
+                return 1;
+            }
+            
+            if($firstChild->getDiagonalPoint()->getY() == $secondChild->getDiagonalPoint()->getY())
+            {
+                return 0;
+            }
+            
+            return -1;
+        });
+        
+        return $children;
     }
     
     private function getMinimumYCoordOfChildren(Glyph $glyph)

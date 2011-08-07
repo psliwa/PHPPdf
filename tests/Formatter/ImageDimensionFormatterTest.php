@@ -23,18 +23,36 @@ class ImageDimensionFormatterTest extends TestCase
     public function drawingFromBeginingOfThePage()
     {
         $page = new Page();
+        
+        $imageHeight = 100;
+        $imageWidth = 50;
+        
+        $imageResource = $this->createImageResourceMock($imageWidth, $imageHeight);
+        
         $image = new Image(array(
-            'src' => \Zend_Pdf_Image::imageWithPath(dirname(__FILE__).'/../resources/domek.jpg'),
+            'src' => $imageResource,
         ));
         $page->add($image);
         
         $this->formatter->format($image, $this->document);
 
-        $imageHeight = $image->getAttribute('src')->getPixelHeight();
-        $imageWidth = $image->getAttribute('src')->getPixelWidth();
-
         $this->assertEquals($imageWidth, $image->getWidth());
         $this->assertEquals($imageHeight, $image->getHeight());
+    }
+    
+    private function createImageResourceMock($width, $height)
+    {
+        $imageResource = $this->getMockBuilder('PHPPdf\Engine\Image')
+                              ->setMethods(array('getOriginalHeight', 'getOriginalWidth'))
+                              ->getMock();
+        $imageResource->expects($this->atLeastOnce())
+                      ->method('getOriginalHeight')
+                      ->will($this->returnValue($height));
+        $imageResource->expects($this->atLeastOnce())
+                      ->method('getOriginalWidth')
+                      ->will($this->returnValue($width));
+                      
+        return $imageResource;
     }
 
     /**
@@ -44,14 +62,27 @@ class ImageDimensionFormatterTest extends TestCase
     {
         $page = new Page();
 
-        $imageResource = \Zend_Pdf_Image::imageWithPath(dirname(__FILE__).'/../resources/domek.jpg');
+        $height = 100;
+        $width = 120;
+        
+        $imageResource = $this->getMockBuilder('PHPPdf\Engine\Image')
+                              ->setMethods(array('getOriginalHeight', 'getOriginalWidth'))
+                              ->getMock();
+                              
+        $imageResource->expects($this->atLeastOnce())
+                      ->method('getOriginalHeight')
+                      ->will($this->returnValue($height));
+        $imageResource->expects($this->atLeastOnce())
+                      ->method('getOriginalWidth')
+                      ->will($this->returnValue($width));
+        
         $image = new Image(array(
             'src' => $imageResource,
         ));
 
         $container = new Container(array(
-            'width' => (int) ($imageResource->getPixelWidth() * 0.7),
-            'height' => (int) ($imageResource->getPixelHeight() * 0.5),
+            'width' => (int) ($width * 0.7),
+            'height' => (int) ($height * 0.5),
         ));
 
         $container->add($image);
@@ -70,7 +101,10 @@ class ImageDimensionFormatterTest extends TestCase
     {
         $page = new Page();
 
-        $imageResource = \Zend_Pdf_Image::imageWithPath(dirname(__FILE__).'/../resources/zend.jpg');
+        $imageWidth = 100;
+        $imageHeight = 120;
+        
+        $imageResource = $this->createImageResourceMock($imageWidth, $imageHeight);
 
         $image = new Image(array(
             'src' => $imageResource,
@@ -81,7 +115,7 @@ class ImageDimensionFormatterTest extends TestCase
 
         $this->formatter->format($image, $this->document);
 
-        $ratio = $imageResource->getPixelWidth() / $imageResource->getPixelHeight();
+        $ratio = $imageWidth / $imageHeight;
 
         if(!$height)
         {

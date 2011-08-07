@@ -1,7 +1,7 @@
 <?php
 
-use PHPPdf\Parser\FontRegistryParser,
-    PHPPdf\Font\Font;
+use PHPPdf\Engine\Font;
+use PHPPdf\Parser\FontRegistryParser;
 
 class FontRegistryParserTest extends PHPUnit_Framework_TestCase
 {
@@ -19,9 +19,9 @@ class FontRegistryParserTest extends PHPUnit_Framework_TestCase
     {
         $xml = '<fonts></fonts>';
 
-        $fontRegistry = $this->parser->parse($xml);
+        $fontDefinitions = $this->parser->parse($xml);
 
-        $this->assertEquals(0, count($fontRegistry));
+        $this->assertEquals(0, count($fontDefinitions));
     }
 
     /**
@@ -30,16 +30,16 @@ class FontRegistryParserTest extends PHPUnit_Framework_TestCase
      */
     public function parseSimpleXml($xml)
     {
-        $fontRegistry = $this->parser->parse($xml);
+        $fontDefinitions = $this->parser->parse($xml);
 
-        $this->assertEquals(1, count($fontRegistry));
+        $this->assertEquals(1, count($fontDefinitions));
 
-        $font = $fontRegistry->get('verdana');
+        $font = $fontDefinitions['verdana'];
         $styles = array(Font::STYLE_NORMAL => true, Font::STYLE_BOLD => true, Font::STYLE_ITALIC => false, Font::STYLE_BOLD_ITALIC => true);
 
         foreach($styles as $style => $has)
         {
-            $this->assertEquals($has, $font->hasStyle($style));
+            $this->assertEquals($has, isset($font[$style]));
         }
     }
     
@@ -48,9 +48,9 @@ class FontRegistryParserTest extends PHPUnit_Framework_TestCase
         $xml1 = <<<XML
 <fonts>
     <font name="verdana">
-        <bold file="%resources%/fonts/verdana/bold.ttf" />
-        <normal file="%resources%/fonts/verdana/normal.ttf" />
-        <bold-italic file="%resources%/fonts/verdana/bold+italic.ttf" />
+        <bold src="%resources%/fonts/verdana/bold.ttf" />
+        <normal src="%resources%/fonts/verdana/normal.ttf" />
+        <bold-italic src="%resources%/fonts/verdana/bold+italic.ttf" />
     </font>
 </fonts>
 XML;
@@ -58,9 +58,9 @@ XML;
         $xml2 = <<<XML
 <fonts>
     <font name="verdana">
-        <bold type="courier-bold" />
-        <normal type="courier" />
-        <bold-italic type="courier-oblique" />
+        <bold src="courier-bold" />
+        <normal src="courier" />
+        <bold-italic src="courier-oblique" />
     </font>
 </fonts>
 XML;
@@ -71,21 +71,21 @@ XML;
         );
     }
 
-    /**
-     * @test
-     * @expectedException \PHPPdf\Parser\Exception\ParseException
-     */
-    public function throwExceptionIfFontNameIsMissing()
-    {
-        $xml = <<<XML
-<fonts>
-    <font>
-        <normal file="%resources%/fonts/verdana/normal.ttf" />
-    </font>
-</fonts>
-XML;
-        $this->parser->parse($xml);
-    }
+//    /**
+//     * @test
+//     * @expectedException \PHPPdf\Parser\Exception\ParseException
+//     */
+//    public function throwExceptionIfFontNameIsMissing()
+//    {
+//        $xml = <<<XML
+//<fonts>
+//    <font>
+//        <normal file="%resources%/fonts/verdana/normal.ttf" />
+//    </font>
+//</fonts>
+//XML;
+//        $this->parser->parse($xml);
+//    }
 
     /**
      * @test
@@ -103,19 +103,19 @@ XML;
         $this->parser->parse($xml);
     }
 
-    /**
-     * @test
-     * @expectedException \PHPPdf\Parser\Exception\ParseException
-     */
-    public function throwExceptionIfFontTypeDosntExist()
-    {
-        $xml = <<<XML
-<fonts>
-    <font name="verdana">
-        <normal type="some-type" />
-    </font>
-</fonts>
-XML;
-        $this->parser->parse($xml);
-    }
+//    /**
+//     * @test
+//     * @expectedException \PHPPdf\Parser\Exception\ParseException
+//     */
+//    public function throwExceptionIfFontTypeDosntExist()
+//    {
+//        $xml = <<<XML
+//<fonts>
+//    <font name="verdana">
+//        <normal type="some-type" />
+//    </font>
+//</fonts>
+//XML;
+//        $this->parser->parse($xml);
+//    }
 }

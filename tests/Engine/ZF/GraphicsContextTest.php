@@ -1,9 +1,10 @@
 <?php
 
-use PHPPdf\Glyph\Page,
-    PHPPdf\Glyph\GraphicsContext;
+namespace PHPPdf\Test\Engine\ZF;
 
-class GraphicsContextTest extends TestCase
+use PHPPdf\Engine\ZF\GraphicsContext;
+
+class GraphicsContextTest extends \TestCase
 {
     /**
      * @test
@@ -55,11 +56,18 @@ class GraphicsContextTest extends TestCase
         $y2 = 100;
 
         $zendPageMock = $this->getMock('\Zend_Pdf_Page', array('drawImage'), array(), '', false);
-        $image = $this->getMock('\Zend_Pdf_Resource_Image', array());
+        $zendImage = $this->getMock('\Zend_Pdf_Resource_Image', array());
+        $image = $this->getMockBuilder('PHPPdf\Engine\ZF\Image')
+                      ->setMethods(array('getWrappedImage'))
+                      ->disableOriginalConstructor()
+                      ->getMock();
+        $image->expects($this->once())
+              ->method('getWrappedImage')
+              ->will($this->returnvalue($zendImage));
 
         $zendPageMock->expects($this->once())
                      ->method('drawImage')
-                     ->with($image, $x1, $y1, $x2, $y2);
+                     ->with($zendImage, $x1, $y1, $x2, $y2);
 
         $gc = new GraphicsContext($zendPageMock);
 
@@ -95,9 +103,13 @@ class GraphicsContextTest extends TestCase
         $zendPageMock = $this->getMock('\Zend_Pdf_Page', array('setFont'), array(), '', false);
         $zendFontMock = $this->getMock('\Zend_Pdf_Resource_Font');
 
-        $fontMock = $this->getMock('\PHPPdf\Font\Font', array('getFont'), array(array()), '', false);
+        $fontMock = $this->getMockBuilder('PHPPdf\Engine\ZF\Font')
+                         ->setMethods(array('getCurrentWrappedFont'))
+                         ->disableOriginalConstructor()
+                         ->getMock();
+
         $fontMock->expects($this->once())
-                 ->method('getFont')
+                 ->method('getCurrentWrappedFont')
                  ->will($this->returnValue($zendFontMock));
         $size = 12;
 
@@ -118,6 +130,13 @@ class GraphicsContextTest extends TestCase
     {
         $zendPageMock = $this->getMock('\Zend_Pdf_Page', array($method), array(), '', false);
         $zendColor = $this->getMock('\Zend_Pdf_Color');
+        $color = $this->getMockBuilder('PHPPdf\Engine\ZF\Color')
+                      ->setMethods(array('getWrappedColor', 'getComponents'))
+                      ->disableOriginalConstructor()
+                      ->getMock();
+        $color->expects($this->once())
+              ->method('getWrappedColor')
+              ->will($this->returnValue($zendColor));
 
         $zendPageMock->expects($this->once())
                      ->method($method)
@@ -125,10 +144,10 @@ class GraphicsContextTest extends TestCase
 
         $gc = new GraphicsContext($zendPageMock);
 
-        $gc->$method($zendColor);
+        $gc->$method($color);
 
         //don't delegate if not necessary
-        $gc->$method($zendColor);
+        $gc->$method($color);
     }
 
     public function colorSetters()
@@ -258,11 +277,11 @@ class GraphicsContextTest extends TestCase
      */
     public function cachingGraphicsState()
     {
-        $zendColor1 = $this->getMock('\Zend_Pdf_Color', array('instructions', 'getComponents'));
-        $zendColor2 = $this->getMock('\Zend_Pdf_Color', array('instructions', 'getComponents'));
-        $zendColor2->expects($this->any())
-                   ->method('getComponents')
-                   ->will($this->returnValue(array(9, 10, 11)));
+        $zendColor1 = $this->getMock('Zend_Pdf_Color', array('instructions', 'getComponents'));
+        $zendColor2 = $this->getMock('Zend_Pdf_Color', array('instructions', 'getComponents'));
+
+        $color1 = $this->createColorMock($zendColor1);
+        $color2 = $this->createColorMock($zendColor2, array(9, 10, 11));
 
         $zendPageMock = $this->getMock('\Zend_Pdf_Page', array('setLineDashingPattern', 'setLineWidth', 'setFillColor', 'setLineColor', 'saveGS', 'restoreGS'), array(), '', false);
 
@@ -304,8 +323,8 @@ class GraphicsContextTest extends TestCase
         {
             $gc->setLineDashingPattern(array(1, 1));
             $gc->setLineWidth(1);
-            $gc->setFillColor($zendColor1);
-            $gc->setLineColor($zendColor1);
+            $gc->setFillColor($color1);
+            $gc->setLineColor($color1);
         }
 
         $gc->restoreGS();
@@ -315,14 +334,35 @@ class GraphicsContextTest extends TestCase
         {
             $gc->setLineDashingPattern(array(1, 1));
             $gc->setLineWidth(1);
-            $gc->setFillColor($zendColor1);
-            $gc->setLineColor($zendColor1);
+            $gc->setFillColor($color1);
+            $gc->setLineColor($color1);
         }
 
         //overriding by new values
         $gc->setLineDashingPattern(array(1, 2));
         $gc->setLineWidth(2);
-        $gc->setFillColor($zendColor2);
-        $gc->setLineColor($zendColor2);
+        $gc->setFillColor($color2);
+        $gc->setLineColor($color2);
+    }
+    
+    private function createColorMock($zendColor, array $components = null)
+    {
+        $color = $this->getMockBuilder('PHPPdf\Engine\ZF\Color')
+                      ->setMethods(array('getWrappedColor', 'getComponents'))
+                      ->disableOriginalConstructor()
+                      ->getMock();
+                      
+        $color->expects($this->any())
+              ->method('getWrappedColor')
+              ->will($this->returnValue($zendColor));
+              
+        if($components !== null)
+        {
+            $color->expects($this->any())
+                  ->method('getComponents')
+                  ->will($this->returnValue($components));
+        }
+              
+        return $color;
     }
 }

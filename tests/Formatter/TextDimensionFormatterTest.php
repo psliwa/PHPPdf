@@ -5,8 +5,6 @@ use PHPPdf\Glyph\Glyph;
 use PHPPdf\Glyph\Container;
 use PHPPdf\Glyph\Page;
 use PHPPdf\Formatter\TextDimensionFormatter;
-use PHPPdf\Font\Font;
-use PHPPdf\Font\ResourceWrapper;
 
 class TextDimensionFormatterTest extends PHPUnit_Framework_TestCase
 {
@@ -28,9 +26,7 @@ class TextDimensionFormatterTest extends PHPUnit_Framework_TestCase
                          ->setMethods(array('setWordsSizes', 'getText', 'getFont', 'getRecurseAttribute'))
                          ->getMock();
                      
-        $fontMock = $this->getMockBuilder('PHPPdf\Font\Font')
-                         ->disableOriginalConstructor()
-                         ->setMethods(array('getCharsWidth'))
+        $fontMock = $this->getMockBuilder('PHPPdf\Engine\Font')
                          ->getMock();
                      
         $textMock->expects($this->atLeastOnce())

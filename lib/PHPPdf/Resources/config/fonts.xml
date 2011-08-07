@@ -2,38 +2,38 @@
 <fonts>
 	<!-- verdana is with utf-8 support -->
     <font name="verdana">
-        <normal file="%resources%/fonts/verdana/normal.ttf" />
-        <bold file="%resources%/fonts/verdana/bold.ttf" />
-        <italic file="%resources%/fonts/verdana/italic.ttf" />
-        <bold-italic file="%resources%/fonts/verdana/bold+italic.ttf" />
+        <normal src="%resources%/fonts/verdana/normal.ttf" />
+        <bold src="%resources%/fonts/verdana/bold.ttf" />
+        <italic src="%resources%/fonts/verdana/italic.ttf" />
+        <bold-italic src="%resources%/fonts/verdana/bold+italic.ttf" />
     </font>
 
     <font name="courier">
-        <normal type="courier" />
-        <bold type="courier-bold" />
-        <italic type="courier-oblique" />
-        <bold-italic type="courier-bold-italic" />
+        <normal src="courier" />
+        <bold src="courier-bold" />
+        <italic src="courier-oblique" />
+        <bold-italic src="courier-bold-italic" />
     </font>
 
     <font name="times-roman">
-        <normal type="times-roman" />
-        <bold type="times-bold" />
-        <italic type="times-italic" />
-        <bold-italic type="times-bold-italic" />
+        <normal src="times-roman" />
+        <bold src="times-bold" />
+        <italic src="times-italic" />
+        <bold-italic src="times-bold-italic" />
     </font>
     
     <font name="helvetica">
-        <normal type="helvetica" />
-        <bold type="helvetica-bold" />
-        <italic type="helvetica-oblique" />
-        <bold-italic type="helvetica-bold-oblique" />
+        <normal src="helvetica" />
+        <bold src="helvetica-bold" />
+        <italic src="helvetica-oblique" />
+        <bold-italic src="helvetica-bold-oblique" />
     </font>
 
     <font name="zapf-dingbats">
-        <normal type="zapfDingbats" />
+        <normal src="zapfDingbats" />
     </font>
 
     <font name="symbol">
-        <normal type="symbol" />
+        <normal src="symbol" />
     </font>
 </fonts>

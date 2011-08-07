@@ -74,13 +74,20 @@ class BasicList extends Container
     }
     
     public function setImage($image)
+    {        
+        $this->setAttributeDirectly('image', $image);
+    }
+    
+    public function preFormat(Document $document)
     {
-        if(!$image instanceof \Zend_Pdf_Resource_Image)
+        $image = $this->getAttribute('image');
+
+        if(is_string($image))
         {
-            $image = \Zend_Pdf_Image::imageWithPath($image);
+            $image = $document->createImage($image);
+            $this->setAttribute('image', $image);
         }
         
-        $this->setAttributeDirectly('image', $image);
     }
     
     public function getImage()

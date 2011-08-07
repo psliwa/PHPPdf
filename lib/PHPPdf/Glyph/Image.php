@@ -45,15 +45,15 @@ class Image extends Glyph
 
         if(is_string($src))
         {
-            $src = \Zend_Pdf_Image::imageWithPath($src);
+            $src = $document->createImage($src);
             $this->setAttribute('src', $src);
         }
         
         if(!$this->getWidth() && !$this->getHeight())
         {
 
-            $this->setWidth($src->getPixelWidth());
-            $this->setHeight($src->getPixelHeight());
+            $this->setWidth($src->getOriginalWidth());
+            $this->setHeight($src->getOriginalHeight());
         }
     }
 

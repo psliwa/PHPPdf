@@ -8,11 +8,8 @@
 
 namespace PHPPdf\Glyph\BasicList;
 
-use PHPPdf\Glyph\GraphicsContext;
-
-use PHPPdf\Font\Font;
-
-use PHPPdf\Glyph\BasicList;
+use PHPPdf\Engine\GraphicsContext,
+    PHPPdf\Glyph\BasicList;
 
 class OrderedEnumerationStrategy extends TextEnumerationStrategy
 {

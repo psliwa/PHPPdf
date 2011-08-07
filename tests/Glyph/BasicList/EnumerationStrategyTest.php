@@ -24,15 +24,10 @@ abstract class EnumerationStrategyTest extends TestCase
         $listMock = $this->getMockBuilder('PHPPdf\Glyph\BasicList')
                          ->setMethods(array_merge($this->getListMockedMethod(), array('getChild', 'getAttribute', 'getEncoding', 'getFontSizeRecursively', 'getRecurseAttribute', 'getFontType', 'getFont')))
                          ->getMock();
-        $fontTypeMock = $this->getMockBuilder('PHPPdf\Font\Font')
-                             ->setMethods(array('getCharsWidth'))
-                             ->disableOriginalConstructor()
+        $fontTypeMock = $this->getMockBuilder('PHPPdf\Engine\Font')
                              ->getMock();
-        $fontMock = $this->getMockBuilder('PHPPdf\Font\Font')
-                         ->setMethods(array())
-                         ->disableOriginalConstructor()
-                         ->getMock();
-        $colorStub = \Zend_Pdf_Color_Html::color('white');
+
+        $colorStub = $this->getMock('PHPPdf\Engine\Color');
         
         $this->setElementPattern($listMock, $elementPattern);
         
@@ -90,17 +85,15 @@ abstract class EnumerationStrategyTest extends TestCase
                        ->will($this->returnValue($encoding));
         $listMock->expects($this->atLeastOnce())
                  ->method('getFont')
-                 ->will($this->returnValue($fontMock));
+                 ->will($this->returnValue($fontTypeMock));
                        
         $listMock->expects($this->atLeastOnce())
              ->method('getFontType')
              ->with(true)
              ->will($this->returnValue($fontTypeMock));
                        
-        $gc = $this->getMockBuilder('PHPPdf\Glyph\GraphicsContext')
-                   ->setMethods(array('drawText', 'setLineColor', 'setFont', 'saveGS', 'restoreGS'))
-                   ->disableOriginalConstructor()
-                   ->getMock();
+        $gc = $this->getMockBuilder('PHPPdf\Engine\GraphicsContext')
+                       ->getMock();
 
         $expectedXCoord = $point->getX() + $positionTranslation - $childMarginLeft;
         $expectedYCoord = $point->getY() - $fontSize;
@@ -112,7 +105,7 @@ abstract class EnumerationStrategyTest extends TestCase
            ->with($colorStub);
         $gc->expects($this->at(2))
            ->method('setFont')
-           ->with($fontMock, $fontSize);
+           ->with($fontTypeMock, $fontSize);
         
         $gc->expects($this->at(3))
            ->method('drawText')

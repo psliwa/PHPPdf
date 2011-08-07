@@ -62,7 +62,7 @@ class TextDimensionFormatter extends BaseFormatter
         $glyph->setWordsSizes($words, $wordsSizes);
     }
 
-    private function getTextWidth(\PHPPdf\Font\Font $font, $fontSize, $text)
+    private function getTextWidth($font, $fontSize, $text)
     {
         $callback = array($this, $this->charCodeMethodName);
         if($fontSize)

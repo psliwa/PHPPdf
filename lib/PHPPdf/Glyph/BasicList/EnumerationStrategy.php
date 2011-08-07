@@ -9,7 +9,7 @@
 namespace PHPPdf\Glyph\BasicList;
 
 
-use PHPPdf\Glyph\GraphicsContext,
+use PHPPdf\Engine\GraphicsContext,
     PHPPdf\Glyph\BasicList;
 
 /**

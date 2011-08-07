@@ -63,7 +63,7 @@ class FacadeTest extends TestCase
         $stylesheet = '<stylesheet></stylesheet>';
         $content = 'pdf content';
 
-        $documentMock = $this->getMock('PHPPdf\Document', array('draw', 'initialize', 'render', 'setFontRegistry', 'setEnhancementFactory'));
+        $documentMock = $this->getMock('PHPPdf\Document', array('draw', 'initialize', 'render', 'addFontDefinitions', 'setEnhancementFactory'));
         $parserMock = $this->getMock('PHPPdf\Parser\DocumentParser', array('parse', 'setEnhancementFactory', 'setGlyphFactory'));
         $stylesheetParserMock = $this->getMock('PHPPdf\Parser\StylesheetParser', array('parse'));
         $constraintMock = $this->getMock('PHPPdf\Parser\StylesheetConstraint');
@@ -71,7 +71,7 @@ class FacadeTest extends TestCase
         
         $glyphFactoryMock = $this->getMock('PHPPdf\Glyph\Factory');
         $enhancementFactoryMock = $this->getMock('PHPPdf\Enhancement\Factory');
-        $fontRegistryMock = $this->getMock('PHPPdf\Font\Registry');
+        $fontDefinitionsStub = array('some-data');
         
         $this->loaderMock->expects($this->atLeastOnce())
                          ->method('createGlyphFactory')
@@ -81,11 +81,11 @@ class FacadeTest extends TestCase
                          ->will($this->returnValue($enhancementFactoryMock));
         $this->loaderMock->expects($this->atLeastOnce())
                          ->method('createFontRegistry')
-                         ->will($this->returnValue($fontRegistryMock));
+                         ->will($this->returnValue($fontDefinitionsStub));
                          
         $documentMock->expects($this->once())
-                     ->method('setFontRegistry')
-                     ->with($fontRegistryMock);
+                     ->method('addFontDefinitions')
+                     ->with($fontDefinitionsStub);
         $documentMock->expects($this->once())
                      ->method('setEnhancementFactory')
                      ->with($enhancementFactoryMock);

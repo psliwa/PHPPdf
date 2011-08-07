@@ -8,6 +8,10 @@
 
 namespace PHPPdf\Glyph;
 
+use PHPPdf\Exception\UnregisteredGlyphException;
+
+use PHPPdf\Exception\InvalidAttributeException;
+
 use PHPPdf\Util\Point;
 
 use PHPPdf\Document,
@@ -354,10 +358,6 @@ abstract class Glyph implements Drawable, \ArrayAccess, \Serializable
         return $page;
     }
 
-    /**
-     * Get font resource object
-     * @return \Zend_Pdf_Resource_Font
-     */
     public function getFont()
     {
         $font = $this->getRecurseAttribute('font-type');
@@ -736,7 +736,8 @@ abstract class Glyph implements Drawable, \ArrayAccess, \Serializable
     {
         if(!$this->hasAttribute($name))
         {
-            throw new \InvalidArgumentException(sprintf('Class "%s" dosn\'t have "%s" attribute.', get_class($this), $name));
+            throw new InvalidAttributeException($name);
+//            throw new \InvalidArgumentException(sprintf('Class "%s" dosn\'t have "%s" attribute.', get_class($this), $name));
         }
     }
 
@@ -898,7 +899,7 @@ abstract class Glyph implements Drawable, \ArrayAccess, \Serializable
         foreach($enhancements as $enhancement)
         {
             $callback = array($enhancement, 'enhance');
-            $args = array($this->getPage(), $this);
+            $args = array($this, $document);
             $priority = $enhancement->getPriority() + $this->getPriority();
             $tasks[] = new DrawingTask($callback, $args, $priority);
         }

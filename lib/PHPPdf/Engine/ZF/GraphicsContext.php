@@ -6,20 +6,18 @@
  * License information is in LICENSE file
  */
 
-namespace PHPPdf\Glyph;
+namespace PHPPdf\Engine\ZF;
+
+use PHPPdf\Engine\GraphicsContext as BaseGraphicsContext,
+    PHPPdf\Engine\Color as BaseColor,
+    PHPPdf\Engine\Font as BaseFont,
+    PHPPdf\Engine\Image as BaseImage;
 
 /**
- * Graphics Context
- *
- * Facade for Zend_Pdf_Page class
- *
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
-class GraphicsContext
+class GraphicsContext implements BaseGraphicsContext
 {
-    const DASHING_PATTERN_SOLID = 0;
-    const DASHING_PATTERN_DOTTED = 1;
-
     private $state = array(
         'fillColor' => null,
         'lineColor' => null,
@@ -57,9 +55,9 @@ class GraphicsContext
         $this->memento = null;
     }
 
-    public function drawImage(\Zend_Pdf_Resource_Image $image, $x1, $y1, $x2, $y2)
+    public function drawImage(BaseImage $image, $x1, $y1, $x2, $y2)
     {
-        $this->page->drawImage($image, $x1, $y1, $x2, $y2);
+        $this->page->drawImage($image->getWrappedImage(), $x1, $y1, $x2, $y2);
     }
 
     public function drawLine($x1, $y1, $x2, $y2)
@@ -67,26 +65,26 @@ class GraphicsContext
         $this->page->drawLine($x1, $y1, $x2, $y2);
     }
 
-    public function setFont(\PHPPdf\Font\Font $font, $size)
+    public function setFont(BaseFont $font, $size)
     {
-        $fontResource = $font->getFont();
+        $fontResource = $font->getCurrentWrappedFont();
         $this->page->setFont($fontResource, $size);
     }
 
-    public function setFillColor($color)
+    public function setFillColor(BaseColor $color)
     {
         if(!$this->state['fillColor'] || $color->getComponents() !== $this->state['fillColor']->getComponents())
         {
-            $this->page->setFillColor($color);
+            $this->page->setFillColor($color->getWrappedColor());
             $this->state['fillColor'] = $color;
         }
     }
 
-    public function setLineColor($color)
+    public function setLineColor(BaseColor $color)
     {
         if(!$this->state['lineColor'] || $color->getComponents() !== $this->state['lineColor']->getComponents())
         {
-            $this->page->setLineColor($color);
+            $this->page->setLineColor($color->getWrappedColor());
             $this->state['lineColor'] = $color;
         }
     }
@@ -106,24 +104,29 @@ class GraphicsContext
         $this->page = clone $this->page;
     }
 
-    public function getStyle()
-    {
-        return $this->page->getStyle();
-    }
-
-    public function setStyle($style)
-    {
-        $this->page->setStyle($style);
-    }
-
     public function getPage()
     {
         return $this->page;
     }
 
-    public function drawRoundedRectangle($x1, $y1, $x2, $y2, $radius, $fillType = \Zend_Pdf_Page::SHAPE_DRAW_FILL_AND_STROKE)
+    public function drawRoundedRectangle($x1, $y1, $x2, $y2, $radius, $fillType = self::SHAPE_DRAW_FILL_AND_STROKE)
     {
-        $this->page->drawRoundedRectangle($x1, $y1, $x2, $y2, $radius, $fillType);
+        $this->page->drawRoundedRectangle($x1, $y1, $x2, $y2, $radius, $this->translateFillType($fillType));
+    }
+    
+    private function translateFillType($fillType)
+    {
+        switch($fillType)
+        {
+            case self::SHAPE_DRAW_STROKE:
+                return \Zend_Pdf_Page::SHAPE_DRAW_STROKE;
+            case self::SHAPE_DRAW_FILL:
+                return \Zend_Pdf_Page::SHAPE_DRAW_FILL;
+            case self::SHAPE_DRAW_FILL_AND_STROKE:
+                return \Zend_Pdf_Page::SHAPE_DRAW_FILL_AND_STROKE;
+            default:
+                throw new \InvalidArgumentException(sprintf('Invalid filling type "%s".', $fillType));
+        }
     }
 
     public function setLineWidth($width)

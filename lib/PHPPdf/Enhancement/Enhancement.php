@@ -10,7 +10,7 @@ namespace PHPPdf\Enhancement;
 
 use PHPPdf\Glyph\Glyph,
     PHPPdf\Glyph\Page,
-    PHPPdf\Glyph\GraphicsContext,
+    PHPPdf\Engine\GraphicsContext,
     PHPPdf\Document;
 
 /**
@@ -25,11 +25,6 @@ abstract class Enhancement
 
     public function __construct($color = null, $radius = null)
     {
-        if($color !== null && !$color instanceof \Zend_Pdf_Color)
-        {
-            $color = \Zend_Pdf_Color_Html::color($color);
-        }
-
         $this->color = $color;
         $this->setRadius($radius);
     }
@@ -66,10 +61,12 @@ abstract class Enhancement
         return $this->color;
     }
 
-    public function enhance(Page $page, Glyph $glyph)
+    public function enhance(Glyph $glyph, Document $document)
     {
         $color = $this->getColor();
-        $graphicsContext = $page->getGraphicsContext();
+        $color = $color ? $document->createColor($color) : null;
+        
+        $graphicsContext = $glyph->getGraphicsContext();
 
         if($color)
         {
@@ -78,7 +75,7 @@ abstract class Enhancement
             $graphicsContext->setFillColor($color);
         }
 
-        $this->doEnhance($page, $glyph);
+        $this->doEnhance($graphicsContext, $glyph, $document);
         
         if($color)
         {
@@ -86,7 +83,7 @@ abstract class Enhancement
         }
     }
 
-    abstract protected function doEnhance(Page $page, Glyph $glyph);
+    abstract protected function doEnhance($gc, Glyph $glyph, Document $document);
 
     protected function drawBoundary(GraphicsContext $gc, $points, $drawType, $shift = 0.5)
     {

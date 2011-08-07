@@ -225,7 +225,9 @@ class DocumentParser extends XmlParser
         }
         else
         {
-            //TODO exception
+            $element = end($this->tagStack);
+
+            throw new ParseException(sprintf('Placeholder "%s" is not supported by "%s" tag.', $placeholderName, $element['tag']));
         }
     }
 
@@ -329,7 +331,7 @@ class DocumentParser extends XmlParser
         {
             return $this->getGlyphFactory()->create($tag);
         }
-        catch(\InvalidArgumentException $e)
+        catch(\PHPPdf\Exception\UnregisteredGlyphException $e)
         {
             throw new ParseException(sprintf('Unknown tag "%s".', $tag), 0, $e);
         }

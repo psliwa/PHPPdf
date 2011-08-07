@@ -106,7 +106,8 @@ class Facade
         $enhancementFactory = $this->configurationLoader->createEnhancementFactory();
         
         $this->getDocument()->setEnhancementFactory($enhancementFactory);
-        $this->getDocument()->setFontRegistry($this->configurationLoader->createFontRegistry());
+        $fontDefinitions = $this->configurationLoader->createFontRegistry();
+        $this->getDocument()->addFontDefinitions($fontDefinitions);
         $this->getDocumentParser()->setEnhancementFactory($enhancementFactory);
         $this->getDocumentParser()->setGlyphFactory($this->configurationLoader->createGlyphFactory());
 

@@ -8,7 +8,9 @@
 
 namespace PHPPdf;
 
+
 use PHPPdf\Glyph\Glyph,
+    PHPPdf\Engine\ZF\Engine,
     PHPPdf\Formatter as Formatters,
     PHPPdf\Glyph\Page,
     PHPPdf\Glyph\PageCollection,
@@ -21,10 +23,7 @@ use PHPPdf\Glyph\Glyph,
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
 class Document
-{
-    const ATTR_PAGE_SIZE = 1;
-    const SIZE_A4 = \Zend_Pdf_Page::SIZE_A4;
-    
+{   
     const DRAWING_PRIORITY_BACKGROUND1 = 60;
     const DRAWING_PRIORITY_BACKGROUND2 = 50;
     const DRAWING_PRIORITY_BACKGROUND3 = 40;
@@ -32,14 +31,13 @@ class Document
     const DRAWING_PRIORITY_FOREGROUND1 = 10;
     const DRAWING_PRIORITY_FOREGROUND2 = 20;
     const DRAWING_PRIORITY_FOREGROUND3 = 30;
-    
-    private $attributes = array(
-        self::ATTR_PAGE_SIZE => self::SIZE_A4,
-    );
+
     private $processed = false;
 
-    /** @var Zend_Pdf */
-    private $pdfEngine;
+    /**
+     * @var PHPPdf\Engine\Engine
+     */
+    private $engine;
 
     private $enhancementFactory = null;
 
@@ -82,14 +80,17 @@ class Document
     public function initialize()
     {
         $this->processed = false;
-        $this->pdfEngine = new \Zend_Pdf();
+        $this->engine = new Engine();
     }
     
+    /**
+     * @return PHPPdf\Font\Registry
+     */
     public function getFontRegistry()
     {
         if($this->fontRegistry === null)
         {
-            throw new \PHPPdf\Exception\Exception(sprintf('Font registry isn\'t set in class "%s".', __CLASS__));
+            $this->fontRegistry = new FontRegistry($this);
         }
 
         return $this->fontRegistry;
@@ -98,25 +99,6 @@ class Document
     public function setFontRegistry(FontRegistry $registry)
     {
         $this->fontRegistry = $registry;
-    }
-    
-    public function setAttribute($attribute, $value)
-    {
-        $attribute = (int) $attribute;
-        
-        $this->attributes[$attribute] = $value;
-    }
-
-    public function getAttribute($attribute)
-    {
-        $attribute = (int) $attribute;
-
-        if(!isset($this->attributes[$attribute]))
-        {
-            throw new \InvalidArgumentException(sprintf('Attribute %d dosn\'t exist.', $attribute));
-        }
-
-        return $this->attributes[$attribute];
     }
 
     /**
@@ -194,14 +176,6 @@ class Document
     }
 
     /**
-     * @return Zend_Pdf
-     */
-    public function getDocumentEngine()
-    {
-        return $this->pdfEngine;
-    }
-
-    /**
      * @param string $className Formatter class name
      * @return PHPPdf\Formatter\Formatter
      */
@@ -234,9 +208,61 @@ class Document
             throw new \PHPPdf\Exception\Exception(sprintf('Class "%s" dosn\'t exist or haven\'t default constructor.', $className), 0, $e);
         }
     }
+    
+    public function createGraphicsContext($size)
+    {
+        return $this->engine->createGraphicsContext($size);
+    }
+    
+    public function attachGraphicsContext($gc)
+    {
+        $this->engine->attachGraphicsContext($gc);
+    }
+    
+    public function createColor($color)
+    {
+        return $this->engine->createColor($color);
+    }
+    
+    public function createImage($path)
+    {
+        return $this->engine->createImage($path);
+    }
+    
+    public function createFont($data)
+    {
+        foreach($data as $name => $value)
+        {
+            if(strpos($value, '/') !== false)
+            {
+                $value = str_replace('%resources%', __DIR__.'/Resources', $value);
+                $data[$name] = $value;
+            }
+        }
+        
+        return $this->engine->createFont($data);
+    }
+    
+    public function getFont($name)
+    {
+        return $this->getFontRegistry()->get($name);
+    }
+    
+    public function setFontDefinition($name, array $definition)
+    {
+        $this->getFontRegistry()->register($name, $definition);
+    }
+    
+    public function addFontDefinitions(array $definitions)
+    {
+        foreach($definitions as $name => $definition)
+        {
+            $this->setFontDefinition($name, $definition);
+        }
+    }
 
     public function render()
     {
-        return $this->getDocumentEngine()->render();
+        return $this->engine->render();
     }
 }

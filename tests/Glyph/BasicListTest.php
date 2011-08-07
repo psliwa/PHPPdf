@@ -28,7 +28,8 @@ class BasicListTest extends TestCase
     {
         $page = $this->getMock('PHPPdf\Glyph\Page', array('getGraphicsContext', 'getAttribute'));
         
-        $gc = $this->getMock('PHPPdf\Glyph\GraphicsContext', array(), array(), '', false, false);
+        $gc = $this->getMockBuilder('PHPPdf\Engine\GraphicsContext')
+                   ->getMock();
         
         $page->expects($this->atLeastOnce())
              ->method('getGraphicsContext')
@@ -129,7 +130,8 @@ class BasicListTest extends TestCase
      */
     public function createNewEnumerationStrategyOnlyWhenTypeWasChanged()
     {
-        $font = $this->getMock('PHPPdf\Font\Font', array(), array(), '', false);
+        $font = $this->getMockBuilder('PHPPdf\Engine\Font')
+                     ->getMock();
         $this->list->setAttribute('font-type', $font);
         
         $type = BasicList::TYPE_CIRCLE;

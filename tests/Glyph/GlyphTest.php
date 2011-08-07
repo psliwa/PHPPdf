@@ -38,7 +38,7 @@ class GlyphTest extends TestCase
 
     /**
      * @test
-     * @expectedException \InvalidArgumentException
+     * @expectedException PHPPdf\Exception\InvalidAttributeException
      */
     public function failureSettingAttribute()
     {

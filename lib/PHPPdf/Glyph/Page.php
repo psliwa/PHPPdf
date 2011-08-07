@@ -21,7 +21,7 @@ use PHPPdf\Document,
 class Page extends Container
 {
     const ATTR_SIZE = 'page-size';
-    const SIZE_A4 = \Zend_Pdf_Page::SIZE_A4;
+    const SIZE_A4 = '595:842';
 
     private $graphicsContext;
 
@@ -123,14 +123,9 @@ class Page extends Container
 
     protected function doDraw(Document $document)
     {
-        $graphicsContext = $this->getGraphicsContext();
+        $this->prepareGraphicsContext($document);
 
-        if($graphicsContext->getStyle() === null)
-        {
-            $this->setGraphicsContextDefaultStyle();
-        }
-
-        $document->getDocumentEngine()->pages[] = $graphicsContext->getPage();
+        $document->attachGraphicsContext($this->getGraphicsContext());
 
         if(!$this->preparedTemplate)
         {
@@ -149,28 +144,37 @@ class Page extends Container
             $this->addDrawingTasks($tasks);
         }
     }
+    
+    private function prepareGraphicsContext(Document $document)
+    {
+        $this->assignGraphicsContextIfIsNull($document);
 
+        $graphicsContext = $this->getGraphicsContext();
+
+//        if($graphicsContext->getStyle() === null)
+        {
+//            $this->setGraphicsContextDefaultStyle($document);
+        }
+    }
+
+    private function assignGraphicsContextIfIsNull(Document $document)
+    {
+        if($this->graphicsContext === null)
+        {
+            $this->graphicsContext = $document->createGraphicsContext($this->getAttribute(self::ATTR_SIZE));
+            $this->setGraphicsContextDefaultStyle($document);
+        }
+    }
+    
     /**
      * @return GraphicsContext
      */
     public function getGraphicsContext()
     {
-        if($this->graphicsContext === null)
-        {
-            $page = new \Zend_Pdf_Page($this->getAttribute(self::ATTR_SIZE));
-
-            $this->createGraphicsContext($page);
-        }
-
         return $this->graphicsContext;
     }
 
-    private function createGraphicsContext(\Zend_Pdf_Page $page)
-    {
-        $this->graphicsContext = new GraphicsContext($page);
-    }
-
-    private function setGraphicsContextDefaultStyle()
+    private function setGraphicsContextDefaultStyle(Document $document)
     {
         $font = $this->getFont();
         if($font && $this->getAttribute('font-size'))
@@ -178,12 +182,9 @@ class Page extends Container
             $this->graphicsContext->setFont($font, $this->getAttribute('font-size'));
         }
 
-        $defaultStyle = new \Zend_Pdf_Style();
-        $color = new \Zend_Pdf_Color_Rgb(0, 0, 0);
-        $defaultStyle->setFillColor($color);
-        $defaultStyle->setLineColor($color);
-
-        $this->graphicsContext->setStyle($defaultStyle);
+        $blackColor = $document->createColor('#000000');
+        $this->graphicsContext->setFillColor($blackColor);
+        $this->graphicsContext->setLineColor($blackColor);
     }
 
     public function getPage()
@@ -384,6 +385,8 @@ class Page extends Container
     public function prepareTemplate(Document $document)
     {
         $tasks = $this->getTemplateDrawingTasksAndFormatPlaceholders($document);
+        
+        $this->prepareGraphicsContext($document);
 
         $document->invokeTasks($tasks);
 

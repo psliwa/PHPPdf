@@ -1,5 +1,6 @@
 <?php
 
+use PHPPdf\Document;
 use PHPPdf\Enhancement\Enhancement,
     PHPPdf\Glyph\Page,
     PHPPdf\Glyph\Glyph;
@@ -15,7 +16,7 @@ class EnhancementStub extends Enhancement
         $this->someParameter = $someParameter;
     }
 
-    protected function doEnhance(Page $page, Glyph $glyph)
+    protected function doEnhance($gc, Glyph $glyph, Document $document)
     {
     }
 }

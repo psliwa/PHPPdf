@@ -8,6 +8,10 @@
 
 namespace PHPPdf\Enhancement;
 
+use PHPPdf\Engine\GraphicsContext;
+
+use PHPPdf\Document;
+
 use PHPPdf\Glyph\Page,
     PHPPdf\Util,
     PHPPdf\Glyph\Glyph;
@@ -33,11 +37,6 @@ class Background extends Enhancement
     public function __construct($color = null, $image = null, $repeat = self::REPEAT_NONE, $radius = null, $useRealDimension = false, $imageWidth = null, $imageHeight = null)
     {
         parent::__construct($color, $radius);
-
-        if($image !== null && !$image instanceof \Zend_Pdf_Resource_Image)
-        {
-            $image = \Zend_Pdf_Image::imageWithPath($image);
-        }
 
         $this->image = $image;
         $this->setRepeat($repeat);
@@ -71,18 +70,13 @@ class Background extends Enhancement
         $this->imageHeight = $height;
     }
 
-    /**
-     * @return \Zend_Pdf_Resource_Image
-     */
     public function getImage()
     {
         return $this->image;
     }
 
-    protected function doEnhance(Page $page, Glyph $glyph)
+    protected function doEnhance($graphicsContext, Glyph $glyph, Document $document)
     {
-        $graphicsContext = $page->getGraphicsContext();
-
         if($this->getColor() !== null)
         {
             $boundary = $this->getBoundary($glyph);
@@ -91,21 +85,23 @@ class Background extends Enhancement
                 $firstPoint = $boundary[3];
                 $diagonalPoint = $boundary[1];
                 
-                $this->drawRoundedBoundary($graphicsContext, $firstPoint[0], $firstPoint[1], $diagonalPoint[0], $diagonalPoint[1], \Zend_Pdf_Page::SHAPE_DRAW_FILL_AND_STROKE);
+                $this->drawRoundedBoundary($graphicsContext, $firstPoint[0], $firstPoint[1], $diagonalPoint[0], $diagonalPoint[1], GraphicsContext::SHAPE_DRAW_FILL_AND_STROKE);
             }
             else
             {
-                $this->drawBoundary($page->getGraphicsContext(), $boundary, \Zend_Pdf_Page::SHAPE_DRAW_FILL);
+                $this->drawBoundary($graphicsContext, $boundary, GraphicsContext::SHAPE_DRAW_FILL);
             }
         }
 
         $image = $this->getImage();
+        $image = $image ? $document->createImage($image) : null;
+
         if($image !== null)
         {
             list($x, $y) = $this->getFirstPoint($glyph)->toArray();
             list($endX, $endY) = $this->getDiagonalPoint($glyph)->toArray();
                     
-            list($width, $height) = $this->getImageDimension($glyph);
+            list($width, $height) = $this->getImageDimension($image, $glyph);
 
             $graphicsContext->saveGS();
             $graphicsContext->clipRectangle($x, $y, $x+$this->getWidth($glyph), $y-$this->getHeight($glyph));
@@ -134,19 +130,19 @@ class Background extends Enhancement
         }
     }
     
-    private function getImageDimension(Glyph $glyph)
+    private function getImageDimension($image, Glyph $glyph)
     {
         $width = $this->imageWidth;
         $height = $this->imageHeight;
         
         if(!$width && !$height)
         {
-            return array($this->image->getPixelWidth(), $this->image->getPixelHeight());
+            return array($image->getOriginalWidth(), $image->getOriginalHeight());
         }
         
         list($width, $height) = $this->convertPercentageDimension($glyph, $width, $height);
         
-        $ratio = $this->image->getPixelWidth() / $this->image->getPixelHeight();
+        $ratio = $image->getOriginalWidth() / $image->getOriginalHeight();
             
         list($width, $height) = Util::calculateDependantSizes($width, $height, $ratio);
         

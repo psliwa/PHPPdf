@@ -8,28 +8,29 @@
 
 namespace PHPPdf\Font;
 
+use PHPPdf\Document;
+
 /**
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
-class Registry implements \Countable, \Serializable
+class Registry implements \Countable
 {
     private $fonts = array();
-
-    public function register($name, $font)
+    private $document = null;
+    
+    public function __construct(Document $document)
     {
-        if(is_array($font))
-        {
-            $font = new Font($font);
-        }
-        elseif(!$font instanceof Font)
-        {
-            throw new \InvalidArgumentException('Font should by type of PHPPdf\Font or array');
-        }
-
-            $this->add($name, $font);
+        $this->document = $document;
     }
 
-    private function add($name, Font $font)
+    public function register($name, array $font)
+    {
+        $font = $this->document->createFont($font);
+
+        $this->add($name, $font);
+    }
+
+    private function add($name, $font)
     {
         $name = (string) $name;
         $this->fonts[$name] = $font;
@@ -53,24 +54,5 @@ class Registry implements \Countable, \Serializable
     public function count()
     {
         return count($this->fonts);
-    }
-
-    public function serialize()
-    {
-        return serialize(array(
-            'fonts' => $this->fonts,
-        ));
-    }
-
-    public function unserialize($serialized)
-    {
-        $data = \unserialize($serialized);
-
-        $fonts = $data['fonts'];
-
-        foreach($fonts as $name => $font)
-        {
-            $this->add($name, $font);
-        }
     }
 }

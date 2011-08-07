@@ -26,8 +26,8 @@ class ImageDimensionFormatter extends BaseFormatter
             $height = $glyph->getHeight();
             $src = $glyph->getAttribute('src');
 
-            $originalWidth = $src->getPixelWidth();
-            $originalHeight = $src->getPixelHeight();
+            $originalWidth = $src->getOriginalWidth();
+            $originalHeight = $src->getOriginalHeight();
             $originalRatio = $originalWidth/$originalHeight;
 
             if(!$width && !$height)
@@ -52,8 +52,8 @@ class ImageDimensionFormatter extends BaseFormatter
         $parent = $glyph->getParent();
         $src = $glyph->getAttribute('src');
 
-        $width = $src->getPixelWidth();
-        $height = $src->getPixelHeight();
+        $width = $src->getOriginalWidth();
+        $height = $src->getOriginalHeight();
 
         if($width > $parent->getWidth() || $height > $parent->getHeight())
         {
