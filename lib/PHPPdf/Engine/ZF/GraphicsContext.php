@@ -158,7 +158,7 @@ class GraphicsContext implements BaseGraphicsContext
     {
         $uriAction = \Zend_Pdf_Action_URI::create($uri);
         
-        $annotation = \Zend_Pdf_Annotation_Link::create($x1, $y1, $x2, $y2, $uriAction);
+        $annotation = $this->createAnnotationLink($x1, $y1, $x2, $y2, $uriAction);
         
         $this->page->attachAnnotation($annotation);
     }
@@ -167,8 +167,24 @@ class GraphicsContext implements BaseGraphicsContext
     {
         $destination = \Zend_Pdf_Destination_FitHorizontally::create($gc->getPage(), $top);   
         
-        $annotation = \Zend_Pdf_Annotation_Link::create($x1, $y1, $x2, $y2, $destination);
+        $annotation = $this->createAnnotationLink($x1, $y1, $x2, $y2, $destination);
         
         $this->page->attachAnnotation($annotation);
+    }
+    
+    private function createAnnotationLink($x1, $y1, $x2, $y2, $target)
+    {
+        $annotation = \Zend_Pdf_Annotation_Link::create($x1, $y1, $x2, $y2, $target);
+        $annotationDictionary = $annotation->getResource();
+        
+        $border = new \Zend_Pdf_Element_Array();
+        $zero = new \Zend_Pdf_Element_Numeric(0);
+        $border->items[] = $zero;
+        $border->items[] = $zero;
+        $border->items[] = $zero;
+        $border->items[] = $zero;
+        $annotationDictionary->Border = $border;
+
+        return $annotation;
     }
 }

@@ -8,17 +8,16 @@
 
 namespace PHPPdf\Parser;
 
-use PHPPdf\Glyph\Text;
-
-use PHPPdf\Parser\Exception\ParseException;
-
-use PHPPdf\Glyph\Factory as GlyphFactory,
+use PHPPdf\Glyph\Text,
+    PHPPdf\Parser\Exception\ParseException,
+    PHPPdf\Glyph\Factory as GlyphFactory,
     PHPPdf\Glyph\PageCollection,
     PHPPdf\Glyph\Glyph,
     PHPPdf\Parser\BagContainer,
     PHPPdf\Parser\Exception as Exceptions,
     PHPPdf\Enhancement\Factory as EnhancementFactory,
-    PHPPdf\Parser\StylesheetConstraint;
+    PHPPdf\Parser\StylesheetConstraint,
+    PHPPdf\Glyph\Behaviour\Factory as BehaviourFactory;
 
 /**
  * @author Piotr Śliwa <peter.pl7@gmail.com>
@@ -31,7 +30,7 @@ class DocumentParser extends XmlParser
     const ATTRIBUTE_CLASS = 'class';
     const STYLESHEET_TAG = 'stylesheet';
     const PLACEHOLDERS_TAG = 'placeholders';
-
+    
     private $factory = null;
     private $enhancementFactory = null;
     private $stylesheetConstraint = null;
@@ -42,6 +41,7 @@ class DocumentParser extends XmlParser
     private $innerParser = null;
     private $inPlaceholder = false;
     private $endTag = self::ROOT_TAG;
+    private $behaviourFactory = null;
     
     private $isPreviousText = false;
     
@@ -56,6 +56,7 @@ class DocumentParser extends XmlParser
         $this->setGlyphFactory($factory);
         $this->setStylesheetParser($stylesheetParser);
         $this->setEnhancementFactory($enhancementFactory);
+        $this->setBehaviourFactory(new BehaviourFactory());
 
         $this->initialize();
     }
@@ -133,6 +134,11 @@ class DocumentParser extends XmlParser
     public function getGlyphFactory()
     {
         return $this->factory;
+    }
+    
+    public function setBehaviourFactory(BehaviourFactory $factory)
+    {
+        $this->behaviourFactory = $factory;
     }
 
     /**
@@ -286,6 +292,7 @@ class DocumentParser extends XmlParser
     
             $this->prototypes[$id] = $glyph;
         }
+        $this->setBehavioursFromReader($reader, $glyph);
         $this->setGlyphAttributesFromReader($reader, $glyph);
     
         if($this->isTextGlyph($glyph) && $this->isntTextGlyph($parentGlyph))
@@ -360,9 +367,24 @@ class DocumentParser extends XmlParser
         $bagContainer = new BagContainer();
         
         $stylesheetParser = $this->getStylesheetParser();
-        $stylesheetParser->addConstraintsFromAttributes($bagContainer, $reader, array(self::ATTRIBUTE_ID, self::ATTRIBUTE_EXTENDS, self::ATTRIBUTE_CLASS));
+        
+        $ignoredTags = array_merge($this->behaviourFactory->getSupportedBehaviourNames(), array(self::ATTRIBUTE_ID, self::ATTRIBUTE_EXTENDS, self::ATTRIBUTE_CLASS));
+        
+        $stylesheetParser->addConstraintsFromAttributes($bagContainer, $reader, $ignoredTags);
 
         $this->setGlyphStylesheet($glyph, $bagContainer);
+    }
+    
+    private function setBehavioursFromReader(\XMLReader $reader, Glyph $glyph)
+    {
+        foreach($this->behaviourFactory->getSupportedBehaviourNames() as $name)
+        {
+            $value = $reader->getAttribute($name);
+            if($value)
+            {
+                $glyph->addBehaviour($this->behaviourFactory->create($name, $value));
+            }
+        }
     }
 
     protected function parseEndElement(\XMLReader $reader)
