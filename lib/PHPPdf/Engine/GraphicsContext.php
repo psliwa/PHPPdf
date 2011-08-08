@@ -45,4 +45,8 @@ interface GraphicsContext
     public function setLineWidth($width);
 
     public function setLineDashingPattern($pattern);
+    
+    public function uriAction($x1, $y1, $x2, $y2, $uri);
+    
+    public function goToAction(GraphicsContext $gc, $x1, $y1, $x2, $y2, $top);
 }

@@ -8,6 +8,8 @@
 
 namespace PHPPdf\Glyph;
 
+use PHPPdf\Engine\GraphicsContext;
+
 use PHPPdf\Document,
     PHPPdf\Util\DrawingTask,
     PHPPdf\Util\Point,
@@ -161,9 +163,14 @@ class Page extends Container
     {
         if($this->graphicsContext === null)
         {
-            $this->graphicsContext = $document->createGraphicsContext($this->getAttribute(self::ATTR_SIZE));
+            $this->setGraphicsContext($document->createGraphicsContext($this->getAttribute(self::ATTR_SIZE)));
             $this->setGraphicsContextDefaultStyle($document);
         }
+    }
+    
+    private function setGraphicsContext(GraphicsContext $gc)
+    {
+        $this->graphicsContext = $gc;
     }
     
     /**

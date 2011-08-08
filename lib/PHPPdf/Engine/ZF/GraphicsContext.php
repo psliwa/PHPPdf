@@ -153,4 +153,22 @@ class GraphicsContext implements BaseGraphicsContext
             $this->state['lineDashingPattern'] = $pattern;
         }
     }
+    
+    public function uriAction($x1, $y1, $x2, $y2, $uri)
+    {
+        $uriAction = \Zend_Pdf_Action_URI::create($uri);
+        
+        $annotation = \Zend_Pdf_Annotation_Link::create($x1, $y1, $x2, $y2, $uriAction);
+        
+        $this->page->attachAnnotation($annotation);
+    }
+    
+    public function goToAction(BaseGraphicsContext $gc, $x1, $y1, $x2, $y2, $top)
+    {
+        $destination = \Zend_Pdf_Destination_FitHorizontally::create($gc->getPage(), $top);   
+        
+        $annotation = \Zend_Pdf_Annotation_Link::create($x1, $y1, $x2, $y2, $destination);
+        
+        $this->page->attachAnnotation($annotation);
+    }
 }

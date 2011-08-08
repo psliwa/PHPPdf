@@ -534,4 +534,35 @@ class GlyphTest extends TestCase
             ),
         );
     }
+    
+    /**
+     * @test
+     */
+    public function eachBehavioursShouldBeAttachedByDrawingTasks()
+    {
+        $gc = $this->getMockBuilder('PHPPdf\Engine\GraphicsContext')
+                   ->getMock();
+                   
+        $page = new Page();
+        $this->invokeMethod($page, 'setGraphicsContext', array($gc));
+        $page->add($this->glyph);
+        
+        for($i=0; $i<2; $i++)
+        {
+            $behaviour = $this->getMockBuilder('PHPPdf\Glyph\Behaviour\Behaviour')
+                              ->getMock();
+            $behaviour->expects($this->once())
+                      ->method('attach')
+                      ->with($gc, $this->glyph)
+                      ;
+            $this->glyph->addBehaviour($behaviour);
+        }
+        
+        $tasks = $this->glyph->getDrawingTasks(new Document());
+        
+        foreach($tasks as $task)
+        {
+            $task->invoke();
+        }
+    }
 }

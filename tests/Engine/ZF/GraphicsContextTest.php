@@ -365,4 +365,79 @@ class GraphicsContextTest extends \TestCase
               
         return $color;
     }
+    
+    /**
+     * @test
+     */
+    public function attachUriAction()
+    {
+        $uri = 'http://google.com';
+        $coords = array(0, 100, 200, 50);
+
+        $zendPageMock = $this->getMockBuilder('\Zend_Pdf_Page')
+                             ->setMethods(array('attachAnnotation'))
+                             ->disableOriginalConstructor()
+                             ->getMock();
+
+        $zendPageMock->expects($this->once())
+                     ->method('attachAnnotation')
+                     ->with($this->validateByCallback(function($actual, \PHPUnit_Framework_TestCase $testCase) use($uri, $coords){
+                         $testCase->assertAnnotationLinkWithRectangle($coords, $actual);
+                         
+                         $action = $actual->getDestination();
+                         $testCase->assertInstanceOf('\Zend_Pdf_Action_URI', $action);
+                         $testCase->assertEquals($uri, $action->getUri());
+                     }, $this));
+                             
+        $gc = new GraphicsContext($zendPageMock);
+        
+        $gc->uriAction($coords[0], $coords[1], $coords[2], $coords[3], $uri);
+    }
+    
+    public function assertAnnotationLinkWithRectangle(array $coords, $actual)
+    {
+        $this->assertInstanceOf('\Zend_Pdf_Annotation_Link', $actual);
+        
+        $boundary = $actual->getResource()->Rect;
+        
+        foreach($coords as $i => $coord)
+        {
+            $this->assertEquals((string) $coord, $boundary->items[$i]->toString());
+        }
+    }
+    
+    /**
+     * @test
+     */
+    public function attachGoToAction()
+    {
+        $zendPageMock = $this->getMockBuilder('\Zend_Pdf_Page')
+                             ->setMethods(array('attachAnnotation'))
+                             ->disableOriginalConstructor()
+                             ->getMock();
+                             
+        $coords = array(0, 100, 200, 50);
+        $top = 100;
+        
+        $pageStub = new \Zend_Pdf_Page('a4');
+        $gcStub = new GraphicsContext($pageStub);
+        
+        $zendPageMock->expects($this->once())
+                     ->method('attachAnnotation')
+                     ->with($this->validateByCallback(function($actual, \PHPUnit_Framework_TestCase $testCase) use($top, $coords, $pageStub){
+                         $testCase->assertAnnotationLinkWithRectangle($coords, $actual);
+                         
+                         $destination = $actual->getDestination();
+                         $testCase->assertInstanceOf('\Zend_Pdf_Destination_FitHorizontally', $destination);
+                         
+                         $testCase->assertEquals($top, $destination->getTopEdge());
+                         $testCase->assertTrue($destination->getResource()->items[0] === $pageStub->getPageDictionary());
+
+                     }, $this));
+                     
+        $gc = new GraphicsContext($zendPageMock);
+        
+        
+        $gc->goToAction($gcStub, $coords[0], $coords[1], $coords[2], $coords[3], $top);
+    }
 }

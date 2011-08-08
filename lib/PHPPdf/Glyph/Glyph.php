@@ -8,6 +8,10 @@
 
 namespace PHPPdf\Glyph;
 
+use PHPPdf\Glyph\Behaviour\Behaviour;
+
+use PHPPdf\Glyph\Behaviour\GoToUrl;
+
 use PHPPdf\Exception\UnregisteredGlyphException;
 
 use PHPPdf\Exception\InvalidAttributeException;
@@ -62,6 +66,8 @@ abstract class Glyph implements Drawable, \ArrayAccess, \Serializable
     private $enhancementBag = null;
     private $drawingTasks = array();
     private $formattersNames = array();
+    
+    private $behaviours = array();
 
     public function __construct(array $attributes = array())
     {
@@ -337,6 +343,11 @@ abstract class Glyph implements Drawable, \ArrayAccess, \Serializable
     protected function setEnhancementBag(EnhancementBag $bag)
     {
         $this->enhancementBag = $bag;
+    }
+    
+    public function addBehaviour(Behaviour $behaviour)
+    {
+        $this->behaviours[] = $behaviour;
     }
 
     public function reset()
@@ -902,6 +913,15 @@ abstract class Glyph implements Drawable, \ArrayAccess, \Serializable
             $args = array($this, $document);
             $priority = $enhancement->getPriority() + $this->getPriority();
             $tasks[] = new DrawingTask($callback, $args, $priority);
+        }
+        
+        foreach($this->behaviours as $behaviour)
+        {
+            $callback = function($behaviour, $glyph){
+                $behaviour->attach($glyph->getGraphicsContext(), $glyph);
+            };
+            $args = array($behaviour, $this);
+            $tasks[] = new DrawingTask($callback, $args);
         }
         
         return $tasks;
