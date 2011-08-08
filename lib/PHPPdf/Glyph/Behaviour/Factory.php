@@ -26,7 +26,7 @@ class Factory
                 return null;
         }
     }
-    
+
     public function getSupportedBehaviourNames()
     {
         return array('href');

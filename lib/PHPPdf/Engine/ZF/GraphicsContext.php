@@ -8,7 +8,8 @@
 
 namespace PHPPdf\Engine\ZF;
 
-use PHPPdf\Engine\GraphicsContext as BaseGraphicsContext,
+use PHPPdf\Exception\Exception,
+    PHPPdf\Engine\GraphicsContext as BaseGraphicsContext,
     PHPPdf\Engine\Color as BaseColor,
     PHPPdf\Engine\Font as BaseFont,
     PHPPdf\Engine\Image as BaseImage;
@@ -156,20 +157,34 @@ class GraphicsContext implements BaseGraphicsContext
     
     public function uriAction($x1, $y1, $x2, $y2, $uri)
     {
-        $uriAction = \Zend_Pdf_Action_URI::create($uri);
-        
-        $annotation = $this->createAnnotationLink($x1, $y1, $x2, $y2, $uriAction);
-        
-        $this->page->attachAnnotation($annotation);
+        try
+        {
+            $uriAction = \Zend_Pdf_Action_URI::create($uri);
+            
+            $annotation = $this->createAnnotationLink($x1, $y1, $x2, $y2, $uriAction);
+            
+            $this->page->attachAnnotation($annotation);
+        }
+        catch(\Zend_Pdf_Exception $e)
+        {
+            throw new Exception(sprintf('Error wile adding uri action with uri="%s"', $uri), 0, $e);
+        }
     }
     
     public function goToAction(BaseGraphicsContext $gc, $x1, $y1, $x2, $y2, $top)
     {
-        $destination = \Zend_Pdf_Destination_FitHorizontally::create($gc->getPage(), $top);   
-        
-        $annotation = $this->createAnnotationLink($x1, $y1, $x2, $y2, $destination);
-        
-        $this->page->attachAnnotation($annotation);
+        try
+        {
+            $destination = \Zend_Pdf_Destination_FitHorizontally::create($gc->getPage(), $top);   
+            
+            $annotation = $this->createAnnotationLink($x1, $y1, $x2, $y2, $destination);
+            
+            $this->page->attachAnnotation($annotation);
+        }
+        catch(\Zend_Pdf_Exception $e)
+        {
+            throw new Exception('Error while adding goTo action', 0, $e);
+        }
     }
     
     private function createAnnotationLink($x1, $y1, $x2, $y2, $target)

@@ -437,7 +437,39 @@ class GraphicsContextTest extends \TestCase
                      
         $gc = new GraphicsContext($zendPageMock);
         
-        
         $gc->goToAction($gcStub, $coords[0], $coords[1], $coords[2], $coords[3], $top);
+    }
+    
+    /**
+     * @test
+     * @expectedException PHPPdf\Exception\Exception
+     * @dataProvider wrapZendExceptionsFromActionsProvider
+     */
+    public function wrapZendExceptionsFromActions($method, array $args)
+    {
+        $zendPageMock = $this->getMockBuilder('\Zend_Pdf_Page')
+                             ->setMethods(array('attachAnnotation'))
+                             ->disableOriginalConstructor()
+                             ->getMock();
+                             
+        $zendPageMock->expects($this->any())
+                     ->method('attachAnnotation')
+                     ->will($this->throwException(new \Zend_Pdf_Exception()));
+
+        $gc = new GraphicsContext($zendPageMock);
+        
+        call_user_func_array(array($gc, $method), $args);
+    }
+    
+    public function wrapZendExceptionsFromActionsProvider()
+    {
+        return array(
+            array(
+                'goToAction', array(new GraphicsContext(new \Zend_Pdf_Page('a4')), 0, 0, 0, 0, 10),
+            ),
+            array(
+                'uriAction', array(0, 0, 0, 0, 'invalid-uri'),
+            ),
+        );
     }
 }
