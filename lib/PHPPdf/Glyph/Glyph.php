@@ -32,7 +32,7 @@ use PHPPdf\Document,
  *
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
-abstract class Glyph implements Drawable, \ArrayAccess, \Serializable
+abstract class Glyph implements Drawable, GlyphAware, \ArrayAccess, \Serializable
 {
     const DISPLAY_BLOCK = 'block';
     const DISPLAY_INLINE = 'inline';
@@ -1253,6 +1253,11 @@ abstract class Glyph implements Drawable, \ArrayAccess, \Serializable
         $this->enhancementBag = new EnhancementBag($data['enhancementBag']);
         $this->setFormattersNames($data['formattersNames']);
         $this->priority = $data['priority'];
+    }
+    
+    public function getGlyph()
+    {
+        return $this;
     }
 
     public function __toString()

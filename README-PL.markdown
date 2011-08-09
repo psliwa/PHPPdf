@@ -221,6 +221,8 @@ Atrybuty.
 * text-align - działanie takie jak w HTML/CSS. Wartości left|center|right, domyślnie left. Obecnie nie działa poprawnie dla tekstu wymieszanego z tagami formatującymi (np. "span").
 * page-break - łamie stronę jeśli element jest bezpośrednim dzieckiem elementu dynamic-page
 * colspan, rowspan - działanie analogiczne do atrybutów html (rowspan jeszcze nie jest zaimplementowane)
+* href - zewnętrzy adres url, gdzie element powinien linkować
+* ref - id elementu do którego posiadacz tego atrybutu powinien linkować (odpowiednik kotwic w HTML'u)
 
 Atrybuty złożone
 ----------------

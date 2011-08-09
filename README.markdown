@@ -223,9 +223,11 @@ Attributes
 * splittable - if true, element is able to be splitted in several pages. Default value for most tags is true..
 * float - works similar but not the same as in HTML/CSS. Allowed values: left|none|right, default none
 * line-height - works similar as in HTML/CSS. Default value: 1.2*font-size
-* text-align - works as same as in HTML/CSS. Allowed values: left|center|right, default left. Nowday isn't work properly with text mixed with inline tags (for example "span")
+* text-align - works as same as in HTML/CSS. Allowed values: left|center|right, default left.
 * page-break - breaks page in the end of the owner of this attribute. Owner of this attribute must by directly child of dynamic-page tag!
 * colspan, rowspan - works similar as in HTML (TODO: rowspan isn't implemented yet)
+* href - external url where element should linking
+* ref - id of element where owner should linking
 
 Complex attributes
 ------------------

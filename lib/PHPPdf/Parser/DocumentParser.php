@@ -8,6 +8,10 @@
 
 namespace PHPPdf\Parser;
 
+use PHPPdf\Glyph\Manager;
+
+use PHPPdf\Glyph\GlyphWrapper;
+
 use PHPPdf\Glyph\Text,
     PHPPdf\Parser\Exception\ParseException,
     PHPPdf\Glyph\Factory as GlyphFactory,
@@ -42,10 +46,13 @@ class DocumentParser extends XmlParser
     private $inPlaceholder = false;
     private $endTag = self::ROOT_TAG;
     private $behaviourFactory = null;
+    private $glyphManager = null;
     
     private $isPreviousText = false;
     
     private $currentParagraph = null;
+    
+    private $wrappers = array();
 
     public function __construct()
     {
@@ -56,6 +63,7 @@ class DocumentParser extends XmlParser
         $this->setGlyphFactory($factory);
         $this->setStylesheetParser($stylesheetParser);
         $this->setEnhancementFactory($enhancementFactory);
+        $this->glyphManager = new Manager();
         $this->setBehaviourFactory(new BehaviourFactory());
 
         $this->initialize();
@@ -139,6 +147,7 @@ class DocumentParser extends XmlParser
     public function setBehaviourFactory(BehaviourFactory $factory)
     {
         $this->behaviourFactory = $factory;
+        $factory->setGlyphManager($this->glyphManager);
     }
 
     /**
@@ -281,16 +290,11 @@ class DocumentParser extends XmlParser
         $bagContainer = $this->getStylesheetConstraint()->find($this->tagStack);
         $this->setGlyphStylesheet($glyph, $bagContainer);
     
-        $id = $reader->getAttribute('id');
+        $id = $reader->getAttribute(self::ATTRIBUTE_ID);
     
         if($id)
         {
-            if(isset($this->prototypes[$id]))
-            {
-                throw new Exceptions\DuplicatedIdException(sprintf('Duplicate of id "%s".', $id));
-            }
-    
-            $this->prototypes[$id] = $glyph;
+            $this->glyphManager->register($id, $glyph);
         }
         $this->setBehavioursFromReader($reader, $glyph);
         $this->setGlyphAttributesFromReader($reader, $glyph);
@@ -316,12 +320,14 @@ class DocumentParser extends XmlParser
 
         if($extends)
         {
-            if(!isset($this->prototypes[$extends]))
+            $parent = $this->glyphManager->get($extends);
+            
+            if($parent->getGlyph() == null)
             {
                 throw new Exceptions\IdNotFoundException(sprintf('Element with id="%s" dosn\'t exist.', $extends));
             }
 
-            $glyph = $this->prototypes[$extends]->copy();
+            $glyph = $parent->getGlyph()->copy();
             $glyph->removeAll();
         }
         else
@@ -381,7 +387,7 @@ class DocumentParser extends XmlParser
         {
             $value = $reader->getAttribute($name);
             if($value)
-            {
+            {                
                 $glyph->addBehaviour($this->behaviourFactory->create($name, $value));
             }
         }

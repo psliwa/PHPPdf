@@ -8,11 +8,20 @@
 
 namespace PHPPdf\Glyph\Behaviour;
 
+use PHPPdf\Glyph\Manager;
+
 /**
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
 class Factory
 {
+    private $glyphManager;
+    
+    public function setGlyphManager(Manager $manager)
+    {
+        $this->glyphManager = $manager;
+    }
+    
     /**
      * @return Behaviour
      */
@@ -22,6 +31,8 @@ class Factory
         {
             case 'href':
                 return new GoToUrl($arg);
+            case 'ref':
+                return new GoToInternal($this->glyphManager->get($arg));
             default:
                 return null;
         }
@@ -29,6 +40,6 @@ class Factory
 
     public function getSupportedBehaviourNames()
     {
-        return array('href');
+        return array('href', 'ref');
     }
 }
