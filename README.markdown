@@ -334,6 +334,21 @@ Page can be separated on columns:
 
 Above XML describes several pages of pdf document with green rectangles separated on two columns. "column-layout" tag has three additional parameters: number-of-columns, margin-between-columns and equals-columns. Default values for this attributes are 2, 10 and false respectlivy. If equals-columns attribute is set, columns will have more or less equals height.
 
+Breaking pages and columns
+--------------------------
+
+Page and column may by manually broken by one of tags: page-break, column-break, break. All those tags are the same. Those tags have to be direct children of breaking element (dynamic-page or column-layout).
+
+If you want to avoid automatic page or column break on certain tag, you should set off "splittable" attribute of this tag. 
+
+Example:
+
+    <pdf>
+        <dynamic-page>
+            <div splittable="false">this div won't be automatically broken</div>
+        </dynamic-page>
+    </pdf>
+
 Configuration
 -------------
 

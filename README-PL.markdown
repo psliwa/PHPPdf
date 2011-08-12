@@ -329,6 +329,21 @@ Strona może być podzielona na kolumny.
 
 Powyższy xml określa kilka stron dokumentu pdf z zielonymi prostokątami podzielonymi na 2 kolumny. Tag "column-layout" ma dwa dodatkowe atrybuty: number-of-columns oraz margin-between-columns. Domyślna wartość tych atrybutów to odpowiednio 2 oraz 10.
 
+Łamanie stron i kolumn
+----------------------
+
+Strona i kolumna może być ręcznie złamana przez jeden z tagów: page-break, column-break, break. Każdy z tych tagów ma dokładnie takie samo znaczenie. Te tagi muszą być bezpośrednimi dziećmi łamanego elementu (tagów dynamic-page lub column-layout).
+
+Jeśli chcesz uniknąć automatycznego łamania strony lub kolumny dla szczególnego tagu, powinieneś wyłączyć atrybut "splittable" dla tego tagu.
+
+Przykład:
+
+    <pdf>
+        <dynamic-page>
+            <div splittable="false">ten div nie będzie automatycznie łamany</div>
+        </dynamic-page>
+    </pdf>
+
 Konfiguracja.
 -------------
 
