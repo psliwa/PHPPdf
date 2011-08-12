@@ -94,7 +94,7 @@
 	            <formatter class="PHPPdf\Formatter\ParagraphFormatter" />
 	            <formatter class="PHPPdf\Formatter\ContainerDimensionFormatter" />
 	            <formatter class="PHPPdf\Formatter\StandardPositionFormatter" />
-	            <formatter class="PHPPdf\Formatter\FloatFormatter" />
+
 	        </formatters>
 	    </glyph>
 	    

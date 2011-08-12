@@ -42,4 +42,9 @@ class PageCollection extends Container
             $page->format($document);
         }
     }
+    
+    public function getGraphicsContext()
+    {
+        return null;
+    }
 }

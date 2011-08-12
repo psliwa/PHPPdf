@@ -8,6 +8,8 @@
 
 namespace PHPPdf\Formatter;
 
+use PHPPdf\Util\Point;
+
 use PHPPdf\Glyph\Glyph,
     PHPPdf\Document,
     PHPPdf\Util\Boundary,
@@ -87,13 +89,13 @@ class ColumnDivertingFormatter extends BaseFormatter
     private function splitContainerIntoColumns(ColumnableContainer $columnableContainer, Container $container)
     {
         $numberOfBreaks = 0;
-        $breakYCoord = $this->getBreakYCoord($columnableContainer, $numberOfBreaks++);
+        $breakYCoord = $this->getBreakYCoord($columnableContainer, $numberOfBreaks++, $container);
         
         do
         {
             if($this->shouldBeBroken($container, $breakYCoord))
             {
-                $container = $this->breakContainer($container, $breakYCoord);
+                $container = $this->breakContainer($container, $breakYCoord, $numberOfBreaks);
                 $childHasBeenSplitted = true;
 
                 $breakYCoord = $this->getBreakYCoord($columnableContainer, $numberOfBreaks++, $container);
@@ -111,8 +113,8 @@ class ColumnDivertingFormatter extends BaseFormatter
     {
         $numberOfColumns = $columnableContainer->getAttribute('number-of-columns');
         
-        $rowNumber = floor($numberOfBreaks/$numberOfColumns);
-        $columnNumber = $numberOfBreaks % $numberOfColumns;
+        $rowNumber = $this->getNumberOfRow($columnableContainer, $numberOfBreaks);
+        $columnNumber = $this->getNumberOfColumn($columnableContainer, $numberOfBreaks);
         
         if($this->staticBreakYCoord !== null)
         {
@@ -123,9 +125,38 @@ class ColumnDivertingFormatter extends BaseFormatter
             return $this->staticBreakYCoord;
         }
         
+        $page = $columnableContainer->getPage();
+        
         $container = $container ? : $columnableContainer;
         
-        $page = $columnableContainer->getPage();
+        foreach($container->getChildren() as $child)
+        {
+            if($child->getAttribute('page-break'))
+            {                
+                return $child->getDiagonalPoint()->getY();
+            }
+        }        
+        
+        return $this->getDiagonalYCoordOfColumn($columnableContainer, $container, $columnNumber, $rowNumber);
+    }
+    
+    private function getNumberOfRow(ColumnableContainer $container, $numberOfBreaks)
+    {
+        $numberOfColumns = $container->getAttribute('number-of-columns');
+        
+        return floor($numberOfBreaks/$numberOfColumns);
+    }
+    
+    private function getNumberOfColumn(ColumnableContainer $columnableContainer, $numberOfBreaks)
+    {
+        $numberOfColumns = $columnableContainer->getAttribute('number-of-columns');
+        
+        return $numberOfBreaks % $numberOfColumns;
+    }
+    
+    private function getDiagonalYCoordOfColumn($columnableContainer, $container, $columnNumber, $rowNumber)
+    {
+        $numberOfColumns = $columnableContainer->getAttribute('number-of-columns');
         
         if($this->shouldColumnsBeEqual($columnableContainer, $container, $columnNumber, $rowNumber))
         {
@@ -137,8 +168,15 @@ class ColumnDivertingFormatter extends BaseFormatter
         }
         else
         {
-            return $this->getPageDiagonalYCoord($columnableContainer) - ($rowNumber)*$page->getHeight();
+            return $this->getCurrentPageDiagonalYCoord($columnableContainer, $rowNumber);
         }
+    }
+    
+    private function getCurrentPageDiagonalYCoord(ColumnableContainer $columnableContainer, $rowNumber)
+    {
+        $page = $columnableContainer->getPage();
+
+        return $this->getPageDiagonalYCoord($columnableContainer) - ($rowNumber)*$page->getHeight();
     }
     
     private function getPageDiagonalYCoord(ColumnableContainer $columnableContainer)
@@ -171,7 +209,7 @@ class ColumnDivertingFormatter extends BaseFormatter
         return ($yEnd < $pageYCoordEnd);
     }
     
-    private function breakContainer(Container $container, $breakYCoord)
+    private function breakContainer(Container $container, $breakYCoord, $numberOfBreaks)
     {
         $breakPoint = $container->getFirstPoint()->getY() - $breakYCoord;
         $originalHeightOfContainer = $container->getHeight();
@@ -180,15 +218,38 @@ class ColumnDivertingFormatter extends BaseFormatter
         
         if($productOfBroke)
         {
+            $this->resizeAndMoveContainersToColumnHeight($container, $productOfBroke, $numberOfBreaks);
+            
             $container->getParent()->add($productOfBroke);
             
-            $this->translateProductOfBroke($productOfBroke, $container);
+            $this->translateProductOfBroke($productOfBroke, $container, $numberOfBreaks);
             
             return $productOfBroke;
         }
     }
     
-    private function translateProductOfBroke(Container $productOfBroke, Container $originalContainer)
+    private function resizeAndMoveContainersToColumnHeight(Container $originalContainer, Container $productOfBroke, $numberOfBreaks)
+    {
+        $numberOfBreaks--;
+        $columnableContainer = $originalContainer->getParent();
+        $numberOfRow = $this->getNumberOfRow($columnableContainer, $numberOfBreaks);
+        $numberOfColumn = $this->getNumberOfColumn($columnableContainer, $numberOfBreaks);        
+        
+        $yCoord = $this->getCurrentPageDiagonalYCoord($columnableContainer, $numberOfRow);
+        
+        $yCoord = $this->staticBreakYCoord !== null && $this->staticBreakYCoord > $yCoord ? $this->staticBreakYCoord : $yCoord;
+        
+        $enlarge = $originalContainer->getDiagonalPoint()->getY() - $yCoord;
+        
+        if($enlarge > 0)
+        {
+            $originalContainer->resize(0, $enlarge);
+            $originalContainer->setHeight($originalContainer->getHeight() + $enlarge);
+            $productOfBroke->translate(0, $enlarge);
+        }
+    }
+    
+    private function translateProductOfBroke(Container $productOfBroke, Container $originalContainer, $numberOfBreaks)
     {
         $columnableContainer = $originalContainer->getParent();
         
@@ -206,6 +267,11 @@ class ColumnDivertingFormatter extends BaseFormatter
         {
             $xCoordTranslate = $numberOfColumns*$originalContainer->getWidth() + ($numberOfColumns-1)*$columnableContainer->getAttribute('margin-between-columns');
             $firstPoint = $originalContainer->getDiagonalPoint()->translate(-$xCoordTranslate, 0);
+            
+            $numberOfRow = $this->getNumberOfRow($columnableContainer, $numberOfBreaks) - 1;
+//            $page = $columnableContainer->getPage();
+//            $yCoord = $page->getDiagonalPoint()->getY() - $numberOfRow*$page->getHeight();
+//            $firstPoint = Point::getInstance($firstPoint->getX(), $yCoord);
         }
         
         $xCoordTranslate = $firstPoint->getX() - $productOfBroke->getFirstPoint()->getX();
