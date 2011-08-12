@@ -222,7 +222,7 @@ class ColumnDivertingFormatter extends BaseFormatter
             
             $container->getParent()->add($productOfBroke);
             
-            $this->translateProductOfBroke($productOfBroke, $container, $numberOfBreaks);
+            $this->translateProductOfBroke($productOfBroke, $container);
             
             return $productOfBroke;
         }
@@ -249,7 +249,7 @@ class ColumnDivertingFormatter extends BaseFormatter
         }
     }
     
-    private function translateProductOfBroke(Container $productOfBroke, Container $originalContainer, $numberOfBreaks)
+    private function translateProductOfBroke(Container $productOfBroke, Container $originalContainer)
     {
         $columnableContainer = $originalContainer->getParent();
         
@@ -267,11 +267,6 @@ class ColumnDivertingFormatter extends BaseFormatter
         {
             $xCoordTranslate = $numberOfColumns*$originalContainer->getWidth() + ($numberOfColumns-1)*$columnableContainer->getAttribute('margin-between-columns');
             $firstPoint = $originalContainer->getDiagonalPoint()->translate(-$xCoordTranslate, 0);
-            
-            $numberOfRow = $this->getNumberOfRow($columnableContainer, $numberOfBreaks) - 1;
-//            $page = $columnableContainer->getPage();
-//            $yCoord = $page->getDiagonalPoint()->getY() - $numberOfRow*$page->getHeight();
-//            $firstPoint = Point::getInstance($firstPoint->getX(), $yCoord);
         }
         
         $xCoordTranslate = $firstPoint->getX() - $productOfBroke->getFirstPoint()->getX();
