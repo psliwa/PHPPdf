@@ -1,5 +1,6 @@
 <?php
 
+use PHPPdf\Glyph\Container;
 use PHPPdf\Glyph\Paragraph;
 use PHPPdf\Glyph\Text;
 use PHPPdf\Parser\DocumentParser,
@@ -867,5 +868,42 @@ XML;
         
         $this->assertEquals('another text', $text2Glyph->getText());
         $this->assertEquals('Some text ', $text1Glyph->getText());
+    }
+    
+    /**
+     * @test
+     */
+    public function recognizeBehaviourAttribute()
+    {
+        $xml = <<<XML
+<pdf>
+	<tag behaviour="arg" />
+</pdf>
+XML;
+
+        $behaviour = $this->getMockBuilder('PHPPdf\Glyph\Behaviour\Behaviour')
+                          ->getMock();
+        $behavoiurFactory = $this->getMockBuilder('PHPPdf\Glyph\Behaviour\Factory')
+                                 ->setMethods(array('create', 'getSupportedBehaviourNames'))
+                                 ->getMock();
+                                 
+        $behavoiurFactory->expects($this->atLeastOnce())
+                         ->method('getSupportedBehaviourNames')
+                         ->will($this->returnValue(array('behaviour')));
+        $behavoiurFactory->expects($this->once())
+                         ->method('create')
+                         ->with('behaviour', 'arg')
+                         ->will($this->returnValue($behaviour));
+        
+        $glyph = $this->getGlyphMock(array(), 'PHPPdf\Glyph\Container', array('addBehaviour'));
+        $glyph->expects($this->once())
+              ->method('addBehaviour')
+              ->with($behaviour);
+        $glyphFactoryMock = $this->getGlyphFactoryMock(array(array('tag', $glyph)));
+        
+        $this->parser->setBehaviourFactory($behavoiurFactory);
+        $this->parser->setGlyphFactory($glyphFactoryMock);
+        
+        $this->parser->parse($xml);
     }
 }
