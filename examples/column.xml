@@ -38,6 +38,20 @@
             </div>
         </column-layout>
         
+        <div class="outside-column">
+            Use break tag inside column
+        </div>
+        
+        <column-layout extends="column">
+        	<div background.color="blue" color="white">
+       		Before break
+        	</div>
+        	<break />
+        	<div background.color="blue" color="white" height="2000">
+        		Very long container after break.
+       		</div>
+        </column-layout>
+        
         
     </dynamic-page>
 </pdf>

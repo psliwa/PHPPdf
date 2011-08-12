@@ -414,12 +414,12 @@ class GlyphTest extends TestCase
     public function convertBooleanAttributes()
     {
         $testData = array(
-            array('page-break', 'true', true),
-            array('page-break', '1', true),
-            array('page-break', 'yes', true),
-            array('page-break', 'false', false),
-            array('page-break', '0', false),
-            array('page-break', 'no', false),
+            array('break', 'true', true),
+            array('break', '1', true),
+            array('break', 'yes', true),
+            array('break', 'false', false),
+            array('break', '0', false),
+            array('break', 'no', false),
             array('static-size', 'true', true),
             array('static-size', '1', true),
             array('static-size', 'yes', true),

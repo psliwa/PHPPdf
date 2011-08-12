@@ -313,7 +313,22 @@
 	            <formatter class="PHPPdf\Formatter\TextDimensionFormatter" />
 	        </formatters>
 	    </glyph>
+	    <glyph name="a" class="PHPPdf\Glyph\Text">
+	        <formatters>
+	            <formatter class="PHPPdf\Formatter\ConvertAttributesFormatter" />
+	            <formatter class="PHPPdf\Formatter\TextDimensionFormatter" />
+	        </formatters>
+	    </glyph>
 	    <glyph name="b" class="PHPPdf\Glyph\Text">
+	        <stylesheet>
+	            <attribute name="font-style" value="bold" />
+	        </stylesheet>
+	        <formatters>
+	            <formatter class="PHPPdf\Formatter\ConvertAttributesFormatter" />
+	            <formatter class="PHPPdf\Formatter\TextDimensionFormatter" />
+	        </formatters>
+	    </glyph>
+	    <glyph name="strong" class="PHPPdf\Glyph\Text">
 	        <stylesheet>
 	            <attribute name="font-style" value="bold" />
 	        </stylesheet>
@@ -333,7 +348,38 @@
 	    </glyph>
 	    <glyph name="page-break" class="PHPPdf\Glyph\Container">
 	        <stylesheet>
-	            <attribute name="page-break" value="1" />
+	            <attribute name="break" value="1" />
+	            <attribute name="height" value="0.01" />
+	        </stylesheet>
+	        <formatters>
+	            <formatter class="PHPPdf\Formatter\ConvertAttributesFormatter" />
+	            <formatter class="PHPPdf\Formatter\StandardDimensionFormatter" />
+	            <formatter class="PHPPdf\Formatter\FirstPointPositionFormatter" />
+	            <formatter class="PHPPdf\Formatter\ContainerFormatter" />
+	            <formatter class="PHPPdf\Formatter\ContainerDimensionFormatter" />
+	            <formatter class="PHPPdf\Formatter\StandardPositionFormatter" />
+	            <formatter class="PHPPdf\Formatter\FloatFormatter" />
+	        </formatters>
+	    </glyph>
+	    <glyph name="break" class="PHPPdf\Glyph\Container">
+	        <stylesheet>
+	            <attribute name="break" value="1" />
+	            <attribute name="height" value="0.01" />
+	        </stylesheet>
+	        <formatters>
+	            <formatter class="PHPPdf\Formatter\ConvertAttributesFormatter" />
+	            <formatter class="PHPPdf\Formatter\StandardDimensionFormatter" />
+	            <formatter class="PHPPdf\Formatter\FirstPointPositionFormatter" />
+	            <formatter class="PHPPdf\Formatter\ContainerFormatter" />
+	            <formatter class="PHPPdf\Formatter\ContainerDimensionFormatter" />
+	            <formatter class="PHPPdf\Formatter\StandardPositionFormatter" />
+	            <formatter class="PHPPdf\Formatter\FloatFormatter" />
+	        </formatters>
+	    </glyph>
+	    <glyph name="column-break" class="PHPPdf\Glyph\Container">
+	        <stylesheet>
+	            <attribute name="break" value="1" />
+	            <attribute name="height" value="0.01" />
 	        </stylesheet>
 	        <formatters>
 	            <formatter class="PHPPdf\Formatter\ConvertAttributesFormatter" />

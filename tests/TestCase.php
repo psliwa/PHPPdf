@@ -26,4 +26,9 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
     {
         return new PHPUnitExtension_Framework_MockObject_Stub_ComposeStub($stubs);
     }
+    
+    protected static function validateByCallback(Closure $closure, TestCase $testCase)
+    {
+        return new PHPUnitExtension_Framework_Constraint_ValidateByCallback($closure, $testCase);
+    }
 }

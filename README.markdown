@@ -192,14 +192,13 @@ Long style:
 Standard tags
 -------------
 
-Library supports primary HTML tags: div, p, table, tr, td, b, span, h1, h2, h3, img, br, ul, li
+Library supports primary HTML tags: div, p, table, tr, td, b, strong, span, a, h1, h2, h3, h4, h5, img, br, ul, li
 In addition there are not standard tags:
 
 * dynamic-page - auto breakable page
 * page - single page
-* page-break - page break, this tag must be direct child of "dynamic-page"!
+* page-break, column-break, break - breaks page or column, this tag must be direct child of "dynamic-page" or "column-layout"!
 * column-layout - separate workspace on columns, additional attributes: number-of-columns, margin-between-columns, equals-columns
-* column-break - column break, this tag must be direct child of "column-layout"! (TODO: not implemented yet)
 
 There are tags that only are bags for attributes, set of tags etc:
 
@@ -224,7 +223,7 @@ Attributes
 * float - works similar but not the same as in HTML/CSS. Allowed values: left|none|right, default none
 * line-height - works similar as in HTML/CSS. Default value: 1.2*font-size
 * text-align - works as same as in HTML/CSS. Allowed values: left|center|right, default left.
-* page-break - breaks page in the end of the owner of this attribute. Owner of this attribute must by directly child of dynamic-page tag!
+* break - breaks page or column in the end of the owner of this attribute. Owner of this attribute must by directly child of dynamic-page or column-layout tag!
 * colspan, rowspan - works similar as in HTML (TODO: rowspan isn't implemented yet)
 * href - external url where element should linking
 * ref - id of element where owner should linking
@@ -264,6 +263,25 @@ It is possible to add several complex attributes in the same type (for instance 
     </pdf>
 
 In this example second border has "borderLeftAndRight" indentifie, if this border had not id, attributes from second border would be merged with attributes from first border. Default identifier "id" is as same as "name" attribute. "id" attributes for complex attributes hasn't nothing to attribute "id" of tags (using in inheritance). It is possible to create complex borders as same as in previous example (outerBorderLeftAndRight).
+
+Hyperlinks
+----------
+
+Library supports external and internal hyperlinks. External hyperlink links to urls, internal links to another tag inside pdf.
+
+Example:
+
+    <pdf>
+        <dynamic-page>
+            <a href="http://google.com">go to google.com</a>
+            <br />
+            <a ref="some-id">go to another tag</a>
+            <page-break />
+            <p id="some-id">Yep, this is another tag! ;)</p>
+        </dynamic-page>
+    </pdf>
+
+Every element has "href" and "ref" attribute, even div. You can't nest elements inner "a" tag. If you want to use img element as link, you should use href (external link) or ref (internal link) attribute directly in img tag.
 
 Repetitive headers and footers
 ------------------------------
@@ -353,7 +371,7 @@ TODO - plans.
 -------------------
 
 * rewrite and improve text rendering - done
-* annotations (hyperlinks, table of contents)
+* automatic generating table of contents
 * document metadata
 * bookmarks
 * improve interpretation of attributes and fixing found bugs

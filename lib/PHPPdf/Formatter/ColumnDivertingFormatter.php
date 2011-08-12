@@ -131,7 +131,7 @@ class ColumnDivertingFormatter extends BaseFormatter
         
         foreach($container->getChildren() as $child)
         {
-            if($child->getAttribute('page-break'))
+            if($child->getAttribute('break'))
             {                
                 return $child->getDiagonalPoint()->getY();
             }

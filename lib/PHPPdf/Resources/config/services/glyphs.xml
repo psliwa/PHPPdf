@@ -16,6 +16,7 @@
 					<argument key="paragraph" type="service" id="phppdf.glyph.paragraph" />
 					<argument key="text" type="service" id="phppdf.glyph.text" />
 					<argument key="span" type="service" id="phppdf.glyph.span" />
+					<argument key="a" type="service" id="phppdf.glyph.span" />
 					<argument key="h1" type="service" id="phppdf.glyph.h1" />
 					<argument key="h2" type="service" id="phppdf.glyph.h2" />
 					<argument key="h3" type="service" id="phppdf.glyph.h3" />
@@ -32,8 +33,11 @@
 					<argument key="hr" type="service" id="phppdf.glyph.hr" />
 					<argument key="nl" type="service" id="phppdf.glyph.nl" />
 					<argument key="b" type="service" id="phppdf.glyph.b" />
+					<argument key="strong" type="service" id="phppdf.glyph.b" />
 					<argument key="i" type="service" id="phppdf.glyph.i" />
 					<argument key="page-break" type="service" id="phppdf.glyph.page-break" />
+					<argument key="column-break" type="service" id="phppdf.glyph.page-break" />
+					<argument key="break" type="service" id="phppdf.glyph.page-break" />
 					<argument key="column-layout" type="service" id="phppdf.glyph.column-layout" />
 				</argument>
 			</call>
@@ -470,7 +474,8 @@
 		<service id="phppdf.glyph.page-break" class="PHPPdf\Glyph\Container" public="false">
 			<tag name="phppdf.glyph" />
 			<argument type="collection">
-				<argument key="page-break">true</argument>
+				<argument key="break">true</argument>
+				<argument key="height">0.01</argument>
 			</argument>
 			<call method="setFormattersNames">
 				<argument type="collection">

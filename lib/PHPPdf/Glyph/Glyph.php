@@ -93,7 +93,7 @@ abstract class Glyph implements Drawable, GlyphAware, \ArrayAccess, \Serializabl
     {
         //TODO refactoring
         $attributeWithGetters = array('width', 'height', 'margin-left', 'margin-right', 'margin-top', 'margin-bottom', 'padding-left', 'padding-right', 'padding-top', 'padding-bottom', 'display', 'font-type', 'font-size', 'float', 'splittable');
-        $attributeWithSetters = array('width', 'height', 'margin-left', 'margin-right', 'margin-top', 'margin-bottom', 'display', 'font-type', 'float', 'static-size', 'font-size', 'margin', 'padding', 'page-break', 'splittable');
+        $attributeWithSetters = array('width', 'height', 'margin-left', 'margin-right', 'margin-top', 'margin-bottom', 'display', 'font-type', 'float', 'static-size', 'font-size', 'margin', 'padding', 'break', 'splittable');
 
         $predicateGetters = array('splittable');
         
@@ -333,7 +333,7 @@ abstract class Glyph implements Drawable, GlyphAware, \ArrayAccess, \Serializabl
         $this->addAttribute('float', self::FLOAT_NONE);
         $this->addAttribute('font-style', null);
         $this->addAttribute('static-size', false);
-        $this->addAttribute('page-break', false);
+        $this->addAttribute('break', false);
         
         $this->addAttribute('vertical-align', null);
 
@@ -795,10 +795,10 @@ abstract class Glyph implements Drawable, GlyphAware, \ArrayAccess, \Serializabl
         $this->setAttributeDirectly('static-size', $flag);
     }
     
-    public function setPageBreak($flag)
+    public function setBreak($flag)
     {
         $flag = $this->filterBooleanValue($flag);
-        $this->setAttributeDirectly('page-break', $flag);
+        $this->setAttributeDirectly('break', $flag);
     }
     
     final protected function filterBooleanValue($value)

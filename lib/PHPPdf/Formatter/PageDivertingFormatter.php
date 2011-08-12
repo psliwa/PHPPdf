@@ -81,7 +81,7 @@ class PageDivertingFormatter extends BaseFormatter
     
     private function shouldParentBeAutomaticallyBroken(Glyph $glyph)
     {
-        return $glyph->getAttribute('page-break');
+        return $glyph->getAttribute('break');
     }
     
     private function getPageYCoordEnd()

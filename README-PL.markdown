@@ -187,14 +187,13 @@ Długi sposób:
 Standardowe tagi.
 -----------------
 
-Biblioteka obsługuje podstawowe tagi zaczerpnięte z języka HTML: div, p, table, tr, td, b, strong, span, h1, h2, h3, h4, h5, img, br, ul, li
+Biblioteka obsługuje podstawowe tagi zaczerpnięte z języka HTML: div, p, table, tr, td, b, strong, span, a, h1, h2, h3, h4, h5, img, br, ul, li
 Ponadto obsługiwane są niestandardowe tagi:
 
 * dynamic-page - strona, która się dynamicznie dzieli gdy zostaje przepełniona
 * page - pojedyncza strona
-* page-break - złamanie strony, jest to element podrzędny dynamic-page, czyli musi być bezpośrednim dzieckiem tego elemntu!
+* page-break, column-break, break - złamanie strony lub kolumny, jest to element podrzędny dynamic-page lub column-layout, czyli musi być bezpośrednim dzieckiem tego elemntu! Te trzy tagi są aliasami.
 * column-layout - podział obszaru roboczego na kolumny, dodatkowe atrybuty: number-of-columns oraz margin-between-columns
-* column-break - złamanie kolumny, jest to element podrzędny columns (TODO)
 
 Istnieją tagi, które służą jedynie do określania wartości atrybutów, zbioru atrybutów lub zbioru elementów:
 
@@ -219,7 +218,7 @@ Atrybuty.
 * float - działanie podobne, aczkolwiek nie takie same jak w HTML/CSS. Wartości left|none|right, domyślnie none
 * line-height - działanie takie jak w HTML/CSS. Domyślna wartość to 1.2*font-size
 * text-align - działanie takie jak w HTML/CSS. Wartości left|center|right, domyślnie left. Obecnie nie działa poprawnie dla tekstu wymieszanego z tagami formatującymi (np. "span").
-* page-break - łamie stronę jeśli element jest bezpośrednim dzieckiem elementu dynamic-page
+* break - łamie stronę lub kolumnę jeśli element jest bezpośrednim dzieckiem elementu dynamic-page lub column-layout
 * colspan, rowspan - działanie analogiczne do atrybutów html (rowspan jeszcze nie jest zaimplementowane)
 * href - zewnętrzy adres url, gdzie element powinien linkować
 * ref - id elementu do którego posiadacz tego atrybutu powinien linkować (odpowiednik kotwic w HTML'u)
@@ -259,6 +258,25 @@ Można dodawać kilka upiększeń tego samego typu (np. 3 różne obramowania) u
     </pdf>
 
 W tym przykładzie drugie obramowanie ma identyfikator "borderLeftAndRight", jakby go nie było to atrybuty drugiego obramowania zostały by złączone z atrybutami z pierwszego obramowania. Domyślny identyfikator "id" jest równy atrybutowi "name". Identyfikatory "id" dla upiększeń (enhancements) nie mają nic wspólnego z atrybutami "id" dla elementów (glyphów). Można tworzyć obramowania złożone manipulując pozycją, tak jak w powyższym przykładzie (outerBorderLeftAndRight).
+
+Hiperlinki
+----------
+
+Biblioteka wspiera wewnętrzne oraz zewnętrzne hiperłącza. Zewnętrzne hiperłącza linkują do adresów url, wewnętrzne zaś do innego tagu wewnątrz dokumentu.
+
+Przykład:
+
+    <pdf>
+        <dynamic-page>
+            <a href="http://google.com">idź do google.com</a>
+            <br />
+            <a ref="some-id">idź do innego tagu</a>
+            <page-break />
+            <p id="some-id">Tak, to jest inny tag! ;)</p>
+        </dynamic-page>
+    </pdf>
+
+Każdy element ma attrybuty "href" oraz "ref", nawet div. Nie możesz zagnieżdżać elementów wewnątrz tagu "a". Jeśli chcesz użyć np. img jako linka, powinieneś wykorzystać do tego atrybut "href" (zewnętrzny link) lub "ref" (wewnętrzny link) bezpośrednio w tagu "img".
 
 Powtarzalne nagłówki i stopki.
 ------------------------------
@@ -348,7 +366,7 @@ TODO - czyli plany.
 -------------------
 
 * poprawienie i przepisanie obsługi tekstu - gotowe
-* obsługa adnotacji (hiperlinki, spis treści)
+* automatycznie generowany spis treści
 * obsługa metadanych dokumentu
 * obsługa zakładek
 * poprawa interpretacji wartości atrybutów i rozkładu elementów w dokumencie

@@ -155,7 +155,7 @@ class PageDivertingFormatterTest extends TestCase
     /**
      * @test
      */
-    public function pageShouldBeBreakIfPageBreakAttributeIsUsed()
+    public function pageShouldBeBreakIfBreakAttributeIsUsed()
     {
         $prototype = $this->getMock('PHPPdf\Glyph\Page', array('copy'));
         $prototype->expects($this->exactly(2))
@@ -167,7 +167,7 @@ class PageDivertingFormatterTest extends TestCase
         $container = $this->getContainerMock(array(0, 700), array(40, 600), array('getAttribute', 'split'));
         $container->expects($this->atLeastOnce())
                   ->method('getAttribute')
-                  ->with('page-break')
+                  ->with('break')
                   ->will($this->returnValue(false));
 
         $this->page->add($container);
@@ -175,7 +175,7 @@ class PageDivertingFormatterTest extends TestCase
         $container = $this->getContainerMock(array(0, 600), array(0, 600), array('getAttribute', 'split'));
         $container->expects($this->atLeastOnce())
                   ->method('getAttribute')
-                  ->with('page-break')
+                  ->with('break')
                   ->will($this->returnValue(true));
 
         $this->page->add($container);
