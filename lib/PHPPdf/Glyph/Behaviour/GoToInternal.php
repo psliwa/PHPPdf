@@ -16,7 +16,7 @@ use PHPPdf\Glyph\Glyph,
 /**
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
-class GoToInternal implements Behaviour
+class GoToInternal extends Behaviour
 {
     private $destination;
     
@@ -25,7 +25,7 @@ class GoToInternal implements Behaviour
         $this->destination = $destination;
     }
     
-    public function attach(GraphicsContext $gc, Glyph $glyph)
+    protected function doAttach(GraphicsContext $gc, Glyph $glyph)
     {
         $destinationGlyph = $this->destination->getGlyph();
         

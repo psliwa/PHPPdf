@@ -14,7 +14,7 @@ use PHPPdf\Glyph\Glyph,
 /**
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
-class GoToUrl implements Behaviour
+class GoToUrl extends Behaviour
 {
     private $uri;
     
@@ -23,7 +23,7 @@ class GoToUrl implements Behaviour
         $this->uri = (string) $uri;
     }
     
-    public function attach(GraphicsContext $gc, Glyph $glyph)
+    protected function doAttach(GraphicsContext $gc, Glyph $glyph)
     {
         $firstPoint = $glyph->getFirstPoint();
         $diagonalPoint = $glyph->getDiagonalPoint();

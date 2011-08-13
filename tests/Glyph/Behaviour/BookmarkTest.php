@@ -32,7 +32,10 @@ class BookmarkTest extends \TestCase
            ->method('addBookmark')
            ->with($name, $top);
            
-        $bookmark->attach($gc, $glyph);          
+        $bookmark->attach($gc, $glyph);  
+        
+        //one bookmark may by attached only once
+        $bookmark->attach($gc, $glyph);        
     }
     
     private function getGlyphStub($x, $y, $width, $height)

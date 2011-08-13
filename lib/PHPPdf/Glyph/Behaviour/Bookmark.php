@@ -14,7 +14,7 @@ use PHPPdf\Engine\GraphicsContext,
 /**
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
-class Bookmark implements Behaviour
+class Bookmark extends Behaviour
 {
     private $name;
     
@@ -23,8 +23,9 @@ class Bookmark implements Behaviour
         $this->name = (string) $name;
     }
 
-    public function attach(GraphicsContext $gc, Glyph $glyph)
+    protected function doAttach(GraphicsContext $gc, Glyph $glyph)
     {
         $gc->addBookmark($this->name, $glyph->getFirstPoint()->getY());
+        $this->setPassive(true);
     }
 }

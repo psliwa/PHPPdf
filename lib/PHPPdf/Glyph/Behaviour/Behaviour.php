@@ -14,7 +14,27 @@ use PHPPdf\Glyph\Glyph,
 /**
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
-interface Behaviour
+abstract class Behaviour
 {
-    public function attach(GraphicsContext $gc, Glyph $glyph);
+    private $passive = false;
+    
+    public function attach(GraphicsContext $gc, Glyph $glyph)
+    {
+        if(!$this->isPassive())
+        {
+            $this->doAttach($gc, $glyph);
+        }
+    }
+    
+    abstract protected function doAttach(GraphicsContext $gc, Glyph $glyph);
+
+    public function isPassive()
+    {
+        return $this->passive;
+    }
+
+    public function setPassive($flag)
+    {
+        $this->passive = (boolean) $flag;
+    }
 }
