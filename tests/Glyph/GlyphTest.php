@@ -550,6 +550,7 @@ class GlyphTest extends TestCase
         for($i=0; $i<2; $i++)
         {
             $behaviour = $this->getMockBuilder('PHPPdf\Glyph\Behaviour\Behaviour')
+                              ->setMethods(array('doAttach', 'attach'))
                               ->getMock();
             $behaviour->expects($this->once())
                       ->method('attach')

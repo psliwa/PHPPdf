@@ -50,5 +50,5 @@ interface GraphicsContext
     
     public function goToAction(GraphicsContext $gc, $x1, $y1, $x2, $y2, $top);
     
-    public function addBookmark($name, $top);
+    public function addBookmark($identifier, $name, $top, $ancestorsIdentifier = null);
 }

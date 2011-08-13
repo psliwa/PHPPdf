@@ -209,14 +209,26 @@ class GraphicsContext implements BaseGraphicsContext
         return $annotation;
     }
     
-    public function addBookmark($name, $top)
+    public function addBookmark($identifier, $name, $top, $parentIdentifier = null)
     {
         try
         {
             $destination = \Zend_Pdf_Destination_FitHorizontally::create($this->getPage(), $top);
             $action = \Zend_Pdf_Action_GoTo::create($destination);
             
-            $this->engine->getZendPdf()->outlines[] = \Zend_Pdf_Outline::create($name, $action);
+            $outline = \Zend_Pdf_Outline::create($name, $action);
+            
+            if($parentIdentifier !== null)
+            {
+                $parent = $this->engine->getOutline($parentIdentifier);
+                $parent->childOutlines[] = $outline;
+            }
+            else
+            {
+                $this->engine->getZendPdf()->outlines[] = $outline;
+            }
+
+            $this->engine->registerOutline($identifier, $outline);            
         }
         catch(\Zend_Pdf_Exception $e)
         {

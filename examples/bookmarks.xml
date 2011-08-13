@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pdf SYSTEM "%resources%/dtd/doctype.dtd">
+<pdf>
+	<dynamic-page>
+		<div bookmark="bookmark 1">
+			Some text under bookmark 1
+			<div bookmark="bookmark 1.1">
+				Some text under nested bookmark 1.1
+				<div bookmark="bookmark 1.1.2">
+					Some text under nested bookmark 1.1.2
+				</div>
+			</div>
+			<div bookmark="bookmark 1.2">
+				Some text under nested bookmark 1.2
+			</div>
+		</div>
+		<div bookmark="bookmark 2">
+			Some text under bookmark 2
+		</div>
+	</dynamic-page>
+</pdf>

@@ -349,6 +349,11 @@ abstract class Glyph implements Drawable, GlyphAware, \ArrayAccess, \Serializabl
     {
         $this->behaviours[] = $behaviour;
     }
+    
+    public function getBehaviours()
+    {
+        return $this->behaviours;
+    }
 
     public function reset()
     {

@@ -222,6 +222,7 @@ Atrybuty.
 * colspan, rowspan - działanie analogiczne do atrybutów html (rowspan jeszcze nie jest zaimplementowane)
 * href - zewnętrzy adres url, gdzie element powinien linkować
 * ref - id elementu do którego posiadacz tego atrybutu powinien linkować (odpowiednik kotwic w HTML'u)
+* bookmark - tworzy zakładkę o podanej nazwie linkującą do tego tagu
 
 Atrybuty złożone
 ----------------
@@ -277,6 +278,36 @@ Przykład:
     </pdf>
 
 Każdy element ma attrybuty "href" oraz "ref", nawet div. Nie możesz zagnieżdżać elementów wewnątrz tagu "a". Jeśli chcesz użyć np. img jako linka, powinieneś wykorzystać do tego atrybut "href" (zewnętrzny link) lub "ref" (wewnętrzny link) bezpośrednio w tagu "img".
+
+Bookmarks
+---------
+
+Każdy tag ma atrybut "bookmark", jeśli przypiszesz mu jakąś wartość to zostanie utworzona zakładka, która linkuje do tego tagu. Zakładka tagu rodzica jest również rodzicem zakładek dzieci tego tagu.
+
+Przykład:
+
+    <pdf>
+	    <dynamic-page>
+		    <div bookmark="bookmark rodzica">
+		        Jakaś treść
+		        <div bookmark="bookmark dziecka">
+		            Inna treść
+		        </div>
+		        <div bookmark="inny bookmark dziecka">
+		            Inna treść
+		        </div>
+		    </div>
+		    <div bookmark="inny bookmark rodzica>
+		       Jakaś treść
+		    </div>
+		</dynamic-page>
+    </pdf>
+
+Powyższa struktura utworzy poniższą strukturę zakładek:
+- bookmark rodzica
+-- bookmark dziecka
+-- inny bookmark dziecka
+- inny bookmark rodzica
 
 Powtarzalne nagłówki i stopki.
 ------------------------------
@@ -380,10 +411,8 @@ Poniżej przedstawiam listę ograniczeń obecnej wersji biblioteki:
 TODO - czyli plany.
 -------------------
 
-* poprawienie i przepisanie obsługi tekstu - gotowe
 * automatycznie generowany spis treści
 * obsługa metadanych dokumentu
-* obsługa zakładek
 * poprawa interpretacji wartości atrybutów i rozkładu elementów w dokumencie
 * poprawa działania tabelek, definiowanie nagłówków i stopek dla tabeli
 * obsługa rowspan, nagłówka i stopki dla tabeli

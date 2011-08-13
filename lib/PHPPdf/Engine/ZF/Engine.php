@@ -89,4 +89,14 @@ class Engine implements BaseEngine
     {
         return $this->zendPdf;
     }
+    
+    public function registerOutline($id, \Zend_Pdf_Outline $outline)
+    {
+        $this->outlines[$id] = $outline;
+    }
+    
+    public function getOutline($id)
+    {
+        return $this->outlines[$id];
+    }
 }

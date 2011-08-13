@@ -18,7 +18,7 @@ class BookmarkTest extends \TestCase
     /**
      * @test
      */
-    public function attachBookmarkToGraphicsContexts()
+    public function attachBookmarkSingleToGraphicsContexts()
     {
         $name = 'some name';
         $top = 50;
@@ -30,7 +30,7 @@ class BookmarkTest extends \TestCase
                    ->getMock();
         $gc->expects($this->once())
            ->method('addBookmark')
-           ->with($name, $top);
+           ->with($bookmark->getUniqueId(), $name, $top);
            
         $bookmark->attach($gc, $glyph);  
         
@@ -46,5 +46,29 @@ class BookmarkTest extends \TestCase
         $this->invokeMethod($glyph, 'setBoundary', array($boundary));
         
         return $glyph;
+    }
+    
+    /**
+     * @test
+     */
+    public function attachNestedBookmarks()
+    {
+        $parentBookmark = new Bookmark('some name 1');
+        
+        $parent = $this->getGlyphStub(0, 100, 100, 100);
+        $parent->addBehaviour($parentBookmark);
+        
+        $bookmark = new Bookmark('some name 2');
+        $glyph = $this->getGlyphStub(0, 50, 100, 50);
+        
+        $parent->add($glyph);
+        
+        $gc = $this->getMockBuilder('PHPPdf\Engine\GraphicsContext')
+                   ->getMock();
+        $gc->expects($this->once())
+           ->method('addBookmark')
+           ->with($bookmark->getUniqueId(), $this->anything(), $this->anything(), $parentBookmark->getUniqueId());
+           
+        $bookmark->attach($gc, $glyph);  
     }
 }

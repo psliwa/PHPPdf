@@ -96,7 +96,7 @@ Inheritance
                 </stylesheet>
                 Layer 1
             </div>
-            <div extends="warstwa-1">
+            <div extends="layer-1">
                 Layer 2 inherits style (type, simple and complex attributes) from layer 1)
             </div>
         </dynamic-page>
@@ -227,6 +227,7 @@ Attributes
 * colspan, rowspan - works similar as in HTML (TODO: rowspan isn't implemented yet)
 * href - external url where element should linking
 * ref - id of element where owner should linking
+* bookmark - create bookmark with given title associated with the tag
 
 Complex attributes
 ------------------
@@ -282,6 +283,36 @@ Example:
     </pdf>
 
 Every element has "href" and "ref" attribute, even div. You can't nest elements inner "a" tag. If you want to use img element as link, you should use href (external link) or ref (internal link) attribute directly in img tag.
+
+Bookmarks
+---------
+
+Every tag has "bookmark" attribute, if you assign some value to this attribute, bookmark that refers to this tag will be automatically created. Bookmark of parent tag is also parent of children's bookmarks.
+
+Example:
+
+    <pdf>
+	    <dynamic-page>
+		    <div bookmark="parent bookmark">
+		        Some content
+		        <div bookmark="children bookmark">
+		            Some another content
+		        </div>
+		        <div bookmark="another children bookmark">
+		            Some another content
+		        </div>
+		    </div>
+		    <div bookmark="another parent bookmark">
+		       Some content
+		    </div>
+		</dynamic-page>
+    </pdf>
+
+Below structure will create this bookmarks structure:
+- parent bookmark
+-- children bookmark
+-- another children bookmark
+- another parent bookmark
 
 Repetitive headers and footers
 ------------------------------
@@ -385,10 +416,8 @@ Below is list of known limitations of library current version:
 TODO - plans.
 -------------------
 
-* rewrite and improve text rendering - done
 * automatic generating table of contents
 * document metadata
-* bookmarks
 * improve interpretation of attributes and fixing found bugs
 * improve table, header and footer for table, rowspan. Fix calculation of cell's min height when colspan is used.
 * refactoring

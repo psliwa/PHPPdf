@@ -491,9 +491,10 @@ class GraphicsContextTest extends \TestCase
     /**
      * @test
      */
-    public function attachBookmark()
+    public function attachSingleBookmark()
     {
         $pageStub = new \Zend_Pdf_Page('a4');
+        $identifier = 'some id';
                              
         $top = 100;
         $bookmarkName = 'some name';
@@ -501,7 +502,7 @@ class GraphicsContextTest extends \TestCase
         $engine = new Engine();
         $gc = new GraphicsContext($engine, $pageStub);
         
-        $gc->addBookmark($bookmarkName, $top);
+        $gc->addBookmark($identifier, $bookmarkName, $top);
         
         $zendPdf = $engine->getZendPdf();
         
@@ -509,13 +510,46 @@ class GraphicsContextTest extends \TestCase
         
         $outline = $zendPdf->outlines[0];
         
-        $this->assertEquals($bookmarkName, $outline->getTitle());
+        $this->assertOutline($bookmarkName, $pageStub, $top, $outline);
+    }
+    
+    private function assertOutline($expectedName, $expectedPage, $expectedTop, $actualOutline)
+    {
+        $this->assertEquals($expectedName, $actualOutline->getTitle());
         
-        $target = $outline->getTarget();
+        $target = $actualOutline->getTarget();
         
         $this->assertInstanceOf('\Zend_Pdf_Action_GoTo', $target);
         $destination = $target->getDestination();
         
-        $this->assertZendPageDestination($top, $pageStub, $destination);
+        $this->assertZendPageDestination($expectedTop, $expectedPage, $destination);
+    }
+    
+    /**
+     * @test
+     */
+    public function attachNestedBookmarks()
+    {
+        $pageStub = new \Zend_Pdf_Page('a4');
+        
+        $engine = new Engine();
+        $gc = new GraphicsContext($engine, $pageStub);
+        
+        $gc->addBookmark(1, '1', 0, null);
+        $gc->addBookmark(2, '2', 10, 1);
+        $gc->addBookmark(3, '3', 0, null);
+        
+        $zendPdf = $engine->getZendPdf();
+        
+        $this->assertEquals(2, count($zendPdf->outlines));
+        
+        $firstOutline = $zendPdf->outlines[0];
+        $secondOutline = $zendPdf->outlines[1];
+        
+        $this->assertEquals(1, count($firstOutline->childOutlines));
+        $this->assertEquals(0, count($secondOutline->childOutlines));
+        
+        $childOutline = $firstOutline->childOutlines[0];
+        $this->assertOutline('2', $pageStub, 10, $childOutline);
     }
 }

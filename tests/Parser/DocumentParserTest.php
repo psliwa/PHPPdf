@@ -882,6 +882,7 @@ XML;
 XML;
 
         $behaviour = $this->getMockBuilder('PHPPdf\Glyph\Behaviour\Behaviour')
+                          ->setMethods(array('doAttach', 'attach'))
                           ->getMock();
         $behavoiurFactory = $this->getMockBuilder('PHPPdf\Glyph\Behaviour\Factory')
                                  ->setMethods(array('create', 'getSupportedBehaviourNames'))

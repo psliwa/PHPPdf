@@ -37,4 +37,9 @@ abstract class Behaviour
     {
         $this->passive = (boolean) $flag;
     }
+    
+    public function getUniqueId()
+    {
+        return spl_object_hash($this);
+    }
 }
