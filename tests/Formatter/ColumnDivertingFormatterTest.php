@@ -239,4 +239,39 @@ class ColumnDivertingFormatterTest extends TestCase
             $this->assertEquals($expectedYCoord, $container->getFirstPoint()->getY());
         }
     }
+    
+    /**
+     * @test
+     */
+    public function breakColumnIfChildHasBreakAttributeOn()
+    {
+        $pageHeight = $this->page->getHeight();
+        $this->page->add($this->column);
+        
+        $containerHeights = array($pageHeight/4, $pageHeight/4, 1, $pageHeight/4, $pageHeight/4, 1, $pageHeight*2.5, 1, $pageHeight/4);
+        $totalHeight = array_sum($containerHeights);
+        $this->column->setHeight($totalHeight);  
+        $this->injectBoundary($this->column);
+        
+        $containers = $this->createContainers($containerHeights);
+        
+        foreach(array(2, 5, 7) as $index)
+        {
+            $containers[$index]->setAttribute('break', true);
+        }
+
+        $this->formatter->format($this->page, new Document());
+        
+        $this->assertEquals(6, count($this->column->getChildren()));
+        
+        $columns = $this->column->getChildren();
+        
+        for($i=0, $count=count($columns); $i<$count; $i++)
+        {
+            if($i < ($count-1))
+            {
+                $this->assertEquals($pageHeight, $columns[$i]->getHeight());
+            }
+        }
+    }
 }

@@ -129,15 +129,25 @@ class ColumnDivertingFormatter extends BaseFormatter
         
         $container = $container ? : $columnableContainer;
         
+        $forcedBreakYCoord = null;
+        
         foreach($container->getChildren() as $child)
         {
             if($child->getAttribute('break'))
             {                
-                return $child->getDiagonalPoint()->getY();
+                $forcedBreakYCoord = $child->getDiagonalPoint()->getY();
+                break;
             }
         }        
         
-        return $this->getDiagonalYCoordOfColumn($columnableContainer, $container, $columnNumber, $rowNumber);
+        $minBreakYCoord = $this->getDiagonalYCoordOfColumn($columnableContainer, $container, $columnNumber, $rowNumber);
+        
+        if($forcedBreakYCoord === null)
+        {
+            return $minBreakYCoord;
+        }
+
+        return max($minBreakYCoord, $forcedBreakYCoord);
     }
     
     private function getNumberOfRow(ColumnableContainer $container, $numberOfBreaks)
