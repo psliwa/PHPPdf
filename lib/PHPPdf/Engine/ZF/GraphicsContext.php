@@ -27,14 +27,20 @@ class GraphicsContext implements BaseGraphicsContext
     );
 
     private $memento = null;
+    
+    /**
+     * @var Engine
+     */
+    private $engine = null;
 
     /**
      * @var Zend_Pdf_Page
      */
     private $page;
 
-    public function __construct(\Zend_Pdf_Page $page)
+    public function __construct(Engine $engine, \Zend_Pdf_Page $page)
     {
+        $this->engine = $engine;
         $this->page = $page;
     }
 
@@ -201,5 +207,20 @@ class GraphicsContext implements BaseGraphicsContext
         $annotationDictionary->Border = $border;
 
         return $annotation;
+    }
+    
+    public function addBookmark($name, $top)
+    {
+        try
+        {
+            $destination = \Zend_Pdf_Destination_FitHorizontally::create($this->getPage(), $top);
+            $action = \Zend_Pdf_Action_GoTo::create($destination);
+            
+            $this->engine->getZendPdf()->outlines[] = \Zend_Pdf_Outline::create($name, $action);
+        }
+        catch(\Zend_Pdf_Exception $e)
+        {
+            throw new Exception('Error while bookmark adding', 0, $e);
+        }
     }
 }

@@ -33,6 +33,8 @@ class Factory
                 return new GoToUrl($arg);
             case 'ref':
                 return new GoToInternal($this->glyphManager->get($arg));
+            case 'bookmark':
+                return new Bookmark($arg);
             default:
                 return null;
         }
@@ -40,6 +42,6 @@ class Factory
 
     public function getSupportedBehaviourNames()
     {
-        return array('href', 'ref');
+        return array('href', 'ref', 'bookmark');
     }
 }

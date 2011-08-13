@@ -49,4 +49,6 @@ interface GraphicsContext
     public function uriAction($x1, $y1, $x2, $y2, $uri);
     
     public function goToAction(GraphicsContext $gc, $x1, $y1, $x2, $y2, $top);
+    
+    public function addBookmark($name, $top);
 }

@@ -29,7 +29,7 @@ class Engine implements BaseEngine
     {
         $page = new \Zend_Pdf_Page($graphicsContextSize);
         
-        $gc = new GraphicsContext($page);
+        $gc = new GraphicsContext($this, $page);
         
         return $gc;
     }
@@ -80,5 +80,13 @@ class Engine implements BaseEngine
     public function render()
     {
         return $this->zendPdf->render();
+    }
+    
+    /**
+     * @return \Zend_Pdf
+     */
+    public function getZendPdf()
+    {
+        return $this->zendPdf;
     }
 }
