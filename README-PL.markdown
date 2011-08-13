@@ -304,10 +304,11 @@ Przykład:
     </pdf>
 
 Powyższa struktura utworzy poniższą strukturę zakładek:
-- bookmark rodzica
--- bookmark dziecka
--- inny bookmark dziecka
-- inny bookmark rodzica
+
+* bookmark rodzica
+    - bookmark dziecka
+    - inny bookmark dziecka
+* inny bookmark rodzica
 
 Powtarzalne nagłówki i stopki.
 ------------------------------

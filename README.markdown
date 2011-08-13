@@ -309,10 +309,11 @@ Example:
     </pdf>
 
 Below structure will create this bookmarks structure:
-- parent bookmark
--- children bookmark
--- another children bookmark
-- another parent bookmark
+
+* parent bookmark
+    - children bookmark
+    - another children bookmark
+* another parent bookmark
 
 Repetitive headers and footers
 ------------------------------
