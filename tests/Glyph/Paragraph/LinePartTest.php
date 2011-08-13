@@ -1,5 +1,6 @@
 <?php
 
+use PHPPdf\Glyph\Glyph;
 use PHPPdf\Document;
 use PHPPdf\Util\Point;
 use PHPPdf\Glyph\Paragraph\LinePart;
@@ -8,8 +9,9 @@ class LinePartTest extends TestCase
 {
     /**
      * @test
+     * @dataProvider drawingDataProvider
      */
-    public function drawLinePartUsingTextGlyphAttributes()
+    public function drawLinePartUsingTextGlyphAttributes($fontSize, $lineHeightOfText, $textDecoration, $expectedLineDecorationYCoord)
     {
         $encodingStub = 'utf-16';
         $colorStub = $this->getMockBuilder('PHPPdf\Engine\Color')
@@ -19,16 +21,16 @@ class LinePartTest extends TestCase
                          ->getMock();
         $words = 'some words';
         $startPoint = Point::getInstance(100, 120);
-        $fontSize = 11;
+
         $documentStub = new Document();
         $xTranslationInLine = 5;
+        $linePartWidth = 100;
         
-        $lineHeightOfText = 15;
         $heightOfLine = 18;        
         
         $text = $this->getMockBuilder('PHPPdf\Glyph\Text')
-                     ->setMethods(array('getFont', 'getAttribute', 'getRecurseAttribute', 'getGraphicsContext', 'getEncoding', 'getFontSize'))
-                     ->getMock();                     
+                     ->setMethods(array('getFont', 'getAttribute', 'getRecurseAttribute', 'getGraphicsContext', 'getEncoding', 'getFontSize', 'getTextDecorationRecursively'))
+                     ->getMock();
                          
         $text->expects($this->atLeastOnce())
              ->method('getFont')
@@ -52,12 +54,19 @@ class LinePartTest extends TestCase
              ->method('getEncoding')
              ->will($this->returnValue($encodingStub));
              
+        $text->expects($this->atLeastOnce())
+             ->method('getTextDecorationRecursively')
+             ->will($this->returnValue($textDecoration));
+             
         $gc = $this->getMockBuilder('PHPPdf\Engine\GraphicsContext')
         		   ->getMock();
-                   
+
+	    $expectedXCoord = $startPoint->getX() + $xTranslationInLine;
+	    $expectedYCoord = $startPoint->getY() - $fontSize - ($heightOfLine - $lineHeightOfText);
+	    
         $gc->expects($this->once())
            ->method('drawText')
-           ->with($words, $startPoint->getX() + $xTranslationInLine, $startPoint->getY() - $fontSize - ($heightOfLine - $lineHeightOfText), $encodingStub);
+           ->with($words, $expectedXCoord, $expectedYCoord, $encodingStub);
            
         $gc->expects($this->once())
            ->method('setFont')
@@ -72,6 +81,30 @@ class LinePartTest extends TestCase
         $gc->expects($this->once())
            ->method('restoreGS');
            
+        if($expectedLineDecorationYCoord === false)
+        {
+            $gc->expects($this->never())
+               ->method('drawLine');
+        }
+        else
+        {
+            $expectedYCoord = $expectedYCoord + $expectedLineDecorationYCoord;
+            $gc->expects($this->once())
+               ->method('setLineColor')
+               ->id('color')
+               ->with($colorStub);
+               
+            $gc->expects($this->once())
+               ->method('setLineWidth')
+               ->id('line')
+               ->with(0.5);
+
+            $gc->expects($this->once())
+               ->after('color')
+               ->method('drawLine')
+               ->with($expectedXCoord, $expectedYCoord, $expectedXCoord + $linePartWidth, $expectedYCoord);
+        }
+
         $text->expects($this->atLeastOnce())
              ->method('getGraphicsContext')
              ->will($this->returnValue($gc));
@@ -88,7 +121,6 @@ class LinePartTest extends TestCase
              ->method('getHeight')
              ->will($this->returnValue($heightOfLine));
         
-        $linePartWidth = 100;
         $linePart = new LinePart($words, $linePartWidth, $xTranslationInLine, $text);
         $linePart->setLine($line);
         
@@ -98,6 +130,16 @@ class LinePartTest extends TestCase
         {
             $task->invoke();
         }
+    }
+    
+    public function drawingDataProvider()
+    {
+        return array(
+            array(11, 15, Glyph::TEXT_DECORATION_NONE, false),
+            array(11, 15, Glyph::TEXT_DECORATION_UNDERLINE, -1),
+            array(18, 15, Glyph::TEXT_DECORATION_LINE_THROUGH, 6),
+            array(12, 15, Glyph::TEXT_DECORATION_OVERLINE, 11),
+        );
     }
     
     /**

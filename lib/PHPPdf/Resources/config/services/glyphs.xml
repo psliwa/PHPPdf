@@ -16,7 +16,7 @@
 					<argument key="paragraph" type="service" id="phppdf.glyph.paragraph" />
 					<argument key="text" type="service" id="phppdf.glyph.text" />
 					<argument key="span" type="service" id="phppdf.glyph.span" />
-					<argument key="a" type="service" id="phppdf.glyph.span" />
+					<argument key="a" type="service" id="phppdf.glyph.a" />
 					<argument key="h1" type="service" id="phppdf.glyph.h1" />
 					<argument key="h2" type="service" id="phppdf.glyph.h2" />
 					<argument key="h3" type="service" id="phppdf.glyph.h3" />
@@ -177,6 +177,19 @@
 		</service>
 		<service id="phppdf.glyph.span" class="PHPPdf\Glyph\Text" public="false">
 			<tag name="phppdf.glyph" />
+			<call method="setFormattersNames">
+				<argument type="collection">
+					<argument>PHPPdf\Formatter\ConvertAttributesFormatter</argument>
+					<argument>PHPPdf\Formatter\TextDimensionFormatter</argument>
+				</argument>
+			</call>
+		</service>
+		<service id="phppdf.glyph.a" class="PHPPdf\Glyph\Text" public="false">
+			<tag name="phppdf.glyph" />
+			<argument type="collection">
+				<argument key="text-decoration">underline</argument>
+				<argument key="color">blue</argument>
+			</argument>
 			<call method="setFormattersNames">
 				<argument type="collection">
 					<argument>PHPPdf\Formatter\ConvertAttributesFormatter</argument>

@@ -314,6 +314,10 @@
 	        </formatters>
 	    </glyph>
 	    <glyph name="a" class="PHPPdf\Glyph\Text">
+	    	<stylesheet>
+	    		<attribute name="text-decoration" value="underline" />
+	    		<attribute name="color" value="blue" />
+	    	</stylesheet>
 	        <formatters>
 	            <formatter class="PHPPdf\Formatter\ConvertAttributesFormatter" />
 	            <formatter class="PHPPdf\Formatter\TextDimensionFormatter" />

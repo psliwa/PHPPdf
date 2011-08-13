@@ -218,6 +218,7 @@ Atrybuty.
 * float - działanie podobne, aczkolwiek nie takie same jak w HTML/CSS. Wartości left|none|right, domyślnie none
 * line-height - działanie takie jak w HTML/CSS. Domyślna wartość to 1.2*font-size
 * text-align - działanie takie jak w HTML/CSS. Wartości left|center|right, domyślnie left. Obecnie nie działa poprawnie dla tekstu wymieszanego z tagami formatującymi (np. "span").
+* text-decoration - dozwolone wartości: none, underline, overline, line-through
 * break - łamie stronę lub kolumnę jeśli element jest bezpośrednim dzieckiem elementu dynamic-page lub column-layout
 * colspan, rowspan - działanie analogiczne do atrybutów html (rowspan jeszcze nie jest zaimplementowane)
 * href - zewnętrzy adres url, gdzie element powinien linkować

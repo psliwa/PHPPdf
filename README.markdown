@@ -223,6 +223,7 @@ Attributes
 * float - works similar but not the same as in HTML/CSS. Allowed values: left|none|right, default none
 * line-height - works similar as in HTML/CSS. Default value: 1.2*font-size
 * text-align - works as same as in HTML/CSS. Allowed values: left|center|right, default left.
+* text-decoration - allowed values: none, underline, overline, line-through
 * break - breaks page or column in the end of the owner of this attribute. Owner of this attribute must by directly child of dynamic-page or column-layout tag!
 * colspan, rowspan - works similar as in HTML (TODO: rowspan isn't implemented yet)
 * href - external url where element should linking

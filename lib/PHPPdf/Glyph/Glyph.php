@@ -47,6 +47,10 @@ abstract class Glyph implements Drawable, GlyphAware, \ArrayAccess, \Serializabl
     const VERTICAL_ALIGN_TOP = 'top';
     const VERTICAL_ALIGN_MIDDLE = 'middle';
     const VERTICAL_ALIGN_BOTTOM = 'bottom';
+    const TEXT_DECORATION_NONE = 'none';
+    const TEXT_DECORATION_UNDERLINE = 'underline';
+    const TEXT_DECORATION_LINE_THROUGH = 'line-through';
+    const TEXT_DECORATION_OVERLINE = 'overline';
     
     private static $attributeSetters = array();
     private static $attributeGetters = array();
@@ -336,6 +340,8 @@ abstract class Glyph implements Drawable, GlyphAware, \ArrayAccess, \Serializabl
         $this->addAttribute('break', false);
         
         $this->addAttribute('vertical-align', null);
+        
+        $this->addAttribute('text-decoration', null);
 
         $this->setEnhancementBag(new EnhancementBag());
     }
@@ -427,6 +433,11 @@ abstract class Glyph implements Drawable, GlyphAware, \ArrayAccess, \Serializabl
     public function getFontSizeRecursively()
     {
         return $this->getRecurseAttribute('font-size');
+    }
+    
+    public function getTextDecorationRecursively()
+    {
+        return $this->getRecurseAttribute('text-decoration');
     }
     
     public function getDisplay()

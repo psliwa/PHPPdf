@@ -64,6 +64,7 @@ class Page extends Container
         $this->addAttribute('encoding', 'utf-8');
         $this->addAttribute('static-size', true);
         $this->setAttribute('text-align', self::ALIGN_LEFT);
+        $this->setAttribute('text-decoration', self::TEXT_DECORATION_NONE);
     }
 
     protected static function initializeType()

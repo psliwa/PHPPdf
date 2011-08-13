@@ -8,6 +8,8 @@
 
 namespace PHPPdf\Glyph\Paragraph;
 
+use PHPPdf\Glyph\Glyph;
+
 use PHPPdf\Util\DrawingTask,
     PHPPdf\Document,
     PHPPdf\Util\Point,
@@ -52,7 +54,7 @@ class LinePart implements Drawable
     
     public function getDrawingTasks(Document $document)
     {
-        return array(new DrawingTask(function(Text $text, $point, $words) {
+        return array(new DrawingTask(function(Text $text, $point, $words, $width) {
             $gc = $text->getGraphicsContext();
             $gc->saveGS();
             $fontSize = $text->getFontSize();
@@ -64,11 +66,41 @@ class LinePart implements Drawable
             {
                 $gc->setFillColor($color);
             }
-            
+                       
+            $yCoord = $point->getY() - $fontSize;
             $gc->drawText($words, $point->getX(), $point->getY() - $fontSize, $text->getEncoding());
             
+            $textDecoration = $text->getTextDecorationRecursively();
+            
+            $lineDecorationYTranslation = false;
+            
+            if($textDecoration == Glyph::TEXT_DECORATION_UNDERLINE)
+            {
+                $lineDecorationYTranslation = -1;
+            }
+            elseif($textDecoration == Glyph::TEXT_DECORATION_LINE_THROUGH)
+            {
+                $lineDecorationYTranslation = $fontSize / 3;
+            }
+            elseif($textDecoration == Glyph::TEXT_DECORATION_OVERLINE)
+            {
+                $lineDecorationYTranslation = $fontSize - 1;
+            }
+            
+            if($lineDecorationYTranslation !== false)
+            {
+                $gc->setLineWidth(0.5);
+                if($color)
+                {
+                    $gc->setLineColor($color);
+                }
+                
+                $yCoord = $yCoord + $lineDecorationYTranslation;
+                $gc->drawLine($point->getX(), $yCoord, $point->getX() + $width, $yCoord);
+            }
+
             $gc->restoreGS();
-        }, array($this->text, $this->getFirstPoint(), $this->words)));
+        }, array($this->text, $this->getFirstPoint(), $this->words, $this->width)));
     }
     
     public function getFirstPoint()
