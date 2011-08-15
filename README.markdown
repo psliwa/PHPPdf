@@ -309,7 +309,7 @@ Example:
 		</dynamic-page>
     </pdf>
 
-Below structure will create this bookmarks structure:
+Above structure will create this bookmarks structure:
 
 * parent bookmark
     - children bookmark

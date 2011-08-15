@@ -510,17 +510,7 @@ abstract class Glyph implements Drawable, GlyphAware, \ArrayAccess, \Serializabl
 
     private function getWidthOrHeight($sizeType)
     {
-        $display = $this->getAttribute('display');
-        if($display == self::DISPLAY_BLOCK)
-        {
-            return $this->getAttributeDirectly($sizeType);
-        }
-        elseif($display == self::DISPLAY_NONE)
-        {
-            return 0;
-        }
-
-        return (double) $this->getAttributeDirectly($sizeType);
+        return $this->getAttributeDirectly($sizeType);
     }
 
     public function getWidthWithMargins()
@@ -764,7 +754,6 @@ abstract class Glyph implements Drawable, GlyphAware, \ArrayAccess, \Serializabl
         if(!$this->hasAttribute($name))
         {
             throw new InvalidAttributeException($name);
-//            throw new \InvalidArgumentException(sprintf('Class "%s" dosn\'t have "%s" attribute.', get_class($this), $name));
         }
     }
 
@@ -827,7 +816,7 @@ abstract class Glyph implements Drawable, GlyphAware, \ArrayAccess, \Serializabl
      */
     public function hasAttribute($name)
     {
-        return (in_array($name, array_keys($this->attributes)));
+        return in_array($name, array_keys($this->attributes));
     }
 
     public function getAttribute($name)

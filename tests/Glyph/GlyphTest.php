@@ -104,25 +104,6 @@ class GlyphTest extends TestCase
     /**
      * @test
      */
-    public function displayModes()
-    {
-        $width = $height= 100;
-        $this->glyph->setWidth($width);
-        $this->glyph->setHeight($height);
-
-        $this->glyph->setAttribute('display', 'block');
-
-        $this->assertEquals($width, $this->glyph->getWidth());
-        $this->assertEquals($height, $this->glyph->getHeight());
-
-        $this->glyph->setAttribute('display', 'none');
-        $this->assertEquals(0, $this->glyph->getWidth());
-        $this->assertEquals(0, $this->glyph->getHeight());
-    }
-
-    /**
-     * @test
-     */
     public function settingMargin()
     {
         $margins = array('margin-top', 'margin-right', 'margin-bottom', 'margin-left');
