@@ -59,6 +59,11 @@ class Zend_Pdf_Resource_Image_Png extends Zend_Pdf_Resource_Image
     const PNG_CHANNEL_INDEXED = 3;
     const PNG_CHANNEL_GRAY_ALPHA = 4;
     const PNG_CHANNEL_RGB_ALPHA = 6;
+    
+    /*
+     * psliwa: turn off predicator in order to incrase performance
+     */
+    const PREDICATOR = 10;
 
     protected $_width;
     protected $_height;
@@ -237,7 +242,7 @@ class Zend_Pdf_Resource_Image_Png extends Zend_Pdf_Resource_Image
                 $decodingStream = $decodingObjFactory->newStreamObject($imageData);
                 $decodingStream->dictionary->Filter      = new Zend_Pdf_Element_Name('FlateDecode');
                 $decodingStream->dictionary->DecodeParms = new Zend_Pdf_Element_Dictionary();
-                $decodingStream->dictionary->DecodeParms->Predictor        = new Zend_Pdf_Element_Numeric(15);
+                $decodingStream->dictionary->DecodeParms->Predictor        = new Zend_Pdf_Element_Numeric(self::PREDICATOR);
                 $decodingStream->dictionary->DecodeParms->Columns          = new Zend_Pdf_Element_Numeric($width);
                 $decodingStream->dictionary->DecodeParms->Colors           = new Zend_Pdf_Element_Numeric(2);   //GreyAlpha
                 $decodingStream->dictionary->DecodeParms->BitsPerComponent = new Zend_Pdf_Element_Numeric($bits);
@@ -272,7 +277,7 @@ class Zend_Pdf_Resource_Image_Png extends Zend_Pdf_Resource_Image
                 $decodingStream = $decodingObjFactory->newStreamObject($imageData);
                 $decodingStream->dictionary->Filter      = new Zend_Pdf_Element_Name('FlateDecode');
                 $decodingStream->dictionary->DecodeParms = new Zend_Pdf_Element_Dictionary();
-                $decodingStream->dictionary->DecodeParms->Predictor        = new Zend_Pdf_Element_Numeric(15);
+                $decodingStream->dictionary->DecodeParms->Predictor        = new Zend_Pdf_Element_Numeric(self::PREDICATOR);
                 $decodingStream->dictionary->DecodeParms->Columns          = new Zend_Pdf_Element_Numeric($width);
                 $decodingStream->dictionary->DecodeParms->Colors           = new Zend_Pdf_Element_Numeric(4);   //RGBA
                 $decodingStream->dictionary->DecodeParms->BitsPerComponent = new Zend_Pdf_Element_Numeric($bits);
@@ -316,7 +321,7 @@ class Zend_Pdf_Resource_Image_Png extends Zend_Pdf_Resource_Image
 
             // Encode stream with FlateDecode filter
             $smaskStreamDecodeParms = array();
-            $smaskStreamDecodeParms['Predictor']        = new Zend_Pdf_Element_Numeric(15);
+            $smaskStreamDecodeParms['Predictor']        = new Zend_Pdf_Element_Numeric(self::PREDICATOR);
             $smaskStreamDecodeParms['Columns']          = new Zend_Pdf_Element_Numeric($width);
             $smaskStreamDecodeParms['Colors']           = new Zend_Pdf_Element_Numeric(1);
             $smaskStreamDecodeParms['BitsPerComponent'] = new Zend_Pdf_Element_Numeric(8);
@@ -336,7 +341,7 @@ class Zend_Pdf_Resource_Image_Png extends Zend_Pdf_Resource_Image
         $imageDictionary->Filter       = new Zend_Pdf_Element_Name('FlateDecode');
 
         $decodeParms = array();
-        $decodeParms['Predictor']        = new Zend_Pdf_Element_Numeric(15); // Optimal prediction
+        $decodeParms['Predictor']        = new Zend_Pdf_Element_Numeric(self::PREDICATOR); // Optimal prediction
         $decodeParms['Columns']          = new Zend_Pdf_Element_Numeric($width);
         $decodeParms['Colors']           = new Zend_Pdf_Element_Numeric((($color==Zend_Pdf_Resource_Image_Png::PNG_CHANNEL_RGB || $color==Zend_Pdf_Resource_Image_Png::PNG_CHANNEL_RGB_ALPHA)?(3):(1)));
         $decodeParms['BitsPerComponent'] = new Zend_Pdf_Element_Numeric($bits);
