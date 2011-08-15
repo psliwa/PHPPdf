@@ -15,10 +15,10 @@ class FontTest extends \TestCase
         $this->fontPath = $fontPath;
 
         $this->font = new Font(array(
-            Font::STYLE_NORMAL => $fontPath.'/verdana.ttf',
-            Font::STYLE_BOLD => $fontPath.'/verdanab.ttf',
-            Font::STYLE_ITALIC => $fontPath.'/verdanai.ttf',
-            Font::STYLE_BOLD_ITALIC => $fontPath.'/verdanaz.ttf',
+            Font::STYLE_NORMAL => $fontPath.'/font-judson/normal.ttf',
+            Font::STYLE_BOLD => $fontPath.'/font-judson/bold.ttf',
+            Font::STYLE_ITALIC => $fontPath.'/font-judson/italic.ttf',
+            Font::STYLE_BOLD_ITALIC => $fontPath.'/font-judson/bold+italic.ttf',
         ));
     }
 
@@ -97,9 +97,9 @@ class FontTest extends \TestCase
     public function creationWithInvalidFontTypes()
     {
         new Font(array(
-            Font::STYLE_BOLD => $this->fontPath.'/verdana.ttf',
-            Font::STYLE_NORMAL => $this->fontPath.'/verdana.ttf',
-            8 => $this->fontPath.'/verdana.ttf',
+            Font::STYLE_BOLD => $this->fontPath.'/font-judson/bold.ttf',
+            Font::STYLE_NORMAL => $this->fontPath.'/font-judson/normal.ttf',
+            8 => $this->fontPath.'/font-judson/normal.ttf',
         ));
     }
 
@@ -110,7 +110,7 @@ class FontTest extends \TestCase
     public function creationWithoutNormalFont()
     {
         new Font(array(
-            Font::STYLE_BOLD => $this->fontPath.'/verdana.ttf',
+            Font::STYLE_BOLD => $this->fontPath.'/font-judson/normal.ttf',
         ));
     }
     

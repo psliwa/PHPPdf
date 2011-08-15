@@ -45,7 +45,7 @@
 		<service id="phppdf.glyph.page" class="PHPPdf\Glyph\Page" public="false">
 			<tag name="phppdf.glyph" />
 			<argument type="collection">
-				<argument key="font-type">verdana</argument>
+				<argument key="font-type">helvetica</argument>
 				<argument key="font-size">10</argument>
 				<argument key="font-style">normal</argument>
 				<argument key="color">black</argument>

@@ -90,7 +90,7 @@ Inheritance
 
     <pdf>
         <dynamic-page>
-            <div id="layer-1" color="red" font-type="verdana" font-size="16">
+            <div id="layer-1" color="red" font-type="judson" font-size="16">
                 <stylesheet>
                     <enhancement name="border" color="green" />
                 </stylesheet>

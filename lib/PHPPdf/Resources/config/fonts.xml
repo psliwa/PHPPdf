@@ -1,11 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<fonts>
-	<!-- verdana is with utf-8 support -->
-    <font name="verdana">
-        <normal src="%resources%/fonts/verdana/normal.ttf" />
-        <bold src="%resources%/fonts/verdana/bold.ttf" />
-        <italic src="%resources%/fonts/verdana/italic.ttf" />
-        <bold-italic src="%resources%/fonts/verdana/bold+italic.ttf" />
+<fonts>   
+    <font name="DejaVuSans">
+    	<normal src="%resources%/fonts/DejaVuSans/normal.ttf" />
+    	<bold src="%resources%/fonts/DejaVuSans/bold.ttf" />
+    	<italic src="%resources%/fonts/DejaVuSans/oblique.ttf" />
+    	<bold-italic src="%resources%/fonts/DejaVuSans/bold+oblique.ttf" />
+    </font>
+    
+    <font name="DejaVuSansCondensed">
+    	<normal src="%resources%/fonts/DejaVuSansCondensed/normal.ttf" />
+    	<bold src="%resources%/fonts/DejaVuSansCondensed/bold.ttf" />
+    	<italic src="%resources%/fonts/DejaVuSansCondensed/oblique.ttf" />
+    	<bold-italic src="%resources%/fonts/DejaVuSansCondensed/bold+oblique.ttf" />
+    </font>
+    <font name="DejaVuSansMono">
+    	<normal src="%resources%/fonts/DejaVuSansMono/normal.ttf" />
+    	<bold src="%resources%/fonts/DejaVuSansMono/bold.ttf" />
+    	<italic src="%resources%/fonts/DejaVuSansMono/oblique.ttf" />
+    	<bold-italic src="%resources%/fonts/DejaVuSansMono/bold+oblique.ttf" />
+    </font>
+    <font name="DejaVuSerif">
+    	<normal src="%resources%/fonts/DejaVuSerif/normal.ttf" />
+    	<bold src="%resources%/fonts/DejaVuSerif/bold.ttf" />
+    	<italic src="%resources%/fonts/DejaVuSerif/italic.ttf" />
+    	<bold-italic src="%resources%/fonts/DejaVuSerif/bold+italic.ttf" />
+    </font>
+    <font name="judson">
+    	<normal src="%resources%/fonts/judson/normal.ttf" />
+    	<bold src="%resources%/fonts/judson/bold.ttf" />
+    	<italic src="%resources%/fonts/judson/italic.ttf" />
+    </font>
+    <font name="Norasi">
+    	<normal src="%resources%/fonts/Norasi/normal.ttf" />
+    	<bold src="%resources%/fonts/Norasi/bold.ttf" />
+    	<italic src="%resources%/fonts/Norasi/oblique.ttf" />
+    	<bold-italic src="%resources%/fonts/Norasi/bold+oblique.ttf" />
     </font>
 
     <font name="courier">

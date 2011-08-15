@@ -34,7 +34,7 @@ class FontRegistryParserTest extends PHPUnit_Framework_TestCase
 
         $this->assertEquals(1, count($fontDefinitions));
 
-        $font = $fontDefinitions['verdana'];
+        $font = $fontDefinitions['font'];
         $styles = array(Font::STYLE_NORMAL => true, Font::STYLE_BOLD => true, Font::STYLE_ITALIC => false, Font::STYLE_BOLD_ITALIC => true);
 
         foreach($styles as $style => $has)
@@ -47,17 +47,17 @@ class FontRegistryParserTest extends PHPUnit_Framework_TestCase
     {
         $xml1 = <<<XML
 <fonts>
-    <font name="verdana">
-        <bold src="%resources%/fonts/verdana/bold.ttf" />
-        <normal src="%resources%/fonts/verdana/normal.ttf" />
-        <bold-italic src="%resources%/fonts/verdana/bold+italic.ttf" />
+    <font name="font">
+        <bold src="%resources%/fonts/judson/bold.ttf" />
+        <normal src="%resources%/fonts/judson/normal.ttf" />
+        <bold-italic src="%resources%/fonts/judson/italic.ttf" />
     </font>
 </fonts>
 XML;
         
         $xml2 = <<<XML
 <fonts>
-    <font name="verdana">
+    <font name="font">
         <bold src="courier-bold" />
         <normal src="courier" />
         <bold-italic src="courier-oblique" />
@@ -71,22 +71,6 @@ XML;
         );
     }
 
-//    /**
-//     * @test
-//     * @expectedException \PHPPdf\Parser\Exception\ParseException
-//     */
-//    public function throwExceptionIfFontNameIsMissing()
-//    {
-//        $xml = <<<XML
-//<fonts>
-//    <font>
-//        <normal file="%resources%/fonts/verdana/normal.ttf" />
-//    </font>
-//</fonts>
-//XML;
-//        $this->parser->parse($xml);
-//    }
-
     /**
      * @test
      * @expectedException \PHPPdf\Parser\Exception\ParseException
@@ -95,27 +79,11 @@ XML;
     {
         $xml = <<<XML
 <fonts>
-    <font name="verdana">
+    <font name="font">
         <normal />
     </font>
 </fonts>
 XML;
         $this->parser->parse($xml);
     }
-
-//    /**
-//     * @test
-//     * @expectedException \PHPPdf\Parser\Exception\ParseException
-//     */
-//    public function throwExceptionIfFontTypeDosntExist()
-//    {
-//        $xml = <<<XML
-//<fonts>
-//    <font name="verdana">
-//        <normal type="some-type" />
-//    </font>
-//</fonts>
-//XML;
-//        $this->parser->parse($xml);
-//    }
 }

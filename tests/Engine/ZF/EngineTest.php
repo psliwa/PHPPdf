@@ -61,8 +61,8 @@ class EngineTest extends \TestCase
         return array(
             array(
                 array(
-                    Font::STYLE_NORMAL => $resourcesDir.'/verdana.ttf',
-                    Font::STYLE_BOLD => $resourcesDir.'/verdanab.ttf',
+                    Font::STYLE_NORMAL => $resourcesDir.'/font-judson/normal.ttf',
+                    Font::STYLE_BOLD => $resourcesDir.'/font-judson/bold.ttf',
                 ),
             ),
             array(

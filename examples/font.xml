@@ -3,8 +3,36 @@
 <pdf>
 	<dynamic-page>
 		<table>
-			<tr font-type="verdana">
-				<td class="first">verdana</td>
+			<tr font-type="judson">
+				<td class="first">judson</td>
+				<td font-style="normal">normal</td>
+				<td font-style="bold">bold</td>
+				<td font-style="italic">italic</td>
+				<td font-style="bold-italic">bold italic</td>
+			</tr>
+			<tr font-type="DejaVuSans">
+				<td class="first">DejaVuSans</td>
+				<td font-style="normal">normal</td>
+				<td font-style="bold">bold</td>
+				<td font-style="italic">italic</td>
+				<td font-style="bold-italic">bold italic</td>
+			</tr>
+			<tr font-type="DejaVuSansCondensed">
+				<td class="first">DejaVuSansCondensed</td>
+				<td font-style="normal">normal</td>
+				<td font-style="bold">bold</td>
+				<td font-style="italic">italic</td>
+				<td font-style="bold-italic">bold italic</td>
+			</tr>
+			<tr font-type="DejaVuSansMono">
+				<td class="first">DejaVuSansMono</td>
+				<td font-style="normal">normal</td>
+				<td font-style="bold">bold</td>
+				<td font-style="italic">italic</td>
+				<td font-style="bold-italic">bold italic</td>
+			</tr>
+			<tr font-type="DejaVuSerif">
+				<td class="first">DejaVuSerif</td>
 				<td font-style="normal">normal</td>
 				<td font-style="bold">bold</td>
 				<td font-style="italic">italic</td>

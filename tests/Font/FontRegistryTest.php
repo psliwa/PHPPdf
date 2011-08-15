@@ -37,9 +37,9 @@ class FontRegistryTest extends PHPUnit_Framework_TestCase
                        ->with($definition)
                        ->will($this->returnValue($fontStub));
         
-        $this->registry->register('verdana', $definition);
+        $this->registry->register('font', $definition);
 
-        $font = $this->registry->get('verdana');
+        $font = $this->registry->get('font');
 
         $this->assertEquals($fontStub, $font);
     }

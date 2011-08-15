@@ -85,7 +85,7 @@ Atrybut "id" ma całkowicie inne znaczenie niż w HTML'u. Id musi być unikalne 
 
     <pdf>
         <dynamic-page>
-            <div id="warstwa-1" color="red" font-type="verdana" font-size="16">
+            <div id="warstwa-1" color="red" font-type="judson" font-size="16">
                 <stylesheet>
                     <enhancement name="border" color="green" />
                 </stylesheet>

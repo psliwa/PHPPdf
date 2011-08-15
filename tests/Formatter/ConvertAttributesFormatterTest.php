@@ -99,7 +99,7 @@ class ConvertAttributesFormatterTest extends PHPUnit_Framework_TestCase
         $documentMock = $this->getMock('PHPPdf\Document', array('getFont'));
         $documentMock->expects($this->once())
                 ->method('getFont')
-                ->with('verdana')
+                ->with('font')
                 ->will($this->returnValue($fontStub));
 
         $glyphMock = $this->getMock('PHPPdf\Glyph\Container', array('setFontType', 'getFontType', 'getParent'));
@@ -108,7 +108,7 @@ class ConvertAttributesFormatterTest extends PHPUnit_Framework_TestCase
                   ->with($fontStub);
         $glyphMock->expects($this->once())
                   ->method('getFontType')
-                  ->will($this->returnValue('verdana'));
+                  ->will($this->returnValue('font'));
         $glyphMock->expects($this->any())
                   ->method('getParent')
                   ->will($this->returnValue(new Page()));

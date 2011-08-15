@@ -6,7 +6,7 @@
 	<glyphs>
 	    <glyph name="page" class="PHPPdf\Glyph\Page">
 	        <stylesheet>
-	            <attribute name="font-type" value="verdana" />
+	            <attribute name="font-type" value="helvetica" />
 	            <attribute name="font-size" value="10" />
 	            <attribute name="font-style" value="normal" />
 	            <attribute name="margin" value="40 40" />
