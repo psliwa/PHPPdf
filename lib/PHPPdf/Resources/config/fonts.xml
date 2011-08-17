@@ -42,12 +42,6 @@
     	<bold src="%resources%/fonts/UniversElse/bold.ttf" />
     	<italic src="%resources%/fonts/UniversElse/italic.ttf" />
     </font>
-    <font name="Iwona">
-    	<normal src="%resources%/fonts/Iwona/normal.ttf" />
-    	<bold src="%resources%/fonts/Iwona/bold.ttf" />
-    	<italic src="%resources%/fonts/Iwona/italic.ttf" />
-    	<bold-italic src="%resources%/fonts/Iwona/bold+italic.ttf" />
-    </font>
     <font name="Kurier">
     	<normal src="%resources%/fonts/Kurier/normal.ttf" />
     	<bold src="%resources%/fonts/Kurier/bold.ttf" />

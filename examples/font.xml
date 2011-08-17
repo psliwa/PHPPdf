@@ -38,13 +38,6 @@
 				<td font-style="italic">italic</td>
 				<td font-style="bold-italic">bold italic</td>
 			</tr>
-			<tr font-type="Iwona">
-				<td class="first">Iwona</td>
-				<td font-style="normal">normal</td>
-				<td font-style="bold">bold</td>
-				<td font-style="italic">italic</td>
-				<td font-style="bold-italic">bold italic</td>
-			</tr>
 			<tr font-type="Kurier">
 				<td class="first">Kurier</td>
 				<td font-style="normal">normal</td>
