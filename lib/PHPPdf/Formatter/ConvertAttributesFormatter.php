@@ -24,7 +24,6 @@ class ConvertAttributesFormatter extends BaseFormatter
     {
         $this->convertPercentageDimensions($glyph);
         $this->convertAutoMargins($glyph);
-        $this->convertColorAttributes($glyph, $document);
     }
 
     private function convertPercentageDimensions(Glyphs\Glyph $glyph)
@@ -80,19 +79,6 @@ class ConvertAttributesFormatter extends BaseFormatter
         foreach($colorAttributes as $attribute)
         {
             $this->convertColorAttribute($glyph, $attribute, $document);
-        }
-    }
-
-    private function convertColorAttribute(Glyphs\Glyph $glyph, $attribute, Document $document)
-    {
-        if($glyph->hasAttribute($attribute))
-        {
-            $color = $glyph->getAttribute($attribute);
-            if(is_string($color))
-            {
-                $color = $document->createColor($color);
-                $glyph->setAttribute($attribute, $color);
-            }
         }
     }
 }

@@ -190,7 +190,7 @@ class Page extends Container
             $this->graphicsContext->setFont($font, $this->getAttribute('font-size'));
         }
 
-        $blackColor = $document->createColor('#000000');
+        $blackColor = '#000000';
         $this->graphicsContext->setFillColor($blackColor);
         $this->graphicsContext->setLineColor($blackColor);
     }

@@ -64,7 +64,6 @@ abstract class Enhancement
     public function enhance(Glyph $glyph, Document $document)
     {
         $color = $this->getColor();
-        $color = $color ? $document->createColor($color) : null;
         
         $graphicsContext = $glyph->getGraphicsContext();
 

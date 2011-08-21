@@ -14,12 +14,12 @@
 	    		<li>Some text</li>
 	    		<li>some another text</li>
 	    	</ul>
-	    	<p>Type: square</p>
+	    	<p>Type: square (only using font with utf-8 support)</p>
 	    	<ul type="square">
 	    		<li>Some text</li>
 	    		<li>some another text</li>
 	    	</ul>
-	    	<p>Type: disc</p>
+	    	<p>Type: disc (only using font with utf-8 support)</p>
 	    	<ul type="disc">
 	    		<li>Some text</li>
 	    		<li>some another text</li>

@@ -977,7 +977,7 @@ abstract class Glyph implements Drawable, GlyphAware, \ArrayAccess, \Serializabl
     
     private function createDumpTask()
     {
-        $task = new DrawingTask(function($glyph, $attributes){
+        $task = new DrawingTask(function($glyph){
             $gc = $glyph->getGraphicsContext();
             $firstPoint = $glyph->getFirstPoint();
             $diagonalPoint = $glyph->getDiagonalPoint();
@@ -989,16 +989,22 @@ abstract class Glyph implements Drawable, GlyphAware, \ArrayAccess, \Serializabl
                 $coorinations[] = $point->toArray();
             }
             
-            unset($attributes['font-type']);
+            $attributes = $glyph->getAttributes() + $glyph->getEnhancementsAttributes();
+            
             $dumpText = var_export(array(
                 'attributes' => $attributes,
                 'coordinations' => $coorinations,
             ), true);
 
             $gc->attachStickyNote($firstPoint->getX(), $firstPoint->getY(), $diagonalPoint->getX(), $diagonalPoint->getY(), $dumpText);
-        }, array($this, $this->attributes + $this->getEnhancementsAttributes()));
+        }, array($this));
 
         return $task;
+    }
+    
+    public function getAttributes()
+    {
+        return $this->attributes;
     }
 
     public function preFormat(Document $document)

@@ -74,18 +74,4 @@ class ConvertAttributesFormatterTest extends PHPUnit_Framework_TestCase
             array(200, 100, 0, 0), // if child is wider than parent, margins should be set as "0" and parent width should be set as child width
         );
     }
-
-    /**
-     * @test
-     */
-    public function colorConvert()
-    {
-        $page = new Page();
-        $glyph = new Container(array('color' => '#ffffff'));
-        $page->add($glyph);
-
-        $this->formatter->format($glyph, $this->document);
-
-        $this->assertTrue($glyph->getAttribute('color') instanceof PHPPdf\Engine\Color);
-    }
 }

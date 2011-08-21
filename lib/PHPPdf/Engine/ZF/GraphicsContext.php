@@ -78,17 +78,34 @@ class GraphicsContext implements BaseGraphicsContext
         $this->page->setFont($fontResource, $size);
     }
 
-    public function setFillColor(BaseColor $color)
+    public function setFillColor($colorData)
     {
+        $color = $this->getColor($colorData);
         if(!$this->state['fillColor'] || $color->getComponents() !== $this->state['fillColor']->getComponents())
         {
             $this->page->setFillColor($color->getWrappedColor());
             $this->state['fillColor'] = $color;
         }
     }
-
-    public function setLineColor(BaseColor $color)
+    
+    private function getColor($colorData)
     {
+        if(is_string($colorData))
+        {
+            return $this->engine->createColor($colorData);
+        }
+        
+        if(!$colorData instanceof BaseColor)
+        {
+            throw new Exception('Wrong color value, expected string or object of PHPPdf\Engine\Color class.');
+        }
+        
+        return $colorData;
+    }
+
+    public function setLineColor($colorData)
+    {
+        $color = $this->getColor($colorData);
         if(!$this->state['lineColor'] || $color->getComponents() !== $this->state['lineColor']->getComponents())
         {
             $this->page->setLineColor($color->getWrappedColor());

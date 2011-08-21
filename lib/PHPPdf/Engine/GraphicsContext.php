@@ -32,9 +32,15 @@ interface GraphicsContext
 
     public function setFont(Font $font, $size);
 
-    public function setFillColor(Color $color);
+    /**
+     * @param string|PHPPdf\Engine\Color String representing color or color object
+     */
+    public function setFillColor($color);
 
-    public function setLineColor(Color $color);
+    /**
+     * @param string|PHPPdf\Engine\Color String representing color or color object
+     */
+    public function setLineColor($color);
     
     public function drawPolygon(array $x, array $y, $type);
 
