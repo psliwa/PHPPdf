@@ -222,7 +222,6 @@ class ColumnDivertingFormatter extends BaseFormatter
     private function breakContainer(Container $container, $breakYCoord, $numberOfBreaks)
     {
         $breakPoint = $container->getFirstPoint()->getY() - $breakYCoord;
-        $originalHeightOfContainer = $container->getHeight();
         
         $productOfBroke = $container->split($breakPoint);
         

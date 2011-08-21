@@ -56,12 +56,12 @@ class Boundary implements \Countable, \Iterator, \ArrayAccess, \Serializable
 
         $diagonalPoint = $this->getDiagonalPoint();
 
-        if(!$diagonalPoint || $diagonalPoint->compareYCoord($point) > 0)
+        if(!$diagonalPoint || $diagonalPoint->compareYCoord($point) >= 0)
         {
             $this->diagonalPointYIndex = $oldNumberOfPoints;
         }
         
-        if(!$diagonalPoint || $diagonalPoint->compareXCoord($point) < 0)
+        if(!$diagonalPoint || $diagonalPoint->compareXCoord($point) <= 0)
         {
             $this->diagonalPointXIndex = $oldNumberOfPoints;
         }

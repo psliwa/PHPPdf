@@ -168,8 +168,10 @@ class Container extends Glyph
             $yChildStart = $child->getFirstPoint()->getY();
             $yChildEnd = $child->getDiagonalPoint()->getY();
             if($splitProduct)
-            {                
-                $translates[] = ($yChildEnd - $splitProduct->getFirstPoint()->getY());
+            {
+                $heightAfterSplit = $splitProduct->getHeight() + $child->getHeight();
+                $translate = $heightAfterSplit - $originalChildHeight;
+                $translates[] = $translate + ($yChildEnd - $splitProduct->getFirstPoint()->getY());
                 $splitProducts[] = $splitProduct;
             }
             else
@@ -215,7 +217,7 @@ class Container extends Glyph
         {
             $child->translate(0, $translate);
         }
-
+        
         return $splitCompose;
     }
 
