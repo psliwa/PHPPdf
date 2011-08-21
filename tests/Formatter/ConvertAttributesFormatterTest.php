@@ -88,31 +88,4 @@ class ConvertAttributesFormatterTest extends PHPUnit_Framework_TestCase
 
         $this->assertTrue($glyph->getAttribute('color') instanceof PHPPdf\Engine\Color);
     }
-
-    /**
-     * @test
-     */
-    public function fontConvert()
-    {
-        $fontStub = 'fontStub';
-
-        $documentMock = $this->getMock('PHPPdf\Document', array('getFont'));
-        $documentMock->expects($this->once())
-                ->method('getFont')
-                ->with('font')
-                ->will($this->returnValue($fontStub));
-
-        $glyphMock = $this->getMock('PHPPdf\Glyph\Container', array('setFontType', 'getFontType', 'getParent'));
-        $glyphMock->expects($this->once())
-                  ->method('setFontType')
-                  ->with($fontStub);
-        $glyphMock->expects($this->once())
-                  ->method('getFontType')
-                  ->will($this->returnValue('font'));
-        $glyphMock->expects($this->any())
-                  ->method('getParent')
-                  ->will($this->returnValue(new Page()));
-
-        $this->formatter->format($glyphMock, $documentMock);
-    }
 }

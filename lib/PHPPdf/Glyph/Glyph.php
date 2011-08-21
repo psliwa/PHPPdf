@@ -72,8 +72,6 @@ abstract class Glyph implements Drawable, GlyphAware, \ArrayAccess, \Serializabl
     private $formattersNames = array();
     
     private $behaviours = array();
-    
-    private $font;
 
     public function __construct(array $attributes = array())
     {
@@ -384,12 +382,14 @@ abstract class Glyph implements Drawable, GlyphAware, \ArrayAccess, \Serializabl
         return $page;
     }
 
-    public function getFont()
+    public function getFont(Document $document)
     {
-        $font = $this->getRecurseAttribute('font-type');
+        $fontType = $this->getRecurseAttribute('font-type');
 
-        if($font)
+        if($fontType)
         {
+            $font = $document->getFont($fontType);
+            
             $fontStyle = $this->getRecurseAttribute('font-style');
             if($fontStyle)
             {

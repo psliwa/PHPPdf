@@ -184,7 +184,7 @@ class Page extends Container
 
     private function setGraphicsContextDefaultStyle(Document $document)
     {
-        $font = $this->getFont();
+        $font = $this->getFont($document);
         if($font && $this->getAttribute('font-size'))
         {
             $this->graphicsContext->setFont($font, $this->getAttribute('font-size'));

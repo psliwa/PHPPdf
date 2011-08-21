@@ -28,7 +28,7 @@ abstract class TextEnumerationStrategy extends AbstractEnumerationStrategy
         $enumerationText = $this->assembleEnumerationText($list, $this->visualIndex);
 
         $fontSize = $list->getFontSizeRecursively();
-        $font = $list->getFont();
+        $font = $list->getFont($document);
         
         $xTranslation = 0;
         
@@ -61,7 +61,7 @@ abstract class TextEnumerationStrategy extends AbstractEnumerationStrategy
             $gc->setLineColor($color);
         }
         
-        $font = $list->getFont();
+        $font = $list->getFont($document);
         $size = $list->getFontSizeRecursively();
         
         if($font && $size)

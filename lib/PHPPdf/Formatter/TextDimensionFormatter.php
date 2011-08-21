@@ -51,7 +51,7 @@ class TextDimensionFormatter extends BaseFormatter
 
         $wordsSizes = array();
         
-        $font = $glyph->getFont();
+        $font = $glyph->getFont($document);
         $fontSize = $glyph->getRecurseAttribute('font-size');
         
         foreach($words as $word)

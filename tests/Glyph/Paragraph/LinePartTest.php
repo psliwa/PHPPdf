@@ -34,6 +34,7 @@ class LinePartTest extends TestCase
                          
         $text->expects($this->atLeastOnce())
              ->method('getFont')
+             ->with($documentStub)
              ->will($this->returnValue($fontStub));
              
         $text->expects($this->atLeastOnce())

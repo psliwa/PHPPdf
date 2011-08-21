@@ -23,6 +23,8 @@ class Paragraph extends Container
     {
         parent::initialize();
         $this->setAttribute('text-align', null);
+        
+//        $this->mergeEnhancementAttributes('border', array('name' => 'border'));
     }
     
     public function getWidth()

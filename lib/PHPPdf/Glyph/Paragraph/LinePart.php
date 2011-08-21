@@ -54,12 +54,12 @@ class LinePart implements Drawable
     
     public function getDrawingTasks(Document $document)
     {
-        return array(new DrawingTask(function(Text $text, $point, $words, $width) {
+        return array(new DrawingTask(function(Text $text, $point, $words, $width, $document) {
             $gc = $text->getGraphicsContext();
             $gc->saveGS();
             $fontSize = $text->getFontSize();
             
-            $gc->setFont($text->getFont(), $fontSize);
+            $gc->setFont($text->getFont($document), $fontSize);
             $color = $text->getRecurseAttribute('color');
             
             if($color)
@@ -100,7 +100,7 @@ class LinePart implements Drawable
             }
 
             $gc->restoreGS();
-        }, array($this->text, $this->getFirstPoint(), $this->words, $this->width)));
+        }, array($this->text, $this->getFirstPoint(), $this->words, $this->width, $document)));
     }
     
     public function getFirstPoint()
