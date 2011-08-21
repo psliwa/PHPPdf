@@ -202,6 +202,7 @@ Istnieją tagi, które służą jedynie do określania wartości atrybutów, zbi
 * enhancement - atrybut złożony (upiększenie), bezpośredni element podrzędny dla "stylesheet". Wymagany atrybut tego elementu: name - nazwa.
 * placeholders - definiuje wartości "slotów" dla elementu podrzędnego. Elementy podrzędne "placeholders" są specyficzne dla tagu nadrzędnego.
 * metadata - definiuje dane meta dla dokumentu pdf, bezpośredni element podrzędny korzenia dokumentu (TODO)
+* behaviours - definiuje zachowania dla elementu nadrzędnego. Obsługiwane zachowania: ref, href, bookmark, note (działanie takie samo jak dla atrybutów o tych samych nazwach)
 
 Atrybuty.
 ---------
@@ -323,6 +324,18 @@ Przykład:
     <pdf>
         <dynamic-page>
             <div note="treść notatki"></div>
+        </dynamic-page>
+    </pdf>
+
+Parser xml normalizuje wartości atrybutów, czego skutkiem jest ignorowanie znaków nowej linii. Jeśli chcesz dodać notatkę, w której znaki nowej lini są ważne, możesz skorzystać ze składni:
+
+    <pdf>
+        <dynamic-page>
+            <div>
+                <behaviours>
+                    <note>Tekst notatki</note>
+                </behaviours>
+            </div>
         </dynamic-page>
     </pdf>
 

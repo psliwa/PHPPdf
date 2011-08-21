@@ -8,7 +8,8 @@
 
 namespace PHPPdf\Glyph\Behaviour;
 
-use PHPPdf\Glyph\Manager;
+use PHPPdf\Exception\Exception,
+    PHPPdf\Glyph\Manager;
 
 /**
  * @author Piotr Śliwa <peter.pl7@gmail.com>
@@ -38,7 +39,7 @@ class Factory
             case 'note':
                 return new StickyNote($arg);
             default:
-                return null;
+                throw new Exception(sprintf('Behaviour "%s" dosn\'t exist.', $name));
         }
     }
 

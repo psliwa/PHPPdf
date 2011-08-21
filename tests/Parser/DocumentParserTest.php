@@ -907,4 +907,60 @@ XML;
         
         $this->parser->parse($xml);
     }
+    
+
+    /**
+     * @test
+     */
+    public function parseBehaviours()
+    {
+        $xml = <<<XML
+<pdf>
+    <tag1>
+        <behaviours>
+            <note>some text 1</note>
+            <bookmark>some text 2</bookmark>
+        </behaviours>
+    </tag1>
+</pdf>
+XML;
+        $glyphMock = $this->getMock('PHPPdf\Glyph\Container', array('addBehaviour'));
+
+        $mocks = array(array('tag1', $glyphMock));
+        $glyphFactoryMock = $this->getGlyphFactoryMock($mocks);
+        $behaviourFactoryMock = $this->getMockBuilder('PHPPdf\Glyph\Behaviour\Factory')
+                                     ->setMethods(array('getSupportedBehaviourNames', 'create'))
+                                     ->getMock();
+
+        $args = array('some text 1', 'some text 2');
+        $behaviourNames = array('note', 'bookmark');
+        
+        $behaviourFactoryMock->expects($this->atLeastOnce())
+                             ->method('getSupportedBehaviourNames')
+                             ->will($this->returnValue($behaviourNames));
+        
+        //first two invocations are getSupportedBehaviourNames method calls
+        $behaviourFactoryCallIndex = 2;
+
+        foreach($behaviourNames as $i => $behaviourName)
+        {
+            $behaviour = $this->getMockBuilder('PHPPdf\Glyph\Behaviour\Behaviour')
+                              ->setMethods(array('doAttach'))
+                              ->getMock();
+            $matcher = $behaviourFactoryMock->expects($this->at($behaviourFactoryCallIndex))
+                                             ->method('create')
+                                             ->with($behaviourName, $args[$i])
+                                             ->will($this->returnValue($behaviour));
+                                             
+            $glyphMock->expects($this->at($i))
+                      ->method('addBehaviour')
+                      ->with($behaviour);
+            $behaviourFactoryCallIndex++;
+        }
+                                     
+        $this->parser->setBehaviourFactory($behaviourFactoryMock);
+        $this->parser->setGlyphFactory($glyphFactoryMock);
+
+        $this->parser->parse($xml);
+    }
 }

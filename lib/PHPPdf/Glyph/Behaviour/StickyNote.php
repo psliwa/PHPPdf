@@ -19,7 +19,7 @@ class StickyNote extends Behaviour
     private $text;
     
     public function __construct($text)
-    {
+    {        
         $this->text = (string) $text;
     }
     

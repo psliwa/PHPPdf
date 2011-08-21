@@ -34,6 +34,7 @@ class DocumentParser extends XmlParser
     const ATTRIBUTE_CLASS = 'class';
     const STYLESHEET_TAG = 'stylesheet';
     const PLACEHOLDERS_TAG = 'placeholders';
+    const BEHAVIOURS_TAG = 'behaviours';
     
     private $factory = null;
     private $enhancementFactory = null;
@@ -44,6 +45,7 @@ class DocumentParser extends XmlParser
     private $tagStack = array();
     private $innerParser = null;
     private $inPlaceholder = false;
+    private $inBehaviour = false;
     private $endTag = self::ROOT_TAG;
     private $behaviourFactory = null;
     private $glyphManager = null;
@@ -198,9 +200,17 @@ class DocumentParser extends XmlParser
         {
             $this->parsePlaceholder($reader, $parentGlyph);
         }
+        elseif($this->inBehaviour)
+        {
+            $this->parseBehaviour($reader, $parentGlyph);
+        }
         elseif($tag === self::PLACEHOLDERS_TAG)
         {
             $this->inPlaceholder = true;
+        }
+        elseif($tag === self::BEHAVIOURS_TAG)
+        {
+            $this->inBehaviour = true;
         }
         elseif($tag === self::STYLESHEET_TAG)
         {
@@ -244,6 +254,17 @@ class DocumentParser extends XmlParser
 
             throw new ParseException(sprintf('Placeholder "%s" is not supported by "%s" tag.', $placeholderName, $element['tag']));
         }
+    }
+    
+    private function parseBehaviour(\XMLReader $reader, Glyph $parentGlyph)
+    {
+        $behaviourName = $reader->name;
+        
+        $this->seekReaderToNextTag($reader);
+        
+        $value = trim((string) $reader->value);
+
+        $parentGlyph->addBehaviour($this->behaviourFactory->create($behaviourName, $value));
     }
 
     private function isntIgnoredTag($tag)
@@ -399,7 +420,11 @@ class DocumentParser extends XmlParser
         {
             $this->inPlaceholder = false;
         }
-        else
+        elseif($this->inBehaviour && $reader->name === self::BEHAVIOURS_TAG)
+        {
+            $this->inBehaviour = false;
+        }
+        elseif(!$this->inBehaviour)
         {
             $glyph = $this->popFromStack();
             

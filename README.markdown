@@ -207,6 +207,7 @@ There are tags that only are bags for attributes, set of tags etc:
 * enhancement - complex attribute declaration, direct child of "stylesheet" tag. Required attributes of this element: name - complex attribute name
 * placeholders - defines placeholders for parent tag. Children tags of placeholder are specyfic for every parent tag.
 * metadata - defines metadata of pdf document, direct child of document root (TODO: not implemented yet)
+* behaviours - defines behaviours for parent tag. Supported behaviours: href, ref, bookmark, note (action as same as for attributes with as same as name)
 
 Attributes
 ----------
@@ -327,9 +328,22 @@ Example:
 
     <pdf>
         <dynamic-page>
-            <div note="text of the note"></div>
+            <div note="note text"></div>
         </dynamic-page>
     </pdf>
+    
+Xml parser normalizes values of attributes, wich results ignoring new line chars. If you want to add note with new line chars, you should use syntax:
+
+    <pdf>
+        <dynamic-page>
+            <div>
+                <behaviours>
+                    <note>note text</note>
+                </behaviours>
+            </div>
+        </dynamic-page>
+    </pdf>
+
 
 Repetitive headers and footers
 ------------------------------
