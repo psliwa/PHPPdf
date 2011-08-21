@@ -35,6 +35,8 @@ class Factory
                 return new GoToInternal($this->glyphManager->get($arg));
             case 'bookmark':
                 return new Bookmark($arg);
+            case 'note':
+                return new StickyNote($arg);
             default:
                 return null;
         }
@@ -42,6 +44,6 @@ class Factory
 
     public function getSupportedBehaviourNames()
     {
-        return array('href', 'ref', 'bookmark');
+        return array('href', 'ref', 'bookmark', 'note');
     }
 }

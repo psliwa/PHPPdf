@@ -1001,7 +1001,7 @@ abstract class Glyph implements Drawable, GlyphAware, \ArrayAccess, \Serializabl
 
         return $task;
     }
-    
+
     public function getAttributes()
     {
         return $this->attributes;

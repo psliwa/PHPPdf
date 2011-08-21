@@ -229,6 +229,8 @@ Attributes
 * href - external url where element should linking
 * ref - id of element where owner should linking
 * bookmark - create bookmark with given title associated with the tag
+* note - create sticky note associated with tag
+* dump - allowed values: true or false. Create sticky note with debug informations (attributes, position etc.)
 
 Complex attributes
 ------------------
@@ -315,6 +317,19 @@ Above structure will create this bookmarks structure:
     - children bookmark
     - another children bookmark
 * another parent bookmark
+
+Sticky notes
+------------
+
+Sticky note can be created by "note" attribute.
+
+Example:
+
+    <pdf>
+        <dynamic-page>
+            <div note="text of the note"></div>
+        </dynamic-page>
+    </pdf>
 
 Repetitive headers and footers
 ------------------------------

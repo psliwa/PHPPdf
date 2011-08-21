@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <stylesheet>
+	<dynamic-page font-type="DejaVuSans"></dynamic-page>
 	<p margin-top="10">
 	</p>
 	

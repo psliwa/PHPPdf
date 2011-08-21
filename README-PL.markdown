@@ -224,6 +224,8 @@ Atrybuty.
 * href - zewnętrzy adres url, gdzie element powinien linkować
 * ref - id elementu do którego posiadacz tego atrybutu powinien linkować (odpowiednik kotwic w HTML'u)
 * bookmark - tworzy zakładkę o podanej nazwie linkującą do tego tagu
+* note - tworzy notatkę dla danego elementu o podanej treści
+* dump - dozwolone wartości: true or false. Tworzy notatkę z informacjami przeznaczonymi do debugowania, np. wartości atrybutów, pozycja itp.
 
 Atrybuty złożone
 ----------------
@@ -310,6 +312,19 @@ Powyższa struktura utworzy poniższą strukturę zakładek:
     - bookmark dziecka
     - inny bookmark dziecka
 * inny bookmark rodzica
+
+Notatki
+-------
+
+Notatka może zostać dodana poprzez atrybut "note".
+
+Przykład:
+
+    <pdf>
+        <dynamic-page>
+            <div note="treść notatki"></div>
+        </dynamic-page>
+    </pdf>
 
 Powtarzalne nagłówki i stopki.
 ------------------------------
