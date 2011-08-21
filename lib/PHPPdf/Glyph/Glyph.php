@@ -72,6 +72,8 @@ abstract class Glyph implements Drawable, GlyphAware, \ArrayAccess, \Serializabl
     private $formattersNames = array();
     
     private $behaviours = array();
+    
+    private $font;
 
     public function __construct(array $attributes = array())
     {
@@ -97,7 +99,7 @@ abstract class Glyph implements Drawable, GlyphAware, \ArrayAccess, \Serializabl
     {
         //TODO refactoring
         $attributeWithGetters = array('width', 'height', 'margin-left', 'margin-right', 'margin-top', 'margin-bottom', 'padding-left', 'padding-right', 'padding-top', 'padding-bottom', 'display', 'font-type', 'font-size', 'float', 'splittable');
-        $attributeWithSetters = array('width', 'height', 'margin-left', 'margin-right', 'margin-top', 'margin-bottom', 'display', 'font-type', 'float', 'static-size', 'font-size', 'margin', 'padding', 'break', 'splittable');
+        $attributeWithSetters = array('width', 'height', 'margin-left', 'margin-right', 'margin-top', 'margin-bottom', 'display', 'font-type', 'float', 'static-size', 'font-size', 'margin', 'padding', 'break', 'splittable', 'dump');
 
         $predicateGetters = array('splittable');
         
@@ -342,6 +344,8 @@ abstract class Glyph implements Drawable, GlyphAware, \ArrayAccess, \Serializabl
         $this->addAttribute('vertical-align', null);
         
         $this->addAttribute('text-decoration', null);
+        
+        $this->addAttribute('dump', false);
 
         $this->setEnhancementBag(new EnhancementBag());
     }
@@ -775,6 +779,12 @@ abstract class Glyph implements Drawable, GlyphAware, \ArrayAccess, \Serializabl
         $this->setAttributeDirectly('splittable', $flag);
     }
     
+    public function setDump($flag)
+    {
+        $flag = $this->filterBooleanValue($flag);
+        $this->setAttributeDirectly('dump', $flag);
+    }
+    
     public function isSplittable()
     {
         try
@@ -959,6 +969,36 @@ abstract class Glyph implements Drawable, GlyphAware, \ArrayAccess, \Serializabl
 
     protected function postDraw(Document $document)
     {
+        if($this->getAttribute('dump'))
+        {
+            $this->addDrawingTask($this->createDumpTask());
+        }
+    }
+    
+    private function createDumpTask()
+    {
+        $task = new DrawingTask(function($glyph, $attributes){
+            $gc = $glyph->getGraphicsContext();
+            $firstPoint = $glyph->getFirstPoint();
+            $diagonalPoint = $glyph->getDiagonalPoint();
+            
+            $boundary = $glyph->getBoundary();
+            $coordinations = array();
+            foreach($boundary as $point)
+            {
+                $coorinations[] = $point->toArray();
+            }
+            
+            unset($attributes['font-type']);
+            $dumpText = var_export(array(
+                'attributes' => $attributes,
+                'coordinations' => $coorinations,
+            ), true);
+
+            $gc->attachStickyNote($firstPoint->getX(), $firstPoint->getY(), $diagonalPoint->getX(), $diagonalPoint->getY(), $dumpText);
+        }, array($this, $this->attributes + $this->getEnhancementsAttributes()));
+
+        return $task;
     }
 
     public function preFormat(Document $document)
@@ -1202,6 +1242,9 @@ abstract class Glyph implements Drawable, GlyphAware, \ArrayAccess, \Serializabl
         return $this->formattersNames;
     }
     
+    /**
+     * @return \PHPPdf\Engine\GraphicsContext
+     */
     public function getGraphicsContext()
     {
         return $this->getPage()->getGraphicsContext();

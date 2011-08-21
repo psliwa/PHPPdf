@@ -51,4 +51,6 @@ interface GraphicsContext
     public function goToAction(GraphicsContext $gc, $x1, $y1, $x2, $y2, $top);
     
     public function addBookmark($identifier, $name, $top, $ancestorsIdentifier = null);
+    
+    public function attachStickyNote($x1, $y1, $x2, $y2, $text);
 }

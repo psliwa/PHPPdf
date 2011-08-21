@@ -1,5 +1,6 @@
 <?php
 
+use PHPPdf\Document;
 use PHPPdf\Glyph\BasicList;
 use PHPPdf\Util\Point;
 use PHPPdf\Glyph\BasicList\ImageEnumerationStrategy;
@@ -84,7 +85,12 @@ class ImageEnumerationStrategyTest extends TestCase
            ->with($image, $expectedX1Coord, $expectedY1Coord, $expectedX2Coord, $expectedY2Coord);
            
         $this->strategy->setIndex($elementIndex);
-        $this->strategy->drawEnumeration($listMock, $gc);
+        $this->strategy->drawEnumeration($this->getDocumentStub(), $listMock, $gc);
+    }
+    
+    private function getDocumentStub()
+    {
+        return new Document();
     }
     
     private function createImageMock($width, $height)
@@ -133,7 +139,8 @@ class ImageEnumerationStrategyTest extends TestCase
                  
         $gc = $this->getMockBuilder('PHPPdf\Engine\GraphicsContext')
                    ->getMock();
+
         $this->strategy->setIndex($elementIndex);
-        $this->strategy->drawEnumeration($listMock, $gc);
+        $this->strategy->drawEnumeration($this->getDocumentStub(), $listMock, $gc);
     }
 }

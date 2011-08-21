@@ -8,6 +8,8 @@
 
 namespace PHPPdf\Glyph\BasicList;
 
+use PHPPdf\Document;
+
 use PHPPdf\Engine\GraphicsContext,
     PHPPdf\Glyph\BasicList;
 
@@ -25,9 +27,9 @@ class OrderedEnumerationStrategy extends TextEnumerationStrategy
         $this->pattern = $pattern;
     }
 
-    public function getWidthOfTheBiggestPosibleEnumerationElement(BasicList $list)
+    public function getWidthOfTheBiggestPosibleEnumerationElement(Document $document, BasicList $list)
     {
         $enumerationText = $this->assembleEnumerationText($list, count($list->getChildren()));
-        return $this->getWidthOfText($enumerationText, $list->getFontType(true), $list->getFontSizeRecursively());
+        return $this->getWidthOfText($enumerationText, $list->getFont(), $list->getFontSizeRecursively());
     }
 }

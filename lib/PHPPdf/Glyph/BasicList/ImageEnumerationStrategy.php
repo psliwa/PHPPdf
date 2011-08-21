@@ -8,6 +8,8 @@
 
 namespace PHPPdf\Glyph\BasicList;
 
+use PHPPdf\Document;
+
 use PHPPdf\Glyph\BasicList,
     PHPPdf\Engine\GraphicsContext;
 
@@ -19,14 +21,14 @@ class ImageEnumerationStrategy extends AbstractEnumerationStrategy
     private $imageWidth;
     private $imageHeight;
 
-    protected function doDrawEnumeration(BasicList $list, GraphicsContext $gc, $xCoord, $yCoord)
+    protected function doDrawEnumeration(Document $document, BasicList $list, GraphicsContext $gc, $xCoord, $yCoord)
     {
         $image = $this->getImage($list);
 
         $gc->drawImage($image, $xCoord, $yCoord - $this->imageWidth, $xCoord + $this->imageHeight, $yCoord);
     }
 
-    protected function getEnumerationElementTranslations(BasicList $list)
+    protected function getEnumerationElementTranslations(Document $document, BasicList $list)
     {
         $image = $this->getImage($list);
         $fontSize = $list->getRecurseAttribute('font-size');
@@ -81,7 +83,7 @@ class ImageEnumerationStrategy extends AbstractEnumerationStrategy
         return array($this->imageWidth, $this->imageHeight);
     }
 
-    public function getWidthOfTheBiggestPosibleEnumerationElement(BasicList $list)
+    public function getWidthOfTheBiggestPosibleEnumerationElement(Document $document, BasicList $list)
     {
         $image = $this->getImage($list);
         $fontSize = $list->getRecurseAttribute('font-size');

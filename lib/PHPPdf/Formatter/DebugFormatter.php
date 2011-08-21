@@ -8,20 +8,18 @@
 
 namespace PHPPdf\Formatter;
 
-use PHPPdf\Formatter\BaseFormatter,
-    PHPPdf\Glyph as Glyphs,
-    PHPPdf\Formatter\Chain;
+use PHPPdf\Document,
+    PHPPdf\Glyph\Glyph;
 
 /**
  * Collect debug information
  *
- * @todo implementation
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
 class DebugFormatter extends BaseFormatter
 {
-    public function format(Glyphs\Glyph $glyph, \PHPPdf\Document $document)
+    public function format(Glyph $glyph, Document $document)
     {
-        //@todo
+
     }
 }

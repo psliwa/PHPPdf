@@ -100,7 +100,7 @@ class BasicList extends Container
         parent::doDraw($document);
         
         $glyph = $this;
-        $task = new DrawingTask(function() use($glyph){
+        $task = new DrawingTask(function(Glyph $glyph, Document $document) {
             $gc = $glyph->getGraphicsContext();
 
             $enumerationStrategy = $glyph->getEnumerationStrategy();
@@ -108,11 +108,11 @@ class BasicList extends Container
             
             foreach($glyph->getChildren() as $i => $child)
             {
-                $enumerationStrategy->drawEnumeration($glyph, $gc, $i);
+                $enumerationStrategy->drawEnumeration($document, $glyph, $gc, $i);
             }
 
             $enumerationStrategy->reset();
-        });
+        }, array($this, $document));
         
         $this->addDrawingTask($task);
     }

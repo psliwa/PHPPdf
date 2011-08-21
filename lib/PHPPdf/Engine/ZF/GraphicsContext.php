@@ -235,4 +235,10 @@ class GraphicsContext implements BaseGraphicsContext
             throw new Exception('Error while bookmark adding', 0, $e);
         }
     }
+    
+    public function attachStickyNote($x1, $y1, $x2, $y2, $text)
+    {
+        $annotation = \Zend_Pdf_Annotation_Text::create($x1, $y1, $x2, $y2, $text);
+        $this->page->attachAnnotation($annotation);
+    }
 }

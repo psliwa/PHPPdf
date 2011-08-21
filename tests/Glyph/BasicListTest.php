@@ -40,6 +40,7 @@ class BasicListTest extends TestCase
         $enumerationStrategy->expects($this->once())
                             ->method('setIndex')
                             ->with(0);
+        $document = new Document();
         
         $this->list->setEnumerationStrategy($enumerationStrategy);
 
@@ -48,12 +49,12 @@ class BasicListTest extends TestCase
             $this->list->add(new Container());
             $enumerationStrategy->expects($this->at($i+1))
                                 ->method('drawEnumeration')
-                                ->with($this->list, $gc, $i);
+                                ->with($document, $this->list, $gc, $i);
         }
         $enumerationStrategy->expects($this->at($i))
                             ->method('reset');
         
-        $tasks = $this->list->getDrawingTasks(new Document());
+        $tasks = $this->list->getDrawingTasks($document);
         
         foreach($tasks as $task)
         {

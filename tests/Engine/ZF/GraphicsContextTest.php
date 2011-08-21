@@ -552,4 +552,35 @@ class GraphicsContextTest extends \TestCase
         $childOutline = $firstOutline->childOutlines[0];
         $this->assertOutline('2', $pageStub, 10, $childOutline);
     }
+    
+    /**
+     * @test
+     */
+    public function attachStickyNote()
+    {
+        $zendPageMock = $this->getMockBuilder('\Zend_Pdf_Page')
+                             ->setMethods(array('attachAnnotation'))
+                             ->disableOriginalConstructor()
+                             ->getMock();
+        $gc = new GraphicsContext(new Engine(), $zendPageMock);
+        
+        $coords = array(1, 2, 3, 4);
+        $text = 'text';
+        
+        $zendPageMock->expects($this->once())
+                     ->method('attachAnnotation')
+                     ->with($this->validateByCallback(function($actual, \PHPUnit_Framework_TestCase $testCase) use($text, $coords){
+                         $testCase->assertInstanceOf('Zend_Pdf_Annotation_Text', $actual);
+                         $rect = $actual->getResource()->Rect;
+
+                         foreach($coords as $i => $coord)
+                         {
+                             $testCase->assertEquals($coord, $rect->items[$i]->toPhp());
+                         }
+                         $actualText = $actual->getResource()->Contents->toString();
+                         $testCase->assertEquals($text, $actual->getResource()->Contents->toPhp());
+                     }, $this));
+
+        $gc->attachStickyNote($coords[0], $coords[1], $coords[2], $coords[3], $text);
+    }
 }

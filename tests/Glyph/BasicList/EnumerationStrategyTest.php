@@ -87,10 +87,10 @@ abstract class EnumerationStrategyTest extends TestCase
                  ->method('getFont')
                  ->will($this->returnValue($fontTypeMock));
                        
-        $listMock->expects($this->atLeastOnce())
-             ->method('getFontType')
-             ->with(true)
-             ->will($this->returnValue($fontTypeMock));
+//        $listMock->expects($this->atLeastOnce())
+//             ->method('getFontType')
+//             ->with(true)
+//             ->will($this->returnValue($fontTypeMock));
                        
         $gc = $this->getMockBuilder('PHPPdf\Engine\GraphicsContext')
                        ->getMock();
@@ -112,10 +112,14 @@ abstract class EnumerationStrategyTest extends TestCase
            ->with($expectedText, $expectedXCoord, $expectedYCoord, $encoding);
         $gc->expects($this->at(4))
            ->method('restoreGS');
+           
+        $document = $this->getMockBuilder('PHPPdf\Document')
+                         ->setMethods(array('getFont'))
+                         ->getMock();
 
         $this->strategy->setIndex($elementIndex);
         $this->strategy->setVisualIndex($elementIndex+1);
-        $this->strategy->drawEnumeration($listMock, $gc);
+        $this->strategy->drawEnumeration($document, $listMock, $gc);
     }
     
     public function integerProvider()

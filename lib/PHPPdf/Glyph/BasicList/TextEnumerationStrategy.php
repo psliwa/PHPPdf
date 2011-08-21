@@ -8,6 +8,8 @@
 
 namespace PHPPdf\Glyph\BasicList;
 
+use PHPPdf\Document;
+
 use PHPPdf\Engine\GraphicsContext,
     PHPPdf\Glyph\BasicList;
 
@@ -21,12 +23,12 @@ abstract class TextEnumerationStrategy extends AbstractEnumerationStrategy
     
     private $enumerationText = null;
         
-    protected function getEnumerationElementTranslations(BasicList $list)
+    protected function getEnumerationElementTranslations(Document $document, BasicList $list)
     {
         $enumerationText = $this->assembleEnumerationText($list, $this->visualIndex);
 
         $fontSize = $list->getFontSizeRecursively();
-        $font = $list->getFontType(true);
+        $font = $list->getFont();
         
         $xTranslation = 0;
         
@@ -37,7 +39,7 @@ abstract class TextEnumerationStrategy extends AbstractEnumerationStrategy
         }
         else
         {
-            $widthOfEnumerationText = $this->getWidthOfTheBiggestPosibleEnumerationElement($list) - $this->getWidthOfText($enumerationText, $font, $fontSize);
+            $widthOfEnumerationText = $this->getWidthOfTheBiggestPosibleEnumerationElement($document, $list) - $this->getWidthOfText($enumerationText, $font, $fontSize);
             $xTranslation += $widthOfEnumerationText;
         }
         
@@ -46,7 +48,7 @@ abstract class TextEnumerationStrategy extends AbstractEnumerationStrategy
         return array($xTranslation, $fontSize);
     }
     
-    protected function doDrawEnumeration(BasicList $list, GraphicsContext $gc, $xCoord, $yCoord)
+    protected function doDrawEnumeration(Document $document, BasicList $list, GraphicsContext $gc, $xCoord, $yCoord)
     {
         $encoding = $list->getEncoding();
         

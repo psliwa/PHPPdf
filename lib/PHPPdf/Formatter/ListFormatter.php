@@ -22,7 +22,7 @@ class ListFormatter extends BaseFormatter
         
         if($position === BasicList::POSITION_INSIDE)
         {
-            $widthOfEnumerationChar = $glyph->getEnumerationStrategy()->getWidthOfTheBiggestPosibleEnumerationElement($glyph);
+            $widthOfEnumerationChar = $glyph->getEnumerationStrategy()->getWidthOfTheBiggestPosibleEnumerationElement($document, $glyph);
             
             foreach($glyph->getChildren() as $child)
             {
