@@ -1,5 +1,6 @@
 <?php
 
+use PHPPdf\Glyph\Container;
 use PHPPdf\Engine\GraphicsContext;
 
 class GenericGlyphObjectMother
@@ -74,5 +75,18 @@ class GenericGlyphObjectMother
                  ->close();
 
         return $boundary;
+    }
+    
+    public function getGlyphStub($x, $y, $width, $height)
+    {
+        $boundary = $this->getBoundaryStub($x, $y, $width, $height);
+        $glyph = new Container();
+        
+        $this->test->invokeMethod($glyph, 'setBoundary', array($boundary));
+        
+        $glyph->setWidth($width);
+        $glyph->setHeight($height);
+        
+        return $glyph;
     }
 }

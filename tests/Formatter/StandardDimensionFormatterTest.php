@@ -114,4 +114,38 @@ class StandardDimensionFormatterTest extends PHPUnit_Framework_TestCase
             )),
         );
     }
+    
+    /**
+     * @test
+     */
+    public function widthCantExceedWidthOfParent()
+    {
+        $parentWidth = 100;
+        $parentHeight = 100;
+        $childWidth = 90;
+        $childHeight = 90;
+        
+        $paddingHorizontal = 10;
+        $paddingVertical = 10;
+        
+        $parentPaddingHorizontal = 2;
+        $parentPaddingVertical = 2;
+        
+        $parent = new Container();
+        $parent->setWidth($parentWidth);
+        $parent->setHeight($parentHeight);
+        $parent->setPadding($parentPaddingVertical, $parentPaddingHorizontal);
+        
+        $glyph = new Container();
+        $glyph->setWidth($childWidth);        
+        $glyph->setHeight($childHeight);    
+        $glyph->setPadding($paddingVertical, $paddingHorizontal);
+        
+        $parent->add($glyph);
+        
+        $this->formatter->format($glyph, $this->document);
+        
+        $this->assertEquals($parent->getWidthWithoutPaddings(), $glyph->getWidth());
+        $this->assertEquals($childHeight + 2*$paddingVertical, $glyph->getHeight());
+    }
 }

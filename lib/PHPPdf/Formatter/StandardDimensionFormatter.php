@@ -9,7 +9,7 @@
 namespace PHPPdf\Formatter;
 
 use PHPPdf\Formatter\BaseFormatter,
-    PHPPdf\Glyph as Glyphs,
+    PHPPdf\Glyph\Glyph,
     PHPPdf\Document;
 
 /**
@@ -19,11 +19,11 @@ use PHPPdf\Formatter\BaseFormatter,
  */
 class StandardDimensionFormatter extends BaseFormatter
 {
-    public function format(Glyphs\Glyph $glyph, Document $document)
+    public function format(Glyph $glyph, Document $document)
     {
         $parent = $glyph->getParent();
 
-        if($glyph->getWidth() === null && $glyph->getAttribute('display') === Glyphs\Glyph::DISPLAY_BLOCK && $glyph->getFloat() === Glyphs\Glyph::FLOAT_NONE)
+        if($glyph->getWidth() === null && $glyph->getAttribute('display') === Glyph::DISPLAY_BLOCK && $glyph->getFloat() === Glyph::FLOAT_NONE)
         {
             $parentWidth = $parent->getWidthWithoutPaddings();
 
@@ -33,7 +33,7 @@ class StandardDimensionFormatter extends BaseFormatter
             $glyph->setWidth($parentWidth - ($marginLeft + $marginRight));
             $glyph->setRelativeWidth('100%');
         }
-        elseif($glyph->getAttribute('display') === Glyphs\Glyph::DISPLAY_INLINE)
+        elseif($glyph->getAttribute('display') === Glyph::DISPLAY_INLINE)
         {
             $glyph->setWidth(0);
         }
@@ -47,8 +47,19 @@ class StandardDimensionFormatter extends BaseFormatter
         $paddingRight = $glyph->getPaddingRight();
         $paddingTop = $glyph->getPaddingTop();
         $paddingBottom = $glyph->getPaddingBottom();
+        
+        $prefferedWidth = $glyph->getRealWidth() + $paddingLeft + $paddingRight;
+        
+        $parent = $glyph->getParent();
+        
+        $parentWidth = $parent ? $parent->getWidthWithoutPaddings() : null;
+        
+        if($parent && $parentWidth < $prefferedWidth)
+        {
+            $prefferedWidth = $parentWidth;
+        }
 
-        $glyph->setWidth($glyph->getRealWidth() + $paddingLeft + $paddingRight);
+        $glyph->setWidth($prefferedWidth);
         $glyph->setHeight($glyph->getRealHeight() + $paddingTop + $paddingBottom);
     }
 }
