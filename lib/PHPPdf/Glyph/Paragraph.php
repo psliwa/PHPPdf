@@ -23,8 +23,6 @@ class Paragraph extends Container
     {
         parent::initialize();
         $this->setAttribute('text-align', null);
-        
-//        $this->mergeEnhancementAttributes('border', array('name' => 'border'));
     }
     
     public function getWidth()
@@ -122,7 +120,7 @@ class Paragraph extends Container
     protected function doSplit($height)
     {
         $linesToMove = array();
-        
+        $numberOfLines = count($this->lines);
         foreach($this->lines as $i => $line)
         {
             $lineEnd = $line->getYTranslation() + $line->getHeight();
@@ -133,7 +131,7 @@ class Paragraph extends Container
             }
         }
         
-        if(!$linesToMove)
+        if(!$linesToMove || count($linesToMove) == $numberOfLines)
         {
             return null;
         }

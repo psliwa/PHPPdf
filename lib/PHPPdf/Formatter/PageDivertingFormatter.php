@@ -105,7 +105,6 @@ class PageDivertingFormatter extends BaseFormatter
 
             $gap = $originalHeight - (($glyph->getFirstPoint()->getY() - $glyph->getDiagonalPoint()->getY()) + ($splittedGlyph->getFirstPoint()->getY() - $splittedGlyph->getDiagonalPoint()->getY()));
             $this->totalVerticalTranslation += $gap;
-            $glyph->resize(0, $gap);
 
             $glyphYCoordStart = $splittedGlyph->getFirstPoint()->getY();
             $this->addToSubjectOfSplitting($glyph);
