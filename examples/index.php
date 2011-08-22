@@ -6,6 +6,7 @@ ini_set('display_startup_errors', 1);
 
 set_time_limit(240);
 
+require_once __DIR__.'/get_examples.php';
 require_once __DIR__.'/../lib/PHPPdf/Autoloader.php';
 
 PHPPdf\Autoloader::register();
@@ -22,7 +23,15 @@ $facade = PHPPdf\Parser\FacadeBuilder::create()
 
 if(!isset($_GET['name']))
 {
-    die('Pass example name by "name" parameter.');
+    echo 'Pass example name by "name" parameter.<br />';
+    
+    echo 'Available examples:<br />';
+    $examples = get_examples();
+    foreach($examples as $example)
+    {
+        echo '<a href="?name='.$example.'">'.$example.'</a><br />';
+    }
+    exit();
 }
 
 $name = basename($_GET['name']);

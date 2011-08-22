@@ -6,6 +6,7 @@ ini_set('display_startup_errors', 1);
 
 set_time_limit(240);
 
+require_once __DIR__.'/get_examples.php';
 require_once __DIR__.'/../lib/PHPPdf/Autoloader.php';
 
 PHPPdf\Autoloader::register();
@@ -22,7 +23,10 @@ $facade = PHPPdf\Parser\FacadeBuilder::create()
 
 if($_SERVER['argc'] < 3) 
 {
-    die('Passe example name and destination file path, for example `cli.php example-name \some\destination\file.pdf`');
+    echo 'Pass example name and destination file path, for example `cli.php example-name \some\destination\file.pdf`'.PHP_EOL;
+    echo 'Available examples:'.PHP_EOL;
+    $examples = get_examples();
+    die(implode(PHP_EOL, $examples));
 }
 
 $name = basename($_SERVER['argv'][1]);

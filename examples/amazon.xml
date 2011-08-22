@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pdf SYSTEM "%resources%/dtd/doctype.dtd">
+<pdf>
+	<dynamic-page>
+		<placeholders>
+			<header>
+				<div class="head">
+					<img src="dir:/amazon-logo.jpg" />
+					<div>
+						<h1>Amazon Simple Storage service <span>(Version 2006-03-01)</span></h1>
+						<h2 width="40%" float="left">Quick Reference Card</h2>
+					</div>
+					<h4 class="right">Revised: 04/1/2010</h4>
+					<h4 class="right">Page <page-number /></h4>
+				</div>
+			</header>
+		</placeholders>
+		
+		<column-layout number-of-columns="3" margin-between-columns="0" class="columns">
+			<div class="bordered">
+				<h3>Service Operations</h3>
+			</div>
+			<div class="bordered">
+				<strong>GET Service</strong><nl />
+				Returns a list of all buckets owned by the authenticated request sender.
+				<p class="code">
+					GET / HTTP/1.1<nl />
+					Host: s3.amazonaws.com<nl />
+					Date: <i>date</i><nl />
+					Authorization: AWS <i>AWSAccessKeyId:signature</i><nl />
+				</p>
+			</div>
+			<div class="bordered">
+				<h3>Bucket Operations</h3>
+			</div>
+			<div class="bordered">
+				<strong>PUT Bucket</strong><nl />
+				Creates a new bucket belonging to the account of the authenticated request sender. Optionally, you can specify a EU (Ireland) or US-West (N. California) location constraint.
+				<p class="code">
+					PUT / HTTP/1.1<nl />
+					Host: <i>destinationBucket</i>.s3.amazonaws.com<nl />
+					Date: <i>date</i><nl />
+					Authorization: AWS <i>AWSAccessKeyId:signature</i><nl />
+					Content-Length: {0 | <i>length</i>}<nl />
+					[<i>&lt;CreateBucketConfiguration&gt; &nbsp;&lt;LocationConstraint&gt;EU&lt;/LocationConstraint&gt; &lt;/CreateBucketConfiguration&gt;</i>]
+				</p>
+			</div>
+			<div class="bordered">
+				<strong>GET Bucket</strong><nl />
+				Lists information about the objects in a bucket for a user that has read access to the bucket.
+				<p class="code">
+					GET ?prefix=<i>prefix</i>&amp;marker=<i>marker</i>&amp;max-keys=<i>maxkeys</i>&amp;<nl />
+					delimiter=<i>delimiter</i> HTTP/1.1<nl />
+					Host: <i>destinationBucket</i>.s3.amazonaws.com<nl />
+					Date: <i>date</i><nl />
+					Authorization: AWS <i>AWSAccessKeyId:signature</i>
+				</p>
+			</div>
+			<div class="bordered">
+				<strong>GET Bucket location</strong><nl />
+				Lists the location constraint of the bucket for the bucketm owner.
+				<p class="code">
+					GET /?location HTTP/1.1<nl />
+					Host: <i>destinationBucket</i>.s3.amazonaws.com<nl />
+					Date: <i>date</i><nl />
+					Authorization: AWS <i>AWSAccessKeyId:signature</i><nl />
+				</p>
+			</div>
+			<div class="bordered">
+				<strong>DELETE Bucket</strong><nl />
+				Deletes the specified bucket. All objects in the bucket must be deleted before the bucket itself can be deleted.
+				<p class="code">
+					DELETE / HTTP/1.1<nl />
+					Host: <i>destinationBucket</i>.s3.amazonaws.com<nl />
+					Date: <i>date</i><nl />
+					Authorization: AWS <i>AWSAccessKeyId:signature</i>
+				</p>
+			</div>
+			<div class="bordered">
+				<strong>POST Object</strong><nl />
+				For more information about POST, refer to the Amazon Simple Storage Service Developer Guide.
+			</div>
+			<div class="bordered">
+				<h3>Object Operations</h3>
+			</div>
+			<div class="bordered">
+				<strong>GET Object</strong><nl />
+				Gets an object for a user that has read access to the object.
+				<p class="code">
+					GET /<i>destinationObject</i> HTTP/1.1<nl />
+					Host: <i>destinationBucket</i>.s3.amazonaws.com<nl />
+					Date: <i>date</i><nl />
+					Authorization: AWS AWSAccessKeyId:signature<nl />
+					[Range:bytes=<i>byte_range</i>]<nl />
+					[x-amz-metadata-directive: <i>metadata_directive</i>]<nl />
+					[x-amz-if-match: <i>etag</i>]<nl />
+					[x-amz-if-none-match: <i>etag</i>]<nl />
+					[x-amz-if-unmodified-since: <i>time_stamp</i>]<nl />
+					[x-amz-if-modified-since: <i>time_stamp</i>]
+				</p>
+			</div>
+			<div class="bordered">
+				<strong>PUT Object</strong><nl />
+				Adds an object to a bucket for a user that has write access to the bucket. A success response indicates the object was successfully stored; if the object already exists, it will be overwritten.
+				<p class="code">
+					PUT /destinationObject HTTP/1.1<nl />
+					Host: <i>destinationBucket</i>.s3.amazonaws.com<nl />
+					Date: <i>date</i><nl />
+					Authorization: AWS <i>AWSAccessKeyId:signature</i><nl />
+					Content-Length: <i>length</i><nl />
+					Content-MD5: <i>md5_digest</i><nl />
+					Content-Type: <i>type</i><nl />
+					Content-Disposition: <i>object_information</i><nl />
+					Content-Encoding: <i>encoding</i><nl />
+					Cache-Control: <i>caching</i><nl />
+					Expires: <i>expiration</i><nl />
+					<i>&lt;request metadata&gt;</i>
+				</p>
+			</div>
+			<div class="bordered">
+				<strong>COPY Object</strong><nl />
+				Copies an object for a user that has write access to the bucket and read access to the object. All headers prefixed with x-amz- must be signed, including x-amz-copy-source.
+				<p class="code">
+					PUT /<i>destinationObject</i> HTTP/1.1<nl />
+					Host: <i>destinationBucket</i>.s3.amazonaws.com<nl />
+					Date: <i>date</i><nl />
+					Authorization: AWS <i>AWSAccessKeyId:signature</i><nl />
+					x-amz-copy-source: /<i>source_bucket</i>/<i>sourceObject</i><nl />
+					[x-amz-metadata-directive: <i>metadata_directive</i>]<nl />
+					[x-amz-copy-source-if-match: <i>etag</i>]<nl />
+					[x-amz-copy-source-if-none-match: <i>etag</i>]<nl />
+					[x-amz-copy-source-if-unmodified-since:<nl />
+					<i>time_stamp</i>]<nl />
+					[x-amz-copy-source-if-modified-since: <i>time_stamp</i>]<nl />
+					<i>&lt;request metadata&gt;</i>
+				</p>
+			</div>
+			<div class="bordered">
+				<strong>HEAD Object</strong><nl />
+				Retrieves information about an object for a user with read access without fetching the object.
+				<p class="code">
+					HEAD /<i>destinationObject</i> HTTP/1.1<nl />
+					Host: <i>destinationBucket</i>.s3.amazonaws.com<nl />
+					Date: <i>date</i><nl />
+					Authorization: AWS <i>AWSAccessKeyId:signature</i>
+				</p>
+			</div>
+			<div class="bordered">
+				<strong>DELETE Object</strong><nl />
+				Deletes the specified object. Once deleted, there is no method to restore or undelete an object.
+				<p class="code">
+					DELETE / HTTP/1.1<nl />
+					Host: <i>destinationBucket</i>.s3.amazonaws.com<nl />
+					Date: <i>date</i><nl />
+					Authorization: AWS <i>AWSAccessKeyId:signature</i>
+				</p>
+			</div>
+			<div class="bordered">
+				<strong>POST Object</strong><nl />
+				Adds an object to a bucket using forms.
+				<p class="code">
+					POST / HTTP/1.1<nl />
+					Host: <i>destinationBucket</i>.s3.amazonaws.com<nl />
+					User-Agent: <i>browser_data</i><nl />
+					Accept: <i>file_types</i><nl />
+					Accept-Language: <i>locales</i><nl />
+					Accept-Encoding: <i>encoding</i><nl />
+					Accept-Charset: <i>character_set</i><nl />
+					Keep-Alive: <i>300</i><nl />
+					Connection: <i>keep-alive</i><nl />
+					Content-Type: multipart/form-data; boundary=----------ID<nl />
+					Content-Length: <i>length</i><nl />
+					<i>&lt;multiform_data&gt;</i><nl />
+					Note: For more information about the multiform data, refer to the Amazon Simple Storage Service Developer Guide.
+				</p>
+			</div>
+			
+			<break />
+			<div class="bordered">
+				<h3>Miscellaneous</h3>
+			</div>
+			<div class="bordered">
+				<strong>Bucket Name Restrictions</strong><nl />
+				Amazon S3 bucket names must:
+				<ul>
+					<li>Only contain lowercase letters, numbers, periods (.), and dashes (-)</li>
+					<li>Start with a number or letter</li>
+					<li>Be between 3 and 63 characters long</li>
+					<li>Not be in an IP address style (e.g., "192.168.5.4")</li>
+					<li>Not end with a dash</li>
+					<li>Not contain dashes next to periods (e.g., "my-.bucket.com" and "my.-bucket" are invalid)</li>
+				</ul>
+				<b>Note:</b> Although legacy bucket names can be up to 255 characters, include underscores, and end with a dash, they are not recommended.
+			</div>
+			<div class="bordered">
+				<strong>REST Request Signature</strong><nl/>
+				Construct a signature by making an RFC2104 HMAC-SHA1 of the following and converting it to Base64.
+				<div class="half left">
+					<strong>Item</strong><nl />
+					<p class="code small">
+						HTTP-Verb + "\n" + <nl />
+						[Content-MD5] + "\n" + <nl />
+						[Content-Type] + "\n" + <nl />
+						Date + "\n" + <nl />
+						[CanonicalizedAmzHeaders +/n] <br />
+						[CanonicalizedResource]
+					</p>
+				</div>
+				<div class="half right">
+					<strong>Example</strong><nl />
+					<p class="code small">
+						GET\n<nl />
+						4gJE4saaMU4BqNR0kLY+lw==\n or \n<nl />
+						image/jpeg\n or \n<nl />
+						Tue, 6 Mar 2007 19:42:41 +0000\n<nl />
+						x-amz-acl:public-read\n<nl />
+						x-amz-meta-checksum:crc32\n<nl />
+						/mybucket/photos/lolcatz.jpg
+					</p>
+				</div>
+				The content cannot contain whitespaces and \n represents Unicode code point U+000A.
+			</div>
+			
+			<break />
+			<div class="bordered">
+				<h3>Versioning</h3>
+			</div>
+			<div class="bordered">
+				<strong>GET Bucket Object versions</strong>
+				<p class="code">
+					Lists metadata about all of the versions of objects in a bucket.<nl />
+					GET /?<i>versions</i> HTTP/1.1<nl />
+					Host: <i>BucketName</i>.s3.amazonaws.com
+				</p>
+				
+				<strong>GET Bucket versioning</strong>
+				<p class="code">
+					Returns the versioning state of a bucket.<nl />
+					GET /?<i>versioning</i> HTTP/1.1<nl />
+					Host: <i>myBucket</i>.s3.amazonaws.com
+				</p>
+				
+				<strong>PUT Bucket versioning</strong>
+				<p class="code">
+					Sets the versioning state of an existing bucket.<nl />
+					PUT /?<i>versioning</i> HTTP/1.1<nl />
+					Host: <i>bucket</i>.s3.amazonaws.com<nl />
+					<i>&lt;VersioningConfiguration xmlns="http://s3.amazonaws.com/ doc/2006-03-01/"&gt; &lt;Status>Enabled&lt;/Status&gt; &lt;/VersioningConfiguration&gt;</i>
+				</p>
+				
+				<strong>DELETE Object versionId</strong>
+				<p class="code">
+					Removes a specific object version.<nl />
+					DELETE /<i>my-third-image.jpg</i>?<nl />
+					Host: <i>bucket</i>.s3.amazonaws.com<nl />
+					versionId=&lt;<i>versionID</i>&gt;
+				</p>
+				
+				<strong>GET Object versionId</strong>
+				<p class="code">
+					Returns a specific object version.<nl />
+					GET /<i>myObject</i>?<i font-style="bold-italic">versionId</i>=&lt;<i>versionID</i>&gt;<nl />
+					Host: <i>bucket</i>.s3.amazonaws.com
+				</p>
+				
+				<strong>HEAD Object versionId</strong>
+				<p class="code">
+					Returns metadata of a specific object version.<nl />
+					HEAD /<i>myObject</i>?<i font-style="bold-italic">versionId</i>=&lt;<i>versionID</i>><nl />
+					Host: <i>bucket</i>.s3.amazonaws.com
+				</p>
+				
+				<strong>PUT Object copy versionId</strong>
+				<p class="code">
+					Copies a specific object version.<nl />
+					PUT /<i>my-second-image.jpg</i> HTTP/1.1<nl />
+					Host: <i>bucket</i>.s3.amazonaws.com<nl />
+					Date: Wed, 28 Oct 2009 22:32:00 GMT<nl />
+					x-amz-copy-source: /bucket/myimage.<nl />
+					jpg?<i font-style="bold-italic">versionId</i>=&lt;<i>versionID</i>&gt;
+				</p>
+			</div>
+
+		</column-layout>
+	</dynamic-page>
+</pdf>
