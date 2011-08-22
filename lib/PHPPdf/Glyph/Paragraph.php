@@ -202,7 +202,8 @@ class Paragraph extends Container
         }
         
         $paragraphProduct->translate(0, $yTranslation);
-        $this->resize(0, $yTranslation);
+        $paragraphProduct->resize(0, -$yTranslation);
+        $paragraphProduct->resize(0, $yTranslation);
 
         return $paragraphProduct;
     }

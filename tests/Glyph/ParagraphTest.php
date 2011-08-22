@@ -207,6 +207,12 @@ class ParagraphTest extends TestCase
         
         $paragraphProduct = $paragraph->split(225);
         
+        $this->assertEquals(200, $paragraph->getHeight());
+        $this->assertEquals(200, $paragraph->getFirstPoint()->getY() - $paragraph->getDiagonalPoint()->getY());
+
+        $this->assertEquals(300, $paragraphProduct->getHeight());
+        $this->assertEquals(300, $paragraphProduct->getFirstPoint()->getY() - $paragraphProduct->getDiagonalPoint()->getY());
+        
         $this->assertTrue($paragraphProduct !== null);
         
         $this->assertEquals(200, $paragraph->getHeight());
