@@ -371,7 +371,27 @@ XML;
 
         $constraint = $this->getConstraint($resultConstraint, 'some-tag');
         
-        $this->assertNotNull($constraint);
+        $this->assertNotEquals(false, $constraint);
         $this->assertEquals(array('someEnhancement' => array('name' => 'someEnhancement', 'attribute' => 'value')), $constraint->getEnhancementBag()->getAll());
+    }
+    
+    /**
+     * @test
+     */
+    public function validInterpretSelectorsAsShortTag()
+    {
+        $xml = <<<XML
+<stylesheet>
+	<some-tag attribute1="value1" />
+	<another-tag attribute2="value2"></another-tag>
+</stylesheet>
+XML;
+
+        $resultConstraint = $this->parser->parse($xml);
+
+        $constraint = $this->getConstraint($resultConstraint, 'another-tag');
+
+        $this->assertNotEquals(false, $constraint);
+        $this->assertEquals(array('attribute2' => 'value2'), $constraint->getAttributeBag()->getAll());
     }
 }

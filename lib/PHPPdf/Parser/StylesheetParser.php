@@ -124,6 +124,8 @@ class StylesheetParser extends XmlParser
             throw new ParseException(sprintf('Unknown tag "%s" in stylesheet section.', $tag));
         }
         
+        $isEmptyElement = $reader->isEmptyElement;
+        
         $lastConstraint = $this->getLastElementFromStack();
 
         $constraint = new StylesheetConstraint();
@@ -148,6 +150,11 @@ class StylesheetParser extends XmlParser
         $this->addConstraintsFromAttributes($constraint, $reader);
         
         $this->pushOnStack($constraint);
+        
+        if($isEmptyElement)
+        {
+            $this->parseEndElement($reader);
+        }
     }
     
     public function addConstraintsFromAttributes(BagContainer $constraint, \XMLReader $reader, array $ignoredAttributes = array(self::ATTRIBUTE_CLASS))
