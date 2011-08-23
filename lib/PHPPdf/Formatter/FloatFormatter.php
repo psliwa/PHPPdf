@@ -178,7 +178,7 @@ class FloatFormatter extends BaseFormatter
 
             if($overflowed)
             {
-                $preferredYCoord = $sibling->getDiagonalPoint()->getY() - ($sibling->getMarginBottom() + $glyph->getMarginTop());
+                $preferredYCoord = $sibling->getDiagonalPoint()->getY() - $glyph->getPaddingTop() - ($sibling->getMarginBottom() + $glyph->getMarginTop());
                 $preferredXCoord = $this->correctXCoordWithParent($glyph, $sibling);
             }
         }

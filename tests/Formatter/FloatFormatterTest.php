@@ -293,24 +293,52 @@ class FloatFormatterTest extends PHPUnit_Framework_TestCase
     
     /**
      * @test
+     * @dataProvider paddingProvider
      */
-    public function moveGlyphWithRightFloatUnderPreviousSiblingIfPreviousSiblingHasLeftFloatAndBothElementsDontFit()
+    public function moveGlyphWithRightFloatUnderPreviousSiblingIfPreviousSiblingHasLeftFloatAndBothElementsDontFit($firstContainerFloat, $secondContainerFloat, $heightOfFirstContainer, $paddingTopOfSecondContainer)
     {
-        $container = $this->getGlyphMock(0, 500, 500, 500, array('getChildren', 'setHeight'), false);
+        $heightOfParentContainer = 500;
+        $widthOfParentContainer = 500;
+        $container = $this->getGlyphMock(0, $heightOfParentContainer, $widthOfParentContainer, $heightOfParentContainer, array('getChildren', 'setHeight'), false);
         
-        $containerLeftFloated = $this->getGlyphMockWithFloatAndParent(0, 500, 300, 200, 'left', $container);
-        $containerRightFloated = $this->getGlyphMockWithFloatAndParent(0, 300, 300, 100, 'right', $container);
+        $widthOfFirstContainer = 300;
+        $firstPointYCoordOfSecondContainer = $heightOfParentContainer - $heightOfFirstContainer;// - $paddingTopOfSecondContainer;
+        $heightOfSecondContainer = 100;
+        $widthOfSecondContainer = 300;
+        
+        $firstContainer = $this->getGlyphMockWithFloatAndParent(0, $heightOfParentContainer, $widthOfFirstContainer, $heightOfFirstContainer, $firstContainerFloat, $container);
+        $secondContainer = $this->getGlyphMockWithFloatAndParent(0, $firstPointYCoordOfSecondContainer, $widthOfSecondContainer, $heightOfSecondContainer, $secondContainerFloat, $container);
+        $secondContainer->setAttribute('padding-top', $paddingTopOfSecondContainer);
         
         $container->expects($this->atLeastOnce())
                   ->method('getChildren')
-                  ->will($this->returnValue(array($containerLeftFloated, $containerRightFloated)));
+                  ->will($this->returnValue(array($firstContainer, $secondContainer)));
                   
         $this->formatter->format($container, $this->document);
         
-        $this->assertEquals(0, $containerLeftFloated->getFirstPoint()->getX());
-        $this->assertEquals(200, $containerRightFloated->getFirstPoint()->getX());
-        $this->assertEquals(500, $containerLeftFloated->getFirstPoint()->getY());
-        $this->assertEquals(300, $containerRightFloated->getFirstPoint()->getY());
+        $expectedXCoordOfFirstContainer = $firstContainerFloat == Glyph::FLOAT_LEFT ? 0 : ($widthOfParentContainer - $widthOfSecondContainer);
+        $this->assertEquals($expectedXCoordOfFirstContainer, $firstContainer->getFirstPoint()->getX());
+        
+        $expectedXCoordOfSecondContainer = $secondContainerFloat == Glyph::FLOAT_LEFT ? 0 : ($widthOfParentContainer - $widthOfSecondContainer);
+        $this->assertEquals($expectedXCoordOfSecondContainer, $secondContainer->getFirstPoint()->getX());
+        
+        
+        $this->assertEquals($heightOfParentContainer, $firstContainer->getFirstPoint()->getY());
+        
+        $expectedYCoordOfSecondContainer = $heightOfParentContainer - $heightOfFirstContainer;
+        $this->assertEquals($expectedYCoordOfSecondContainer, $secondContainer->getFirstPoint()->getY());
+    }
+    
+    public function paddingProvider()
+    {
+        return array(
+            array('left', 'right', 200, 0),
+            array('left', 'left', 200, 0),
+            array('left', 'left', 200, 10),
+            array('right', 'left', 200, 10),
+            array('left', 'right', 200, 10),
+            array('right', 'right', 200, 10),
+        );
     }
     
     /**
