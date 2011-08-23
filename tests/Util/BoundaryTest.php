@@ -218,4 +218,25 @@ class BoundaryTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($this->boundary->intersects($clone));
         $this->assertTrue($clone->intersects($this->boundary));
     }
+    
+    /**
+     * @test
+     */
+    public function intersectingOccursWhenAtLeastOnePointIsContainedInBySecondBoundary()
+    {
+        $this->boundary->setNext(0, 100)
+                       ->setNext(100, 100)
+                       ->setNext(100, 0)
+                       ->setNext(0, 0)
+                       ->close();
+        $secondBoundary = new Boundary();
+        $secondBoundary->setNext(99, 100)
+                       ->setNext(190, 100)
+                       ->setNext(190, 50)
+                       ->setNext(99, 50)
+                       ->close();
+                       
+        $this->assertTrue($this->boundary->intersects($secondBoundary));
+        $this->assertTrue($secondBoundary->intersects($this->boundary));
+    }
 }

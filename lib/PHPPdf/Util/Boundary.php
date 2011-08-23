@@ -106,6 +106,14 @@ class Boundary implements \Countable, \Iterator, \ArrayAccess, \Serializable
                 return true;
             }
         }
+        
+        foreach($this as $point)
+        {
+            if($boundary->contains($point))
+            {
+                return true;
+            }
+        }
 
         $centerPoint = $this->getPointBetween($firstPoint, $diagonalPoint);
 

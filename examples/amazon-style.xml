@@ -11,8 +11,7 @@
 			</h1>
 			<h2 font-style="normal" margin-top="5"></h2>
 		</div>
-		<!--  jak się da text-align="left" to elementy nachodzą na inne -->
-		<any class="right" width="200" text-align="right" float="right"></any>
+		<any class="right" width="150" text-align="right" float="right"></any>
 	</any>
 	
 	<any class="columns">
