@@ -55,7 +55,7 @@ class ParagraphFormatter extends BaseFormatter
     	        $newLineWidth = $currentWidthOfLine + $wordSize;
     	        
     	        $endXCoord = $newLineWidth + $currentPoint->getX();
-    	        $maxLineXCoord = $glyph->getFirstPoint()->getX() + $glyph->getWidth();
+    	        $maxLineXCoord = $this->getMaxXCoord($glyph);
     	        $isEndOfLine = $endXCoord > $maxLineXCoord;
     	        
     	        if($isEndOfLine)
@@ -108,6 +108,20 @@ class ParagraphFormatter extends BaseFormatter
             $line->addParts($partsOfLine);
             $glyph->addLine($line);
     	}
+    }
+    
+    private function getMaxXCoord(Glyph $glyph)
+    {
+        for($parent=$glyph->getParent(); $parent && !$parent->getWidth(); $parent=$parent->getParent())
+        {
+        }
+        
+        if(!$glyph->getWidth() && $parent && $parent->getWidth())
+        {
+            $glyph = $parent;
+        }
+
+        return $glyph->getFirstPoint()->getX() + $glyph->getWidth();
     }
     
     private function getStartPoint($align, $widthOfWordsLine, $maxAllowedXCoordOfLine, Point $firstPoint)

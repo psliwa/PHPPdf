@@ -33,7 +33,7 @@ class ParagraphFormatterTest extends TestCase
     public function calculateTextsPositions($x, $width, $height, array $fontSizes, array $wordsSizes, array $expectedPositions)
     {
         $paragraph = $this->createParagraph($x, $height, $width, $height);
-        $this->createTextGlyphAndAddToParagraph($wordsSizes, $fontSizes, $paragraph);
+        $this->createTextGlyphsAndAddToParagraph($wordsSizes, $fontSizes, $paragraph);
         
         $this->formatter->format($paragraph, $this->document);
         
@@ -150,22 +150,51 @@ class ParagraphFormatterTest extends TestCase
         return $paragraph;
     }
     
-    private function createTextGlyphAndAddToParagraph(array $wordsSizes, array $fontSizes, Paragraph $paragraph)
+    private function createTextGlyphsAndAddToParagraph(array $wordsSizes, array $fontSizes, Paragraph $paragraph)
     {
         foreach($wordsSizes as $index => $wordsSizesForGlyph)
         {
-            $textGlyph = new Text();
-            
-            list($words, $sizes) = $wordsSizesForGlyph;
-            $textGlyph->setWordsSizes($words, $sizes);
-            $textGlyph->setFontSize($fontSizes[$index]);
-            
-            $paragraph->add($textGlyph);
+            $this->createTextGlyph($wordsSizesForGlyph, $fontSizes[$index], $paragraph);
         }
+    }
+    
+    private function createTextGlyph(array $wordsSizes, $fontSize, Paragraph $paragraph)
+    {
+        $textGlyph = new Text();
+        
+        list($words, $sizes) = $wordsSizes;
+        $textGlyph->setWordsSizes($words, $sizes);
+        $textGlyph->setFontSize($fontSize);
+        
+        $paragraph->add($textGlyph);
+        
+        return $textGlyph;
     }
     
     private function getLineHeight($fontSize)
     {
         return $fontSize*1.2;
+    }
+    
+    /**
+     * @test
+     */
+    public function useWidthOfAncestorIfParagraphParentsWidthIsNull()
+    {
+        $width = 300;        
+        $grandparent = $this->objectMother->getGlyphStub(0, 500, $width, 100);        
+        $paragraph = $this->createParagraph(0, 500, 0, 100);
+
+        $grandparent->add($paragraph->getParent());
+        
+        $wordsSizes = array(10, 20, 30);
+        $text = $this->createTextGlyph(array(
+            array('ab', 'cd', 'ef'),
+            $wordsSizes,
+        ), 12, $paragraph);
+
+        $this->formatter->format($paragraph, $this->document);
+        
+        $this->assertEquals(1, count($paragraph->getLines()));
     }
 }

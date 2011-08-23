@@ -5,13 +5,14 @@
 	<any class="head" width="100%" height="55">
 		<img height="50" width="136" float="left"></img>
 		
-		<div float="left" width="500" margin-left="5">
+		<div float="left" margin-left="5">
 			<h1 font-style="normal" font-size="22" margin-bottom="0">
 				<span font-size="16"></span>
 			</h1>
 			<h2 font-style="normal" margin-top="5"></h2>
 		</div>
-		<any class="right" width="150" text-align="right" float="right"></any>
+		<any class="right" text-align="right" float="right">
+		</any>
 	</any>
 	
 	<any class="columns">

@@ -10,8 +10,10 @@
 						<h1>Amazon Simple Storage service <span>(Version 2006-03-01)</span></h1>
 						<h2 width="40%" float="left">Quick Reference Card</h2>
 					</div>
-					<h4 class="right">Revised: 04/1/2010</h4>
-					<h4 class="right">Page <page-number /></h4>
+					<h4 class="right">
+						Revised: 04/1/2010<br />Page <page-number />
+					</h4>
+
 				</div>
 			</header>
 		</placeholders>
