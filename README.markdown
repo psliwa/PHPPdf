@@ -232,6 +232,8 @@ Attributes
 * bookmark - create bookmark with given title associated with the tag
 * note - create sticky note associated with tag
 * dump - allowed values: true or false. Create sticky note with debug informations (attributes, position etc.)
+* rotate - angle of element rotation. This attribute isn't fully implemented, works corectly for watermarks (see "Watermarks" section). Possible values: XXdeg (in degrees), XX (in radians), diagonally, -diagonally.
+* alpha - possible values: from 0 to 1. Transparency for element and his children.
 
 Complex attributes
 ------------------
@@ -249,6 +251,7 @@ Complex attributes
     - image: background image
     - repeat: way of image repeating (none|x|y|all)
     - radius: rounding background corners (for now only works with color background)
+    - use-real-dimension: attribute uses only by page (or dynamic-page). True for filling also margins, false in otherwise.
     - image-width: custom width of background image, percentage values are allowed
     - image-height: custom height of background image, percentage values are allowed
 
@@ -376,6 +379,26 @@ In header and footer is special tag "page-info". It displays current page inform
             <page-info format="page %s from %s"></page-info>
         </header>
     <!-- ... -->
+
+Watermarks
+----------
+
+Page has "watermark" placeholder. As watermark may be set block and container elements, for instance: div, p, h1 (no span, plain text or img). If you want to use image as watermark, you should wrap tag img into div tag.
+
+Example:
+
+    <pdf>
+        <dynamic-page>
+            <placeholders>
+                <watermark>
+                    <!-- as rotate can you use absolute values (45deg - in degrees, 0.123 - in radians) or relative values ("diagonally" and "-diagonally" - angle between diagonal and base side of the page) -->
+                    <div rotate="diagonally" alpha="0.1">
+                        <img src="path/to/image.png" />
+                    </div>
+                </watermark>
+            </placeholders>
+        </dynamic-page>
+    </pdf>
 
 Separate page on columns
 -------------------------

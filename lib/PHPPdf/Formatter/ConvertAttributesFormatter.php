@@ -9,7 +9,7 @@
 namespace PHPPdf\Formatter;
 
 use PHPPdf\Formatter\BaseFormatter,
-    PHPPdf\Glyph as Glyphs,
+    PHPPdf\Glyph\Glyph,
     PHPPdf\Util,
     PHPPdf\Document;
 
@@ -20,13 +20,14 @@ use PHPPdf\Formatter\BaseFormatter,
  */
 class ConvertAttributesFormatter extends BaseFormatter
 {
-    public function format(Glyphs\Glyph $glyph, Document $document)
+    public function format(Glyph $glyph, Document $document)
     {
         $this->convertPercentageDimensions($glyph);
         $this->convertAutoMargins($glyph);
+        $this->convertDegreesToRadians($glyph);
     }
 
-    private function convertPercentageDimensions(Glyphs\Glyph $glyph)
+    private function convertPercentageDimensions(Glyph $glyph)
     {       
         $glyph->convertScalarAttribute('width');
         $glyph->convertScalarAttribute('height');
@@ -37,7 +38,7 @@ class ConvertAttributesFormatter extends BaseFormatter
         return Util::convertFromPercentageValue($percent, $value);
     }
 
-    private function convertAutoMargins(Glyphs\Glyph $glyph)
+    private function convertAutoMargins(Glyph $glyph)
     {
         $parent = $glyph->getParent();
 
@@ -64,21 +65,23 @@ class ConvertAttributesFormatter extends BaseFormatter
         }
     }
 
-    private function hasAutoMargins(Glyphs\Glyph $glyph)
+    private function hasAutoMargins(Glyph $glyph)
     {
         $marginLeft = $glyph->getMarginLeft();
         $marginRight = $glyph->getMarginRight();
 
-        return ($marginLeft === Glyphs\Glyph::MARGIN_AUTO && $marginRight === Glyphs\Glyph::MARGIN_AUTO);
+        return ($marginLeft === Glyph::MARGIN_AUTO && $marginRight === Glyph::MARGIN_AUTO);
     }
-
-    private function convertColorAttributes(Glyphs\Glyph $glyph, Document $document)
+    
+    private function convertDegreesToRadians(Glyph $glyph)
     {
-        $colorAttributes = array('color');
-
-        foreach($colorAttributes as $attribute)
+        $rotate = $glyph->getAttribute('rotate');
+        
+        if($rotate !== null && strpos($rotate, 'deg') !== false)
         {
-            $this->convertColorAttribute($glyph, $attribute, $document);
+            $degrees = (float) $rotate;
+            $radians = deg2rad($degrees);
+            $glyph->setAttribute('rotate', $radians);
         }
     }
 }

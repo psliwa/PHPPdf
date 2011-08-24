@@ -382,25 +382,10 @@ class Page extends Container
     
     public function setWatermark(Container $watermark)
     {
-        $this->throwExceptionIfHeightIsntSet($watermark);
         $watermark->setParent($this);
-        $watermark->setAttribute('static-size', true);
-        
-        $boundary = $this->getBoundary();
-        $height = $watermark->getHeight();
-        $middlePoint = $this->getMiddlePoint()->translate(0, -$height/2);
-
-
+        $watermark->setAttribute('vertical-align', self::VERTICAL_ALIGN_MIDDLE);
+        $watermark->setHeight($this->getHeight());
         $watermark->setWidth($this->getWidth());
-
-        $firstPoint = $boundary->getFirstPoint();
-        $diagonalPoint = $boundary->getDiagonalPoint();
-        
-        $watermark->getBoundary()->setNext($firstPoint->getX(), $middlePoint->getY())
-                              ->setNext($diagonalPoint->getX(), $middlePoint->getY())
-                              ->setNext($diagonalPoint->getX(), $middlePoint->getY() - $height)
-                              ->setNext($firstPoint->getX(), $middlePoint->getY() - $height)
-                              ->close();
 
         $this->watermark = $watermark;
     }

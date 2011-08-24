@@ -1,5 +1,6 @@
 <?php
 
+use PHPPdf\Glyph\Glyph;
 use PHPPdf\Util\DrawingTask;
 use PHPPdf\Document;
 use PHPPdf\Glyph\Page;
@@ -364,12 +365,8 @@ class PageTest extends TestCase
         
         $this->page->setWatermark($watermark);
         
-        $middlePoint = $this->page->getMiddlePoint();
-        
-        $expectedFirstYCoord = $middlePoint->getY() + $watermark->getHeight()/2;
-        $this->assertEquals($expectedFirstYCoord, $watermark->getFirstPoint()->getY());
-        
-        $expectedDiagonalYCoord = $middlePoint->getY() - $watermark->getHeight()/2;
-        $this->assertEquals($expectedDiagonalYCoord, $watermark->getDiagonalPoint()->getY());
+        $this->assertEquals(Glyph::VERTICAL_ALIGN_MIDDLE, $watermark->getAttribute('vertical-align'));
+        $this->assertEquals($this->page->getHeight(), $watermark->getHeight());
+        $this->assertEquals($this->page->getWidth(), $watermark->getWidth());
     }
 }

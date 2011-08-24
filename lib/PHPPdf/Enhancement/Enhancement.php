@@ -80,7 +80,7 @@ abstract class Enhancement
         if($rotationGlyph)
         {
             $middlePoint = $rotationGlyph->getMiddlePoint();
-            $graphicsContext->rotate($middlePoint->getX(), $middlePoint->getY(), $rotationGlyph->getAttribute('rotate'));
+            $graphicsContext->rotate($middlePoint->getX(), $middlePoint->getY(), $rotationGlyph->getRotate());
         }
         
         if($alpha !== null)

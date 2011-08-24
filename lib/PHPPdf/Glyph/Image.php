@@ -43,7 +43,7 @@ class Image extends Glyph
             if($rotationGlyph)
             {
                 $middlePoint = $rotationGlyph->getMiddlePoint();
-                $gc->rotate($middlePoint->getX(), $middlePoint->getY(), $rotationGlyph->getAttribute('rotate'));
+                $gc->rotate($middlePoint->getX(), $middlePoint->getY(), $rotationGlyph->getRotate());
             }
 
             list($x, $y) = $glyph->getStartDrawingPoint();

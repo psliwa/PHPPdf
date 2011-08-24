@@ -51,7 +51,9 @@ abstract class Glyph implements Drawable, GlyphAware, \ArrayAccess, \Serializabl
     const TEXT_DECORATION_UNDERLINE = 'underline';
     const TEXT_DECORATION_LINE_THROUGH = 'line-through';
     const TEXT_DECORATION_OVERLINE = 'overline';
-    
+    const ROTATE_DIAGONALLY = 'diagonally';
+    const ROTATE_OPPOSITE_DIAGONALLY = '-diagonally';
+
     private static $attributeSetters = array();
     private static $attributeGetters = array();
     private static $initialized = array();
@@ -718,6 +720,28 @@ abstract class Glyph implements Drawable, GlyphAware, \ArrayAccess, \Serializabl
         return $this->getRecurseAttribute('alpha');
     }
     
+    public function getRotate()
+    {
+        $rotate = $this->getAttribute('rotate');
+        if(in_array($rotate, array(self::ROTATE_DIAGONALLY, self::ROTATE_OPPOSITE_DIAGONALLY)) && ($page = $this->getPage()))
+        {
+            $width = $page->getWidth();
+            $height = $page->getHeight();
+            $d = sqrt($width*$width + $height*$height);
+
+            $angle = $d == 0 ? 0 : acos($width/$d);
+            
+            if($rotate === self::ROTATE_OPPOSITE_DIAGONALLY)
+            {
+                $angle = -$angle;
+            }
+            
+            $rotate = $angle;
+        }
+
+        return $rotate === null ? null : (float) $rotate;
+    }
+    
     public function setFontSize($size)
     {
         $this->setAttributeDirectly('font-size', (int)$size);
@@ -1331,9 +1355,9 @@ abstract class Glyph implements Drawable, GlyphAware, \ArrayAccess, \Serializabl
         if($this->ancestorWithRotation === null)
         {
             $parent = $this->getParent();
-            $this->ancestorWithRotation = $this->getAttribute('rotate') === null ? ($parent ? $parent->getAncestorWithRotation() : false) : $this;
+            $this->ancestorWithRotation = $this->getRotate() === null ? ($parent ? $parent->getAncestorWithRotation() : false) : $this;
         }
-        
+
         return $this->ancestorWithRotation;
     }
 }

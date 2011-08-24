@@ -74,4 +74,35 @@ class ConvertAttributesFormatterTest extends PHPUnit_Framework_TestCase
             array(200, 100, 0, 0), // if child is wider than parent, margins should be set as "0" and parent width should be set as child width
         );
     }
+    
+    /**
+     * @test
+     * @dataProvider angleProvider
+     */
+    public function convertRotateAngleFronDegreesToRadians($angle, $expectedRadians)
+    {
+        $glyph = new Container();
+        $glyph->setAttribute('rotate', $angle);
+        
+        $this->formatter->format($glyph, $this->document);
+        
+        if($angle === null)
+        {
+            $this->assertNull($glyph->getAttribute('rotate'));
+        }
+        else
+        {
+            $this->assertEquals($expectedRadians, $glyph->getAttribute('rotate'), 'conversion from degrees to radians failure', 0.001);
+        }
+    }
+    
+    public function angleProvider()
+    {
+        return array(
+            array(0, 0),
+            array('180deg', pi()),
+            array(pi(), pi()),
+            array('45deg', pi()/4),
+        );
+    }
 }

@@ -30,7 +30,13 @@ class StubComposeGlyph extends Container
 class GlyphTest extends TestCase
 {
     private $glyph;
+    private $objectMother;
 
+    protected function init()
+    {
+        $this->objectMother = new GenericGlyphObjectMother($this);
+    }
+    
     public function setUp()
     {
         $this->glyph = new StubGlyph();
@@ -583,6 +589,29 @@ class GlyphTest extends TestCase
             array(0.4, null, 'glyph'),
             array(0.4, 0.5, 'glyph'),
             array(null, 0.5, 'parent'),
+        );
+    }
+    
+    /**
+     * @test
+     * @dataProvider calculateDiagonallyRotationProvider
+     */
+    public function calculateDiagonallyRotation($rotate, $width, $height, $expectedRadians)
+    {
+        $page = new Page(array('page-size' => $width.':'.$height));
+        $page->add($this->glyph);
+        
+        $this->glyph->setAttribute('rotate', $rotate);
+        
+        $this->assertEquals($expectedRadians, $this->glyph->getRotate(), 'diagonally rotate dosn\'t match', 0.001);
+    }
+    
+    public function calculateDiagonallyRotationProvider()
+    {
+        return array(
+            array(Glyph::ROTATE_DIAGONALLY, 100, 100, pi()/4),
+            array(Glyph::ROTATE_DIAGONALLY, 3, 4, acos(3/5)),
+            array(Glyph::ROTATE_OPPOSITE_DIAGONALLY, 100, 100, -pi()/4),
         );
     }
 }

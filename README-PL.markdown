@@ -227,6 +227,9 @@ Atrybuty.
 * bookmark - tworzy zakładkę o podanej nazwie linkującą do tego tagu
 * note - tworzy notatkę dla danego elementu o podanej treści
 * dump - dozwolone wartości: true or false. Tworzy notatkę z informacjami przeznaczonymi do debugowania, np. wartości atrybutów, pozycja itp.
+* rotate - kąt obrotu elementu. Obsługa tego atrybutu nie jest w pełni zaimplementowana, działa poprawnie ze znakami wodnymi (patrz sekcja "Znaki wodne"). Możliwe wartości: XXdeg (w stopniach), XX (w radianach), diagonally, -diagonally.
+* alpha - możliwe wartości: od 0 do 1. Przeźroczystość elementu i jego dzieci.
+
 
 Atrybuty złożone
 ----------------
@@ -244,6 +247,7 @@ Atrybuty złożone
     - image: obrazek tła
     - repeat: sposób powtarzania obrazka (none|x|y|all)
     - radius: zaokrąglanie rogów tła w radianach (w chwili obecnej działa tylko dla koloru, nie obrazka)
+    - use-real-dimension: atrybut wykorzystany jak narazie dla tagu page (lub dynamic-page). True jeśli zapełniać marginesy, false w przeciwnym wypadku.
     - image-width: szerokość obrazka tła, może być wartością procentową
     - image-height: wysokość obrazka tła, może być wartością procentową
 
@@ -283,8 +287,8 @@ Przykład:
 
 Każdy element ma attrybuty "href" oraz "ref", nawet div. Nie możesz zagnieżdżać elementów wewnątrz tagu "a". Jeśli chcesz użyć np. img jako linka, powinieneś wykorzystać do tego atrybut "href" (zewnętrzny link) lub "ref" (wewnętrzny link) bezpośrednio w tagu "img".
 
-Bookmarks
----------
+Zakładki
+--------
 
 Każdy tag ma atrybut "bookmark", jeśli przypiszesz mu jakąś wartość to zostanie utworzona zakładka, która linkuje do tego tagu. Zakładka tagu rodzica jest również rodzicem zakładek dzieci tego tagu.
 
@@ -370,6 +374,27 @@ W nagłówku i stopce można korzystać z specjalnego tagu "<page-info></page-in
             <page-info format="strona %s na %s"></page-info>
         </header>
     <!-- ciach -->
+
+Znaki wodne
+-----------
+
+Strona ma placeholder o nazwie "watermark". Jako znak wodny można użyć element blokowy, który może zawierać dzieci, np. div, p, h1 (ale nie span, tekst czy img). Jeśli chcesz użyć tagu img lub tekstu jako znak wody, powinieneś ten element opakować np. w tag div.
+
+Przykład:
+
+    <pdf>
+        <dynamic-page>
+            <placeholders>
+                <watermark>
+                    <!-- jako "rotate" możesz użyć absolutnych wartości (45deg - w stopniach, 0.123 - w radianach) lub relatywnych wartości ("diagonally" oraz "-diagonally" - kąt pomiędzy przekątną, a podstawą strony) -->
+                    <div rotate="diagonally" alpha="0.1">
+                        <img src="ścieżka/do/zdjęcia.png" />
+                    </div>
+                </watermark>
+            </placeholders>
+        </dynamic-page>
+    </pdf>
+
 
 Podział strony na kolumny.
 --------------------------
