@@ -1,13 +1,44 @@
 Dokumentacja
 ============
 
+Spis treści
+-----------------
+
+1. [Instalacja](#installation)
+1. [Symfony2 bundle](#symfony2-bundle)
+1. [Parsowanie dokumentu i tworzenie pdf'a](#parsing)
+1. [Podstawowa struktura dokumentu](#structure)
+1. [Dziedziczenie](#inheritance)
+1. [Struktura stylów](#stylesheet)
+1. [Standardowe tagi](#tags)
+1. [Atrybut](#attributes)
+1. [Atrybuty złożone](#complex-attributes)
+1. [Hiperlinki](#hyperlinks)
+1. [Zakładki](#bookmarks)
+1. [Notatki](#notes)
+1. [Powtarzalne nagłówki i stopki](#headers)
+1. [Znaki wodne](#watermarks)
+1. [Podział strony na kolumny](#columns)
+1. [Łamanie stron i kolumn](#page-break)
+1. [Konfiguracja](#configuration)
+1. [Znane ograniczenia](#limitations)
+1. [TODO - czyli plany](#todo)
+1. [Wymagania techniczne](#requirements)
+
 Instalacja
 ----------
 
 Biblioteka opcjonalnie korzysta z innych bibliotek (komponent Symfony2 do DependencyInjection), które można pobrać wywołując polecenie:
 
     php vendors.php
+    
+<a name="symfony2-bundle"></a>
+Symfony2 bundle
+----------------
 
+Tutaj znajduje się [Symfony2 bundle][1] integrujący tą bibliotekę z Symfony2.
+
+<a name="parsing"></a>
 Parsowanie dokumentu i tworzenie pdf'a.
 ---------------------------------------
 
@@ -26,6 +57,7 @@ Najprostrzy sposób wykorzystania biblioteki:
     header('Content-Type: application/pdf');
     echo $content;
 
+<a name="structure"></a>
 Podstawowa struktura dokumentu.
 -------------------------------
 
@@ -78,7 +110,8 @@ Atrybuty można nadawać za pomocą atrybutów XML bezpośrednio po nazwie tagu 
 
 Biblioteka jest bardzo rygorystyczna pod względem poprawności tagów i atrybutów. Jeśli zostanie użyty nieistniejący tag lub atrybut, dokument się nie sparsuje - zostanie wyrzucony wyjątek z odpowiednią treścią.
 
-Dziedziczenie.
+<a name="inheritance"></a>
+Dziedziczenie
 --------------
 
 Atrybut "id" ma całkowicie inne znaczenie niż w HTML'u. Id musi być unikalne w obrębie dokumentu, w przeciwnym wypadku wystąpi błąd parsowania. Służy on do identyfikowania elementów przy dziedziczeniu. Przykład:
@@ -125,6 +158,7 @@ Drugi "div" będzie miał następujące atrybuty:
 - color: #aaaaaa
 - height: 200
 
+<a name="stylesheet"></a>
 Struktura arkusza stylów.
 -------------------------
 
@@ -184,7 +218,8 @@ Długi sposób:
         </h2>
     </stylesheet>
 
-Standardowe tagi.
+<a name="tags"></a>
+Standardowe tagi
 -----------------
 
 Biblioteka obsługuje podstawowe tagi zaczerpnięte z języka HTML: div, p, table, tr, td, b, strong, span, a, h1, h2, h3, h4, h5, img, br, ul, li
@@ -204,7 +239,8 @@ Istnieją tagi, które służą jedynie do określania wartości atrybutów, zbi
 * metadata - definiuje dane meta dla dokumentu pdf, bezpośredni element podrzędny korzenia dokumentu (TODO)
 * behaviours - definiuje zachowania dla elementu nadrzędnego. Obsługiwane zachowania: ref, href, bookmark, note (działanie takie samo jak dla atrybutów o tych samych nazwach)
 
-Atrybuty.
+<a name="attributes"></a>
+Atrybuty
 ---------
 
 * width oraz height: ustawienie wysokości i szerokości na sztywno, nie są obsługiwane jednostki. Jest możliwe użycie wartości relatywnych wyrażonych w procentach
@@ -230,7 +266,7 @@ Atrybuty.
 * rotate - kąt obrotu elementu. Obsługa tego atrybutu nie jest w pełni zaimplementowana, działa poprawnie ze znakami wodnymi (patrz sekcja "Znaki wodne"). Możliwe wartości: XXdeg (w stopniach), XX (w radianach), diagonally, -diagonally.
 * alpha - możliwe wartości: od 0 do 1. Przeźroczystość elementu i jego dzieci.
 
-
+<a name="complex-attributes"></a>
 Atrybuty złożone
 ----------------
 
@@ -268,6 +304,7 @@ Można dodawać kilka upiększeń tego samego typu (np. 3 różne obramowania) u
 
 W tym przykładzie drugie obramowanie ma identyfikator "borderLeftAndRight", jakby go nie było to atrybuty drugiego obramowania zostały by złączone z atrybutami z pierwszego obramowania. Domyślny identyfikator "id" jest równy atrybutowi "name". Identyfikatory "id" dla upiększeń (enhancements) nie mają nic wspólnego z atrybutami "id" dla elementów (glyphów). Można tworzyć obramowania złożone manipulując pozycją, tak jak w powyższym przykładzie (outerBorderLeftAndRight).
 
+<a name="hyperlinks"></a>
 Hiperlinki
 ----------
 
@@ -287,6 +324,7 @@ Przykład:
 
 Każdy element ma attrybuty "href" oraz "ref", nawet div. Nie możesz zagnieżdżać elementów wewnątrz tagu "a". Jeśli chcesz użyć np. img jako linka, powinieneś wykorzystać do tego atrybut "href" (zewnętrzny link) lub "ref" (wewnętrzny link) bezpośrednio w tagu "img".
 
+<a name="bookmarks"></a>
 Zakładki
 --------
 
@@ -318,6 +356,7 @@ Powyższa struktura utworzy poniższą strukturę zakładek:
     - inny bookmark dziecka
 * inny bookmark rodzica
 
+<a name="notes"></a>
 Notatki
 -------
 
@@ -343,7 +382,8 @@ Parser xml normalizuje wartości atrybutów, czego skutkiem jest ignorowanie zna
         </dynamic-page>
     </pdf>
 
-Powtarzalne nagłówki i stopki.
+<a name="headers"></a>
+Powtarzalne nagłówki i stopki
 ------------------------------
 
 Aby dodać powtarzalny nagłówek i/bądź stopkę należy wykorzystać tag "placeholders". Niektóre elementy mają specjalne "sloty": strona ma nagłówek i stopkę, tabela może mieć nagłówek (TODO: jeszcze nie zaimplementowane) itp.
@@ -375,6 +415,7 @@ W nagłówku i stopce można korzystać z specjalnego tagu "<page-info></page-in
         </header>
     <!-- ciach -->
 
+<a name="watermarks"></a>
 Znaki wodne
 -----------
 
@@ -395,7 +436,7 @@ Przykład:
         </dynamic-page>
     </pdf>
 
-
+<a name="columns"></a>
 Podział strony na kolumny.
 --------------------------
 
@@ -415,6 +456,7 @@ Strona może być podzielona na kolumny.
 
 Powyższy xml określa kilka stron dokumentu pdf z zielonymi prostokątami podzielonymi na 2 kolumny. Tag "column-layout" ma dwa dodatkowe atrybuty: number-of-columns oraz margin-between-columns. Domyślna wartość tych atrybutów to odpowiednio 2 oraz 10.
 
+<a name="page-break"></a>
 Łamanie stron i kolumn
 ----------------------
 
@@ -430,7 +472,8 @@ Przykład:
         </dynamic-page>
     </pdf>
 
-Konfiguracja.
+<a name="configuration"></a>
+Konfiguracja
 -------------
 
 Biblioteka ma 3 podstawowe pliki konfiguracyjne, które pozwalają na dostosowanie biblioteki do swoich potrzeb oraz do jej rozszerzenia.
@@ -454,7 +497,8 @@ Można wykorzystać budowniczego fasady, który jak narazie ma opcje do ustawian
 
 Są dwie implementacje loaderów konfiguracji, zwykła oraz korzystająca z komponentu DependencyInjection z Symfony2. Druga implementacja daje większą elastyczność w konfigurowaniu biblioteki. Domyślnie używany jest loader, który nie korzysta z DI.
 
-Znane ograniczenia.
+<a name="limitations"></a>
+Znane ograniczenia
 -------------------
 
 Poniżej przedstawiam listę ograniczeń obecnej wersji biblioteki:
@@ -463,7 +507,8 @@ Poniżej przedstawiam listę ograniczeń obecnej wersji biblioteki:
 * brak justrowania - zostanie wprowadzone w kolejnych wersjach
 * obramowanie nie zmienia rozmiaru elementu tak jak to jest w HTML - zabieg celowy, raczej nie planuję jego zmiany
 
-TODO - czyli plany.
+<a name="todo"></a>
+TODO - czyli plany
 -------------------
 
 * automatycznie generowany spis treści
@@ -474,7 +519,8 @@ TODO - czyli plany.
 * poprawienie wyliczania minimalnej wielkości komórki tabeli gdy jest użyty colspan
 * refaktoryzacja
 
-Wymagania techniczne.
+<a name="requirements"></a>
+Wymagania techniczne
 ---------------------
 
 Biblioteka działa pod php 5.3+.

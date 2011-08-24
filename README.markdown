@@ -33,7 +33,9 @@ Library optionally uses external libraries (DependencyInjection from Symfony2) t
 
     php vendors.php
     
-<h2 id="symfony2-bundle">Symfony2 bundle</h2>
+<a name="symfony2-bundle"></a>
+Symfony2 bundle
+----------------
 
 There is [Symfony2 bundle][1] integrates this library with Symfony2 framework.
 
@@ -507,7 +509,9 @@ Below is list of known limitations of library current version:
 * lack of justification - will be introduced in next releases
 * border doesn't change dimensions of the element (in HTML do)
 
-<h2 id="todo">TODO - plans</h2>
+<a name="todo"></a>
+TODO - plans
+----------------
 
 * automatic generating table of contents
 * document metadata
