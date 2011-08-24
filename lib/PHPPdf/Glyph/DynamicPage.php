@@ -158,6 +158,11 @@ class DynamicPage extends Page
         return $this->getPrototypePage()->setFooter($footer);
     }
 
+    public function setWatermark(Container $watermark)
+    {
+        return $this->getPrototypePage()->setWatermark($watermark);
+    }
+
     public function preFormat(Document $document)
     {
         $this->getPrototypePage()->prepareTemplate($document);

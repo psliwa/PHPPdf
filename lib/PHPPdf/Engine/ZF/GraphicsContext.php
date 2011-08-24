@@ -24,6 +24,7 @@ class GraphicsContext implements BaseGraphicsContext
         'lineColor' => null,
         'lineWidth' => null,
         'lineDashingPattern' => null,
+        'alpha' => 1,
     );
 
     private $memento = null;
@@ -257,5 +258,14 @@ class GraphicsContext implements BaseGraphicsContext
     {
         $annotation = \Zend_Pdf_Annotation_Text::create($x1, $y1, $x2, $y2, $text);
         $this->page->attachAnnotation($annotation);
+    }
+    
+    public function setAlpha($alpha)
+    {
+        if($this->state['alpha'] != $alpha)
+        {
+            $this->page->setAlpha($alpha);
+            $this->state['alpha'] = $alpha;
+        }
     }
 }

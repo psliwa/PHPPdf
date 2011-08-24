@@ -288,18 +288,20 @@ class PageTest extends TestCase
     /**
      * @test
      */
-    public function formatMethodDosntInvokeHeaderAndFooterFormatMethod()
+    public function formatMethodDosntInvokePlaceholdersFormatMethod()
     {
-        $header = $this->getHeaderOrFooterMockWithNeverFormatMethodInvocation();
-        $footer = $this->getHeaderOrFooterMockWithNeverFormatMethodInvocation();
+        $header = $this->getPlaceholderMockWithNeverFormatMethodInvocation();
+        $footer = $this->getPlaceholderMockWithNeverFormatMethodInvocation();
+        $watermark = $this->getPlaceholderMockWithNeverFormatMethodInvocation();
 
         $this->page->setHeader($header);
         $this->page->setHeader($footer);
+        $this->page->setWatermark($watermark);
 
         $this->page->format(new PHPPdf\Document());
     }
 
-    private function getHeaderOrFooterMockWithNeverFormatMethodInvocation()
+    private function getPlaceholderMockWithNeverFormatMethodInvocation()
     {
         $header = $this->getMock('PHPPdf\Glyph\Container', array('format', 'getHeight'));
         $header->expects($this->never())
@@ -350,5 +352,24 @@ class PageTest extends TestCase
             array(100, 50, array('margin' => array(0))),
             array(77, 55, array('margin' => array(2, 3, 4, 5))),
         );
+    }
+    
+    /**
+     * @test
+     */
+    public function watermarkShouldBeInTheMiddleOfPage()
+    {
+        $watermark = new Container();
+        $watermark->setHeight(100);
+        
+        $this->page->setWatermark($watermark);
+        
+        $middlePoint = $this->page->getMiddlePoint();
+        
+        $expectedFirstYCoord = $middlePoint->getY() + $watermark->getHeight()/2;
+        $this->assertEquals($expectedFirstYCoord, $watermark->getFirstPoint()->getY());
+        
+        $expectedDiagonalYCoord = $middlePoint->getY() - $watermark->getHeight()/2;
+        $this->assertEquals($expectedDiagonalYCoord, $watermark->getDiagonalPoint()->getY());
     }
 }

@@ -25,17 +25,22 @@ class LinePartTest extends TestCase
         $documentStub = new Document();
         $xTranslationInLine = 5;
         $linePartWidth = 100;
+        $alpha = 0.5;
         
         $heightOfLine = 18;        
         
         $text = $this->getMockBuilder('PHPPdf\Glyph\Text')
-                     ->setMethods(array('getFont', 'getAttribute', 'getRecurseAttribute', 'getGraphicsContext', 'getEncoding', 'getFontSize', 'getTextDecorationRecursively'))
+                     ->setMethods(array('getFont', 'getAttribute', 'getRecurseAttribute', 'getGraphicsContext', 'getEncoding', 'getFontSize', 'getTextDecorationRecursively', 'getAlpha'))
                      ->getMock();
                          
         $text->expects($this->atLeastOnce())
              ->method('getFont')
              ->with($documentStub)
              ->will($this->returnValue($fontStub));
+             
+        $text->expects($this->atLeastOnce())
+             ->method('getAlpha')
+             ->will($this->returnValue($alpha));
              
         $text->expects($this->atLeastOnce())
              ->method('getFontSize')
@@ -76,6 +81,9 @@ class LinePartTest extends TestCase
         $gc->expects($this->once())
            ->method('setFillColor')
            ->with($colorStub);
+        $gc->expects($this->once())
+           ->method('setAlpha')
+           ->with($alpha);
            
         $gc->expects($this->once())
            ->method('saveGs');

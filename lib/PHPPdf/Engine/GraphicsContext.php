@@ -59,4 +59,6 @@ interface GraphicsContext
     public function addBookmark($identifier, $name, $top, $ancestorsIdentifier = null);
     
     public function attachStickyNote($x1, $y1, $x2, $y2, $text);
+    
+    public function setAlpha($float);
 }

@@ -583,4 +583,41 @@ class GraphicsContextTest extends \TestCase
 
         $gc->attachStickyNote($coords[0], $coords[1], $coords[2], $coords[3], $text);
     }
+    
+    /**
+     * @test
+     * @dataProvider alphaProvider
+     */
+    public function setAlpha($alpha, $expectCall)
+    {
+        $zendPageMock = $this->getMockBuilder('\Zend_Pdf_Page')
+                             ->setMethods(array('setAlpha'))
+                             ->disableOriginalConstructor()
+                             ->getMock();
+                             
+        $gc = new GraphicsContext(new Engine(), $zendPageMock);
+        
+        if($expectCall)
+        {
+            $zendPageMock->expects($this->at(0))
+                         ->method('setAlpha')
+                         ->with($alpha);
+        }
+        else
+        {
+            $zendPageMock->expects($this->never())
+                         ->method('setAlpha');
+        }
+
+        $gc->setAlpha($alpha);
+        $gc->setAlpha($alpha);
+    }
+    
+    public function alphaProvider()
+    {
+        return array(
+            array(0.5, true),
+            array(1, false),
+        );
+    }
 }

@@ -64,19 +64,31 @@ abstract class Enhancement
     public function enhance(Glyph $glyph, Document $document)
     {
         $color = $this->getColor();
+        $alpha = $glyph->getAlpha();
         
         $graphicsContext = $glyph->getGraphicsContext();
+        
+        $isAlphaSet = $alpha != 1 && $alpha !== null;
+        
+        if($color || $isAlphaSet)
+        {
+            $graphicsContext->saveGS();
+        }
+        
+        if($alpha !== null)
+        {
+            $graphicsContext->setAlpha($alpha);
+        }
 
         if($color)
         {
-            $graphicsContext->saveGS();
             $graphicsContext->setLineColor($color);
             $graphicsContext->setFillColor($color);
         }
 
         $this->doEnhance($graphicsContext, $glyph, $document);
         
-        if($color)
+        if($color || $isAlphaSet)
         {
             $graphicsContext->restoreGs();
         }

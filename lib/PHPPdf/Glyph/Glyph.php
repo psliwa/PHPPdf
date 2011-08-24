@@ -344,6 +344,8 @@ abstract class Glyph implements Drawable, GlyphAware, \ArrayAccess, \Serializabl
         $this->addAttribute('text-decoration', null);
         
         $this->addAttribute('dump', false);
+        
+        $this->addAttribute('alpha', null);
 
         $this->setEnhancementBag(new EnhancementBag());
     }
@@ -709,6 +711,11 @@ abstract class Glyph implements Drawable, GlyphAware, \ArrayAccess, \Serializabl
     public function getEncoding()
     {
         return $this->getPage()->getAttribute('encoding');
+    }
+    
+    public function getAlpha()
+    {
+        return $this->getRecurseAttribute('alpha');
     }
     
     public function setFontSize($size)

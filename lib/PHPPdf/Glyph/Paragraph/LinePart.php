@@ -66,7 +66,14 @@ class LinePart implements Drawable
             {
                 $gc->setFillColor($color);
             }
-                       
+            
+            $alpha = $text->getAlpha();
+            
+            if($alpha !== null)
+            {
+                $gc->setAlpha($alpha);
+            }
+ 
             $yCoord = $point->getY() - $fontSize;
             $gc->drawText($words, $point->getX(), $point->getY() - $fontSize, $text->getEncoding());
             

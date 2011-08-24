@@ -36,6 +36,11 @@ class Page extends Container
      * @var PHPPdf\Glyph\Glyph
      */
     private $header;
+    
+    /**
+     * @var PHPPdf\Glyph\Glyph
+     */
+    private $watermark;
 
     /**
      * @var PHPPdf\Glyph\PageContext;
@@ -65,6 +70,7 @@ class Page extends Container
         $this->addAttribute('static-size', true);
         $this->setAttribute('text-align', self::ALIGN_LEFT);
         $this->setAttribute('text-decoration', self::TEXT_DECORATION_NONE);
+        $this->setAttribute('alpha', 1);
     }
 
     protected static function initializeType()
@@ -101,6 +107,7 @@ class Page extends Container
     {
         $this->setFooter(new Container(array('height' => 0)));
         $this->setHeader(new Container(array('height' => 0)));
+        $this->setWatermark(new Container(array('height' => 0)));
     }
 
     public function setPageSize($pageSize)
@@ -151,13 +158,6 @@ class Page extends Container
     private function prepareGraphicsContext(Document $document)
     {
         $this->assignGraphicsContextIfIsNull($document);
-
-        $graphicsContext = $this->getGraphicsContext();
-
-//        if($graphicsContext->getStyle() === null)
-        {
-//            $this->setGraphicsContextDefaultStyle($document);
-        }
     }
 
     private function assignGraphicsContextIfIsNull(Document $document)
@@ -379,6 +379,31 @@ class Page extends Container
 
         $this->header = $header;
     }
+    
+    public function setWatermark(Container $watermark)
+    {
+        $this->throwExceptionIfHeightIsntSet($watermark);
+        $watermark->setParent($this);
+        $watermark->setAttribute('static-size', true);
+        
+        $boundary = $this->getBoundary();
+        $height = $watermark->getHeight();
+        $middlePoint = $this->getMiddlePoint()->translate(0, -$height/2);
+
+
+        $watermark->setWidth($this->getWidth());
+
+        $firstPoint = $boundary->getFirstPoint();
+        $diagonalPoint = $boundary->getDiagonalPoint();
+        
+        $watermark->getBoundary()->setNext($firstPoint->getX(), $middlePoint->getY())
+                              ->setNext($diagonalPoint->getX(), $middlePoint->getY())
+                              ->setNext($diagonalPoint->getX(), $middlePoint->getY() - $height)
+                              ->setNext($firstPoint->getX(), $middlePoint->getY() - $height)
+                              ->close();
+
+        $this->watermark = $watermark;
+    }
 
     protected function getHeader()
     {
@@ -388,6 +413,11 @@ class Page extends Container
     protected function getFooter()
     {
         return $this->footer;
+    }
+    
+    protected function getWatermark()
+    {
+        return $this->watermark;
     }
 
     public function prepareTemplate(Document $document)
@@ -407,13 +437,15 @@ class Page extends Container
         
         $this->getHeader()->format($document);
         $this->getFooter()->format($document);
+        $this->getWatermark()->format($document);
 
         $tasks = array();
 
-        $tasks = array_merge($this->getDrawingTasksFromEnhancements($document), $this->footer->getDrawingTasks($document), $this->header->getDrawingTasks($document));
+        $tasks = array_merge($this->getDrawingTasksFromEnhancements($document), $this->footer->getDrawingTasks($document), $this->header->getDrawingTasks($document), $this->watermark->getDrawingTasks($document));
 
         $this->footer->removeAll();
         $this->header->removeAll();
+        $this->watermark->removeAll();
         
         return $tasks;
     }
@@ -466,21 +498,22 @@ class Page extends Container
 
     public function setPlaceholder($name, Glyph $glyph)
     {
-        if($name === 'footer')
+        switch($name)
         {
-            return $this->setFooter($glyph);
+            case 'footer':
+                return $this->setFooter($glyph);
+            case 'header':
+                return $this->setHeader($glyph);
+            case 'watermark':
+                return $this->setWatermark($glyph);
+            default:
+                parent::setPlaceholder($name, $glyph);
         }
-        elseif($name === 'header')
-        {
-            return $this->setHeader($glyph);
-        }
-
-        parent::setPlaceholder($name, $glyph);
     }
 
     public function hasPlaceholder($name)
     {
-        return in_array($name, array('footer', 'header'));
+        return in_array($name, array('footer', 'header', 'watermark'));
     }
 
     public function unserialize($serialized)
