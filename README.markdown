@@ -1,8 +1,9 @@
-[TOC]
+1. <a href="#installation">toc test</a>
 
 Documentation
 =============
 
+<a name="installation"></a>
 Installation
 ------------
 
