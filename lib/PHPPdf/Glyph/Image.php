@@ -32,17 +32,25 @@ class Image extends Glyph
             $alpha = $glyph->getAlpha();
             $isAlphaSet = $alpha != 1 && $alpha !== null;
             
-            if($isAlphaSet)
+            $rotationGlyph = $glyph->getAncestorWithRotation();
+        
+            if($isAlphaSet || $rotationGlyph)
             {
                 $gc->saveGS();
                 $gc->setAlpha($alpha);
+            }
+            
+            if($rotationGlyph)
+            {
+                $middlePoint = $rotationGlyph->getMiddlePoint();
+                $gc->rotate($middlePoint->getX(), $middlePoint->getY(), $rotationGlyph->getAttribute('rotate'));
             }
 
             list($x, $y) = $glyph->getStartDrawingPoint();
             $image = $glyph->getAttribute('src');
             $gc->drawImage($image, $x, $y-$glyph->getHeight(), $x+$glyph->getWidth(), $y);
             
-            if($isAlphaSet)
+            if($isAlphaSet || $rotationGlyph)
             {
                 $gc->restoreGS();
             }

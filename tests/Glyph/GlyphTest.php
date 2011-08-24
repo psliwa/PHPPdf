@@ -547,4 +547,42 @@ class GlyphTest extends TestCase
             $task->invoke();
         }
     }
+    
+    /**
+     * @test
+     * @dataProvider rotationProvider
+     */
+    public function getAncestorWithRotation($glyphRotation, $parentRotation, $expected)
+    {
+        $this->glyph->setAttribute('rotate', $glyphRotation);
+        $parent = new Container();
+        $parent->setAttribute('rotate', $parentRotation);
+        $parent->add($this->glyph);
+        
+        switch($expected)
+        {
+            case 'glyph':
+                $expectedGlyph = $this->glyph;
+                break;
+            case 'parent':
+                $expectedGlyph = $parent;
+                break;
+            default:
+                $expectedGlyph = false;
+        }
+        
+        $actualGlyph = $this->glyph->getAncestorWithRotation();
+        
+        $this->assertTrue($expectedGlyph === $actualGlyph);
+    }
+    
+    public function rotationProvider()
+    {
+        return array(
+            array(null, null, null),
+            array(0.4, null, 'glyph'),
+            array(0.4, 0.5, 'glyph'),
+            array(null, 0.5, 'parent'),
+        );
+    }
 }

@@ -43,7 +43,7 @@ class GraphicsContext implements BaseGraphicsContext
     private $engine = null;
 
     /**
-     * @var Zend_Pdf_Page
+     * @var \Zend_Pdf_Page
      */
     private $page;
 
@@ -275,5 +275,10 @@ class GraphicsContext implements BaseGraphicsContext
             $this->page->setAlpha($alpha);
             $this->state['alpha'] = $alpha;
         }
+    }
+
+    public function rotate($x, $y, $angle)
+    {
+        $this->page->rotate($x, $y, $angle);
     }
 }

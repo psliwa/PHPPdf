@@ -72,6 +72,8 @@ abstract class Glyph implements Drawable, GlyphAware, \ArrayAccess, \Serializabl
     private $formattersNames = array();
     
     private $behaviours = array();
+    
+    private $ancestorWithRotation = null;
 
     public function __construct(array $attributes = array())
     {
@@ -244,10 +246,7 @@ abstract class Glyph implements Drawable, GlyphAware, \ArrayAccess, \Serializabl
      */
     public function getMiddlePoint()
     {
-        $x = $this->getFirstPoint()->getX() + ($this->getDiagonalPoint()->getX() - $this->getFirstPoint()->getX())/2;
-        $y = $this->getDiagonalPoint()->getY() + ($this->getFirstPoint()->getY() - $this->getDiagonalPoint()->getY())/2;
-        
-        return Point::getInstance($x, $y);
+        return $this->getBoundary()->getMiddlePoint();
     }
 
     public function setParent(Container $glyph)
@@ -346,6 +345,7 @@ abstract class Glyph implements Drawable, GlyphAware, \ArrayAccess, \Serializabl
         $this->addAttribute('dump', false);
         
         $this->addAttribute('alpha', null);
+        $this->addAttribute('rotate', null);
 
         $this->setEnhancementBag(new EnhancementBag());
     }
@@ -1324,5 +1324,16 @@ abstract class Glyph implements Drawable, GlyphAware, \ArrayAccess, \Serializabl
     public function __toString()
     {
         return get_class($this).\spl_object_hash($this);
+    }
+    
+    public function getAncestorWithRotation()
+    {
+        if($this->ancestorWithRotation === null)
+        {
+            $parent = $this->getParent();
+            $this->ancestorWithRotation = $this->getAttribute('rotate') === null ? ($parent ? $parent->getAncestorWithRotation() : false) : $this;
+        }
+        
+        return $this->ancestorWithRotation;
     }
 }

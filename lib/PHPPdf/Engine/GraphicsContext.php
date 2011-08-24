@@ -61,4 +61,6 @@ interface GraphicsContext
     public function attachStickyNote($x1, $y1, $x2, $y2, $text);
     
     public function setAlpha($float);
+    
+    public function rotate($x, $y, $angle);
 }

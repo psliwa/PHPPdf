@@ -70,9 +70,17 @@ abstract class Enhancement
         
         $isAlphaSet = $alpha != 1 && $alpha !== null;
         
-        if($color || $isAlphaSet)
+        $rotationGlyph = $glyph->getAncestorWithRotation();
+        
+        if($color || $isAlphaSet || $rotationGlyph)
         {
             $graphicsContext->saveGS();
+        }
+        
+        if($rotationGlyph)
+        {
+            $middlePoint = $rotationGlyph->getMiddlePoint();
+            $graphicsContext->rotate($middlePoint->getX(), $middlePoint->getY(), $rotationGlyph->getAttribute('rotate'));
         }
         
         if($alpha !== null)
@@ -88,7 +96,7 @@ abstract class Enhancement
 
         $this->doEnhance($graphicsContext, $glyph, $document);
         
-        if($color || $isAlphaSet)
+        if($color || $isAlphaSet || $rotationGlyph)
         {
             $graphicsContext->restoreGs();
         }

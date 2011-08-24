@@ -73,6 +73,14 @@ class LinePart implements Drawable
             {
                 $gc->setAlpha($alpha);
             }
+            
+            $rotationGlyph = $text->getAncestorWithRotation();
+        
+            if($rotationGlyph)
+            {
+                $middlePoint = $rotationGlyph->getMiddlePoint();
+                $gc->rotate($middlePoint->getX(), $middlePoint->getY(), $rotationGlyph->getAttribute('rotate'));
+            }
  
             $yCoord = $point->getY() - $fontSize;
             $gc->drawText($words, $point->getX(), $point->getY() - $fontSize, $text->getEncoding());

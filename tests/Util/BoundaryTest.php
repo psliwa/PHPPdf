@@ -239,4 +239,22 @@ class BoundaryTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($this->boundary->intersects($secondBoundary));
         $this->assertTrue($secondBoundary->intersects($this->boundary));
     }
+    
+    /**
+     * @test
+     */
+    public function getMiddlePoint()
+    {
+        $this->boundary->setNext(0, 100)
+                       ->setNext(100, 100)
+                       ->setNext(100, 0)
+                       ->setNext(0, 0)
+                       ->close();
+                       
+        $this->assertEquals(array(50, 50), $this->boundary->getMiddlePoint()->toArray());
+        
+        $this->boundary->translate(50, 50);
+        
+        $this->assertEquals(array(100, 0), $this->boundary->getMiddlePoint()->toArray());        
+    }
 }

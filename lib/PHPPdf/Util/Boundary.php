@@ -261,6 +261,24 @@ class Boundary implements \Countable, \Iterator, \ArrayAccess, \Serializable
 
         return null;
     }
+    
+    /**
+     * @return PHPPdf\Util\Point Point that divides line between first and diagonal points on half
+     */
+    public function getMiddlePoint()
+    {
+        $diagonalPoint = $this->getDiagonalPoint();
+        
+        if($diagonalPoint === null)
+        {
+            return null;
+        }
+        
+        $x = $this->getFirstPoint()->getX() + ($diagonalPoint->getX() - $this->getFirstPoint()->getX())/2;
+        $y = $diagonalPoint->getY() + ($this->getFirstPoint()->getY() - $diagonalPoint->getY())/2;
+        
+        return Point::getInstance($x, $y);
+    }
 
     /**
      * Clears points and status of the object

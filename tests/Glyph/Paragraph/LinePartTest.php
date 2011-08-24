@@ -30,7 +30,7 @@ class LinePartTest extends TestCase
         $heightOfLine = 18;        
         
         $text = $this->getMockBuilder('PHPPdf\Glyph\Text')
-                     ->setMethods(array('getFont', 'getAttribute', 'getRecurseAttribute', 'getGraphicsContext', 'getEncoding', 'getFontSize', 'getTextDecorationRecursively', 'getAlpha'))
+                     ->setMethods(array('getFont', 'getAttribute', 'getRecurseAttribute', 'getGraphicsContext', 'getEncoding', 'getFontSize', 'getTextDecorationRecursively', 'getAlpha', 'getAncestorWithRotation'))
                      ->getMock();
                          
         $text->expects($this->atLeastOnce())
@@ -63,6 +63,9 @@ class LinePartTest extends TestCase
         $text->expects($this->atLeastOnce())
              ->method('getTextDecorationRecursively')
              ->will($this->returnValue($textDecoration));
+        $text->expects($this->atLeastOnce())
+             ->method('getAncestorWithRotation')
+             ->will($this->returnValue(null));
              
         $gc = $this->getMockBuilder('PHPPdf\Engine\GraphicsContext')
         		   ->getMock();
