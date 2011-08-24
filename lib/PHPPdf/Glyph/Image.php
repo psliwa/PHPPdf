@@ -27,11 +27,25 @@ class Image extends Glyph
     {
         $callback = function($glyph)
         {
-            $graphicsContext = $glyph->getGraphicsContext();
+            $gc = $glyph->getGraphicsContext();
+            
+            $alpha = $glyph->getAlpha();
+            $isAlphaSet = $alpha != 1 && $alpha !== null;
+            
+            if($isAlphaSet)
+            {
+                $gc->saveGS();
+                $gc->setAlpha($alpha);
+            }
 
             list($x, $y) = $glyph->getStartDrawingPoint();
             $image = $glyph->getAttribute('src');
-            $graphicsContext->drawImage($image, $x, $y-$glyph->getHeight(), $x+$glyph->getWidth(), $y);
+            $gc->drawImage($image, $x, $y-$glyph->getHeight(), $x+$glyph->getWidth(), $y);
+            
+            if($isAlphaSet)
+            {
+                $gc->restoreGS();
+            }
         };
         
         $drawingTask = new DrawingTask($callback, array($this));

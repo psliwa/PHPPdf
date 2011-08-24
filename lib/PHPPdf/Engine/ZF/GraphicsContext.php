@@ -26,6 +26,14 @@ class GraphicsContext implements BaseGraphicsContext
         'lineDashingPattern' => null,
         'alpha' => 1,
     );
+    
+    private static $originalState = array(
+        'fillColor' => null,
+        'lineColor' => null,
+        'lineWidth' => null,
+        'lineDashingPattern' => null,
+        'alpha' => 1,
+    );
 
     private $memento = null;
     
@@ -60,7 +68,7 @@ class GraphicsContext implements BaseGraphicsContext
     {
         $this->page->restoreGS();
         $this->state = $this->memento;
-        $this->memento = null;
+        $this->memento = self::$originalState;
     }
 
     public function drawImage(BaseImage $image, $x1, $y1, $x2, $y2)
