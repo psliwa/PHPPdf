@@ -524,3 +524,5 @@ Wymagania techniczne
 ---------------------
 
 Biblioteka działa pod php 5.3+.
+
+[1]: https://github.com/psliwa/PdfBundle
