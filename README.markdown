@@ -1,23 +1,45 @@
-1. <a href="#installation">toc test</a>
-
 Documentation
 =============
 
+Table of contents
+-----------------
+
+1. [Installation](#installation)
+1. [Symfony2 bundle](#symfony2-bundle)
+1. [Document parsing and createing pdf file](#parsing)
+1. [Basic document structure](#structure)
+1. [Inheritance](#inheritance)
+1. [Stylesheet structure](#stylesheet)
+1. [Standard tags](#tags)
+1. [Attributes](#attributes)
+1. [Complex attributes](#complex-attributes)
+1. [Hyperlinks](#hyperlinks)
+1. [Bookmarks](#bookmarks)
+1. [Sticky notes](#notes)
+1. [Repetitive headers and footers](#headers)
+1. [Watermarks](#watermarks)
+1. [Separate page on columns](#columns)
+1. [Breaking pages and columns](#page-break)
+1. [Configuration](#configuration)
+1. [Known limitations](#limitations)
+1. [TODO - plans](#todo)
+1. [Technical requirements](#requirements)
+
 <a name="installation"></a>
 Installation
-------------
+----------------
 
 Library optionally uses external libraries (DependencyInjection from Symfony2) that be able to download by command:
 
     php vendors.php
     
-Symfony2 bundle
----------------
+<h2 id="symfony2-bundle">Symfony2 bundle</h2>
 
 There is [Symfony2 bundle][1] integrates this library with Symfony2 framework.
 
+<a name="parsing"></a>
 Document parsing and creating pdf file
---------------------------------------
+----------------
 
 The simplest way of library using:
 
@@ -34,8 +56,9 @@ The simplest way of library using:
     header('Content-Type: application/pdf');
     echo $content;
 
+<a name="structure"></a>
 Basic document structure
-------------------------
+----------------
 
 Library bases on XML format similar to HTML but this format isn't HTML - some tags are diffrent, interpretation of some attributes is not as same as in HTML and CSS standards, way of attributes adding is also diffrent. The simplest document has following structure:
 
@@ -86,8 +109,9 @@ Attributes can by setted as XML attributes directly after tag name or by means o
 
 Library is very strict in respect of corectness of tags and attributes. If unexisted tag or attribute is used, document won't parse - suitable exception will be thrown.
 
+<a name="inheritance"></a>
 Inheritance
-------------
+----------------
 
 "id" attribute has entirely different mean than in HTML. Id must by unique in whole document, otherwise parsing error occurs. Id attribute is used to identify tags in inheritance. Example:
 
@@ -133,8 +157,9 @@ Second "div" will have following attributes:
 - color: #aaaaaa
 - height: 200
 
+<a name="stylesheet"></a>
 Stylesheet structure
---------------------
+----------------
 
 Stylesheets have to be in external file, stylesheet short and long declarations of attributes are supported. Syntax of stylesheet:
 
@@ -192,8 +217,9 @@ Long style:
         </h2>
     </stylesheet>
 
+<a name="tags"></a>
 Standard tags
--------------
+----------------
 
 Library supports primary HTML tags: div, p, table, tr, td, b, strong, span, a, h1, h2, h3, h4, h5, img, br, ul, li
 In addition there are not standard tags:
@@ -212,8 +238,9 @@ There are tags that only are bags for attributes, set of tags etc:
 * metadata - defines metadata of pdf document, direct child of document root (TODO: not implemented yet)
 * behaviours - defines behaviours for parent tag. Supported behaviours: href, ref, bookmark, note (action as same as for attributes with as same as name)
 
+<a name="attributes"></a>
 Attributes
-----------
+----------------
 
 * width and height: rigidly sets height and width, there are no units. Relative values in percent are supported. 
 * margin (margin-top, margin-bottom, margin-left, margin-right): margin similar to margin from HTML/CSS. Margins of simblings are pooled. For side margins possible is "auto" value, it works similar as in HTML/CSS.
@@ -238,8 +265,9 @@ Attributes
 * rotate - angle of element rotation. This attribute isn't fully implemented, works corectly for watermarks (see "Watermarks" section). Possible values: XXdeg (in degrees), XX (in radians), diagonally, -diagonally.
 * alpha - possible values: from 0 to 1. Transparency for element and his children.
 
+<a name="complex-attributes"></a>
 Complex attributes
-------------------
+----------------
 
 * border:
     - color: border color
@@ -275,8 +303,9 @@ It is possible to add several complex attributes in the same type (for instance 
 
 In this example second border has "borderLeftAndRight" indentifie, if this border had not id, attributes from second border would be merged with attributes from first border. Default identifier "id" is as same as "name" attribute. "id" attributes for complex attributes hasn't nothing to attribute "id" of tags (using in inheritance). It is possible to create complex borders as same as in previous example (outerBorderLeftAndRight).
 
+<a name="hyperlinks"></a>
 Hyperlinks
-----------
+----------------
 
 Library supports external and internal hyperlinks. External hyperlink links to urls, internal links to another tag inside pdf.
 
@@ -294,8 +323,9 @@ Example:
 
 Every element has "href" and "ref" attribute, even div. You can't nest elements inner "a" tag. If you want to use img element as link, you should use href (external link) or ref (internal link) attribute directly in img tag.
 
+<a name="bookmarks"></a>
 Bookmarks
----------
+----------------
 
 Every tag has "bookmark" attribute, if you assign some value to this attribute, bookmark that refers to this tag will be automatically created. Bookmark of parent tag is also parent of children's bookmarks.
 
@@ -325,8 +355,9 @@ Above structure will create this bookmarks structure:
     - another children bookmark
 * another parent bookmark
 
+<a name="notes"></a>
 Sticky notes
-------------
+----------------
 
 Sticky note can be created by "note" attribute.
 
@@ -351,8 +382,9 @@ Xml parser normalizes values of attributes, wich results ignoring new line chars
     </pdf>
 
 
+<a name="headers"></a>
 Repetitive headers and footers
-------------------------------
+----------------
 
 "placeholders" can be used in order to adding repetitive header or/and footer. Some elemnts has special "placeholders": page has header and footer, table also has header and footer (TODO: not implemented yet) etc.
 
@@ -383,8 +415,9 @@ In header and footer is special tag "page-info". It displays current page inform
         </header>
     <!-- ... -->
 
+<a name="watermarks"></a>
 Watermarks
-----------
+----------------
 
 Page has "watermark" placeholder. As watermark may be set block and container elements, for instance: div, p, h1 (no span, plain text or img). If you want to use image as watermark, you should wrap tag img into div tag.
 
@@ -403,8 +436,9 @@ Example:
         </dynamic-page>
     </pdf>
 
+<a name="columns"></a>
 Separate page on columns
--------------------------
+----------------
 
 Page can be separated on columns:
 
@@ -422,8 +456,9 @@ Page can be separated on columns:
 
 Above XML describes several pages of pdf document with green rectangles separated on two columns. "column-layout" tag has three additional parameters: number-of-columns, margin-between-columns and equals-columns. Default values for this attributes are 2, 10 and false respectlivy. If equals-columns attribute is set, columns will have more or less equals height.
 
+<a name="page-break"></a>
 Breaking pages and columns
---------------------------
+----------------
 
 Page and column may by manually broken by one of tags: page-break, column-break, break. All those tags are the same. Those tags have to be direct children of breaking element (dynamic-page or column-layout).
 
@@ -437,8 +472,9 @@ Example:
         </dynamic-page>
     </pdf>
 
+<a name="configuration"></a>
 Configuration
--------------
+----------------
 
 Library has three primary config files that allow you to adopt library to specyfic needs and to extending.
 
@@ -461,8 +497,9 @@ FacadeBuilder can be uset to build and configure Facade. Nowaday builder has onl
 
 There are two implementation of configuration loaders, standard and using DependencyInjection component from Symfony2. Second implementation is more flexible in configuration, but is less efficently. Default loader dosn't use DI container.
 
+<a name="limitations"></a>
 Known limitations
------------------
+----------------
 
 Below is list of known limitations of library current version:
 
@@ -470,8 +507,7 @@ Below is list of known limitations of library current version:
 * lack of justification - will be introduced in next releases
 * border doesn't change dimensions of the element (in HTML do)
 
-TODO - plans.
--------------------
+<h2 id="todo">TODO - plans</h2>
 
 * automatic generating table of contents
 * document metadata
@@ -479,8 +515,9 @@ TODO - plans.
 * improve table, header and footer for table, rowspan. Fix calculation of cell's min height when colspan is used.
 * refactoring
 
+<a name="requirements"></a>
 Technical requirements
-----------------------
+----------------
 
 Library works on php 5.3+
 
