@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pdf>
+	<page>
+		<placeholders>
+			<watermark>
+				<div class="watermark">
+					WATERMARK
+				</div>
+			</watermark>
+		</placeholders>
+		<div>
+			<p>
+				Text as watermark
+			</p>
+		</div>
+	</page>
+	<page>
+		<placeholders>
+			<watermark>
+				<div class="watermark">
+					<img src="dir:/zend.jpg" margin="0 auto" />
+				</div>
+			</watermark>
+		</placeholders>
+		<div>
+			<p>
+				Image as watermark
+			</p>
+		</div>
+	</page>
+	<dynamic-page>
+		<placeholders>
+			<watermark>
+				<div class="watermark">
+					PAGE <page-number />
+				</div>
+			</watermark>
+		</placeholders>
+		
+		<div>
+			<p>
+				Page <page-number />
+			</p>
+		</div>
+
+		<div>
+			<p>
+				Page <page-number />
+			</p>
+		</div>
+	</dynamic-page>
+</pdf>

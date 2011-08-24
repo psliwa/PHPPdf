@@ -386,6 +386,8 @@ class Page extends Container
         $watermark->setAttribute('vertical-align', self::VERTICAL_ALIGN_MIDDLE);
         $watermark->setHeight($this->getHeight());
         $watermark->setWidth($this->getWidth());
+        
+        $watermark->setBoundary(clone $this->getBoundary());
 
         $this->watermark = $watermark;
     }
