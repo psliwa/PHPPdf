@@ -22,7 +22,7 @@ class TextPositionFormatter extends BaseFormatter
         list($parentX, $parentY) = $glyph->getParent()->getStartDrawingPoint();
 
         $lineSizes = $glyph->getLineSizes();
-        $lineHeight = $glyph->getLineHeight();
+        $lineHeight = $glyph->getLineHeightRecursively();
 
         $startX = $x;
 

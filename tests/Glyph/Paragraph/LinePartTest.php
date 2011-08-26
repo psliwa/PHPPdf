@@ -162,12 +162,11 @@ class LinePartTest extends TestCase
         $lineHeight = 123;
         
         $text = $this->getMockBuilder('PHPPdf\Glyph\Text')
-                     ->setMethods(array('getRecurseAttribute'))
+                     ->setMethods(array('getLineHeightRecursively'))
                      ->getMock();
                      
         $text->expects($this->once())
-             ->method('getRecurseAttribute')
-             ->with('line-height')
+             ->method('getLineHeightRecursively')
              ->will($this->returnValue($lineHeight));
         
         $linePart = new LinePart('', 0, 0, $text);

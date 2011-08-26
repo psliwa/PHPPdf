@@ -30,6 +30,8 @@ class StickyNoteTest extends \TestCase
         $gc = $this->getMockBuilder('PHPPdf\Engine\GraphicsContext')
                    ->getMock();
         
+       $text = 'some text';
+
         $gc->expects($this->once())
            ->method('attachStickyNote')
            ->with($x, $y, $x+$width, $y-$height, $text);

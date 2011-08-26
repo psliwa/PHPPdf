@@ -395,7 +395,6 @@
 			<call method="setFormattersNames">
 				<argument type="collection">
 					<argument>PHPPdf\Formatter\ConvertAttributesFormatter</argument>
-					<argument>PHPPdf\Formatter\StandardDimensionFormatter</argument>
 					<argument>PHPPdf\Formatter\FirstPointPositionFormatter</argument>
 					<argument>PHPPdf\Formatter\ImageDimensionFormatter</argument>
 					<argument>PHPPdf\Formatter\StandardPositionFormatter</argument>

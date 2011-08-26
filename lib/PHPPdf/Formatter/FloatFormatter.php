@@ -73,7 +73,7 @@ class FloatFormatter extends BaseFormatter
                     $translateY = -($minYCoord - $y - $child->getMarginTop() - $child->getPaddingTop());
                     if($child->getDisplay() === Glyph::DISPLAY_INLINE && $previousSiblingWithMinBottomYCoord->getDisplay() === Glyph::DISPLAY_INLINE)
                     {
-                        $translateY -= $child instanceof Text ? $child->getLineHeight() : $child->getHeight();
+                        $translateY -= $child instanceof Text ? $child->getLineHeightRecursively() : $child->getHeight();
                     }
                 }
             }

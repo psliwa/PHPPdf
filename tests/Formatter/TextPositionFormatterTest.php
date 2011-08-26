@@ -34,13 +34,13 @@ class TextPositionFormatterTest extends TestCase
 
         $mock = $this->getMock('\PHPPdf\Glyph\Text', array(
             'getParent',
-            'getLineHeight',
+            'getLineHeightRecursively',
             'getLineSizes',
             'getStartDrawingPoint',
             'getBoundary',
         ));
 
-        $mock->expects($this->once())
+        $mock->expects($this->atLeastOnce())
              ->method('getParent')
              ->will($this->returnValue($parentMock));
 
@@ -66,7 +66,7 @@ class TextPositionFormatterTest extends TestCase
              ->will($this->returnValue($boundaryMock));
 
         $mock->expects($this->once())
-             ->method('getLineHeight')
+             ->method('getLineHeightRecursively')
              ->will($this->returnValue(self::TEXT_LINE_HEIGHT));
 
         $mock->expects($this->once())

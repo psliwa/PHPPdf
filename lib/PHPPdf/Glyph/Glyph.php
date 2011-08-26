@@ -76,6 +76,7 @@ abstract class Glyph implements Drawable, GlyphAware, \ArrayAccess, \Serializabl
     private $behaviours = array();
     
     private $ancestorWithRotation = null;
+    private $ancestorWithFontSize = null;
 
     public function __construct(array $attributes = array())
     {
@@ -440,7 +441,16 @@ abstract class Glyph implements Drawable, GlyphAware, \ArrayAccess, \Serializabl
     
     public function getFontSizeRecursively()
     {
-        return $this->getRecurseAttribute('font-size');
+        $ancestor = $this->getAncestorWithFontSize();
+        
+        return $ancestor === false ? $this->getFontSize() : $ancestor->getFontSize();
+    }
+    
+    public function getLineHeightRecursively()
+    {
+        $ancestor = $this->getAncestorWithFontSize();
+        
+        return $ancestor === false ? $this->getAttribute('line-height') : $ancestor->getAttribute('line-height');
     }
     
     public function getTextDecorationRecursively()
@@ -745,6 +755,8 @@ abstract class Glyph implements Drawable, GlyphAware, \ArrayAccess, \Serializabl
     public function setFontSize($size)
     {
         $this->setAttributeDirectly('font-size', (int)$size);
+        $this->setAttribute('line-height', (int) ($size + $size*0.2));
+
         return $this;
     }
 
@@ -1359,5 +1371,16 @@ abstract class Glyph implements Drawable, GlyphAware, \ArrayAccess, \Serializabl
         }
 
         return $this->ancestorWithRotation;
+    }
+    
+    protected function getAncestorWithFontSize()
+    {
+        if($this->ancestorWithFontSize === null)
+        {
+            $parent = $this->getParent();
+            $this->ancestorWithFontSize = $this->getFontSize() === null ? ($parent ? $parent->getAncestorWithFontSize() : false) : $this;
+        }
+        
+        return $this->ancestorWithFontSize;
     }
 }

@@ -82,18 +82,6 @@ class Text extends Glyph
         return $minWidth;
     }
 
-    public function setFontSize($size)
-    {
-        parent::setFontSize($size);
-
-        if($this->getAttribute('line-height') === null)
-        {
-            $this->setAttribute('line-height', (int) ($size + $size*0.2));
-        }
-
-        return $this;
-    }
-
     protected function doDraw(Document $document)
     {
         if($this->isEmptyText())

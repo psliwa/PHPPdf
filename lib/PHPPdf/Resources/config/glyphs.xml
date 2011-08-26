@@ -260,7 +260,6 @@
 	        </stylesheet>
 	        <formatters>
 	            <formatter class="PHPPdf\Formatter\ConvertAttributesFormatter" />
-	            <formatter class="PHPPdf\Formatter\StandardDimensionFormatter" />
 	            <formatter class="PHPPdf\Formatter\FirstPointPositionFormatter" />
 	            <formatter class="PHPPdf\Formatter\ImageDimensionFormatter" />
 	            <formatter class="PHPPdf\Formatter\StandardPositionFormatter" />

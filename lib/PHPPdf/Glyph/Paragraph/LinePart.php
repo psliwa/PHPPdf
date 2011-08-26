@@ -57,7 +57,7 @@ class LinePart implements Drawable
         return array(new DrawingTask(function(Text $text, $point, $words, $width, $document) {
             $gc = $text->getGraphicsContext();
             $gc->saveGS();
-            $fontSize = $text->getFontSize();
+            $fontSize = $text->getFontSizeRecursively();
             
             $gc->setFont($text->getFont($document), $fontSize);
             $color = $text->getRecurseAttribute('color');
@@ -120,13 +120,13 @@ class LinePart implements Drawable
     
     public function getFirstPoint()
     {
-        $yTranslation = $this->line->getHeight() - $this->text->getAttribute('line-height');
+        $yTranslation = $this->line->getHeight() - $this->text->getLineHeightRecursively();
         return $this->line->getFirstPoint()->translate($this->xTranslation, $yTranslation);
     }
     
     public function getHeight()
     {
-        return $this->text->getRecurseAttribute('line-height');
+        return $this->text->getLineHeightRecursively();
     }
     
     public function getText()

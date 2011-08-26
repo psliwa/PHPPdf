@@ -53,7 +53,7 @@ class FirstPointPositionFormatter extends BaseFormatter
                 $preferredYCoord = $siblingStartY + $previousSibling->getMarginTop() - $glyph->getMarginTop();
                 if($previousSibling instanceof Glyphs\Text)
                 {
-                    $preferredYCoord -= $previousSibling->getAttribute('line-height') * (count($previousSibling->getLineSizes()) - 1);
+                    $preferredYCoord -= $previousSibling->getLineHeightRecursively() * (count($previousSibling->getLineSizes()) - 1);
                 }
             }
             else

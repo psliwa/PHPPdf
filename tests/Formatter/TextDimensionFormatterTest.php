@@ -23,7 +23,7 @@ class TextDimensionFormatterTest extends PHPUnit_Framework_TestCase
     public function calculateSizeOfEachWord($text, $expectedWords, $fontSize)
     {
         $textMock = $this->getMockBuilder('PHPPdf\Glyph\Text')
-                         ->setMethods(array('setWordsSizes', 'getText', 'getFont', 'getRecurseAttribute'))
+                         ->setMethods(array('setWordsSizes', 'getText', 'getFont', 'getRecurseAttribute', 'getFontSizeRecursively'))
                          ->getMock();
                      
         $fontMock = $this->getMockBuilder('PHPPdf\Engine\Font')
@@ -36,8 +36,7 @@ class TextDimensionFormatterTest extends PHPUnit_Framework_TestCase
                  ->method('getFont')
                  ->will($this->returnValue($fontMock));
         $textMock->expects($this->atLeastOnce())
-                 ->method('getRecurseAttribute')
-                 ->with('font-size')
+                 ->method('getFontSizeRecursively')
                  ->will($this->returnValue($fontSize));
         
         $wordsSizes = array();
