@@ -99,7 +99,7 @@ class Line
         return $this->paragraph->getWidth() - $this->paragraph->getParentPaddingLeft() - $this->paragraph->getParentPaddingRight();
     }
     
-    private function getTotalWidth()
+    public function getTotalWidth()
     {
         $width = 0;
         foreach($this->parts as $part)

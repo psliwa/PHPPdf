@@ -220,4 +220,16 @@ class Paragraph extends Container
         
         return $copy;
     }
+    
+    public function getMinWidth()
+    {
+        $minWidth = 0;
+        
+        foreach($this->lines as $line)
+        {
+            $minWidth = max($line->getTotalWidth(), $minWidth);
+        }
+        
+        return $minWidth;
+    }
 }
