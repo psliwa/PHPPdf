@@ -121,23 +121,7 @@ class ParagraphFormatter extends BaseFormatter
             $glyph = $parent;
         }
 
-        return $glyph->getFirstPoint()->getX() + $glyph->getWidth();
-    }
-    
-    private function getStartPoint($align, $widthOfWordsLine, $maxAllowedXCoordOfLine, Point $firstPoint)
-    {
-        return $firstPoint;
-        switch($align)
-        {
-            case Glyph::ALIGN_LEFT:
-                return $firstPoint;
-            case Glyph::ALIGN_RIGHT:
-                return $firstPoint->translate(($maxAllowedXCoordOfLine - $firstPoint->getX()) - $widthOfWordsLine, 0);
-            case Glyph::ALIGN_CENTER:
-                return $firstPoint->translate((($maxAllowedXCoordOfLine - $firstPoint->getX()) - $widthOfWordsLine)/2, 0);
-            default:
-                throw new \InvalidArgumentException(sprintf('Unsupported align type "%s".', $align));
-        }
+        return $glyph->getFirstPoint()->getX() + $glyph->getWidth() - $glyph->getPaddingRight();
     }
     
     private function setTextBoundaries(array $textGlyphs)

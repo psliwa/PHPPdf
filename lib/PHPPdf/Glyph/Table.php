@@ -8,7 +8,8 @@
 
 namespace PHPPdf\Glyph;
 
-use PHPPdf\Glyph\Glyph,
+use PHPPdf\Glyph\Table\Cell,
+    PHPPdf\Glyph\Glyph,
     PHPPdf\Glyph\Table\Row;
 
 /**
@@ -38,12 +39,19 @@ class Table extends Container implements Listener
 
         foreach($glyph->getChildren() as $cell)
         {
-            $this->setColumnWidthIfNecessary($cell);
-            $this->setColumnMarginIfNecessary($cell, 'margin-left');
-            $this->setColumnMarginIfNecessary($cell, 'margin-right');
+            $this->updateColumnDataIfNecessary($cell);
         }
 
         return parent::add($glyph);
+    }
+    
+    private function updateColumnDataIfNecessary(Cell $cell)
+    {
+        $this->setColumnWidthIfNecessary($cell);
+        foreach(array('margin-left', 'margin-right') as $attribute)
+        {
+            $this->setColumnMarginIfNecessary($cell, $attribute);
+        }
     }
 
     private function setColumnWidthIfNecessary(Glyph $glyph)
@@ -120,9 +128,7 @@ class Table extends Container implements Listener
 
     public function parentBind(Glyph $glyph)
     {
-        $this->setColumnWidthIfNecessary($glyph);
-        $this->setColumnMarginIfNecessary($glyph, 'margin-left');
-        $this->setColumnMarginIfNecessary($glyph, 'margin-right');
+        $this->updateColumnDataIfNecessary($glyph);
     }
 
     public function getWidthsOfColumns()

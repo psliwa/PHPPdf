@@ -45,6 +45,11 @@ class Paragraph extends Container
     {
         return $this->getParent()->getPaddingRight();
     }
+    
+    public function getWidthWithoutPaddings()
+    {
+        return $this->getParent()->getWidthWithoutPaddings();
+    }
 
     public function add(Glyph $text)
     {

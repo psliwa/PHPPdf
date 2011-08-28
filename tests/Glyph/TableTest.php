@@ -1,5 +1,6 @@
 <?php
 
+use PHPPdf\Glyph\Table\Cell;
 use PHPPdf\Glyph\Table;
 use PHPPdf\Util\Boundary;
 use PHPPdf\Glyph as Glyphs;
@@ -218,28 +219,23 @@ class TableTest extends TestCase
     public function setColumnsMarginsWhenTableHasBeenNotifiedByCell(array $cellsMarginsLeft, array $cellsMarginsRight)
     {
         $numberOfColumns = count($cellsMarginsLeft);
-        $expectedMarginsLeft = array_fill(0, $numberOfColumns, 0);
-        $expectedMarginsRight = array_fill(0, $numberOfColumns, 0);
+        $expectedMarginsLeft = $expectedMarginsRight = array_fill(0, $numberOfColumns, 0);
         
         foreach($cellsMarginsLeft as $columnNumber => $marginsLeft)
         {
             foreach($marginsLeft as $rowNumber => $marginLeft)
             {
                 $marginRight = $cellsMarginsRight[$columnNumber][$rowNumber];
-                $cell = $this->getMock('PHPPdf\Glyph\Table\Cell', array('getMarginLeft', 'getMarginRight', 'getNumberOfColumn'));
-                $cell->expects($this->atLeastOnce())
-                     ->method('getMarginLeft')
-                     ->will($this->returnValue($marginLeft));
-                $cell->expects($this->atLeastOnce())
-                     ->method('getMarginRight')
-                     ->will($this->returnValue($marginRight));
-                $cell->expects($this->atLeastOnce())
-                     ->method('getNumberOfColumn')
-                     ->will($this->returnValue($columnNumber));
+                
+                $cell = new Cell(array(
+                	'margin-left' => $marginLeft, 
+                	'margin-right' => $marginRight,
+                ));
+                $cell->setNumberOfColumn($columnNumber);
 
                 $expectedMarginsLeft[$columnNumber] = max($expectedMarginsLeft[$columnNumber], $marginLeft);
                 $expectedMarginsRight[$columnNumber] = max($expectedMarginsRight[$columnNumber], $marginRight);
-
+                
                 $cells[] = $cell;
             }
         }

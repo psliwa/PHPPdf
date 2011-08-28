@@ -221,6 +221,6 @@ class Container extends Glyph
             $minWidth = max(array($minWidth, $child->getMinWidth()));
         }
 
-        return $minWidth + $this->getPaddingLeft() + $this->getPaddingRight();
+        return $minWidth + $this->getPaddingLeft() + $this->getPaddingRight() + $this->getMarginLeft() + $this->getMarginRight();
     }
 }
