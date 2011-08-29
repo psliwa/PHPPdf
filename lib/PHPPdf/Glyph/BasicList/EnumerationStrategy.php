@@ -24,4 +24,5 @@ interface EnumerationStrategy
     public function getWidthOfTheBiggestPosibleEnumerationElement(Document $document, BasicList $list);
     public function setIndex($index);
     public function setVisualIndex($visualIndex);
+    public function incrementIndex();
 }

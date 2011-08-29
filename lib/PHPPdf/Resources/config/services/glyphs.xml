@@ -116,7 +116,6 @@
 			<tag name="phppdf.glyph" />
 			<argument type="collection">
 				<argument key="margin-left">10</argument>
-				<argument key="splittable">false</argument>
 			</argument>
 			<call method="setFormattersNames">
 				<argument type="collection">

@@ -36,6 +36,7 @@ class BasicList extends Container
     const POSITION_OUTSIDE = 'outside';
     
     private $enumerationStrategy;
+    private $omitEnumerationOfFirstElement = false;
 
     public function initialize()
     {
@@ -52,6 +53,16 @@ class BasicList extends Container
         
         static::setAttributeSetters(array('type' => 'setType', 'image' => 'setImage'));
         static::setAttributeGetters(array('type' => 'getType', 'image' => 'getImage'));
+    }
+    
+    public function isOmitEnumerationOfFirstElement()
+    {
+        return $this->omitEnumerationOfFirstElement;
+    }
+    
+    public function setOmitEnumerationOfFirstElement($flag)
+    {
+        $this->omitEnumerationOfFirstElement = (boolean) $flag;
     }
     
     public function setType($type)
@@ -99,7 +110,6 @@ class BasicList extends Container
     {
         parent::doDraw($document);
         
-        $glyph = $this;
         $task = new DrawingTask(function(Glyph $glyph, Document $document) {
             $gc = $glyph->getGraphicsContext();
 
@@ -108,7 +118,15 @@ class BasicList extends Container
             
             foreach($glyph->getChildren() as $i => $child)
             {
-                $enumerationStrategy->drawEnumeration($document, $glyph, $gc, $i);
+                if($glyph->isOmitEnumerationOfFirstElement())
+                {
+                    $glyph->setOmitEnumerationOfFirstElement(false);
+                    $enumerationStrategy->incrementIndex();
+                }
+                else
+                {
+                    $enumerationStrategy->drawEnumeration($document, $glyph, $gc, $i);
+                }
             }
 
             $enumerationStrategy->reset();
@@ -154,5 +172,29 @@ class BasicList extends Container
         $fontSize = $this->getRecurseAttribute('font-size');
         
         return $font->getCharsWidth(array(ord($type)), $fontSize);
+    }
+    
+    protected function doSplit($height)
+    {
+        $numberOfChildren = $this->getNumberOfChildren();
+        
+        $glyph = parent::doSplit($height);
+        
+        $currentNumberOfChildren = $this->getNumberOfChildren() + ($glyph ? $glyph->getNumberOfChildren() : 0);
+        
+        if($glyph && $currentNumberOfChildren > $numberOfChildren)
+        {
+            $glyph->setOmitEnumerationOfFirstElement(true);
+        }
+        
+        return $glyph;
+    }
+    
+    public function copy()
+    {
+        $glyph = parent::copy();
+        $glyph->setOmitEnumerationOfFirstElement(false);
+        
+        return $glyph;
     }
 }

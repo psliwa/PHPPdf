@@ -36,7 +36,8 @@ class BasicListTest extends TestCase
              ->will($this->returnValue($gc));
              
         $this->list->setParent($page);
-        $enumerationStrategy = $this->getMock('PHPPdf\Glyph\BasicList\EnumerationStrategy', array('drawEnumeration', 'reset', 'getWidthOfTheBiggestPosibleEnumerationElement', 'setIndex', 'setVisualIndex'));
+        $enumerationStrategy = $this->getMockBuilder('PHPPdf\Glyph\BasicList\EnumerationStrategy')
+                                    ->getMock();
         $enumerationStrategy->expects($this->once())
                             ->method('setIndex')
                             ->with(0);

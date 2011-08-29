@@ -46,8 +46,13 @@ abstract class AbstractEnumerationStrategy implements EnumerationStrategy
         
         $this->doDrawEnumeration($document, $list, $gc, $xCoord, $yCoord);
         
-        $this->index++;
+        $this->incrementIndex();
         $this->visualIndex++;
+    }
+    
+    public function incrementIndex()
+    {
+        $this->index++;
     }
     
     abstract protected function getEnumerationElementTranslations(Document $document, BasicList $list);

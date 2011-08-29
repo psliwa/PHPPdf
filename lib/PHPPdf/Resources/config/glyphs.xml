@@ -57,7 +57,6 @@
 	    <glyph name="li" class="PHPPdf\Glyph\Container">
 	    	<stylesheet>
 	    		<attribute name="margin-left" value="10" />
-	    		<attribute name="splittable" value="false" />
 	    	</stylesheet>
 	        <formatters>
 	            <formatter class="PHPPdf\Formatter\ConvertAttributesFormatter" />

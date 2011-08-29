@@ -44,6 +44,7 @@ class RowTest extends TestCase
                  ->setNext(100, 0)
                  ->setNext(0, 0)
                  ->close();
+        $this->row->setHeight(100);
 
         $this->assertNull($this->row->split(50));
     }
