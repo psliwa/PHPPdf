@@ -1169,12 +1169,35 @@ abstract class Glyph implements Drawable, GlyphAware, \ArrayAccess, \Serializabl
      */
     public function split($height)
     {
-        if(!$this->getAttribute('splittable') || $height <= 0 || $height >= $this->getHeight())
+        if($this->shouldNotBeSplitted($height))
         {
             return null;
         }
 
         return $this->doSplit($height);
+    }
+    
+    protected function shouldNotBeSplitted($height)
+    {
+        if($height <= 0 || $height >= $this->getHeight())
+        {
+            return true;
+        }
+        
+        try
+        {
+            $page = $this->getPage();
+            if($page && $page->getHeight() < $this->getHeight())
+            {
+                return false;
+            }
+        }
+        catch(\LogicException $e)
+        {
+            //if glyph has no parent, splittable attribute will decide
+        }
+        
+        return !$this->getAttribute('splittable');
     }
 
     protected function doSplit($height)

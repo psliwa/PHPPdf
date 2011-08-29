@@ -233,4 +233,40 @@ class ParagraphTest extends TestCase
             }
         }
     }
+    
+    /**
+     * @test
+     * @dataProvider linesWidthsProvider
+     */
+    public function minWidthIsMaxOfLineMinWidth(array $linesWidths)
+    {
+        foreach($linesWidths as $width)
+        {
+            $line = $this->getMockBuilder('PHPPdf\Glyph\Paragraph\Line')
+                         ->setMethods(array('getTotalWidth'))
+                         ->disableOriginalConstructor()
+                         ->getMock();
+            $line->expects($this->atLeastOnce())
+                 ->method('getTotalWidth')
+                 ->will($this->returnValue($width));
+                 
+            $this->paragraph->addLine($line);
+        }
+        
+        $expectedMinWidth = max($linesWidths);
+        
+        $this->assertEquals($expectedMinWidth, $this->paragraph->getMinWidth());
+    }
+    
+    public function linesWidthsProvider()
+    {
+        return array(
+            array(array(
+                10, 20 ,30            
+            )),
+            array(array(
+                20, 20 ,10            
+            )),
+        );
+    }
 }

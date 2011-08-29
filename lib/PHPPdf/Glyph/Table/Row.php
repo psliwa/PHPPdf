@@ -24,6 +24,13 @@ class Row extends Container implements Listener
         'margin-top' => 0,
         'margin-bottom' => 0,
     );
+    
+    public function initialize()
+    {
+        parent::initialize();
+        
+        $this->setAttribute('splittable', false);
+    }
 
     public function add(Glyph $glyph)
     {
@@ -95,14 +102,6 @@ class Row extends Container implements Listener
     public function getWidth()
     {
         return $this->getParent()->getWidth();
-    }
-
-    /**
-     * Row can not be splitted
-     */
-    public function split($height)
-    {
-        return null;
     }
 
     public function reset()

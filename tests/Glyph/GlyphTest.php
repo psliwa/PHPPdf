@@ -209,6 +209,31 @@ class GlyphTest extends TestCase
         $this->assertEquals(30, $result->getHeight());
         $this->assertEquals(array(70, -30), $result->getEndDrawingPoint());
     }
+    
+    /**
+     * @test
+     */
+    public function splitIfGlyphIsHigherThanPageEvenIfSplittableAttributeIsFalse()
+    {
+        $x = 0;
+        $y = 500;
+        $height = 600;
+        $width = 300;
+        
+        $boundary = $this->objectMother->getBoundaryStub($x, $y, $width, $height);
+        
+        $this->invokeMethod($this->glyph, 'setBoundary', array($boundary));
+        $this->glyph->setWidth($width);
+        $this->glyph->setHeight($height);
+        $this->glyph->setAttribute('splittable', false);
+        
+        $page = new Page(array('page-size' => $width.':'.($height/2)));
+        $page->add($this->glyph);
+        
+        $newGlyph = $this->glyph->split(500);
+        
+        $this->assertNotNull($newGlyph);
+    }
 
     /**
      * @test
