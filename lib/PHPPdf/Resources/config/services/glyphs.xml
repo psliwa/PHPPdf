@@ -112,7 +112,7 @@
 				<argument id="phppdf.glyph.ul.enumeration_factory" type="service" />
 			</call>
 		</service>
-		<service id="phppdf.glyph.li" class="PHPPdf\Glyph\Container" public="false">
+		<service id="phppdf.glyph.li" class="PHPPdf\Glyph\BasicListItem" public="false">
 			<tag name="phppdf.glyph" />
 			<argument type="collection">
 				<argument key="margin-left">10</argument>

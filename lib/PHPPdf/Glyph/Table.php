@@ -61,7 +61,7 @@ class Table extends Container implements Listener
         $colspan = $glyph->getAttribute('colspan');
 
         $isWidthRelative = strpos($width, '%') !== false;
-        
+
         $widthPerColumn = $width / $colspan;
         
         if($isWidthRelative)

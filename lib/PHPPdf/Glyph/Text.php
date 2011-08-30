@@ -236,4 +236,15 @@ class Text extends Glyph
 
         return $copy;
     }
+    
+    public function isLeaf()
+    {
+        return true;
+    }
+    
+    protected function isAbleToExistsAboveCoord($yCoord)
+    {
+        $yCoord += $this->getAncestorWithFontSize()->getAttribute('line-height');
+        return $this->getFirstPoint()->getY() > $yCoord;
+    }
 }

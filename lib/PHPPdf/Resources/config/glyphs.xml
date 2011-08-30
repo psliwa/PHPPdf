@@ -54,7 +54,7 @@
 	            <formatter class="PHPPdf\Formatter\FloatFormatter" />
 	        </formatters>
 	    </glyph>
-	    <glyph name="li" class="PHPPdf\Glyph\Container">
+	    <glyph name="li" class="PHPPdf\Glyph\BasicListItem">
 	    	<stylesheet>
 	    		<attribute name="margin-left" value="10" />
 	    	</stylesheet>

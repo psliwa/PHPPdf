@@ -1247,6 +1247,29 @@ abstract class Glyph implements Drawable, GlyphAware, \ArrayAccess, \Serializabl
         return array();
     }
     
+    public function isLeaf()
+    {
+        return false;
+    }
+    
+    public function hasLeafDescendants($bottomYCoord = null)
+    {
+        return false;
+    }
+    
+    protected function isAbleToExistsAboveCoord($yCoord)
+    {
+        foreach($this->getChildren() as $child)
+        {
+            if($child->isAbleToExistsAboveCoord($yCoord))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+    
     /**
      * @return PHPPdf\Glyph\Glyph
      */

@@ -88,4 +88,15 @@ class Image extends Glyph
     {
         return $this->getWidth() + $this->getMarginLeft() + $this->getMarginRight();
     }
+    
+    public function isLeaf()
+    {
+        return true;
+    }
+    
+    protected function isAbleToExistsAboveCoord($yCoord)
+    {
+        $yCoord += $this->getHeight();
+        return $this->getFirstPoint()->getY() > $yCoord;
+    }
 }

@@ -223,4 +223,19 @@ class Container extends Glyph
 
         return $minWidth + $this->getPaddingLeft() + $this->getPaddingRight() + $this->getMarginLeft() + $this->getMarginRight();
     }
+    
+    public function hasLeafDescendants($bottomYCoord = null)
+    {
+        foreach($this->getChildren() as $child)
+        {
+            $hasValidPosition = $bottomYCoord === null || $child->isAbleToExistsAboveCoord($bottomYCoord);
+
+            if($hasValidPosition && ($child->isLeaf() || $child->hasLeafDescendants()))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }
