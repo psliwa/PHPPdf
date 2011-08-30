@@ -54,6 +54,22 @@
 	            <formatter class="PHPPdf\Formatter\FloatFormatter" />
 	        </formatters>
 	    </glyph>
+	    <glyph name="ol" class="PHPPdf\Glyph\BasicList">
+	    	<stylesheet>
+	    		<attribute name="type" value="decimal" />
+	    	</stylesheet>
+	    	<invoke method="setEnumerationStrategyFactory" argId="list.enumeration_factory" />
+	        <formatters>
+	            <formatter class="PHPPdf\Formatter\ConvertAttributesFormatter" />
+	            <formatter class="PHPPdf\Formatter\StandardDimensionFormatter" />
+	            <formatter class="PHPPdf\Formatter\FirstPointPositionFormatter" />
+	            <formatter class="PHPPdf\Formatter\ListFormatter" />
+	            <formatter class="PHPPdf\Formatter\ContainerFormatter" />
+	            <formatter class="PHPPdf\Formatter\ContainerDimensionFormatter" />
+	            <formatter class="PHPPdf\Formatter\StandardPositionFormatter" />
+	            <formatter class="PHPPdf\Formatter\FloatFormatter" />
+	        </formatters>
+	    </glyph>
 	    <glyph name="li" class="PHPPdf\Glyph\BasicListItem">
 	    	<stylesheet>
 	    		<attribute name="margin-left" value="10" />

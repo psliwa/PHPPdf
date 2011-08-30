@@ -6,4 +6,6 @@
 	
 	<ul border.color="blue">
 	</ul>
+	<ol border.color="blue">
+	</ol>
 </stylesheet>

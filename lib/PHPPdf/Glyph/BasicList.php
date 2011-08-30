@@ -44,7 +44,7 @@ class BasicList extends Container
         
         $this->addAttribute('type', self::TYPE_CIRCLE);
         $this->addAttribute('image');
-        $this->addAttribute('position', self::POSITION_OUTSIDE);
+        $this->addAttribute('position', self::POSITION_INSIDE);
     }
     
     protected static function initializeType()

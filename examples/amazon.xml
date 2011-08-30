@@ -28,7 +28,7 @@
 				<p class="code">
 					GET / HTTP/1.1<nl />
 					Host: s3.amazonaws.com<nl />
-					Date: <i>date</i><nl />
+					Date: <i>date</i><nl />zz
 					Authorization: AWS <i>AWSAccessKeyId:signature</i><nl />
 				</p>
 			</div>

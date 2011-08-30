@@ -5,12 +5,12 @@
     	<div>
 
 	    	<p>Position: outside</p>
-	    	<ul>
+	    	<ul position="outside">
 	    		<li>Some text</li>
 	    		<li>some another text</li>
 	    	</ul>
 	    	<p>Position: inside</p>
-	    	<ul position="inside">
+	    	<ul>
 	    		<li>Some text</li>
 	    		<li>some another text</li>
 	    	</ul>
@@ -42,25 +42,25 @@
 	    	</ul>
 
 	    	<p>Ordered list</p>
-	    	<ul type="decimal" position="inside">
+	    	<ol>
+	    		<li>Some text</li>
+	    		<li>some another text</li>
+	    	</ol>
+	    	
+	    	<p>Ordered list</p>
+	    	<ol type="decimal-leading-zero" position="outside">
+	    		<li>Some text</li>
+	    		<li>some another text</li>
+	    	</ol>
+	    	
+	    	<p>Ordered list</p>
+	    	<ul type="lower-alpha">
 	    		<li>Some text</li>
 	    		<li>some another text</li>
 	    	</ul>
 	    	
 	    	<p>Ordered list</p>
-	    	<ul type="decimal-leading-zero" position="outside">
-	    		<li>Some text</li>
-	    		<li>some another text</li>
-	    	</ul>
-	    	
-	    	<p>Ordered list</p>
-	    	<ul type="lower-alpha" position="inside">
-	    		<li>Some text</li>
-	    		<li>some another text</li>
-	    	</ul>
-	    	
-	    	<p>Ordered list</p>
-	    	<ul type="upper-alpha" position="inside">
+	    	<ul type="upper-alpha">
 	    		<li>Some text</li>
 	    		<li>some another text</li>
 	    	</ul>

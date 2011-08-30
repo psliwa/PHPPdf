@@ -12,6 +12,7 @@
 					<argument key="div" type="service" id="phppdf.glyph.div" />
 					<argument key="ul" type="service" id="phppdf.glyph.ul" />
 					<argument key="li" type="service" id="phppdf.glyph.li" />
+					<argument key="ol" type="service" id="phppdf.glyph.ol" />
 					<argument key="p" type="service" id="phppdf.glyph.p" />
 					<argument key="paragraph" type="service" id="phppdf.glyph.paragraph" />
 					<argument key="text" type="service" id="phppdf.glyph.text" />
@@ -96,6 +97,27 @@
 		<service id="phppdf.glyph.ul.enumeration_factory" class="PHPPdf\Glyph\BasicList\EnumerationStrategyFactory" />
 		<service id="phppdf.glyph.ul" class="PHPPdf\Glyph\BasicList" public="false">
 			<tag name="phppdf.glyph" />
+			<call method="setFormattersNames">
+				<argument type="collection">
+					<argument>PHPPdf\Formatter\ConvertAttributesFormatter</argument>
+					<argument>PHPPdf\Formatter\StandardDimensionFormatter</argument>
+					<argument>PHPPdf\Formatter\FirstPointPositionFormatter</argument>
+					<argument>PHPPdf\Formatter\ListFormatter</argument>
+					<argument>PHPPdf\Formatter\ContainerFormatter</argument>
+					<argument>PHPPdf\Formatter\ContainerDimensionFormatter</argument>
+					<argument>PHPPdf\Formatter\StandardPositionFormatter</argument>
+					<argument>PHPPdf\Formatter\FloatFormatter</argument>
+				</argument>
+			</call>
+			<call method="setEnumerationStrategyFactory">
+				<argument id="phppdf.glyph.ul.enumeration_factory" type="service" />
+			</call>
+		</service>
+		<service id="phppdf.glyph.ol" class="PHPPdf\Glyph\BasicList" public="false">
+			<tag name="phppdf.glyph" />
+			<argument type="collection">
+				<argument key="type">decimal</argument>
+			</argument>
 			<call method="setFormattersNames">
 				<argument type="collection">
 					<argument>PHPPdf\Formatter\ConvertAttributesFormatter</argument>
