@@ -1,5 +1,6 @@
 <?php
 
+use PHPPdf\Glyph\Text;
 use PHPPdf\Glyph\Glyph;
 use PHPPdf\Document;
 use PHPPdf\Util\Point;
@@ -196,5 +197,35 @@ class LinePartTest extends TestCase
              ->with($this->anything());
         
         $linePart = new LinePart('', 0, 0, $text);
+    }
+    
+    /**
+     * @test
+     */
+    public function getNumberOfWords()
+    {
+        $words = 'some words';
+        $linePart = new LinePart($words, 0, 0, new Text());
+        
+        $this->assertEquals(2, $linePart->getNumberOfWords());
+        
+        $linePart->setWords('some more words');
+        $this->assertEquals(3, $linePart->getNumberOfWords());
+    }
+    
+    /**
+     * @test
+     */
+    public function wordSpacingHasAnImpactOnWidth()
+    {
+        $words = 'some more words';
+        $width = 100;
+        $linePart = new LinePart($words, $width, 0, new Text());
+        
+        $wordSpacing = 5;
+        $linePart->setWordSpacing($wordSpacing);
+        
+        $expectedWidth = $width + ($linePart->getNumberOfWords()-1)*5;
+        $this->assertEquals($expectedWidth, $linePart->getWidth());
     }
 }

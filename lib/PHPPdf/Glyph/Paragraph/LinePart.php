@@ -28,6 +28,7 @@ class LinePart implements Drawable
     private $yTranslation;
     private $width;
     private $wordSpacing = null;
+    private $numberOfWords = null;
     
     public function __construct($words, $width, $xTranslation, Text $text)
     {
@@ -46,11 +47,17 @@ class LinePart implements Drawable
         }
         
         $this->words = (string) $words;
+        $this->numberOfWords = null;
     }
     
     public function getNumberOfWords()
     {
-        return count(explode(' ', rtrim($this->words)));
+        if($this->numberOfWords === null)
+        {
+            $this->numberOfWords = count(explode(' ', rtrim($this->words)));
+        }
+        
+        return $this->numberOfWords;
     }
     
     public function setLine(Line $line)
@@ -163,7 +170,23 @@ class LinePart implements Drawable
     
     public function getWidth()
     {
-        return $this->width;
+        $width = $this->width;
+        if($this->wordSpacing !== null)
+        {
+            $width += $this->getWordSpacingSum();
+        }
+
+        return $width;
+    }
+    
+    public function getWordSpacingSum()
+    {
+        if($this->wordSpacing === null)
+        {
+            return 0;
+        }
+        
+        return ($this->getNumberOfWords() - 1)*$this->wordSpacing;
     }
     
     public function getLineHeight()

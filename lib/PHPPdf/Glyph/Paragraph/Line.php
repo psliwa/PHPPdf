@@ -139,9 +139,12 @@ class Line
         
         $wordSpacing = $numberOfSpaces ? ($this->getRealWidth() - $this->getTotalWidth()) / $numberOfSpaces : null;
 
+        $wordSpacingSum = 0;
         foreach($this->parts as $part)
         {
             $part->setWordSpacing($wordSpacing);
+            $part->horizontalTranslate($wordSpacingSum);
+            $wordSpacingSum += $part->getWordSpacingSum();
         }
     }
     
