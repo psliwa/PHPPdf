@@ -91,7 +91,6 @@ class Paragraph extends Container
     public function addLine(Line $line)
     {
         $this->lines[] = $line;
-        $line->reorganizeParts();
     }
     
     public function getLines()
@@ -101,9 +100,10 @@ class Paragraph extends Container
     
     public function getDrawingTasks(Document $document)
     {
-        foreach($this->lines as $line)
+        $lastIndex = count($this->lines) - 1;
+        foreach($this->lines as $i => $line)
         {
-            $line->applyHorizontalTranslation();
+            $line->format($i != $lastIndex);
         }
         
         $tasks = array();

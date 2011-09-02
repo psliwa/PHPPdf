@@ -11,7 +11,7 @@ class LinePartTest extends TestCase
      * @test
      * @dataProvider drawingDataProvider
      */
-    public function drawLinePartUsingTextGlyphAttributes($fontSize, $lineHeightOfText, $textDecoration, $expectedLineDecorationYCoord)
+    public function drawLinePartUsingTextGlyphAttributes($fontSize, $lineHeightOfText, $textDecoration, $expectedLineDecorationYCoord, $wordSpacing)
     {
         $encodingStub = 'utf-16';
         $colorStub = $this->getMockBuilder('PHPPdf\Engine\Color')
@@ -73,9 +73,16 @@ class LinePartTest extends TestCase
 	    $expectedXCoord = $startPoint->getX() + $xTranslationInLine;
 	    $expectedYCoord = $startPoint->getY() - $fontSize - ($heightOfLine - $lineHeightOfText);
 	    
+	    $expectedWordSpacing = 0;
+	    if($wordSpacing !== null)
+	    {
+            $expectedWordSpacing = $wordSpacing;
+	    }
+
         $gc->expects($this->once())
            ->method('drawText')
-           ->with($words, $expectedXCoord, $expectedYCoord, $encodingStub);
+           ->with($words, $expectedXCoord, $expectedYCoord, $encodingStub, $expectedWordSpacing);
+	    
            
         $gc->expects($this->once())
            ->method('setFont')
@@ -134,6 +141,7 @@ class LinePartTest extends TestCase
              ->will($this->returnValue($heightOfLine));
         
         $linePart = new LinePart($words, $linePartWidth, $xTranslationInLine, $text);
+        $linePart->setWordSpacing($wordSpacing);
         $linePart->setLine($line);
         
         $tasks = $linePart->getDrawingTasks($documentStub);
@@ -147,10 +155,10 @@ class LinePartTest extends TestCase
     public function drawingDataProvider()
     {
         return array(
-            array(11, 15, Glyph::TEXT_DECORATION_NONE, false),
-            array(11, 15, Glyph::TEXT_DECORATION_UNDERLINE, -1),
-            array(18, 15, Glyph::TEXT_DECORATION_LINE_THROUGH, 6),
-            array(12, 15, Glyph::TEXT_DECORATION_OVERLINE, 11),
+            array(11, 15, Glyph::TEXT_DECORATION_NONE, false, null),
+            array(11, 15, Glyph::TEXT_DECORATION_UNDERLINE, -1, null),
+            array(18, 15, Glyph::TEXT_DECORATION_LINE_THROUGH, 6, null),
+            array(12, 15, Glyph::TEXT_DECORATION_OVERLINE, 11, 13),
         );
     }
     

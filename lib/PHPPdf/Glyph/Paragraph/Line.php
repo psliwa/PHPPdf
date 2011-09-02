@@ -73,17 +73,13 @@ class Line
         $this->paragraph = $paragraph;
     }
     
-    public function applyHorizontalTranslation()
-    {
-         $this->setXTranslation($this->getHorizontalTranslation());
-    }
-    
     private function getHorizontalTranslation()
     {
         $align = $this->paragraph->getRecurseAttribute('text-align');
         switch($align)
         {
             case Glyph::ALIGN_LEFT:
+            case Glyph::ALIGN_JUSTIFY:
                 return 0;
             case Glyph::ALIGN_RIGHT:
                 return  $this->getRealWidth() - $this->getTotalWidth();
@@ -130,19 +126,34 @@ class Line
         return $height;
     }
     
-    public function reorganizeParts()
+    public function format($formatJustify = true)
     {
-//        $lineHeight = null;
-//        foreach($this->parts as $part)
-//        {
-//            if(!$lineHeight)
-//            {
-//                $lineHeight = $part->getHeight();
-//            }
-//            else
-//            {
-//                $part->verticalTranslate($lineHeight - $part->getHeight());
-//            }
-//        }
+        $this->setXTranslation($this->getHorizontalTranslation());
+        
+        if(!$formatJustify || $this->paragraph->getRecurseAttribute('text-align') !== Glyph::ALIGN_JUSTIFY)
+        {
+            return;
+        }
+
+        $numberOfSpaces = $this->getNumberOfWords() - 1;
+        
+        $wordSpacing = $numberOfSpaces ? ($this->getRealWidth() - $this->getTotalWidth()) / $numberOfSpaces : null;
+
+        foreach($this->parts as $part)
+        {
+            $part->setWordSpacing($wordSpacing);
+        }
+    }
+    
+    private function getNumberOfWords()
+    {
+        $count = 0;
+        
+        foreach($this->parts as $part)
+        {
+            $count += $part->getNumberOfWords();
+        }
+        
+        return $count;
     }
 }

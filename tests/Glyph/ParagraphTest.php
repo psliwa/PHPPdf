@@ -74,7 +74,7 @@ class ParagraphTest extends TestCase
     /**
      * @test
      */
-    public function translateLinesWhileGettingTasks()
+    public function formatLinesWhileGettingTasks()
     {
         $documentStub = new Document();
         
@@ -83,12 +83,12 @@ class ParagraphTest extends TestCase
         for($i=0; $i<3; $i++)
         {
             $line = $this->getMockBuilder('PHPPdf\Glyph\Paragraph\Line')
-                         ->setMethods(array('applyHorizontalTranslation'))
+                         ->setMethods(array('format'))
                          ->disableOriginalConstructor()
                          ->getMock();
                              
             $line->expects($this->once())
-                 ->method('applyHorizontalTranslation');
+                 ->method('format');
                      
             $this->paragraph->addLine($line);
         }

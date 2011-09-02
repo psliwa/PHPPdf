@@ -231,4 +231,28 @@ class ContainerTest extends TestCase
          
          $this->assertEquals($graphicContextStub, $this->glyph->getGraphicsContext());
     }
+    
+    /**
+     * @test
+     */
+    public function hasLeafDescendants()
+    {
+        $this->assertFalse($this->glyph->hasLeafDescendants());
+
+        $child = new Container();
+        $this->glyph->add($child);
+        
+        $this->assertFalse($this->glyph->hasLeafDescendants());
+        
+        $leaf = $this->getMockBuilder('PHPPdf\Glyph\Glyph')
+                     ->setMethods(array('hasLeafDescendants'))
+                     ->getMock();
+        $leaf->expects($this->atLeastOnce())
+             ->method('hasLeafDescendants')
+             ->will($this->returnValue(true));
+             
+        $child->add($leaf);
+
+        $this->assertTrue($this->glyph->hasLeafDescendants());
+    }
 }

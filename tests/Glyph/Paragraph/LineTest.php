@@ -33,7 +33,7 @@ class LineTest extends TestCase
             $line->addPart($linePart);
         }
         
-        $line->applyHorizontalTranslation();
+        $line->format();
         
         $expectedXCoord = $paragraphFirstPoint->getX() + $expectedTranslation;
         $actualXCoord = $line->getFirstPoint()->getX();
@@ -92,5 +92,64 @@ class LineTest extends TestCase
         $line = new Line($paragraph, $xTranslation, $yTranslation);
         
         $this->assertEquals(array(110, 79), $line->getFirstPoint()->toArray());
+    }
+    
+    /**
+     * @test
+     */
+    public function justifyLine()
+    {
+        $paragraphWidth = 100;
+
+        $paragraph = $this->getMockBuilder('PHPPdf\Glyph\Paragraph')
+                          ->setMethods(array('getWidth', 'getRecurseAttribute', 'getParentPaddingLeft', 'getParentPaddingRight'))
+                          ->getMock();
+        $paragraph->expects($this->atLeastOnce())
+                  ->method('getWidth')
+                  ->will($this->returnValue($paragraphWidth));
+        $paragraph->expects($this->atLeastOnce())
+                  ->method('getParentPaddingLeft')
+                  ->will($this->returnValue(0));
+        $paragraph->expects($this->atLeastOnce())
+                  ->method('getParentPaddingRight')
+                  ->will($this->returnValue(0));
+        $paragraph->expects($this->atLeastOnce())
+                  ->method('getWidth')
+                  ->will($this->returnValue($paragraphWidth));
+        $paragraph->expects($this->atLeastOnce())
+                  ->method('getRecurseAttribute')
+                  ->with('text-align')
+                  ->will($this->returnValue(Glyph::ALIGN_JUSTIFY));
+                          
+        $line = new Line($paragraph, 0, 0);
+        
+        $linePartSizes = array(30, 50);
+        $numberOfWordsPerPart = 5;
+        $numberOfSpaces = count($linePartSizes) * $numberOfWordsPerPart - 1;
+        $totalWidth = array_sum($linePartSizes);
+
+        $expectedWordSpacing = ($paragraphWidth - $totalWidth)/$numberOfSpaces;        
+        
+        foreach($linePartSizes as $width)
+        {
+            $linePart = $this->getMockBuilder('PHPPdf\Glyph\Paragraph\LinePart')
+                             ->setMethods(array('setWordSpacing', 'getWidth', 'getNumberOfWords'))
+                             ->disableOriginalConstructor()
+                             ->getMock();
+            $linePart->expects($this->atLeastOnce())
+                     ->method('getWidth')
+                     ->will($this->returnValue($width));
+                     
+            $linePart->expects($this->once())
+                     ->method('setWordSpacing')
+                     ->with($expectedWordSpacing);
+                     
+            $linePart->expects($this->atLeastOnce())
+                     ->method('getNumberOfWords')
+                     ->will($this->returnValue($numberOfWordsPerPart));
+            $line->addPart($linePart);
+        }
+        
+        $line->format();
     }
 }

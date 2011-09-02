@@ -31,15 +31,7 @@ class VerticalAlignFormatter extends BaseFormatter
     private function processVerticalAlign(Glyph $glyph, $verticalAlign)
     {
         $minYCoord = $this->getMinimumYCoordOfChildren($glyph);
-//        $sortedGlyphs = $this->sortChildren($glyph);
-//        
-//        foreach($sortedGlyphs as $child)
-//        {
-//            $translation = $child->getMiddlePoint()->getY() - $glyph->getMiddlePoint()->getY();
-//            $child->translate(0, $translation);
-//        }
-        
-//
+
         $translation = $this->getVerticalTranslation($glyph, $minYCoord, $verticalAlign);
 
         $this->verticalTranslateOfGlyphs($glyph->getChildren(), $translation);

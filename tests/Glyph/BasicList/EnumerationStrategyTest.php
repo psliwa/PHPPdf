@@ -98,19 +98,23 @@ abstract class EnumerationStrategyTest extends TestCase
         $expectedXCoord = $point->getX() + $positionTranslation - $childMarginLeft;
         $expectedYCoord = $point->getY() - $fontSize;
         
-        $gc->expects($this->at(0))
+        $i = 0;
+        $gc->expects($this->at($i++))
            ->method('saveGS');
-        $gc->expects($this->at(1))
+        $gc->expects($this->at($i++))
            ->method('setLineColor')
            ->with($colorStub);
-        $gc->expects($this->at(2))
+        $gc->expects($this->at($i++))
+           ->method('setFillColor')
+           ->with($colorStub);
+        $gc->expects($this->at($i++))
            ->method('setFont')
            ->with($fontTypeMock, $fontSize);
         
-        $gc->expects($this->at(3))
+        $gc->expects($this->at($i++))
            ->method('drawText')
            ->with($expectedText, $expectedXCoord, $expectedYCoord, $encoding);
-        $gc->expects($this->at(4))
+        $gc->expects($this->at($i++))
            ->method('restoreGS');
 
         $this->strategy->setIndex($elementIndex);

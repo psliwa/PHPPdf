@@ -59,6 +59,7 @@ abstract class TextEnumerationStrategy extends AbstractEnumerationStrategy
         if($color)
         {
             $gc->setLineColor($color);
+            $gc->setFillColor($color);
         }
         
         $font = $list->getFont($document);

@@ -44,6 +44,7 @@ abstract class Glyph implements Drawable, GlyphAware, \ArrayAccess, \Serializabl
     const ALIGN_LEFT = 'left';
     const ALIGN_RIGHT = 'right';
     const ALIGN_CENTER = 'center';
+    const ALIGN_JUSTIFY = 'justify';
     const VERTICAL_ALIGN_TOP = 'top';
     const VERTICAL_ALIGN_MIDDLE = 'middle';
     const VERTICAL_ALIGN_BOTTOM = 'bottom';

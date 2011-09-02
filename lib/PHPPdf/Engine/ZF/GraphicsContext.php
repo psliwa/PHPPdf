@@ -127,9 +127,58 @@ class GraphicsContext implements BaseGraphicsContext
         $this->page->drawPolygon($x, $y, $type);
     }
 
-    public function drawText($text, $width, $height, $encoding)
+    public function drawText($text, $x, $y, $encoding, $wordSpacing = 0, $fillType = self::SHAPE_DRAW_FILL)
     {
-        $this->page->drawText($text, $width, $height, $encoding);
+        try 
+        {
+            if($wordSpacing == 0 && $fillType == self::SHAPE_DRAW_FILL)
+            {
+                $this->page->drawText($text, $x, $y, $encoding);
+            }
+            else
+            {
+                $this->richDrawText($text, $x, $y, $encoding, $wordSpacing, $fillType);
+            }
+        }
+        catch(\Zend_Pdf_Exception $e)
+        {
+            throw new Exception($e->getMessage(), $e->getCode(), $e);
+        }
+    }
+    
+    private function richDrawText($text, $x, $y, $encoding, $wordSpacing, $fillType)
+    {
+        if($this->page->getFont() === null) 
+        {
+            throw new \Zend_Pdf_Exception('Font has not been set');
+        }
+        
+        $textObj = new \Zend_Pdf_Element_String($this->page->getFont()->encodeString($text, $encoding));
+        $xObj    = new \Zend_Pdf_Element_Numeric($x);
+        $yObj    = new \Zend_Pdf_Element_Numeric($y);
+        $wordSpacingObj = new \Zend_Pdf_Element_Numeric($wordSpacing);
+        
+        if($fillType == self::SHAPE_DRAW_FILL)
+        {
+            $pdfFillType = 0;
+        }
+        elseif($fillType == self::SHAPE_DRAW_STROKE)
+        {
+            $pdfFillType = 1;
+        }
+        else
+        {
+            $pdfFillType = 2;
+        }
+        
+        $data = "BT\n"
+                 .  $xObj->toString() . ' ' . $yObj->toString() . " Td\n"
+                 . ($wordSpacing != 0 ? $wordSpacing.' Tw'."\n" : '')
+                 . ($pdfFillType != 0 ? $pdfFillType.' Tr'."\n" : '')
+                 .  $textObj->toString() . " Tj\n"
+                 .  "ET\n";
+
+        $this->page->rawWrite($data, 'Text');
     }
 
     public function __clone()

@@ -21,7 +21,7 @@ class TableFormatter extends BaseFormatter
     public function format(Glyph $glyph, Document $document)
     {
         $widthsOfColumns = $glyph->getWidthsOfColumns();
-        $tableWidth = $glyph->getWidth();      
+        $tableWidth = $glyph->getWidthWithoutPaddings();
 
         $marginsLeft = $glyph->getMarginsLeftOfColumns();
         $marginsRight = $glyph->getMarginsRightOfColumns();

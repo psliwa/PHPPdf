@@ -27,6 +27,7 @@ class LinePart implements Drawable
     private $xTranslation;
     private $yTranslation;
     private $width;
+    private $wordSpacing = null;
     
     public function __construct($words, $width, $xTranslation, Text $text)
     {
@@ -47,19 +48,33 @@ class LinePart implements Drawable
         $this->words = (string) $words;
     }
     
+    public function getNumberOfWords()
+    {
+        return count(explode(' ', rtrim($this->words)));
+    }
+    
     public function setLine(Line $line)
     {
         $this->line = $line;
     }
     
+    /**
+     * @param float Word spacing in units
+     */
+    public function setWordSpacing($wordSpacing)
+    {
+        $this->wordSpacing = $wordSpacing;
+    }
+    
     public function getDrawingTasks(Document $document)
     {
-        return array(new DrawingTask(function(Text $text, $point, $words, $width, $document) {
+        return array(new DrawingTask(function(Text $text, $point, $words, $width, $document, $linePartWordSpacing) {
             $gc = $text->getGraphicsContext();
             $gc->saveGS();
             $fontSize = $text->getFontSizeRecursively();
             
-            $gc->setFont($text->getFont($document), $fontSize);
+            $font = $text->getFont($document);
+            $gc->setFont($font, $fontSize);
             $color = $text->getRecurseAttribute('color');
             
             if($color)
@@ -83,7 +98,13 @@ class LinePart implements Drawable
             }
  
             $yCoord = $point->getY() - $fontSize;
-            $gc->drawText($words, $point->getX(), $point->getY() - $fontSize, $text->getEncoding());
+            $wordSpacing = 0;
+            
+            if($linePartWordSpacing !== null)
+            {
+                $wordSpacing = $linePartWordSpacing;
+            }
+            $gc->drawText($words, $point->getX(), $point->getY() - $fontSize, $text->getEncoding(), $wordSpacing);
             
             $textDecoration = $text->getTextDecorationRecursively();
             
@@ -115,7 +136,7 @@ class LinePart implements Drawable
             }
 
             $gc->restoreGS();
-        }, array($this->text, $this->getFirstPoint(), $this->words, $this->width, $document)));
+        }, array($this->text, $this->getFirstPoint(), $this->words, $this->width, $document, $this->wordSpacing)));
     }
     
     public function getFirstPoint()

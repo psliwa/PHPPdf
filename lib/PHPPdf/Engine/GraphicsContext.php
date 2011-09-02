@@ -44,7 +44,7 @@ interface GraphicsContext
     
     public function drawPolygon(array $x, array $y, $type);
 
-    public function drawText($text, $width, $height, $encoding);
+    public function drawText($text, $x, $y, $encoding, $wordSpacing = 0, $fillType = self::SHAPE_DRAW_FILL);
 
     public function drawRoundedRectangle($x1, $y1, $x2, $y2, $radius, $fillType = null);
     
