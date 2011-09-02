@@ -254,7 +254,7 @@ Atrybuty
 * splittable - określa czy element może zostać podzielony na dwie strony, dla większości elementów domyślna wartość to true
 * float - działanie podobne, aczkolwiek nie takie same jak w HTML/CSS. Wartości left|none|right, domyślnie none
 * line-height - działanie takie jak w HTML/CSS. Domyślna wartość to 1.2*font-size
-* text-align - działanie takie jak w HTML/CSS. Wartości left|center|right, domyślnie left. Obecnie nie działa poprawnie dla tekstu wymieszanego z tagami formatującymi (np. "span").
+* text-align - działanie takie jak w HTML/CSS. Wartości left|center|right|justify, domyślnie left.
 * text-decoration - dozwolone wartości: none, underline, overline, line-through
 * break - łamie stronę lub kolumnę jeśli element jest bezpośrednim dzieckiem elementu dynamic-page lub column-layout
 * colspan, rowspan - działanie analogiczne do atrybutów html (rowspan jeszcze nie jest zaimplementowane)
@@ -504,7 +504,6 @@ Znane ograniczenia
 Poniżej przedstawiam listę ograniczeń obecnej wersji biblioteki:
 
 * brak możliwości wstawiania zdjęcia do tekstu z opływem (float) - zostanie wprowadzone w kolejnych wersjach
-* brak justrowania - zostanie wprowadzone w kolejnych wersjach
 * obramowanie nie zmienia rozmiaru elementu tak jak to jest w HTML - zabieg celowy, raczej nie planuję jego zmiany
 
 <a name="todo"></a>

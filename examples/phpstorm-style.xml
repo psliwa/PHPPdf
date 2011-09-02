@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<stylesheet>
+	<h1 color="#5058a6" border.type="bottom" border.color="#5058a6" border.size="0.5" padding-bottom="5" font-size="20"></h1>
+	<h2 color="#5058a6" float="left" font-size="11" margin-bottom="10" margin-top="10"/>
+	
+	<div class="header" height="45">
+		<h2 height="100%" vertical-align="bottom" line-height="25" margin-bottom="0" margin-top="0"/>
+		<img float="right" height="100%" />
+	</div>
+	
+	<p padding="1 0" text-align="justify">
+		<img width="100%" border.color="#a8a9ad" border.size="1.5" margin="5 auto" />
+	</p>
+	
+	<any class="half" width="49.5%"></any>
+	<any class="left" float="left"></any>
+	<any class="right" float="right"></any>
+	<any class="code" font-type="courier" />
+	
+	<p class="learn" margin-top="230" float="right" background.image="dir:/phpstorm/arrows.jpg" background.image-height="100%" padding-left="15" padding-top="0" padding-bottom="0">
+	</p>
+	<a font-style="bold" color="#5058a6" text-decoration="none"></a>
+	
+	<div class="table" border.color="#5058a6" border.size="0.5" padding-left="3">
+		<div class="td" float="left" width="24.2%">
+			<div class="block" background.color="#abacd6" margin-right="3" margin-top="3" margin-bottom="3" padding="5" height="90">
+				<div class="header" height="65%">
+					<p margin-top="5" text-align="center"></p>
+					<h3 font-size="9.5" font-style="bold" text-align="center" padding-bottom="0" margin-bottom="0"></h3>
+				</div>
+				
+				<div class="button" text-align="center" vertical-align="middle" background.color="#5058a6" width="40%" margin="0 auto" height="18" font-size="11" font-style="bold" color="white">
+				</div>
+				<div class="button orange" background.color="#f58221">
+				</div>
+			</div>
+			<div class="lighter" background.color="#c2c2e1" />
+			<div class="the-lightest" background.color="#d2d1e9" />
+			<div class="block first" margin-left="0" />
+			<div class="block last" margin-right="0" />
+		</div>
+	</div>
+	
+	<table width="75%" font-size="8">
+		<tr>
+			<td border.type="none" margin="10 10 0 0" />
+		</tr>
+	</table>
+	
+	<ul color="#5058a6" font-style="bold">
+		<li color="black" font-style="normal" />
+	</ul>
+</stylesheet>
