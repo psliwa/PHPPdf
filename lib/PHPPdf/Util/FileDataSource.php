@@ -9,6 +9,8 @@
 namespace PHPPdf\Util;
 
 /**
+ * File data source class
+ * 
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
 class FileDataSource extends DataSource

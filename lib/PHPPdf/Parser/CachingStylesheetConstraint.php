@@ -10,6 +10,11 @@ namespace PHPPdf\Parser;
 
 use PHPPdf\Cache\Cache;
 
+/**
+ * Styleshet constraint with cache feature
+ *
+ * @author Piotr Śliwa <peter.pl7@gmail.com>
+ */
 class CachingStylesheetConstraint extends StylesheetConstraint
 {
     private $resultMap = array();

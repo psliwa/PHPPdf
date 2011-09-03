@@ -78,14 +78,23 @@ class StylesheetConstraint extends BagContainer implements \Countable
         }
     }
 
-    public function addConstraint($name, StylesheetConstraint $constraint)
+    /**
+     * Adds constraints with given tag
+     * 
+     * @param string Constraint tag
+     * @param StylesheetConstraint Constraint to add
+     */
+    public function addConstraint($tag, StylesheetConstraint $constraint)
     {
-        $name = (string) $name;
-        $constraint->setTag($name);
+        $tag = (string) $tag;
+        $constraint->setTag($tag);
 
         $this->constraints[] = $constraint;
     }
 
+    /**
+     * @return array All constraints
+     */
     public function getConstraints()
     {
         return $this->constraints;
@@ -96,6 +105,21 @@ class StylesheetConstraint extends BagContainer implements \Countable
         return count($this->getConstraints());
     }
 
+    /**
+     * Find attributes by specyfic criteria
+     * 
+     * $query should be array in format:
+     * 
+     * * array(
+     * *  array('tag' => 'first-tag', 'classes' => array('class1', 'class2')),
+     * *  array('tag' => 'second-tag', 'classes' => array()),
+     * * )
+     * 
+     * Above example is equivalent to css selector: "first-tag.class1.class2 second-tag"
+     * 
+     * @param array $query Criteria of constraint
+     * @return BagContainer Container with specyfic attributes
+     */
     public function find(array $query)
     {
         if(count($query) === 0)

@@ -207,6 +207,7 @@ class Boundary implements \Countable, \Iterator, \ArrayAccess, \Serializable
 
     /**
      * Translate boundary by vector ($x, $y)
+     * 
      * @param integer $x First vector's coordinate
      * @param integer $y Second vector's coordinate
      */

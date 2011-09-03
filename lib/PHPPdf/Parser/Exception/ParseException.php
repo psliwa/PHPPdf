@@ -9,6 +9,8 @@
 namespace PHPPdf\Parser\Exception;
 
 /**
+ * Occurs on document parse error
+ * 
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
 class ParseException extends \PHPPdf\Exception\Exception

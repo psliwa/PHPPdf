@@ -97,12 +97,20 @@ class Facade
         $this->facadeConfiguration = $facadeConfiguration;
     }
 
+    /**
+     * @param boolean $useCache Stylsheet constraints should be cached?
+     */
     public function setUseCacheForStylesheetConstraint($useCache)
     {
         $this->useCacheForStylesheetConstraint = (bool) $useCache;
     }
 
-    public function render($documentXml, $stylesheetXml = null)
+    /**
+     * Convert text document to pdf document
+     * 
+     * @return string Content of pdf document
+     */
+    public function render($documentContent, $stylesheetContent = null)
     {
         $enhancementFactory = $this->configurationLoader->createEnhancementFactory();
         
@@ -112,11 +120,11 @@ class Facade
         $this->getDocumentParser()->setEnhancementFactory($enhancementFactory);
         $this->getDocumentParser()->setGlyphFactory($this->configurationLoader->createGlyphFactory());
 
-        $stylesheetConstraint = $this->retrieveStylesheetConstraint($stylesheetXml);
+        $stylesheetConstraint = $this->retrieveStylesheetConstraint($stylesheetContent);
 
         $relativePathToResources = str_replace('\\', '/', realpath(__DIR__.'/../Resources'));
-        $documentXml = str_replace('%resources%', $relativePathToResources, $documentXml);
-        $pageCollection = $this->getDocumentParser()->parse($documentXml, $stylesheetConstraint);
+        $documentContent = str_replace('%resources%', $relativePathToResources, $documentContent);
+        $pageCollection = $this->getDocumentParser()->parse($documentContent, $stylesheetConstraint);
         $this->getDocument()->draw($pageCollection);
 
         $content = $this->getDocument()->render();

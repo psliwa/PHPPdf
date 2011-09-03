@@ -20,7 +20,10 @@ use PHPPdf\Glyph\Glyph,
     PHPPdf\Exception\DrawingException;
 
 /**
+ * Document to generate
+ * 
  * @author Piotr Śliwa <peter.pl7@gmail.com>
+ * @todo Inject Engine object form outside
  */
 class Document
 {   
@@ -50,6 +53,11 @@ class Document
         $this->initialize();
     }
 
+    /**
+     * Create enhancements objects depends on bag content
+     * 
+     * @return array Array of Enhancement objects
+     */
     public function getEnhancements(EnhancementBag $bag)
     {
         $enhancements = array();
@@ -77,6 +85,9 @@ class Document
         $this->enhancementFactory = $enhancementFactory;
     }
 
+    /**
+     * Reset Document state
+     */
     public function initialize()
     {
         $this->processed = false;
@@ -104,7 +115,7 @@ class Document
     /**
      * Invokes drawing procedure.
      *
-     * Formats each of glyph, retreive drawing tasks and execute them.
+     * Formats each of glyph, retreives drawing tasks and executes them.
      *
      * @param array $pages Array of pages to draw
      */
@@ -271,6 +282,9 @@ class Document
         }
     }
 
+    /**
+     * @return string Content of document
+     */
     public function render()
     {
         return $this->engine->render();

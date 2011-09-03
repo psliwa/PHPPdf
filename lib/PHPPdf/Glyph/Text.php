@@ -17,6 +17,8 @@ use PHPPdf\Glyph\Glyph,
     PHPPdf\Util\DrawingTask;
 
 /**
+ * Text glyph
+ * 
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
 class Text extends Glyph

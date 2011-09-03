@@ -11,6 +11,11 @@ namespace PHPPdf\Parser;
 use PHPPdf\Font\Registry,
     PHPPdf\Parser\Exception\ParseException;
 
+/**
+ * Parser for font config file
+ *
+ * @author Piotr Śliwa <peter.pl7@gmail.com>
+ */
 class FontRegistryParser extends XmlParser
 {
     const ROOT_TAG = 'fonts';

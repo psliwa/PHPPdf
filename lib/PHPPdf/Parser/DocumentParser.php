@@ -26,6 +26,8 @@ use PHPPdf\Glyph\Text,
     PHPPdf\Glyph\Behaviour\Factory as BehaviourFactory;
 
 /**
+ * Parse document to graph of Glyphs
+ * 
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
 class DocumentParser extends XmlParser
@@ -115,6 +117,11 @@ class DocumentParser extends XmlParser
         return $this->innerParser;
     }
 
+    /**
+     * Parses document and build graph of Glyph
+     * 
+     * @return PageCollection Root of glyph's graph
+     */
     public function parse($content, StylesheetConstraint $stylesheetConstraint = null)
     {
         if($stylesheetConstraint !== null)

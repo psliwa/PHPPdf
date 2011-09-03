@@ -76,7 +76,8 @@ class Factory implements \Serializable
      * Create copy of glyph stored under passed name
      *
      * @param string Name/key of prototype
-     * @return PHPPdf\Glyph\Glyph Deep copy of glyph stored under passed name
+     * 
+     * @return Glyph Deep copy of glyph stored under passed name
      * @throws PHPPdf\Exception\UnregisteredGlyphException If prototype with passed name dosn't exist
      */
     public function create($name)

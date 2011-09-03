@@ -8,11 +8,13 @@
 
 namespace PHPPdf\Glyph;
 
-/**
- * @author Piotr Śliwa <peter.pl7@gmail.com>
- */
 use PHPPdf\Parser\Exception\DuplicatedIdException;
 
+/**
+ * Manager of glyphs
+ * 
+ * @author Piotr Śliwa <peter.pl7@gmail.com>
+ */
 class Manager
 {
     private $glyphs = array();

@@ -8,16 +8,6 @@
 
 namespace PHPPdf\Glyph;
 
-use PHPPdf\Glyph\Behaviour\Behaviour;
-
-use PHPPdf\Glyph\Behaviour\GoToUrl;
-
-use PHPPdf\Exception\UnregisteredGlyphException;
-
-use PHPPdf\Exception\InvalidAttributeException;
-
-use PHPPdf\Util\Point;
-
 use PHPPdf\Document,
     PHPPdf\Util,
     PHPPdf\Glyph\Container,
@@ -25,7 +15,9 @@ use PHPPdf\Document,
     PHPPdf\Util\DrawingTask,
     PHPPdf\Enhancement\EnhancementBag,
     PHPPdf\Formatter\Formatter,
-    PHPPdf\Util\GlyphIterator;
+    PHPPdf\Glyph\Behaviour\Behaviour,
+    PHPPdf\Exception\InvalidAttributeException,
+    PHPPdf\Util\Point;
 
 /**
  * Base glyph class
@@ -160,11 +152,24 @@ abstract class Glyph implements Drawable, GlyphAware, \ArrayAccess, \Serializabl
         $this->drawingTasks[] = $task;
     }
 
+    /**
+     * Add enhancement attributes, if enhancement with passed name is exists, it will be
+     * merged.
+     * 
+     * @param string $name Name of enhancement
+     * @param array $attributes Attributes of enhancement
+     */
     public function mergeEnhancementAttributes($name, array $attributes = array())
     {
         $this->enhancementBag->add($name, $attributes);
     }
 
+    /**
+     * Get all enhancement data or data of enhancement with passed name
+     * 
+     * @param string $name Name of enhancement to get
+     * @return array If $name is null, data of all enhancements will be returned, otherwise data of enhancement with passed name will be returned.
+     */
     public function getEnhancementsAttributes($name = null)
     {
         if($name === null)
@@ -175,6 +180,9 @@ abstract class Glyph implements Drawable, GlyphAware, \ArrayAccess, \Serializabl
         return $this->enhancementBag->get($name);
     }
 
+    /**
+     * @return array Array of Enhancement objects
+     */
     public function getEnhancements()
     {
         return $this->enhancements;
@@ -275,6 +283,8 @@ abstract class Glyph implements Drawable, GlyphAware, \ArrayAccess, \Serializabl
     }
 
     /**
+     * Gets ancestor with passed type. If ancestor has not been found, null will be returned.
+     * 
      * @param string $type Full class name with namespace
      * @return PHPPdf\Glyph\Glyph Nearest ancestor in $type
      */
@@ -292,7 +302,7 @@ abstract class Glyph implements Drawable, GlyphAware, \ArrayAccess, \Serializabl
     }
 
     /**
-     * @return array Siblings with current object
+     * @return array Siblings with current object includes current object
      */
     public function getSiblings()
     {
@@ -364,17 +374,24 @@ abstract class Glyph implements Drawable, GlyphAware, \ArrayAccess, \Serializabl
         $this->behaviours[] = $behaviour;
     }
     
+    /**
+     * @return array Array of Behhaviour objects
+     */
     public function getBehaviours()
     {
         return $this->behaviours;
     }
 
+    /**
+     * Reset state of object
+     */
     public function reset()
     {
     }
 
     /**
-     * @return PHPPdf\Glyph\Page
+     * @return Page Page of current objects
+     * @throws LogicException If object has not been attached to any page
      */
     public function getPage()
     {
@@ -388,6 +405,11 @@ abstract class Glyph implements Drawable, GlyphAware, \ArrayAccess, \Serializabl
         return $page;
     }
 
+    /**
+     * Gets font object associated with current object
+     * 
+     * @return Font
+     */
     public function getFont(Document $document)
     {
         $fontType = $this->getRecurseAttribute('font-type');
@@ -685,6 +707,9 @@ abstract class Glyph implements Drawable, GlyphAware, \ArrayAccess, \Serializabl
         }
     }
 
+    /**
+     * Set "css style" paddings
+     */
     public function setPadding()
     {
         $paddings = \func_get_args();
@@ -731,6 +756,9 @@ abstract class Glyph implements Drawable, GlyphAware, \ArrayAccess, \Serializabl
         return $this->getRecurseAttribute('alpha');
     }
     
+    /**
+     * @return float Angle of rotate in radians
+     */
     public function getRotate()
     {
         $rotate = $this->getAttribute('rotate');
@@ -761,6 +789,13 @@ abstract class Glyph implements Drawable, GlyphAware, \ArrayAccess, \Serializabl
         return $this;
     }
 
+    /**
+     * Sets attributes values
+     * 
+     * @param array $attributes Array of attributes
+     * 
+     * @throws InvalidAttributeException If at least one of attributes isn't supported by this glyph
+     */
     public function setAttributes(array $attributes)
     {
         foreach($attributes as $name => $value)
@@ -769,6 +804,15 @@ abstract class Glyph implements Drawable, GlyphAware, \ArrayAccess, \Serializabl
         }
     }
 
+    /**
+     * Sets attribute value
+     * 
+     * @param string $name Name of attribute
+     * @param mixed $value Value of attribute
+     * 
+     * @throws InvalidAttributeException If attribute isn't supported by this glyph     * 
+     * @return Glyph Self reference
+     */
     public function setAttribute($name, $value)
     {
         $this->throwExceptionIfAttributeDosntExist($name);
@@ -873,6 +917,14 @@ abstract class Glyph implements Drawable, GlyphAware, \ArrayAccess, \Serializabl
         return in_array($name, array_keys($this->attributes));
     }
 
+    /**
+     * Returns attribute value
+     * 
+     * @param string $name Name of attribute
+     * 
+     * @throws InvalidAttributeException If attribute isn't supported by this glyph     * 
+     * @return mixed Value of attribute
+     */
     public function getAttribute($name)
     {
         $this->throwExceptionIfAttributeDosntExist($name);
@@ -1082,6 +1134,9 @@ abstract class Glyph implements Drawable, GlyphAware, \ArrayAccess, \Serializabl
         return array($x + $this->getPaddingLeft(), $y - $this->getPaddingTop());
     }
 
+    /**
+     * @return Glyph Previous sibling glyph, null if previous sibling dosn't exist
+     */
     public function getPreviousSibling()
     {
         $siblings = $this->getSiblings();
@@ -1092,6 +1147,9 @@ abstract class Glyph implements Drawable, GlyphAware, \ArrayAccess, \Serializabl
         return isset($siblings[$i-1]) ? $siblings[$i-1] : null;
     }
     
+    /**
+     * @deprecated To remove, getDiagonalPoint() is replacement
+     */
     public function getEndDrawingPoint()
     {
         list($x, $y) = $this->getDiagonalPoint()->toArray();
@@ -1109,6 +1167,9 @@ abstract class Glyph implements Drawable, GlyphAware, \ArrayAccess, \Serializabl
         $this->parent = null;
     }
 
+    /**
+     * @return Glyph Copy of this glyph
+     */
     public function copy()
     {
         $copy = clone $this;
@@ -1125,11 +1186,23 @@ abstract class Glyph implements Drawable, GlyphAware, \ArrayAccess, \Serializabl
     {
     }
 
+    /**
+     * Translates position of this glyph
+     * 
+     * @param float $x X coord of translation vector
+     * @param float $y Y coord of translation vector
+     */
     public function translate($x, $y)
     {
         $this->getBoundary()->translate($x, $y);
     }
 
+    /**
+     * Resizes glyph by passed sizes
+     * 
+     * @param float $x Value of width's resize
+     * @param float $y Value of height's resize
+     */
     public function resize($x, $y)
     {
         $diagonalXCoord = $this->getDiagonalPoint()->getX() - $this->getPaddingRight();
@@ -1234,25 +1307,46 @@ abstract class Glyph implements Drawable, GlyphAware, \ArrayAccess, \Serializabl
         return $clone;
     }
 
+    /**
+     * Adds glyph as child
+     */
     public function add(Glyph $glyph)
     {
     }
 
+    /**
+     * Removes glyph from children
+     * 
+     * @return boolean True if glyph has been found and succesfully removed, otherwise false
+     */
     public function remove(Glyph $glyph)
     {
         return false;
     }
 
+    /**
+     * @return array Array of Glyph objects
+     */
     public function getChildren()
     {
         return array();
     }
     
+    /**
+     * @return boolean Glyph is able to have children?
+     */
     public function isLeaf()
     {
         return false;
     }
     
+    /**
+     * Check if this glyph has leaf descendants.
+     * 
+     * If $bottomYCoord is passed, only descendants above passed coord are checked
+     * 
+     * @return boolean
+     */
     public function hasLeafDescendants($bottomYCoord = null)
     {
         return false;
@@ -1272,7 +1366,12 @@ abstract class Glyph implements Drawable, GlyphAware, \ArrayAccess, \Serializabl
     }
     
     /**
-     * @return PHPPdf\Glyph\Glyph
+     * Gets child under passed index
+     * 
+     * @param integer Index of child
+     * 
+     * @return Glyph
+     * @throws OutOfBoundsException Child dosn't exist
      */
     public function getChild($index)
     {
@@ -1356,6 +1455,14 @@ abstract class Glyph implements Drawable, GlyphAware, \ArrayAccess, \Serializabl
         return false;
     }
 
+    /**
+     * Set placeholder
+     * 
+     * @param string $name Name of placeholder
+     * @param Glyph $placeholder Object of Glyph
+     * 
+     * @throws InvalidArgumentException Placeholder isn't supported by glyph
+     */
     public function setPlaceholder($name, Glyph $placeholder)
     {
         throw new \InvalidArgumentException(sprintf('Placeholder "%s" is not supported by class "%s".', $name, get_class($this)));
@@ -1399,6 +1506,11 @@ abstract class Glyph implements Drawable, GlyphAware, \ArrayAccess, \Serializabl
         $this->priority = $data['priority'];
     }
     
+    /**
+     * Method from GlyphAware interface
+     * 
+     * @return Glyph
+     */
     public function getGlyph()
     {
         return $this;

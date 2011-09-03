@@ -12,6 +12,8 @@ use PHPPdf\Glyph\Factory as GlyphFactory,
     PHPPdf\Parser\Exception\ParseException;
 
 /**
+ * Parser for glyph config file
+ * 
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
 class GlyphFactoryParser extends XmlParser

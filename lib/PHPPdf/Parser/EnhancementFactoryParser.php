@@ -12,6 +12,10 @@ use PHPPdf\Enhancement\Factory as EnhancementFactory,
     PHPPdf\Parser\Exception\ParseException;
 
 /**
+ * Enhancement factory parser
+ * 
+ * Parses config file for enhancements and creates EnhancementFactory
+ * 
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
 class EnhancementFactoryParser extends XmlParser

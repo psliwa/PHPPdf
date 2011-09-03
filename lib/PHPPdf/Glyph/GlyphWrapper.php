@@ -9,6 +9,8 @@
 namespace PHPPdf\Glyph;
 
 /**
+ * Wrapper/placeholder for glyph object
+ * 
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
 final class GlyphWrapper implements GlyphAware

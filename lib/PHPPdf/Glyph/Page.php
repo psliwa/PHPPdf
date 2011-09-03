@@ -28,22 +28,22 @@ class Page extends Container
     private $graphicsContext;
 
     /**
-     * @var PHPPdf\Glyph\Glyph
+     * @var Glyph
      */
     private $footer;
 
     /**
-     * @var PHPPdf\Glyph\Glyph
+     * @var Glyph
      */
     private $header;
     
     /**
-     * @var PHPPdf\Glyph\Glyph
+     * @var Glyph
      */
     private $watermark;
 
     /**
-     * @var PHPPdf\Glyph\PageContext;
+     * @var PageContext;
      */
     private $context;
 

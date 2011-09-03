@@ -29,6 +29,8 @@ final class Point implements \ArrayAccess
     }
 
     /**
+     * Factory method
+     * 
      * @return Point
      */
     public static function getInstance($x, $y)

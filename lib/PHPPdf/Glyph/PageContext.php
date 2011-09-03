@@ -9,6 +9,8 @@
 namespace PHPPdf\Glyph;
 
 /**
+ * Context of page
+ * 
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
 class PageContext
@@ -22,11 +24,17 @@ class PageContext
         $this->pageNumber = (int) $pageNumber;
     }
 
+    /**
+     * @return integer Number of current page
+     */
     public function getPageNumber()
     {
         return $this->pageNumber;
     }
 
+    /**
+     * @return integer Total number of pages
+     */
     public function getNumberOfPages()
     {
         return count($this->dynamicPage->getPages());

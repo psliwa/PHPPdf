@@ -14,6 +14,8 @@ use PHPPdf\Parser\StylesheetConstraint,
     PHPPdf\Parser\Exception as Exceptions;
 
 /**
+ * Xml stylesheet parser
+ * 
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
 class StylesheetParser extends XmlParser

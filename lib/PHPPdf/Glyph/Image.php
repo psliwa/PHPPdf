@@ -13,6 +13,8 @@ use PHPPdf\Document,
     PHPPdf\Glyph\Glyph;
 
 /**
+ * Image element
+ * 
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
 class Image extends Glyph

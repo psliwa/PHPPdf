@@ -41,7 +41,7 @@ class BagContainer implements \Serializable
     }
 
     /**
-     * @return PHPPdf\Util\EnhancementBag
+     * @return EnhancementBag
      */
     public function getEnhancementBag()
     {
@@ -49,7 +49,7 @@ class BagContainer implements \Serializable
     }
 
     /**
-     * @return PHPPdf\Util\AttributeBag
+     * @return AttributeBag
      */
     public function getAttributeBag()
     {

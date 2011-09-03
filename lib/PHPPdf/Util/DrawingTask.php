@@ -11,7 +11,7 @@ namespace PHPPdf\Util;
 use PHPPdf\Document;
 
 /**
- * Encapsulate drawing task (callback + arguments + priority)
+ * Encapsulate drawing task (callback + arguments + priority + order)
  *
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */

@@ -8,13 +8,14 @@
 
 namespace PHPPdf\Glyph;
 
+use PHPPdf\Document,
+    PHPPdf\Glyph\Paragraph\Line;
+
 /**
+ * Paragraph element
+ * 
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
-use PHPPdf\Document;
-
-use PHPPdf\Glyph\Paragraph\Line;
-
 class Paragraph extends Container
 {
     private $lines = array();
