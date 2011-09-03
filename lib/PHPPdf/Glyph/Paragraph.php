@@ -119,6 +119,11 @@ class Paragraph extends Container
         
         $tasks = array_merge($tasks, $this->getDrawingTasksFromEnhancements($document));
         
+        if($this->getAttribute('dump'))
+        {
+            $tasks[] = $this->createDumpTask();
+        }
+        
         return $tasks;
     }
     

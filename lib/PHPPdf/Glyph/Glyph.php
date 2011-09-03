@@ -1019,7 +1019,7 @@ abstract class Glyph implements Drawable, GlyphAware, \ArrayAccess, \Serializabl
         }
     }
     
-    private function createDumpTask()
+    protected function createDumpTask()
     {
         $task = new DrawingTask(function($glyph){
             $gc = $glyph->getGraphicsContext();

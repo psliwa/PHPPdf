@@ -162,12 +162,7 @@ class GraphicsContext implements BaseGraphicsContext
         {
             throw new \Zend_Pdf_Exception('Font has not been set');
         }
-        
-        $textObj = new \Zend_Pdf_Element_String($this->page->getFont()->encodeString($text, $encoding));
-        $xObj    = new \Zend_Pdf_Element_Numeric($x);
-        $yObj    = new \Zend_Pdf_Element_Numeric($y);
-        $wordSpacingObj = new \Zend_Pdf_Element_Numeric($wordSpacing);
-        
+  
         if($fillType == self::SHAPE_DRAW_FILL)
         {
             $pdfFillType = 0;
@@ -179,16 +174,62 @@ class GraphicsContext implements BaseGraphicsContext
         else
         {
             $pdfFillType = 2;
-        }
+        }       
+        
+        $data = $this->getDataForTextDrawing($text, $x, $y, $encoding, $wordSpacing, $pdfFillType);
+
+        $this->page->rawWrite($data, 'Text');
+    }
+    
+    private function getDataForTextDrawing($text, $x, $y, $encoding, $wordSpacing, $fillType)
+    {
+        $font = $this->page->getFont();
+        
+        $xObj = new \Zend_Pdf_Element_Numeric($x);
+        $yObj = new \Zend_Pdf_Element_Numeric($y);
+        $wordSpacingObj = new \Zend_Pdf_Element_Numeric($wordSpacing);
         
         $data = "BT\n"
                  .  $xObj->toString() . ' ' . $yObj->toString() . " Td\n"
-                 . ($wordSpacing != 0 ? $wordSpacing.' Tw'."\n" : '')
-                 . ($pdfFillType != 0 ? $pdfFillType.' Tr'."\n" : '')
-                 .  $textObj->toString() . " Tj\n"
-                 .  "ET\n";
+                 . ($fillType != 0 ? $fillType.' Tr'."\n" : '');
+                 
+        if($this->isFontDefiningSpaceInSingleByte($font))
+        {
+            $textObj = $this->createTextObject($font, $text, $encoding);
 
-        $this->page->rawWrite($data, 'Text');
+            $data .= ($wordSpacing != 0 ? $wordSpacingObj->toString().' Tw'."\n" : '')
+                     .  $textObj->toString() . " Tj\n";
+        }
+        //Word spacing form fonts, that defines space char on 2 bytes, dosn't work
+        else
+        {
+            $words = explode(' ', $text);
+
+            $spaceObj = $this->createTextObject($font, ' ', $encoding);
+            
+            foreach($words as $word)
+            {
+                $textObj = $this->createTextObject($font, $word, $encoding);
+                $data .= '0 Tc'."\n"
+                		 . $textObj->toString(). " Tj\n"
+                		 . $wordSpacingObj->toString() . " Tc\n"
+                		 . $spaceObj->toString() ." Tj\n";
+            }
+        }
+        
+        $data .= "ET\n";
+                 
+        return $data;
+    }
+    
+    private function createTextObject(\Zend_Pdf_Resource_Font $font, $text, $encoding)
+    {
+        return new \Zend_Pdf_Element_String($font->encodeString($text, $encoding));
+    }
+    
+    private function isFontDefiningSpaceInSingleByte(\Zend_Pdf_Resource_Font $font)
+    {
+        return $font->getFontType() === \Zend_Pdf_Font::TYPE_STANDARD;
     }
 
     public function __clone()
