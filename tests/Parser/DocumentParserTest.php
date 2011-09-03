@@ -12,10 +12,16 @@ use PHPPdf\Parser\DocumentParser,
 class DocumentParserTest extends TestCase
 {
     private $parser;
+    private $documentMock;
 
     public function setUp()
     {
-        $this->parser = new DocumentParser();
+        $this->documentMock = $this->getMockBuilder('PHPPdf\Document')
+                                   ->disableOriginalConstructor()
+                                   ->setMethods(array('setMetadataValue'))
+                                   ->getMock();
+        
+        $this->parser = new DocumentParser($this->documentMock);
     }
 
     /**
@@ -961,6 +967,26 @@ XML;
         $this->parser->setBehaviourFactory($behaviourFactoryMock);
         $this->parser->setGlyphFactory($glyphFactoryMock);
 
+        $this->parser->parse($xml);
+    }
+    
+    /**
+     * @test
+     */
+    public function parseMetadataFromDocumentRoot()
+    {
+        $xml = <<<XML
+<pdf Subject="some subject" Title="some title">
+</pdf>
+XML;
+
+        $this->documentMock->expects($this->at(0))
+                           ->method('setMetadataValue')
+                           ->with('Subject', 'some subject');
+        $this->documentMock->expects($this->at(1))
+                           ->method('setMetadataValue')
+                           ->with('Title', 'some title');
+        
         $this->parser->parse($xml);
     }
 }

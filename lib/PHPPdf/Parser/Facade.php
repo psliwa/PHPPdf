@@ -42,9 +42,10 @@ class Facade
         $this->configurationLoader = $configurationLoader;
 
         $this->setCache(NullCache::getInstance());
-        $this->setDocumentParser(new DocumentParser());
+        $document = new Document();
+        $this->setDocumentParser(new DocumentParser($document));
         $this->setStylesheetParser(new StylesheetParser());
-        $this->setDocument(new Document());
+        $this->setDocument($document);
     }
 
     public function setCache(Cache $cache)

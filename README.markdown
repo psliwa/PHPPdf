@@ -21,6 +21,7 @@ Table of contents
 1. [Using pdf document as template](#templates)
 1. [Separate page on columns](#columns)
 1. [Breaking pages and columns](#page-break)
+1. [Metadata](#metadata)
 1. [Configuration](#configuration)
 1. [Known limitations](#limitations)
 1. [TODO - plans](#todo)
@@ -487,6 +488,18 @@ Example:
         <dynamic-page>
             <div splittable="false">this div won't be automatically broken</div>
         </dynamic-page>
+    </pdf>
+
+<a name="metadata"></a>
+Metadata
+--------
+
+Metadata can be added by attributes of document's root. Supported metadata: Creator, Keywords, Subject, Author, Title, ModDate, CreationDate and Trapped. Names of this attributes are case sensitive.
+
+Example:
+
+    <pdf Author="Piotr Sliwa" Title="Test document">
+        <!-- some other elements -->
     </pdf>
 
 <a name="configuration"></a>

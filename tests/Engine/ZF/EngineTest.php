@@ -140,4 +140,37 @@ class EngineTest extends \TestCase
         
         $engine->loadEngine($file);
     }
+    
+    /**
+     * @test
+     * @dataProvider metadataProvider
+     */
+    public function setMetadataValues($name, $value, $shouldBeSet, $expectedValue = null)
+    {
+        $zendPdf = new \Zend_Pdf();
+        $engine = new Engine($zendPdf);
+        
+        $engine->setMetadataValue($name, $value);
+        
+        if($shouldBeSet)
+        {
+            $this->assertEquals($expectedValue, $zendPdf->properties[$name]);
+        }
+        else
+        {
+            $this->assertFalse(isset($zendPdf->properties[$name]));
+        }
+    }
+    
+    public function metadataProvider()
+    {
+        return array(
+            array('Trapped', 'true', true, true),
+            array('Trapped', 'false', true, false),
+            array('Trapped', true, true, true),
+            array('Trapped', 'null', true, null),
+            array('Author', 'Author', true, 'Author'),
+            array('InvalidProperty', 'value', false),
+        );
+    }
 }

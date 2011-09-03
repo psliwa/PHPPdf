@@ -8,6 +8,8 @@
 
 namespace PHPPdf\Parser;
 
+use PHPPdf\Document;
+
 use PHPPdf\Glyph\Manager;
 
 use PHPPdf\Glyph\GlyphWrapper;
@@ -55,9 +57,11 @@ class DocumentParser extends XmlParser
     private $currentParagraph = null;
     
     private $wrappers = array();
+    private $document;
 
-    public function __construct()
+    public function __construct(Document $document)
     {
+        $this->document = $document;
         $factory = new GlyphFactory();        
         $stylesheetParser = new StylesheetParser(null, true);
         $enhancementFactory = new EnhancementFactory();
@@ -101,7 +105,7 @@ class DocumentParser extends XmlParser
     {
         if($this->innerParser === null)
         {
-            $innerParser = new self();
+            $innerParser = new self($this->document);
             $innerParser->setEnhancementFactory($this->getEnhancementFactory());
             $innerParser->setGlyphFactory($this->getGlyphFactory());
 
@@ -486,5 +490,16 @@ class DocumentParser extends XmlParser
     protected function isEndOfParsedDocument(\XMLReader $reader)
     {
         return $reader->name == $this->endTag;
+    }
+    
+    protected function parseRootAttributes(\XMLReader $reader)
+    {
+        while($reader->moveToNextAttribute())
+        {
+            $name = $reader->name;
+            $value = $reader->value;
+            
+            $this->document->setMetadataValue($name, $value);
+        }
     }
 }

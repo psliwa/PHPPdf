@@ -248,6 +248,11 @@ class Document
         return $this->engine->loadEngine($file);
     }
     
+    public function setMetadataValue($name, $value)
+    {
+        $this->engine->setMetadataValue($name, $value);
+    }
+    
     public function getFont($name)
     {
         return $this->getFontRegistry()->get($name);

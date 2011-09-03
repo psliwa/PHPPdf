@@ -92,6 +92,9 @@ abstract class XmlParser implements Parser
             {
                 throw new Exceptions\InvalidTagException(sprintf('Root of xml document must be "%s", "%s" given.', static::ROOT_TAG, $reader->name));
             }
+            
+            $this->parseRootAttributes($reader);
+            
             $this->seekReaderToNextTag($reader);
         }
 
@@ -116,6 +119,10 @@ abstract class XmlParser implements Parser
             $result = $reader->read();
         }
         while($result && $reader->nodeType !== \XMLReader::ELEMENT && $reader->nodeType !== \XMLReader::TEXT);
+    }
+    
+    protected function parseRootAttributes(\XMLReader $reader)
+    {
     }
 
     abstract protected function createRoot();

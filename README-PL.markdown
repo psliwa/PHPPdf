@@ -21,6 +21,7 @@ Spis treści
 1. [Wykorzystanie istniejącego dokumentu jako szablon](#templates)
 1. [Podział strony na kolumny](#columns)
 1. [Łamanie stron i kolumn](#page-break)
+1. [Metadane](#metadata)
 1. [Konfiguracja](#configuration)
 1. [Znane ograniczenia](#limitations)
 1. [TODO - czyli plany](#todo)
@@ -485,6 +486,18 @@ Przykład:
         <dynamic-page>
             <div splittable="false">ten div nie będzie automatycznie łamany</div>
         </dynamic-page>
+    </pdf>
+
+<a name="metadata"></a>
+Metadane
+--------
+
+Metadane mogą zostać dodane za pomocą atrybutów korzenia dokumentu. Metadane które można ustawić to: Creator, Keywords, Subject, Author, Title, ModDate, CreationDate oraz Trapped. Nazwy tych atrybutów są wrażliwe na wielkość znaków.
+
+Przykład:
+
+    <pdf Author="Piotr Śliwa" Title="Dokument testowy">
+        <!-- jakieś inne elementy -->
     </pdf>
 
 <a name="configuration"></a>

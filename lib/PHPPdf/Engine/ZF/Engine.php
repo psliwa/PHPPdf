@@ -8,6 +8,8 @@
 
 namespace PHPPdf\Engine\ZF;
 
+use PHPPdf\Util;
+
 use PHPPdf\Exception\InvalidResourceException;
 
 use PHPPdf\Engine\GraphicsContext as BaseGraphicsContext,
@@ -90,6 +92,8 @@ class Engine implements BaseEngine
     
     public function render()
     {
+        $this->zendPdf->properties['Producer'] = sprintf('PHPPdf %s', \PHPPdf\Version::VERSION);
+
         return $this->zendPdf->render();
     }
     
@@ -141,6 +145,29 @@ class Engine implements BaseEngine
         catch(\Zend_Pdf_Exception $e)
         {
             InvalidResourceException::invalidPdfFileException($file, $e);
+        }
+    }
+    
+    public function setMetadataValue($name, $value)
+    {
+        switch($name)
+        {
+            case 'Trapped':
+                $value = $value === 'null' ? null : Util::convertBooleanValue($value);
+                $this->zendPdf->properties[$name] = $value;
+                break;
+            case 'CreationDate':
+            case 'ModDate':
+                $value = \Zend_Pdf::pdfDate(strtotime($value));
+                $this->zendPdf->properties[$name] = $value;
+                break;
+            case 'Title':
+            case 'Author':
+            case 'Subject':
+            case 'Keywords':
+            case 'Creator':
+                $this->zendPdf->properties[$name] = $value;
+                break;
         }
     }
 }

@@ -30,7 +30,9 @@ class FacadeTest extends TestCase
      */
     public function parsersMayByInjectedFromOutside()
     {
-        $documentParser = $this->getMock('PHPPdf\Parser\DocumentParser');
+        $documentParser = $this->getMockBuilder('PHPPdf\Parser\DocumentParser')
+                               ->disableOriginalConstructor()
+                               ->getMock();
         $stylesheetParser = $this->getMock('PHPPdf\Parser\StylesheetParser');
 
         $this->facade->setDocumentParser($documentParser);
@@ -63,8 +65,13 @@ class FacadeTest extends TestCase
         $stylesheet = '<stylesheet></stylesheet>';
         $content = 'pdf content';
 
-        $documentMock = $this->getMock('PHPPdf\Document', array('draw', 'initialize', 'render', 'addFontDefinitions', 'setEnhancementFactory'));
-        $parserMock = $this->getMock('PHPPdf\Parser\DocumentParser', array('parse', 'setEnhancementFactory', 'setGlyphFactory'));
+        $documentMock = $this->getMockBuilder('PHPPdf\Document')
+                             ->setMethods(array('draw', 'initialize', 'render', 'addFontDefinitions', 'setEnhancementFactory'))
+                             ->getMock();
+        $parserMock = $this->getMockBuilder('PHPPdf\Parser\DocumentParser')
+                           ->setMethods(array('parse', 'setEnhancementFactory', 'setGlyphFactory'))
+                           ->disableOriginalConstructor()
+                           ->getMock();
         $stylesheetParserMock = $this->getMock('PHPPdf\Parser\StylesheetParser', array('parse'));
         $constraintMock = $this->getMock('PHPPdf\Parser\StylesheetConstraint');
         $pageCollectionMock = $this->getMock('PHPPdf\Glyph\PageCollection', array());
@@ -141,7 +148,10 @@ class FacadeTest extends TestCase
         $cache->expects($this->exactly($numberOfCacheMethodInvoking))
               ->method('save');
 
-        $documentParserMock = $this->getMock('PHPPdf\Parser\DocumentParser', array('parse'));
+        $documentParserMock = $this->getMockBuilder('PHPPdf\Parser\DocumentParser')
+                                   ->setMethods(array('parse'))
+                                   ->disableOriginalConstructor()
+                                   ->getMock();
         $documentParserMock->expects($this->once())
                            ->method('parse')
                            ->will($this->returnValue(new \PHPPdf\Glyph\PageCollection()));

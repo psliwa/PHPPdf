@@ -69,4 +69,12 @@ interface Engine
      * @return Engine
      */
     public function loadEngine($file);
+    
+    /**
+     * Sets single metadata value for document
+     * 
+     * @param string $name Name of metadata
+     * @param mixed $value Value of metadata
+     */
+    public function setMetadataValue($name, $value);
 }
