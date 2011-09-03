@@ -104,7 +104,7 @@ abstract class Enhancement
 
     abstract protected function doEnhance($gc, Glyph $glyph, Document $document);
 
-    protected function drawBoundary(GraphicsContext $gc, $points, $drawType, $shift = 0.5)
+    protected function drawBoundary(GraphicsContext $gc, $points, $drawType, $shift = 0)
     {
         $x = array();
         $y = array();

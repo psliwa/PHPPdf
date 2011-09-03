@@ -283,7 +283,7 @@ class BackgroundTest extends TestCase
                    ->getMock();
                    
         $expectedXCoords = array(
-            $boundary[0]->getX() - 0.5,
+            $boundary[0]->getX(),
             $boundary[1]->getX(),
             $boundary[1]->getX(),
             $boundary[0]->getX(),
@@ -294,7 +294,7 @@ class BackgroundTest extends TestCase
             $boundary[0]->getY(),
             $boundary[2]->getY(),
             $boundary[2]->getY(),
-            $boundary[0]->getY() + 0.5,
+            $boundary[0]->getY(),
         );
 
         $gc->expects($this->once())
