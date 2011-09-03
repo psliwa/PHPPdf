@@ -207,6 +207,7 @@
 		</service>
 		<service id="phppdf.node.a" class="PHPPdf\Node\Text" public="false">
 			<tag name="phppdf.node" />
+			<argument></argument>
 			<argument type="collection">
 				<argument key="text-decoration">underline</argument>
 				<argument key="color">blue</argument>
