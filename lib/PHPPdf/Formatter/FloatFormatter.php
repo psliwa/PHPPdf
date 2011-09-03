@@ -8,8 +8,8 @@
 
 namespace PHPPdf\Formatter;
 
-use PHPPdf\Glyph\Glyph,
-    PHPPdf\Glyph\Text,
+use PHPPdf\Node\Node,
+    PHPPdf\Node\Text,
     PHPPdf\Document,
     PHPPdf\Util\Boundary;
 
@@ -19,10 +19,10 @@ use PHPPdf\Glyph\Glyph,
  */
 class FloatFormatter extends BaseFormatter
 {
-    public function format(Glyph $glyph, Document $document)
+    public function format(Node $node, Document $document)
     {
-        $children = $glyph->getChildren();
-        $attributesSnapshot = $glyph->getAttributesSnapshot();
+        $children = $node->getChildren();
+        $attributesSnapshot = $node->getAttributesSnapshot();
         $parentBottomYCoord = null;
 
         $positionCorrection = false;
@@ -46,7 +46,7 @@ class FloatFormatter extends BaseFormatter
                     }
                 }
 
-                $this->setGlyphsWithFloatPosition($child, $x, $y, $sibling);
+                $this->setNodesWithFloatPosition($child, $x, $y, $sibling);
                 $translateX = $x - $orgX;
                 $translateY = -($y - $orgY);
 
@@ -71,7 +71,7 @@ class FloatFormatter extends BaseFormatter
                 if($minYCoord !== null)
                 {
                     $translateY = -($minYCoord - $y - $child->getMarginTop() - $child->getPaddingTop());
-                    if($child->getDisplay() === Glyph::DISPLAY_INLINE && $previousSiblingWithMinBottomYCoord->getDisplay() === Glyph::DISPLAY_INLINE)
+                    if($child->getDisplay() === Node::DISPLAY_INLINE && $previousSiblingWithMinBottomYCoord->getDisplay() === Node::DISPLAY_INLINE)
                     {
                         $translateY -= $child instanceof Text ? $child->getLineHeightRecursively() : $child->getHeight();
                     }
@@ -95,10 +95,10 @@ class FloatFormatter extends BaseFormatter
             }
         }
 
-        if($positionCorrection && $parentBottomYCoord && !$glyph->getAttribute('static-size'))
+        if($positionCorrection && $parentBottomYCoord && !$node->getAttribute('static-size'))
         {
-            $parentTranslate = $glyph->getDiagonalPoint()->getY() - $parentBottomYCoord;
-            $newHeight = $glyph->getHeight() + $parentTranslate;
+            $parentTranslate = $node->getDiagonalPoint()->getY() - $parentBottomYCoord;
+            $newHeight = $node->getHeight() + $parentTranslate;
             $oldHeight = isset($attributesSnapshot['height']) ? $attributesSnapshot['height'] : 0;
 
             if($newHeight < $oldHeight)
@@ -107,28 +107,28 @@ class FloatFormatter extends BaseFormatter
                 $newHeight = $oldHeight;
             }
 
-            $glyph->setHeight($newHeight);
-            $glyph->getBoundary()->pointTranslate(2, 0, $parentTranslate);
-            $glyph->getBoundary()->pointTranslate(3, 0, $parentTranslate);
+            $node->setHeight($newHeight);
+            $node->getBoundary()->pointTranslate(2, 0, $parentTranslate);
+            $node->getBoundary()->pointTranslate(3, 0, $parentTranslate);
         }
     }
 
-    private function hasFloat(Glyph $glyph)
+    private function hasFloat(Node $node)
     {
-        return $glyph->getFloat() !== Glyph::FLOAT_NONE;
+        return $node->getFloat() !== Node::FLOAT_NONE;
     }
 
-    private function getPreviousSiblingWithFloat(Glyph $glyph, $float)
+    private function getPreviousSiblingWithFloat(Node $node, $float)
     {
-        $siblings = $glyph->getSiblings();
+        $siblings = $node->getSiblings();
         $floatedSibling = null;
-        for($i=0, $count=count($siblings); $i<$count && $siblings[$i] !== $glyph; $i++)
+        for($i=0, $count=count($siblings); $i<$count && $siblings[$i] !== $node; $i++)
         {
             if($siblings[$i]->getFloat() === $float)
             {
                 $floatedSibling = $siblings[$i];
             }
-            elseif($siblings[$i]->getFloat() === Glyph::FLOAT_NONE)
+            elseif($siblings[$i]->getFloat() === Node::FLOAT_NONE)
             {
                 $floatedSibling = null;
             }
@@ -137,36 +137,36 @@ class FloatFormatter extends BaseFormatter
         return $floatedSibling;
     }
 
-    private function setGlyphsWithFloatPosition(Glyph $glyph, &$preferredXCoord, &$preferredYCoord, Glyph $previousSiblingWithTheSameFloat = null)
+    private function setNodesWithFloatPosition(Node $node, &$preferredXCoord, &$preferredYCoord, Node $previousSiblingWithTheSameFloat = null)
     {
         $sibling = $previousSiblingWithTheSameFloat;
-        $parent = $glyph->getParent();
+        $parent = $node->getParent();
 
         if($sibling)
         {
             $originalPreferredXCoord = $preferredXCoord;
-            if($glyph->getFloat() === Glyph::FLOAT_LEFT)
+            if($node->getFloat() === Node::FLOAT_LEFT)
             {
-                $preferredXCoord = $sibling->getDiagonalPoint()->getX() + $sibling->getMarginRight() + $glyph->getMarginLeft() + $glyph->getPaddingLeft();
+                $preferredXCoord = $sibling->getDiagonalPoint()->getX() + $sibling->getMarginRight() + $node->getMarginLeft() + $node->getPaddingLeft();
             }
             else
             {
-                $preferredXCoord = $sibling->getFirstPoint()->getX() - $sibling->getMarginLeft() - $glyph->getMarginRight() - $glyph->getWidth() - $glyph->getPaddingRight() ;
+                $preferredXCoord = $sibling->getFirstPoint()->getX() - $sibling->getMarginLeft() - $node->getMarginRight() - $node->getWidth() - $node->getPaddingRight() ;
             }
 
             list(,$preferredYCoord) = $sibling->getStartDrawingPoint();
 
-            if($preferredXCoord < $parent->getFirstPoint()->getX() || ($preferredXCoord + $glyph->getWidth()) > $parent->getDiagonalPoint()->getX())
+            if($preferredXCoord < $parent->getFirstPoint()->getX() || ($preferredXCoord + $node->getWidth()) > $parent->getDiagonalPoint()->getX())
             {
                 $overflowed = true;
             }
             else
             {
-                $dummyBoundary = $this->createBoundary($glyph, $preferredXCoord, $preferredYCoord);
+                $dummyBoundary = $this->createBoundary($node, $preferredXCoord, $preferredYCoord);
 
-                $siblings = $glyph->getSiblings();
+                $siblings = $node->getSiblings();
                 $overflowed = false;
-                for($i=0, $count=count($siblings); $i<$count && $siblings[$i] !== $glyph; $i++)
+                for($i=0, $count=count($siblings); $i<$count && $siblings[$i] !== $node; $i++)
                 {
                     if($dummyBoundary->intersects($siblings[$i]->getBoundary()))
                     {
@@ -178,25 +178,25 @@ class FloatFormatter extends BaseFormatter
 
             if($overflowed)
             {
-                $preferredYCoord = $sibling->getDiagonalPoint()->getY() - $glyph->getPaddingTop() - ($sibling->getMarginBottom() + $glyph->getMarginTop());
-                $preferredXCoord = $this->correctXCoordWithParent($glyph, $sibling);
+                $preferredYCoord = $sibling->getDiagonalPoint()->getY() - $node->getPaddingTop() - ($sibling->getMarginBottom() + $node->getMarginTop());
+                $preferredXCoord = $this->correctXCoordWithParent($node, $sibling);
             }
         }
         else
         {
-            $previousSibling = $glyph->getPreviousSibling();
+            $previousSibling = $node->getPreviousSibling();
 
-            $preferredXCoord = $this->correctXCoordWithParent($glyph);
+            $preferredXCoord = $this->correctXCoordWithParent($node);
             
-            if($previousSibling && $previousSibling->getFloat() !== Glyph::FLOAT_NONE)
+            if($previousSibling && $previousSibling->getFloat() !== Node::FLOAT_NONE)
             {
-                $yCoord = $preferredYCoord + $previousSibling->getHeight() + $glyph->getMarginTop() + $previousSibling->getMarginBottom();
+                $yCoord = $preferredYCoord + $previousSibling->getHeight() + $node->getMarginTop() + $previousSibling->getMarginBottom();
                 
-                $boundary = $this->createBoundary($glyph, $preferredXCoord, $yCoord);
+                $boundary = $this->createBoundary($node, $preferredXCoord, $yCoord);
                 
                 if(!$boundary->intersects($previousSibling->getBoundary()))
                 {
-                    $preferredYCoord += $previousSibling->getHeight() + $glyph->getMarginTop() + $previousSibling->getMarginBottom();
+                    $preferredYCoord += $previousSibling->getHeight() + $node->getMarginTop() + $previousSibling->getMarginBottom();
                 }
             }
         }
@@ -205,27 +205,27 @@ class FloatFormatter extends BaseFormatter
     /**
      * @return Boundary
      */
-    private function createBoundary(Glyph $glyph, $preferredXCoord, $preferredYCoord)
+    private function createBoundary(Node $node, $preferredXCoord, $preferredYCoord)
     {
         $dummyBoundary = new Boundary();
         $dummyBoundary->setNext($preferredXCoord, $preferredYCoord)
-                      ->setNext($preferredXCoord + $glyph->getWidth(), $preferredYCoord)
-                      ->setNext($preferredXCoord + $glyph->getWidth(), $preferredYCoord - $glyph->getHeight())
-                      ->setNext($preferredXCoord, $preferredYCoord - $glyph->getHeight());
+                      ->setNext($preferredXCoord + $node->getWidth(), $preferredYCoord)
+                      ->setNext($preferredXCoord + $node->getWidth(), $preferredYCoord - $node->getHeight())
+                      ->setNext($preferredXCoord, $preferredYCoord - $node->getHeight());
                       
         return $dummyBoundary;
     }
 
-    private function correctXCoordWithParent(Glyph $glyph)
+    private function correctXCoordWithParent(Node $node)
     {
-        $parent = $glyph->getParent();
-        if($glyph->getFloat() === Glyph::FLOAT_LEFT)
+        $parent = $node->getParent();
+        if($node->getFloat() === Node::FLOAT_LEFT)
         {
-            $preferredXCoord = $parent->getFirstPoint()->getX() + $parent->getPaddingLeft() + $glyph->getMarginLeft() + $glyph->getPaddingLeft();
+            $preferredXCoord = $parent->getFirstPoint()->getX() + $parent->getPaddingLeft() + $node->getMarginLeft() + $node->getPaddingLeft();
         }
         else
         {
-            $preferredXCoord = $parent->getDiagonalPoint()->getX() - $glyph->getWidth() + $glyph->getPaddingLeft() - $glyph->getMarginRight();
+            $preferredXCoord = $parent->getDiagonalPoint()->getX() - $node->getWidth() + $node->getPaddingLeft() - $node->getMarginRight();
         }
 
         return $preferredXCoord;

@@ -11,7 +11,7 @@ class FacadeBuilderTest extends TestCase
 
     public function setUp()
     {
-        $this->configurationLoader = $this->getMock('PHPPdf\Configuration\Loader', array('createGlyphFactory', 'createEnhancementFactory', 'createFontRegistry', 'setCache'));
+        $this->configurationLoader = $this->getMock('PHPPdf\Configuration\Loader', array('createNodeFactory', 'createEnhancementFactory', 'createFontRegistry', 'setCache'));
         $this->builder = FacadeBuilder::create($this->configurationLoader);
     }
 

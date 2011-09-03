@@ -10,7 +10,7 @@ namespace PHPPdf\Parser;
 
 use PHPPdf\Configuration\Loader;
 
-use PHPPdf\Glyph\TextTransformator;
+use PHPPdf\Node\TextTransformator;
 
 use PHPPdf\Parser\DocumentParser,
     PHPPdf\Document,
@@ -20,7 +20,7 @@ use PHPPdf\Parser\DocumentParser,
     PHPPdf\Cache\Cache,
     PHPPdf\Cache\NullCache,
     PHPPdf\Util\DataSource,
-    PHPPdf\Parser\GlyphFactoryParser;
+    PHPPdf\Parser\NodeFactoryParser;
 
 /**
  * Simple facade whom encapsulate logical complexity of this library
@@ -118,7 +118,7 @@ class Facade
         $fontDefinitions = $this->configurationLoader->createFontRegistry();
         $this->getDocument()->addFontDefinitions($fontDefinitions);
         $this->getDocumentParser()->setEnhancementFactory($enhancementFactory);
-        $this->getDocumentParser()->setGlyphFactory($this->configurationLoader->createGlyphFactory());
+        $this->getDocumentParser()->setNodeFactory($this->configurationLoader->createNodeFactory());
 
         $stylesheetConstraint = $this->retrieveStylesheetConstraint($stylesheetContent);
 

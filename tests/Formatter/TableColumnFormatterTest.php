@@ -24,7 +24,7 @@ class TableColumnFormatterTest extends TestCase
      */
     public function spreadEventlyColumnsWidth(array $cellsInRowsWidths, array $columnsWidths, $tableWidth)
     {
-        $table = $this->getMock('PHPPdf\Glyph\Table', array('reduceColumnsWidthsByMargins', 'getWidthsOfColumns', 'getChildren', 'getWidth', 'getNumberOfColumns', 'getMarginsLeftOfColumns', 'getMarginsRightOfColumns', 'convertRelativeWidthsOfColumns'));
+        $table = $this->getMock('PHPPdf\Node\Table', array('reduceColumnsWidthsByMargins', 'getWidthsOfColumns', 'getChildren', 'getWidth', 'getNumberOfColumns', 'getMarginsLeftOfColumns', 'getMarginsRightOfColumns', 'convertRelativeWidthsOfColumns'));
         $totalColumnsWidth = array_sum($columnsWidths);
         $numberOfColumns = count($columnsWidths);
         $enlargeColumnWidth = ($tableWidth - $totalColumnsWidth)/$numberOfColumns;
@@ -42,7 +42,7 @@ class TableColumnFormatterTest extends TestCase
                 $cells[] = $cell;
             }
 
-            $row = $this->getMock('PHPPdf\Glyph\Table\Row', array('getChildren'));
+            $row = $this->getMock('PHPPdf\Node\Table\Row', array('getChildren'));
             $row->expects($this->atLeastOnce())
                 ->method('getChildren')
                 ->will($this->returnValue($cells));

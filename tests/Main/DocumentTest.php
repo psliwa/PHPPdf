@@ -2,7 +2,7 @@
 
 use PHPPdf\Document,
     PHPPdf\Font\Registry as FontRegistry,
-    PHPPdf\Glyph\Page;
+    PHPPdf\Node\Page;
 
 class DocumentTest extends PHPUnit_Framework_TestCase
 {
@@ -22,7 +22,7 @@ class DocumentTest extends PHPUnit_Framework_TestCase
         $taskMock->expects($this->once())
                  ->method('__invoke');
 
-        $mock = $this->getMock('\PHPPdf\Glyph\PageCollection', array('getDrawingTasks', 'format'));
+        $mock = $this->getMock('\PHPPdf\Node\PageCollection', array('getDrawingTasks', 'format'));
 
         $matcher = $mock->expects($this->once())
                         ->method('format')
@@ -58,7 +58,7 @@ class DocumentTest extends PHPUnit_Framework_TestCase
     public function throwExceptionWhenDocumentIsDrawTwiceWithoutReset()
     {
         $drawingMethods = array('preDraw', 'doDraw', 'postDraw');
-        $mock = $this->getMock('\PHPPdf\Glyph\Page', array_merge($drawingMethods));
+        $mock = $this->getMock('\PHPPdf\Node\Page', array_merge($drawingMethods));
 
         foreach($drawingMethods as $method)
         {
@@ -77,7 +77,7 @@ class DocumentTest extends PHPUnit_Framework_TestCase
      */
     public function drawingArgumentMustBeAnArrayOfPages()
     {
-        $this->document->draw(array(new PHPPdf\Glyph\Container()));
+        $this->document->draw(array(new PHPPdf\Node\Container()));
     }
 
     /**

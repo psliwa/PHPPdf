@@ -9,22 +9,22 @@
 namespace PHPPdf\Formatter;
 
 use PHPPdf\Document,
-    PHPPdf\Glyph\Glyph,
-    PHPPdf\Glyph\BasicList;
+    PHPPdf\Node\Node,
+    PHPPdf\Node\BasicList;
 
 class ListFormatter extends BaseFormatter
 {
-    public function format(Glyph $glyph, Document $document)
+    public function format(Node $node, Document $document)
     {
-        $position = $glyph->getAttribute('position');
+        $position = $node->getAttribute('position');
         
-        $glyph->assignEnumerationStrategyFromFactory();
+        $node->assignEnumerationStrategyFromFactory();
         
         if($position === BasicList::POSITION_INSIDE)
         {
-            $widthOfEnumerationChar = $glyph->getEnumerationStrategy()->getWidthOfTheBiggestPosibleEnumerationElement($document, $glyph);
+            $widthOfEnumerationChar = $node->getEnumerationStrategy()->getWidthOfTheBiggestPosibleEnumerationElement($document, $node);
             
-            foreach($glyph->getChildren() as $child)
+            foreach($node->getChildren() as $child)
             {
                 $marginLeft = $widthOfEnumerationChar + $child->getMarginLeft();
                 $child->setAttribute('margin-left', $marginLeft);

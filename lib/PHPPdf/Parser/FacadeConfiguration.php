@@ -20,7 +20,7 @@ class FacadeConfiguration
     public function __construct()
     {
         $this->configFiles = array(
-            'glyph' => __DIR__.'/../Resources/config/glyphs.xml',
+            'node' => __DIR__.'/../Resources/config/nodes.xml',
             'enhancement' => __DIR__.'/../Resources/config/enhancements.xml',
             'font' => __DIR__.'/../Resources/config/fonts.xml',
         );
@@ -37,21 +37,21 @@ class FacadeConfiguration
     }
 
     /**
-     * Set config file for populating glyph factory
+     * Set config file for populating node factory
      *
      * @param string $file
      * @return FacadeConfiguration
      */
-    public function setGlyphsConfigFile($file)
+    public function setNodesConfigFile($file)
     {
-        $this->configFiles['glyph'] = $file;
+        $this->configFiles['node'] = $file;
 
         return $this;
     }
 
-    public function getGlyphsConfigFile()
+    public function getNodesConfigFile()
     {
-        return $this->configFiles['glyph'];
+        return $this->configFiles['node'];
     }
 
     /**

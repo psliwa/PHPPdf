@@ -8,74 +8,74 @@
 
 namespace PHPPdf\Formatter;
 
-use PHPPdf\Glyph\Glyph,
-    PHPPdf\Glyph as Glyphs,
+use PHPPdf\Node\Node,
+    PHPPdf\Node as Nodes,
     PHPPdf\Document;
 
 class FirstPointPositionFormatter extends BaseFormatter
 {
-    public function format(Glyph $glyph, Document $document)
+    public function format(Node $node, Document $document)
     {
-        $glyph->makeAttributesSnapshot(array('height', 'width'));
-        $boundary = $glyph->getBoundary();
+        $node->makeAttributesSnapshot(array('height', 'width'));
+        $boundary = $node->getBoundary();
         if($boundary->isClosed())
         {
             return;
         }
 
-        $parent = $glyph->getParent();
+        $parent = $node->getParent();
 
         list($parentX, $parentY) = $parent->getStartDrawingPoint();
 
-        $startX = $glyph->getMarginLeft() + $parentX;
-        $startY = $parentY - $glyph->getMarginTop();
+        $startX = $node->getMarginLeft() + $parentX;
+        $startY = $parentY - $node->getMarginTop();
 
-        $this->setGlyphsPosition($glyph, $startX, $startY);
+        $this->setNodesPosition($node, $startX, $startY);
 
         $boundary->setNext($startX, $startY);
     }
 
-    private function setGlyphsPosition(Glyph $glyph, &$preferredXCoord, &$preferredYCoord)
+    private function setNodesPosition(Node $node, &$preferredXCoord, &$preferredYCoord)
     {
-        $parent = $glyph->getParent();
+        $parent = $node->getParent();
         list($parentX, $parentY) = $parent->getStartDrawingPoint();
 
-        $previousSibling = $glyph->getPreviousSibling();
+        $previousSibling = $node->getPreviousSibling();
 
         if($previousSibling)
         {
             list($siblingEndX, $siblingEndY) = $previousSibling->getDiagonalPoint()->toArray();
             list($siblingStartX, $siblingStartY) = $previousSibling->getFirstPoint()->toArray();
 
-            if($this->isGlyphInSameRowAsPreviousSibling($glyph, $previousSibling))
+            if($this->isNodeInSameRowAsPreviousSibling($node, $previousSibling))
             {
                 $preferredXCoord += $previousSibling->getMarginRight() + $siblingEndX - $parentX;
-                $preferredYCoord = $siblingStartY + $previousSibling->getMarginTop() - $glyph->getMarginTop();
-                if($previousSibling instanceof Glyphs\Text)
+                $preferredYCoord = $siblingStartY + $previousSibling->getMarginTop() - $node->getMarginTop();
+                if($previousSibling instanceof Nodes\Text)
                 {
                     $preferredYCoord -= $previousSibling->getLineHeightRecursively() * (count($previousSibling->getLineSizes()) - 1);
                 }
             }
             else
             {
-                $preferredYCoord = $siblingEndY - ($previousSibling->getMarginBottom() + $glyph->getMarginTop());
+                $preferredYCoord = $siblingEndY - ($previousSibling->getMarginBottom() + $node->getMarginTop());
             }
         }
     }
 
-    private function isGlyphInSameRowAsPreviousSibling(Glyph $glyph, Glyph $previousSibling)
+    private function isNodeInSameRowAsPreviousSibling(Node $node, Node $previousSibling)
     {
-        $oneOfGlyphsIsInline = $previousSibling->getAttribute('display') === Glyphs\Glyph::DISPLAY_INLINE && $glyph->getDisplay() === Glyphs\Glyph::DISPLAY_INLINE;
+        $oneOfNodesIsInline = $previousSibling->getAttribute('display') === Nodes\Node::DISPLAY_INLINE && $node->getDisplay() === Nodes\Node::DISPLAY_INLINE;
 
-        $parent = $glyph->getParent();
+        $parent = $node->getParent();
         $parentBoundary = $parent->getBoundary();
 
         list($prevX) = $previousSibling->getEndDrawingPoint();
-        $endX = $prevX + $previousSibling->getMarginRight() + $glyph->getMarginLeft() + $glyph->getWidth();
+        $endX = $prevX + $previousSibling->getMarginRight() + $node->getMarginLeft() + $node->getWidth();
         $parentEndX = $parentBoundary->getFirstPoint()->getX() + $parent->getWidth();
 
-        $rowIsOverflowed = !$glyph instanceof Glyphs\Text && $parentEndX < $endX && $previousSibling->getFloat() !== Glyphs\Glyph::FLOAT_RIGHT;
+        $rowIsOverflowed = !$node instanceof Nodes\Text && $parentEndX < $endX && $previousSibling->getFloat() !== Nodes\Node::FLOAT_RIGHT;
 
-        return !$rowIsOverflowed && $oneOfGlyphsIsInline;
+        return !$rowIsOverflowed && $oneOfNodesIsInline;
     }
 }

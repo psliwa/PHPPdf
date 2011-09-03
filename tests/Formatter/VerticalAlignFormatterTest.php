@@ -1,6 +1,6 @@
 <?php
 
-use PHPPdf\Glyph\Container;
+use PHPPdf\Node\Container;
 use PHPPdf\Document,
     PHPPdf\Formatter\VerticalAlignFormatter;
 
@@ -13,7 +13,7 @@ class VerticalAlignFormatterTest extends TestCase
     
     protected function init()
     {
-        $this->objectMother = new GenericGlyphObjectMother($this);
+        $this->objectMother = new GenericNodeObjectMother($this);
     }
     
     public function setUp()
@@ -24,9 +24,9 @@ class VerticalAlignFormatterTest extends TestCase
     
     /**
      * @test
-     * @dataProvider alignSingleGlyphProvider
+     * @dataProvider alignSingleNodeProvider
      */
-    public function alignSingleGlyph($parentHeight, $childHeight, $childYCoord, $align, $expectedYCoord)
+    public function alignSingleNode($parentHeight, $childHeight, $childYCoord, $align, $expectedYCoord)
     {
         $container = new Container();
         $this->invokeMethod($container, 'setBoundary', array($this->objectMother->getBoundaryStub(0, $parentHeight, 500, $parentHeight)));
@@ -42,7 +42,7 @@ class VerticalAlignFormatterTest extends TestCase
         $this->assertEquals($expectedYCoord, $child->getFirstPoint()->getY());
     }
     
-    public function alignSingleGlyphProvider()
+    public function alignSingleNodeProvider()
     {
         return array(
             array(500, 300, 500, 'top', 500),

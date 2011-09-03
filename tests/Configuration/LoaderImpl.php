@@ -8,7 +8,7 @@ class LoaderImplTest extends TestCase
     {
         $loader = new LoaderImpl();
         
-        $glyphFile = $this->readAttribute($loader, 'glyphFile');
+        $nodeFile = $this->readAttribute($loader, 'nodeFile');
         $enhancementFile = $this->readAttribute($loader, 'enhancementFile');
         $fontFile = $this->readAttribute($loader, 'fontFile');
  
@@ -32,7 +32,7 @@ class LoaderImplTest extends TestCase
     public function configFileGetterProvider()
     {
         return array(
-            array('glyphFile', 'createGlyphFactory', new PHPPdf\Glyph\Factory()),
+            array('nodeFile', 'createNodeFactory', new PHPPdf\Node\Factory()),
             array('enhancementFile', 'createEnhancementFactory', new \PHPPdf\Enhancement\Factory()),
             array('fontFile', 'createFontRegistry', new PHPPdf\Font\Registry()),
         );
@@ -46,7 +46,7 @@ class LoaderImplTest extends TestCase
     {
         $loader = new LoaderImpl();
         
-        $glyphFile = $this->readAttribute($loader, 'glyphFile');
+        $nodeFile = $this->readAttribute($loader, 'nodeFile');
         $enhancementFile = $this->readAttribute($loader, 'enhancementFile');
         $fontFile = $this->readAttribute($loader, 'fontFile');
 

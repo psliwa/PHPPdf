@@ -10,23 +10,23 @@ namespace PHPPdf\Parser;
 
 use PHPPdf\Document;
 
-use PHPPdf\Glyph\Manager;
+use PHPPdf\Node\Manager;
 
-use PHPPdf\Glyph\GlyphWrapper;
+use PHPPdf\Node\NodeWrapper;
 
-use PHPPdf\Glyph\Text,
+use PHPPdf\Node\Text,
     PHPPdf\Parser\Exception\ParseException,
-    PHPPdf\Glyph\Factory as GlyphFactory,
-    PHPPdf\Glyph\PageCollection,
-    PHPPdf\Glyph\Glyph,
+    PHPPdf\Node\Factory as NodeFactory,
+    PHPPdf\Node\PageCollection,
+    PHPPdf\Node\Node,
     PHPPdf\Parser\BagContainer,
     PHPPdf\Parser\Exception as Exceptions,
     PHPPdf\Enhancement\Factory as EnhancementFactory,
     PHPPdf\Parser\StylesheetConstraint,
-    PHPPdf\Glyph\Behaviour\Factory as BehaviourFactory;
+    PHPPdf\Node\Behaviour\Factory as BehaviourFactory;
 
 /**
- * Parse document to graph of Glyphs
+ * Parse document to graph of Nodes
  * 
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
@@ -52,7 +52,7 @@ class DocumentParser extends XmlParser
     private $inBehaviour = false;
     private $endTag = self::ROOT_TAG;
     private $behaviourFactory = null;
-    private $glyphManager = null;
+    private $nodeManager = null;
     
     private $isPreviousText = false;
     
@@ -64,14 +64,14 @@ class DocumentParser extends XmlParser
     public function __construct(Document $document)
     {
         $this->document = $document;
-        $factory = new GlyphFactory();        
+        $factory = new NodeFactory();        
         $stylesheetParser = new StylesheetParser(null, true);
         $enhancementFactory = new EnhancementFactory();
 
-        $this->setGlyphFactory($factory);
+        $this->setNodeFactory($factory);
         $this->setStylesheetParser($stylesheetParser);
         $this->setEnhancementFactory($enhancementFactory);
-        $this->glyphManager = new Manager();
+        $this->nodeManager = new Manager();
         $this->setBehaviourFactory(new BehaviourFactory());
 
         $this->initialize();
@@ -109,7 +109,7 @@ class DocumentParser extends XmlParser
         {
             $innerParser = new self($this->document);
             $innerParser->setEnhancementFactory($this->getEnhancementFactory());
-            $innerParser->setGlyphFactory($this->getGlyphFactory());
+            $innerParser->setNodeFactory($this->getNodeFactory());
 
             $this->innerParser = $innerParser;
         }
@@ -118,9 +118,9 @@ class DocumentParser extends XmlParser
     }
 
     /**
-     * Parses document and build graph of Glyph
+     * Parses document and build graph of Node
      * 
-     * @return PageCollection Root of glyph's graph
+     * @return PageCollection Root of node's graph
      */
     public function parse($content, StylesheetConstraint $stylesheetConstraint = null)
     {
@@ -144,15 +144,15 @@ class DocumentParser extends XmlParser
         return new PageCollection();
     }
 
-    public function setGlyphFactory(GlyphFactory $factory)
+    public function setNodeFactory(NodeFactory $factory)
     {
         $this->factory = $factory;
     }
 
     /**
-     * @return GlyphFactory
+     * @return NodeFactory
      */
-    public function getGlyphFactory()
+    public function getNodeFactory()
     {
         return $this->factory;
     }
@@ -160,7 +160,7 @@ class DocumentParser extends XmlParser
     public function setBehaviourFactory(BehaviourFactory $factory)
     {
         $this->behaviourFactory = $factory;
-        $factory->setGlyphManager($this->glyphManager);
+        $factory->setNodeManager($this->nodeManager);
     }
 
     /**
@@ -205,15 +205,15 @@ class DocumentParser extends XmlParser
     protected function parseElement(\XMLReader $reader)
     {
         $tag = $reader->name;
-        $parentGlyph = $this->getLastElementFromStack();
+        $parentNode = $this->getLastElementFromStack();
 
         if($this->inPlaceholder)
         {
-            $this->parsePlaceholder($reader, $parentGlyph);
+            $this->parsePlaceholder($reader, $parentNode);
         }
         elseif($this->inBehaviour)
         {
-            $this->parseBehaviour($reader, $parentGlyph);
+            $this->parseBehaviour($reader, $parentNode);
         }
         elseif($tag === self::PLACEHOLDERS_TAG)
         {
@@ -225,30 +225,30 @@ class DocumentParser extends XmlParser
         }
         elseif($tag === self::STYLESHEET_TAG)
         {
-            $this->parseStylesheet($reader, $parentGlyph);
+            $this->parseStylesheet($reader, $parentNode);
         }
         else
         {
-            $this->parseGlyph($reader, $parentGlyph);
+            $this->parseNode($reader, $parentNode);
         }
     }
 
-    private function parseStylesheet(\XMLReader $reader, Glyph $glyph)
+    private function parseStylesheet(\XMLReader $reader, Node $node)
     {
         $this->seekReaderToNextTag($reader);
         $constraint = $this->getStylesheetParser()->parse($reader);
 
-        $this->setGlyphStylesheet($glyph, $constraint);
+        $this->setNodeStylesheet($node, $constraint);
     }
 
-    private function parsePlaceholder(\XMLReader $reader, Glyph $parentGlyph)
+    private function parsePlaceholder(\XMLReader $reader, Node $parentNode)
     {
         $placeholderName = $reader->name;
         $innerParser = $this->getInnerParser();
 
         $this->seekReaderToNextTag($reader);
 
-        if($parentGlyph->hasPlaceholder($placeholderName))
+        if($parentNode->hasPlaceholder($placeholderName))
         {
             $innerParser->setEndTag($placeholderName);
             $collection = $innerParser->parse($reader, $this->getStylesheetConstraint());
@@ -256,7 +256,7 @@ class DocumentParser extends XmlParser
 
             if($placeholder)
             {
-                $parentGlyph->setPlaceholder($placeholderName, $placeholder);
+                $parentNode->setPlaceholder($placeholderName, $placeholder);
             }
         }
         else
@@ -267,7 +267,7 @@ class DocumentParser extends XmlParser
         }
     }
     
-    private function parseBehaviour(\XMLReader $reader, Glyph $parentGlyph)
+    private function parseBehaviour(\XMLReader $reader, Node $parentNode)
     {
         $behaviourName = $reader->name;
         
@@ -275,7 +275,7 @@ class DocumentParser extends XmlParser
         
         $value = trim((string) $reader->value);
 
-        $parentGlyph->addBehaviour($this->behaviourFactory->create($behaviourName, $value));
+        $parentNode->addBehaviour($this->behaviourFactory->create($behaviourName, $value));
     }
 
     private function isntIgnoredTag($tag)
@@ -283,30 +283,30 @@ class DocumentParser extends XmlParser
         return !in_array($tag, $this->ignoredTags);
     }
     
-    private function setGlyphStylesheet(Glyph $glyph, BagContainer $bagContainer)
+    private function setNodeStylesheet(Node $node, BagContainer $bagContainer)
     {
         $attributeBag = $bagContainer->getAttributeBag();
         $enhancementBag = $bagContainer->getEnhancementBag();
 
         foreach($attributeBag->getAll() as $name => $value)
         {
-            $glyph->setAttribute($name, $value);
+            $node->setAttribute($name, $value);
         }
 
         foreach($enhancementBag->getAll() as $name => $parameters)
         {
-            $glyph->mergeEnhancementAttributes($name, $parameters);
+            $node->mergeEnhancementAttributes($name, $parameters);
         }
     }
 
-    private function parseGlyph(\XMLReader $reader, Glyph $parentGlyph)
+    private function parseNode(\XMLReader $reader, Node $parentNode)
     {
         $tag = $reader->name;
         $isEmptyElement = $reader->isEmptyElement;
 
-        $glyph = $this->createGlyph($reader);
+        $node = $this->createNode($reader);
         
-        if($this->isntTextGlyph($glyph))
+        if($this->isntTextNode($node))
         {
             $this->currentParagraph = null;
             $this->isPreviousText = false;
@@ -320,24 +320,24 @@ class DocumentParser extends XmlParser
         $this->pushOnTagStack($tag, $class);
     
         $bagContainer = $this->getStylesheetConstraint()->find($this->tagStack);
-        $this->setGlyphStylesheet($glyph, $bagContainer);
+        $this->setNodeStylesheet($node, $bagContainer);
     
         $id = $reader->getAttribute(self::ATTRIBUTE_ID);
     
         if($id)
         {
-            $this->glyphManager->register($id, $glyph);
+            $this->nodeManager->register($id, $node);
         }
-        $this->setBehavioursFromReader($reader, $glyph);
-        $this->setGlyphAttributesFromReader($reader, $glyph);
+        $this->setBehavioursFromReader($reader, $node);
+        $this->setNodeAttributesFromReader($reader, $node);
     
-        if($this->isTextGlyph($glyph) && $this->isntTextGlyph($parentGlyph))
+        if($this->isTextNode($node) && $this->isntTextNode($parentNode))
         {
-            $parentGlyph = $this->getCurrentParagraph();
+            $parentNode = $this->getCurrentParagraph();
         }
 
-        $parentGlyph->add($glyph);
-        $this->pushOnStack($glyph);
+        $parentNode->add($node);
+        $this->pushOnStack($node);
 
         if($isEmptyElement)
         {
@@ -345,51 +345,51 @@ class DocumentParser extends XmlParser
         }
     }
 
-    private function createGlyph(\XMLReader $reader)
+    private function createNode(\XMLReader $reader)
     {
         $extends = $reader->getAttribute('extends');
         $tag = $reader->name;
 
         if($extends)
         {
-            $parent = $this->glyphManager->get($extends);
+            $parent = $this->nodeManager->get($extends);
             
-            if($parent->getGlyph() == null)
+            if($parent->getNode() == null)
             {
                 throw new Exceptions\IdNotFoundException(sprintf('Element with id="%s" dosn\'t exist.', $extends));
             }
 
-            $glyph = $parent->getGlyph()->copy();
-            $glyph->removeAll();
+            $node = $parent->getNode()->copy();
+            $node->removeAll();
         }
         else
         {
-            $glyph = $this->createGlyphByTag($tag);            
+            $node = $this->createNodeByTag($tag);            
         }
 
-        return $glyph;
+        return $node;
     }
     
-    private function createGlyphByTag($tag)
+    private function createNodeByTag($tag)
     {
         try
         {
-            return $this->getGlyphFactory()->create($tag);
+            return $this->getNodeFactory()->create($tag);
         }
-        catch(\PHPPdf\Exception\UnregisteredGlyphException $e)
+        catch(\PHPPdf\Exception\UnregisteredNodeException $e)
         {
             throw new ParseException(sprintf('Unknown tag "%s".', $tag), 0, $e);
         }
     }
     
-    private function isTextGlyph(Glyph $glyph)
+    private function isTextNode(Node $node)
     {
-        return $glyph instanceof Text;
+        return $node instanceof Text;
     }
     
-    private function isntTextGlyph(Glyph $glyph)
+    private function isntTextNode(Node $node)
     {
-        return !$this->isTextGlyph($glyph);
+        return !$this->isTextNode($node);
     }
 
     private function pushOnTagStack($tag, $class)
@@ -400,7 +400,7 @@ class DocumentParser extends XmlParser
         array_push($this->tagStack, array('tag' => $tag, 'classes' => $classes));
     }
 
-    private function setGlyphAttributesFromReader(\XMLReader $reader, Glyph $glyph)
+    private function setNodeAttributesFromReader(\XMLReader $reader, Node $node)
     {
         $bagContainer = new BagContainer();
         
@@ -410,17 +410,17 @@ class DocumentParser extends XmlParser
         
         $stylesheetParser->addConstraintsFromAttributes($bagContainer, $reader, $ignoredTags);
 
-        $this->setGlyphStylesheet($glyph, $bagContainer);
+        $this->setNodeStylesheet($node, $bagContainer);
     }
     
-    private function setBehavioursFromReader(\XMLReader $reader, Glyph $glyph)
+    private function setBehavioursFromReader(\XMLReader $reader, Node $node)
     {
         foreach($this->behaviourFactory->getSupportedBehaviourNames() as $name)
         {
             $value = $reader->getAttribute($name);
             if($value)
             {                
-                $glyph->addBehaviour($this->behaviourFactory->create($name, $value));
+                $node->addBehaviour($this->behaviourFactory->create($name, $value));
             }
         }
     }
@@ -437,9 +437,9 @@ class DocumentParser extends XmlParser
         }
         elseif(!$this->inBehaviour)
         {
-            $glyph = $this->popFromStack();
+            $node = $this->popFromStack();
             
-            if($this->isntTextGlyph($glyph))
+            if($this->isntTextNode($node))
             {
                 $this->isPreviousText = false;
                 $this->currentParagraph = null;
@@ -467,17 +467,17 @@ class DocumentParser extends XmlParser
         if($text)
         {
             $this->isPreviousText = true;
-            $parentGlyph = $this->getLastElementFromStack();
+            $parentNode = $this->getLastElementFromStack();
 
-            if($this->isntTextGlyph($parentGlyph))
+            if($this->isntTextNode($parentNode))
             {
-                $parentGlyph = $this->getCurrentParagraph();
+                $parentNode = $this->getCurrentParagraph();
             }
 
-            $textGlyph = $this->getGlyphFactory()->create('text');
-            $textGlyph->setText($text);
+            $textNode = $this->getNodeFactory()->create('text');
+            $textNode->setText($text);
             
-            $parentGlyph->add($textGlyph);
+            $parentNode->add($textNode);
         }
     }
     
@@ -485,10 +485,10 @@ class DocumentParser extends XmlParser
     {
         if($this->currentParagraph === null)
         {
-            $this->currentParagraph = $this->getGlyphFactory()->create('paragraph');
-            $parentGlyph = $this->getLastElementFromStack();
+            $this->currentParagraph = $this->getNodeFactory()->create('paragraph');
+            $parentNode = $this->getLastElementFromStack();
             
-            $parentGlyph->add($this->currentParagraph);
+            $parentNode->add($this->currentParagraph);
         }
         
         return $this->currentParagraph;

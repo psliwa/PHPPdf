@@ -16,8 +16,8 @@ class FacadeConfigurationTest extends PHPUnit_Framework_TestCase
      */
     public function settingConfigFiles()
     {
-        $this->facadeConfiguration->setGlyphsConfigFile('a');
-        $this->assertEquals('a', $this->facadeConfiguration->getGlyphsConfigFile());
+        $this->facadeConfiguration->setNodesConfigFile('a');
+        $this->assertEquals('a', $this->facadeConfiguration->getNodesConfigFile());
 
         $this->facadeConfiguration->setEnhancementsConfigFile('b');
         $this->assertEquals('b', $this->facadeConfiguration->getEnhancementsConfigFile());
@@ -31,7 +31,7 @@ class FacadeConfigurationTest extends PHPUnit_Framework_TestCase
      */
     public function fluentInterface()
     {
-        $this->assertTrue($this->facadeConfiguration === $this->facadeConfiguration->setGlyphsConfigFile('a'));
+        $this->assertTrue($this->facadeConfiguration === $this->facadeConfiguration->setNodesConfigFile('a'));
         $this->assertTrue($this->facadeConfiguration === $this->facadeConfiguration->setEnhancementsConfigFile('a'));
         $this->assertTrue($this->facadeConfiguration === $this->facadeConfiguration->setFontsConfigFile('a'));
     }
@@ -41,7 +41,7 @@ class FacadeConfigurationTest extends PHPUnit_Framework_TestCase
      */
     public function defaultConfiguration()
     {
-        $this->assertNotNull($this->facadeConfiguration->getGlyphsConfigFile());
+        $this->assertNotNull($this->facadeConfiguration->getNodesConfigFile());
         $this->assertNotNull($this->facadeConfiguration->getEnhancementsConfigFile());
         $this->assertNotNull($this->facadeConfiguration->getFontsConfigFile());
     }

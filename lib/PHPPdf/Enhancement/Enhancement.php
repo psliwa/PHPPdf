@@ -8,13 +8,13 @@
 
 namespace PHPPdf\Enhancement;
 
-use PHPPdf\Glyph\Glyph,
-    PHPPdf\Glyph\Page,
+use PHPPdf\Node\Node,
+    PHPPdf\Node\Page,
     PHPPdf\Engine\GraphicsContext,
     PHPPdf\Document;
 
 /**
- * Base class of enhancement glyph's visual representation.
+ * Base class of enhancement node's visual representation.
  *
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
@@ -61,26 +61,26 @@ abstract class Enhancement
         return $this->color;
     }
 
-    public function enhance(Glyph $glyph, Document $document)
+    public function enhance(Node $node, Document $document)
     {
         $color = $this->getColor();
-        $alpha = $glyph->getAlpha();
+        $alpha = $node->getAlpha();
         
-        $graphicsContext = $glyph->getGraphicsContext();
+        $graphicsContext = $node->getGraphicsContext();
         
         $isAlphaSet = $alpha != 1 && $alpha !== null;
         
-        $rotationGlyph = $glyph->getAncestorWithRotation();
+        $rotationNode = $node->getAncestorWithRotation();
         
-        if($color || $isAlphaSet || $rotationGlyph)
+        if($color || $isAlphaSet || $rotationNode)
         {
             $graphicsContext->saveGS();
         }
         
-        if($rotationGlyph)
+        if($rotationNode)
         {
-            $middlePoint = $rotationGlyph->getMiddlePoint();
-            $graphicsContext->rotate($middlePoint->getX(), $middlePoint->getY(), $rotationGlyph->getRotate());
+            $middlePoint = $rotationNode->getMiddlePoint();
+            $graphicsContext->rotate($middlePoint->getX(), $middlePoint->getY(), $rotationNode->getRotate());
         }
         
         if($alpha !== null)
@@ -94,15 +94,15 @@ abstract class Enhancement
             $graphicsContext->setFillColor($color);
         }
 
-        $this->doEnhance($graphicsContext, $glyph, $document);
+        $this->doEnhance($graphicsContext, $node, $document);
         
-        if($color || $isAlphaSet || $rotationGlyph)
+        if($color || $isAlphaSet || $rotationNode)
         {
             $graphicsContext->restoreGs();
         }
     }
 
-    abstract protected function doEnhance($gc, Glyph $glyph, Document $document);
+    abstract protected function doEnhance($gc, Node $node, Document $document);
 
     protected function drawBoundary(GraphicsContext $gc, $points, $drawType, $shift = 0)
     {

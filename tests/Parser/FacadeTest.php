@@ -12,7 +12,7 @@ class FacadeTest extends TestCase
 
     public function setUp()
     {
-        $this->loaderMock = $this->getMock('PHPPdf\Configuration\Loader', array('createGlyphFactory', 'createEnhancementFactory', 'createFontRegistry', 'setCache'));
+        $this->loaderMock = $this->getMock('PHPPdf\Configuration\Loader', array('createNodeFactory', 'createEnhancementFactory', 'createFontRegistry', 'setCache'));
         $this->facade = new Facade($this->loaderMock);
     }
 
@@ -69,20 +69,20 @@ class FacadeTest extends TestCase
                              ->setMethods(array('draw', 'initialize', 'render', 'addFontDefinitions', 'setEnhancementFactory'))
                              ->getMock();
         $parserMock = $this->getMockBuilder('PHPPdf\Parser\DocumentParser')
-                           ->setMethods(array('parse', 'setEnhancementFactory', 'setGlyphFactory'))
+                           ->setMethods(array('parse', 'setEnhancementFactory', 'setNodeFactory'))
                            ->disableOriginalConstructor()
                            ->getMock();
         $stylesheetParserMock = $this->getMock('PHPPdf\Parser\StylesheetParser', array('parse'));
         $constraintMock = $this->getMock('PHPPdf\Parser\StylesheetConstraint');
-        $pageCollectionMock = $this->getMock('PHPPdf\Glyph\PageCollection', array());
+        $pageCollectionMock = $this->getMock('PHPPdf\Node\PageCollection', array());
         
-        $glyphFactoryMock = $this->getMock('PHPPdf\Glyph\Factory');
+        $nodeFactoryMock = $this->getMock('PHPPdf\Node\Factory');
         $enhancementFactoryMock = $this->getMock('PHPPdf\Enhancement\Factory');
         $fontDefinitionsStub = array('some-data');
         
         $this->loaderMock->expects($this->atLeastOnce())
-                         ->method('createGlyphFactory')
-                         ->will($this->returnValue($glyphFactoryMock));
+                         ->method('createNodeFactory')
+                         ->will($this->returnValue($nodeFactoryMock));
         $this->loaderMock->expects($this->atLeastOnce())
                          ->method('createEnhancementFactory')
                          ->will($this->returnValue($enhancementFactoryMock));
@@ -100,8 +100,8 @@ class FacadeTest extends TestCase
                    ->method('setEnhancementFactory')
                    ->with($enhancementFactoryMock);
         $parserMock->expects($this->once())
-                   ->method('setGlyphFactory')
-                   ->with($glyphFactoryMock);
+                   ->method('setNodeFactory')
+                   ->with($nodeFactoryMock);
 
         $parserMock->expects($this->once())
                    ->method('parse')
@@ -154,7 +154,7 @@ class FacadeTest extends TestCase
                                    ->getMock();
         $documentParserMock->expects($this->once())
                            ->method('parse')
-                           ->will($this->returnValue(new \PHPPdf\Glyph\PageCollection()));
+                           ->will($this->returnValue(new \PHPPdf\Node\PageCollection()));
 
         $stylesheetParserMock = $this->getMock('PHPPdf\Parser\StylesheetParser', array('parse'));
         $stylesheetParserMock->expects($this->once())

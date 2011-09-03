@@ -1,10 +1,10 @@
 <?php
 
 use PHPPdf\Document,
-    PHPPdf\Glyph\Image,
+    PHPPdf\Node\Image,
     PHPPdf\Formatter\ImageDimensionFormatter,
-    PHPPdf\Glyph\Page,
-    PHPPdf\Glyph\Container;
+    PHPPdf\Node\Page,
+    PHPPdf\Node\Container;
 
 class ImageDimensionFormatterTest extends TestCase
 {

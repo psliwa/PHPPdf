@@ -8,31 +8,31 @@
 
 namespace PHPPdf\Formatter;
 
-use PHPPdf\Glyph\Glyph,
+use PHPPdf\Node\Node,
     PHPPdf\Document;
 
 class RowDimensionFormatter extends BaseFormatter
 {
-    public function format(Glyph $glyph, Document $document)
+    public function format(Node $node, Document $document)
     {
-        $boundary = $glyph->getBoundary();
-        $verticalMargins = $glyph->getMarginsBottomOfCells() + $glyph->getMarginsTopOfCells();
-        $newHeight = $glyph->getMaxHeightOfCells() + $verticalMargins;
+        $boundary = $node->getBoundary();
+        $verticalMargins = $node->getMarginsBottomOfCells() + $node->getMarginsTopOfCells();
+        $newHeight = $node->getMaxHeightOfCells() + $verticalMargins;
 
-        $heightDiff = $newHeight - $glyph->getHeight();
+        $heightDiff = $newHeight - $node->getHeight();
 
         $boundary->pointTranslate(2, 0, $heightDiff)
                  ->pointTranslate(3, 0, $heightDiff);
 
-        $glyph->setHeight($newHeight);
+        $node->setHeight($newHeight);
 
-        foreach((array) $glyph->getChildren() as $cell)
+        foreach((array) $node->getChildren() as $cell)
         {
-            $heightDiff = $glyph->getMaxHeightOfCells() - $cell->getHeight();
-            $cell->setHeight($glyph->getMaxHeightOfCells());
+            $heightDiff = $node->getMaxHeightOfCells() - $cell->getHeight();
+            $cell->setHeight($node->getMaxHeightOfCells());
             $cell->getBoundary()->pointTranslate(2, 0, $heightDiff)
                                 ->pointTranslate(3, 0, $heightDiff);
-            $cell->translate(0, $glyph->getMarginsTopOfCells());
+            $cell->translate(0, $node->getMarginsTopOfCells());
         }
     }
 }

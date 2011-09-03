@@ -1,8 +1,8 @@
 <?php
 
-use PHPPdf\Glyph\ColumnableContainer,
-    PHPPdf\Glyph\Container,
-    PHPPdf\Glyph\Page,
+use PHPPdf\Node\ColumnableContainer,
+    PHPPdf\Node\Container,
+    PHPPdf\Node\Page,
     PHPPdf\Util\Boundary,
     PHPPdf\Document,
     PHPPdf\Formatter\ColumnDivertingFormatter;

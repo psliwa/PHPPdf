@@ -10,7 +10,7 @@ namespace PHPPdf\Configuration;
 
 use PHPPdf\Parser\FontRegistryParser,
     PHPPdf\Parser\EnhancementFactoryParser,
-    PHPPdf\Parser\GlyphFactoryParser,
+    PHPPdf\Parser\NodeFactoryParser,
     PHPPdf\Cache\NullCache,
     PHPPdf\Cache\Cache;
 
@@ -19,21 +19,21 @@ use PHPPdf\Parser\FontRegistryParser,
  */
 class LoaderImpl implements Loader
 {
-    private $glyphFile = null;
+    private $nodeFile = null;
     private $enhancementFile = null;
     private $fontFile = null;
     
     private $enhancementFactory;
-    private $glyphFactory;
+    private $nodeFactory;
     private $fontRegistry;
     
     private $cache;
     
-    public function __construct($glyphFile = null, $enhancementFile = null, $fontFile = null)
+    public function __construct($nodeFile = null, $enhancementFile = null, $fontFile = null)
     {
-        if($glyphFile === null)
+        if($nodeFile === null)
         {
-            $glyphFile = __DIR__.'/../Resources/config/glyphs.xml';
+            $nodeFile = __DIR__.'/../Resources/config/nodes.xml';
         }
         
         if($enhancementFile === null)
@@ -46,7 +46,7 @@ class LoaderImpl implements Loader
             $fontFile = __DIR__.'/../Resources/config/fonts.xml';
         }
         
-        $this->glyphFile = $glyphFile;        
+        $this->nodeFile = $nodeFile;        
         $this->enhancementFile = $enhancementFile;        
         $this->fontFile = $fontFile;   
 
@@ -79,40 +79,40 @@ class LoaderImpl implements Loader
         
     }
 
-	public function createGlyphFactory()
+	public function createNodeFactory()
     {
-        if($this->glyphFactory === null)
+        if($this->nodeFactory === null)
         {
-            $this->glyphFactory = $this->loadGlyphs();
+            $this->nodeFactory = $this->loadNodes();
         }        
 
-        return $this->glyphFactory;
+        return $this->nodeFactory;
     }
 
-    protected function loadGlyphs()
+    protected function loadNodes()
     {
-        $file = $this->glyphFile;
+        $file = $this->nodeFile;
 
-        $doLoadGlyphs = function($content)
+        $doLoadNodes = function($content)
         {
-            $glyphFactoryParser = new GlyphFactoryParser();
+            $nodeFactoryParser = new NodeFactoryParser();
 
-            $glyphFactory = $glyphFactoryParser->parse($content);
+            $nodeFactory = $nodeFactoryParser->parse($content);
 
-            return $glyphFactory;
+            return $nodeFactory;
         };
 
-        /* @var $glyphFactory PHPpdf\Glyph\Factory */
-        $glyphFactory = $this->getFromCacheOrCallClosure($file, $doLoadGlyphs);
+        /* @var $nodeFactory PHPpdf\Node\Factory */
+        $nodeFactory = $this->getFromCacheOrCallClosure($file, $doLoadNodes);
 
         //TODO: DI
-        if($glyphFactory->hasPrototype('page') && $glyphFactory->hasPrototype('dynamic-page'))
+        if($nodeFactory->hasPrototype('page') && $nodeFactory->hasPrototype('dynamic-page'))
         {
-            $page = $glyphFactory->create('page');
-            $glyphFactory->getPrototype('dynamic-page')->setPrototypePage($page);
+            $page = $nodeFactory->create('page');
+            $nodeFactory->getPrototype('dynamic-page')->setPrototypePage($page);
         }
         
-        return $glyphFactory;
+        return $nodeFactory;
     }
 
     protected function getFromCacheOrCallClosure($file, \Closure $closure)

@@ -9,19 +9,19 @@
 namespace PHPPdf\Formatter;
 
 use PHPPdf\Formatter\Formatter,
-    PHPPdf\Glyph as Glyphs,
+    PHPPdf\Node as Nodes,
     PHPPdf\Formatter\Chain;
 
 /**
- * Sets chain to children glyphs
+ * Sets chain to children nodes
  *
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
 class ContainerFormatter extends BaseFormatter
 {
-    public function format(Glyphs\Glyph $glyph, \PHPPdf\Document $document)
+    public function format(Nodes\Node $node, \PHPPdf\Document $document)
     {
-        foreach($glyph->getChildren() as $child)
+        foreach($node->getChildren() as $child)
         {
             $child->preFormat($document);
             $child->format($document);

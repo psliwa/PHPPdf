@@ -4,8 +4,8 @@ use PHPPdf\Formatter\FloatFormatter,
     PHPPdf\Util\Boundary,
     PHPPdf\Formatter\Chain,
     PHPPdf\Document,
-    PHPPdf\Glyph\Glyph,
-    PHPPdf\Glyph\Page;
+    PHPPdf\Node\Node,
+    PHPPdf\Node\Page;
 
 class FloatFormatterTest extends PHPUnit_Framework_TestCase
 {
@@ -24,7 +24,7 @@ class FloatFormatterTest extends PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function correctGlyphsPositionIfHasFloatSetToLeft()
+    public function correctNodesPositionIfHasFloatSetToLeft()
     {
         $containers = $this->createContainerWithFloatingChildren(
                 array(0, 700, 700, 700),
@@ -43,13 +43,13 @@ class FloatFormatterTest extends PHPUnit_Framework_TestCase
         $args = func_get_args();
         $numArgs = func_num_args();
         
-        $container = $this->getGlyphMock($args[0][0], $args[0][1], $args[0][2], $args[0][3], array('getChildren'));
+        $container = $this->getNodeMock($args[0][0], $args[0][1], $args[0][2], $args[0][3], array('getChildren'));
 
         $children = array();
 
         for($i=1; $i<$numArgs; $i+=2)
         {
-            $children[] = $this->getGlyphMockWithFloatAndParent($args[$i][0], $args[$i][1], $args[$i][2], $args[$i][3], $args[$i+1], $container);
+            $children[] = $this->getNodeMockWithFloatAndParent($args[$i][0], $args[$i][1], $args[$i][2], $args[$i][3], $args[$i+1], $container);
 
         }
 
@@ -61,7 +61,7 @@ class FloatFormatterTest extends PHPUnit_Framework_TestCase
     }
 
 
-    private function getGlyphMock($x, $y, $width, $height, array $methods = array(), $boundaryAtLeastOnce = true, $class = 'PHPPdf\Glyph\Container')
+    private function getNodeMock($x, $y, $width, $height, array $methods = array(), $boundaryAtLeastOnce = true, $class = 'PHPPdf\Node\Container')
     {
         $methods = array_merge(array('getBoundary', 'getHeight', 'getWidth'), $methods);
         $mock = $this->getMock($class, $methods);
@@ -91,7 +91,7 @@ class FloatFormatterTest extends PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function correctGlyphPositionIfHasFloatSetToRight()
+    public function correctNodePositionIfHasFloatSetToRight()
     {
         $containers = $this->createContainerWithFloatingChildren(
                 array(0, 700, 700, 700),
@@ -108,7 +108,7 @@ class FloatFormatterTest extends PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function correctGlyphsPositionWithNoFloatIfPreviousSiblingsHaveFloat()
+    public function correctNodesPositionWithNoFloatIfPreviousSiblingsHaveFloat()
     {
         $containers = $this->createContainerWithFloatingChildren(
                 array(0, 700, 700, 700),
@@ -178,7 +178,7 @@ class FloatFormatterTest extends PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function glyphsHaveEqualTopYCoordEvenIfHaveHeightIsDifferent()
+    public function nodesHaveEqualTopYCoordEvenIfHaveHeightIsDifferent()
     {
         $containers = $this->createContainerWithFloatingChildren(
                 array(0, 500, 200, 40),
@@ -197,27 +197,27 @@ class FloatFormatterTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($containers[1]->getFirstPoint()->getY(), $containers[2]->getFirstPoint()->getY());
     }
 
-    private function getGlyphMockWithFloatAndParent($x, $y, $width, $height, $float, $parent, array $methods = array())
+    private function getNodeMockWithFloatAndParent($x, $y, $width, $height, $float, $parent, array $methods = array())
     {
         $methods[] = 'getFloat';
         $methods[] = 'getParent';
-        $glyph = $this->getGlyphMock($x, $y, $width, $height, $methods);
+        $node = $this->getNodeMock($x, $y, $width, $height, $methods);
 
-        $glyph->expects($this->atLeastOnce())
+        $node->expects($this->atLeastOnce())
               ->method('getFloat')
               ->will($this->returnValue($float));
 
-        $glyph->expects($this->atLeastOnce())
+        $node->expects($this->atLeastOnce())
               ->method('getParent')
               ->will($this->returnValue($parent));
 
-        return $glyph;
+        return $node;
     }
 
     /**
      * @test
      */
-    public function correctGlyphsPositionWithRightFloatIfRightPaddingIsSet()
+    public function correctNodesPositionWithRightFloatIfRightPaddingIsSet()
     {
         $containers = $this->createContainerWithFloatingChildren(
                 array(0, 500, 100, 40),
@@ -236,15 +236,15 @@ class FloatFormatterTest extends PHPUnit_Framework_TestCase
      */
     public function correctParentsHeightWhenFloatingChildrenHasDifferentHeight()
     {
-        $container = $this->getGlyphMock(0, 500, 100, 100, array('getChildren', 'setHeight', 'getAttributesSnapshot'), false);
+        $container = $this->getNodeMock(0, 500, 100, 100, array('getChildren', 'setHeight', 'getAttributesSnapshot'), false);
 
         $container->expects($this->once())
                   ->method('setHeight')
                   ->with(60)
                   ->will($this->returnValue($container));
 
-        $children[] = $this->getGlyphMockWithFloatAndParent(0, 500, 40, 60, 'left', $container);
-        $children[] = $this->getGlyphMockWithFloatAndParent(0, 440, 40, 40, 'right', $container);
+        $children[] = $this->getNodeMockWithFloatAndParent(0, 500, 40, 60, 'left', $container);
+        $children[] = $this->getNodeMockWithFloatAndParent(0, 440, 40, 40, 'right', $container);
 
         $container->expects($this->atLeastOnce())
                   ->method('getChildren')
@@ -258,11 +258,11 @@ class FloatFormatterTest extends PHPUnit_Framework_TestCase
      */
     public function dontCorrectParentsHeightIfHisChildrenPositionHasNotBeenCorrected()
     {
-        $container = $this->getGlyphMock(0, 500, 100, 100, array('getChildren', 'setHeight'), false);
+        $container = $this->getNodeMock(0, 500, 100, 100, array('getChildren', 'setHeight'), false);
         $container->expects($this->never())
                   ->method('setHeight');
 
-        $child = $this->getGlyphMockWithFloatAndParent(0, 500, 100, 50, 'left', $container);
+        $child = $this->getNodeMockWithFloatAndParent(0, 500, 100, 50, 'left', $container);
 
         $container->expects($this->atLeastOnce())
                   ->method('getChildren')
@@ -276,11 +276,11 @@ class FloatFormatterTest extends PHPUnit_Framework_TestCase
      */
     public function containerWithoutFloatShouldBeBelowAllOfPreviousSiblingsWithFloat()
     {
-        $container = $this->getGlyphMock(0, 500, 100, 500, array('getChildren', 'setHeight'), false);
+        $container = $this->getNodeMock(0, 500, 100, 500, array('getChildren', 'setHeight'), false);
         
-        $containerLeftFloated = $this->getGlyphMockWithFloatAndParent(0, 500, 10, 200, 'left', $container);
-        $containerRightFloated = $this->getGlyphMockWithFloatAndParent(0, 300, 10, 100, 'right', $container);
-        $containerWithoutFloat = $this->getGlyphMockWithFloatAndParent(0, 200, 10, 100, 'none', $container);
+        $containerLeftFloated = $this->getNodeMockWithFloatAndParent(0, 500, 10, 200, 'left', $container);
+        $containerRightFloated = $this->getNodeMockWithFloatAndParent(0, 300, 10, 100, 'right', $container);
+        $containerWithoutFloat = $this->getNodeMockWithFloatAndParent(0, 200, 10, 100, 'none', $container);
         
         $container->expects($this->atLeastOnce())
                   ->method('getChildren')
@@ -295,19 +295,19 @@ class FloatFormatterTest extends PHPUnit_Framework_TestCase
      * @test
      * @dataProvider paddingProvider
      */
-    public function moveGlyphWithRightFloatUnderPreviousSiblingIfPreviousSiblingHasLeftFloatAndBothElementsDontFit($firstContainerFloat, $secondContainerFloat, $heightOfFirstContainer, $paddingTopOfSecondContainer)
+    public function moveNodeWithRightFloatUnderPreviousSiblingIfPreviousSiblingHasLeftFloatAndBothElementsDontFit($firstContainerFloat, $secondContainerFloat, $heightOfFirstContainer, $paddingTopOfSecondContainer)
     {
         $heightOfParentContainer = 500;
         $widthOfParentContainer = 500;
-        $container = $this->getGlyphMock(0, $heightOfParentContainer, $widthOfParentContainer, $heightOfParentContainer, array('getChildren', 'setHeight'), false);
+        $container = $this->getNodeMock(0, $heightOfParentContainer, $widthOfParentContainer, $heightOfParentContainer, array('getChildren', 'setHeight'), false);
         
         $widthOfFirstContainer = 300;
         $firstPointYCoordOfSecondContainer = $heightOfParentContainer - $heightOfFirstContainer;// - $paddingTopOfSecondContainer;
         $heightOfSecondContainer = 100;
         $widthOfSecondContainer = 300;
         
-        $firstContainer = $this->getGlyphMockWithFloatAndParent(0, $heightOfParentContainer, $widthOfFirstContainer, $heightOfFirstContainer, $firstContainerFloat, $container);
-        $secondContainer = $this->getGlyphMockWithFloatAndParent(0, $firstPointYCoordOfSecondContainer, $widthOfSecondContainer, $heightOfSecondContainer, $secondContainerFloat, $container);
+        $firstContainer = $this->getNodeMockWithFloatAndParent(0, $heightOfParentContainer, $widthOfFirstContainer, $heightOfFirstContainer, $firstContainerFloat, $container);
+        $secondContainer = $this->getNodeMockWithFloatAndParent(0, $firstPointYCoordOfSecondContainer, $widthOfSecondContainer, $heightOfSecondContainer, $secondContainerFloat, $container);
         $secondContainer->setAttribute('padding-top', $paddingTopOfSecondContainer);
         
         $container->expects($this->atLeastOnce())
@@ -316,10 +316,10 @@ class FloatFormatterTest extends PHPUnit_Framework_TestCase
                   
         $this->formatter->format($container, $this->document);
         
-        $expectedXCoordOfFirstContainer = $firstContainerFloat == Glyph::FLOAT_LEFT ? 0 : ($widthOfParentContainer - $widthOfSecondContainer);
+        $expectedXCoordOfFirstContainer = $firstContainerFloat == Node::FLOAT_LEFT ? 0 : ($widthOfParentContainer - $widthOfSecondContainer);
         $this->assertEquals($expectedXCoordOfFirstContainer, $firstContainer->getFirstPoint()->getX());
         
-        $expectedXCoordOfSecondContainer = $secondContainerFloat == Glyph::FLOAT_LEFT ? 0 : ($widthOfParentContainer - $widthOfSecondContainer);
+        $expectedXCoordOfSecondContainer = $secondContainerFloat == Node::FLOAT_LEFT ? 0 : ($widthOfParentContainer - $widthOfSecondContainer);
         $this->assertEquals($expectedXCoordOfSecondContainer, $secondContainer->getFirstPoint()->getX());
         
         
@@ -345,10 +345,10 @@ class FloatFormatterTest extends PHPUnit_Framework_TestCase
      * @test
      * @dataProvider floatAndMarginProvider
      */
-    public function marginIsRespectedEvenIfGlyphHasFloat($float, $marginLeft, $marginRight, $parentWidth, $width, $expectedXCoord)
+    public function marginIsRespectedEvenIfNodeHasFloat($float, $marginLeft, $marginRight, $parentWidth, $width, $expectedXCoord)
     {
-        $container = $this->getGlyphMock(0, 500, $parentWidth, 500, array('getChildren'), false);
-        $containerFloated = $this->getGlyphMockWithFloatAndParent(0, 500, $width, 200, $float, $container);
+        $container = $this->getNodeMock(0, 500, $parentWidth, 500, array('getChildren'), false);
+        $containerFloated = $this->getNodeMockWithFloatAndParent(0, 500, $width, 200, $float, $container);
         $containerFloated->setAttribute('margin-left', $marginLeft);
         $containerFloated->setAttribute('margin-right', $marginRight);
         
@@ -364,10 +364,10 @@ class FloatFormatterTest extends PHPUnit_Framework_TestCase
     public function floatAndMarginProvider()
     {
         return array(
-            array(Glyph::FLOAT_LEFT, 100, 0, 500, 100, 100),
-            array(Glyph::FLOAT_RIGHT, 100, 100, 500, 100, 300),
-            array(Glyph::FLOAT_RIGHT, 0, 0, 500, 100, 400),
-            array(Glyph::FLOAT_LEFT, 0, 0, 500, 100, 0),
+            array(Node::FLOAT_LEFT, 100, 0, 500, 100, 100),
+            array(Node::FLOAT_RIGHT, 100, 100, 500, 100, 300),
+            array(Node::FLOAT_RIGHT, 0, 0, 500, 100, 400),
+            array(Node::FLOAT_LEFT, 0, 0, 500, 100, 0),
         );
     }
 }

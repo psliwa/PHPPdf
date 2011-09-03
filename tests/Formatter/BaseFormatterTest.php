@@ -4,7 +4,7 @@ use PHPPdf\Formatter\BaseFormatter;
 
 class StubFormatter extends BaseFormatter
 {
-    public function format(PHPPdf\Glyph\Glyph $glyph, PHPPdf\Document $document)
+    public function format(PHPPdf\Node\Node $node, PHPPdf\Document $document)
     {
     }
 }

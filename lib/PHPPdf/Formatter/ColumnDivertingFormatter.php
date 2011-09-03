@@ -10,11 +10,11 @@ namespace PHPPdf\Formatter;
 
 use PHPPdf\Util\Point;
 
-use PHPPdf\Glyph\Glyph,
+use PHPPdf\Node\Node,
     PHPPdf\Document,
     PHPPdf\Util\Boundary,
-    PHPPdf\Glyph\ColumnableContainer,
-    PHPPdf\Glyph\Container;
+    PHPPdf\Node\ColumnableContainer,
+    PHPPdf\Node\Container;
 
 /**
  * Formats columnable container, breaks containers into columns. 
@@ -30,21 +30,21 @@ class ColumnDivertingFormatter extends BaseFormatter
     
     private $lastVerticalTranslation = 0;
     
-    public function format(Glyph $glyph, Document $document)
+    public function format(Node $node, Document $document)
     {
         $this->lastVerticalTranslation = 0;
 
-        $glyphs = $glyph instanceof ColumnableContainer ? array($glyph) : $glyph->getChildren();
+        $nodes = $node instanceof ColumnableContainer ? array($node) : $node->getChildren();
         
-        foreach($glyphs as $glyph)
+        foreach($nodes as $node)
         {
-            if($glyph instanceof ColumnableContainer)
+            if($node instanceof ColumnableContainer)
             {
-                $container = $this->moveAllChildrenToSingleContainer($glyph);
+                $container = $this->moveAllChildrenToSingleContainer($node);
                 
-                $this->splitContainerIntoColumns($glyph, $container);
+                $this->splitContainerIntoColumns($node, $container);
                 
-                $this->resizeColumnableContainer($glyph);
+                $this->resizeColumnableContainer($node);
                 
                 $this->staticBreakYCoord = null;
                 $this->stopBreaking = false;

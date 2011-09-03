@@ -1,11 +1,11 @@
 <?php
 
-use PHPPdf\Glyph\Glyph;
-use PHPPdf\Glyph\Container;
+use PHPPdf\Node\Node;
+use PHPPdf\Node\Container;
 use PHPPdf\Document;
 use PHPPdf\Util\Point;
-use PHPPdf\Glyph\Text;
-use PHPPdf\Glyph\Paragraph;
+use PHPPdf\Node\Text;
+use PHPPdf\Node\Paragraph;
 use PHPPdf\Formatter\ParagraphFormatter;
 
 class ParagraphFormatterTest extends TestCase
@@ -17,7 +17,7 @@ class ParagraphFormatterTest extends TestCase
     
     protected function init()
     {
-        $this->objectMother = new GenericGlyphObjectMother($this);
+        $this->objectMother = new GenericNodeObjectMother($this);
     }
 
     public function setUp()
@@ -33,14 +33,14 @@ class ParagraphFormatterTest extends TestCase
     public function calculateTextsPositions($x, $width, $height, array $fontSizes, array $wordsSizes, array $expectedPositions)
     {
         $paragraph = $this->createParagraph($x, $height, $width, $height);
-        $this->createTextGlyphsAndAddToParagraph($wordsSizes, $fontSizes, $paragraph);
+        $this->createTextNodesAndAddToParagraph($wordsSizes, $fontSizes, $paragraph);
         
         $this->formatter->format($paragraph, $this->document);
         
-        foreach($paragraph->getChildren() as $i => $textGlyph)
+        foreach($paragraph->getChildren() as $i => $textNode)
         {
-            $this->assertPointEquals($expectedPositions[$i][0], $textGlyph->getFirstPoint(), sprintf('%%sfirst point of "%d" text is invalid', $i));
-            $this->assertPointEquals($expectedPositions[$i][1], $textGlyph->getDiagonalPoint(), sprintf('%%sdiagonal point of "%d" text is invalid', $i));
+            $this->assertPointEquals($expectedPositions[$i][0], $textNode->getFirstPoint(), sprintf('%%sfirst point of "%d" text is invalid', $i));
+            $this->assertPointEquals($expectedPositions[$i][1], $textNode->getDiagonalPoint(), sprintf('%%sdiagonal point of "%d" text is invalid', $i));
         }
     }
     
@@ -150,25 +150,25 @@ class ParagraphFormatterTest extends TestCase
         return $paragraph;
     }
     
-    private function createTextGlyphsAndAddToParagraph(array $wordsSizes, array $fontSizes, Paragraph $paragraph)
+    private function createTextNodesAndAddToParagraph(array $wordsSizes, array $fontSizes, Paragraph $paragraph)
     {
-        foreach($wordsSizes as $index => $wordsSizesForGlyph)
+        foreach($wordsSizes as $index => $wordsSizesForNode)
         {
-            $this->createTextGlyph($wordsSizesForGlyph, $fontSizes[$index], $paragraph);
+            $this->createTextNode($wordsSizesForNode, $fontSizes[$index], $paragraph);
         }
     }
     
-    private function createTextGlyph(array $wordsSizes, $fontSize, Paragraph $paragraph)
+    private function createTextNode(array $wordsSizes, $fontSize, Paragraph $paragraph)
     {
-        $textGlyph = new Text();
+        $textNode = new Text();
         
         list($words, $sizes) = $wordsSizes;
-        $textGlyph->setWordsSizes($words, $sizes);
-        $textGlyph->setFontSize($fontSize);
+        $textNode->setWordsSizes($words, $sizes);
+        $textNode->setFontSize($fontSize);
         
-        $paragraph->add($textGlyph);
+        $paragraph->add($textNode);
         
-        return $textGlyph;
+        return $textNode;
     }
     
     private function getLineHeight($fontSize)
@@ -182,13 +182,13 @@ class ParagraphFormatterTest extends TestCase
     public function useWidthOfAncestorIfParagraphParentsWidthIsNull()
     {
         $width = 300;        
-        $grandparent = $this->objectMother->getGlyphStub(0, 500, $width, 100);        
+        $grandparent = $this->objectMother->getNodeStub(0, 500, $width, 100);        
         $paragraph = $this->createParagraph(0, 500, 0, 100);
 
         $grandparent->add($paragraph->getParent());
         
         $wordsSizes = array(10, 20, 30);
-        $text = $this->createTextGlyph(array(
+        $text = $this->createTextNode(array(
             array('ab', 'cd', 'ef'),
             $wordsSizes,
         ), 12, $paragraph);

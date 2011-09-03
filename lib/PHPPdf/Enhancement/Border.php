@@ -8,14 +8,14 @@
 
 namespace PHPPdf\Enhancement;
 
-use PHPPdf\Glyph\Page,
-    PHPPdf\Glyph\Glyph,
+use PHPPdf\Node\Page,
+    PHPPdf\Node\Node,
     PHPPdf\Util\Boundary,
     PHPPdf\Engine\GraphicsContext,
     PHPPdf\Document;
 
 /**
- * Enhance glyph by drawing border
+ * Enhance node by drawing border
  *
  * Border can be drawed in specific edges by passing type parameter. Size, radius and
  * line style also may by customized.
@@ -99,11 +99,11 @@ class Border extends Enhancement
         $this->position = $position;
     }
 
-    protected function doEnhance($graphicsContext, Glyph $glyph, Document $document)
+    protected function doEnhance($graphicsContext, Node $node, Document $document)
     {
         $graphicsContext->setLineDashingPattern($this->style);
         $graphicsContext->setLineWidth($this->size);
-        $boundary = $glyph->getBoundary();
+        $boundary = $node->getBoundary();
 
         $points = $this->getPointsWithPositionCorrection($boundary);
 

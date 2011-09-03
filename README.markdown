@@ -509,12 +509,12 @@ Configuration
 Library has three primary config files that allow you to adopt library to specyfic needs and to extending.
 
 * enhancements.xml - declarations of complex attributes classes to logical names that identify attribute in whole library.
-* glyphs.xml - definitions of allowed tags in xml document with default attributes and formatting objects.
+* nodes.xml - definitions of allowed tags in xml document with default attributes and formatting objects.
 * fonts.xml - definitions of fonts and assigning them to logical names that identify font in whole library.
 
 In order to change default config files, you must pass to Facade constructor configured Loader object:
 
-    $loader = new PHPPdf\Configuration\LoaderImpl('/path/to/file/glyphs.xml', '/path/to/file/enhancements.xml', '/path/to/file/fonts.xml');
+    $loader = new PHPPdf\Configuration\LoaderImpl('/path/to/file/nodes.xml', '/path/to/file/enhancements.xml', '/path/to/file/fonts.xml');
     $facade = new PHPPdf\Parser\Facade($loader);
 
 FacadeBuilder can be uset to build and configure Facade. Nowaday builder has only cache setting responsibilites:

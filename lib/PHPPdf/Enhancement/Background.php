@@ -12,12 +12,12 @@ use PHPPdf\Engine\GraphicsContext;
 
 use PHPPdf\Document;
 
-use PHPPdf\Glyph\Page,
+use PHPPdf\Node\Page,
     PHPPdf\Util,
-    PHPPdf\Glyph\Glyph;
+    PHPPdf\Node\Node;
 
 /**
- * Enhance glyph by drawing background
+ * Enhance node by drawing background
  *
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
@@ -75,11 +75,11 @@ class Background extends Enhancement
         return $this->image;
     }
 
-    protected function doEnhance($graphicsContext, Glyph $glyph, Document $document)
+    protected function doEnhance($graphicsContext, Node $node, Document $document)
     {
         if($this->getColor() !== null)
         {
-            $boundary = $this->getBoundary($glyph);
+            $boundary = $this->getBoundary($node);
             if($this->getRadius() !== null)
             {
                 $firstPoint = $boundary[3];
@@ -98,13 +98,13 @@ class Background extends Enhancement
 
         if($image !== null)
         {
-            list($x, $y) = $this->getFirstPoint($glyph)->toArray();
-            list($endX, $endY) = $this->getDiagonalPoint($glyph)->toArray();
+            list($x, $y) = $this->getFirstPoint($node)->toArray();
+            list($endX, $endY) = $this->getDiagonalPoint($node)->toArray();
                     
-            list($width, $height) = $this->getImageDimension($image, $glyph);
+            list($width, $height) = $this->getImageDimension($image, $node);
 
             $graphicsContext->saveGS();
-            $graphicsContext->clipRectangle($x, $y, $x+$this->getWidth($glyph), $y-$this->getHeight($glyph));
+            $graphicsContext->clipRectangle($x, $y, $x+$this->getWidth($node), $y-$this->getHeight($node));
  
             $repeatX = $this->repeat & self::REPEAT_X;
             $repeatY = $this->repeat & self::REPEAT_Y;
@@ -130,7 +130,7 @@ class Background extends Enhancement
         }
     }
     
-    private function getImageDimension($image, Glyph $glyph)
+    private function getImageDimension($image, Node $node)
     {
         $width = $this->imageWidth;
         $height = $this->imageHeight;
@@ -140,7 +140,7 @@ class Background extends Enhancement
             return array($image->getOriginalWidth(), $image->getOriginalHeight());
         }
         
-        list($width, $height) = $this->convertPercentageDimension($glyph, $width, $height);
+        list($width, $height) = $this->convertPercentageDimension($node, $width, $height);
         
         $ratio = $image->getOriginalWidth() / $image->getOriginalHeight();
             
@@ -149,61 +149,61 @@ class Background extends Enhancement
         return array($width, $height);
     }
     
-    private function convertPercentageDimension(Glyph $glyph, $width, $height)
+    private function convertPercentageDimension(Node $node, $width, $height)
     {
-        $width = Util::convertFromPercentageValue($width, $this->getWidth($glyph));
-        $height = Util::convertFromPercentageValue($height, $this->getHeight($glyph));
+        $width = Util::convertFromPercentageValue($width, $this->getWidth($node));
+        $height = Util::convertFromPercentageValue($height, $this->getHeight($node));
         
         return array($width, $height);
     }
 
-    private function getFirstPoint(Glyph $glyph)
+    private function getFirstPoint(Node $node)
     {
         if($this->useRealDimension)
         {
-            return $glyph->getRealFirstPoint();
+            return $node->getRealFirstPoint();
         }
         
-        return $glyph->getFirstPoint();
+        return $node->getFirstPoint();
     }
     
-    private function getDiagonalPoint(Glyph $glyph)
+    private function getDiagonalPoint(Node $node)
     {
         if($this->useRealDimension)
         {
-            return $glyph->getRealDiagonalPoint();
+            return $node->getRealDiagonalPoint();
         }
         
-        return $glyph->getDiagonalPoint();
+        return $node->getDiagonalPoint();
     }
     
-    private function getBoundary(Glyph $glyph)
+    private function getBoundary(Node $node)
     {
         if($this->useRealDimension)
         {
-            return $glyph->getRealBoundary();
+            return $node->getRealBoundary();
         }
         
-        return $glyph->getBoundary();
+        return $node->getBoundary();
     }
     
-    private function getWidth(Glyph $glyph)
+    private function getWidth(Node $node)
     {
         if($this->useRealDimension)
         {
-            return $glyph->getRealWidth();
+            return $node->getRealWidth();
         }
         
-        return $glyph->getWidth();
+        return $node->getWidth();
     }
 
-    private function getHeight(Glyph $glyph)
+    private function getHeight(Node $node)
     {
         if($this->useRealDimension)
         {
-            return $glyph->getRealHeight();
+            return $node->getRealHeight();
         }
         
-        return $glyph->getHeight();
+        return $node->getHeight();
     }
 }

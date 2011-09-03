@@ -8,35 +8,35 @@
 
 namespace PHPPdf\Formatter;
 
-use PHPPdf\Glyph\Glyph,
+use PHPPdf\Node\Node,
     PHPPdf\Document,
     PHPPdf\Util,
-    PHPPdf\Glyph\Table;
+    PHPPdf\Node\Table;
 
 /**
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
 class TableFormatter extends BaseFormatter
 {
-    public function format(Glyph $glyph, Document $document)
+    public function format(Node $node, Document $document)
     {
-        $widthsOfColumns = $glyph->getWidthsOfColumns();
-        $tableWidth = $glyph->getWidthWithoutPaddings();
+        $widthsOfColumns = $node->getWidthsOfColumns();
+        $tableWidth = $node->getWidthWithoutPaddings();
 
-        $marginsLeft = $glyph->getMarginsLeftOfColumns();
-        $marginsRight = $glyph->getMarginsRightOfColumns();
+        $marginsLeft = $node->getMarginsLeftOfColumns();
+        $marginsRight = $node->getMarginsRightOfColumns();
 
-        $minWidthsOfColumns = $glyph->getMinWidthsOfColumns();
+        $minWidthsOfColumns = $node->getMinWidthsOfColumns();
         $totalWidth = array_sum($widthsOfColumns);
         $totalMargins = array_sum($marginsLeft) + array_sum($marginsRight);
 
         $verticalAlignFormatter = $document->getFormatter('PHPPdf\Formatter\VerticalAlignFormatter');
         
-        foreach($glyph->getChildren() as $row)
+        foreach($node->getChildren() as $row)
         {
             $diffBetweenTableAndColumnsWidths = $tableWidth - $totalWidth - $totalMargins;
             $translate = 0;
-            foreach($row->getChildren() as /* @var $cell PHPPdf\Glyph\Table\Cell */ $cell)
+            foreach($row->getChildren() as /* @var $cell PHPPdf\Node\Table\Cell */ $cell)
             {
                 $column = $cell->getNumberOfColumn();
                 $colspan = $cell->getColspan();

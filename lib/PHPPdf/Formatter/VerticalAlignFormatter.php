@@ -9,37 +9,37 @@
 namespace PHPPdf\Formatter;
 
 use PHPPdf\Document,
-    PHPPdf\Glyph\Glyph;
+    PHPPdf\Node\Node;
 
 /**
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
 class VerticalAlignFormatter extends BaseFormatter
 {
-    public function format(Glyph $glyph, Document $document)
+    public function format(Node $node, Document $document)
     {
-        $verticalAlign = $glyph->getRecurseAttribute('vertical-align');
+        $verticalAlign = $node->getRecurseAttribute('vertical-align');
         
-        if($verticalAlign == Glyph::VERTICAL_ALIGN_TOP || $verticalAlign == null)
+        if($verticalAlign == Node::VERTICAL_ALIGN_TOP || $verticalAlign == null)
         {
             return;
         }
         
-        $this->processVerticalAlign($glyph, $verticalAlign);
+        $this->processVerticalAlign($node, $verticalAlign);
     }
     
-    private function processVerticalAlign(Glyph $glyph, $verticalAlign)
+    private function processVerticalAlign(Node $node, $verticalAlign)
     {
-        $minYCoord = $this->getMinimumYCoordOfChildren($glyph);
+        $minYCoord = $this->getMinimumYCoordOfChildren($node);
 
-        $translation = $this->getVerticalTranslation($glyph, $minYCoord, $verticalAlign);
+        $translation = $this->getVerticalTranslation($node, $minYCoord, $verticalAlign);
 
-        $this->verticalTranslateOfGlyphs($glyph->getChildren(), $translation);
+        $this->verticalTranslateOfNodes($node->getChildren(), $translation);
     }
     
-    private function sortChildren($glyph)
+    private function sortChildren($node)
     {
-        $children = $glyph->getChildren();
+        $children = $node->getChildren();
         
         usort($children, function($firstChild, $secondChild){
             if($firstChild->getDiagonalPoint()->getY() < $secondChild->getDiagonalPoint()->getY())
@@ -58,11 +58,11 @@ class VerticalAlignFormatter extends BaseFormatter
         return $children;
     }
     
-    private function getMinimumYCoordOfChildren(Glyph $glyph)
+    private function getMinimumYCoordOfChildren(Node $node)
     {
-        $minYCoord = $glyph->getFirstPoint()->getY();
+        $minYCoord = $node->getFirstPoint()->getY();
 
-        foreach($glyph->getChildren() as $child)
+        foreach($node->getChildren() as $child)
         {
             $minYCoord = min($minYCoord, $child->getDiagonalPoint()->getY());
         }
@@ -70,11 +70,11 @@ class VerticalAlignFormatter extends BaseFormatter
         return $minYCoord;
     }
     
-    private function getVerticalTranslation(Glyph $glyph, $minYCoord, $verticalAlign)
+    private function getVerticalTranslation(Node $node, $minYCoord, $verticalAlign)
     {
-        $difference = $minYCoord - $glyph->getDiagonalPoint()->getY();
+        $difference = $minYCoord - $node->getDiagonalPoint()->getY();
         
-        if($verticalAlign == Glyph::VERTICAL_ALIGN_MIDDLE)
+        if($verticalAlign == Node::VERTICAL_ALIGN_MIDDLE)
         {
             $difference /= 2;
         }
@@ -82,11 +82,11 @@ class VerticalAlignFormatter extends BaseFormatter
         return $difference;
     }
     
-    private function verticalTranslateOfGlyphs(array $glyphs, $verticalTranslation)
+    private function verticalTranslateOfNodes(array $nodes, $verticalTranslation)
     {
-        foreach($glyphs as $glyph)
+        foreach($nodes as $node)
         {
-            $glyph->translate(0, $verticalTranslation);
+            $node->translate(0, $verticalTranslation);
         }
     }
 }

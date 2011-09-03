@@ -8,7 +8,7 @@
 
 namespace PHPPdf\Formatter;
 
-use PHPPdf\Glyph as Glyphs,
+use PHPPdf\Node as Nodes,
     PHPPdf\Document,
     PHPPdf\Util\Point;
 
@@ -19,10 +19,10 @@ use PHPPdf\Glyph as Glyphs,
  */
 class TextResetPositionFormatter extends BaseFormatter
 {
-    public function format(Glyphs\Glyph $glyph, Document $document)
+    public function format(Nodes\Node $node, Document $document)
     {
-        $boundary = $glyph->getBoundary();
-        list($x, $y) = $glyph->getFirstPoint()->toArray();
+        $boundary = $node->getBoundary();
+        list($x, $y) = $node->getFirstPoint()->toArray();
         $boundary->reset();
 
         $boundary->setNext($x, $y);

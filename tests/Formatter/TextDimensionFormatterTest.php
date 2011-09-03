@@ -1,9 +1,9 @@
 <?php
 
 use PHPPdf\Document;
-use PHPPdf\Glyph\Glyph;
-use PHPPdf\Glyph\Container;
-use PHPPdf\Glyph\Page;
+use PHPPdf\Node\Node;
+use PHPPdf\Node\Container;
+use PHPPdf\Node\Page;
 use PHPPdf\Formatter\TextDimensionFormatter;
 
 class TextDimensionFormatterTest extends PHPUnit_Framework_TestCase
@@ -22,7 +22,7 @@ class TextDimensionFormatterTest extends PHPUnit_Framework_TestCase
      */
     public function calculateSizeOfEachWord($text, $expectedWords, $fontSize)
     {
-        $textMock = $this->getMockBuilder('PHPPdf\Glyph\Text')
+        $textMock = $this->getMockBuilder('PHPPdf\Node\Text')
                          ->setMethods(array('setWordsSizes', 'getText', 'getFont', 'getRecurseAttribute', 'getFontSizeRecursively'))
                          ->getMock();
                      

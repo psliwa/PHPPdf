@@ -1,12 +1,12 @@
 <?php
 
-use PHPPdf\Glyph\Container;
-use PHPPdf\Glyph\Paragraph;
-use PHPPdf\Glyph\Text;
+use PHPPdf\Node\Container;
+use PHPPdf\Node\Paragraph;
+use PHPPdf\Node\Text;
 use PHPPdf\Parser\DocumentParser,
-    PHPPdf\Glyph\Factory as GlyphFactory,
+    PHPPdf\Node\Factory as NodeFactory,
     PHPPdf\Enhancement\Factory as EnhancementFactory,
-    PHPPdf\Glyph\PageCollection,
+    PHPPdf\Node\PageCollection,
     PHPPdf\Parser\StylesheetConstraint;
 
 class DocumentParserTest extends TestCase
@@ -29,16 +29,16 @@ class DocumentParserTest extends TestCase
      */
     public function settingAndGettingProperties()
     {
-        $factory = new GlyphFactory();
+        $factory = new NodeFactory();
         $enhancementFactory = new EnhancementFactory();
 
-        $this->assertTrue($this->parser->getGlyphFactory() instanceof GlyphFactory);
+        $this->assertTrue($this->parser->getNodeFactory() instanceof NodeFactory);
         $this->assertTrue($this->parser->getEnhancementFactory() instanceof EnhancementFactory);
         
-        $this->parser->setGlyphFactory($factory);
+        $this->parser->setNodeFactory($factory);
         $this->parser->setEnhancementFactory($enhancementFactory);
 
-        $this->assertTrue($factory === $this->parser->getGlyphFactory());
+        $this->assertTrue($factory === $this->parser->getNodeFactory());
         $this->assertTrue($enhancementFactory === $this->parser->getEnhancementFactory());
     }
 
@@ -84,20 +84,20 @@ class DocumentParserTest extends TestCase
     {
         $tag = 'tag';
 
-        $glyphMock = $this->getGlyphMock();
-        $mocks = array(array($tag, $glyphMock));
-        $factoryMock = $this->getGlyphFactoryMock($mocks);
+        $nodeMock = $this->getNodeMock();
+        $mocks = array(array($tag, $nodeMock));
+        $factoryMock = $this->getNodeFactoryMock($mocks);
 
-        $this->parser->setGlyphFactory($factoryMock);
+        $this->parser->setNodeFactory($factoryMock);
 
         $pageCollection = $this->parser->parse($xml);
 
         $this->assertTrue($pageCollection instanceof PageCollection);
 
-        $glyphs = $pageCollection->getChildren();
+        $nodes = $pageCollection->getChildren();
 
-        $this->assertEquals(1, count($glyphs));
-        $this->assertTrue($glyphMock === current($glyphs));
+        $this->assertEquals(1, count($nodes));
+        $this->assertTrue($nodeMock === current($nodes));
     }
 
     public function simpleXmlProvider()
@@ -114,9 +114,9 @@ class DocumentParserTest extends TestCase
         );
     }
     
-    private function getGlyphFactoryMock(array $mocks = array(), $indexStep = 1, $excatly = false)
+    private function getNodeFactoryMock(array $mocks = array(), $indexStep = 1, $excatly = false)
     {
-        $factoryMock = $this->getMock('PHPPdf\Glyph\Factory', array('create'));
+        $factoryMock = $this->getMock('PHPPdf\Node\Factory', array('create'));
         
         $index = 0;
         foreach($mocks as $mockData)
@@ -134,35 +134,35 @@ class DocumentParserTest extends TestCase
         return $factoryMock;
     }
 
-    private function getGlyphMock(array $attributes = array(), $baseClass = 'PHPPdf\Glyph\Page', $methods = array(), $setParentExpectation = true)
+    private function getNodeMock(array $attributes = array(), $baseClass = 'PHPPdf\Node\Page', $methods = array(), $setParentExpectation = true)
     {
-        $glyphMock = $this->createGlyphMock($baseClass, $methods, $setParentExpectation);
-        $this->addGlyphAttributesExpectations($glyphMock, $attributes);
+        $nodeMock = $this->createNodeMock($baseClass, $methods, $setParentExpectation);
+        $this->addNodeAttributesExpectations($nodeMock, $attributes);
 
-        return $glyphMock;
+        return $nodeMock;
     }
 
-    private function createGlyphMock($baseClass = 'PHPPdf\Glyph\Page', $methods = array(), $setParentExpectation = true)
+    private function createNodeMock($baseClass = 'PHPPdf\Node\Page', $methods = array(), $setParentExpectation = true)
     {
-        $glyphMock = $this->getMock($baseClass, array_merge(array('setParent', 'setAttribute'), $methods));
+        $nodeMock = $this->getMock($baseClass, array_merge(array('setParent', 'setAttribute'), $methods));
         if($setParentExpectation)
         {
-            $glyphMock->expects($this->once())
+            $nodeMock->expects($this->once())
                       ->method('setParent');
         }
 
-        return $glyphMock;
+        return $nodeMock;
     }
 
-    private function addGlyphAttributesExpectations($glyph, $attributes, $attributeStartIndex = 0)
+    private function addNodeAttributesExpectations($node, $attributes, $attributeStartIndex = 0)
     {
         $index = $attributeStartIndex;
         foreach($attributes as $name => $value)
         {
-            $glyph->expects($this->at($index++))
+            $node->expects($this->at($index++))
                       ->method('setAttribute')
                       ->with($this->equalTo($name), $this->equalTo($value))
-                      ->will($this->returnValue($glyph));
+                      ->will($this->returnValue($node));
         }
     }
 
@@ -173,19 +173,19 @@ class DocumentParserTest extends TestCase
     {
         $xml = '<pdf><tag someName="someValue" anotherName="anotherValue" /></pdf>';
 
-        $glyphMock = $this->getGlyphMock(array('someName' => 'someValue', 'anotherName' => 'anotherValue'));
+        $nodeMock = $this->getNodeMock(array('someName' => 'someValue', 'anotherName' => 'anotherValue'));
 
-        $mocks = array(array('tag', $glyphMock));
-        $factoryMock = $this->getGlyphFactoryMock($mocks);
+        $mocks = array(array('tag', $nodeMock));
+        $factoryMock = $this->getNodeFactoryMock($mocks);
 
-        $this->parser->setGlyphFactory($factoryMock);
+        $this->parser->setNodeFactory($factoryMock);
 
         $pageCollection = $this->parser->parse($xml);
 
-        $glyphs = $pageCollection->getChildren();
+        $nodes = $pageCollection->getChildren();
 
-        $this->assertEquals(1, count($glyphs));
-        $this->assertTrue($glyphMock === current($glyphs));
+        $this->assertEquals(1, count($nodes));
+        $this->assertTrue($nodeMock === current($nodes));
     }
 
     /**
@@ -200,27 +200,27 @@ class DocumentParserTest extends TestCase
     </tag1>
 </pdf>
 XML;
-        $glyphMock1 = $this->getGlyphMock(array('someName' => 'someValue'));
-        $glyphMock2 = $this->getGlyphMock(array('anotherName' => 'anotherValue'));
+        $nodeMock1 = $this->getNodeMock(array('someName' => 'someValue'));
+        $nodeMock2 = $this->getNodeMock(array('anotherName' => 'anotherValue'));
 
-        $mocks = array(array('tag1', $glyphMock1), array('tag2', $glyphMock2));
-        $factoryMock = $this->getGlyphFactoryMock($mocks);
+        $mocks = array(array('tag1', $nodeMock1), array('tag2', $nodeMock2));
+        $factoryMock = $this->getNodeFactoryMock($mocks);
 
-        $this->parser->setGlyphFactory($factoryMock);
+        $this->parser->setNodeFactory($factoryMock);
         
         $pageCollection = $this->parser->parse($xml);
 
-        $this->assertOnlyChild($glyphMock1, $pageCollection);
-        $this->assertOnlyChild($glyphMock2, $glyphMock1);
+        $this->assertOnlyChild($nodeMock1, $pageCollection);
+        $this->assertOnlyChild($nodeMock2, $nodeMock1);
 
     }
 
-    private function assertOnlyChild($expectedChild, $parentGlyph)
+    private function assertOnlyChild($expectedChild, $parentNode)
     {
-        $glyphs = $parentGlyph->getChildren();
+        $nodes = $parentNode->getChildren();
 
-        $this->assertEquals(1, count($glyphs));
-        $this->assertTrue($expectedChild === current($glyphs));
+        $this->assertEquals(1, count($nodes));
+        $this->assertTrue($expectedChild === current($nodes));
     }
 
     /**
@@ -235,9 +235,9 @@ XML;
     </tag>
 </pdf>
 XML;
-        $glyphMock = $this->getGlyphMock();
-        $textMock = $this->getGlyphMock(array(), 'PHPPdf\Glyph\Text', array('setText', 'getText'));
-        $paragraphMock = $this->getGlyphMock(array(), 'PHPPdf\Glyph\Paragraph');
+        $nodeMock = $this->getNodeMock();
+        $textMock = $this->getNodeMock(array(), 'PHPPdf\Node\Text', array('setText', 'getText'));
+        $paragraphMock = $this->getNodeMock(array(), 'PHPPdf\Node\Paragraph');
 
         $textMock->expects($this->atLeastOnce())
                  ->method('setText')
@@ -247,15 +247,15 @@ XML;
                  ->method('getText')
                  ->will($this->returnValue('        Some text'));
 
-        $mocks = array(array('tag', $glyphMock), array('paragraph', $paragraphMock), array('text', $textMock));
-        $factoryMock = $this->getGlyphFactoryMock($mocks);
+        $mocks = array(array('tag', $nodeMock), array('paragraph', $paragraphMock), array('text', $textMock));
+        $factoryMock = $this->getNodeFactoryMock($mocks);
 
-        $this->parser->setGlyphFactory($factoryMock);
+        $this->parser->setNodeFactory($factoryMock);
 
         $pageCollection = $this->parser->parse($xml);
 
-        $this->assertOnlyChild($glyphMock, $pageCollection);
-        $this->assertOnlyChild($paragraphMock, $glyphMock);
+        $this->assertOnlyChild($nodeMock, $pageCollection);
+        $this->assertOnlyChild($paragraphMock, $nodeMock);
         $this->assertOnlyChild($textMock, $paragraphMock);
     }
     
@@ -274,18 +274,18 @@ XML;
 </pdf>
 XML;
 
-        $tag1Mock = $this->getGlyphMock();
-        $tag2Mock = $this->getGlyphMock();
-        $paragraph1Mock = $this->getGlyphMock(array(), 'PHPPdf\Glyph\Paragraph');
-        $text1Mock = $this->getGlyphMock(array(), 'PHPPdf\Glyph\Text', array('setText'));
-        $paragraph2Mock = $this->getGlyphMock(array(), 'PHPPdf\Glyph\Paragraph');
-        $text2Mock = $this->getGlyphMock(array(), 'PHPPdf\Glyph\Text', array('setText'));
+        $tag1Mock = $this->getNodeMock();
+        $tag2Mock = $this->getNodeMock();
+        $paragraph1Mock = $this->getNodeMock(array(), 'PHPPdf\Node\Paragraph');
+        $text1Mock = $this->getNodeMock(array(), 'PHPPdf\Node\Text', array('setText'));
+        $paragraph2Mock = $this->getNodeMock(array(), 'PHPPdf\Node\Paragraph');
+        $text2Mock = $this->getNodeMock(array(), 'PHPPdf\Node\Text', array('setText'));
         
         $mocks = array(array('tag1', $tag1Mock), array('paragraph', $paragraph1Mock), array('text', $text1Mock), array('tag2', $tag2Mock), array('paragraph', $paragraph2Mock), array('text', $text2Mock));
         
-        $factoryMock = $this->getGlyphFactoryMock($mocks);
+        $factoryMock = $this->getNodeFactoryMock($mocks);
 
-        $this->parser->setGlyphFactory($factoryMock);
+        $this->parser->setNodeFactory($factoryMock);
 
         $pageCollection = $this->parser->parse($xml);
     }
@@ -300,16 +300,16 @@ XML;
     Some text <span>Some another text</span>
 </pdf>
 XML;
-        $paragraphMock = $this->getGlyphMock(array(), 'PHPPdf\Glyph\Paragraph');
-        $text1Mock = $this->getGlyphMock(array(), 'PHPPdf\Glyph\Text', array('setText'));
-        $text2Mock = $this->getGlyphMock(array(), 'PHPPdf\Glyph\Text', array('setText'));
-        $text3Mock = $this->getGlyphMock(array(), 'PHPPdf\Glyph\Text', array('setText'), false);
+        $paragraphMock = $this->getNodeMock(array(), 'PHPPdf\Node\Paragraph');
+        $text1Mock = $this->getNodeMock(array(), 'PHPPdf\Node\Text', array('setText'));
+        $text2Mock = $this->getNodeMock(array(), 'PHPPdf\Node\Text', array('setText'));
+        $text3Mock = $this->getNodeMock(array(), 'PHPPdf\Node\Text', array('setText'), false);
         
         $mocks = array(array('paragraph', $paragraphMock), array('text', $text1Mock), array('span', $text2Mock), array('text', $text3Mock));
         
-        $factoryMock = $this->getGlyphFactoryMock($mocks);
+        $factoryMock = $this->getNodeFactoryMock($mocks);
 
-        $this->parser->setGlyphFactory($factoryMock);
+        $this->parser->setNodeFactory($factoryMock);
 
         $pages = $this->parser->parse($xml);
         
@@ -325,29 +325,29 @@ XML;
     {
         $xml = <<<XML
 <pdf>
-    <tag id="glyph">
-        <tag extends="glyph" />
+    <tag id="node">
+        <tag extends="node" />
     </tag>
 </pdf>
 XML;
-        $glyphMock1 = $this->getGlyphMock(array(), 'PHPPdf\Glyph\Page', array('copy'));
+        $nodeMock1 = $this->getNodeMock(array(), 'PHPPdf\Node\Page', array('copy'));
 
-        $glyphMock1->expects($this->never())
+        $nodeMock1->expects($this->never())
                    ->method('setAttribute');
 
-        $glyphMock2 = $this->getGlyphMock();
+        $nodeMock2 = $this->getNodeMock();
 
-        $glyphMock2->expects($this->never())
+        $nodeMock2->expects($this->never())
                    ->method('setAttribute');
         
-        $glyphMock1->expects($this->once())
+        $nodeMock1->expects($this->once())
                    ->method('copy')
-                   ->will($this->returnValue($glyphMock2));
+                   ->will($this->returnValue($nodeMock2));
 
-        $mocks = array(array('tag', $glyphMock1));
-        $factoryMock = $this->getGlyphFactoryMock($mocks);
+        $mocks = array(array('tag', $nodeMock1));
+        $factoryMock = $this->getNodeFactoryMock($mocks);
 
-        $this->parser->setGlyphFactory($factoryMock);
+        $this->parser->setNodeFactory($factoryMock);
 
         $pageCollection = $this->parser->parse($xml);
     }
@@ -360,18 +360,18 @@ XML;
     {
         $xml = <<<XML
 <pdf>
-    <tag1 id="glyph">
-        <tag2 id="glyph" />
+    <tag1 id="node">
+        <tag2 id="node" />
     </tag1>
 </pdf>
 XML;
-        $glyphMock1 = $this->getGlyphMock(array(), 'PHPPdf\Glyph\Page', array(), false);
-        $glyphMock2 = $this->getGlyphMock(array(), 'PHPPdf\Glyph\Page', array(), false);
+        $nodeMock1 = $this->getNodeMock(array(), 'PHPPdf\Node\Page', array(), false);
+        $nodeMock2 = $this->getNodeMock(array(), 'PHPPdf\Node\Page', array(), false);
         
-        $mocks = array(array('tag1', $glyphMock1), array('tag2', $glyphMock2));
-        $factoryMock = $this->getGlyphFactoryMock($mocks);
+        $mocks = array(array('tag1', $nodeMock1), array('tag2', $nodeMock2));
+        $factoryMock = $this->getNodeFactoryMock($mocks);
 
-        $this->parser->setGlyphFactory($factoryMock);
+        $this->parser->setNodeFactory($factoryMock);
 
         $this->parser->parse($xml);
     }
@@ -384,9 +384,9 @@ XML;
     {
         $xml = '<pdf><tag extends="id" /></pdf>';
 
-        $factoryMock = $this->getGlyphFactoryMock();
+        $factoryMock = $this->getNodeFactoryMock();
 
-        $this->parser->setGlyphFactory($factoryMock);
+        $this->parser->setNodeFactory($factoryMock);
 
         $this->parser->parse($xml);
     }
@@ -394,7 +394,7 @@ XML;
     /**
      * @test
      */
-    public function childrenArentInheritedFromGlyph()
+    public function childrenArentInheritedFromNode()
     {
         $xml = <<<XML
 <pdf>
@@ -405,21 +405,21 @@ XML;
 </pdf>
 XML;
 
-        $glyphMock1 = $this->getGlyphMock(array(), 'PHPPdf\Glyph\Page', array('copy'));
-        $glyphMock2 = $this->getGlyphMock(array(), 'PHPPdf\Glyph\Page', array('removeAll'));
-        $glyphMock3 = $this->getGlyphMock();
+        $nodeMock1 = $this->getNodeMock(array(), 'PHPPdf\Node\Page', array('copy'));
+        $nodeMock2 = $this->getNodeMock(array(), 'PHPPdf\Node\Page', array('removeAll'));
+        $nodeMock3 = $this->getNodeMock();
 
-        $glyphMock1->expects($this->once())
+        $nodeMock1->expects($this->once())
                    ->method('copy')
-                   ->will($this->returnValue($glyphMock2));
+                   ->will($this->returnValue($nodeMock2));
 
-        $glyphMock2->expects($this->once())
+        $nodeMock2->expects($this->once())
                    ->method('removeAll');
 
-        $mocks = array(array('tag1', $glyphMock1), array('tag2', $glyphMock3));
-        $factoryMock = $this->getGlyphFactoryMock($mocks);
+        $mocks = array(array('tag1', $nodeMock1), array('tag2', $nodeMock3));
+        $factoryMock = $this->getNodeFactoryMock($mocks);
 
-        $this->parser->setGlyphFactory($factoryMock);
+        $this->parser->setNodeFactory($factoryMock);
 
         $this->parser->parse($xml);
     }
@@ -473,16 +473,16 @@ XML;
                    )));
 
 
-        $glyphMock= $this->createGlyphMock('PHPPdf\Glyph\Page', array('mergeEnhancementAttributes'));
-        $this->addGlyphAttributesExpectations($glyphMock, $attributes, 1);
-        $glyphMock->expects($this->at(3))
+        $nodeMock= $this->createNodeMock('PHPPdf\Node\Page', array('mergeEnhancementAttributes'));
+        $this->addNodeAttributesExpectations($nodeMock, $attributes, 1);
+        $nodeMock->expects($this->at(3))
                   ->method('mergeEnhancementAttributes')
                   ->with($this->equalTo('someName'), $this->equalTo(array('attribute' => 'value')));
 
-        $glyphFactoryMock = $this->getGlyphFactoryMock(array(array('tag', $glyphMock)));
+        $nodeFactoryMock = $this->getNodeFactoryMock(array(array('tag', $nodeMock)));
 
         $this->parser->setStylesheetParser($parserMock);
-        $this->parser->setGlyphFactory($glyphFactoryMock);
+        $this->parser->setNodeFactory($nodeFactoryMock);
 
         $pageCollection = $this->parser->parse($reader);
     }
@@ -567,20 +567,20 @@ XML;
            )
         ), $bagContainerMock3);
 
-        $glyphMock1 = $this->getGlyphMock(array('someName1' => 'someValue1'), 'PHPPdf\Glyph\Page', array('mergeEnhancementAttributes'));
-        $glyphMock2 = $this->getGlyphMock(array(), 'PHPPdf\Glyph\Page', array('mergeEnhancementAttributes'));
-        $glyphMock3 = $this->getGlyphMock(array('someName2' => 'someValue2'), 'PHPPdf\Glyph\Page', array('mergeEnhancementAttributes'));
+        $nodeMock1 = $this->getNodeMock(array('someName1' => 'someValue1'), 'PHPPdf\Node\Page', array('mergeEnhancementAttributes'));
+        $nodeMock2 = $this->getNodeMock(array(), 'PHPPdf\Node\Page', array('mergeEnhancementAttributes'));
+        $nodeMock3 = $this->getNodeMock(array('someName2' => 'someValue2'), 'PHPPdf\Node\Page', array('mergeEnhancementAttributes'));
 
-        $glyphMock1->expects($this->never())
+        $nodeMock1->expects($this->never())
                    ->method('mergeEnhancementAttributes');
 
-        $this->addEnhancementExpectationToGlyphMock($glyphMock2, array('someName1' => array('someAttribute1' => 'someValue1')), 0);
-        $this->addEnhancementExpectationToGlyphMock($glyphMock3, array('someName2' => array('someAttribute2' => 'someValue2')), 1);
+        $this->addEnhancementExpectationToNodeMock($nodeMock2, array('someName1' => array('someAttribute1' => 'someValue1')), 0);
+        $this->addEnhancementExpectationToNodeMock($nodeMock3, array('someName2' => array('someAttribute2' => 'someValue2')), 1);
 
-        $mocks = array(array('tag1', $glyphMock1), array('tag2', $glyphMock2), array('tag3', $glyphMock3));
-        $glyphFactoryMock = $this->getGlyphFactoryMock($mocks);
+        $mocks = array(array('tag1', $nodeMock1), array('tag2', $nodeMock2), array('tag3', $nodeMock3));
+        $nodeFactoryMock = $this->getNodeFactoryMock($mocks);
 
-        $this->parser->setGlyphFactory($glyphFactoryMock);
+        $this->parser->setNodeFactory($nodeFactoryMock);
 
         $this->parser->parse($xml, $constraintMock);
     }
@@ -609,11 +609,11 @@ XML;
                        ->will($this->returnValue($bagContainerMock));
     }
 
-    private function addEnhancementExpectationToGlyphMock($glyph, $enhancements, $initSequence)
+    private function addEnhancementExpectationToNodeMock($node, $enhancements, $initSequence)
     {
         foreach($enhancements as $name => $parameters)
         {
-            $glyph->expects($this->at($initSequence++))
+            $node->expects($this->at($initSequence++))
                   ->method('mergeEnhancementAttributes')
                   ->with($this->equalTo($name), $this->equalTo($parameters));
         }
@@ -639,24 +639,24 @@ XML;
 XML;
 
         $height = 50;
-        $placeholderMock1 = $this->getMock('PHPPdf\Glyph\Container', array('getHeight'));
-        $placeholderMock2 = $this->getMock('PHPPdf\Glyph\Container', array('getHeight'));
+        $placeholderMock1 = $this->getMock('PHPPdf\Node\Container', array('getHeight'));
+        $placeholderMock2 = $this->getMock('PHPPdf\Node\Container', array('getHeight'));
 
-        $glyphMock = $this->getMock('PHPPdf\Glyph\Container', array('hasPlaceholder', 'setPlaceholder'));
+        $nodeMock = $this->getMock('PHPPdf\Node\Container', array('hasPlaceholder', 'setPlaceholder'));
 
-        $glyphMock->expects($this->at(0))
+        $nodeMock->expects($this->at(0))
                   ->method('hasPlaceholder')
                   ->with($this->equalTo('placeholder'))
                   ->will($this->returnValue(true));
         
-        $glyphMock->expects($this->at(1))
+        $nodeMock->expects($this->at(1))
                   ->method('setPlaceholder')
                   ->with($this->equalTo('placeholder'), $this->equalTo($placeholderMock1));
 
-        $mocks = array(array('tag1', $glyphMock), array('tag2', $placeholderMock1), array('tag3', $placeholderMock2));
-        $glyphFactoryMock = $this->getGlyphFactoryMock($mocks);
+        $mocks = array(array('tag1', $nodeMock), array('tag2', $placeholderMock1), array('tag3', $placeholderMock2));
+        $nodeFactoryMock = $this->getNodeFactoryMock($mocks);
 
-        $this->parser->setGlyphFactory($glyphFactoryMock);
+        $this->parser->setNodeFactory($nodeFactoryMock);
 
         $this->parser->parse($xml);
     }
@@ -672,19 +672,19 @@ XML;
 </pdf>
 XML;
 
-        $glyphMock = $this->getMock('PHPPdf\Glyph\Container', array('setAttribute', 'setParent'));
-        $glyphMock->expects($this->once())
+        $nodeMock = $this->getMock('PHPPdf\Node\Container', array('setAttribute', 'setParent'));
+        $nodeMock->expects($this->once())
                   ->method('setAttribute')
                   ->id('attribute')
                   ->with('someAttribute', 'someValue');
-        $glyphMock->expects($this->once())
+        $nodeMock->expects($this->once())
                   ->method('setParent')
                   ->after('attribute');
 
 
-        $glyphFactoryMock = $this->getGlyphFactoryMock(array(array('tag1', $glyphMock)));
+        $nodeFactoryMock = $this->getNodeFactoryMock(array(array('tag1', $nodeMock)));
 
-        $this->parser->setGlyphFactory($glyphFactoryMock);
+        $this->parser->setNodeFactory($nodeFactoryMock);
 
         $this->parser->parse($xml);
     }
@@ -724,18 +724,18 @@ XML;
 </pdf>
 XML;
 
-        $glyphMock = $this->getMock('PHPPdf\Glyph\Container', array('setAttribute', 'mergeEnhancementAttributes'));
-        $glyphMock->expects($this->once())
+        $nodeMock = $this->getMock('PHPPdf\Node\Container', array('setAttribute', 'mergeEnhancementAttributes'));
+        $nodeMock->expects($this->once())
                   ->method('setAttribute')
                   ->id('attribute')
                   ->with('someAttribute', 'someValue');
-        $glyphMock->expects($this->once())
+        $nodeMock->expects($this->once())
                   ->method('mergeEnhancementAttributes')
                   ->with('someEnhancement', array('name' => 'someEnhancement', 'property' => 'propertyValue'));
 
-        $glyphFactoryMock = $this->getGlyphFactoryMock(array(array('tag', $glyphMock)));
+        $nodeFactoryMock = $this->getNodeFactoryMock(array(array('tag', $nodeMock)));
 
-        $this->parser->setGlyphFactory($glyphFactoryMock);
+        $this->parser->setNodeFactory($nodeFactoryMock);
 
         $this->parser->parse($xml);
     }
@@ -751,20 +751,20 @@ XML;
 	<tag2></tag2>
 </pdf>
 XML;
-        $tag1GlyphMock = $this->getMock('PHPPdf\Glyph\Container', array('setPriorityFromParent', 'setAttribute'));
-        $tag2GlyphMock = $this->getMock('PHPPdf\Glyph\Container', array('setPriorityFromParent', 'setAttribute'));
+        $tag1NodeMock = $this->getMock('PHPPdf\Node\Container', array('setPriorityFromParent', 'setAttribute'));
+        $tag2NodeMock = $this->getMock('PHPPdf\Node\Container', array('setPriorityFromParent', 'setAttribute'));
         
-        $mocks = array(array('tag1', $tag1GlyphMock), array('tag2', $tag2GlyphMock));
-        $glyphFactoryMock = $this->getGlyphFactoryMock($mocks);
+        $mocks = array(array('tag1', $tag1NodeMock), array('tag2', $tag2NodeMock));
+        $nodeFactoryMock = $this->getNodeFactoryMock($mocks);
         
-        $this->parser->setGlyphFactory($glyphFactoryMock);
+        $this->parser->setNodeFactory($nodeFactoryMock);
 
         $pages = $this->parser->parse($xml);
         
         $this->assertEquals(2, count($pages->getChildren()));
         $children = $pages->getChildren();
-        $this->assertTrue($tag1GlyphMock === $children[0]);
-        $this->assertTrue($tag2GlyphMock === $children[1]);
+        $this->assertTrue($tag1NodeMock === $children[0]);
+        $this->assertTrue($tag2NodeMock === $children[1]);
     }
     
     /**
@@ -777,12 +777,12 @@ XML;
 	Some text
 </pdf>
 XML;
-        $textGlyph = $this->getMock('PHPPdf\Glyph\Text', array('setPriorityFromParent'));
-        $paragraphGlyph = $this->getMock('PHPPdf\Glyph\Paragraph', array('setPriorityFromParent'));
+        $textNode = $this->getMock('PHPPdf\Node\Text', array('setPriorityFromParent'));
+        $paragraphNode = $this->getMock('PHPPdf\Node\Paragraph', array('setPriorityFromParent'));
         
-        $glyphFactoryMock = $this->getGlyphFactoryMock(array(array('paragraph', $paragraphGlyph), array('text', $textGlyph)));
+        $nodeFactoryMock = $this->getNodeFactoryMock(array(array('paragraph', $paragraphNode), array('text', $textNode)));
         
-        $this->parser->setGlyphFactory($glyphFactoryMock);
+        $this->parser->setNodeFactory($nodeFactoryMock);
         
         $pages = $this->parser->parse($xml);
         
@@ -801,21 +801,21 @@ XML;
 </pdf>
 XML;
 
-        $textGlyphTag1 = $this->getMock('PHPPdf\Glyph\Text', array('setPriorityFromParent'));
-        $textGlyphSpace = $this->getMock('PHPPdf\Glyph\Text', array('setPriorityFromParent', 'setText', 'getText'));
-        $paragraphGlyph = $this->getMock('PHPPdf\Glyph\Paragraph', array('setPriorityFromParent'));
-        $textGlyphTag2 = $this->getMock('PHPPdf\Glyph\Text', array('setPriorityFromParent'));
+        $textNodeTag1 = $this->getMock('PHPPdf\Node\Text', array('setPriorityFromParent'));
+        $textNodeSpace = $this->getMock('PHPPdf\Node\Text', array('setPriorityFromParent', 'setText', 'getText'));
+        $paragraphNode = $this->getMock('PHPPdf\Node\Paragraph', array('setPriorityFromParent'));
+        $textNodeTag2 = $this->getMock('PHPPdf\Node\Text', array('setPriorityFromParent'));
         
-        $textGlyphSpace->expects($this->atLeastOnce())
+        $textNodeSpace->expects($this->atLeastOnce())
                        ->method('setText')
                        ->with(' ');
-        $textGlyphSpace->expects($this->atLeastOnce())
+        $textNodeSpace->expects($this->atLeastOnce())
                        ->method('getText')
                        ->will($this->returnValue(' '));
         
-        $glyphFactoryMock = $this->getGlyphFactoryMock(array(array('tag1', $textGlyphTag1), array('paragraph', $paragraphGlyph), array('text', $textGlyphSpace), array('tag2', $textGlyphTag2)));
+        $nodeFactoryMock = $this->getNodeFactoryMock(array(array('tag1', $textNodeTag1), array('paragraph', $paragraphNode), array('text', $textNodeSpace), array('tag2', $textNodeTag2)));
         
-        $this->parser->setGlyphFactory($glyphFactoryMock);
+        $this->parser->setNodeFactory($nodeFactoryMock);
         
         $pages = $this->parser->parse($xml);
     }
@@ -832,22 +832,22 @@ XML;
 </pdf>
 XML;
 
-        $text1Glyph = $this->getMock('PHPPdf\Glyph\Text', array('setPriorityFromParent'));
-        $text2Glyph = $this->getMock('PHPPdf\Glyph\Text', array('setPriorityFromParent'));
-        $tag1Glyph = $this->getMock('PHPPdf\Glyph\Container', array('setPriorityFromParent'));
-        $paragraph1Glyph = $this->getMock('PHPPdf\Glyph\Paragraph', array('setPriorityFromParent'));
-        $paragraph2Glyph = $this->getMock('PHPPdf\Glyph\Paragraph', array('setPriorityFromParent'));
+        $text1Node = $this->getMock('PHPPdf\Node\Text', array('setPriorityFromParent'));
+        $text2Node = $this->getMock('PHPPdf\Node\Text', array('setPriorityFromParent'));
+        $tag1Node = $this->getMock('PHPPdf\Node\Container', array('setPriorityFromParent'));
+        $paragraph1Node = $this->getMock('PHPPdf\Node\Paragraph', array('setPriorityFromParent'));
+        $paragraph2Node = $this->getMock('PHPPdf\Node\Paragraph', array('setPriorityFromParent'));
         
-        $glyphFactoryMock = $this->getGlyphFactoryMock(array(array('tag1', $tag1Glyph), array('text1', $text1Glyph), array('paragraph', $paragraph1Glyph), array('text2', $text2Glyph), array('paragraph', $paragraph2Glyph)));
+        $nodeFactoryMock = $this->getNodeFactoryMock(array(array('tag1', $tag1Node), array('text1', $text1Node), array('paragraph', $paragraph1Node), array('text2', $text2Node), array('paragraph', $paragraph2Node)));
         
-        $this->parser->setGlyphFactory($glyphFactoryMock);
+        $this->parser->setNodeFactory($nodeFactoryMock);
         
         $pages = $this->parser->parse($xml);
         
         $this->assertEquals(2, count($pages->getChildren()));
         
-        $this->assertInstanceOf('PHPPdf\Glyph\Container', $pages->getChild(0));
-        $this->assertInstanceOf('PHPPdf\Glyph\Paragraph', $pages->getChild(1));
+        $this->assertInstanceOf('PHPPdf\Node\Container', $pages->getChild(0));
+        $this->assertInstanceOf('PHPPdf\Node\Paragraph', $pages->getChild(1));
     }
     
     /**
@@ -861,19 +861,19 @@ XML;
 </pdf>
 XML;
 
-        $text1Glyph = new Text();
-        $text2Glyph = new Text();
-        $text3Glyph = new Text();
-        $paragraphGlyph = new Paragraph();
+        $text1Node = new Text();
+        $text2Node = new Text();
+        $text3Node = new Text();
+        $paragraphNode = new Paragraph();
         
-        $glyphFactoryMock = $this->getGlyphFactoryMock(array(array('paragraph', $paragraphGlyph), array('text', $text1Glyph), array('text1', $text2Glyph), array('text', $text3Glyph)));
+        $nodeFactoryMock = $this->getNodeFactoryMock(array(array('paragraph', $paragraphNode), array('text', $text1Node), array('text1', $text2Node), array('text', $text3Node)));
         
-        $this->parser->setGlyphFactory($glyphFactoryMock);
+        $this->parser->setNodeFactory($nodeFactoryMock);
         
         $pages = $this->parser->parse($xml);
         
-        $this->assertEquals('another text', $text2Glyph->getText());
-        $this->assertEquals('Some text ', $text1Glyph->getText());
+        $this->assertEquals('another text', $text2Node->getText());
+        $this->assertEquals('Some text ', $text1Node->getText());
     }
     
     /**
@@ -887,10 +887,10 @@ XML;
 </pdf>
 XML;
 
-        $behaviour = $this->getMockBuilder('PHPPdf\Glyph\Behaviour\Behaviour')
+        $behaviour = $this->getMockBuilder('PHPPdf\Node\Behaviour\Behaviour')
                           ->setMethods(array('doAttach', 'attach'))
                           ->getMock();
-        $behavoiurFactory = $this->getMockBuilder('PHPPdf\Glyph\Behaviour\Factory')
+        $behavoiurFactory = $this->getMockBuilder('PHPPdf\Node\Behaviour\Factory')
                                  ->setMethods(array('create', 'getSupportedBehaviourNames'))
                                  ->getMock();
                                  
@@ -902,14 +902,14 @@ XML;
                          ->with('behaviour', 'arg')
                          ->will($this->returnValue($behaviour));
         
-        $glyph = $this->getGlyphMock(array(), 'PHPPdf\Glyph\Container', array('addBehaviour'));
-        $glyph->expects($this->once())
+        $node = $this->getNodeMock(array(), 'PHPPdf\Node\Container', array('addBehaviour'));
+        $node->expects($this->once())
               ->method('addBehaviour')
               ->with($behaviour);
-        $glyphFactoryMock = $this->getGlyphFactoryMock(array(array('tag', $glyph)));
+        $nodeFactoryMock = $this->getNodeFactoryMock(array(array('tag', $node)));
         
         $this->parser->setBehaviourFactory($behavoiurFactory);
-        $this->parser->setGlyphFactory($glyphFactoryMock);
+        $this->parser->setNodeFactory($nodeFactoryMock);
         
         $this->parser->parse($xml);
     }
@@ -930,11 +930,11 @@ XML;
     </tag1>
 </pdf>
 XML;
-        $glyphMock = $this->getMock('PHPPdf\Glyph\Container', array('addBehaviour'));
+        $nodeMock = $this->getMock('PHPPdf\Node\Container', array('addBehaviour'));
 
-        $mocks = array(array('tag1', $glyphMock));
-        $glyphFactoryMock = $this->getGlyphFactoryMock($mocks);
-        $behaviourFactoryMock = $this->getMockBuilder('PHPPdf\Glyph\Behaviour\Factory')
+        $mocks = array(array('tag1', $nodeMock));
+        $nodeFactoryMock = $this->getNodeFactoryMock($mocks);
+        $behaviourFactoryMock = $this->getMockBuilder('PHPPdf\Node\Behaviour\Factory')
                                      ->setMethods(array('getSupportedBehaviourNames', 'create'))
                                      ->getMock();
 
@@ -950,7 +950,7 @@ XML;
 
         foreach($behaviourNames as $i => $behaviourName)
         {
-            $behaviour = $this->getMockBuilder('PHPPdf\Glyph\Behaviour\Behaviour')
+            $behaviour = $this->getMockBuilder('PHPPdf\Node\Behaviour\Behaviour')
                               ->setMethods(array('doAttach'))
                               ->getMock();
             $matcher = $behaviourFactoryMock->expects($this->at($behaviourFactoryCallIndex))
@@ -958,14 +958,14 @@ XML;
                                              ->with($behaviourName, $args[$i])
                                              ->will($this->returnValue($behaviour));
                                              
-            $glyphMock->expects($this->at($i))
+            $nodeMock->expects($this->at($i))
                       ->method('addBehaviour')
                       ->with($behaviour);
             $behaviourFactoryCallIndex++;
         }
                                      
         $this->parser->setBehaviourFactory($behaviourFactoryMock);
-        $this->parser->setGlyphFactory($glyphFactoryMock);
+        $this->parser->setNodeFactory($nodeFactoryMock);
 
         $this->parser->parse($xml);
     }

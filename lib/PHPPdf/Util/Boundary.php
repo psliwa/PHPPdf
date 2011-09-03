@@ -9,7 +9,7 @@
 namespace PHPPdf\Util;
 
 /**
- * Set of ordered points whom determine boundary and shape of glyph element.
+ * Set of ordered points whom determine boundary and shape of node element.
  *
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */

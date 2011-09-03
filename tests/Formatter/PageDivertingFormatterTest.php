@@ -1,10 +1,10 @@
 <?php
 
 use PHPPdf\Formatter\PageDivertingFormatter,
-    PHPPdf\Glyph\DynamicPage,
+    PHPPdf\Node\DynamicPage,
     PHPPdf\Util\Boundary,
     PHPPdf\Document,
-    PHPPdf\Glyph\Container;
+    PHPPdf\Node\Container;
 
 class PageDivertingFormatterTest extends TestCase
 {
@@ -79,7 +79,7 @@ class PageDivertingFormatterTest extends TestCase
     private function getContainerMock($start, $end, array $methods = array())
     {
         $methods = array_merge(array('getBoundary', 'getHeight'), $methods);
-        $mock = $this->getMock('PHPPdf\Glyph\Container', $methods);
+        $mock = $this->getMock('PHPPdf\Node\Container', $methods);
 
         $boundary = new Boundary();
         $boundary->setNext($start[0], $start[1])
@@ -132,17 +132,17 @@ class PageDivertingFormatterTest extends TestCase
     /**
      * @test
      */
-    public function multipleSplitWithManyGlyphsPerPage()
+    public function multipleSplitWithManyNodesPerPage()
     {
         $prototype = $this->page->getPrototypePage();
         $originalHeight = $height = $prototype->getHeight();
 
-        $heightOfGlyph = (int) ($originalHeight*5/32);
+        $heightOfNode = (int) ($originalHeight*5/32);
 
         $mocks = array();
-        for($i=0; $i<32; $i++, $height -= $heightOfGlyph)
+        for($i=0; $i<32; $i++, $height -= $heightOfNode)
         {
-            $this->page->add($this->getContainerStub(array(0, $height), array(100, $height-$heightOfGlyph)));
+            $this->page->add($this->getContainerStub(array(0, $height), array(100, $height-$heightOfNode)));
         }
 
         $this->formatter->format($this->page, new Document());
@@ -157,7 +157,7 @@ class PageDivertingFormatterTest extends TestCase
      */
     public function pageShouldBeBreakIfBreakAttributeIsUsed()
     {
-        $prototype = $this->getMock('PHPPdf\Glyph\Page', array('copy'));
+        $prototype = $this->getMock('PHPPdf\Node\Page', array('copy'));
         $prototype->expects($this->exactly(2))
                   ->method('copy')
                   ->will($this->returnValue($prototype));
@@ -186,15 +186,15 @@ class PageDivertingFormatterTest extends TestCase
     /**
      * @test
      *
-     * @todo przerobić ten test, aby dotyczył glyphu który się podzielił na dwie strony, tylko że pomiędzy pierwszą częścią glyphu a końcem strony jest "luka" (np. tabela)
+     * @todo przerobić ten test, aby dotyczył nodeu który się podzielił na dwie strony, tylko że pomiędzy pierwszą częścią nodeu a końcem strony jest "luka" (np. tabela)
      */
-    public function nextSiblingOfNotSplittableGlyphMustBeDirectlyAfterThisGlyphIfPageBreakOccurs()
+    public function nextSiblingOfNotSplittableNodeMustBeDirectlyAfterThisNodeIfPageBreakOccurs()
     {
         $this->markTestIncomplete();
 
         $diagonalPoint = Point::getInstance(100, 10);
 
-        $prototype = $this->getMock('PHPPdf\Glyph\Page', array('copy', 'getHeight', 'getDiagonalPoint'));
+        $prototype = $this->getMock('PHPPdf\Node\Page', array('copy', 'getHeight', 'getDiagonalPoint'));
         $this->page->setMarginBottom(10);
         $prototype->expects($this->exactly(1))
                   ->method('copy')

@@ -3,9 +3,9 @@
 use PHPPdf\Formatter\TableFormatter,
     PHPPdf\Document,
     PHPPdf\Util\Boundary,
-    PHPPdf\Glyph\Table\Row,
-    PHPPdf\Glyph\Table,
-    PHPPdf\Glyph\Table\Cell;
+    PHPPdf\Node\Table\Row,
+    PHPPdf\Node\Table,
+    PHPPdf\Node\Table\Cell;
 
 class TableFormatterTest extends TestCase
 {
@@ -64,14 +64,14 @@ class TableFormatterTest extends TestCase
                 $translate += $columnWidth + $columnsMarginsRight[$column];
             }
 
-            $row = $this->getMock('PHPPdf\Glyph\Table\Row', array('getChildren'));
+            $row = $this->getMock('PHPPdf\Node\Table\Row', array('getChildren'));
             $row->expects($this->atLeastOnce())
                 ->method('getChildren')
                 ->will($this->returnValue($cells));
             $rows[] = $row;
         }
 
-        $table = $this->getMock('PHPPdf\Glyph\Table', array('getChildren', 'getWidthsOfColumns', 'getMinWidthsOfColumns', 'getWidth', 'getMarginsLeftOfColumns', 'getMarginsRightOfColumns'));
+        $table = $this->getMock('PHPPdf\Node\Table', array('getChildren', 'getWidthsOfColumns', 'getMinWidthsOfColumns', 'getWidth', 'getMarginsLeftOfColumns', 'getMarginsRightOfColumns'));
         $table->expects($this->atLeastOnce())
               ->method('getChildren')
               ->will($this->returnValue($rows));

@@ -2,8 +2,8 @@
 
 use PHPPdf\Document;
 use PHPPdf\Util\Boundary;
-use PHPPdf\Glyph\Glyph;
-use PHPPdf\Glyph\Container;
+use PHPPdf\Node\Node;
+use PHPPdf\Node\Container;
 use PHPPdf\Formatter\ContainerDimensionFormatter;
 
 class ContainerDimensionFormatterTest extends TestCase
@@ -13,7 +13,7 @@ class ContainerDimensionFormatterTest extends TestCase
 
     protected function init()
     {
-        $this->objectMother = new GenericGlyphObjectMother($this);
+        $this->objectMother = new GenericNodeObjectMother($this);
     }
     
     public function setUp()
@@ -24,20 +24,20 @@ class ContainerDimensionFormatterTest extends TestCase
     /**
      * @test
      */
-    public function glyphFormatter()
+    public function nodeFormatter()
     {
-        $composeGlyph = new Container();
-        $composeGlyph->setWidth(140);
+        $composeNode = new Container();
+        $composeNode->setWidth(140);
         $children = array();
-        $children[] = $this->objectMother->getGlyphStub(0, 500, 100, 200);
-        $children[] = $this->objectMother->getGlyphStub(0, 300, 200, 200);
+        $children[] = $this->objectMother->getNodeStub(0, 500, 100, 200);
+        $children[] = $this->objectMother->getNodeStub(0, 300, 200, 200);
 
         foreach($children as $child)
         {
-            $composeGlyph->add($child);
+            $composeNode->add($child);
         }
 
-        $this->formatter->format($composeGlyph, new Document());
+        $this->formatter->format($composeNode, new Document());
 
         $height = 0;
         foreach($children as $child)
@@ -45,7 +45,7 @@ class ContainerDimensionFormatterTest extends TestCase
             $height += $child->getHeight();
         }
 
-        $this->assertEquals($height, $composeGlyph->getHeight());
-        $this->assertEquals(200, $composeGlyph->getWidth());
+        $this->assertEquals($height, $composeNode->getHeight());
+        $this->assertEquals(200, $composeNode->getWidth());
     }
 }

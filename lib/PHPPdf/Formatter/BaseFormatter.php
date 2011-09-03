@@ -9,7 +9,7 @@
 namespace PHPPdf\Formatter;
 
 use PHPPdf\Formatter\Formatter,
-    PHPPdf\Glyph\Glyph,
+    PHPPdf\Node\Node,
     PHPPdf\Document,
     PHPPdf\Formatter\Chain;
 

@@ -16,9 +16,9 @@ use PHPPdf\Cache\Cache;
 interface Loader
 {
     /**
-     * @return PHPPdf\Glyph\Factory
+     * @return PHPPdf\Node\Factory
      */
-    public function createGlyphFactory();
+    public function createNodeFactory();
     
     /**
      * @return PHPPdf\Enhancement\Factory

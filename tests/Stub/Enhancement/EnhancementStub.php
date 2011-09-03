@@ -2,8 +2,8 @@
 
 use PHPPdf\Document;
 use PHPPdf\Enhancement\Enhancement,
-    PHPPdf\Glyph\Page,
-    PHPPdf\Glyph\Glyph;
+    PHPPdf\Node\Page,
+    PHPPdf\Node\Node;
 
 class EnhancementStub extends Enhancement
 {
@@ -16,7 +16,7 @@ class EnhancementStub extends Enhancement
         $this->someParameter = $someParameter;
     }
 
-    protected function doEnhance($gc, Glyph $glyph, Document $document)
+    protected function doEnhance($gc, Node $node, Document $document)
     {
     }
 }

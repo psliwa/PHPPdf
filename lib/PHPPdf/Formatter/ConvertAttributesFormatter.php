@@ -9,7 +9,7 @@
 namespace PHPPdf\Formatter;
 
 use PHPPdf\Formatter\BaseFormatter,
-    PHPPdf\Glyph\Glyph,
+    PHPPdf\Node\Node,
     PHPPdf\Util,
     PHPPdf\Document;
 
@@ -20,17 +20,17 @@ use PHPPdf\Formatter\BaseFormatter,
  */
 class ConvertAttributesFormatter extends BaseFormatter
 {
-    public function format(Glyph $glyph, Document $document)
+    public function format(Node $node, Document $document)
     {
-        $this->convertPercentageDimensions($glyph);
-        $this->convertAutoMargins($glyph);
-        $this->convertDegreesToRadians($glyph);
+        $this->convertPercentageDimensions($node);
+        $this->convertAutoMargins($node);
+        $this->convertDegreesToRadians($node);
     }
 
-    private function convertPercentageDimensions(Glyph $glyph)
+    private function convertPercentageDimensions(Node $node)
     {       
-        $glyph->convertScalarAttribute('width');
-        $glyph->convertScalarAttribute('height');
+        $node->convertScalarAttribute('width');
+        $node->convertScalarAttribute('height');
     }
 
     private function convertFromPercentageValue($value, $percent)
@@ -38,50 +38,50 @@ class ConvertAttributesFormatter extends BaseFormatter
         return Util::convertFromPercentageValue($percent, $value);
     }
 
-    private function convertAutoMargins(Glyph $glyph)
+    private function convertAutoMargins(Node $node)
     {
-        $parent = $glyph->getParent();
+        $parent = $node->getParent();
 
-        if($parent !== null && $this->hasAutoMargins($glyph))
+        if($parent !== null && $this->hasAutoMargins($node))
         {
             $parentWidth = $parent->getWidthWithoutPaddings();
-            $glyphWidth = $glyph->getWidth();
+            $nodeWidth = $node->getWidth();
 
-            if($glyphWidth > $parentWidth)
+            if($nodeWidth > $parentWidth)
             {
-                $parentWidth = $glyphWidth;
-                $parent->setWidth($glyphWidth);
+                $parentWidth = $nodeWidth;
+                $parent->setWidth($nodeWidth);
             }
 
-            $glyph->hadAutoMargins(true);
-            $width = $glyph->getWidth() === null ? $parentWidth : $glyph->getWidth();
+            $node->hadAutoMargins(true);
+            $width = $node->getWidth() === null ? $parentWidth : $node->getWidth();
             
             //adds horizontal paddings, becouse dimension formatter hasn't executed yet
-            $width += $glyph->getPaddingLeft() + $glyph->getPaddingRight();
+            $width += $node->getPaddingLeft() + $node->getPaddingRight();
 
             $margin = ($parentWidth - $width)/2;
-            $glyph->setMarginLeft($margin);
-            $glyph->setMarginRight($margin);
+            $node->setMarginLeft($margin);
+            $node->setMarginRight($margin);
         }
     }
 
-    private function hasAutoMargins(Glyph $glyph)
+    private function hasAutoMargins(Node $node)
     {
-        $marginLeft = $glyph->getMarginLeft();
-        $marginRight = $glyph->getMarginRight();
+        $marginLeft = $node->getMarginLeft();
+        $marginRight = $node->getMarginRight();
 
-        return ($marginLeft === Glyph::MARGIN_AUTO && $marginRight === Glyph::MARGIN_AUTO);
+        return ($marginLeft === Node::MARGIN_AUTO && $marginRight === Node::MARGIN_AUTO);
     }
     
-    private function convertDegreesToRadians(Glyph $glyph)
+    private function convertDegreesToRadians(Node $node)
     {
-        $rotate = $glyph->getAttribute('rotate');
+        $rotate = $node->getAttribute('rotate');
         
         if($rotate !== null && strpos($rotate, 'deg') !== false)
         {
             $degrees = (float) $rotate;
             $radians = deg2rad($degrees);
-            $glyph->setAttribute('rotate', $radians);
+            $node->setAttribute('rotate', $radians);
         }
     }
 }

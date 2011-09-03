@@ -9,11 +9,11 @@
 namespace PHPPdf;
 
 
-use PHPPdf\Glyph\Glyph,
+use PHPPdf\Node\Node,
     PHPPdf\Engine\ZF\Engine,
     PHPPdf\Formatter as Formatters,
-    PHPPdf\Glyph\Page,
-    PHPPdf\Glyph\PageCollection,
+    PHPPdf\Node\Page,
+    PHPPdf\Node\PageCollection,
     PHPPdf\Enhancement\EnhancementBag,
     PHPPdf\Font\Registry as FontRegistry,
     PHPPdf\Enhancement\Factory as EnhancementFactory,
@@ -115,7 +115,7 @@ class Document
     /**
      * Invokes drawing procedure.
      *
-     * Formats each of glyph, retreives drawing tasks and executes them.
+     * Formats each of node, retreives drawing tasks and executes them.
      *
      * @param array $pages Array of pages to draw
      */
@@ -137,7 +137,7 @@ class Document
             {
                 if(!$page instanceof Page)
                 {
-                    throw new DrawingException(sprintf('Not all elements of passed array are PHPPdf\Glyph\Page type. One of them is "%s".', get_class($page)));
+                    throw new DrawingException(sprintf('Not all elements of passed array are PHPPdf\Node\Page type. One of them is "%s".', get_class($page)));
                 }
 
                 $pageCollection->add($page);

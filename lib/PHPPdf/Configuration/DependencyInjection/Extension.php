@@ -18,7 +18,7 @@ class Extension implements ExtensionInterface
     public function load(array $config, ContainerBuilder $container)
     {
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__ . '/../../Resources/config/services'));
-        $loader->load('glyphs.xml');
+        $loader->load('nodes.xml');
     }
     
     public function getNamespace()

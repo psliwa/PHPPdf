@@ -1,8 +1,8 @@
 <?php
 
 use PHPPdf\Document;
-use PHPPdf\Glyph\Glyph;
-use PHPPdf\Glyph\Container;
+use PHPPdf\Node\Node;
+use PHPPdf\Node\Container;
 use PHPPdf\Formatter\StandardDimensionFormatter;
 
 class StandardDimensionFormatterTest extends PHPUnit_Framework_TestCase
@@ -19,43 +19,43 @@ class StandardDimensionFormatterTest extends PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function glyphFormatter()
+    public function nodeFormatter()
     {
-        $glyph = $this->getMock('PHPPdf\Glyph\Glyph', array('getWidth', 'getHeight', 'setWidth', 'setHeight'));
-        $glyph->expects($this->atLeastOnce())
+        $node = $this->getMock('PHPPdf\Node\Node', array('getWidth', 'getHeight', 'setWidth', 'setHeight'));
+        $node->expects($this->atLeastOnce())
               ->method('getWidth')
               ->will($this->returnValue(120));
-        $glyph->expects($this->atLeastOnce())
+        $node->expects($this->atLeastOnce())
               ->method('getHeight')
               ->will($this->returnValue(140));
-        $glyph->expects($this->once())
+        $node->expects($this->once())
               ->method('setWidth')
               ->with($this->equalTo(120));
-        $glyph->expects($this->once())
+        $node->expects($this->once())
               ->method('setHeight')
               ->with($this->equalTo(140));
 
-        $this->formatter->format($glyph, $this->document);
+        $this->formatter->format($node, $this->document);
     }
 
     /**
      * @test
      */
-    public function setZeroWidthGlyphsWithFloat()
+    public function setZeroWidthNodesWithFloat()
     {
-        $glyph = $this->getMock('PHPPdf\Glyph\Container', array('getWidth', 'setWidth', 'getFloat'));
+        $node = $this->getMock('PHPPdf\Node\Container', array('getWidth', 'setWidth', 'getFloat'));
 
-        $glyph->expects($this->atLeastOnce())
+        $node->expects($this->atLeastOnce())
               ->method('getWidth')
               ->will($this->returnValue(null));
-        $glyph->expects($this->atLeastOnce())
+        $node->expects($this->atLeastOnce())
               ->method('setWidth')
               ->with($this->equalTo(0));
-        $glyph->expects($this->atLeastOnce())
+        $node->expects($this->atLeastOnce())
               ->method('getFloat')
               ->will($this->returnValue('left'));
 
-        $this->formatter->format($glyph, $this->document);
+        $this->formatter->format($node, $this->document);
     }
     
     /**
@@ -64,13 +64,13 @@ class StandardDimensionFormatterTest extends PHPUnit_Framework_TestCase
      */
     public function useRealWidthAndHeightToIncraseDimensionsByPaddings($realWidth, $realHeight, array $paddings)
     {
-        $glyph = $this->getMockBuilder('PHPPdf\Glyph\Container')
+        $node = $this->getMockBuilder('PHPPdf\Node\Container')
                       ->setMethods(array('getRealWidth', 'getRealHeight', 'getWidth', 'getHeight', 'setHeight', 'setWidth', 'getPaddingLeft', 'getPaddingTop', 'getPaddingRight', 'getPaddingBottom'))
                       ->getMock();
                       
         foreach($paddings as $method => $value)
         {
-            $glyph->expects($this->atLeastOnce())
+            $node->expects($this->atLeastOnce())
                   ->method($method)
                   ->will($this->returnValue($value));
         }
@@ -79,28 +79,28 @@ class StandardDimensionFormatterTest extends PHPUnit_Framework_TestCase
         //to incrase dimension
         foreach(array('getWidth', 'getHeight') as $method)
         {
-            $glyph->expects($this->atLeastOnce())
+            $node->expects($this->atLeastOnce())
                   ->method($method)
                   ->will($this->returnValue(rand(1, 200)));
         }        
         
-        $glyph->expects($this->atLeastOnce())
+        $node->expects($this->atLeastOnce())
               ->method('getRealWidth')
               ->will($this->returnValue($realWidth));
 
-        $glyph->expects($this->atLeastOnce())
+        $node->expects($this->atLeastOnce())
               ->method('getRealHeight')
               ->will($this->returnValue($realHeight));
               
-        $glyph->expects($this->once())
+        $node->expects($this->once())
               ->method('setWidth')
               ->with($realWidth + $paddings['getPaddingLeft'] + $paddings['getPaddingRight']);
 
-        $glyph->expects($this->once())
+        $node->expects($this->once())
               ->method('setHeight')
               ->with($realHeight + $paddings['getPaddingTop'] + $paddings['getPaddingBottom']);
 
-        $this->formatter->format($glyph, $this->document);
+        $this->formatter->format($node, $this->document);
     }
     
     public function dimensionProvider()
@@ -136,16 +136,16 @@ class StandardDimensionFormatterTest extends PHPUnit_Framework_TestCase
         $parent->setHeight($parentHeight);
         $parent->setPadding($parentPaddingVertical, $parentPaddingHorizontal);
         
-        $glyph = new Container();
-        $glyph->setWidth($childWidth);        
-        $glyph->setHeight($childHeight);    
-        $glyph->setPadding($paddingVertical, $paddingHorizontal);
+        $node = new Container();
+        $node->setWidth($childWidth);        
+        $node->setHeight($childHeight);    
+        $node->setPadding($paddingVertical, $paddingHorizontal);
         
-        $parent->add($glyph);
+        $parent->add($node);
         
-        $this->formatter->format($glyph, $this->document);
+        $this->formatter->format($node, $this->document);
         
-        $this->assertEquals($parent->getWidthWithoutPaddings(), $glyph->getWidth());
-        $this->assertEquals($childHeight + 2*$paddingVertical, $glyph->getHeight());
+        $this->assertEquals($parent->getWidthWithoutPaddings(), $node->getWidth());
+        $this->assertEquals($childHeight + 2*$paddingVertical, $node->getHeight());
     }
 }

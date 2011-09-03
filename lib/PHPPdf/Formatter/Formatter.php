@@ -8,15 +8,15 @@
 
 namespace PHPPdf\Formatter;
 
-use PHPPdf\Glyph\Glyph,
+use PHPPdf\Node\Node,
     PHPPdf\Document;
 
 /**
- * Glyph formatter
+ * Node formatter
  *
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
 interface Formatter
 {
-    public function format(Glyph $glyph, Document $document);
+    public function format(Node $node, Document $document);
 }

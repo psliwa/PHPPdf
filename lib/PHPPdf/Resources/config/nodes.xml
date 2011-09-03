@@ -1,0 +1,424 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<factory>
+	<invoke-args>
+		<invoke-arg id="list.enumeration_factory" class="PHPPdf\Node\BasicList\EnumerationStrategyFactory" />
+	</invoke-args>
+	<nodes>
+	    <node name="page" class="PHPPdf\Node\Page">
+	        <stylesheet>
+	            <attribute name="font-type" value="helvetica" />
+	            <attribute name="font-size" value="10" />
+	            <attribute name="font-style" value="normal" />
+	            <attribute name="margin" value="40 40" />
+	            <attribute name="color" value="black" />
+	        </stylesheet>
+	        <formatters>
+	            <formatter class="PHPPdf\Formatter\ConvertAttributesFormatter" />
+	            <formatter class="PHPPdf\Formatter\StandardDimensionFormatter" />
+	            <formatter class="PHPPdf\Formatter\ContainerFormatter" />
+	            <formatter class="PHPPdf\Formatter\FloatFormatter" />
+	            <formatter class="PHPPdf\Formatter\ColumnDivertingFormatter" />
+	        </formatters>
+	    </node>
+	    <node name="dynamic-page" class="PHPPdf\Node\DynamicPage">
+	        <formatters>
+	            <formatter class="PHPPdf\Formatter\ConvertAttributesFormatter" />
+	            <formatter class="PHPPdf\Formatter\StandardDimensionFormatter" />
+	            <formatter class="PHPPdf\Formatter\ContainerFormatter" />
+	            <formatter class="PHPPdf\Formatter\FloatFormatter" />
+	            <formatter class="PHPPdf\Formatter\PageDivertingFormatter" />
+	        </formatters>
+	    </node>
+	    <node name="div" class="PHPPdf\Node\Container">
+	        <formatters>
+	            <formatter class="PHPPdf\Formatter\ConvertAttributesFormatter" />
+	            <formatter class="PHPPdf\Formatter\StandardDimensionFormatter" />
+	            <formatter class="PHPPdf\Formatter\FirstPointPositionFormatter" />
+	            <formatter class="PHPPdf\Formatter\ContainerFormatter" />
+	            <formatter class="PHPPdf\Formatter\ContainerDimensionFormatter" />
+	            <formatter class="PHPPdf\Formatter\StandardPositionFormatter" />
+	            <formatter class="PHPPdf\Formatter\FloatFormatter" />
+	            <formatter class="PHPPdf\Formatter\VerticalAlignFormatter" />
+	        </formatters>
+	    </node>
+	    <node name="ul" class="PHPPdf\Node\BasicList">
+	    	<invoke method="setEnumerationStrategyFactory" argId="list.enumeration_factory" />
+	        <formatters>
+	            <formatter class="PHPPdf\Formatter\ConvertAttributesFormatter" />
+	            <formatter class="PHPPdf\Formatter\StandardDimensionFormatter" />
+	            <formatter class="PHPPdf\Formatter\FirstPointPositionFormatter" />
+	            <formatter class="PHPPdf\Formatter\ListFormatter" />
+	            <formatter class="PHPPdf\Formatter\ContainerFormatter" />
+	            <formatter class="PHPPdf\Formatter\ContainerDimensionFormatter" />
+	            <formatter class="PHPPdf\Formatter\StandardPositionFormatter" />
+	            <formatter class="PHPPdf\Formatter\FloatFormatter" />
+	        </formatters>
+	    </node>
+	    <node name="ol" class="PHPPdf\Node\BasicList">
+	    	<stylesheet>
+	    		<attribute name="type" value="decimal" />
+	    	</stylesheet>
+	    	<invoke method="setEnumerationStrategyFactory" argId="list.enumeration_factory" />
+	        <formatters>
+	            <formatter class="PHPPdf\Formatter\ConvertAttributesFormatter" />
+	            <formatter class="PHPPdf\Formatter\StandardDimensionFormatter" />
+	            <formatter class="PHPPdf\Formatter\FirstPointPositionFormatter" />
+	            <formatter class="PHPPdf\Formatter\ListFormatter" />
+	            <formatter class="PHPPdf\Formatter\ContainerFormatter" />
+	            <formatter class="PHPPdf\Formatter\ContainerDimensionFormatter" />
+	            <formatter class="PHPPdf\Formatter\StandardPositionFormatter" />
+	            <formatter class="PHPPdf\Formatter\FloatFormatter" />
+	        </formatters>
+	    </node>
+	    <node name="li" class="PHPPdf\Node\BasicListItem">
+	    	<stylesheet>
+	    		<attribute name="margin-left" value="10" />
+	    	</stylesheet>
+	        <formatters>
+	            <formatter class="PHPPdf\Formatter\ConvertAttributesFormatter" />
+	            <formatter class="PHPPdf\Formatter\StandardDimensionFormatter" />
+	            <formatter class="PHPPdf\Formatter\FirstPointPositionFormatter" />
+	            <formatter class="PHPPdf\Formatter\ContainerFormatter" />
+	            <formatter class="PHPPdf\Formatter\ContainerDimensionFormatter" />
+	            <formatter class="PHPPdf\Formatter\StandardPositionFormatter" />
+	            <formatter class="PHPPdf\Formatter\FloatFormatter" />
+	        </formatters>
+	    </node>
+	    <node name="p" class="PHPPdf\Node\Container">
+	        <stylesheet>
+	            <attribute name="padding" value="5 0" />
+	        </stylesheet>
+	        <formatters>
+	            <formatter class="PHPPdf\Formatter\ConvertAttributesFormatter" />
+	            <formatter class="PHPPdf\Formatter\StandardDimensionFormatter" />
+	            <formatter class="PHPPdf\Formatter\FirstPointPositionFormatter" />
+	            <formatter class="PHPPdf\Formatter\ContainerFormatter" />
+	            <formatter class="PHPPdf\Formatter\ContainerDimensionFormatter" />
+	            <formatter class="PHPPdf\Formatter\StandardPositionFormatter" />
+	            <formatter class="PHPPdf\Formatter\FloatFormatter" />
+	            <formatter class="PHPPdf\Formatter\VerticalAlignFormatter" />
+	        </formatters>
+	    </node>
+	    
+	    <node name="paragraph" class="PHPPdf\Node\Paragraph">
+	        <formatters>
+	            <formatter class="PHPPdf\Formatter\ConvertAttributesFormatter" />
+	            <formatter class="PHPPdf\Formatter\StandardDimensionFormatter" />
+	            <formatter class="PHPPdf\Formatter\FirstPointPositionFormatter" />
+	            <formatter class="PHPPdf\Formatter\ContainerFormatter" />
+	            <formatter class="PHPPdf\Formatter\ParagraphFormatter" />
+	            <formatter class="PHPPdf\Formatter\ContainerDimensionFormatter" />
+	            <formatter class="PHPPdf\Formatter\StandardPositionFormatter" />
+
+	        </formatters>
+	    </node>
+	    
+	    <node name="text" class="PHPPdf\Node\Text">
+	        <formatters>
+	            <formatter class="PHPPdf\Formatter\ConvertAttributesFormatter" />
+	            <formatter class="PHPPdf\Formatter\TextDimensionFormatter" />
+	        </formatters>
+	    </node>
+	    <node name="h1" class="PHPPdf\Node\Container">
+	        <stylesheet>
+	            <attribute name="font-size" value="16" />
+	            <attribute name="font-style" value="bold" />
+	            <attribute name="margin" value="5 0" />
+	        </stylesheet>
+	        <formatters>
+	            <formatter class="PHPPdf\Formatter\ConvertAttributesFormatter" />
+	            <formatter class="PHPPdf\Formatter\StandardDimensionFormatter" />
+	            <formatter class="PHPPdf\Formatter\FirstPointPositionFormatter" />
+	            <formatter class="PHPPdf\Formatter\ContainerFormatter" />
+	            <formatter class="PHPPdf\Formatter\ContainerDimensionFormatter" />
+	            <formatter class="PHPPdf\Formatter\StandardPositionFormatter" />
+	            <formatter class="PHPPdf\Formatter\FloatFormatter" />
+	            <formatter class="PHPPdf\Formatter\VerticalAlignFormatter" />
+	        </formatters>
+	    </node>
+	    <node name="h2" class="PHPPdf\Node\Container">
+	        <stylesheet>
+	            <attribute name="font-size" value="14" />
+	            <attribute name="font-style" value="bold" />
+	            <attribute name="margin" value="4 0" />
+	        </stylesheet>
+	        <formatters>
+	            <formatter class="PHPPdf\Formatter\ConvertAttributesFormatter" />
+	            <formatter class="PHPPdf\Formatter\StandardDimensionFormatter" />
+	            <formatter class="PHPPdf\Formatter\FirstPointPositionFormatter" />
+	            <formatter class="PHPPdf\Formatter\ContainerFormatter" />
+	            <formatter class="PHPPdf\Formatter\ContainerDimensionFormatter" />
+	            <formatter class="PHPPdf\Formatter\StandardPositionFormatter" />
+	            <formatter class="PHPPdf\Formatter\FloatFormatter" />
+	            <formatter class="PHPPdf\Formatter\VerticalAlignFormatter" />
+	        </formatters>
+	    </node>
+	    <node name="h3" class="PHPPdf\Node\Container">
+	        <stylesheet>
+	            <attribute name="font-size" value="12" />
+	            <attribute name="margin" value="3 0" />
+	        </stylesheet>
+	        <formatters>
+	            <formatter class="PHPPdf\Formatter\ConvertAttributesFormatter" />
+	            <formatter class="PHPPdf\Formatter\StandardDimensionFormatter" />
+	            <formatter class="PHPPdf\Formatter\FirstPointPositionFormatter" />
+	            <formatter class="PHPPdf\Formatter\ContainerFormatter" />
+	            <formatter class="PHPPdf\Formatter\ContainerDimensionFormatter" />
+	            <formatter class="PHPPdf\Formatter\StandardPositionFormatter" />
+	            <formatter class="PHPPdf\Formatter\FloatFormatter" />
+	            <formatter class="PHPPdf\Formatter\VerticalAlignFormatter" />
+	        </formatters>
+	    </node>
+	    <node name="h4" class="PHPPdf\Node\Container">
+	        <stylesheet>
+	            <attribute name="font-size" value="12" />
+	            <attribute name="margin" value="3 0" />
+	        </stylesheet>
+	        <formatters>
+	            <formatter class="PHPPdf\Formatter\ConvertAttributesFormatter" />
+	            <formatter class="PHPPdf\Formatter\StandardDimensionFormatter" />
+	            <formatter class="PHPPdf\Formatter\FirstPointPositionFormatter" />
+	            <formatter class="PHPPdf\Formatter\ContainerFormatter" />
+	            <formatter class="PHPPdf\Formatter\ContainerDimensionFormatter" />
+	            <formatter class="PHPPdf\Formatter\StandardPositionFormatter" />
+	            <formatter class="PHPPdf\Formatter\FloatFormatter" />
+	            <formatter class="PHPPdf\Formatter\VerticalAlignFormatter" />
+	        </formatters>
+	    </node>
+	    <node name="h5" class="PHPPdf\Node\Container">
+	        <stylesheet>
+	            <attribute name="font-size" value="12" />
+	            <attribute name="margin" value="3 0" />
+	        </stylesheet>
+	        <formatters>
+	            <formatter class="PHPPdf\Formatter\ConvertAttributesFormatter" />
+	            <formatter class="PHPPdf\Formatter\StandardDimensionFormatter" />
+	            <formatter class="PHPPdf\Formatter\FirstPointPositionFormatter" />
+	            <formatter class="PHPPdf\Formatter\ContainerFormatter" />
+	            <formatter class="PHPPdf\Formatter\ContainerDimensionFormatter" />
+	            <formatter class="PHPPdf\Formatter\StandardPositionFormatter" />
+	            <formatter class="PHPPdf\Formatter\FloatFormatter" />
+	            <formatter class="PHPPdf\Formatter\VerticalAlignFormatter" />
+	        </formatters>
+	    </node>
+	    <node name="h6" class="PHPPdf\Node\Container">
+	        <stylesheet>
+	            <attribute name="font-size" value="12" />
+	            <attribute name="margin" value="3 0" />
+	        </stylesheet>
+	        <formatters>
+	            <formatter class="PHPPdf\Formatter\ConvertAttributesFormatter" />
+	            <formatter class="PHPPdf\Formatter\StandardDimensionFormatter" />
+	            <formatter class="PHPPdf\Formatter\FirstPointPositionFormatter" />
+	            <formatter class="PHPPdf\Formatter\ContainerFormatter" />
+	            <formatter class="PHPPdf\Formatter\ContainerDimensionFormatter" />
+	            <formatter class="PHPPdf\Formatter\StandardPositionFormatter" />
+	            <formatter class="PHPPdf\Formatter\FloatFormatter" />
+	            <formatter class="PHPPdf\Formatter\VerticalAlignFormatter" />
+	        </formatters>
+	    </node>
+	    <node name="page-info" class="PHPPdf\Node\Runtime\PageInfo">
+	        <formatters>
+	            <formatter class="PHPPdf\Formatter\ConvertAttributesFormatter" />
+	            <formatter class="PHPPdf\Formatter\TextDimensionFormatter" />
+	        </formatters>
+	    </node>
+	    <node name="page-number" class="PHPPdf\Node\Runtime\CurrentPageNumber">
+	        <formatters>
+	            <formatter class="PHPPdf\Formatter\ConvertAttributesFormatter" />
+	            <formatter class="PHPPdf\Formatter\TextDimensionFormatter" />
+	        </formatters>
+	    </node>
+	    <node name="table" class="PHPPdf\Node\Table">
+	        <formatters>
+	            <formatter class="PHPPdf\Formatter\ConvertAttributesFormatter" />
+	            <formatter class="PHPPdf\Formatter\StandardDimensionFormatter" />
+	            <formatter class="PHPPdf\Formatter\TableColumnFormatter" />
+	            <formatter class="PHPPdf\Formatter\FirstPointPositionFormatter" />
+	            <formatter class="PHPPdf\Formatter\ContainerFormatter" />
+	            <formatter class="PHPPdf\Formatter\ContainerDimensionFormatter" />
+	            <formatter class="PHPPdf\Formatter\TableFormatter" />
+	            <formatter class="PHPPdf\Formatter\StandardPositionFormatter" />
+	        </formatters>
+	    </node>
+	    <node name="tr" class="PHPPdf\Node\Table\Row">
+	        <stylesheet>
+	            <attribute name="height" value="5" />
+	        </stylesheet>
+	        <formatters>
+	            <formatter class="PHPPdf\Formatter\ConvertAttributesFormatter" />
+	            <formatter class="PHPPdf\Formatter\StandardDimensionFormatter" />
+	            <formatter class="PHPPdf\Formatter\FirstPointPositionFormatter" />
+	            <formatter class="PHPPdf\Formatter\ContainerFormatter" />
+	            <formatter class="PHPPdf\Formatter\ContainerDimensionFormatter" />
+	            <formatter class="PHPPdf\Formatter\StandardPositionFormatter" />
+	            <formatter class="PHPPdf\Formatter\RowDimensionFormatter" />
+	        </formatters>
+	    </node>
+	    <node name="td" class="PHPPdf\Node\Table\Cell">
+	        <stylesheet>
+	            <enhancement name="border" color="black" />
+	        </stylesheet>
+	        <formatters>
+	            <formatter class="PHPPdf\Formatter\ConvertAttributesFormatter" />
+	            <formatter class="PHPPdf\Formatter\StandardDimensionFormatter" />
+	            <formatter class="PHPPdf\Formatter\CellFirstPointPositionFormatter" />
+	            <formatter class="PHPPdf\Formatter\ContainerFormatter" />
+	            <formatter class="PHPPdf\Formatter\ContainerDimensionFormatter" />
+	            <formatter class="PHPPdf\Formatter\StandardPositionFormatter" />
+	            <formatter class="PHPPdf\Formatter\FloatFormatter" />
+	        </formatters>
+	    </node>
+	    <node name="img" class="PHPPdf\Node\Image">
+	        <stylesheet>
+	            <attribute name="margin" value="1" />
+	        </stylesheet>
+	        <formatters>
+	            <formatter class="PHPPdf\Formatter\ConvertAttributesFormatter" />
+	            <formatter class="PHPPdf\Formatter\FirstPointPositionFormatter" />
+	            <formatter class="PHPPdf\Formatter\ImageDimensionFormatter" />
+	            <formatter class="PHPPdf\Formatter\StandardPositionFormatter" />
+	        </formatters>
+	    </node>
+	    <node name="br" class="PHPPdf\Node\Container">
+	        <stylesheet>
+	            <attribute name="height" value="10" />
+	        </stylesheet>
+	        <formatters>
+	            <formatter class="PHPPdf\Formatter\ConvertAttributesFormatter" />
+	            <formatter class="PHPPdf\Formatter\StandardDimensionFormatter" />
+	            <formatter class="PHPPdf\Formatter\FirstPointPositionFormatter" />
+	            <formatter class="PHPPdf\Formatter\ContainerFormatter" />
+	            <formatter class="PHPPdf\Formatter\ContainerDimensionFormatter" />
+	            <formatter class="PHPPdf\Formatter\StandardPositionFormatter" />
+	            <formatter class="PHPPdf\Formatter\FloatFormatter" />
+	        </formatters>
+	    </node>
+	    <node name="hr" class="PHPPdf\Node\Container">
+	        <stylesheet>
+	            <attribute name="height" value="0.5" />
+	            <attribute name="margin" value="8 0" />
+	            <enhancement name="background" color="black" />
+	        </stylesheet>
+	        <formatters>
+	            <formatter class="PHPPdf\Formatter\ConvertAttributesFormatter" />
+	            <formatter class="PHPPdf\Formatter\StandardDimensionFormatter" />
+	            <formatter class="PHPPdf\Formatter\FirstPointPositionFormatter" />
+	            <formatter class="PHPPdf\Formatter\ContainerFormatter" />
+	            <formatter class="PHPPdf\Formatter\ContainerDimensionFormatter" />
+	            <formatter class="PHPPdf\Formatter\StandardPositionFormatter" />
+	            <formatter class="PHPPdf\Formatter\FloatFormatter" />
+	        </formatters>
+	    </node>
+	    <node name="nl" class="PHPPdf\Node\Container">
+	        <formatters>
+	            <formatter class="PHPPdf\Formatter\ConvertAttributesFormatter" />
+	            <formatter class="PHPPdf\Formatter\StandardDimensionFormatter" />
+	            <formatter class="PHPPdf\Formatter\FirstPointPositionFormatter" />
+	            <formatter class="PHPPdf\Formatter\ContainerFormatter" />
+	            <formatter class="PHPPdf\Formatter\ContainerDimensionFormatter" />
+	            <formatter class="PHPPdf\Formatter\StandardPositionFormatter" />
+	            <formatter class="PHPPdf\Formatter\FloatFormatter" />
+	        </formatters>
+	    </node>
+	    <node name="span" class="PHPPdf\Node\Text">
+	        <formatters>
+	            <formatter class="PHPPdf\Formatter\ConvertAttributesFormatter" />
+	            <formatter class="PHPPdf\Formatter\TextDimensionFormatter" />
+	        </formatters>
+	    </node>
+	    <node name="a" class="PHPPdf\Node\Text">
+	    	<stylesheet>
+	    		<attribute name="text-decoration" value="underline" />
+	    		<attribute name="color" value="blue" />
+	    	</stylesheet>
+	        <formatters>
+	            <formatter class="PHPPdf\Formatter\ConvertAttributesFormatter" />
+	            <formatter class="PHPPdf\Formatter\TextDimensionFormatter" />
+	        </formatters>
+	    </node>
+	    <node name="b" class="PHPPdf\Node\Text">
+	        <stylesheet>
+	            <attribute name="font-style" value="bold" />
+	        </stylesheet>
+	        <formatters>
+	            <formatter class="PHPPdf\Formatter\ConvertAttributesFormatter" />
+	            <formatter class="PHPPdf\Formatter\TextDimensionFormatter" />
+	        </formatters>
+	    </node>
+	    <node name="strong" class="PHPPdf\Node\Text">
+	        <stylesheet>
+	            <attribute name="font-style" value="bold" />
+	        </stylesheet>
+	        <formatters>
+	            <formatter class="PHPPdf\Formatter\ConvertAttributesFormatter" />
+	            <formatter class="PHPPdf\Formatter\TextDimensionFormatter" />
+	        </formatters>
+	    </node>
+	    <node name="i" class="PHPPdf\Node\Text">
+	        <stylesheet>
+	            <attribute name="font-style" value="italic" />
+	        </stylesheet>
+	        <formatters>
+	            <formatter class="PHPPdf\Formatter\ConvertAttributesFormatter" />
+	            <formatter class="PHPPdf\Formatter\TextDimensionFormatter" />
+	        </formatters>
+	    </node>
+	    <node name="page-break" class="PHPPdf\Node\Container">
+	        <stylesheet>
+	            <attribute name="break" value="1" />
+	            <attribute name="height" value="0.01" />
+	        </stylesheet>
+	        <formatters>
+	            <formatter class="PHPPdf\Formatter\ConvertAttributesFormatter" />
+	            <formatter class="PHPPdf\Formatter\StandardDimensionFormatter" />
+	            <formatter class="PHPPdf\Formatter\FirstPointPositionFormatter" />
+	            <formatter class="PHPPdf\Formatter\ContainerFormatter" />
+	            <formatter class="PHPPdf\Formatter\ContainerDimensionFormatter" />
+	            <formatter class="PHPPdf\Formatter\StandardPositionFormatter" />
+	            <formatter class="PHPPdf\Formatter\FloatFormatter" />
+	        </formatters>
+	    </node>
+	    <node name="break" class="PHPPdf\Node\Container">
+	        <stylesheet>
+	            <attribute name="break" value="1" />
+	            <attribute name="height" value="0.01" />
+	        </stylesheet>
+	        <formatters>
+	            <formatter class="PHPPdf\Formatter\ConvertAttributesFormatter" />
+	            <formatter class="PHPPdf\Formatter\StandardDimensionFormatter" />
+	            <formatter class="PHPPdf\Formatter\FirstPointPositionFormatter" />
+	            <formatter class="PHPPdf\Formatter\ContainerFormatter" />
+	            <formatter class="PHPPdf\Formatter\ContainerDimensionFormatter" />
+	            <formatter class="PHPPdf\Formatter\StandardPositionFormatter" />
+	            <formatter class="PHPPdf\Formatter\FloatFormatter" />
+	        </formatters>
+	    </node>
+	    <node name="column-break" class="PHPPdf\Node\Container">
+	        <stylesheet>
+	            <attribute name="break" value="1" />
+	            <attribute name="height" value="0.01" />
+	        </stylesheet>
+	        <formatters>
+	            <formatter class="PHPPdf\Formatter\ConvertAttributesFormatter" />
+	            <formatter class="PHPPdf\Formatter\StandardDimensionFormatter" />
+	            <formatter class="PHPPdf\Formatter\FirstPointPositionFormatter" />
+	            <formatter class="PHPPdf\Formatter\ContainerFormatter" />
+	            <formatter class="PHPPdf\Formatter\ContainerDimensionFormatter" />
+	            <formatter class="PHPPdf\Formatter\StandardPositionFormatter" />
+	            <formatter class="PHPPdf\Formatter\FloatFormatter" />
+	        </formatters>
+	    </node>
+	    <node name="column-layout" class="PHPPdf\Node\ColumnableContainer">
+	        <formatters>
+	            <formatter class="PHPPdf\Formatter\ConvertAttributesFormatter" />
+	            <formatter class="PHPPdf\Formatter\StandardDimensionFormatter" />
+	            <formatter class="PHPPdf\Formatter\FirstPointPositionFormatter" />
+	            <formatter class="PHPPdf\Formatter\ContainerFormatter" />
+	            <formatter class="PHPPdf\Formatter\ContainerDimensionFormatter" />
+	            <formatter class="PHPPdf\Formatter\StandardPositionFormatter" />
+	            <formatter class="PHPPdf\Formatter\FloatFormatter" />
+	        </formatters>
+	    </node>
+	</nodes>
+</factory>

@@ -1,8 +1,8 @@
 <?php
 
 use PHPPdf\Document;
-use PHPPdf\Glyph\Page;
-use PHPPdf\Glyph\Container;
+use PHPPdf\Node\Page;
+use PHPPdf\Node\Container;
 use PHPPdf\Formatter\ConvertAttributesFormatter;
 
 class ConvertAttributesFormatterTest extends PHPUnit_Framework_TestCase
@@ -22,14 +22,14 @@ class ConvertAttributesFormatterTest extends PHPUnit_Framework_TestCase
     public function percentageConvert()
     {
         $page = new Page();
-        $glyph = new Container(array('width' => 200, 'height' => 100));
+        $node = new Container(array('width' => 200, 'height' => 100));
 
         $child = new Container(array('width' => '70%', 'height' => '50%'));
-        $glyph->add($child);
-        $page->add($glyph);
+        $node->add($child);
+        $page->add($node);
 
-        $glyph->setHeight(100);
-        $glyph->setWidth(200);
+        $node->setHeight(100);
+        $node->setWidth(200);
 
         $this->formatter->format($child, $this->document);
 
@@ -41,30 +41,30 @@ class ConvertAttributesFormatterTest extends PHPUnit_Framework_TestCase
      * @test
      * @dataProvider autoMarginConvertProvider
      */
-    public function autoMarginConvert($glyphWidth, $parentWidth, $expectedMarginLeft, $expectedMarginRight)
+    public function autoMarginConvert($nodeWidth, $parentWidth, $expectedMarginLeft, $expectedMarginRight)
     {
-        $glyph = new Container(array('width' => $glyphWidth));
-        $glyph->setWidth($glyphWidth);
-        $glyph->setMargin(0, 'auto');
+        $node = new Container(array('width' => $nodeWidth));
+        $node->setWidth($nodeWidth);
+        $node->setMargin(0, 'auto');
 
-        $mock = $this->getMock('\PHPPdf\Glyph\Page', array('getWidth', 'setWidth'));
+        $mock = $this->getMock('\PHPPdf\Node\Page', array('getWidth', 'setWidth'));
         $mock->expects($this->atLeastOnce())
              ->method('getWidth')
              ->will($this->returnValue($parentWidth));
              
-        if($glyphWidth > $parentWidth)
+        if($nodeWidth > $parentWidth)
         {
             $mock->expects($this->once())
                  ->method('setWidth')
-                 ->with($glyphWidth);
+                 ->with($nodeWidth);
         }
 
-        $mock->add($glyph);
+        $mock->add($node);
 
-        $this->formatter->format($glyph, $this->document);
+        $this->formatter->format($node, $this->document);
 
-        $this->assertEquals($expectedMarginLeft, $glyph->getMarginLeft());
-        $this->assertEquals($expectedMarginRight, $glyph->getMarginRight());
+        $this->assertEquals($expectedMarginLeft, $node->getMarginLeft());
+        $this->assertEquals($expectedMarginRight, $node->getMarginRight());
     }
     
     public function autoMarginConvertProvider()
@@ -81,18 +81,18 @@ class ConvertAttributesFormatterTest extends PHPUnit_Framework_TestCase
      */
     public function convertRotateAngleFronDegreesToRadians($angle, $expectedRadians)
     {
-        $glyph = new Container();
-        $glyph->setAttribute('rotate', $angle);
+        $node = new Container();
+        $node->setAttribute('rotate', $angle);
         
-        $this->formatter->format($glyph, $this->document);
+        $this->formatter->format($node, $this->document);
         
         if($angle === null)
         {
-            $this->assertNull($glyph->getAttribute('rotate'));
+            $this->assertNull($node->getAttribute('rotate'));
         }
         else
         {
-            $this->assertEquals($expectedRadians, $glyph->getAttribute('rotate'), 'conversion from degrees to radians failure', 0.001);
+            $this->assertEquals($expectedRadians, $node->getAttribute('rotate'), 'conversion from degrees to radians failure', 0.001);
         }
     }
     

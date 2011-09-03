@@ -14,7 +14,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder,
 
 /**
  * Implementation of configuration loader using DependencyInjection Container (from Symfony2) for
- * loading glyph factory. This implementation is more flexible than standard PHPPdf\Configuration\LoaderImpl.
+ * loading node factory. This implementation is more flexible than standard PHPPdf\Configuration\LoaderImpl.
  * 
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
@@ -28,7 +28,7 @@ class LoaderImpl extends BaseLoader
         parent::__construct(null, $enhancementFile, $fontFile);
     }
     
-    protected function loadGlyphs()
+    protected function loadNodes()
     {
         if(!$this->container)
         {
@@ -39,6 +39,6 @@ class LoaderImpl extends BaseLoader
             $this->container = $container;           
         }
 
-        return $this->container->get('phppdf.glyph_factory');
+        return $this->container->get('phppdf.node_factory');
     }
 }

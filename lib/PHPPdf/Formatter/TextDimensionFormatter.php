@@ -9,7 +9,7 @@
 namespace PHPPdf\Formatter;
 
 use PHPPdf\Formatter\BaseFormatter,
-    PHPPdf\Glyph as Glyphs,
+    PHPPdf\Node as Nodes,
     PHPPdf\Document,
     PHPPdf\Formatter\Chain;
 
@@ -37,9 +37,9 @@ class TextDimensionFormatter extends BaseFormatter
         $this->charCodeMethodName = $methodName;
     }
 
-    public function format(Glyphs\Glyph $glyph, Document $document)
+    public function format(Nodes\Node $node, Document $document)
     {
-        $words = preg_split('/\s+/', $glyph->getText());
+        $words = preg_split('/\s+/', $node->getText());
         
         $lastIndex = count($words) - 1;
         array_walk($words, function(&$value, $index) use($lastIndex){
@@ -51,15 +51,15 @@ class TextDimensionFormatter extends BaseFormatter
 
         $wordsSizes = array();
         
-        $font = $glyph->getFont($document);
-        $fontSize = $glyph->getFontSizeRecursively();
+        $font = $node->getFont($document);
+        $fontSize = $node->getFontSizeRecursively();
         
         foreach($words as $word)
         {
             $wordsSizes[] = $this->getTextWidth($font, $fontSize, $word);
         }
         
-        $glyph->setWordsSizes($words, $wordsSizes);
+        $node->setWordsSizes($words, $wordsSizes);
     }
 
     private function getTextWidth($font, $fontSize, $text)

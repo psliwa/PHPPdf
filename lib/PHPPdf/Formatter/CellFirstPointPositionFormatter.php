@@ -8,7 +8,7 @@
 
 namespace PHPPdf\Formatter;
 
-use PHPPdf\Glyph\Glyph,
+use PHPPdf\Node\Node,
     PHPPdf\Document;
 
 /**
@@ -16,10 +16,10 @@ use PHPPdf\Glyph\Glyph,
  */
 class CellFirstPointPositionFormatter extends BaseFormatter
 {
-    public function format(Glyph $glyph, Document $document)
+    public function format(Node $node, Document $document)
     {
-        $parent = $glyph->getParent();
-        $boundary = $glyph->getBoundary();
+        $parent = $node->getParent();
+        $boundary = $node->getBoundary();
 
         $boundary->setNext($parent->getFirstPoint());
     }

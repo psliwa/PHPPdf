@@ -52,7 +52,7 @@ class RowDimensionFormatterTest extends TestCase
 
     private function getRowMockWithHeightAsserts($boundary, $oldHeight, $maxHeightOfCells, $expectedNewHeight = null)
     {
-        $row = $this->getMock('PHPPdf\Glyph\Table\Row', array('getBoundary', 'getHeight', 'setHeight', 'getMaxHeightOfCells', 'getChildren', 'getMarginsBottomOfCells', 'getMarginsTopOfCells'));
+        $row = $this->getMock('PHPPdf\Node\Table\Row', array('getBoundary', 'getHeight', 'setHeight', 'getMaxHeightOfCells', 'getChildren', 'getMarginsBottomOfCells', 'getMarginsTopOfCells'));
 
         $expectedNewHeight = $expectedNewHeight === null ? $maxHeightOfCells : $expectedNewHeight;
 
@@ -86,7 +86,7 @@ class RowDimensionFormatterTest extends TestCase
         {
             $boundary = $this->getBoundaryMockWithEnlargeAsserts($rowHeight - $height);
 
-            $cell = $this->getMock('PHPPdf\Glyph\Table\Cell', array('getHeight', 'setHeight', 'getBoundary'));
+            $cell = $this->getMock('PHPPdf\Node\Table\Cell', array('getHeight', 'setHeight', 'getBoundary'));
 
             $cell->expects($this->atLeastOnce())
                  ->method('getBoundary')

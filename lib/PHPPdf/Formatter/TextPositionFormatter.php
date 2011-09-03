@@ -10,19 +10,19 @@ namespace PHPPdf\Formatter;
 
 use PHPPdf\Document,
     PHPPdf\Util\Point,
-    PHPPdf\Glyph\Glyph;
+    PHPPdf\Node\Node;
 
 class TextPositionFormatter extends BaseFormatter
 {
-    public function format(Glyph $glyph, Document $document)
+    public function format(Node $node, Document $document)
     {
-        $boundary = $glyph->getBoundary();
+        $boundary = $node->getBoundary();
 
         list($x, $y) = $boundary->getFirstPoint()->toArray();
-        list($parentX, $parentY) = $glyph->getParent()->getStartDrawingPoint();
+        list($parentX, $parentY) = $node->getParent()->getStartDrawingPoint();
 
-        $lineSizes = $glyph->getLineSizes();
-        $lineHeight = $glyph->getLineHeightRecursively();
+        $lineSizes = $node->getLineSizes();
+        $lineHeight = $node->getLineHeightRecursively();
 
         $startX = $x;
 
@@ -40,7 +40,7 @@ class TextPositionFormatter extends BaseFormatter
             $boundary->setNext($newX, $newY);
             $currentX = $newX;
             $currentY = $newY;
-            $x = $parentX + $glyph->getMarginLeft();
+            $x = $parentX + $node->getMarginLeft();
         }
 
         $boundary->setNext($x, $currentY);

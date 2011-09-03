@@ -8,11 +8,11 @@
 
 namespace PHPPdf\Formatter;
 
-use PHPPdf\Glyph\Paragraph\Line;
-use PHPPdf\Glyph\Paragraph\LinePart;
-use PHPPdf\Glyph\Glyph;
+use PHPPdf\Node\Paragraph\Line;
+use PHPPdf\Node\Paragraph\LinePart;
+use PHPPdf\Node\Node;
 use PHPPdf\Document;
-use PHPPdf\Glyph\Text;
+use PHPPdf\Node\Text;
 use PHPPdf\Util\Point;
 
 /**
@@ -22,24 +22,24 @@ use PHPPdf\Util\Point;
  */
 class ParagraphFormatter extends BaseFormatter
 {
-    public function format(Glyph $glyph, Document $document)
+    public function format(Node $node, Document $document)
     {
-        $this->designateLinesOfWords($glyph);        
-        $this->setTextBoundaries($glyph->getChildren());           
+        $this->designateLinesOfWords($node);        
+        $this->setTextBoundaries($node->getChildren());           
     }
     
-	private function designateLinesOfWords($glyph)
+	private function designateLinesOfWords($node)
 	{
-    	$currentPoint = $glyph->getFirstPoint();
+    	$currentPoint = $node->getFirstPoint();
     	
     	$partsOfLine = array();
     	$yTranslation = 0;
-    	$line = new Line($glyph, 0, $yTranslation);
+    	$line = new Line($node, 0, $yTranslation);
     	
-    	foreach($glyph->getChildren() as $textGlyph)
+    	foreach($node->getChildren() as $textNode)
     	{
-    	    $words = $textGlyph->getWords();
-    	    $wordsSizes = $textGlyph->getWordsSizes();    	               
+    	    $words = $textNode->getWords();
+    	    $wordsSizes = $textNode->getWordsSizes();    	               
     
     	    $currentWordLine = array();
     	    $currentWidthOfLine = 0;
@@ -55,21 +55,21 @@ class ParagraphFormatter extends BaseFormatter
     	        $newLineWidth = $currentWidthOfLine + $wordSize;
     	        
     	        $endXCoord = $newLineWidth + $currentPoint->getX();
-    	        $maxLineXCoord = $this->getMaxXCoord($glyph);
+    	        $maxLineXCoord = $this->getMaxXCoord($node);
     	        $isEndOfLine = $endXCoord > $maxLineXCoord;
     	        
     	        if($isEndOfLine)
     	        {
     	            if($currentWordLine)
     	            {
-        	            $partOfLine = new LinePart($currentWordLine, $currentWidthOfLine, $currentPoint->getX() - $glyph->getFirstPoint()->getX(), $textGlyph);
+        	            $partOfLine = new LinePart($currentWordLine, $currentWidthOfLine, $currentPoint->getX() - $node->getFirstPoint()->getX(), $textNode);
     	                $partsOfLine[] = $partOfLine;
     	                
     	                $line->addParts($partsOfLine);
-    	                $glyph->addLine($line);
+    	                $node->addLine($line);
     	                
     	                $yTranslation += $line->getHeight();
-    	                $line = new Line($glyph, 0, $yTranslation);
+    	                $line = new Line($node, 0, $yTranslation);
     	                $partsOfLine = array();
         	            
         	            $currentWidthOfLine = 0;
@@ -78,14 +78,14 @@ class ParagraphFormatter extends BaseFormatter
     	            else
     	            {
     	                $line->addParts($partsOfLine);
-    	                $glyph->addLine($line);
+    	                $node->addLine($line);
     	                
     	                $yTranslation += $line->getHeight();
-    	                $line = new Line($glyph, 0, $yTranslation);
+    	                $line = new Line($node, 0, $yTranslation);
     	                $partsOfLine = array();
     	            }
 
-    	            $currentPoint = Point::getInstance($glyph->getFirstPoint()->getX(), 0);
+    	            $currentPoint = Point::getInstance($node->getFirstPoint()->getX(), 0);
     	        }
 
 	            $currentWidthOfLine = $currentWidthOfLine + $wordSize;
@@ -94,7 +94,7 @@ class ParagraphFormatter extends BaseFormatter
     	    
             if($currentWordLine)
             {
-                $partOfLine = new LinePart($currentWordLine, $currentWidthOfLine, $currentPoint->getX() - $glyph->getFirstPoint()->getX(), $textGlyph);
+                $partOfLine = new LinePart($currentWordLine, $currentWidthOfLine, $currentPoint->getX() - $node->getFirstPoint()->getX(), $textNode);
                 $partsOfLine[] = $partOfLine;
                 
 	            $currentPoint = $currentPoint->translate($currentWidthOfLine, 0);
@@ -104,31 +104,31 @@ class ParagraphFormatter extends BaseFormatter
     	if($partsOfLine)
     	{
     	    $yTranslation += $line->getHeight();
-    	    $line = new Line($glyph, 0, $yTranslation);
+    	    $line = new Line($node, 0, $yTranslation);
             $line->addParts($partsOfLine);
-            $glyph->addLine($line);
+            $node->addLine($line);
     	}
     }
     
-    private function getMaxXCoord(Glyph $glyph)
+    private function getMaxXCoord(Node $node)
     {
-        for($parent=$glyph->getParent(); $parent && !$parent->getWidth(); $parent=$parent->getParent())
+        for($parent=$node->getParent(); $parent && !$parent->getWidth(); $parent=$parent->getParent())
         {
         }
         
-        if(!$glyph->getWidth() && $parent && $parent->getWidth())
+        if(!$node->getWidth() && $parent && $parent->getWidth())
         {
-            $glyph = $parent;
+            $node = $parent;
         }
 
-        return $glyph->getFirstPoint()->getX() + $glyph->getWidth() - $glyph->getPaddingRight();
+        return $node->getFirstPoint()->getX() + $node->getWidth() - $node->getPaddingRight();
     }
     
-    private function setTextBoundaries(array $textGlyphs)
+    private function setTextBoundaries(array $textNodes)
     {
-        foreach($textGlyphs as $textGlyph)
+        foreach($textNodes as $textNode)
         {
-            $this->setTextBoundary($textGlyph);
+            $this->setTextBoundary($textNode);
         }
     }
     

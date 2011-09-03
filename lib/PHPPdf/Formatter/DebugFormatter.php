@@ -9,7 +9,7 @@
 namespace PHPPdf\Formatter;
 
 use PHPPdf\Document,
-    PHPPdf\Glyph\Glyph;
+    PHPPdf\Node\Node;
 
 /**
  * Collect debug information
@@ -18,7 +18,7 @@ use PHPPdf\Document,
  */
 class DebugFormatter extends BaseFormatter
 {
-    public function format(Glyph $glyph, Document $document)
+    public function format(Node $node, Document $document)
     {
 
     }

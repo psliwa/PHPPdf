@@ -20,7 +20,7 @@ class CellFirstPointPositionFormatterTest extends TestCase
     {
         $firstPoint = Point::getInstance(0, 500);
 
-        $parent = $this->getMock('PHPPdf\Glyph\Container', array('getFirstPoint'));
+        $parent = $this->getMock('PHPPdf\Node\Container', array('getFirstPoint'));
         $parent->expects($this->atLeastOnce())
                ->method('getFirstPoint')
                ->will($this->returnValue($firstPoint));
@@ -30,14 +30,14 @@ class CellFirstPointPositionFormatterTest extends TestCase
                  ->method('setNext')
                  ->with($firstPoint);
 
-        $glyph = $this->getMock('PHPPdf\Glyph\Container', array('getParent', 'getBoundary'));
-        $glyph->expects($this->atLeastOnce())
+        $node = $this->getMock('PHPPdf\Node\Container', array('getParent', 'getBoundary'));
+        $node->expects($this->atLeastOnce())
               ->method('getParent')
               ->will($this->returnValue($parent));
-        $glyph->expects($this->atLeastOnce())
+        $node->expects($this->atLeastOnce())
               ->method('getBoundary')
               ->will($this->returnValue($boundary));
 
-        $this->formatter->format($glyph, new Document());
+        $this->formatter->format($node, new Document());
     }
 }

@@ -10,7 +10,7 @@ namespace PHPPdf\Formatter;
 
 use PHPPdf\Util;
 
-use PHPPdf\Glyph as Glyphs,
+use PHPPdf\Node as Nodes,
     PHPPdf\Document;
 
 /**
@@ -18,13 +18,13 @@ use PHPPdf\Glyph as Glyphs,
  */
 class ImageDimensionFormatter extends BaseFormatter
 {
-    public function format(Glyphs\Glyph $glyph, Document $document)
+    public function format(Nodes\Node $node, Document $document)
     {
-        if($this->isImageAndSizesArentSet($glyph))
+        if($this->isImageAndSizesArentSet($node))
         {
-            $width = $glyph->getWidth();
-            $height = $glyph->getHeight();
-            $src = $glyph->getAttribute('src');
+            $width = $node->getWidth();
+            $height = $node->getHeight();
+            $src = $node->getAttribute('src');
 
             $originalWidth = $src->getOriginalWidth();
             $originalHeight = $src->getOriginalHeight();
@@ -32,25 +32,25 @@ class ImageDimensionFormatter extends BaseFormatter
 
             if(!$width && !$height)
             {
-                list($width, $height) = $this->setDimensionsFromParent($glyph);
+                list($width, $height) = $this->setDimensionsFromParent($node);
             }
             
             list($width, $height) = Util::calculateDependantSizes($width, $height, $originalRatio);
             
-            $glyph->setWidth($width);
-            $glyph->setHeight($height);
+            $node->setWidth($width);
+            $node->setHeight($height);
         }
     }
 
-    private function isImageAndSizesArentSet(Glyphs\Glyph $glyph)
+    private function isImageAndSizesArentSet(Nodes\Node $node)
     {
-        return ($glyph instanceof Glyphs\Image && (!$glyph->getWidth() || !$glyph->getHeight()));
+        return ($node instanceof Nodes\Image && (!$node->getWidth() || !$node->getHeight()));
     }
 
-    private function setDimensionsFromParent(Glyphs\Glyph $glyph)
+    private function setDimensionsFromParent(Nodes\Node $node)
     {
-        $parent = $glyph->getParent();
-        $src = $glyph->getAttribute('src');
+        $parent = $node->getParent();
+        $src = $node->getAttribute('src');
 
         $width = $src->getOriginalWidth();
         $height = $src->getOriginalHeight();

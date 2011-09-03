@@ -1,6 +1,6 @@
 <?php
 
-use PHPPdf\Glyph\BasicList;
+use PHPPdf\Node\BasicList;
 use PHPPdf\Document;
 use PHPPdf\Formatter\ListFormatter;
 
@@ -18,7 +18,7 @@ class ListFormatterTest extends TestCase
      */
     public function ifListsPositionIsOutsidePositionOfChildrenWontBeTranslated()
     {
-        $list = $this->getMock('PHPPdf\Glyph\BasicList', array('getChildren', 'getAttribute', 'assignEnumerationStrategyFromFactory'));
+        $list = $this->getMock('PHPPdf\Node\BasicList', array('getChildren', 'getAttribute', 'assignEnumerationStrategyFromFactory'));
         
         $list->expects($this->once())
              ->method('getAttribute')
@@ -43,9 +43,9 @@ class ListFormatterTest extends TestCase
         
         $documentStub = new Document();
         
-        $list = $this->getMock('PHPPdf\Glyph\BasicList', array('getChildren', 'getEnumerationStrategy', 'getAttribute', 'assignEnumerationStrategyFromFactory'));
+        $list = $this->getMock('PHPPdf\Node\BasicList', array('getChildren', 'getEnumerationStrategy', 'getAttribute', 'assignEnumerationStrategyFromFactory'));
         
-        $enumerationStrategy = $this->getMockBuilder('PHPPdf\Glyph\BasicList\EnumerationStrategy')
+        $enumerationStrategy = $this->getMockBuilder('PHPPdf\Node\BasicList\EnumerationStrategy')
                                     ->getMock();
         
         $list->expects($this->once())
@@ -71,7 +71,7 @@ class ListFormatterTest extends TestCase
         $leftMargin = 10;
         for($i=0; $i<2; $i++)
         {
-            $child = $this->getMock('PHPPdf\Glyph\Container', array('setAttribute', 'getMarginLeft'));
+            $child = $this->getMock('PHPPdf\Node\Container', array('setAttribute', 'getMarginLeft'));
             $child->expects($this->once())
                   ->method('getMarginLeft')
                   ->will($this->returnValue($leftMargin));

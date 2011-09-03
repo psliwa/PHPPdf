@@ -8,7 +8,7 @@
 
 namespace PHPPdf\Formatter;
 
-use PHPPdf\Glyph\Glyph,
+use PHPPdf\Node\Node,
     PHPPdf\Document;
 
 /**
@@ -18,18 +18,18 @@ use PHPPdf\Glyph\Glyph,
  */
 class PageDivertingFormatter extends BaseFormatter
 {
-    protected $glyph;
+    protected $node;
     protected $totalVerticalTranslation = 0;
     
-    public function format(Glyph $glyph, Document $document)
+    public function format(Node $node, Document $document)
     {
         $columnFormatter = new ColumnDivertingFormatter();
 
-        $this->glyph = $glyph;
+        $this->node = $node;
         $this->totalVerticalTranslation = 0;
 
-        $children = $this->glyph->getChildren();
-        foreach($this->glyph->getChildren() as $child)
+        $children = $this->node->getChildren();
+        foreach($this->node->getChildren() as $child)
         {
             $child->translate(0, -$this->totalVerticalTranslation);
             
@@ -42,20 +42,20 @@ class PageDivertingFormatter extends BaseFormatter
             $this->totalVerticalTranslation += -$verticalTranslation;
         }
         
-        foreach($glyph->getPages() as $page)
+        foreach($node->getPages() as $page)
         {
             $page->preFormat($document);
         }
     }
 
-    private function splitChildIfNecessary(Glyph $glyph)
+    private function splitChildIfNecessary(Node $node)
     {
         $childHasBeenSplitted = false;
         $childMayBeSplitted = true;
         
-        if($this->shouldParentBeAutomaticallyBroken($glyph))
+        if($this->shouldParentBeAutomaticallyBroken($node))
         {
-            $pageYCoordEnd = $glyph->getDiagonalPoint()->getY() + 1;
+            $pageYCoordEnd = $node->getDiagonalPoint()->getY() + 1;
         }
         else
         {
@@ -64,16 +64,16 @@ class PageDivertingFormatter extends BaseFormatter
 
         do
         {
-            if($this->shouldBeSplited($glyph, $pageYCoordEnd))
+            if($this->shouldBeSplited($node, $pageYCoordEnd))
             {
-                $glyph = $this->splitChildAndGetProductOfSplitting($glyph);
+                $node = $this->splitChildAndGetProductOfSplitting($node);
                 $childHasBeenSplitted = true;
             }
             else
             {
                 if(!$childHasBeenSplitted)
                 {
-                    $this->addToSubjectOfSplitting($glyph);
+                    $this->addToSubjectOfSplitting($node);
                 }
 
                 $childMayBeSplitted = false;
@@ -84,78 +84,78 @@ class PageDivertingFormatter extends BaseFormatter
         while($childMayBeSplitted);
     }
     
-    private function shouldParentBeAutomaticallyBroken(Glyph $glyph)
+    private function shouldParentBeAutomaticallyBroken(Node $node)
     {
-        return $glyph->getAttribute('break');
+        return $node->getAttribute('break');
     }
     
     private function getPageYCoordEnd()
     {
-        return $this->glyph->getPage()->getDiagonalPoint()->getY();
+        return $this->node->getPage()->getDiagonalPoint()->getY();
     }
     
-    private function splitChildAndGetProductOfSplitting(Glyph $glyph)
+    private function splitChildAndGetProductOfSplitting(Node $node)
     {
-        $originalHeight = $glyph->getFirstPoint()->getY() - $glyph->getDiagonalPoint()->getY();
-        $glyphYCoordStart = $this->getChildYCoordOfFirstPoint($glyph);
+        $originalHeight = $node->getFirstPoint()->getY() - $node->getDiagonalPoint()->getY();
+        $nodeYCoordStart = $this->getChildYCoordOfFirstPoint($node);
         $end = $this->getPageYCoordEnd();
-        $splitLine = $glyphYCoordStart - $end;
-        $splittedGlyph = $glyph->split($splitLine);
+        $splitLine = $nodeYCoordStart - $end;
+        $splittedNode = $node->split($splitLine);
 
-        $gapBeetwenBottomOfOriginalGlyphAndEndOfPage = 0;
+        $gapBeetwenBottomOfOriginalNodeAndEndOfPage = 0;
 
-        if($splittedGlyph)
+        if($splittedNode)
         {           
-            $gapBeetwenBottomOfOriginalGlyphAndEndOfPage = $glyph->getDiagonalPoint()->getY() - $end;
+            $gapBeetwenBottomOfOriginalNodeAndEndOfPage = $node->getDiagonalPoint()->getY() - $end;
 
-            $gap = $originalHeight - (($glyph->getFirstPoint()->getY() - $glyph->getDiagonalPoint()->getY()) + ($splittedGlyph->getFirstPoint()->getY() - $splittedGlyph->getDiagonalPoint()->getY()));
+            $gap = $originalHeight - (($node->getFirstPoint()->getY() - $node->getDiagonalPoint()->getY()) + ($splittedNode->getFirstPoint()->getY() - $splittedNode->getDiagonalPoint()->getY()));
             $this->totalVerticalTranslation += $gap;
 
-            $glyphYCoordStart = $splittedGlyph->getFirstPoint()->getY();
-            $this->addToSubjectOfSplitting($glyph);
-            $glyph = $splittedGlyph;
+            $nodeYCoordStart = $splittedNode->getFirstPoint()->getY();
+            $this->addToSubjectOfSplitting($node);
+            $node = $splittedNode;
         }
 
-        $this->breakSubjectOfSplittingIncraseTranslation($glyph, $glyphYCoordStart, $gapBeetwenBottomOfOriginalGlyphAndEndOfPage);
+        $this->breakSubjectOfSplittingIncraseTranslation($node, $nodeYCoordStart, $gapBeetwenBottomOfOriginalNodeAndEndOfPage);
 
-        return $glyph;
+        return $node;
     }
 
-    private function addToSubjectOfSplitting(Glyph $glyph)
+    private function addToSubjectOfSplitting(Node $node)
     {
-        $this->getSubjectOfSplitting()->getCurrentPage()->add($glyph);
+        $this->getSubjectOfSplitting()->getCurrentPage()->add($node);
     }
 
-    private function breakSubjectOfSplittingIncraseTranslation(Glyph $glyph, $glyphYCoordStart, $gapBeetwenBottomOfOriginalGlyphAndEndOfPage)
+    private function breakSubjectOfSplittingIncraseTranslation(Node $node, $nodeYCoordStart, $gapBeetwenBottomOfOriginalNodeAndEndOfPage)
     {
-        $translation = $this->glyph->getPage()->getHeight() + $this->glyph->getPage()->getMarginBottom() - $glyphYCoordStart;
-        $verticalTranslation = $translation - $gapBeetwenBottomOfOriginalGlyphAndEndOfPage;
+        $translation = $this->node->getPage()->getHeight() + $this->node->getPage()->getMarginBottom() - $nodeYCoordStart;
+        $verticalTranslation = $translation - $gapBeetwenBottomOfOriginalNodeAndEndOfPage;
         
         $this->getSubjectOfSplitting()->createNextPage();
         $this->totalVerticalTranslation += $verticalTranslation;
         
-        $this->getSubjectOfSplitting()->getCurrentPage()->add($glyph);
-        $glyph->translate(0, -$translation);
+        $this->getSubjectOfSplitting()->getCurrentPage()->add($node);
+        $node->translate(0, -$translation);
     }
     
     /**
-     * @return Glyph
+     * @return Node
      */
     private function getSubjectOfSplitting()
     {
-        return $this->glyph;
+        return $this->node;
     }
     
-    private function shouldBeSplited(Glyph $glyph, $pageYCoordEnd)
+    private function shouldBeSplited(Node $node, $pageYCoordEnd)
     {
-        $yEnd = $glyph->getDiagonalPoint()->getY();
+        $yEnd = $node->getDiagonalPoint()->getY();
 
         return ($yEnd < $pageYCoordEnd);
     }
 
-    private function getChildYCoordOfFirstPoint(Glyph $glyph)
+    private function getChildYCoordOfFirstPoint(Node $node)
     {
-        $yCoordOfFirstPoint = $glyph->getFirstPoint()->getY();
+        $yCoordOfFirstPoint = $node->getFirstPoint()->getY();
 
         return $yCoordOfFirstPoint;
     }

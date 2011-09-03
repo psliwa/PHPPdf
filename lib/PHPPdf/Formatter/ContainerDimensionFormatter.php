@@ -9,20 +9,20 @@
 namespace PHPPdf\Formatter;
 
 use PHPPdf\Formatter\BaseFormatter,
-    PHPPdf\Glyph as Glyphs,
+    PHPPdf\Node as Nodes,
     PHPPdf\Document;
 
 /**
- * Calculates real dimension of compose glyph
+ * Calculates real dimension of compose node
  *
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
 class ContainerDimensionFormatter extends BaseFormatter
 {
-    public function format(Glyphs\Glyph $glyph, Document $document)
+    public function format(Nodes\Node $node, Document $document)
     {
         $minX = $maxX = $minY = $maxY = null;
-        foreach($glyph->getChildren() as $child)
+        foreach($node->getChildren() as $child)
         {
             $boundary = $child->getBoundary();
             $firstPoint = $boundary->getFirstPoint();
@@ -40,22 +40,22 @@ class ContainerDimensionFormatter extends BaseFormatter
             $this->changeValueIfIsGreater($minY, $childMinY);
         }
 
-        $paddingVertical = $glyph->getPaddingTop() + $glyph->getPaddingBottom();
-        $paddingHorizontal = $glyph->getPaddingLeft() + $glyph->getPaddingRight();
+        $paddingVertical = $node->getPaddingTop() + $node->getPaddingBottom();
+        $paddingHorizontal = $node->getPaddingLeft() + $node->getPaddingRight();
 
         $realHeight = $paddingVertical + ($maxY - $minY);
         $realWidth = $paddingHorizontal + ($maxX - $minX);
 
-        $display = $glyph->getAttribute('display');
+        $display = $node->getAttribute('display');
 
-        if($realHeight > $glyph->getHeight())
+        if($realHeight > $node->getHeight())
         {
-            $glyph->setHeight($realHeight);
+            $node->setHeight($realHeight);
         }
 
-        if($display === Glyphs\Glyph::DISPLAY_INLINE || $realWidth > $glyph->getWidth())
+        if($display === Nodes\Node::DISPLAY_INLINE || $realWidth > $node->getWidth())
         {
-            $glyph->setWidth($realWidth);
+            $node->setWidth($realWidth);
         }
     }
 

@@ -19,7 +19,7 @@ class TextResetPositionFormatterTest extends PHPUnit_Framework_TestCase
      */
     public function clearBoundaryAndAddOldFirstPoint()
     {
-        $glyphMock = $this->getMock('\PHPPdf\Glyph\Text', array('getBoundary'));
+        $nodeMock = $this->getMock('\PHPPdf\Node\Text', array('getBoundary'));
 
         $boundary = new Boundary();
         $boundary->setNext(0, 100)
@@ -30,11 +30,11 @@ class TextResetPositionFormatterTest extends PHPUnit_Framework_TestCase
 
         $firstPoint = $boundary->getFirstPoint();
 
-        $glyphMock->expects($this->atLeastOnce())
+        $nodeMock->expects($this->atLeastOnce())
                   ->method('getBoundary')
                   ->will($this->returnValue($boundary));
 
-        $this->formatter->format($glyphMock, new Document());
+        $this->formatter->format($nodeMock, new Document());
 
         $this->assertFalse($boundary->isClosed());
         $this->assertEquals($firstPoint, $boundary->getFirstPoint());

@@ -304,7 +304,7 @@ Można dodawać kilka upiększeń tego samego typu (np. 3 różne obramowania) u
         </dynamic-page>
     </pdf>
 
-W tym przykładzie drugie obramowanie ma identyfikator "borderLeftAndRight", jakby go nie było to atrybuty drugiego obramowania zostały by złączone z atrybutami z pierwszego obramowania. Domyślny identyfikator "id" jest równy atrybutowi "name". Identyfikatory "id" dla upiększeń (enhancements) nie mają nic wspólnego z atrybutami "id" dla elementów (glyphów). Można tworzyć obramowania złożone manipulując pozycją, tak jak w powyższym przykładzie (outerBorderLeftAndRight).
+W tym przykładzie drugie obramowanie ma identyfikator "borderLeftAndRight", jakby go nie było to atrybuty drugiego obramowania zostały by złączone z atrybutami z pierwszego obramowania. Domyślny identyfikator "id" jest równy atrybutowi "name". Identyfikatory "id" dla upiększeń (enhancements) nie mają nic wspólnego z atrybutami "id" dla elementów (nodeów). Można tworzyć obramowania złożone manipulując pozycją, tak jak w powyższym przykładzie (outerBorderLeftAndRight).
 
 <a name="hyperlinks"></a>
 Hiperlinki
@@ -507,12 +507,12 @@ Konfiguracja
 Biblioteka ma 3 podstawowe pliki konfiguracyjne, które pozwalają na dostosowanie biblioteki do swoich potrzeb oraz do jej rozszerzenia.
 
 * enhancements.xml - przypisywanie klas upiększeń (atrybutów złożonych) pod nazwy logiczne, które identyfikują dany typ upiększenia w obrębie całej biblioteki
-* glyphs.xml - definiowanie tagów dostępnych w dokumencie xml wraz z domyślnymi stylami oraz obiektami formatującymi
+* nodes.xml - definiowanie tagów dostępnych w dokumencie xml wraz z domyślnymi stylami oraz obiektami formatującymi
 * fonts.xml - definowanie czcionek i przypisywanie ich do nazw logicznych, które identyfikują daną czcionkę w obrębie całej biblioteki
 
 Aby zmienić domyślne pliki konfiguracyjne należy przekazać do konstruktora fasady odpowiednio skonfigurowany obiekt ładujący konfigurację.
 
-    $loader = new PHPPdf\Configuration\LoaderImpl('/sciezka/do/pliku/glyphs.xml', '/sciezka/do/pliku/enhancements.xml', '/sciezka/do/pliku/fonts.xml');
+    $loader = new PHPPdf\Configuration\LoaderImpl('/sciezka/do/pliku/nodes.xml', '/sciezka/do/pliku/enhancements.xml', '/sciezka/do/pliku/fonts.xml');
     $facade = new PHPPdf\Parser\Facade($loader);
 
 Można wykorzystać budowniczego fasady, który jak narazie ma opcje do ustawiania cache.

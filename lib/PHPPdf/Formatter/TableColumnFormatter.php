@@ -8,32 +8,32 @@
 
 namespace PHPPdf\Formatter;
 
-use PHPPdf\Glyph\Glyph,
+use PHPPdf\Node\Node,
     PHPPdf\Document;
 
 class TableColumnFormatter extends BaseFormatter
 {
-    public function format(Glyph $glyph, Document $document)
+    public function format(Node $node, Document $document)
     {
-        $glyph->convertRelativeWidthsOfColumns();
-        $glyph->reduceColumnsWidthsByMargins();
-        $columnsWidths = $glyph->getWidthsOfColumns();
+        $node->convertRelativeWidthsOfColumns();
+        $node->reduceColumnsWidthsByMargins();
+        $columnsWidths = $node->getWidthsOfColumns();
 
-        $columnsMarginsLeft = $glyph->getMarginsLeftOfColumns();
-        $columnsMarginsRight = $glyph->getMarginsRightOfColumns();
+        $columnsMarginsLeft = $node->getMarginsLeftOfColumns();
+        $columnsMarginsRight = $node->getMarginsRightOfColumns();
         
-        $numberOfColumns = $glyph->getNumberOfColumns();
+        $numberOfColumns = $node->getNumberOfColumns();
         $totalColumnsWidth = array_sum($columnsWidths);
-        $tableWidth = $glyph->getWidth();
+        $tableWidth = $node->getWidth();
         $enlargeColumnWidth = $numberOfColumns ? ($tableWidth - $totalColumnsWidth)/count($columnsWidths) : 0;
 
         array_walk($columnsWidths, function(&$width) use($enlargeColumnWidth){
             $width += $enlargeColumnWidth;
         });
 
-        foreach($glyph->getChildren() as $row)
+        foreach($node->getChildren() as $row)
         {
-            foreach($row->getChildren() as /* @var $cell PHPPdf\Glyph\Table\Cell */ $cell)
+            foreach($row->getChildren() as /* @var $cell PHPPdf\Node\Table\Cell */ $cell)
             {
                 $column = $cell->getNumberOfColumn();
                 $colspan = $cell->getColspan();
