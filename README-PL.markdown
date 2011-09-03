@@ -18,6 +18,7 @@ Spis treści
 1. [Notatki](#notes)
 1. [Powtarzalne nagłówki i stopki](#headers)
 1. [Znaki wodne](#watermarks)
+1. [Wykorzystanie istniejącego dokumentu jako szablon](#templates)
 1. [Podział strony na kolumny](#columns)
 1. [Łamanie stron i kolumn](#page-break)
 1. [Konfiguracja](#configuration)
@@ -433,6 +434,20 @@ Przykład:
                     </div>
                 </watermark>
             </placeholders>
+        </dynamic-page>
+    </pdf>
+
+<a name="templates"></a>
+Wykorzystanie istniejącego dokumentu jako szablon
+-------------------------------------------------
+
+Tag "page" oraz "dynamic-page" posiadają atrybut "document-template", który pozwala na wskazanie pliku z dokumentem, który ma być wykorzystany jako szablon. Dla tagu "page" szablonem strony będzie pierwsza strona wskazanego dokumentu, zaś dla tagu "dynamic-page" szablonami kolejnych stron, będą odpowiednie, kolejne strony wskazanego dokumentu.
+
+Przykład:
+
+    <pdf>
+        <dynamic-page document-template="sciezka/do/pliku.pdf">
+            <div>Jakaś treść</div>
         </dynamic-page>
     </pdf>
 

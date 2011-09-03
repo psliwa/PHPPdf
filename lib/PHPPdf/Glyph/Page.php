@@ -71,7 +71,7 @@ class Page extends Container
         $this->setAttribute('text-align', self::ALIGN_LEFT);
         $this->setAttribute('text-decoration', self::TEXT_DECORATION_NONE);
         $this->setAttribute('alpha', 1);
-        $this->addAttribute('source-page');
+        $this->addAttribute('document-template');
     }
 
     protected static function initializeType()
@@ -513,16 +513,41 @@ class Page extends Container
     
     public function preFormat(Document $document)
     {
-        $fileOfSourcePage = $this->getAttribute('source-page');
+        $gc = $this->getGraphicsContextFromSourceDocument($document);
+        
+        if($gc !== null)
+        {
+            $gc = $gc->copy();
+            
+            $this->setGraphicsContext($gc);
+            $this->setPageSize($gc->getWidth().':'.$gc->getHeight());
+            $this->setGraphicsContextDefaultStyle($document);
+        }
+    }
+    
+    protected function getGraphicsContextFromSourceDocument(Document $document)
+    {
+        $fileOfSourcePage = $this->getAttribute('document-template');
         
         if($fileOfSourcePage)
         {
             $engine = $document->loadEngine($fileOfSourcePage);
             
-            $gc = current($engine->getAttachedGraphicsContexts())->copy();
-            $this->setGraphicsContext($gc);
-            $this->setPageSize($gc->getWidth().':'.$gc->getHeight());
-            $this->setGraphicsContextDefaultStyle($document);
+            $graphicsContexts = $engine->getAttachedGraphicsContexts();
+            
+            $count = count($graphicsContexts);
+            
+            if($count == 0)
+            {
+                return null;
+            }
+
+            $pageContext = $this->context;
+            $index = ($pageContext ? ($pageContext->getPageNumber()-1) : 0) % $count;
+            
+            return $graphicsContexts[$index];
         }
+        
+        return null;
     }
 }

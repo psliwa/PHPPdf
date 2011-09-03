@@ -41,8 +41,13 @@ class PageDivertingFormatter extends BaseFormatter
             
             $this->totalVerticalTranslation += -$verticalTranslation;
         }
+        
+        foreach($glyph->getPages() as $page)
+        {
+            $page->preFormat($document);
+        }
     }
-    
+
     private function splitChildIfNecessary(Glyph $glyph)
     {
         $childHasBeenSplitted = false;

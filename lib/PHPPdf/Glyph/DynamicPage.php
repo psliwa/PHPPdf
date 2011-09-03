@@ -165,7 +165,12 @@ class DynamicPage extends Page
 
     public function preFormat(Document $document)
     {
-        $this->getPrototypePage()->preFormat($document);
+        $gc = $this->getGraphicsContextFromSourceDocument($document);
+        if($gc)
+        {
+            $this->setPageSize($gc->getWidth().':'.$gc->getHeight());
+        }
+
         $this->getPrototypePage()->prepareTemplate($document);
     }
 

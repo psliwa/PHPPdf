@@ -111,4 +111,33 @@ class EngineTest extends \TestCase
         
         $this->assertEquals($content, $engine->render());
     }
+    
+    /**
+     * @test
+     */    
+    public function successfullEngineLoading()
+    {
+        $file = __DIR__.'/../../resources/test.pdf';
+        
+        $engine = new Engine();
+        
+        $loadedEngine = $engine->loadEngine($file);
+        
+        $this->assertFalse($loadedEngine === $engine);
+        $this->assertInstanceOf('PHPPdf\Engine\ZF\Engine', $loadedEngine);
+        $this->assertEquals(2, count($loadedEngine->getAttachedGraphicsContexts()));
+    }
+
+    /**
+     * @test
+     * @expectedException PHPPdf\Exception\InvalidResourceException
+     */
+    public function throwExceptionIfFileIsInvalidWhileEngineLoading()
+    {
+        $file = 'some/invalid/filename.pdf';
+        
+        $engine = new Engine();
+        
+        $engine->loadEngine($file);
+    }
 }

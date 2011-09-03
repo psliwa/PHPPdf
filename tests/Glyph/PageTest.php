@@ -369,4 +369,88 @@ class PageTest extends TestCase
         $this->assertEquals($this->page->getHeight(), $watermark->getHeight());
         $this->assertEquals($this->page->getWidth(), $watermark->getWidth());
     }
+    
+    /**
+     * @test
+     * @dataProvider pageNumberProvider
+     */
+    public function loadTemplateDocumentWhileFormattingIfExists($numberOfPage)
+    {
+        $fileOfSourcePage = 'some/file.pdf';
+        $width = 100;
+        $height = 50;
+        $numberOfSourceGcs = 3;
+        
+        $this->page->setAttribute('document-template', $fileOfSourcePage);
+        
+        if($numberOfPage !== null)
+        {
+            $pageContext = $this->getMockBuilder('PHPPdf\Glyph\PageContext')
+                                ->setMethods(array('getPageNumber'))
+                                ->disableOriginalConstructor()
+                                ->getMock();
+                                
+            $pageContext->expects($this->once())
+                        ->method('getPageNumber')
+                        ->will($this->returnValue($numberOfPage));
+            $this->page->setContext($pageContext);
+        }
+        
+        $document = $this->getMockBuilder('PHPPdf\Document')
+                         ->disableOriginalConstructor()
+                         ->setMethods(array('loadEngine'))
+                         ->getMock();
+                         
+        $engine = $this->getMockBuilder('PHPPdf\Engine\Engine')
+                       ->getMock();
+
+        $copiedGc = $this->getMockBuilder('PHPPdf\Engine\GraphicsContext')
+                         ->getMock();
+
+        $sourceGcs = array();
+        for($i=0; $i<$numberOfSourceGcs; $i++)
+        {
+            $sourceGc = $this->getMockBuilder('PHPPdf\Engine\GraphicsContext')
+                             ->getMock();
+            $sourceGcs[] = $sourceGc;
+        }
+                         
+        $document->expects($this->once())
+                 ->method('loadEngine')
+                 ->with($fileOfSourcePage)
+                 ->will($this->returnValue($engine));
+                 
+        $engine->expects($this->once())
+               ->method('getAttachedGraphicsContexts')
+               ->will($this->returnValue($sourceGcs));
+               
+        $sourceGcIndex = $numberOfPage === null ? 0 : ($numberOfPage - 1) % $numberOfSourceGcs;
+
+        $sourceGc = $sourceGcs[$sourceGcIndex];
+
+        $sourceGc->expects($this->once())
+                 ->method('copy')
+                 ->will($this->returnValue($copiedGc));
+        
+        $copiedGc->expects($this->atLeastOnce())
+                 ->method('getWidth')
+                 ->will($this->returnValue($width));
+        $copiedGc->expects($this->atLeastOnce())
+                 ->method('getHeight')
+                 ->will($this->returnValue($height));
+           
+        $this->page->preFormat($document);
+        
+        $this->assertEquals($width, $this->page->getWidth());
+        $this->assertEquals($height, $this->page->getHeight());
+    }
+    
+    public function pageNumberProvider()
+    {
+        return array(
+            array(null),
+            array(1),
+            array(6),
+        );
+    }
 }

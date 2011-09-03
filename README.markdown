@@ -18,6 +18,7 @@ Table of contents
 1. [Sticky notes](#notes)
 1. [Repetitive headers and footers](#headers)
 1. [Watermarks](#watermarks)
+1. [Using pdf document as template](#templates)
 1. [Separate page on columns](#columns)
 1. [Breaking pages and columns](#page-break)
 1. [Configuration](#configuration)
@@ -435,6 +436,20 @@ Example:
                     </div>
                 </watermark>
             </placeholders>
+        </dynamic-page>
+    </pdf>
+
+<a name="templates"></a>
+Using pdf document as template
+------------------------------
+
+"page" and "dynamic-page" tags have "document-template" attribute, that is able to use external pdf document as template. For "page" tag page's template will be first page of external document. For "dynamic-page" tag template for each page will be corresponding page of external document.
+
+Example:
+
+    <pdf>
+        <dynamic-page document-template="path/to/file.pdf">
+            <div>Some content</div>
         </dynamic-page>
     </pdf>
 
