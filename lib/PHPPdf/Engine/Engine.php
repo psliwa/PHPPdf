@@ -52,9 +52,21 @@ interface Engine
     public function attachGraphicsContext(GraphicsContext $gc);
     
     /**
+     * @return array All of attached graphics contexts
+     */
+    public function getAttachedGraphicsContexts();
+    
+    /**
      * Renders document
      * 
      * @return string String representation of the document
      */
     public function render();
+    
+    /**
+     * Loads Engine object from given Pdf document
+     * 
+     * @return Engine
+     */
+    public function loadEngine($file);
 }

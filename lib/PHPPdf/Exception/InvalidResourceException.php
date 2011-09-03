@@ -27,4 +27,14 @@ class InvalidResourceException extends Exception
     {
         throw new self(sprintf('Font "%s" not found.', $fontData), 0, $previous);
     }
+    
+    public static function invalidPdfFileException($file, \Exception $previous = null)
+    {
+        throw new self(sprintf('Error while loading pdf document from "%s".', $file), 0, $previous);
+    }
+    
+    public static function fileDosntExistException($file)
+    {
+        throw new self(sprintf('File "%s" dosn\'t exist.', $file));
+    }
 }

@@ -71,6 +71,7 @@ class Page extends Container
         $this->setAttribute('text-align', self::ALIGN_LEFT);
         $this->setAttribute('text-decoration', self::TEXT_DECORATION_NONE);
         $this->setAttribute('alpha', 1);
+        $this->addAttribute('source-page');
     }
 
     protected static function initializeType()
@@ -508,5 +509,20 @@ class Page extends Container
         parent::unserialize($serialized);
 
         $this->initializePlaceholders();
+    }
+    
+    public function preFormat(Document $document)
+    {
+        $fileOfSourcePage = $this->getAttribute('source-page');
+        
+        if($fileOfSourcePage)
+        {
+            $engine = $document->loadEngine($fileOfSourcePage);
+            
+            $gc = current($engine->getAttachedGraphicsContexts())->copy();
+            $this->setGraphicsContext($gc);
+            $this->setPageSize($gc->getWidth().':'.$gc->getHeight());
+            $this->setGraphicsContextDefaultStyle($document);
+        }
     }
 }

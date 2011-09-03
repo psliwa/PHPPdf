@@ -53,6 +53,16 @@ class GraphicsContext implements BaseGraphicsContext
         $this->page = $page;
     }
 
+    public function getWidth()
+    {
+        return $this->page->getWidth();
+    }
+
+    public function getHeight()
+    {
+        return $this->page->getHeight();
+    }
+
     public function clipRectangle($x1, $y1, $x2, $y2)
     {
         $this->page->clipRectangle($x1, $y1, $x2, $y2);
@@ -329,5 +339,13 @@ class GraphicsContext implements BaseGraphicsContext
     public function rotate($x, $y, $angle)
     {
         $this->page->rotate($x, $y, $angle);
+    }
+    
+    public function copy()
+    {
+        $gc = clone $this;
+        $gc->page = clone $this->page;
+        
+        return $gc;
     }
 }

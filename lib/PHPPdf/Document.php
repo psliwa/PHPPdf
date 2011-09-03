@@ -243,6 +243,11 @@ class Document
         return $this->engine->createFont($data);
     }
     
+    public function loadEngine($file)
+    {
+        return $this->engine->loadEngine($file);
+    }
+    
     public function getFont($name)
     {
         return $this->getFontRegistry()->get($name);

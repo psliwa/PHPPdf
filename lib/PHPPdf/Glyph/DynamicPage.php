@@ -165,6 +165,7 @@ class DynamicPage extends Page
 
     public function preFormat(Document $document)
     {
+        $this->getPrototypePage()->preFormat($document);
         $this->getPrototypePage()->prepareTemplate($document);
     }
 

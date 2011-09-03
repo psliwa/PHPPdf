@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE pdf SYSTEM "%resources%/dtd/doctype.dtd">
 <pdf>
-	<page page-size="595:768" background.image="dir:/phpstorm/cover.png" background.image-width="100%" background.use-real-dimension="true">
+	<page page-size="595:767" background.image="dir:/phpstorm/cover.png" background.image-width="100%" background.use-real-dimension="true">
 	</page>
 
 	<dynamic-page>

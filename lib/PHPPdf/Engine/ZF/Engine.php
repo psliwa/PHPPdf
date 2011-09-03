@@ -8,6 +8,8 @@
 
 namespace PHPPdf\Engine\ZF;
 
+use PHPPdf\Exception\InvalidResourceException;
+
 use PHPPdf\Engine\GraphicsContext as BaseGraphicsContext,
     PHPPdf\Engine\Engine as BaseEngine;
 
@@ -16,9 +18,12 @@ use PHPPdf\Engine\GraphicsContext as BaseGraphicsContext,
  */
 class Engine implements BaseEngine
 {
+    private static $loadedEngines = array();
+    
     private $zendPdf = null;
     private $colors = array();
     private $images = array();
+    private $graphicsContexts = array();
     
     public function __construct(\Zend_Pdf $zendPdf = null)
     {
@@ -37,6 +42,12 @@ class Engine implements BaseEngine
     public function attachGraphicsContext(BaseGraphicsContext $gc)
     {
         $this->zendPdf->pages[] = $gc->getPage();
+        $this->graphicsContexts[] = $gc;
+    }
+    
+    public function getAttachedGraphicsContexts()
+    {
+        return $this->graphicsContexts;
     }
     
     /**
@@ -98,5 +109,38 @@ class Engine implements BaseEngine
     public function getOutline($id)
     {
         return $this->outlines[$id];
+    }
+    
+    public function loadEngine($file)
+    {
+        if(isset(self::$loadedEngines[$file]))
+        {
+            return self::$loadedEngines[$file];
+        }
+        
+        if(!is_readable($file))
+        {
+            InvalidResourceException::fileDosntExistException($file);
+        }
+
+        try
+        {
+            $pdf = \Zend_Pdf::load($file);
+            $engine = new self($pdf);
+            
+            foreach($pdf->pages as $page)
+            {
+                $gc = new GraphicsContext($engine, $page);
+                $engine->attachGraphicsContext($gc);
+            }
+            
+            self::$loadedEngines[$file] = $engine;
+            
+            return $engine;
+        }
+        catch(\Zend_Pdf_Exception $e)
+        {
+            InvalidResourceException::invalidPdfFileException($file, $e);
+        }
     }
 }

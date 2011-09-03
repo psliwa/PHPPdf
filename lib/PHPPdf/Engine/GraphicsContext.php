@@ -20,6 +20,9 @@ interface GraphicsContext
     const SHAPE_DRAW_FILL = 1;
     const SHAPE_DRAW_FILL_AND_STROKE = 2;
     
+    public function getWidth();
+    public function getHeight();
+    
     public function clipRectangle($x1, $y1, $x2, $y2);
 
     public function saveGS();
@@ -63,4 +66,6 @@ interface GraphicsContext
     public function setAlpha($float);
     
     public function rotate($x, $y, $angle);
+    
+    public function copy();
 }
