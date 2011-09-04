@@ -253,7 +253,6 @@ Attributes
 * font-size - file size in points, there are no any unit
 * font-style - allowed values: normal, bold, italic, bold-italic
 * color - text color. HTML/CSS style values are supported
-* display - way of displaying (block|inline|none)
 * splittable - if true, element is able to be splitted in several pages. Default value for most tags is true..
 * float - works similar but not the same as in HTML/CSS. Allowed values: left|none|right, default none
 * line-height - works similar as in HTML/CSS. Default value: 1.2*font-size

@@ -43,7 +43,6 @@ class Text extends Node
     {
         parent::initialize();
         
-        $this->setAttribute('display', self::DISPLAY_INLINE);
         $this->setAttribute('text-align', null);
     }
     
@@ -244,6 +243,11 @@ class Text extends Node
         return true;
     }
     
+    public function isInline()
+    {
+        return true;
+    }
+
     protected function isAbleToExistsAboveCoord($yCoord)
     {
         $yCoord += $this->getAncestorWithFontSize()->getAttribute('line-height');

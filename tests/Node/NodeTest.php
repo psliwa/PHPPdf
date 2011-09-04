@@ -267,9 +267,9 @@ class NodeTest extends TestCase
             $this->assertEquals($value, $this->node->getAttribute($name));
         }
 
-        $this->node->setAttribute('display', 'none');
+        $this->node->setAttribute('font-size', 123);
 
-        $this->assertNotEquals($snapshot['display'], $this->node->getAttribute('display'));
+        $this->assertNotEquals($snapshot['font-size'], $this->node->getAttribute('font-size'));
     }
 
     /**
@@ -370,14 +370,14 @@ class NodeTest extends TestCase
     public function serializeWithAttributesAndEnhancementBagAndFormattersNames()
     {
         $this->node->mergeEnhancementAttributes('some-enhancement', array('attribute' => 'value'));
-        $this->node->setAttribute('display', 'inline');
+        $this->node->setAttribute('font-size', 123);
         $this->node->getBoundary()->setNext(0, 0);
         $this->node->addFormatterName('SomeName');
 
         $node = unserialize(serialize($this->node));
 
         $this->assertEquals($this->node->getEnhancementsAttributes(), $node->getEnhancementsAttributes());
-        $this->assertEquals($this->node->getAttribute('display'), $node->getAttribute('display'));
+        $this->assertEquals($this->node->getAttribute('font-size'), $node->getAttribute('font-size'));
         $this->assertEquals($this->node->getBoundary(), $node->getBoundary());
         $this->assertEquals($this->node->getFormattersNames(), $node->getFormattersNames());
     }

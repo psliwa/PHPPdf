@@ -252,7 +252,6 @@ Atrybuty
 * font-size - rozmiar czcionki w punktach, brak obsługi jednostek wielkości
 * font-style - styl czcionki, dozwolone wartości: normal, bold, italic, bold-italic
 * color - kolor tekstu. Przyjmowane wartości takie jak w HTML/CSS
-* display - sposób wyświetlenia (block|inline|none)
 * splittable - określa czy element może zostać podzielony na dwie strony, dla większości elementów domyślna wartość to true
 * float - działanie podobne, aczkolwiek nie takie same jak w HTML/CSS. Wartości left|none|right, domyślnie none
 * line-height - działanie takie jak w HTML/CSS. Domyślna wartość to 1.2*font-size

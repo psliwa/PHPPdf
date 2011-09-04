@@ -26,9 +26,6 @@ use PHPPdf\Document,
  */
 abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
 {
-    const DISPLAY_BLOCK = 'block';
-    const DISPLAY_INLINE = 'inline';
-    const DISPLAY_NONE = 'none';
     const MARGIN_AUTO = 'auto';
     const FLOAT_NONE = 'none';
     const FLOAT_LEFT = 'left';
@@ -94,8 +91,8 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
     protected static function initializeType()
     {
         //TODO refactoring
-        $attributeWithGetters = array('width', 'height', 'margin-left', 'margin-right', 'margin-top', 'margin-bottom', 'padding-left', 'padding-right', 'padding-top', 'padding-bottom', 'display', 'font-type', 'font-size', 'float', 'splittable');
-        $attributeWithSetters = array('width', 'height', 'margin-left', 'margin-right', 'margin-top', 'margin-bottom', 'display', 'font-type', 'float', 'static-size', 'font-size', 'margin', 'padding', 'break', 'splittable', 'dump');
+        $attributeWithGetters = array('width', 'height', 'margin-left', 'margin-right', 'margin-top', 'margin-bottom', 'padding-left', 'padding-right', 'padding-top', 'padding-bottom', 'font-type', 'font-size', 'float', 'splittable');
+        $attributeWithSetters = array('width', 'height', 'margin-left', 'margin-right', 'margin-top', 'margin-bottom', 'font-type', 'float', 'static-size', 'font-size', 'margin', 'padding', 'break', 'splittable', 'dump');
 
         $predicateGetters = array('splittable');
         
@@ -336,8 +333,6 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
 
         $this->addAttribute('color');
 
-        $this->addAttribute('display', self::DISPLAY_BLOCK);
-
         $this->addAttribute('padding-top', 0);
         $this->addAttribute('padding-right', 0);
         $this->addAttribute('padding-bottom', 0);
@@ -479,16 +474,6 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
     public function getTextDecorationRecursively()
     {
         return $this->getRecurseAttribute('text-decoration');
-    }
-    
-    public function getDisplay()
-    {
-        return $this->getAttributeDirectly('display');
-    }
-    
-    public function setDisplay($display)
-    {
-        $this->setAttributeDirectly('display', $display);
     }
 
     /**
@@ -988,11 +973,6 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
      */
     public function getDrawingTasks(Document $document)
     {
-        if($this->getAttribute('display') == self::DISPLAY_NONE)
-        {
-            return array();
-        }
-
         try
         {
             $this->preDraw($document);
@@ -1336,6 +1316,14 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
      * @return boolean Node is able to have children?
      */
     public function isLeaf()
+    {
+        return false;
+    }
+    
+    /**
+     * @return boolean True if element is inline, false if block
+     */
+    public function isInline()
     {
         return false;
     }

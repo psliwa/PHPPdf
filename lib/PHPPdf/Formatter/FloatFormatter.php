@@ -71,7 +71,7 @@ class FloatFormatter extends BaseFormatter
                 if($minYCoord !== null)
                 {
                     $translateY = -($minYCoord - $y - $child->getMarginTop() - $child->getPaddingTop());
-                    if($child->getDisplay() === Node::DISPLAY_INLINE && $previousSiblingWithMinBottomYCoord->getDisplay() === Node::DISPLAY_INLINE)
+                    if($child->isInline() && $previousSiblingWithMinBottomYCoord->isInline())
                     {
                         $translateY -= $child instanceof Text ? $child->getLineHeightRecursively() : $child->getHeight();
                     }

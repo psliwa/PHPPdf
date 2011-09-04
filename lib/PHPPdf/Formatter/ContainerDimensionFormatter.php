@@ -46,14 +46,12 @@ class ContainerDimensionFormatter extends BaseFormatter
         $realHeight = $paddingVertical + ($maxY - $minY);
         $realWidth = $paddingHorizontal + ($maxX - $minX);
 
-        $display = $node->getAttribute('display');
-
         if($realHeight > $node->getHeight())
         {
             $node->setHeight($realHeight);
         }
 
-        if($display === Nodes\Node::DISPLAY_INLINE || $realWidth > $node->getWidth())
+        if($node->isInline() || $realWidth > $node->getWidth())
         {
             $node->setWidth($realWidth);
         }

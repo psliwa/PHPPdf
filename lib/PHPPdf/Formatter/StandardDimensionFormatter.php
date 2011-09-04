@@ -23,7 +23,7 @@ class StandardDimensionFormatter extends BaseFormatter
     {
         $parent = $node->getParent();
 
-        if($node->getWidth() === null && $node->getAttribute('display') === Node::DISPLAY_BLOCK && $node->getFloat() === Node::FLOAT_NONE)
+        if($node->getWidth() === null && !$node->isInline() && $node->getFloat() === Node::FLOAT_NONE)
         {
             $parentWidth = $parent->getWidthWithoutPaddings();
 
@@ -33,7 +33,7 @@ class StandardDimensionFormatter extends BaseFormatter
             $node->setWidth($parentWidth - ($marginLeft + $marginRight));
             $node->setRelativeWidth('100%');
         }
-        elseif($node->getAttribute('display') === Node::DISPLAY_INLINE)
+        elseif($node->isInline())
         {
             $node->setWidth(0);
         }

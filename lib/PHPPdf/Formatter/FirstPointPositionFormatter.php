@@ -65,7 +65,7 @@ class FirstPointPositionFormatter extends BaseFormatter
 
     private function isNodeInSameRowAsPreviousSibling(Node $node, Node $previousSibling)
     {
-        $oneOfNodesIsInline = $previousSibling->getAttribute('display') === Nodes\Node::DISPLAY_INLINE && $node->getDisplay() === Nodes\Node::DISPLAY_INLINE;
+        $oneOfNodesIsInline = $previousSibling->isInline() && $node->isInline();
 
         $parent = $node->getParent();
         $parentBoundary = $parent->getBoundary();
