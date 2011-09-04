@@ -989,4 +989,27 @@ XML;
         
         $this->parser->parse($xml);
     }
+    
+    /**
+     * @test
+     * @expectedException PHPPdf\Parser\Exception\ParseException
+     */
+    public function throwExceptionOnParseError()
+    {
+        $warningEnabled = PHPUnit_Framework_Error_Warning::$enabled;
+        PHPUnit_Framework_Error_Warning::$enabled = false;
+        
+        $xml = <<<XML
+<pdf></pdfaa>    
+XML;
+        try
+        {
+            $this->parser->parse($xml);
+        }
+        catch(Exception $e)
+        {
+            PHPUnit_Framework_Error_Warning::$enabled = $warningEnabled;
+            throw $e;
+        }
+    }
 }

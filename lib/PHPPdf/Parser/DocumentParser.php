@@ -89,9 +89,9 @@ class DocumentParser extends XmlParser
     {
         $reader = new \XMLReader();
 
-        $reader->XML($content, null, LIBXML_DTDLOAD);
+        $reader->XML($content, null, LIBXML_DTDLOAD);        
         $reader->setParserProperty(\XMLReader::SUBST_ENTITIES, true);
-        
+
         return $reader;
     }
 

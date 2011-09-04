@@ -53,7 +53,7 @@ abstract class XmlParser implements Parser
                     break;
             }
         }
-        while(!$stopParsing && $reader->read());
+        while(!$stopParsing && $this->read($reader));
 
         $this->stack = array();
         
@@ -85,7 +85,7 @@ abstract class XmlParser implements Parser
             $nodeType = $reader->nodeType;
             while($reader->nodeType !== \XMLReader::ELEMENT)
             {
-                $reader->read();
+                $this->read($reader);
             }
 
             if($reader->name != static::ROOT_TAG)
@@ -101,13 +101,39 @@ abstract class XmlParser implements Parser
         return $reader;
     }
     
+    /**
+     * Converts XMLReader's error on ParseException
+     */
+    protected function read(\XMLReader $reader)
+    {
+        global $php_errormsg;
+        
+        $originalErrorMsg = $php_errormsg;
+        $php_errormsg = null;
+        
+        $trackErrors = ini_get('track_errors');
+        ini_set('track_errors', '1');
+        
+        $status = @$reader->read();
+        ini_set('track_errors', $trackErrors);
+
+        if($php_errormsg)
+        {
+            $errorMsg = $php_errormsg;
+            $php_errormsg = $originalErrorMsg;
+            throw new Exceptions\ParseException($errorMsg);
+        }
+        
+        return $status;
+    }
+    
     protected function createReader($content)
     {
         $reader = new \XMLReader();
-        
+
         $reader->XML($content, null, LIBXML_NOBLANKS | LIBXML_DTDLOAD);
         $reader->setParserProperty(\XMLReader::SUBST_ENTITIES, true);
-        
+
         return $reader;
     }
 
@@ -116,7 +142,7 @@ abstract class XmlParser implements Parser
         $result = null;
         do
         {
-            $result = $reader->read();
+            $result = $this->read($reader);
         }
         while($result && $reader->nodeType !== \XMLReader::ELEMENT && $reader->nodeType !== \XMLReader::TEXT);
     }
