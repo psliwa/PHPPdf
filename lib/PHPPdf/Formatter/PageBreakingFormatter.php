@@ -16,14 +16,14 @@ use PHPPdf\Node\Node,
  * 
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
-class PageDivertingFormatter extends BaseFormatter
+class PageBreakingFormatter extends BaseFormatter
 {
     protected $node;
     protected $totalVerticalTranslation = 0;
     
     public function format(Node $node, Document $document)
     {
-        $columnFormatter = new ColumnDivertingFormatter();
+        $columnFormatter = new ColumnBreakingFormatter();
 
         $this->node = $node;
         $this->totalVerticalTranslation = 0;

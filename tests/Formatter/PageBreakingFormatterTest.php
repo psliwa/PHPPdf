@@ -1,12 +1,12 @@
 <?php
 
-use PHPPdf\Formatter\PageDivertingFormatter,
+use PHPPdf\Formatter\PageBreakingFormatter,
     PHPPdf\Node\DynamicPage,
     PHPPdf\Util\Boundary,
     PHPPdf\Document,
     PHPPdf\Node\Container;
 
-class PageDivertingFormatterTest extends TestCase
+class PageBreakingFormatterTest extends TestCase
 {
     private $page;
     private $formatter;
@@ -14,7 +14,7 @@ class PageDivertingFormatterTest extends TestCase
     public function setUp()
     {
         $this->page = new DynamicPage();
-        $this->formatter = new PageDivertingFormatter();
+        $this->formatter = new PageBreakingFormatter();
     }
 
     /**

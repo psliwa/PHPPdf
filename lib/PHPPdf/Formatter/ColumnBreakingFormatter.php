@@ -23,7 +23,7 @@ use PHPPdf\Node\Node,
  * 
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
-class ColumnDivertingFormatter extends BaseFormatter
+class ColumnBreakingFormatter extends BaseFormatter
 {
     private $staticBreakYCoord = null;
     private $stopBreaking = false;

@@ -17,7 +17,7 @@
 	            <formatter class="PHPPdf\Formatter\StandardDimensionFormatter" />
 	            <formatter class="PHPPdf\Formatter\ContainerFormatter" />
 	            <formatter class="PHPPdf\Formatter\FloatFormatter" />
-	            <formatter class="PHPPdf\Formatter\ColumnDivertingFormatter" />
+	            <formatter class="PHPPdf\Formatter\ColumnBreakingFormatter" />
 	        </formatters>
 	    </node>
 	    <node name="dynamic-page" class="PHPPdf\Node\DynamicPage">
@@ -26,7 +26,7 @@
 	            <formatter class="PHPPdf\Formatter\StandardDimensionFormatter" />
 	            <formatter class="PHPPdf\Formatter\ContainerFormatter" />
 	            <formatter class="PHPPdf\Formatter\FloatFormatter" />
-	            <formatter class="PHPPdf\Formatter\PageDivertingFormatter" />
+	            <formatter class="PHPPdf\Formatter\PageBreakingFormatter" />
 	        </formatters>
 	    </node>
 	    <node name="div" class="PHPPdf\Node\Container">

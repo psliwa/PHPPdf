@@ -5,9 +5,9 @@ use PHPPdf\Node\ColumnableContainer,
     PHPPdf\Node\Page,
     PHPPdf\Util\Boundary,
     PHPPdf\Document,
-    PHPPdf\Formatter\ColumnDivertingFormatter;
+    PHPPdf\Formatter\ColumnBreakingFormatter;
 
-class ColumnDivertingFormatterTest extends TestCase
+class ColumnBreakingFormatterTest extends TestCase
 {
     private $page;
     private $column;
@@ -21,7 +21,7 @@ class ColumnDivertingFormatterTest extends TestCase
         $this->column->setHeight($this->page->getHeight()*1.5);
         $this->column->setWidth($this->page->getWidth()/2);
 
-        $this->formatter = new ColumnDivertingFormatter();
+        $this->formatter = new ColumnBreakingFormatter();
     }
 
     private function injectBoundary(Container $container, $yStart = 0)
