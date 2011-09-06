@@ -90,11 +90,11 @@ class Table extends Container implements Listener
         }
     }
 
-    protected function doSplit($height)
+    protected function doBreakAt($height)
     {
-        $splited = parent::doSplit($height);
+        $broken = parent::doBreakAt($height);
 
-        if($splited)
+        if($broken)
         {
             $height = 0;
             foreach($this->getChildren() as $row)
@@ -111,7 +111,7 @@ class Table extends Container implements Listener
             $boundary->pointTranslate(3, 0, -$diff);
         }
 
-        return $splited;
+        return $broken;
     }
 
     public function attributeChanged(Node $node, $attributeName, $oldValue)

@@ -55,7 +55,7 @@ class TableTest extends TestCase
     /**
      * @test
      */
-    public function split()
+    public function breakAt()
     {
         $numberOfRows = 10;
         $heightOfRow = 50;
@@ -71,36 +71,36 @@ class TableTest extends TestCase
         $this->table->setHeight(500)->setWidth(200);
 
         $start = 500;
-        $pointOfSplit = 220;
-        $reversePointOfSplit = $start - $pointOfSplit;
-        $rowSplitOccurs = false;
+        $pointOfBreaking = 220;
+        $reversePointOfBreaking = $start - $pointOfBreaking;
+        $rowBreakOccurs = false;
         for($i=0; $i<$numberOfRows; $i++)
         {
             $end = $start-$heightOfRow;
-            $split = $reversePointOfSplit < $start && $reversePointOfSplit > $end;
-            if($split)
+            $break = $reversePointOfBreaking < $start && $reversePointOfBreaking > $end;
+            if($break)
             {
-                $rowSplitOccurs = true;
+                $rowBreakOccurs = true;
             }
 
-            $mock = $this->createRowMock(array(0, $start), array(200, $end), $split, $rowSplitOccurs);
+            $mock = $this->createRowMock(array(0, $start), array(200, $end), $break, $rowBreakOccurs);
             $this->table->add($mock);
             $start = $end;
         }
 
-        $result = $this->table->split(220);
+        $result = $this->table->breakAt(220);
 
         $this->assertNotNull($result);
         $this->assertEquals($numberOfRows, count($result->getChildren()) + count($this->table->getChildren()));
         $this->assertEquals($tableHeight, $result->getHeight() + $this->table->getHeight());
     }
 
-    private function createRowMock($start, $end, $split = false, $translate = false)
+    private function createRowMock($start, $end, $break = false, $translate = false)
     {
         $methods = array('getHeight', 'getBoundary');
-        if($split)
+        if($break)
         {
-            $methods[] = 'split';
+            $methods[] = 'breakAt';
         }
         if($translate)
         {
@@ -109,10 +109,10 @@ class TableTest extends TestCase
 
         $mock = $this->getMock('PHPPdf\Node\Table\Row', $methods);
 
-        if($split)
+        if($break)
         {
             $mock->expects($this->once())
-                 ->method('split')
+                 ->method('breakAt')
                  ->will($this->returnValue(null));
         }
 

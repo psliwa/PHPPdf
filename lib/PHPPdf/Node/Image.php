@@ -81,7 +81,7 @@ class Image extends Node
         }
     }
 
-    public function split($height)
+    public function breakAt($height)
     {
         return null;
     }

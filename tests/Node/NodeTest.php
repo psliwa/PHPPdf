@@ -188,7 +188,7 @@ class NodeTest extends TestCase
     /**
      * @test
      */
-    public function split()
+    public function breakAt()
     {
         $this->node->setWidth(100);
         $this->node->setHeight(80);
@@ -199,7 +199,7 @@ class NodeTest extends TestCase
                  ->setNext(20, -30)
                  ->close();
 
-        $result = $this->node->split(50);
+        $result = $this->node->breakAt(50);
 
         $this->assertEquals(100, $this->node->getWidth());
         $this->assertEquals(50, $this->node->getHeight());
@@ -213,7 +213,7 @@ class NodeTest extends TestCase
     /**
      * @test
      */
-    public function splitIfNodeIsHigherThanPageEvenIfSplittableAttributeIsFalse()
+    public function breakIfNodeIsHigherThanPageEvenIfBreakableAttributeIsFalse()
     {
         $x = 0;
         $y = 500;
@@ -225,12 +225,12 @@ class NodeTest extends TestCase
         $this->invokeMethod($this->node, 'setBoundary', array($boundary));
         $this->node->setWidth($width);
         $this->node->setHeight($height);
-        $this->node->setAttribute('splittable', false);
+        $this->node->setAttribute('breakable', false);
         
         $page = new Page(array('page-size' => $width.':'.($height/2)));
         $page->add($this->node);
         
-        $newNode = $this->node->split(500);
+        $newNode = $this->node->breakAt(500);
         
         $this->assertNotNull($newNode);
     }
@@ -238,9 +238,9 @@ class NodeTest extends TestCase
     /**
      * @test
      */
-    public function splitWhenSplitableAttributeIsOff()
+    public function breakWhenBreakableAttributeIsOff()
     {
-        $this->node->setAttribute('splittable', false);
+        $this->node->setAttribute('breakable', false);
         $this->node->setWidth(100)->setHeight(200);
         $boundary = $this->node->getBoundary();
         $boundary->setNext(0, 100)
@@ -249,7 +249,7 @@ class NodeTest extends TestCase
                  ->setNext(0, -100)
                  ->close();
 
-        $result = $this->node->split(50);
+        $result = $this->node->breakAt(50);
 
         $this->assertNull($result);
     }
@@ -438,12 +438,12 @@ class NodeTest extends TestCase
             array('static-size', 'false', false),
             array('static-size', '0', false),
             array('static-size', 'no', false),
-            array('splittable', 'true', true),
-            array('splittable', '1', true),
-            array('splittable', 'yes', true),
-            array('splittable', 'false', false),
-            array('splittable', '0', false),
-            array('splittable', 'no', false),
+            array('breakable', 'true', true),
+            array('breakable', '1', true),
+            array('breakable', 'yes', true),
+            array('breakable', 'false', false),
+            array('breakable', '0', false),
+            array('breakable', 'no', false),
         );
         
         foreach($testData as $data)
@@ -474,9 +474,9 @@ class NodeTest extends TestCase
     
     /**
      * @test
-     * @dataProvider splittableProvider
+     * @dataProvider breakableProvider
      */
-    public function nodeIsSplittableIfSplittableAttributeIsSetOrNodeIsHigherThanPage($splittable, $pageHeight, $nodeHeight, $expectedSplittable)
+    public function nodeIsBreakableIfBreakableAttributeIsSetOrNodeIsHigherThanPage($breakable, $pageHeight, $nodeHeight, $expectedBreakable)
     {
         $page = $this->getMockBuilder('PHPPdf\Node\Page')
                      ->setMethods(array('getHeight'))
@@ -487,13 +487,13 @@ class NodeTest extends TestCase
              ->will($this->returnValue($pageHeight));
              
         $this->node->setParent($page);
-        $this->node->setSplittable($splittable);
+        $this->node->setBreakable($breakable);
         $this->node->setHeight($nodeHeight);
         
-        $this->assertEquals($expectedSplittable, $this->node->isSplittable());
+        $this->assertEquals($expectedBreakable, $this->node->isBreakable());
     }
     
-    public function splittableProvider()
+    public function breakableProvider()
     {
         return array(
             array(

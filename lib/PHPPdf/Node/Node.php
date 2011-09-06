@@ -91,10 +91,10 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
     protected static function initializeType()
     {
         //TODO refactoring
-        $attributeWithGetters = array('width', 'height', 'margin-left', 'margin-right', 'margin-top', 'margin-bottom', 'padding-left', 'padding-right', 'padding-top', 'padding-bottom', 'font-type', 'font-size', 'float', 'splittable');
-        $attributeWithSetters = array('width', 'height', 'margin-left', 'margin-right', 'margin-top', 'margin-bottom', 'font-type', 'float', 'static-size', 'font-size', 'margin', 'padding', 'break', 'splittable', 'dump');
+        $attributeWithGetters = array('width', 'height', 'margin-left', 'margin-right', 'margin-top', 'margin-bottom', 'padding-left', 'padding-right', 'padding-top', 'padding-bottom', 'font-type', 'font-size', 'float', 'breakable');
+        $attributeWithSetters = array('width', 'height', 'margin-left', 'margin-right', 'margin-top', 'margin-bottom', 'font-type', 'float', 'static-size', 'font-size', 'margin', 'padding', 'break', 'breakable', 'dump');
 
-        $predicateGetters = array('splittable');
+        $predicateGetters = array('breakable');
         
         $attributeWithGetters = array_flip($attributeWithGetters);
         array_walk($attributeWithGetters, function(&$value, $key) use($predicateGetters){
@@ -337,7 +337,7 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
         $this->addAttribute('padding-right', 0);
         $this->addAttribute('padding-bottom', 0);
         $this->addAttribute('padding-left', 0);
-        $this->addAttribute('splittable', true);
+        $this->addAttribute('breakable', true);
 
         $this->addAttribute('line-height');
         $this->addAttribute('text-align', null);
@@ -846,10 +846,10 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
         $this->setAttributeDirectly($name, $default);
     }
     
-    public function setSplittable($flag)
+    public function setBreakable($flag)
     {
         $flag = $this->filterBooleanValue($flag);
-        $this->setAttributeDirectly('splittable', $flag);
+        $this->setAttributeDirectly('breakable', $flag);
     }
     
     public function setDump($flag)
@@ -858,7 +858,7 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
         $this->setAttributeDirectly('dump', $flag);
     }
     
-    public function isSplittable()
+    public function isBreakable()
     {
         try
         {
@@ -874,7 +874,7 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
             //ignore, original attribute value will be returned
         }
         
-        return $this->getAttributeDirectly('splittable');
+        return $this->getAttributeDirectly('breakable');
     }
     
     public function setStaticSize($flag)
@@ -1216,22 +1216,22 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
     }
 
     /**
-     * Split node on passed $height.
+     * Break node at passed $height.
      *
      * @param integer $height
-     * @return \PHPPdf\Node\Node|null Second node created afted splitting
+     * @return \PHPPdf\Node\Node|null Second node created afted breaking
      */
-    public function split($height)
+    public function breakAt($height)
     {
-        if($this->shouldNotBeSplitted($height))
+        if($this->shouldNotBeBroken($height))
         {
             return null;
         }
 
-        return $this->doSplit($height);
+        return $this->doBreakAt($height);
     }
     
-    protected function shouldNotBeSplitted($height)
+    protected function shouldNotBeBroken($height)
     {
         if($height <= 0 || $height >= $this->getHeight())
         {
@@ -1248,13 +1248,13 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
         }
         catch(\LogicException $e)
         {
-            //if node has no parent, splittable attribute will decide
+            //if node has no parent, breakable attribute will decide
         }
         
-        return !$this->getAttribute('splittable');
+        return !$this->getAttribute('breakable');
     }
 
-    protected function doSplit($height)
+    protected function doBreakAt($height)
     {
         $boundary = $this->getBoundary();
         $clonedBoundary = clone $boundary;

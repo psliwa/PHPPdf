@@ -122,7 +122,7 @@
 				<img src="dir:/phpstorm/listing6.jpg" />
 			</p>
 			
-			<div height="12" splittable="false" />
+			<div height="12" breakable="false" />
 			
 			<h2>Validation and Quick-Fixes</h2>
 			<p>

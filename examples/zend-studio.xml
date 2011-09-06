@@ -35,7 +35,7 @@
 				<div height="30" vertical-align="bottom"><page-number /></div>
 			</footer>
 			<watermark>
-				<div rotate="diagonally" alpha="0.1" font-size="80" text-align="center">EXAMPLE</div>
+				<div rotate="diagonally" alpha="0.1" font-size="80" text-align="center">PHPPdf EXAMPLE</div>
 			</watermark>
 		</placeholders>
 	

@@ -121,7 +121,7 @@ class Text extends Node
         }
     }
 
-    protected function doSplit($height)
+    protected function doBreakAt($height)
     {
         $clone = null;
         if($height > 0)

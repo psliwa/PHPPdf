@@ -174,11 +174,11 @@ class BasicList extends Container
         return $font->getCharsWidth(array(ord($type)), $fontSize);
     }
     
-    protected function doSplit($height)
+    protected function doBreakAt($height)
     {
         $numberOfChildren = $this->getNumberOfChildren();
         
-        $node = parent::doSplit($height);
+        $node = parent::doBreakAt($height);
         
         $currentNumberOfChildren = $this->getNumberOfChildren() + ($node ? $node->getNumberOfChildren() : 0);
         

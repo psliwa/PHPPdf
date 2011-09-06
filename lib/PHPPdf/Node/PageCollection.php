@@ -29,9 +29,9 @@ class PageCollection extends Container
         return $this;
     }
 
-    public function split($height)
+    public function breakAt($height)
     {
-        throw new \LogicException('PageCollection can\'t be splitted.');
+        throw new \LogicException('PageCollection can\'t be broken.');
     }
 
     public function format(Document $document)

@@ -31,7 +31,7 @@ class TextTest extends PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function split()
+    public function breakAt()
     {
         $text = 'a b c d e f g h';
         $words = \explode(' ', $text);
@@ -46,8 +46,8 @@ class TextTest extends PHPUnit_Framework_TestCase
                              ->setNext(0, 104)
                              ->close();
 
-        $lineSplit = 30;
-        $result = $node->split($lineSplit);
+        $breakingLine = 30;
+        $result = $node->breakAt($breakingLine);
 
         $this->assertEquals(30, $node->getHeight());
         $this->assertEquals(170, $node->getDiagonalPoint()->getY());

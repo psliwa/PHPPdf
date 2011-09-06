@@ -37,7 +37,7 @@ class PageDivertingFormatterTest extends TestCase
     /**
      * @test
      */
-    public function splitingChildren()
+    public function breakingChildren()
     {
         $prototype = $this->page->getPrototypePage();
 
@@ -103,7 +103,7 @@ class PageDivertingFormatterTest extends TestCase
     /**
      * @test
      */
-    public function multipleSplit()
+    public function multipleBreaking()
     {
         $prototype = $this->page->getPrototypePage();
         $height = $prototype->getHeight();
@@ -132,7 +132,7 @@ class PageDivertingFormatterTest extends TestCase
     /**
      * @test
      */
-    public function multipleSplitWithManyNodesPerPage()
+    public function multipleBreakingWithManyNodesPerPage()
     {
         $prototype = $this->page->getPrototypePage();
         $originalHeight = $height = $prototype->getHeight();
@@ -164,7 +164,7 @@ class PageDivertingFormatterTest extends TestCase
 
         $this->invokeMethod($this->page, 'setPrototypePage', array($prototype));
 
-        $container = $this->getContainerMock(array(0, 700), array(40, 600), array('getAttribute', 'split'));
+        $container = $this->getContainerMock(array(0, 700), array(40, 600), array('getAttribute', 'breakAt'));
         $container->expects($this->atLeastOnce())
                   ->method('getAttribute')
                   ->with('break')
@@ -172,7 +172,7 @@ class PageDivertingFormatterTest extends TestCase
 
         $this->page->add($container);
 
-        $container = $this->getContainerMock(array(0, 600), array(0, 600), array('getAttribute', 'split'));
+        $container = $this->getContainerMock(array(0, 600), array(0, 600), array('getAttribute', 'breakAt'));
         $container->expects($this->atLeastOnce())
                   ->method('getAttribute')
                   ->with('break')
@@ -188,7 +188,7 @@ class PageDivertingFormatterTest extends TestCase
      *
      * @todo przerobić ten test, aby dotyczył nodeu który się podzielił na dwie strony, tylko że pomiędzy pierwszą częścią nodeu a końcem strony jest "luka" (np. tabela)
      */
-    public function nextSiblingOfNotSplittableNodeMustBeDirectlyAfterThisNodeIfPageBreakOccurs()
+    public function nextSiblingOfNotBreakableNodeMustBeDirectlyAfterThisNodeIfPageBreakOccurs()
     {
         $this->markTestIncomplete();
 
@@ -210,27 +210,27 @@ class PageDivertingFormatterTest extends TestCase
 
         $this->invokeMethod($this->page, 'setPrototypePage', array($prototype));
 
-        $notSplittedContainer = $this->getContainerMock(array(0, 100), array(50, 30), array('split'));
-        $notSplittedContainer->expects($this->never())
-                             ->method('split');
+        $notBrokenContainer = $this->getContainerMock(array(0, 100), array(50, 30), array('breakAt'));
+        $notBrokenContainer->expects($this->never())
+                             ->method('breakAt');
 
-        $this->page->add($notSplittedContainer);
+        $this->page->add($notBrokenContainer);
 
-        $splittedContainer = $this->getContainerMock(array(0, 30), array(50, -10), array('split'));
-        $splittedContainer->expects($this->once())
-                          ->method('split')
+        $brokenContainer = $this->getContainerMock(array(0, 30), array(50, -10), array('breakAt'));
+        $brokenContainer->expects($this->once())
+                          ->method('breakAt')
                           ->will($this->returnValue(null));
 
-        $this->page->add($splittedContainer);
+        $this->page->add($brokenContainer);
 
-        $nextSiblingOfSplittedContainer = $this->getContainerMock(array(0, -10), array(50, -20), array('split'));
-        $nextSiblingOfSplittedContainer->expects($this->never())
-                                       ->method('split');
+        $nextSiblingOfBrokenContainer = $this->getContainerMock(array(0, -10), array(50, -20), array('breakAt'));
+        $nextSiblingOfBrokenContainer->expects($this->never())
+                                       ->method('breakAt');
 
-        $this->page->add($nextSiblingOfSplittedContainer);
+        $this->page->add($nextSiblingOfBrokenContainer);
 
         $this->page->getDrawingTasks(new Document());
 
-        $this->assertEquals($splittedContainer->getDiagonalPoint()->getY(), $nextSiblingOfSplittedContainer->getFirstPoint()->getY());
+        $this->assertEquals($brokenContainer->getDiagonalPoint()->getY(), $nextSiblingOfBrokenContainer->getFirstPoint()->getY());
     }
 }

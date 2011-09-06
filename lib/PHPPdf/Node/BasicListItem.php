@@ -13,13 +13,13 @@ namespace PHPPdf\Node;
  */
 class BasicListItem extends Container
 {
-    protected function doSplit($height)
+    protected function doBreakAt($height)
     {
-        $absoluteYCoordOfSplit = $this->getFirstPoint()->getY() - $height;
+        $absoluteYCoordOfBreaking = $this->getFirstPoint()->getY() - $height;
         
-        if($this->hasLeafDescendants($absoluteYCoordOfSplit))
+        if($this->hasLeafDescendants($absoluteYCoordOfBreaking))
         {
-            return parent::doSplit($height);
+            return parent::doBreakAt($height);
         }
         
         return null;

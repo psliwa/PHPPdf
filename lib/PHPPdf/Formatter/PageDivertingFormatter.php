@@ -37,7 +37,7 @@ class PageDivertingFormatter extends BaseFormatter
 
             $verticalTranslation = $columnFormatter->getLastVerticalTranslation();
             
-            $this->splitChildIfNecessary($child);
+            $this->breakChildIfNecessary($child);
             
             $this->totalVerticalTranslation += -$verticalTranslation;
         }
@@ -48,10 +48,10 @@ class PageDivertingFormatter extends BaseFormatter
         }
     }
 
-    private function splitChildIfNecessary(Node $node)
+    private function breakChildIfNecessary(Node $node)
     {
-        $childHasBeenSplitted = false;
-        $childMayBeSplitted = true;
+        $childHasBeenBroken = false;
+        $childMayBeBroken = true;
         
         if($this->shouldParentBeAutomaticallyBroken($node))
         {
@@ -64,24 +64,24 @@ class PageDivertingFormatter extends BaseFormatter
 
         do
         {
-            if($this->shouldBeSplited($node, $pageYCoordEnd))
+            if($this->shouldBeBroken($node, $pageYCoordEnd))
             {
-                $node = $this->splitChildAndGetProductOfSplitting($node);
-                $childHasBeenSplitted = true;
+                $node = $this->breakChildAndGetProductOfBreaking($node);
+                $childHasBeenBroken = true;
             }
             else
             {
-                if(!$childHasBeenSplitted)
+                if(!$childHasBeenBroken)
                 {
-                    $this->addToSubjectOfSplitting($node);
+                    $this->addToSubjectOfBreaking($node);
                 }
 
-                $childMayBeSplitted = false;
+                $childMayBeBroken = false;
             }
             
             $pageYCoordEnd = $this->getPageYCoordEnd();
         }
-        while($childMayBeSplitted);
+        while($childMayBeBroken);
     }
     
     private function shouldParentBeAutomaticallyBroken(Node $node)
@@ -94,59 +94,59 @@ class PageDivertingFormatter extends BaseFormatter
         return $this->node->getPage()->getDiagonalPoint()->getY();
     }
     
-    private function splitChildAndGetProductOfSplitting(Node $node)
+    private function breakChildAndGetProductOfBreaking(Node $node)
     {
         $originalHeight = $node->getFirstPoint()->getY() - $node->getDiagonalPoint()->getY();
         $nodeYCoordStart = $this->getChildYCoordOfFirstPoint($node);
         $end = $this->getPageYCoordEnd();
-        $splitLine = $nodeYCoordStart - $end;
-        $splittedNode = $node->split($splitLine);
+        $breakLine = $nodeYCoordStart - $end;
+        $breakNode = $node->breakAt($breakLine);
 
         $gapBeetwenBottomOfOriginalNodeAndEndOfPage = 0;
 
-        if($splittedNode)
+        if($breakNode)
         {           
             $gapBeetwenBottomOfOriginalNodeAndEndOfPage = $node->getDiagonalPoint()->getY() - $end;
 
-            $gap = $originalHeight - (($node->getFirstPoint()->getY() - $node->getDiagonalPoint()->getY()) + ($splittedNode->getFirstPoint()->getY() - $splittedNode->getDiagonalPoint()->getY()));
+            $gap = $originalHeight - (($node->getFirstPoint()->getY() - $node->getDiagonalPoint()->getY()) + ($breakNode->getFirstPoint()->getY() - $breakNode->getDiagonalPoint()->getY()));
             $this->totalVerticalTranslation += $gap;
 
-            $nodeYCoordStart = $splittedNode->getFirstPoint()->getY();
-            $this->addToSubjectOfSplitting($node);
-            $node = $splittedNode;
+            $nodeYCoordStart = $breakNode->getFirstPoint()->getY();
+            $this->addToSubjectOfBreaking($node);
+            $node = $breakNode;
         }
 
-        $this->breakSubjectOfSplittingIncraseTranslation($node, $nodeYCoordStart, $gapBeetwenBottomOfOriginalNodeAndEndOfPage);
+        $this->breakSubjectOfBreakingAndIncraseTranslation($node, $nodeYCoordStart, $gapBeetwenBottomOfOriginalNodeAndEndOfPage);
 
         return $node;
     }
 
-    private function addToSubjectOfSplitting(Node $node)
+    private function addToSubjectOfBreaking(Node $node)
     {
-        $this->getSubjectOfSplitting()->getCurrentPage()->add($node);
+        $this->getSubjectOfBreaking()->getCurrentPage()->add($node);
     }
 
-    private function breakSubjectOfSplittingIncraseTranslation(Node $node, $nodeYCoordStart, $gapBeetwenBottomOfOriginalNodeAndEndOfPage)
+    private function breakSubjectOfBreakingAndIncraseTranslation(Node $node, $nodeYCoordStart, $gapBeetwenBottomOfOriginalNodeAndEndOfPage)
     {
         $translation = $this->node->getPage()->getHeight() + $this->node->getPage()->getMarginBottom() - $nodeYCoordStart;
         $verticalTranslation = $translation - $gapBeetwenBottomOfOriginalNodeAndEndOfPage;
         
-        $this->getSubjectOfSplitting()->createNextPage();
+        $this->getSubjectOfBreaking()->createNextPage();
         $this->totalVerticalTranslation += $verticalTranslation;
         
-        $this->getSubjectOfSplitting()->getCurrentPage()->add($node);
+        $this->getSubjectOfBreaking()->getCurrentPage()->add($node);
         $node->translate(0, -$translation);
     }
     
     /**
      * @return Node
      */
-    private function getSubjectOfSplitting()
+    private function getSubjectOfBreaking()
     {
         return $this->node;
     }
     
-    private function shouldBeSplited(Node $node, $pageYCoordEnd)
+    private function shouldBeBroken(Node $node, $pageYCoordEnd)
     {
         $yEnd = $node->getDiagonalPoint()->getY();
 

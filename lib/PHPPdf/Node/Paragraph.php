@@ -128,7 +128,7 @@ class Paragraph extends Container
         return $tasks;
     }
     
-    protected function doSplit($height)
+    protected function doBreakAt($height)
     {
         $linesToMove = array();
         $numberOfLines = count($this->lines);
@@ -151,7 +151,7 @@ class Paragraph extends Container
         $yTranslation = $height - $firstLineToMove->getYTranslation();
         $height = $firstLineToMove->getYTranslation();
         
-        $paragraphProduct = Node::doSplit($height);
+        $paragraphProduct = Node::doBreakAt($height);
         
         $paragraphProduct->removeAll();
         
@@ -164,7 +164,7 @@ class Paragraph extends Container
             
             $textHeight = $text->getFirstPoint()->getY() - ($this->getFirstPoint()->getY() - $height);
             
-            $textProduct = $text->split($textHeight);
+            $textProduct = $text->breakAt($textHeight);
             
             if($textProduct)
             {

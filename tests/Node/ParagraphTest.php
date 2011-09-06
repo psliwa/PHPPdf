@@ -132,13 +132,13 @@ class ParagraphTest extends TestCase
      * _____________________________
      * |                            |
      * |              ______________|
-     * |_____________|              | <- splitting here
+     * |_____________|              | <- breaking here
      * |                            |
      * |____________________________|
      * 
      * @test
      */
-    public function splitting()
+    public function breaking()
     {
         $x = 0;
         $y = 500;
@@ -205,7 +205,7 @@ class ParagraphTest extends TestCase
                                  ->close();
         $paragraph->setHeight(500);
         
-        $paragraphProduct = $paragraph->split(225);
+        $paragraphProduct = $paragraph->breakAt(225);
         
         $this->assertEquals(200, $paragraph->getHeight());
         $this->assertEquals(200, $paragraph->getFirstPoint()->getY() - $paragraph->getDiagonalPoint()->getY());

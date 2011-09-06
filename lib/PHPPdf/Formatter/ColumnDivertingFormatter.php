@@ -42,7 +42,7 @@ class ColumnDivertingFormatter extends BaseFormatter
             {
                 $container = $this->moveAllChildrenToSingleContainer($node);
                 
-                $this->splitContainerIntoColumns($node, $container);
+                $this->breakContainerIntoColumns($node, $container);
                 
                 $this->resizeColumnableContainer($node);
                 
@@ -86,7 +86,7 @@ class ColumnDivertingFormatter extends BaseFormatter
                     ->close();
     }
     
-    private function splitContainerIntoColumns(ColumnableContainer $columnableContainer, Container $container)
+    private function breakContainerIntoColumns(ColumnableContainer $columnableContainer, Container $container)
     {
         $numberOfBreaks = 0;
         $breakYCoord = $this->getBreakYCoord($columnableContainer, $numberOfBreaks++, $container);
@@ -96,8 +96,6 @@ class ColumnDivertingFormatter extends BaseFormatter
             if($this->shouldBeBroken($container, $breakYCoord))
             {
                 $container = $this->breakContainer($container, $breakYCoord, $numberOfBreaks);
-                $childHasBeenSplitted = true;
-
                 $breakYCoord = $this->getBreakYCoord($columnableContainer, $numberOfBreaks++, $container);
             }
             else
@@ -223,7 +221,7 @@ class ColumnDivertingFormatter extends BaseFormatter
     {
         $breakPoint = $container->getFirstPoint()->getY() - $breakYCoord;
         
-        $productOfBroke = $container->split($breakPoint);
+        $productOfBroke = $container->breakAt($breakPoint);
         
         if($productOfBroke)
         {

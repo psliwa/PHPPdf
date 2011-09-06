@@ -20,7 +20,7 @@ class ContainerTest extends TestCase
     /**
      * @test
      */
-    public function split()
+    public function breakAt()
     {
         $this->node->setWidth(350)
                     ->setHeight(300);
@@ -52,7 +52,7 @@ class ContainerTest extends TestCase
         $child2->translate(0, 200);
         $this->node->add($child2);
 
-        $result = $this->node->split(250);
+        $result = $this->node->breakAt(250);
 
         $this->assertEquals(250, $this->node->getHeight());
         $children = $this->node->getChildren();

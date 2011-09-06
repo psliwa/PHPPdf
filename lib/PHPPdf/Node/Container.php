@@ -116,86 +116,86 @@ class Container extends Node
     }
 
     /**
-     * Splits compose node.
+     * Breaks compose node.
      *
      * @todo refactoring
      *
      * @param integer $height
      * @return \PHPPdf\Node\Node
      */
-    protected function doSplit($height)
+    protected function doBreakAt($height)
     {
-        $splitCompose = parent::doSplit($height);
+        $brokenCompose = parent::doBreakAt($height);
 
-        if(!$splitCompose)
+        if(!$brokenCompose)
         {
             return null;
         }
 
-        $childrenToSplit = array();
+        $childrenToBreak = array();
         $childrenToMove = array();
 
-        $splitLine = $this->getFirstPoint()->getY() - $height;
+        $breakLine = $this->getFirstPoint()->getY() - $height;
 
         foreach($this->getChildren() as $child)
         {
             $childStart = $child->getFirstPoint()->getY();
             $childEnd = $child->getDiagonalPoint()->getY();
 
-            if($splitLine < $childStart && $splitLine > $childEnd)
+            if($breakLine < $childStart && $breakLine > $childEnd)
             {
-                $childrenToSplit[] = $child;
+                $childrenToBreak[] = $child;
             }
-            elseif($splitLine >= $childStart)
+            elseif($breakLine >= $childStart)
             {
                 $childrenToMove[] = $child;
             }
         }
 
-        $splitProducts = array();
+        $breakProducts = array();
         $translates = array(0);    
         
-        foreach($childrenToSplit as $child)
+        foreach($childrenToBreak as $child)
         {
             $childStart = $child->getFirstPoint()->getY();
             $childEnd = $child->getDiagonalPoint()->getY();
-            $childSplitLine = $childStart - $splitLine;
+            $childBreakingLine = $childStart - $breakLine;
             
             $originalChildHeight = $child->getHeight();
             
-            $splitProduct = $child->split($childSplitLine);
+            $breakingProduct = $child->breakAt($childBreakingLine);
 
             $yChildStart = $child->getFirstPoint()->getY();
             $yChildEnd = $child->getDiagonalPoint()->getY();
-            if($splitProduct)
+            if($breakingProduct)
             {
-                $heightAfterSplit = $splitProduct->getHeight() + $child->getHeight();
-                $translate = $heightAfterSplit - $originalChildHeight;
-                $translates[] = $translate + ($yChildEnd - $splitProduct->getFirstPoint()->getY());
-                $splitProducts[] = $splitProduct;
+                $heightAfterBreaking = $breakingProduct->getHeight() + $child->getHeight();
+                $translate = $heightAfterBreaking - $originalChildHeight;
+                $translates[] = $translate + ($yChildEnd - $breakingProduct->getFirstPoint()->getY());
+                $breakProducts[] = $breakingProduct;
             }
             else
             {
-                $translates[] = ($yChildStart - $yChildEnd) - ($child->getHeight() - $childSplitLine);
+                $translates[] = ($yChildStart - $yChildEnd) - ($child->getHeight() - $childBreakingLine);
                 array_unshift($childrenToMove, $child);
             }
         }
 
-        $splitCompose->removeAll();
+        $brokenCompose->removeAll();
 
-        $splitProducts = array_merge($splitProducts, $childrenToMove);
+        $breakProducts = array_merge($breakProducts, $childrenToMove);
         
-        foreach($splitProducts as $child)
+        foreach($breakProducts as $child)
         {
-            $splitCompose->add($child);
+            $brokenCompose->add($child);
         }        
               
         $translate = \max($translates);
 
-        $boundary = $splitCompose->getBoundary();
-        $points = $splitCompose->getBoundary()->getPoints();
+        $boundary = $brokenCompose->getBoundary();
+        $points = $brokenCompose->getBoundary()->getPoints();
 
-        $splitCompose->setHeight($splitCompose->getHeight() + $translate);
+        $brokenCompose->setHeight($brokenCompose->getHeight() + $translate);
         
         $boundary->reset();
         $boundary->setNext($points[0])
@@ -209,7 +209,7 @@ class Container extends Node
             $child->translate(0, $translate);
         }
         
-        return $splitCompose;
+        return $brokenCompose;
     }
 
     public function getMinWidth()

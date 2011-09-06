@@ -17,9 +17,9 @@ class BasicListItemTest extends \TestCase
     
     /**
      * @test
-     * @dataProvider splitIfItemHasDescendantsLeafProvider
+     * @dataProvider breakIfItemHasDescendantsLeafProvider
      */
-    public function splitIfItemHasDescendantsLeaf($splitHeight, array $isLeafs, array $isAbleToExistsAboveCoords, $expected)
+    public function breakIfItemHasDescendantsLeaf($breakingHeight, array $isLeafs, array $isAbleToExistsAboveCoords, $expected)
     {
         $height = 500;
         $width = 200;
@@ -32,7 +32,7 @@ class BasicListItemTest extends \TestCase
         foreach($isLeafs as $i => $isLeaf)
         {
             $node = $this->getMockBuilder('PHPPdf\Node\Node')
-                          ->setMethods(array('isLeaf', 'hasLeafDescendants', 'isAbleToExistsAboveCoord', 'split'))
+                          ->setMethods(array('isLeaf', 'hasLeafDescendants', 'isAbleToExistsAboveCoord', 'breakAt'))
                           ->getMock();
             $node->expects($this->any())
                   ->method('isLeaf')
@@ -42,7 +42,7 @@ class BasicListItemTest extends \TestCase
                   ->will($this->returnValue($isLeaf));
             $node->expects($this->any())
                   ->method('isAbleToExistsAboveCoord')
-                  ->with($height - $splitHeight)
+                  ->with($height - $breakingHeight)
                   ->will($this->returnValue($isAbleToExistsAboveCoords[$i]));
                   
             $boundary = $this->objectMother->getBoundaryStub(0, $height, 0, 200);
@@ -51,11 +51,11 @@ class BasicListItemTest extends \TestCase
             $this->item->add($node);
         }
 
-        $productOfSplit = $this->item->split($splitHeight);
-        $this->assertEquals($expected, $productOfSplit !== null);
+        $productOfBreaking = $this->item->breakAt($breakingHeight);
+        $this->assertEquals($expected, $productOfBreaking !== null);
     }
     
-    public function splitIfItemHasDescendantsLeafProvider()
+    public function breakIfItemHasDescendantsLeafProvider()
     {
         return array(
             array(10, array(false, true), array(true, false), false),

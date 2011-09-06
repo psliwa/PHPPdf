@@ -29,7 +29,7 @@ class Row extends Container implements Listener
     {
         parent::initialize();
         
-        $this->setAttribute('splittable', false);
+        $this->setAttribute('breakable', false);
     }
 
     public function add(Node $node)

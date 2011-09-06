@@ -106,7 +106,7 @@ XML;
 </factory>
 XML;
 
-        $attributes = array('font-size' => 123, 'splittable' => false);
+        $attributes = array('font-size' => 123, 'breakable' => false);
         $enhancements = array('name' => array('name' => 'value'));
         $attributeBagMock = $this->getMock('PHPPdf\Util\AttributeBag', array('getAll'));
         $attributeBagMock->expects($this->once())

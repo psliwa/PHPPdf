@@ -206,9 +206,9 @@ class Page extends Container
         return null;
     }
 
-    public function split($height)
+    public function breakAt($height)
     {
-        throw new \LogicException('Page can\'t be splitted.');
+        throw new \LogicException('Page can\'t be broken.');
     }
 
     public function copy()

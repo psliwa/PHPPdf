@@ -36,7 +36,7 @@ class RowTest extends TestCase
     /**
      * @test
      */
-    public function split()
+    public function breakAt()
     {
         $boundary = $this->row->getBoundary();
         $boundary->setNext(0, 100)
@@ -46,7 +46,7 @@ class RowTest extends TestCase
                  ->close();
         $this->row->setHeight(100);
 
-        $this->assertNull($this->row->split(50));
+        $this->assertNull($this->row->breakAt(50));
     }
 
     /**

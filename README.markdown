@@ -253,7 +253,7 @@ Attributes
 * font-size - file size in points, there are no any unit
 * font-style - allowed values: normal, bold, italic, bold-italic
 * color - text color. HTML/CSS style values are supported
-* splittable - if true, element is able to be splitted in several pages. Default value for most tags is true..
+* breakable - if true, element is able to be broken in several pages. Default value for most tags is true..
 * float - works similar but not the same as in HTML/CSS. Allowed values: left|none|right, default none
 * line-height - works similar as in HTML/CSS. Default value: 1.2*font-size
 * text-align - works as same as in HTML/CSS. Allowed values: left|center|right|justify, default left.
@@ -479,13 +479,13 @@ Breaking pages and columns
 
 Page and column may by manually broken by one of tags: page-break, column-break, break. All those tags are the same. Those tags have to be direct children of breaking element (dynamic-page or column-layout).
 
-If you want to avoid automatic page or column break on certain tag, you should set off "splittable" attribute of this tag. 
+If you want to avoid automatic page or column break on certain tag, you should set off "breakable" attribute of this tag. 
 
 Example:
 
     <pdf>
         <dynamic-page>
-            <div splittable="false">this div won't be automatically broken</div>
+            <div breakable="false">this div won't be automatically broken</div>
         </dynamic-page>
     </pdf>
 

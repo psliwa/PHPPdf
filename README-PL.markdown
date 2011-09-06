@@ -252,7 +252,7 @@ Atrybuty
 * font-size - rozmiar czcionki w punktach, brak obsługi jednostek wielkości
 * font-style - styl czcionki, dozwolone wartości: normal, bold, italic, bold-italic
 * color - kolor tekstu. Przyjmowane wartości takie jak w HTML/CSS
-* splittable - określa czy element może zostać podzielony na dwie strony, dla większości elementów domyślna wartość to true
+* breakable - określa czy element może zostać podzielony na dwie strony, dla większości elementów domyślna wartość to true
 * float - działanie podobne, aczkolwiek nie takie same jak w HTML/CSS. Wartości left|none|right, domyślnie none
 * line-height - działanie takie jak w HTML/CSS. Domyślna wartość to 1.2*font-size
 * text-align - działanie takie jak w HTML/CSS. Wartości left|center|right|justify, domyślnie left.
@@ -477,13 +477,13 @@ Powyższy xml określa kilka stron dokumentu pdf z zielonymi prostokątami podzi
 
 Strona i kolumna może być ręcznie złamana przez jeden z tagów: page-break, column-break, break. Każdy z tych tagów ma dokładnie takie samo znaczenie. Te tagi muszą być bezpośrednimi dziećmi łamanego elementu (tagów dynamic-page lub column-layout).
 
-Jeśli chcesz uniknąć automatycznego łamania strony lub kolumny dla szczególnego tagu, powinieneś wyłączyć atrybut "splittable" dla tego tagu.
+Jeśli chcesz uniknąć automatycznego łamania strony lub kolumny dla szczególnego tagu, powinieneś wyłączyć atrybut "breakable" dla tego tagu.
 
 Przykład:
 
     <pdf>
         <dynamic-page>
-            <div splittable="false">ten div nie będzie automatycznie łamany</div>
+            <div breakable="false">ten div nie będzie automatycznie łamany</div>
         </dynamic-page>
     </pdf>
 
