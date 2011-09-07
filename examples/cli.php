@@ -23,7 +23,7 @@ $facade = PHPPdf\Parser\FacadeBuilder::create()
 
 if($_SERVER['argc'] < 3) 
 {
-    echo 'Pass example name and destination file path, for example `cli.php example-name \some\destination\file.pdf`'.PHP_EOL;
+    echo 'Pass example name and destination file path, for example `cli.php example-name /some/destination/file.pdf`'.PHP_EOL;
     echo 'Available examples:'.PHP_EOL;
     $examples = get_examples();
     die(implode(PHP_EOL, $examples));

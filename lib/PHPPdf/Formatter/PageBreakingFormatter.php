@@ -12,7 +12,7 @@ use PHPPdf\Node\Node,
     PHPPdf\Document;
 
 /**
- * TODO: refactoring and rename
+ * TODO: refactoring
  * 
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */

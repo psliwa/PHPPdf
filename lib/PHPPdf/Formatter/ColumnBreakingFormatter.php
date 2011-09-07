@@ -19,8 +19,6 @@ use PHPPdf\Node\Node,
 /**
  * Formats columnable container, breaks containers into columns. 
  * 
- * TODO: rename
- * 
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
 class ColumnBreakingFormatter extends BaseFormatter

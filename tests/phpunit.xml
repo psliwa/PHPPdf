@@ -7,16 +7,7 @@
     </filter>
     <testsuites>
         <testsuite name="PHPPdf">
-            <directory>Cache</directory>
-            <directory>Configuration</directory>
-            <directory>Enhancement</directory>
-            <directory>Engine</directory>
-            <directory>Font</directory>
-            <directory>Formatter</directory>
-            <directory>Node</directory>
-            <directory>Main</directory>
-            <directory>Parser</directory>
-            <directory>Util</directory>
+            <directory>PHPPdf</directory>
         </testsuite>
     </testsuites>
 </phpunit>
