@@ -23,6 +23,11 @@ class InvalidResourceException extends Exception
         throw new self(sprintf('Image "%s" can\'t be initialized.', $imagePath), 0, $previous);
     }
     
+    public static function unsupportetImageTypeException($imagePath)
+    {
+        throw new self(sprintf('Image type of "%s" is not supported. Supported types: jpeg, png and tiff.', $imagePath));
+    }
+    
     public static function invalidFontException($fontData, \Exception $previous = null)
     {
         throw new self(sprintf('Font "%s" not found.', $fontData), 0, $previous);
