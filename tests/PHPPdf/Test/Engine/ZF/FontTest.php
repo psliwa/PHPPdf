@@ -11,7 +11,7 @@ class FontTest extends \PHPPdf\PHPUnit\Framework\TestCase
 
     public function setUp()
     {
-        $this->fontPath = $fontPath;
+        $this->fontPath = TEST_RESOURCES_DIR;
 
         $this->font = new Font(array(
             Font::STYLE_NORMAL => TEST_RESOURCES_DIR.'/font-judson/normal.ttf',
