@@ -325,7 +325,7 @@ class Png extends \Zend_Pdf_Resource_Image_Png
         }
         else
         {
-            fseek($this->content, $index);
+            fseek($this->content, $index, SEEK_CUR);
         }
     }
     
