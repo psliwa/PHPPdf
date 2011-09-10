@@ -85,11 +85,6 @@ class Text extends Node
 
     protected function doDraw(Document $document)
     {
-        if($this->isEmptyText())
-        {
-            return array();
-        }
-
         $tasks = array();
         
         foreach($this->lineParts as $part)
@@ -99,11 +94,6 @@ class Text extends Node
         }
         
         return $tasks;
-    }
-    
-    private function isEmptyText()
-    {
-        return !$this->text;
     }
 
     public function getStartLineDrawingXDimension($align, $lineWidth)

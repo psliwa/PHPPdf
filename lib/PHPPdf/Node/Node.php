@@ -96,10 +96,10 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
         $predicateGetters = array('breakable');
         
         $attributeWithGetters = array_flip($attributeWithGetters);
-        array_walk($attributeWithGetters, function(&$value, $key) use($predicateGetters){
+        array_walk($attributeWithGetters, function(&$value, $key, $predicateGetters){
             $method = in_array($key, $predicateGetters) ? 'is' : 'get';
             $value = $method.str_replace('-', '', $key);
-        });
+        }, $predicateGetters);
         
         $attributeWithSetters = array_flip($attributeWithSetters);
         array_walk($attributeWithSetters, function(&$value, $key){
@@ -973,7 +973,7 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
     public function getDrawingTasks(Document $document)
     {
         try
-        {
+        {            
             return array_merge($this->preDraw($document), $this->doDraw($document), $this->postDraw($document));
         }
         catch(\Exception $e)

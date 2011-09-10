@@ -8,6 +8,8 @@
 
 namespace PHPPdf\Parser;
 
+use PHPPdf\Util\Point;
+
 use PHPPdf\Configuration\Loader;
 
 use PHPPdf\Node\TextTransformator;
@@ -126,19 +128,22 @@ class Facade
         $documentContent = str_replace('%resources%', $relativePathToResources, $documentContent);
 
         $pageCollection = $this->getDocumentParser()->parse($documentContent, $stylesheetConstraint);
+        $this->updateStylesheetConstraintCacheIfNecessary($stylesheetConstraint);
+        unset($stylesheetConstraint);
 
-        $this->getDocument()->draw($pageCollection);
-        $pageCollection->flush();
-        
-        return $this->doRender($stylesheetConstraint);
+        return $this->doRender($pageCollection);
     }
     
-    private function doRender($stylesheetConstraint)
+    private function doRender($pageCollection)
     {
+        $this->getDocument()->draw($pageCollection);
+        $pageCollection->flush();
+        unset($pageCollection);
+
+        Point::clearInstances();
+        
         $content = $this->getDocument()->render();
         $this->getDocument()->initialize();
-
-        $this->updateStylesheetConstraintCacheIfNecessary($stylesheetConstraint);
 
         return $content;
     }

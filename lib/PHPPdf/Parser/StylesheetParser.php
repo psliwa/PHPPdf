@@ -52,6 +52,16 @@ class StylesheetParser extends XmlParser
     {
         return ($this->root ? $this->root : new StylesheetConstraint());
     }
+    
+    public function parse($content)
+    {
+        $stylesheetConstraint = parent::parse($content);
+
+        $this->root = null;
+        $this->clearStack();
+
+        return $stylesheetConstraint;
+    }
 
     protected function parseElement(\XMLReader $reader)
     {

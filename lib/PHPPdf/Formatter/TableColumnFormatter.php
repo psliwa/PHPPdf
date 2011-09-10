@@ -27,9 +27,9 @@ class TableColumnFormatter extends BaseFormatter
         $tableWidth = $node->getWidth();
         $enlargeColumnWidth = $numberOfColumns ? ($tableWidth - $totalColumnsWidth)/count($columnsWidths) : 0;
 
-        array_walk($columnsWidths, function(&$width) use($enlargeColumnWidth){
+        array_walk($columnsWidths, function(&$width, $index, $enlargeColumnWidth){
             $width += $enlargeColumnWidth;
-        });
+        }, $enlargeColumnWidth);
 
         foreach($node->getChildren() as $row)
         {

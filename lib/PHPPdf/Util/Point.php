@@ -44,6 +44,11 @@ final class Point implements \ArrayAccess
         
         return self::$pool[$index];
     }
+    
+    public static function clearInstances()
+    {
+        self::$pool = array();
+    }
 
     public function getX()
     {

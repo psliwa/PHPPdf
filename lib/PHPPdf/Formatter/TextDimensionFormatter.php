@@ -40,14 +40,16 @@ class TextDimensionFormatter extends BaseFormatter
     public function format(Nodes\Node $node, Document $document)
     {
         $words = preg_split('/\s+/', $node->getText());
-        
+        $node->setText('');
+
         $lastIndex = count($words) - 1;
-        array_walk($words, function(&$value, $index) use($lastIndex){
+
+        array_walk($words, function(&$value, $index, $lastIndex){
             if($index != $lastIndex)
             {
                 $value .= ' ';
             }
-        });
+        }, $lastIndex);
 
         $wordsSizes = array();
         
