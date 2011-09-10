@@ -65,7 +65,7 @@ class Zend_Pdf_Resource_Font_CidFont_TrueType extends Zend_Pdf_Resource_Font_Cid
 
         $this->_fontType = Zend_Pdf_Font::TYPE_CIDFONT_TYPE_2;
 
-        $this->_resource->Subtype  = new Zend_Pdf_Element_Name('CIDFontType2');
+        $this->_resource->Subtype  = Zend_Pdf_Element_Name::getInstance('CIDFontType2');
 
         $fontDescriptor = Zend_Pdf_Resource_Font_FontDescriptor::factory($this, $fontParser, $embeddingOptions);
         $this->_resource->FontDescriptor = $this->_objectFactory->newObject($fontDescriptor);
@@ -81,7 +81,7 @@ class Zend_Pdf_Resource_Font_CidFont_TrueType extends Zend_Pdf_Resource_Font_Cid
         }
         // Store CIDToGIDMap within compressed stream object
         $cidToGidMap = $this->_objectFactory->newStreamObject($cidToGidMapData);
-        $cidToGidMap->dictionary->Filter = new Zend_Pdf_Element_Name('FlateDecode');
+        $cidToGidMap->dictionary->Filter = Zend_Pdf_Element_Name::getInstance('FlateDecode');
         $this->_resource->CIDToGIDMap = $cidToGidMap;
     }
 

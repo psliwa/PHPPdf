@@ -42,6 +42,18 @@ class Zend_Pdf_Element_Null extends Zend_Pdf_Element
     public $value;
 
 
+    public static function getInstance()
+    {
+        static $instance = null;
+        
+        if(!$instance)
+        {
+            $instance = new self();
+        }
+        
+        return $instance;
+    }
+    
     /**
      * Object constructor
      */
@@ -71,5 +83,10 @@ class Zend_Pdf_Element_Null extends Zend_Pdf_Element
     public function toString($factory = null)
     {
         return 'null';
+    }
+    
+    public function makeClone($factory, $processed, $mode)
+    {
+        return $this;
     }
 }

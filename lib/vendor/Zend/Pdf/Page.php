@@ -305,15 +305,15 @@ class Zend_Pdf_Page extends Zend_Pdf_Canvas_Abstract
         }
 
         $this->_dictionary = $this->_objFactory->newObject(new Zend_Pdf_Element_Dictionary());
-        $this->_dictionary->Type         = new Zend_Pdf_Element_Name('Page');
+        $this->_dictionary->Type         = Zend_Pdf_Element_Name::getInstance('Page');
         
-        $this->_dictionary->LastModified = new Zend_Pdf_Element_String(Zend_Pdf::pdfDate());
+        $this->_dictionary->LastModified = Zend_Pdf_Element_String::getInstance(Zend_Pdf::pdfDate());
         $this->_dictionary->Resources    = new Zend_Pdf_Element_Dictionary();
         $this->_dictionary->MediaBox     = new Zend_Pdf_Element_Array();
-        $this->_dictionary->MediaBox->items[] = new Zend_Pdf_Element_Numeric(0);
-        $this->_dictionary->MediaBox->items[] = new Zend_Pdf_Element_Numeric(0);
-        $this->_dictionary->MediaBox->items[] = new Zend_Pdf_Element_Numeric($pageWidth);
-        $this->_dictionary->MediaBox->items[] = new Zend_Pdf_Element_Numeric($pageHeight);
+        $this->_dictionary->MediaBox->items[] = Zend_Pdf_Element_Numeric::getInstance(0);
+        $this->_dictionary->MediaBox->items[] = Zend_Pdf_Element_Numeric::getInstance(0);
+        $this->_dictionary->MediaBox->items[] = Zend_Pdf_Element_Numeric::getInstance($pageWidth);
+        $this->_dictionary->MediaBox->items[] = Zend_Pdf_Element_Numeric::getInstance($pageHeight);
         $this->_dictionary->Contents     = new Zend_Pdf_Element_Array();
     }
 
@@ -381,7 +381,7 @@ class Zend_Pdf_Page extends Zend_Pdf_Canvas_Abstract
             }
         }
 
-        $this->_dictionary->Resources->ProcSet->items[] = new Zend_Pdf_Element_Name($procSetName);
+        $this->_dictionary->Resources->ProcSet->items[] = Zend_Pdf_Element_Name::getInstance($procSetName);
     }
 
     /**

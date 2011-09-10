@@ -84,8 +84,8 @@ class Zend_Pdf_Resource_Font_FontDescriptor
          */
         $fontDescriptor = new Zend_Pdf_Element_Dictionary();
 
-        $fontDescriptor->Type     = new Zend_Pdf_Element_Name('FontDescriptor');
-        $fontDescriptor->FontName = new Zend_Pdf_Element_Name($font->getResource()->BaseFont->value);
+        $fontDescriptor->Type     = Zend_Pdf_Element_Name::getInstance('FontDescriptor');
+        $fontDescriptor->FontName = Zend_Pdf_Element_Name::getInstance($font->getResource()->BaseFont->value);
 
         /* The font flags value is a bitfield that describes the stylistic
          * attributes of the font. We will set as many of the bits as can be
@@ -111,28 +111,28 @@ class Zend_Pdf_Resource_Font_FontDescriptor
             $flags |= 1 << 6;
         }
         // bits 17-19: AllCap, SmallCap, ForceBold; not available
-        $fontDescriptor->Flags = new Zend_Pdf_Element_Numeric($flags);
+        $fontDescriptor->Flags = Zend_Pdf_Element_Numeric::getInstance($flags);
 
-        $fontBBox = array(new Zend_Pdf_Element_Numeric($font->toEmSpace($fontParser->xMin)),
-                          new Zend_Pdf_Element_Numeric($font->toEmSpace($fontParser->yMin)),
-                          new Zend_Pdf_Element_Numeric($font->toEmSpace($fontParser->xMax)),
-                          new Zend_Pdf_Element_Numeric($font->toEmSpace($fontParser->yMax)));
+        $fontBBox = array(Zend_Pdf_Element_Numeric::getInstance($font->toEmSpace($fontParser->xMin)),
+                          Zend_Pdf_Element_Numeric::getInstance($font->toEmSpace($fontParser->yMin)),
+                          Zend_Pdf_Element_Numeric::getInstance($font->toEmSpace($fontParser->xMax)),
+                          Zend_Pdf_Element_Numeric::getInstance($font->toEmSpace($fontParser->yMax)));
         $fontDescriptor->FontBBox     = new Zend_Pdf_Element_Array($fontBBox);
 
-        $fontDescriptor->ItalicAngle  = new Zend_Pdf_Element_Numeric($fontParser->italicAngle);
+        $fontDescriptor->ItalicAngle  = Zend_Pdf_Element_Numeric::getInstance($fontParser->italicAngle);
 
-        $fontDescriptor->Ascent       = new Zend_Pdf_Element_Numeric($font->toEmSpace($fontParser->ascent));
-        $fontDescriptor->Descent      = new Zend_Pdf_Element_Numeric($font->toEmSpace($fontParser->descent));
+        $fontDescriptor->Ascent       = Zend_Pdf_Element_Numeric::getInstance($font->toEmSpace($fontParser->ascent));
+        $fontDescriptor->Descent      = Zend_Pdf_Element_Numeric::getInstance($font->toEmSpace($fontParser->descent));
 
-        $fontDescriptor->CapHeight    = new Zend_Pdf_Element_Numeric($fontParser->capitalHeight);
+        $fontDescriptor->CapHeight    = Zend_Pdf_Element_Numeric::getInstance($fontParser->capitalHeight);
         /**
          * The vertical stem width is not yet extracted from the OpenType font
          * file. For now, record zero which is interpreted as 'unknown'.
          * @todo Calculate value for StemV.
          */
-        $fontDescriptor->StemV        = new Zend_Pdf_Element_Numeric(0);
+        $fontDescriptor->StemV        = Zend_Pdf_Element_Numeric::getInstance(0);
 
-        $fontDescriptor->MissingWidth = new Zend_Pdf_Element_Numeric($fontParser->glyphWidths[0]);
+        $fontDescriptor->MissingWidth = Zend_Pdf_Element_Numeric::getInstance($fontParser->glyphWidths[0]);
 
         /* Set up font embedding. This is where the actual font program itself
          * is embedded within the PDF document.
@@ -182,12 +182,12 @@ class Zend_Pdf_Resource_Font_FontDescriptor
                  */
                 $fontFile = $fontParser->getDataSource()->readAllBytes();
                 $fontFileObject = $font->getFactory()->newStreamObject($fontFile);
-                $fontFileObject->dictionary->Length1 = new Zend_Pdf_Element_Numeric(strlen($fontFile));
+                $fontFileObject->dictionary->Length1 = Zend_Pdf_Element_Numeric::getInstance(strlen($fontFile));
                 if (!($embeddingOptions & Zend_Pdf_Font::EMBED_DONT_COMPRESS)) {
                     /* Compress the font file using Flate. This generally cuts file
                      * sizes by about half!
                      */
-                    $fontFileObject->dictionary->Filter = new Zend_Pdf_Element_Name('FlateDecode');
+                    $fontFileObject->dictionary->Filter = Zend_Pdf_Element_Name::getInstance('FlateDecode');
                 }
                 if ($fontParser instanceof Zend_Pdf_FileParser_Font_OpenType_Type1 /* not implemented now */) {
                     $fontDescriptor->FontFile  = $fontFileObject;

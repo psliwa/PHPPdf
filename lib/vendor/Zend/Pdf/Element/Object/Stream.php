@@ -81,7 +81,7 @@ class Zend_Pdf_Element_Object_Stream extends Zend_Pdf_Element_Object
 
         if ($dictionary === null) {
             $this->_dictionary    = new Zend_Pdf_Element_Dictionary();
-            $this->_dictionary->Length = new Zend_Pdf_Element_Numeric(strlen( $val ));
+            $this->_dictionary->Length = Zend_Pdf_Element_Numeric::getInstance(strlen( $val ));
             $this->_streamDecoded = true;
         } else {
             $this->_dictionary    = $dictionary;

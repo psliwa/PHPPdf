@@ -75,7 +75,7 @@ class Zend_Pdf_Destination_Named extends Zend_Pdf_Destination
      */
     public static function create($name)
     {
-        return new Zend_Pdf_Destination_Named(new Zend_Pdf_Element_String($name));
+        return new Zend_Pdf_Destination_Named(Zend_Pdf_Element_String::getInstance($name));
     }
 
     /**

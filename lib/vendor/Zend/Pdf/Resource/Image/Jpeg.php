@@ -86,25 +86,25 @@ class Zend_Pdf_Resource_Image_Jpeg extends Zend_Pdf_Resource_Image
         }
 
         $imageDictionary = $this->_resource->dictionary;
-        $imageDictionary->Width            = new Zend_Pdf_Element_Numeric($imageInfo[0]);
-        $imageDictionary->Height           = new Zend_Pdf_Element_Numeric($imageInfo[1]);
-        $imageDictionary->ColorSpace       = new Zend_Pdf_Element_Name($colorSpace);
-        $imageDictionary->BitsPerComponent = new Zend_Pdf_Element_Numeric($imageInfo['bits']);
+        $imageDictionary->Width            = Zend_Pdf_Element_Numeric::getInstance($imageInfo[0]);
+        $imageDictionary->Height           = Zend_Pdf_Element_Numeric::getInstance($imageInfo[1]);
+        $imageDictionary->ColorSpace       = Zend_Pdf_Element_Name::getInstance($colorSpace);
+        $imageDictionary->BitsPerComponent = Zend_Pdf_Element_Numeric::getInstance($imageInfo['bits']);
         if ($imageInfo[2] == IMAGETYPE_JPEG) {
-            $imageDictionary->Filter       = new Zend_Pdf_Element_Name('DCTDecode');
+            $imageDictionary->Filter       = Zend_Pdf_Element_Name::getInstance('DCTDecode');
         } else if ($imageInfo[2] == IMAGETYPE_JPEG2000){
-            $imageDictionary->Filter       = new Zend_Pdf_Element_Name('JPXDecode');
+            $imageDictionary->Filter       = Zend_Pdf_Element_Name::getInstance('JPXDecode');
         }
 
         if (($imageFile = @fopen($imageFileName, 'rb')) === false ) {
             
             throw new Zend_Pdf_Exception( "Can not open '$imageFileName' file for reading." );
         }
-        $byteCount = filesize($imageFileName);
+        $byteCount = 1024*10;
         $this->_resource->value = '';
-        while ( $byteCount > 0 && ($nextBlock = fread($imageFile, $byteCount)) != false ) {
+        while ( !feof($imageFile) ) {
+            $nextBlock = fread($imageFile, $byteCount);
             $this->_resource->value .= $nextBlock;
-            $byteCount -= strlen($nextBlock);
         }
         fclose($imageFile);
         $this->_resource->skipFilters();

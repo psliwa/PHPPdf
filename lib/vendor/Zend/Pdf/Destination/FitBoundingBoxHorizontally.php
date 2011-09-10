@@ -62,14 +62,14 @@ class Zend_Pdf_Destination_FitBoundingBoxHorizontally extends Zend_Pdf_Destinati
         if ($page instanceof Zend_Pdf_Page) {
             $destinationArray->items[] = $page->getPageDictionary();
         } else if (is_integer($page)) {
-            $destinationArray->items[] = new Zend_Pdf_Element_Numeric($page);
+            $destinationArray->items[] = Zend_Pdf_Element_Numeric::getInstance($page);
         } else {
             
             throw new Zend_Pdf_Exception('Page entry must be a Zend_Pdf_Page object or a page number.');
         }
 
-        $destinationArray->items[] = new Zend_Pdf_Element_Name('FitBH');
-        $destinationArray->items[] = new Zend_Pdf_Element_Numeric($top);
+        $destinationArray->items[] = Zend_Pdf_Element_Name::getInstance('FitBH');
+        $destinationArray->items[] = Zend_Pdf_Element_Numeric::getInstance($top);
 
         return new Zend_Pdf_Destination_FitBoundingBoxHorizontally($destinationArray);
     }
@@ -92,7 +92,7 @@ class Zend_Pdf_Destination_FitBoundingBoxHorizontally extends Zend_Pdf_Destinati
      */
     public function setTopEdge($top)
     {
-        $this->_destinationArray->items[2] = new Zend_Pdf_Element_Numeric($top);
+        $this->_destinationArray->items[2] = Zend_Pdf_Element_Numeric::getInstance($top);
         return $this;
     }
 }

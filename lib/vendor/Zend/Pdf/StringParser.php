@@ -303,7 +303,7 @@ class Zend_Pdf_StringParser
                 return ($this->_elements[] = $this->_readBinaryString());
 
             case '/':
-                return ($this->_elements[] = new Zend_Pdf_Element_Name(
+                return ($this->_elements[] = Zend_Pdf_Element_Name::getInstance(
                                                     Zend_Pdf_Element_Name::unescape( $this->readLexeme() )
                                                                       ));
 
@@ -330,11 +330,11 @@ class Zend_Pdf_StringParser
 
             default:
                 if (strcasecmp($nextLexeme, 'true') == 0) {
-                    return ($this->_elements[] = new Zend_Pdf_Element_Boolean(true));
+                    return ($this->_elements[] = Zend_Pdf_Element_Boolean::getInstance(true));
                 } else if (strcasecmp($nextLexeme, 'false') == 0) {
-                    return ($this->_elements[] = new Zend_Pdf_Element_Boolean(false));
+                    return ($this->_elements[] = Zend_Pdf_Element_Boolean::getInstance(false));
                 } else if (strcasecmp($nextLexeme, 'null') == 0) {
-                    return ($this->_elements[] = new Zend_Pdf_Element_Null());
+                    return ($this->_elements[] = Zend_Pdf_Element_Null::getInstance());
                 }
 
                 $ref = $this->_readReference($nextLexeme);
@@ -388,7 +388,7 @@ class Zend_Pdf_StringParser
             throw new Zend_Pdf_Exception(sprintf('PDF file syntax error. Unexpected end of file while string reading. Offset - 0x%X. \')\' expected.', $start));
         }
 
-        return new Zend_Pdf_Element_String(Zend_Pdf_Element_String::unescape( substr($this->data,
+        return Zend_Pdf_Element_String::getInstance(Zend_Pdf_Element_String::unescape( substr($this->data,
                                                                                      $start,
                                                                                      $this->offset - $start - 1) ));
     }
@@ -532,7 +532,7 @@ class Zend_Pdf_StringParser
             $nextLexeme = $this->readLexeme();
         }
 
-        return new Zend_Pdf_Element_Numeric($nextLexeme);
+        return Zend_Pdf_Element_Numeric::getInstance($nextLexeme);
     }
 
 
@@ -546,7 +546,7 @@ class Zend_Pdf_StringParser
     public function getObject($offset, Zend_Pdf_Element_Reference_Context $context)
     {
         if ($offset === null ) {
-            return new Zend_Pdf_Element_Null();
+            return Zend_Pdf_Element_Null::getInstance();
         }
 
         // Save current offset to make getObject() reentrant

@@ -115,17 +115,17 @@ class Zend_Pdf_Annotation_Markup extends Zend_Pdf_Annotation
     {
         $annotationDictionary = new Zend_Pdf_Element_Dictionary();
 
-        $annotationDictionary->Type    = new Zend_Pdf_Element_Name('Annot');
-        $annotationDictionary->Subtype = new Zend_Pdf_Element_Name($subType);
+        $annotationDictionary->Type    = Zend_Pdf_Element_Name::getInstance('Annot');
+        $annotationDictionary->Subtype = Zend_Pdf_Element_Name::getInstance($subType);
 
         $rectangle = new Zend_Pdf_Element_Array();
-        $rectangle->items[] = new Zend_Pdf_Element_Numeric($x1);
-        $rectangle->items[] = new Zend_Pdf_Element_Numeric($y1);
-        $rectangle->items[] = new Zend_Pdf_Element_Numeric($x2);
-        $rectangle->items[] = new Zend_Pdf_Element_Numeric($y2);
+        $rectangle->items[] = Zend_Pdf_Element_Numeric::getInstance($x1);
+        $rectangle->items[] = Zend_Pdf_Element_Numeric::getInstance($y1);
+        $rectangle->items[] = Zend_Pdf_Element_Numeric::getInstance($x2);
+        $rectangle->items[] = Zend_Pdf_Element_Numeric::getInstance($y2);
         $annotationDictionary->Rect = $rectangle;
 
-        $annotationDictionary->Contents = new Zend_Pdf_Element_String($text);
+        $annotationDictionary->Contents = Zend_Pdf_Element_String::getInstance($text);
 
         if (!is_array($quadPoints)  ||  count($quadPoints) == 0  ||  count($quadPoints) % 8 != 0) {
             
@@ -133,7 +133,7 @@ class Zend_Pdf_Annotation_Markup extends Zend_Pdf_Annotation
         }
         $points = new Zend_Pdf_Element_Array();
         foreach ($quadPoints as $quadPoint) {
-            $points->items[] = new Zend_Pdf_Element_Numeric($quadPoint);
+            $points->items[] = Zend_Pdf_Element_Numeric::getInstance($quadPoint);
         }
         $annotationDictionary->QuadPoints = $points;
 

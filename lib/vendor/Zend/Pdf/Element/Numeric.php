@@ -40,7 +40,18 @@ class Zend_Pdf_Element_Numeric extends Zend_Pdf_Element
      * @var numeric
      */
     public $value;
+    
+    private static $instances = array();
 
+    public static function getInstance($val)
+    {
+        return new self($val);
+        if(!isset(self::$instances[$val]))
+        {
+            self::$instances[$val] = new self($val);
+        }
+        return self::$instances[$val];
+    }
 
     /**
      * Object constructor
@@ -91,5 +102,17 @@ class Zend_Pdf_Element_Numeric extends Zend_Pdf_Element
             $prec++; $v *= 10;
         }
         return sprintf("%.{$prec}F", $this->value);
+    }
+    
+    /**
+     * psliwa: converting number to string without object creation
+     */
+    public static function convertToString($val)
+    {
+        if (is_integer($val)) {
+            return (string)$val;
+        }
+        
+        return round($val, 4);
     }
 }

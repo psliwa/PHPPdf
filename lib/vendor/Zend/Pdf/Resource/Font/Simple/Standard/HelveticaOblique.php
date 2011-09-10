@@ -302,6 +302,6 @@ class Zend_Pdf_Resource_Font_Simple_Standard_HelveticaOblique extends Zend_Pdf_R
          * viewers already have all of the metrics data. We only need to provide
          * the font name and encoding method.
          */
-        $this->_resource->BaseFont = new Zend_Pdf_Element_Name('Helvetica-Oblique');
+        $this->_resource->BaseFont = Zend_Pdf_Element_Name::getInstance('Helvetica-Oblique');
     }
 }

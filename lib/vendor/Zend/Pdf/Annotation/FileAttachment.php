@@ -79,19 +79,19 @@ class Zend_Pdf_Annotation_FileAttachment extends Zend_Pdf_Annotation
     {
         $annotationDictionary = new Zend_Pdf_Element_Dictionary();
 
-        $annotationDictionary->Type    = new Zend_Pdf_Element_Name('Annot');
-        $annotationDictionary->Subtype = new Zend_Pdf_Element_Name('FileAttachment');
+        $annotationDictionary->Type    = Zend_Pdf_Element_Name::getInstance('Annot');
+        $annotationDictionary->Subtype = Zend_Pdf_Element_Name::getInstance('FileAttachment');
 
         $rectangle = new Zend_Pdf_Element_Array();
-        $rectangle->items[] = new Zend_Pdf_Element_Numeric($x1);
-        $rectangle->items[] = new Zend_Pdf_Element_Numeric($y1);
-        $rectangle->items[] = new Zend_Pdf_Element_Numeric($x2);
-        $rectangle->items[] = new Zend_Pdf_Element_Numeric($y2);
+        $rectangle->items[] = Zend_Pdf_Element_Numeric::getInstance($x1);
+        $rectangle->items[] = Zend_Pdf_Element_Numeric::getInstance($y1);
+        $rectangle->items[] = Zend_Pdf_Element_Numeric::getInstance($x2);
+        $rectangle->items[] = Zend_Pdf_Element_Numeric::getInstance($y2);
         $annotationDictionary->Rect = $rectangle;
 
         $fsDictionary = new Zend_Pdf_Element_Dictionary();
-        $fsDictionary->Type = new Zend_Pdf_Element_Name('Filespec');
-        $fsDictionary->F    = new Zend_Pdf_Element_String($fileSpecification);
+        $fsDictionary->Type = Zend_Pdf_Element_Name::getInstance('Filespec');
+        $fsDictionary->F    = Zend_Pdf_Element_String::getInstance($fileSpecification);
 
         $annotationDictionary->FS = $fsDictionary;
 

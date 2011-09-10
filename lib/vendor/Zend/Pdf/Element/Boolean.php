@@ -41,7 +41,18 @@ class Zend_Pdf_Element_Boolean extends Zend_Pdf_Element
      */
     public $value;
 
+    private static $instances = array();
 
+    public static function getInstance($val)
+    {
+        $v = (int) $val;
+        if(!isset(self::$instances[$v]))
+        {
+            self::$instances[$v] = new self($val);
+        }
+        return self::$instances[$v];
+    }
+    
     /**
      * Object constructor
      *
@@ -79,5 +90,10 @@ class Zend_Pdf_Element_Boolean extends Zend_Pdf_Element
     public function toString($factory = null)
     {
         return $this->value ? 'true' : 'false';
+    }
+    
+    public function makeClone($factory, $processed, $mode)
+    {
+        return $this;
     }
 }

@@ -52,7 +52,8 @@ class Zend_Pdf_Element_Array extends Zend_Pdf_Element
      */
     public function __construct($val = null)
     {
-        $this->items = new ArrayObject();
+        //use array, not ArrayObject
+        $this->items = array();
 
         if ($val !== null  &&  is_array($val)) {
             foreach ($val as $element) {
@@ -140,9 +141,8 @@ class Zend_Pdf_Element_Array extends Zend_Pdf_Element
     {
         $newArray = new self();
 
-        foreach ($this->items as $key => $value) {
-            $newArray->items[$key] = $value->makeClone($factory, $processed, $mode);
-        }
+        //psliwa: don't make a copy
+        $newArray->items = $this->items;
 
         return $newArray;
     }

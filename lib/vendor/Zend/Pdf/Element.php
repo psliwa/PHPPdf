@@ -80,7 +80,7 @@ abstract class Zend_Pdf_Element
      */
     public function makeClone(Zend_Pdf_ElementFactory $factory, array &$processed, $mode)
     {
-        return clone $this;
+        return $this;
     }
 
     /**
@@ -146,10 +146,10 @@ abstract class Zend_Pdf_Element
     {
         if (is_numeric($input)) {
             
-            return new Zend_Pdf_Element_Numeric($input);
+            return Zend_Pdf_Element_Numeric::getInstance($input);
         } else if (is_bool($input)) {
             
-            return new Zend_Pdf_Element_Boolean($input);
+            return Zend_Pdf_Element_Boolean::getInstance($input);
         } else if (is_array($input)) {
             $pdfElementsArray = array();
             $isDictionary = false;
@@ -170,7 +170,7 @@ abstract class Zend_Pdf_Element
             }
         } else {
             
-            return new Zend_Pdf_Element_String((string)$input);
+            return Zend_Pdf_Element_String::getInstance((string)$input);
         }
     }
 }

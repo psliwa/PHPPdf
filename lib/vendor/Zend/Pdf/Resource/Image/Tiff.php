@@ -404,15 +404,15 @@ class Zend_Pdf_Resource_Image_Tiff extends Zend_Pdf_Resource_Image
         $this->_imageProperties['PDFfilter'] = $this->_filter;
         $this->_imageProperties['PDFcolorSpace'] = $this->_colorSpace;
 
-        $imageDictionary->Width            = new Zend_Pdf_Element_Numeric($this->_width);
+        $imageDictionary->Width            = Zend_Pdf_Element_Numeric::getInstance($this->_width);
         if($this->_whiteIsZero === true) {
-            $imageDictionary->Decode       = new Zend_Pdf_Element_Array(array(new Zend_Pdf_Element_Numeric(1), new Zend_Pdf_Element_Numeric(0)));
+            $imageDictionary->Decode       = new Zend_Pdf_Element_Array(array(Zend_Pdf_Element_Numeric::getInstance(1), Zend_Pdf_Element_Numeric::getInstance(0)));
         }
-        $imageDictionary->Height           = new Zend_Pdf_Element_Numeric($this->_height);
-        $imageDictionary->ColorSpace       = new Zend_Pdf_Element_Name($this->_colorSpace);
-        $imageDictionary->BitsPerComponent = new Zend_Pdf_Element_Numeric($this->_bitsPerSample);
+        $imageDictionary->Height           = Zend_Pdf_Element_Numeric::getInstance($this->_height);
+        $imageDictionary->ColorSpace       = Zend_Pdf_Element_Name::getInstance($this->_colorSpace);
+        $imageDictionary->BitsPerComponent = Zend_Pdf_Element_Numeric::getInstance($this->_bitsPerSample);
         if(isset($this->_filter) && $this->_filter != 'None') {
-            $imageDictionary->Filter = new Zend_Pdf_Element_Name($this->_filter);
+            $imageDictionary->Filter = Zend_Pdf_Element_Name::getInstance($this->_filter);
         }
 
         $this->_resource->value = $imageDataBytes;

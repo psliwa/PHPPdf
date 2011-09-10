@@ -229,7 +229,7 @@ class Zend_Pdf_Element_Object extends Zend_Pdf_Element
         }
 
         // Create obect with null value and register it in $processed container
-        $processed[$id] = $clonedObject = $factory->newObject(new Zend_Pdf_Element_Null());
+        $processed[$id] = $clonedObject = $factory->newObject(Zend_Pdf_Element_Null::getInstance());
 
         // Pecursively process actual data
         $clonedObject->_value = $this->_value->makeClone($factory, $processed, $mode);

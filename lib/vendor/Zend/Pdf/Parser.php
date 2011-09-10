@@ -332,7 +332,7 @@ class Zend_Pdf_Parser
          * It doesn't correspond to the actual data, but is true when trailer will be used
          * as a trailer for next generated PDF section.
          */
-        $trailerObj->Prev = new Zend_Pdf_Element_Numeric($offset);
+        $trailerObj->Prev = Zend_Pdf_Element_Numeric::getInstance($offset);
 
         return $trailerObj;
     }

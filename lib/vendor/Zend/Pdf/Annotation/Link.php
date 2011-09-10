@@ -90,14 +90,14 @@ class Zend_Pdf_Annotation_Link extends Zend_Pdf_Annotation
 
         $annotationDictionary = new Zend_Pdf_Element_Dictionary();
 
-        $annotationDictionary->Type    = new Zend_Pdf_Element_Name('Annot');
-        $annotationDictionary->Subtype = new Zend_Pdf_Element_Name('Link');
+        $annotationDictionary->Type    = Zend_Pdf_Element_Name::getInstance('Annot');
+        $annotationDictionary->Subtype = Zend_Pdf_Element_Name::getInstance('Link');
 
         $rectangle = new Zend_Pdf_Element_Array();
-        $rectangle->items[] = new Zend_Pdf_Element_Numeric($x1);
-        $rectangle->items[] = new Zend_Pdf_Element_Numeric($y1);
-        $rectangle->items[] = new Zend_Pdf_Element_Numeric($x2);
-        $rectangle->items[] = new Zend_Pdf_Element_Numeric($y2);
+        $rectangle->items[] = Zend_Pdf_Element_Numeric::getInstance($x1);
+        $rectangle->items[] = Zend_Pdf_Element_Numeric::getInstance($y1);
+        $rectangle->items[] = Zend_Pdf_Element_Numeric::getInstance($x2);
+        $rectangle->items[] = Zend_Pdf_Element_Numeric::getInstance($y2);
         $annotationDictionary->Rect = $rectangle;
 
         if ($target instanceof Zend_Pdf_Destination) {

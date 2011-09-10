@@ -135,7 +135,7 @@ class Zend_Pdf_Style
     public function setLineWidth($width)
     {
         
-        $this->_lineWidth = new Zend_Pdf_Element_Numeric($width);
+        $this->_lineWidth = Zend_Pdf_Element_Numeric::getInstance($width);
     }
 
 
@@ -155,7 +155,7 @@ class Zend_Pdf_Style
 
         
         $this->_lineDashingPattern = $pattern;
-        $this->_lineDashingPhase   = new Zend_Pdf_Element_Numeric($phase);
+        $this->_lineDashingPhase   = Zend_Pdf_Element_Numeric::getInstance($phase);
     }
 
 
@@ -280,7 +280,7 @@ class Zend_Pdf_Style
 
             
             foreach ($this->_lineDashingPattern as $dashItem) {
-                $dashElement = new Zend_Pdf_Element_Numeric($dashItem);
+                $dashElement = Zend_Pdf_Element_Numeric::getInstance($dashItem);
                 $dashPattern->items[] = $dashElement;
             }
 

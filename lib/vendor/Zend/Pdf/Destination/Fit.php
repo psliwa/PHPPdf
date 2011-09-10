@@ -62,13 +62,13 @@ class Zend_Pdf_Destination_Fit extends Zend_Pdf_Destination_Explicit
         if ($page instanceof Zend_Pdf_Page) {
             $destinationArray->items[] = $page->getPageDictionary();
         } else if (is_integer($page)) {
-            $destinationArray->items[] = new Zend_Pdf_Element_Numeric($page);
+            $destinationArray->items[] = Zend_Pdf_Element_Numeric::getInstance($page);
         } else {
             
             throw new Zend_Pdf_Exception('Page entry must be a Zend_Pdf_Page object or a page number.');
         }
 
-        $destinationArray->items[] = new Zend_Pdf_Element_Name('Fit');
+        $destinationArray->items[] = Zend_Pdf_Element_Name::getInstance('Fit');
 
         return new Zend_Pdf_Destination_Fit($destinationArray);
     }

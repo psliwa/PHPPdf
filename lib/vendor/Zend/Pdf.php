@@ -364,7 +364,7 @@ class Zend_Pdf
             $trailerDictionary->ID->items[] = new Zend_Pdf_Element_String_Binary($docIdLow);
             $trailerDictionary->ID->items[] = new Zend_Pdf_Element_String_Binary($docIdHigh);
 
-            $trailerDictionary->Size = new Zend_Pdf_Element_Numeric(0);
+            $trailerDictionary->Size = Zend_Pdf_Element_Numeric::getInstance(0);
 
             
             $this->_trailer = new Zend_Pdf_Trailer_Generator($trailerDictionary);
@@ -373,17 +373,17 @@ class Zend_Pdf
              * Document catalog indirect object.
              */
             $docCatalog = $this->_objFactory->newObject(new Zend_Pdf_Element_Dictionary());
-            $docCatalog->Type    = new Zend_Pdf_Element_Name('Catalog');
-            $docCatalog->Version = new Zend_Pdf_Element_Name(Zend_Pdf::PDF_VERSION);
+            $docCatalog->Type    = Zend_Pdf_Element_Name::getInstance('Catalog');
+            $docCatalog->Version = Zend_Pdf_Element_Name::getInstance(Zend_Pdf::PDF_VERSION);
             $this->_trailer->Root = $docCatalog;
 
             /**
              * Pages container
              */
             $docPages = $this->_objFactory->newObject(new Zend_Pdf_Element_Dictionary());
-            $docPages->Type  = new Zend_Pdf_Element_Name('Pages');
+            $docPages->Type  = Zend_Pdf_Element_Name::getInstance('Pages');
             $docPages->Kids  = new Zend_Pdf_Element_Array();
-            $docPages->Count = new Zend_Pdf_Element_Numeric(0);
+            $docPages->Count = Zend_Pdf_Element_Numeric::getInstance(0);
             $docCatalog->Pages = $docPages;
         }
     }
@@ -671,7 +671,7 @@ class Zend_Pdf
 
         $destArrayItems = array();
         foreach ($this->_namedTargets as $name => $destination) {
-            $destArrayItems[] = new Zend_Pdf_Element_String($name);
+            $destArrayItems[] = Zend_Pdf_Element_String::getInstance($name);
 
             if ($destination instanceof Zend_Pdf_Target) {
                 $destArrayItems[] = $destination->getResource();
@@ -708,7 +708,7 @@ class Zend_Pdf
                 return;
             } else {
                 $root->Outlines = $this->_objFactory->newObject(new Zend_Pdf_Element_Dictionary());
-                $root->Outlines->Type = new Zend_Pdf_Element_Name('Outlines');
+                $root->Outlines->Type = Zend_Pdf_Element_Name::getInstance('Outlines');
                 $updateOutlinesNavigation = true;
             }
         } else {
@@ -758,7 +758,7 @@ class Zend_Pdf
 
         if ($openOutlinesCount != $this->_originalOpenOutlinesCount) {
             $root->Outlines->touch;
-            $root->Outlines->Count = new Zend_Pdf_Element_Numeric($openOutlinesCount);
+            $root->Outlines->Count = Zend_Pdf_Element_Numeric::getInstance($openOutlinesCount);
         }
     }
 
@@ -817,8 +817,8 @@ class Zend_Pdf
     public function setMetadata($metadata)
     {
         $metadataObject = $this->_objFactory->newStreamObject($metadata);
-        $metadataObject->dictionary->Type    = new Zend_Pdf_Element_Name('Metadata');
-        $metadataObject->dictionary->Subtype = new Zend_Pdf_Element_Name('XML');
+        $metadataObject->dictionary->Type    = Zend_Pdf_Element_Name::getInstance('Metadata');
+        $metadataObject->dictionary->Subtype = Zend_Pdf_Element_Name::getInstance('XML');
 
         $this->_trailer->Root->Metadata = $metadataObject;
         $this->_trailer->Root->touch();
@@ -1192,15 +1192,15 @@ class Zend_Pdf
                     case 'Trapped':
                         switch ($value) {
                             case true:
-                                $docInfo->$key = new Zend_Pdf_Element_Name('True');
+                                $docInfo->$key = Zend_Pdf_Element_Name::getInstance('True');
                                 break;
 
                             case false:
-                                $docInfo->$key = new Zend_Pdf_Element_Name('False');
+                                $docInfo->$key = Zend_Pdf_Element_Name::getInstance('False');
                                 break;
 
                             case null:
-                                $docInfo->$key = new Zend_Pdf_Element_Name('Unknown');
+                                $docInfo->$key = Zend_Pdf_Element_Name::getInstance('Unknown');
                                 break;
 
                             default:
@@ -1212,7 +1212,7 @@ class Zend_Pdf
                     case 'CreationDate':
                         // break intentionally omitted
                     case 'ModDate':
-                        $docInfo->$key = new Zend_Pdf_Element_String((string)$value);
+                        $docInfo->$key = Zend_Pdf_Element_String::getInstance((string)$value);
                         break;
 
                     case 'Title':
@@ -1232,7 +1232,7 @@ class Zend_Pdf
                                 $value = "\xfe\xff" . mb_convert_encoding($value, 'UTF-16', $detected);
                             }
                         }
-                        $docInfo->$key = new Zend_Pdf_Element_String((string)$value);
+                        $docInfo->$key = Zend_Pdf_Element_String::getInstance((string)$value);
                         break;
 
                     default:

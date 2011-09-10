@@ -169,7 +169,7 @@ class Zend_Pdf_Element_Reference extends Zend_Pdf_Element
         }
 
         if ($obj === null ) {
-            $this->_ref = new Zend_Pdf_Element_Null();
+            $this->_ref = Zend_Pdf_Element_Null::getInstance();
             return;
         }
 

@@ -55,7 +55,7 @@ class Zend_Pdf_Color_GrayScale extends Zend_Pdf_Color
         if ($grayLevel < 0) { $grayLevel = 0; }
         if ($grayLevel > 1) { $grayLevel = 1; }
 
-        $this->_grayLevel = new Zend_Pdf_Element_Numeric($grayLevel);
+        $this->_grayLevel = Zend_Pdf_Element_Numeric::getInstance($grayLevel);
     }
 
     /**

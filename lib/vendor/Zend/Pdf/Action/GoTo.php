@@ -80,8 +80,8 @@ class Zend_Pdf_Action_GoTo extends Zend_Pdf_Action
         }
 
         $dictionary = new Zend_Pdf_Element_Dictionary();
-        $dictionary->Type = new Zend_Pdf_Element_Name('Action');
-        $dictionary->S    = new Zend_Pdf_Element_Name('GoTo');
+        $dictionary->Type = Zend_Pdf_Element_Name::getInstance('Action');
+        $dictionary->S    = Zend_Pdf_Element_Name::getInstance('GoTo');
         $dictionary->Next = null;
         $dictionary->D    = $destination->getResource();
 

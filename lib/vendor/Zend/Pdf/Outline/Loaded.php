@@ -82,7 +82,7 @@ class Zend_Pdf_Outline_Loaded extends Zend_Pdf_Outline
     public function setTitle($title)
     {
         $this->_outlineDictionary->Title->touch();
-        $this->_outlineDictionary->Title = new Zend_Pdf_Element_String($title);
+        $this->_outlineDictionary->Title = Zend_Pdf_Element_String::getInstance($title);
         return $this;
     }
 
@@ -134,7 +134,7 @@ class Zend_Pdf_Outline_Loaded extends Zend_Pdf_Outline
     {
         if ($this->_outlineDictionary->F === null) {
             $this->_outlineDictionary->touch();
-            $this->_outlineDictionary->F = new Zend_Pdf_Element_Numeric($isItalic? 1 : 0);
+            $this->_outlineDictionary->F = Zend_Pdf_Element_Numeric::getInstance($isItalic? 1 : 0);
         } else {
             $this->_outlineDictionary->F->touch();
             if ($isItalic) {
@@ -169,7 +169,7 @@ class Zend_Pdf_Outline_Loaded extends Zend_Pdf_Outline
     {
         if ($this->_outlineDictionary->F === null) {
             $this->_outlineDictionary->touch();
-            $this->_outlineDictionary->F = new Zend_Pdf_Element_Numeric($isBold? 2 : 0);
+            $this->_outlineDictionary->F = Zend_Pdf_Element_Numeric::getInstance($isBold? 2 : 0);
         } else {
             $this->_outlineDictionary->F->touch();
             if ($isBold) {
@@ -214,9 +214,9 @@ class Zend_Pdf_Outline_Loaded extends Zend_Pdf_Outline
             $this->_outlineDictionary->C = null;
         } else {
             $components = $color->getComponents();
-            $colorComponentElements = array(new Zend_Pdf_Element_Numeric($components[0]),
-                                            new Zend_Pdf_Element_Numeric($components[1]),
-                                            new Zend_Pdf_Element_Numeric($components[2]));
+            $colorComponentElements = array(Zend_Pdf_Element_Numeric::getInstance($components[0]),
+                                            Zend_Pdf_Element_Numeric::getInstance($components[1]),
+                                            Zend_Pdf_Element_Numeric::getInstance($components[2]));
             $this->_outlineDictionary->C = new Zend_Pdf_Element_Array($colorComponentElements);
         }
 
@@ -430,7 +430,7 @@ class Zend_Pdf_Outline_Loaded extends Zend_Pdf_Outline
             $this->_outlineDictionary->Last  = $lastChild;
 
             if (count($this->childOutlines) != 0) {
-                $this->_outlineDictionary->Count = new Zend_Pdf_Element_Numeric(($this->isOpen()? 1 : -1)*count($this->childOutlines));
+                $this->_outlineDictionary->Count = Zend_Pdf_Element_Numeric::getInstance(($this->isOpen()? 1 : -1)*count($this->childOutlines));
             } else {
                 $this->_outlineDictionary->Count = null;
             }

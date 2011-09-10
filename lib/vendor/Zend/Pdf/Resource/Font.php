@@ -144,7 +144,7 @@ abstract class Zend_Pdf_Resource_Font extends Zend_Pdf_Resource
     public function __construct()
     {
         parent::__construct(new Zend_Pdf_Element_Dictionary());
-        $this->_resource->Type = new Zend_Pdf_Element_Name('Font');
+        $this->_resource->Type = Zend_Pdf_Element_Name::getInstance('Font');
     }
 
 

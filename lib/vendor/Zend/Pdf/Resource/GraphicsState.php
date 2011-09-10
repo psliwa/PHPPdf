@@ -58,7 +58,7 @@ class Zend_Pdf_Resource_GraphicsState extends Zend_Pdf_Resource
             $factory = Zend_Pdf_ElementFactory::createFactory(1);
 
             $gsDictionary = new Zend_Pdf_Element_Dictionary();
-            $gsDictionary->Type = new Zend_Pdf_Element_Name('ExtGState');
+            $gsDictionary->Type = Zend_Pdf_Element_Name::getInstance('ExtGState');
 
             $extGStateObject = $factory->newObject($gsDictionary);
         }
@@ -98,9 +98,9 @@ class Zend_Pdf_Resource_GraphicsState extends Zend_Pdf_Resource
             throw new Zend_Pdf_Exception('Alpha value must be numeric between 0 (transparent) and 1 (opaque).');
         }
 
-        $this->_resource->BM   = new Zend_Pdf_Element_Name($mode);
-        $this->_resource->CA   = new Zend_Pdf_Element_Numeric($alpha);
-        $this->_resource->ca   = new Zend_Pdf_Element_Numeric($alpha);
+        $this->_resource->BM   = Zend_Pdf_Element_Name::getInstance($mode);
+        $this->_resource->CA   = Zend_Pdf_Element_Numeric::getInstance($alpha);
+        $this->_resource->ca   = Zend_Pdf_Element_Numeric::getInstance($alpha);
     }
 
 

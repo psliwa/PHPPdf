@@ -131,10 +131,10 @@ class Zend_Pdf_Resource_Font_Type0 extends Zend_Pdf_Resource_Font
         $this->_lineGap = $descendantFont->getLineGap();
 
 
-        $this->_resource->Subtype         = new Zend_Pdf_Element_Name('Type0');
-        $this->_resource->BaseFont        = new Zend_Pdf_Element_Name($descendantFont->getResource()->BaseFont->value);
+        $this->_resource->Subtype         = Zend_Pdf_Element_Name::getInstance('Type0');
+        $this->_resource->BaseFont        = Zend_Pdf_Element_Name::getInstance($descendantFont->getResource()->BaseFont->value);
         $this->_resource->DescendantFonts = new Zend_Pdf_Element_Array(array( $descendantFont->getResource() ));
-        $this->_resource->Encoding        = new Zend_Pdf_Element_Name('Identity-H');
+        $this->_resource->Encoding        = Zend_Pdf_Element_Name::getInstance('Identity-H');
 
         $toUnicode = $this->_objectFactory->newStreamObject(self::getToUnicodeCMapData());
         $this->_resource->ToUnicode = $toUnicode;

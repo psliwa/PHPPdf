@@ -117,7 +117,7 @@ abstract class Zend_Pdf_Resource_Font_Simple extends Zend_Pdf_Resource_Font
          * These encodings will be automatically supported for standard builtin PDF fonts as well
          * as for external fonts.
          */
-        $this->_resource->Encoding = new Zend_Pdf_Element_Name('WinAnsiEncoding');
+        $this->_resource->Encoding = Zend_Pdf_Element_Name::getInstance('WinAnsiEncoding');
     }
 
     /**

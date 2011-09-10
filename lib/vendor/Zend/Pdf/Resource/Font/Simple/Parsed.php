@@ -84,16 +84,16 @@ abstract class Zend_Pdf_Resource_Font_Simple_Parsed extends Zend_Pdf_Resource_Fo
         /* Resource dictionary */
 
         $baseFont = $this->getFontName(Zend_Pdf_Font::NAME_POSTSCRIPT, 'en', 'UTF-8');
-        $this->_resource->BaseFont = new Zend_Pdf_Element_Name($baseFont);
+        $this->_resource->BaseFont = Zend_Pdf_Element_Name::getInstance($baseFont);
 
-        $this->_resource->FirstChar = new Zend_Pdf_Element_Numeric(0);
-        $this->_resource->LastChar  = new Zend_Pdf_Element_Numeric(count($this->_glyphWidths) - 1);
+        $this->_resource->FirstChar = Zend_Pdf_Element_Numeric::getInstance(0);
+        $this->_resource->LastChar  = Zend_Pdf_Element_Numeric::getInstance(count($this->_glyphWidths) - 1);
 
         /* Now convert the scalar glyph widths to Zend_Pdf_Element_Numeric objects.
          */
         $pdfWidths = array();
         foreach ($this->_glyphWidths as $width) {
-            $pdfWidths[] = new Zend_Pdf_Element_Numeric($this->toEmSpace($width));
+            $pdfWidths[] = Zend_Pdf_Element_Numeric::getInstance($this->toEmSpace($width));
         }
         /* Create the Zend_Pdf_Element_Array object and add it to the font's
          * object factory and resource dictionary.

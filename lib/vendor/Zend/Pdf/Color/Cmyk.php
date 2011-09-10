@@ -91,10 +91,10 @@ class Zend_Pdf_Color_Cmyk extends Zend_Pdf_Color
         if ($k < 0) { $k = 0; }
         if ($k > 1) { $k = 1; }
 
-        $this->_c = new Zend_Pdf_Element_Numeric($c);
-        $this->_m = new Zend_Pdf_Element_Numeric($m);
-        $this->_y = new Zend_Pdf_Element_Numeric($y);
-        $this->_k = new Zend_Pdf_Element_Numeric($k);
+        $this->_c = Zend_Pdf_Element_Numeric::getInstance($c);
+        $this->_m = Zend_Pdf_Element_Numeric::getInstance($m);
+        $this->_y = Zend_Pdf_Element_Numeric::getInstance($y);
+        $this->_k = Zend_Pdf_Element_Numeric::getInstance($k);
     }
 
     /**

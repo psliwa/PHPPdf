@@ -88,12 +88,12 @@ class Zend_Pdf_Action_URI extends Zend_Pdf_Action
         self::_validateUri($uri);
 
         $dictionary = new Zend_Pdf_Element_Dictionary();
-        $dictionary->Type = new Zend_Pdf_Element_Name('Action');
-        $dictionary->S    = new Zend_Pdf_Element_Name('URI');
+        $dictionary->Type = Zend_Pdf_Element_Name::getInstance('Action');
+        $dictionary->S    = Zend_Pdf_Element_Name::getInstance('URI');
         $dictionary->Next = null;
-        $dictionary->URI  = new Zend_Pdf_Element_String($uri);
+        $dictionary->URI  = Zend_Pdf_Element_String::getInstance($uri);
         if ($isMap) {
-            $dictionary->IsMap = new Zend_Pdf_Element_Boolean(true);
+            $dictionary->IsMap = Zend_Pdf_Element_Boolean::getInstance(true);
         }
 
         return new Zend_Pdf_Action_URI($dictionary, new SplObjectStorage());
@@ -110,7 +110,7 @@ class Zend_Pdf_Action_URI extends Zend_Pdf_Action
         $this->_validateUri($uri);
 
         $this->_actionDictionary->touch();
-        $this->_actionDictionary->URI = new Zend_Pdf_Element_String($uri);
+        $this->_actionDictionary->URI = Zend_Pdf_Element_String::getInstance($uri);
 
         return $this;
     }
@@ -141,7 +141,7 @@ class Zend_Pdf_Action_URI extends Zend_Pdf_Action
         $this->_actionDictionary->touch();
 
         if ($isMap) {
-            $this->_actionDictionary->IsMap = new Zend_Pdf_Element_Boolean(true);
+            $this->_actionDictionary->IsMap = Zend_Pdf_Element_Boolean::getInstance(true);
         } else {
             $this->_actionDictionary->IsMap = null;
         }

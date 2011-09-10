@@ -256,7 +256,7 @@ class Zend_Pdf_Outline_Created extends Zend_Pdf_Outline
 
         $outlineDictionary = $factory->newObject(new Zend_Pdf_Element_Dictionary());
 
-        $outlineDictionary->Title = new Zend_Pdf_Element_String($this->getTitle());
+        $outlineDictionary->Title = Zend_Pdf_Element_String::getInstance($this->getTitle());
 
         $target = $this->getTarget();
         if ($target === null) {
@@ -273,14 +273,14 @@ class Zend_Pdf_Outline_Created extends Zend_Pdf_Outline
         $color = $this->getColor();
         if ($color !== null) {
             $components = $color->getComponents();
-            $colorComponentElements = array(new Zend_Pdf_Element_Numeric($components[0]),
-                                            new Zend_Pdf_Element_Numeric($components[1]),
-                                            new Zend_Pdf_Element_Numeric($components[2]));
+            $colorComponentElements = array(Zend_Pdf_Element_Numeric::getInstance($components[0]),
+                                            Zend_Pdf_Element_Numeric::getInstance($components[1]),
+                                            Zend_Pdf_Element_Numeric::getInstance($components[2]));
             $outlineDictionary->C = new Zend_Pdf_Element_Array($colorComponentElements);
         }
 
         if ($this->isItalic()  ||  $this->isBold()) {
-            $outlineDictionary->F = new Zend_Pdf_Element_Numeric(($this->isItalic()? 1 : 0)  |   // Bit 1 - Italic
+            $outlineDictionary->F = Zend_Pdf_Element_Numeric::getInstance(($this->isItalic()? 1 : 0)  |   // Bit 1 - Italic
                                                                  ($this->isBold()?   2 : 0));    // Bit 2 - Bold
         }
 
@@ -307,7 +307,7 @@ class Zend_Pdf_Outline_Created extends Zend_Pdf_Outline
         $outlineDictionary->Last = $lastChild;
 
         if (count($this->childOutlines) != 0) {
-            $outlineDictionary->Count = new Zend_Pdf_Element_Numeric(($this->isOpen()? 1 : -1)*count($this->childOutlines));
+            $outlineDictionary->Count = Zend_Pdf_Element_Numeric::getInstance(($this->isOpen()? 1 : -1)*count($this->childOutlines));
         }
 
         return $outlineDictionary;

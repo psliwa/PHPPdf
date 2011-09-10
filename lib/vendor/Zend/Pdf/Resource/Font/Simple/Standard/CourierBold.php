@@ -291,6 +291,6 @@ class Zend_Pdf_Resource_Font_Simple_Standard_CourierBold extends Zend_Pdf_Resour
          * viewers already have all of the metrics data. We only need to provide
          * the font name and encoding method.
          */
-        $this->_resource->BaseFont = new Zend_Pdf_Element_Name('Courier-Bold');
+        $this->_resource->BaseFont = Zend_Pdf_Element_Name::getInstance('Courier-Bold');
     }
 }

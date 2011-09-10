@@ -66,17 +66,17 @@ class Zend_Pdf_Destination_FitRectangle extends Zend_Pdf_Destination_Explicit
         if ($page instanceof Zend_Pdf_Page) {
             $destinationArray->items[] = $page->getPageDictionary();
         } else if (is_integer($page)) {
-            $destinationArray->items[] = new Zend_Pdf_Element_Numeric($page);
+            $destinationArray->items[] = Zend_Pdf_Element_Numeric::getInstance($page);
         } else {
             
             throw new Zend_Pdf_Exception('Page entry must be a Zend_Pdf_Page object or a page number.');
         }
 
-        $destinationArray->items[] = new Zend_Pdf_Element_Name('FitR');
-        $destinationArray->items[] = new Zend_Pdf_Element_Numeric($left);
-        $destinationArray->items[] = new Zend_Pdf_Element_Numeric($bottom);
-        $destinationArray->items[] = new Zend_Pdf_Element_Numeric($right);
-        $destinationArray->items[] = new Zend_Pdf_Element_Numeric($top);
+        $destinationArray->items[] = Zend_Pdf_Element_Name::getInstance('FitR');
+        $destinationArray->items[] = Zend_Pdf_Element_Numeric::getInstance($left);
+        $destinationArray->items[] = Zend_Pdf_Element_Numeric::getInstance($bottom);
+        $destinationArray->items[] = Zend_Pdf_Element_Numeric::getInstance($right);
+        $destinationArray->items[] = Zend_Pdf_Element_Numeric::getInstance($top);
 
         return new Zend_Pdf_Destination_FitRectangle($destinationArray);
     }
@@ -99,7 +99,7 @@ class Zend_Pdf_Destination_FitRectangle extends Zend_Pdf_Destination_Explicit
      */
     public function setLeftEdge($left)
     {
-        $this->_destinationArray->items[2] = new Zend_Pdf_Element_Numeric($left);
+        $this->_destinationArray->items[2] = Zend_Pdf_Element_Numeric::getInstance($left);
         return $this;
     }
 
@@ -121,7 +121,7 @@ class Zend_Pdf_Destination_FitRectangle extends Zend_Pdf_Destination_Explicit
      */
     public function setBottomEdge($bottom)
     {
-        $this->_destinationArray->items[3] = new Zend_Pdf_Element_Numeric($bottom);
+        $this->_destinationArray->items[3] = Zend_Pdf_Element_Numeric::getInstance($bottom);
         return $this;
     }
 
@@ -143,7 +143,7 @@ class Zend_Pdf_Destination_FitRectangle extends Zend_Pdf_Destination_Explicit
      */
     public function setRightEdge($right)
     {
-        $this->_destinationArray->items[4] = new Zend_Pdf_Element_Numeric($right);
+        $this->_destinationArray->items[4] = Zend_Pdf_Element_Numeric::getInstance($right);
         return $this;
     }
 
@@ -165,7 +165,7 @@ class Zend_Pdf_Destination_FitRectangle extends Zend_Pdf_Destination_Explicit
      */
     public function setTopEdge($top)
     {
-        $this->_destinationArray->items[5] = new Zend_Pdf_Element_Numeric($top);
+        $this->_destinationArray->items[5] = Zend_Pdf_Element_Numeric::getInstance($top);
         return $this;
     }
 }

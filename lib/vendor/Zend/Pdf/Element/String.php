@@ -40,6 +40,18 @@ class Zend_Pdf_Element_String extends Zend_Pdf_Element
      */
     public $value;
 
+    private static $instances = array();
+    
+    public static function getInstance($val)
+    {
+        if(!isset(self::$instances[$val]))
+        {
+            self::$instances[$val] = new self($val);
+        }
+        
+        return self::$instances[$val];
+    }
+    
     /**
      * Object constructor
      *

@@ -81,9 +81,9 @@ class Zend_Pdf_Color_Rgb extends Zend_Pdf_Color
         if ($b < 0) { $b = 0; }
         if ($b > 1) { $b = 1; }
 
-        $this->_r = new Zend_Pdf_Element_Numeric($r);
-        $this->_g = new Zend_Pdf_Element_Numeric($g);
-        $this->_b = new Zend_Pdf_Element_Numeric($b);
+        $this->_r = Zend_Pdf_Element_Numeric::getInstance($r);
+        $this->_g = Zend_Pdf_Element_Numeric::getInstance($g);
+        $this->_b = Zend_Pdf_Element_Numeric::getInstance($b);
     }
 
     /**

@@ -172,10 +172,10 @@ abstract class Zend_Pdf_Annotation
 
         if ($this->_annotationDictionary->Contents === null) {
             $this->_annotationDictionary->touch();
-            $this->_annotationDictionary->Contents = new Zend_Pdf_Element_String($text);
+            $this->_annotationDictionary->Contents = Zend_Pdf_Element_String::getInstance($text);
         } else {
             $this->_annotationDictionary->Contents->touch();
-            $this->_annotationDictionary->Contents->value = new Zend_Pdf_Element_String($text);
+            $this->_annotationDictionary->Contents->value = Zend_Pdf_Element_String::getInstance($text);
         }
 
         return $this;

@@ -118,7 +118,7 @@ abstract class Zend_Pdf_Resource_Font_CidFont extends Zend_Pdf_Resource_Font
         /* Resource dictionary */
 
         $baseFont = $this->getFontName(Zend_Pdf_Font::NAME_POSTSCRIPT, 'en', 'UTF-8');
-        $this->_resource->BaseFont = new Zend_Pdf_Element_Name($baseFont);
+        $this->_resource->BaseFont = Zend_Pdf_Element_Name::getInstance($baseFont);
 
 
         /**
@@ -146,7 +146,7 @@ abstract class Zend_Pdf_Resource_Font_CidFont extends Zend_Pdf_Resource_Font
         }
 
         // Store default value in the font dictionary
-        $this->_resource->DW = new Zend_Pdf_Element_Numeric($this->toEmSpace($defaultWidth));
+        $this->_resource->DW = Zend_Pdf_Element_Numeric::getInstance($this->toEmSpace($defaultWidth));
 
         // Remove characters which corresponds to default width from the widths array
         $defWidthChars = array_keys($charWidths, $defaultWidth);
@@ -189,9 +189,9 @@ abstract class Zend_Pdf_Resource_Font_CidFont extends Zend_Pdf_Resource_Font
                     // New width is detected
                     if ($widthsInSequence != 0) {
                         // Previous width value was a part of the widths sequence. Save it as 'c_1st c_last w'.
-                        $pdfCharsWidths[] = new Zend_Pdf_Element_Numeric($startCode);                         // First character code
-                        $pdfCharsWidths[] = new Zend_Pdf_Element_Numeric($startCode + $widthsInSequence - 1); // Last character code
-                        $pdfCharsWidths[] = new Zend_Pdf_Element_Numeric($this->toEmSpace($lastWidth));       // Width
+                        $pdfCharsWidths[] = Zend_Pdf_Element_Numeric::getInstance($startCode);                         // First character code
+                        $pdfCharsWidths[] = Zend_Pdf_Element_Numeric::getInstance($startCode + $widthsInSequence - 1); // Last character code
+                        $pdfCharsWidths[] = Zend_Pdf_Element_Numeric::getInstance($this->toEmSpace($lastWidth));       // Width
 
                         // Reset widths sequence
                         $startCode = $startCode + $widthsInSequence;
@@ -199,7 +199,7 @@ abstract class Zend_Pdf_Resource_Font_CidFont extends Zend_Pdf_Resource_Font
                     }
 
                     // Collect new width
-                    $pdfWidths[] = new Zend_Pdf_Element_Numeric($this->toEmSpace($width));
+                    $pdfWidths[] = Zend_Pdf_Element_Numeric::getInstance($this->toEmSpace($width));
 
                     $lastWidth = $width;
                 } else {
@@ -214,7 +214,7 @@ abstract class Zend_Pdf_Resource_Font_CidFont extends Zend_Pdf_Resource_Font
                         // and write the rest if it's not empty
                         if (count($pdfWidths) != 0) {
                             // Save it as 'c_1st [w1 w2 ... wn]'.
-                            $pdfCharsWidths[] = new Zend_Pdf_Element_Numeric($startCode); // First character code
+                            $pdfCharsWidths[] = Zend_Pdf_Element_Numeric::getInstance($startCode); // First character code
                             $pdfCharsWidths[] = new Zend_Pdf_Element_Array($pdfWidths);   // Widths array
 
                             // Reset widths collection
@@ -234,14 +234,14 @@ abstract class Zend_Pdf_Resource_Font_CidFont extends Zend_Pdf_Resource_Font
             if (count($pdfWidths) != 0) {
                 // We have some widths collected
                 // Save it as 'c_1st [w1 w2 ... wn]'.
-                $pdfCharsWidths[] = new Zend_Pdf_Element_Numeric($startCode); // First character code
+                $pdfCharsWidths[] = Zend_Pdf_Element_Numeric::getInstance($startCode); // First character code
                 $pdfCharsWidths[] = new Zend_Pdf_Element_Array($pdfWidths);   // Widths array
             } else if ($widthsInSequence != 0){
                 // We have widths sequence
                 // Save it as 'c_1st c_last w'.
-                $pdfCharsWidths[] = new Zend_Pdf_Element_Numeric($startCode);                         // First character code
-                $pdfCharsWidths[] = new Zend_Pdf_Element_Numeric($startCode + $widthsInSequence - 1); // Last character code
-                $pdfCharsWidths[] = new Zend_Pdf_Element_Numeric($this->toEmSpace($lastWidth));       // Width
+                $pdfCharsWidths[] = Zend_Pdf_Element_Numeric::getInstance($startCode);                         // First character code
+                $pdfCharsWidths[] = Zend_Pdf_Element_Numeric::getInstance($startCode + $widthsInSequence - 1); // Last character code
+                $pdfCharsWidths[] = Zend_Pdf_Element_Numeric::getInstance($this->toEmSpace($lastWidth));       // Width
             }
         }
 
@@ -255,9 +255,9 @@ abstract class Zend_Pdf_Resource_Font_CidFont extends Zend_Pdf_Resource_Font
 
         /* CIDSystemInfo dictionary */
         $cidSystemInfo = new Zend_Pdf_Element_Dictionary();
-        $cidSystemInfo->Registry   = new Zend_Pdf_Element_String('Adobe');
-        $cidSystemInfo->Ordering   = new Zend_Pdf_Element_String('UCS');
-        $cidSystemInfo->Supplement = new Zend_Pdf_Element_Numeric(0);
+        $cidSystemInfo->Registry   = Zend_Pdf_Element_String::getInstance('Adobe');
+        $cidSystemInfo->Ordering   = Zend_Pdf_Element_String::getInstance('UCS');
+        $cidSystemInfo->Supplement = Zend_Pdf_Element_Numeric::getInstance(0);
         $cidSystemInfoObject            = $this->_objectFactory->newObject($cidSystemInfo);
         $this->_resource->CIDSystemInfo = $cidSystemInfoObject;
     }
