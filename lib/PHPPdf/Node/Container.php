@@ -71,7 +71,7 @@ class Container extends Node
     {
         $this->document = $document;
 
-        parent::preDraw($document);
+        return parent::preDraw($document);
     }
 
     public function getDocument()
@@ -81,14 +81,17 @@ class Container extends Node
 
     protected function doDraw(Document $document)
     {
+        $tasks = array();
         foreach($this->children as $node)
         {
-            $tasks = $node->getDrawingTasks($document);
-            foreach($tasks as $task)
+            $childTasks = $node->getDrawingTasks($document);
+            foreach($childTasks as $task)
             {
-                $this->addDrawingTask($task);
+                $tasks[] = $task;
             }
         }
+        
+        return $tasks;
     }
 
     public function copy()

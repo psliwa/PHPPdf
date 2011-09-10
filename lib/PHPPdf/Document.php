@@ -152,11 +152,9 @@ class Document
             throw new \InvalidArgumentException(sprintf('Argument of draw method must be an array of pages or PageCollection object, "%s" given.', get_class($pages)));
         }
 
-
         $pageCollection->format($this);
-        
-        $tasks = $pageCollection->getDrawingTasks($this);
 
+        $tasks = $pageCollection->getDrawingTasks($this);
         $this->invokeTasks($tasks);
     }
 

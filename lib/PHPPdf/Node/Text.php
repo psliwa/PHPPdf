@@ -87,16 +87,18 @@ class Text extends Node
     {
         if($this->isEmptyText())
         {
-            return;
+            return array();
         }
 
+        $tasks = array();
+        
         foreach($this->lineParts as $part)
         {
-            foreach($part->getDrawingTasks($document) as $task)
-            {
-                $this->addDrawingTask($task);
-            }
+            $partTasks = $part->getDrawingTasks($document);
+            $tasks = array_merge($tasks, $partTasks);
         }
+        
+        return $tasks;
     }
     
     private function isEmptyText()
@@ -252,5 +254,12 @@ class Text extends Node
     {
         $yCoord += $this->getAncestorWithFontSize()->getAttribute('line-height');
         return $this->getFirstPoint()->getY() > $yCoord;
+    }
+    
+    public function flush()
+    {
+        $this->lineParts = array();
+
+        parent::flush();
     }
 }

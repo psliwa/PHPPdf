@@ -60,7 +60,7 @@ class Image extends Node
         
         $drawingTask = new DrawingTask($callback, array($this));
 
-        $this->addDrawingTask($drawingTask);
+        return array($drawingTask);
     }
 
     public function preFormat(Document $document)

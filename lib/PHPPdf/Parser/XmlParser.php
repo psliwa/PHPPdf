@@ -130,11 +130,24 @@ abstract class XmlParser implements Parser
     protected function createReader($content)
     {
         $reader = new \XMLReader();
+        
+        if($this->isXmlDocument($content))
+        {
+            $reader->XML($content, null, LIBXML_NOBLANKS | LIBXML_DTDLOAD);
+        }
+        else
+        {
+            $reader->open($content, null, LIBXML_NOBLANKS | LIBXML_DTDLOAD);
+        }
 
-        $reader->XML($content, null, LIBXML_NOBLANKS | LIBXML_DTDLOAD);
         $reader->setParserProperty(\XMLReader::SUBST_ENTITIES, true);
 
         return $reader;
+    }
+    
+    private function isXmlDocument($content)
+    {
+        return strpos($content, '<') === 0;
     }
 
     protected function seekReaderToNextTag(\XMLReader $reader)
@@ -187,5 +200,10 @@ abstract class XmlParser implements Parser
     protected function isEndOfParsedDocument(\XMLReader $reader)
     {
         return $reader->name == static::ROOT_TAG;
+    }
+    
+    protected function clearStack()
+    {
+        $this->stack = array();
     }
 }

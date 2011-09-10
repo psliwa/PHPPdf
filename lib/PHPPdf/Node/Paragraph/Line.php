@@ -159,4 +159,15 @@ class Line
         
         return $count;
     }
+    
+    public function flush()
+    {
+        foreach($this->parts as $part)
+        {
+            $part->flush();
+        }
+        
+        $this->parts = array();
+        $this->paragraph = null;
+    }
 }

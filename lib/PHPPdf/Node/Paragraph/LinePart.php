@@ -8,9 +8,8 @@
 
 namespace PHPPdf\Node\Paragraph;
 
-use PHPPdf\Node\Node;
-
-use PHPPdf\Util\DrawingTask,
+use PHPPdf\Node\Node,
+    PHPPdf\Util\DrawingTask,
     PHPPdf\Document,
     PHPPdf\Util\Point,
     PHPPdf\Node\Drawable,
@@ -202,5 +201,11 @@ class LinePart implements Drawable
     public function verticalTranslate($translate)
     {
         $this->yTranslation += $translate;
+    }
+    
+    public function flush()
+    {
+        $this->text = array();
+        $this->line = null;
     }
 }

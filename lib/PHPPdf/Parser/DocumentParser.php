@@ -83,6 +83,11 @@ class DocumentParser extends XmlParser
         $this->setStylesheetConstraint($stylesheetConstraint);
         $this->isPreviousText = false;
         $this->currentParagraph = null;
+        $this->wrappers = array();
+        $this->inBehaviour = $this->inPlaceholder = false;
+        $this->tagStack = array();
+        $this->prototypes = array();
+        $this->clearStack();
     }
     
     protected function createReader($content)

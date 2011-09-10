@@ -238,4 +238,16 @@ class Paragraph extends Container
         
         return $minWidth;
     }
+    
+    public function flush()
+    {
+        foreach($this->lines as $line)
+        {
+            $line->flush();
+        }
+        
+        $this->lines = array();
+        
+        parent::flush();
+    }
 }

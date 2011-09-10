@@ -138,22 +138,26 @@ class Page extends Container
 
         $document->attachGraphicsContext($this->getGraphicsContext());
 
+        $tasks = array();
+        
         if(!$this->preparedTemplate)
         {
             $tasks = $this->getTemplateDrawingTasksAndFormatPlaceholders($document);
-            
-            $this->addDrawingTasks($tasks);
         }
         
-        parent::doDraw($document);
+        $originalTasks = parent::doDraw($document);
+
+        $tasks = array_merge($tasks, $originalTasks);
 
         foreach($this->runtimeNodes as $node)
         {
             $node->evaluate();
-            $tasks = $node->getDrawingTasks($document);
+            $runtimeTasks = $node->getDrawingTasks($document);
 
-            $this->addDrawingTasks($tasks);
+            $tasks = array_merge($tasks, $runtimeTasks);
         }
+        
+        return $tasks;
     }
     
     private function prepareGraphicsContext(Document $document)
@@ -410,9 +414,9 @@ class Page extends Container
 
     public function prepareTemplate(Document $document)
     {
-        $tasks = $this->getTemplateDrawingTasksAndFormatPlaceholders($document);
-        
         $this->prepareGraphicsContext($document);
+        
+        $tasks = $this->getTemplateDrawingTasksAndFormatPlaceholders($document);
 
         $document->invokeTasks($tasks);
 
@@ -440,6 +444,7 @@ class Page extends Container
     
     protected function preDraw(Document $document)
     {
+        return array();
     }
 
     private function formatConvertAttributes(Document $document)
@@ -549,5 +554,27 @@ class Page extends Container
         }
         
         return null;
+    }
+    
+    public function flush()
+    {
+        $placeholders = array('footer', 'header', 'watermark');
+        foreach($placeholders as $placeholder)
+        {
+            if($this->$placeholder)
+            {
+                $this->$placeholder->flush();
+                $this->$placeholder = null;
+            }
+        }
+        
+        foreach($this->runtimeNodes as $node)
+        {
+            $node->flush();
+        }
+
+        $this->runtimeNodes = array();
+
+        parent::flush();
     }
 }

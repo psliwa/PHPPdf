@@ -9,6 +9,11 @@
 namespace PHPPdf\Engine;
 
 /**
+ * Interface of graphics context.
+ * 
+ * All of method expects getters, copy and commit should be buffered, and
+ * invoked on commit method.
+ * 
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
 interface GraphicsContext
@@ -22,6 +27,8 @@ interface GraphicsContext
     
     public function getWidth();
     public function getHeight();
+    
+    public function commit();
     
     public function clipRectangle($x1, $y1, $x2, $y2);
 

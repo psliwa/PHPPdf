@@ -108,9 +108,9 @@ class BasicList extends Container
     
     protected function doDraw(Document $document)
     {
-        parent::doDraw($document);
+        $tasks = parent::doDraw($document);
         
-        $task = new DrawingTask(function(Node $node, Document $document) {
+        $tasks[] = new DrawingTask(function(Node $node, Document $document) {
             $gc = $node->getGraphicsContext();
 
             $enumerationStrategy = $node->getEnumerationStrategy();
@@ -132,7 +132,7 @@ class BasicList extends Container
             $enumerationStrategy->reset();
         }, array($this, $document));
         
-        $this->addDrawingTask($task);
+        return $tasks;
     }
     
     /**

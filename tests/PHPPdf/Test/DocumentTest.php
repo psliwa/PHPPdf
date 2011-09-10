@@ -59,15 +59,11 @@ class DocumentTest extends \PHPPdf\PHPUnit\Framework\TestCase
      */
     public function throwExceptionWhenDocumentIsDrawTwiceWithoutReset()
     {
-        $drawingMethods = array('preDraw', 'doDraw', 'postDraw');
-        $mock = $this->getMock('\PHPPdf\Node\Page', array_merge($drawingMethods));
+        $mock = $this->getMock('\PHPPdf\Node\Page', array('getDrawingTasks'));
 
-        foreach($drawingMethods as $method)
-        {
-            $mock->expects($this->once())
-                 ->method($method)
-                 ->will($this->returnValue(true));
-        }
+        $mock->expects($this->once())
+             ->method('getDrawingTasks')
+             ->will($this->returnValue(array()));
 
         $this->document->draw(array($mock));
         $this->document->draw(array($mock));

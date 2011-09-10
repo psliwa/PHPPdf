@@ -27,6 +27,7 @@ class GraphicsContextTest extends \PHPPdf\PHPUnit\Framework\TestCase
         $gc = new GraphicsContext($this->getEngineMock(), $zendPageMock);
 
         $gc->clipRectangle($x1, $y1, $x2, $y2);
+        $gc->commit();
     }
     
     private function getEngineMock(array $methods = array())
@@ -53,6 +54,7 @@ class GraphicsContextTest extends \PHPPdf\PHPUnit\Framework\TestCase
 
         $gc->saveGS();
         $gc->restoreGS();
+        $gc->commit();
     }
 
     /**
@@ -82,6 +84,7 @@ class GraphicsContextTest extends \PHPPdf\PHPUnit\Framework\TestCase
         $gc = new GraphicsContext($this->getEngineMock(), $zendPageMock);
 
         $gc->drawImage($image, $x1, $y1, $x2, $y2);
+        $gc->commit();
     }
 
     /**
@@ -103,6 +106,7 @@ class GraphicsContextTest extends \PHPPdf\PHPUnit\Framework\TestCase
         $gc = new GraphicsContext($this->getEngineMock(), $zendPageMock);
 
         $gc->drawLine($x1, $y1, $x2, $y2);
+        $gc->commit();
     }
 
     /**
@@ -130,6 +134,7 @@ class GraphicsContextTest extends \PHPPdf\PHPUnit\Framework\TestCase
         $gc = new GraphicsContext($this->getEngineMock(), $zendPageMock);
 
         $gc->setFont($fontMock, $size);
+        $gc->commit();
     }
 
     /**
@@ -158,6 +163,7 @@ class GraphicsContextTest extends \PHPPdf\PHPUnit\Framework\TestCase
 
         //don't delegate if not necessary
         $gc->$method($color);
+        $gc->commit();
     }
 
     public function colorSetters()
@@ -186,6 +192,7 @@ class GraphicsContextTest extends \PHPPdf\PHPUnit\Framework\TestCase
         $gc = new GraphicsContext($this->getEngineMock(), $zendPageMock);
 
         $gc->drawPolygon($x, $y, $drawType);
+        $gc->commit();
     }
 
     /**
@@ -207,6 +214,7 @@ class GraphicsContextTest extends \PHPPdf\PHPUnit\Framework\TestCase
         $gc = new GraphicsContext($this->getEngineMock(), $zendPageMock);
 
         $gc->drawText($text, $x, $y, $encoding);
+        $gc->commit();
     }
 
     /**
@@ -230,6 +238,7 @@ class GraphicsContextTest extends \PHPPdf\PHPUnit\Framework\TestCase
         $gc = new GraphicsContext($this->getEngineMock(), $zendPageMock);
 
         $gc->drawRoundedRectangle($x1, $y1, $x2, $y2, $radius, $fillType);
+        $gc->commit();
     }
 
     /**
@@ -251,6 +260,7 @@ class GraphicsContextTest extends \PHPPdf\PHPUnit\Framework\TestCase
 
         //don't delegate if not necessary
         $gc->setLineWidth($width);
+        $gc->commit();
     }
 
     /**
@@ -271,6 +281,7 @@ class GraphicsContextTest extends \PHPPdf\PHPUnit\Framework\TestCase
 
         //don't delegate if not necessary
         $gc->setLineDashingPattern($pattern);
+        $gc->commit();
     }
 
     public function lineDashingPatternProvider()
@@ -353,6 +364,8 @@ class GraphicsContextTest extends \PHPPdf\PHPUnit\Framework\TestCase
         $gc->setLineWidth(2);
         $gc->setFillColor($color2);
         $gc->setLineColor($color2);
+        
+        $gc->commit();
     }
     
     private function createColorMock($zendColor, array $components = null)
@@ -402,6 +415,7 @@ class GraphicsContextTest extends \PHPPdf\PHPUnit\Framework\TestCase
         $gc = new GraphicsContext($this->getEngineMock(), $zendPageMock);
         
         $gc->uriAction($coords[0], $coords[1], $coords[2], $coords[3], $uri);
+        $gc->commit();
     }
     
     public function assertAnnotationLinkWithRectangle(array $coords, $actual)
@@ -445,6 +459,7 @@ class GraphicsContextTest extends \PHPPdf\PHPUnit\Framework\TestCase
         $gc = new GraphicsContext($this->getEngineMock(), $zendPageMock);
         
         $gc->goToAction($gcStub, $coords[0], $coords[1], $coords[2], $coords[3], $top);
+        $gc->commit();
     }
     
     public function assertZendPageDestination($expectedTop, $expectedPage, $actualDestination)
@@ -474,6 +489,7 @@ class GraphicsContextTest extends \PHPPdf\PHPUnit\Framework\TestCase
         $gc = new GraphicsContext($this->getEngineMock(), $zendPageMock);
         
         call_user_func_array(array($gc, $method), $args);
+        $gc->commit();
     }
     
     public function wrapZendExceptionsFromActionsProvider()
@@ -503,6 +519,7 @@ class GraphicsContextTest extends \PHPPdf\PHPUnit\Framework\TestCase
         $gc = new GraphicsContext($engine, $pageStub);
         
         $gc->addBookmark($identifier, $bookmarkName, $top);
+        $gc->commit();
         
         $zendPdf = $engine->getZendPdf();
         
@@ -538,6 +555,7 @@ class GraphicsContextTest extends \PHPPdf\PHPUnit\Framework\TestCase
         $gc->addBookmark(1, '1', 0, null);
         $gc->addBookmark(2, '2', 10, 1);
         $gc->addBookmark(3, '3', 0, null);
+        $gc->commit();
         
         $zendPdf = $engine->getZendPdf();
         
@@ -582,6 +600,7 @@ class GraphicsContextTest extends \PHPPdf\PHPUnit\Framework\TestCase
                      }, $this));
 
         $gc->attachStickyNote($coords[0], $coords[1], $coords[2], $coords[3], $text);
+        $gc->commit();
     }
     
     /**
@@ -611,6 +630,7 @@ class GraphicsContextTest extends \PHPPdf\PHPUnit\Framework\TestCase
 
         $gc->setAlpha($alpha);
         $gc->setAlpha($alpha);
+        $gc->commit();
     }
     
     public function alphaProvider()

@@ -46,6 +46,8 @@ class PageBreakingFormatter extends BaseFormatter
         {
             $page->preFormat($document);
         }
+        
+        $this->node = null;
     }
 
     private function breakChildIfNecessary(Node $node)

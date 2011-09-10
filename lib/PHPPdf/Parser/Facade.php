@@ -124,9 +124,17 @@ class Facade
 
         $relativePathToResources = str_replace('\\', '/', realpath(__DIR__.'/../Resources'));
         $documentContent = str_replace('%resources%', $relativePathToResources, $documentContent);
-        $pageCollection = $this->getDocumentParser()->parse($documentContent, $stylesheetConstraint);
-        $this->getDocument()->draw($pageCollection);
 
+        $pageCollection = $this->getDocumentParser()->parse($documentContent, $stylesheetConstraint);
+
+        $this->getDocument()->draw($pageCollection);
+        $pageCollection->flush();
+        
+        return $this->doRender($stylesheetConstraint);
+    }
+    
+    private function doRender($stylesheetConstraint)
+    {
         $content = $this->getDocument()->render();
         $this->getDocument()->initialize();
 

@@ -73,20 +73,23 @@ abstract class PageText extends Text implements Runtime
     {
         if($this->evaluated)
         {
-            parent::preDraw($document);
+            return parent::preDraw($document);
         }
+        
+        return array();
     }
 
     protected function doDraw(Document $document)
     {
         if($this->evaluated)
         {
-            parent::doDraw($document);
+            return parent::doDraw($document);
         }
         else
         {
             $page = $this->getPage();
             $page->markAsRuntimeNode($this);
+            return array();
         }
     }
 

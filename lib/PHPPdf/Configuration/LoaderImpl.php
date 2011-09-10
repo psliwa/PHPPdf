@@ -140,7 +140,7 @@ class LoaderImpl implements Loader
 
     private function loadFile($file)
     {
-        return \PHPPdf\Util\DataSource::fromFile($file)->read();
+        return $file;
     }
 
     private function loadEnhancements()

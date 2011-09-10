@@ -92,15 +92,18 @@ class DynamicPage extends Page
 
     protected function doDraw(Document $document)
     {
+        $tasks = array();
         foreach($this->getPages() as $page)
         {
-            $tasks = $page->getDrawingTasks($document);
+            $childTasks = $page->getDrawingTasks($document);
 
-            foreach($tasks as $task)
+            foreach($childTasks as $task)
             {
-                $this->addDrawingTask($task);
+                $tasks[] = $task;
             }
         }
+        
+        return $tasks;
     }
 
     public function getAttribute($name)
@@ -197,5 +200,18 @@ class DynamicPage extends Page
         parent::setDataFromUnserialize($data);
         
         $this->prototype = $data['prototype'];
+    }
+
+    public function flush()
+    {
+        foreach($this->pages as $page)
+        {
+            $page->flush();
+        }
+        
+        $this->pages = array();        
+        $this->currentPage = null;
+
+        parent::flush();
     }
 }

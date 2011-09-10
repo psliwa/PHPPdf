@@ -60,7 +60,6 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
 
     private $enhancements = array();
     private $enhancementBag = null;
-    private $drawingTasks = array();
     private $formattersNames = array();
     
     private $behaviours = array();
@@ -975,11 +974,7 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
     {
         try
         {
-            $this->preDraw($document);
-            $this->doDraw($document);
-            $this->postDraw($document);
-
-            return $this->drawingTasks;
+            return array_merge($this->preDraw($document), $this->doDraw($document), $this->postDraw($document));
         }
         catch(\Exception $e)
         {
@@ -989,8 +984,7 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
 
     protected function preDraw(Document $document)
     {
-        $tasks = $this->getDrawingTasksFromEnhancements($document);
-        $this->addDrawingTasks($tasks);
+        return $this->getDrawingTasksFromEnhancements($document);
     }
     
     protected function getDrawingTasksFromEnhancements(Document $document)
@@ -1041,14 +1035,17 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
 
     protected function doDraw(Document $document)
     {
+        return array();
     }
 
     protected function postDraw(Document $document)
     {
         if($this->getAttribute('dump'))
         {
-            $this->addDrawingTask($this->createDumpTask());
+            return array($this->createDumpTask());
         }
+        
+        return array();
     }
     
     protected function createDumpTask()
@@ -1529,5 +1526,27 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
         }
         
         return $this->ancestorWithFontSize;
+    }
+    
+    /**
+     * Free references to other object, after this method invocation
+     * Node is in invalid state!
+     */
+    public function flush()
+    {
+        $this->parent = null;
+        $this->ancestorWithFontSize = null;
+        $this->ancestorWithRotation = null;
+        $this->boundary = null;
+        $this->behaviours = array();
+        $this->enhancementBag = null;
+        $this->attributes = array();
+        
+        foreach($this->getChildren() as $child)
+        {
+            $child->flush();
+        }
+
+        $this->removeAll();
     }
 }

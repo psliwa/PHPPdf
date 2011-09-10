@@ -93,6 +93,11 @@ class Engine implements BaseEngine
     public function render()
     {
         $this->zendPdf->properties['Producer'] = sprintf('PHPPdf %s', \PHPPdf\Version::VERSION);
+        
+        foreach($this->graphicsContexts as $gc)
+        {
+            $gc->commit();
+        }
 
         return $this->zendPdf->render();
     }
