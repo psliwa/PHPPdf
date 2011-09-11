@@ -38,7 +38,6 @@ class PageCollection extends Container
     {
         foreach($this->getChildren() as $page)
         {
-            $page->preFormat($document);
             $page->format($document);
         }
     }

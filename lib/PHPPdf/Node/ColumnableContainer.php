@@ -40,7 +40,7 @@ class ColumnableContainer extends Container
         return $this;
     }
     
-    public function preFormat(Document $document)
+    protected function beforeFormat(Document $document)
     {
         $parent = $this->getParent();
 

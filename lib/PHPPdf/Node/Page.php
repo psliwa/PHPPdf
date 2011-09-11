@@ -522,7 +522,7 @@ class Page extends Container
         $this->initializePlaceholders();
     }
     
-    public function preFormat(Document $document)
+    public function setGraphicsContextFromSourceDocumentIfNecessary(Document $document)
     {
         $gc = $this->getGraphicsContextFromSourceDocument($document);
         
@@ -534,6 +534,11 @@ class Page extends Container
             $this->setPageSize($gc->getWidth().':'.$gc->getHeight());
             $this->setGraphicsContextDefaultStyle($document);
         }
+    }
+    
+    protected function beforeFormat(Document $document)
+    {
+        $this->setGraphicsContextFromSourceDocumentIfNecessary($document);
     }
     
     protected function getGraphicsContextFromSourceDocument(Document $document)

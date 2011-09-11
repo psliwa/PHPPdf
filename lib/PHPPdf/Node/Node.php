@@ -1106,7 +1106,7 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
         return $this->attributes;
     }
 
-    public function preFormat(Document $document)
+    protected function beforeFormat(Document $document)
     {
     }
 
@@ -1426,6 +1426,8 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
      */
     public function format(Document $document)
     {
+        $this->beforeFormat($document);
+        
         foreach($this->formattersNames as $formatterName)
         {
             $formatter = $document->getFormatter($formatterName);

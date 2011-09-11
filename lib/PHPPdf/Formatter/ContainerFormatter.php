@@ -23,7 +23,6 @@ class ContainerFormatter extends BaseFormatter
     {
         foreach($node->getChildren() as $child)
         {
-            $child->preFormat($document);
             $child->format($document);
         }
     }

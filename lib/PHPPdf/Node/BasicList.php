@@ -89,7 +89,7 @@ class BasicList extends Container
         $this->setAttributeDirectly('image', $image);
     }
     
-    public function preFormat(Document $document)
+    protected function beforeFormat(Document $document)
     {
         $image = $this->getAttribute('image');
 

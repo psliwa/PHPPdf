@@ -64,7 +64,7 @@ class Image extends Node
         return array($drawingTask);
     }
 
-    public function preFormat(Document $document)
+    protected function beforeFormat(Document $document)
     {
         $src = $this->getAttribute('src');
 

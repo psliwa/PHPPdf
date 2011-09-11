@@ -44,7 +44,7 @@ class PageBreakingFormatter extends BaseFormatter
         
         foreach($node->getPages() as $page)
         {
-            $page->preFormat($document);
+            $page->setGraphicsContextFromSourceDocumentIfNecessary($document);
         }
         
         $this->node = null;
