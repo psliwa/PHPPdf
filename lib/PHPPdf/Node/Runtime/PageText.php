@@ -26,14 +26,18 @@ abstract class PageText extends Text implements Runtime
         parent::__construct('', $attributes);
     }
 
+    protected static function setDefaultAttributes()
+    {
+        parent::setDefaultAttributes();
+        static::addAttribute('dummy-text', 'no.');
+        static::addAttribute('text-align', self::ALIGN_LEFT);
+        static::addAttribute('format', '%s.');
+        static::addAttribute('dummy-number', 'no.');
+    }
+    
     public function initialize()
     {
         parent::initialize();
-
-        $this->addAttribute('dummy-text', 'no.');
-        $this->setAttribute('text-align', self::ALIGN_LEFT);
-        $this->addAttribute('format', '%s.');
-        $this->addAttribute('dummy-number', 'no.');
 
         $this->setText($this->getAttribute('dummy-text'));
     }

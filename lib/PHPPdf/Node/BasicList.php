@@ -38,13 +38,13 @@ class BasicList extends Container
     private $enumerationStrategy;
     private $omitEnumerationOfFirstElement = false;
 
-    public function initialize()
+    protected static function setDefaultAttributes()
     {
-        parent::initialize();
+        parent::setDefaultAttributes();
         
-        $this->addAttribute('type', self::TYPE_CIRCLE);
-        $this->addAttribute('image');
-        $this->addAttribute('position', self::POSITION_INSIDE);
+        static::addAttribute('type', self::TYPE_CIRCLE);
+        static::addAttribute('image');
+        static::addAttribute('position', self::POSITION_INSIDE);
     }
     
     protected static function initializeType()

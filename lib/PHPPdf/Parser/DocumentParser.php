@@ -43,7 +43,6 @@ class DocumentParser extends XmlParser
     private $factory = null;
     private $enhancementFactory = null;
     private $stylesheetConstraint = null;
-    private $prototypes = array();
     private $stylesheetParser = null;
     private $ignoredTags = array('attribute', 'enhancement');
     private $tagStack = array();
@@ -58,7 +57,6 @@ class DocumentParser extends XmlParser
     
     private $currentParagraph = null;
     
-    private $wrappers = array();
     private $document;
 
     public function __construct(Document $document)
@@ -83,11 +81,11 @@ class DocumentParser extends XmlParser
         $this->setStylesheetConstraint($stylesheetConstraint);
         $this->isPreviousText = false;
         $this->currentParagraph = null;
-        $this->wrappers = array();
         $this->inBehaviour = $this->inPlaceholder = false;
         $this->tagStack = array();
         $this->prototypes = array();
         $this->clearStack();
+        $this->nodeManager->clear();
     }
     
     protected function createReader($content)

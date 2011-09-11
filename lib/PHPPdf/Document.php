@@ -161,7 +161,6 @@ class Document
     public function invokeTasks(array $tasks)
     {
         //SplPriorityQueue and SplMaxHeap arent't deterministic for elements with the same priority - inserting order isn't queue order
-        $priorityQueue = array();
         $heap = new \PHPPdf\Util\DrawingTaskHeap();
         foreach($tasks as $task)
         {

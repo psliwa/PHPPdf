@@ -56,4 +56,10 @@ class Manager
         
         return $wrapper;
     }
+    
+    public function clear()
+    {
+        $this->nodes = array();
+        $this->wrappers = array();
+    }
 }

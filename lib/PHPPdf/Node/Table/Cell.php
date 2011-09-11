@@ -20,11 +20,11 @@ class Cell extends Container
     private $listeners = array();
     private $numberOfColumn;
 
-    public function initialize()
+    protected static function setDefaultAttributes()
     {
-        parent::initialize();
-
-        $this->addAttribute('colspan', 1);
+        parent::setDefaultAttributes();
+        
+        static::addAttribute('colspan', 1);
     }
     
     protected static function initializeType()

@@ -23,11 +23,11 @@ class Table extends Container implements Listener
         'margin-right' => array(),
     );
 
-    public function initialize()
+    protected static function setDefaultAttributes()
     {
-        parent::initialize();
-
-        $this->addAttribute('row-height');
+        parent::setDefaultAttributes();
+        
+        static::addAttribute('row-height');
     }
 
     public function add(Node $node)

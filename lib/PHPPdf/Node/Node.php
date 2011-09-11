@@ -46,6 +46,7 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
 
     private static $attributeSetters = array();
     private static $attributeGetters = array();
+    private static $defaultAttributes = array();
     private static $initialized = array();
 
     private $attributes = array();
@@ -58,7 +59,6 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
 
     private $boundary = null;
 
-    private $enhancements = array();
     private $enhancementBag = null;
     private $formattersNames = array();
     
@@ -108,8 +108,10 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
         
         static::setAttributeGetters($attributeWithGetters);
         static::setAttributeSetters($attributeWithSetters);
+               
+        static::setDefaultAttributes();
     }
-    
+        
     /**
      * @todo refactoring
      */
@@ -133,6 +135,62 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
         }
         
         self::$attributeSetters[$class] = $setters + self::$attributeSetters[$class];
+    }
+    
+    protected static function addAttribute($name, $default = null)
+    {
+        $class = get_called_class();
+        if(!isset(self::$defaultAttributes[$class]))
+        {
+            self::$defaultAttributes[$class] = array();
+        }
+        
+        self::$defaultAttributes[$class][$name] = $default;
+    }
+    
+    
+    protected static function setDefaultAttributes()
+    {
+        static::addAttribute('width', null);
+        static::addAttribute('height', null);
+
+        static::addAttribute('min-width', 0);
+
+        static::addAttribute('margin-top');
+        static::addAttribute('margin-left');
+        static::addAttribute('margin-right');
+        static::addAttribute('margin-bottom');
+
+        static::addAttribute('margin');
+        static::addAttribute('padding');
+
+        static::addAttribute('font-type');
+        static::addAttribute('font-size');
+
+        static::addAttribute('color');
+
+        static::addAttribute('padding-top', 0);
+        static::addAttribute('padding-right', 0);
+        static::addAttribute('padding-bottom', 0);
+        static::addAttribute('padding-left', 0);
+        static::addAttribute('breakable', true);
+
+        static::addAttribute('line-height');
+        static::addAttribute('text-align', null);
+
+        static::addAttribute('float', self::FLOAT_NONE);
+        static::addAttribute('font-style', null);
+        static::addAttribute('static-size', false);
+        static::addAttribute('break', false);
+        
+        static::addAttribute('vertical-align', null);
+        
+        static::addAttribute('text-decoration', null);
+        
+        static::addAttribute('dump', false);
+        
+        static::addAttribute('alpha', null);
+        static::addAttribute('rotate', null);
     }
 
     protected function addDrawingTasks(array $tasks)
@@ -174,14 +232,6 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
         }
 
         return $this->enhancementBag->get($name);
-    }
-
-    /**
-     * @return array Array of Enhancement objects
-     */
-    public function getEnhancements()
-    {
-        return $this->enhancements;
     }
 
     /**
@@ -314,47 +364,6 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
 
     public function initialize()
     {
-        $this->addAttribute('width', null);
-        $this->addAttribute('height', null);
-
-        $this->addAttribute('min-width', 0);
-
-        $this->addAttribute('margin-top');
-        $this->addAttribute('margin-left');
-        $this->addAttribute('margin-right');
-        $this->addAttribute('margin-bottom');
-
-        $this->addAttribute('margin');
-        $this->addAttribute('padding');
-
-        $this->addAttribute('font-type');
-        $this->addAttribute('font-size');
-
-        $this->addAttribute('color');
-
-        $this->addAttribute('padding-top', 0);
-        $this->addAttribute('padding-right', 0);
-        $this->addAttribute('padding-bottom', 0);
-        $this->addAttribute('padding-left', 0);
-        $this->addAttribute('breakable', true);
-
-        $this->addAttribute('line-height');
-        $this->addAttribute('text-align', null);
-
-        $this->addAttribute('float', self::FLOAT_NONE);
-        $this->addAttribute('font-style', null);
-        $this->addAttribute('static-size', false);
-        $this->addAttribute('break', false);
-        
-        $this->addAttribute('vertical-align', null);
-        
-        $this->addAttribute('text-decoration', null);
-        
-        $this->addAttribute('dump', false);
-        
-        $this->addAttribute('alpha', null);
-        $this->addAttribute('rotate', null);
-
         $this->setEnhancementBag(new EnhancementBag());
     }
     
@@ -794,7 +803,7 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
      * @param string $name Name of attribute
      * @param mixed $value Value of attribute
      * 
-     * @throws InvalidAttributeException If attribute isn't supported by this node     * 
+     * @throws InvalidAttributeException If attribute isn't supported by this node
      * @return Node Self reference
      */
     public function setAttribute($name, $value)
@@ -817,12 +826,24 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
 
     protected function setAttributeDirectly($name, $value)
     {
-        $this->attributes[$name] = $value;
+        if(self::$defaultAttributes[get_class($this)][$name] === $value)
+        {
+            unset($this->attributes[$name]);
+        }
+        else
+        {
+            $this->attributes[$name] = $value;
+        }
     }
 
     protected function getAttributeDirectly($name)
     {
-        return isset($this->attributes[$name]) ? $this->attributes[$name] : null;
+        if(!isset($this->attributes[$name]))
+        {
+            $class = get_called_class();
+            return isset(self::$defaultAttributes[$class][$name]) ? self::$defaultAttributes[$class][$name] : null;
+        }
+        return $this->attributes[$name];
     }
 
     private function throwExceptionIfAttributeDosntExist($name)
@@ -840,11 +861,6 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
         return sprintf('%s%s', $prefix, \implode('', $parts));
     }
 
-    protected function addAttribute($name, $default = null)
-    {
-        $this->setAttributeDirectly($name, $default);
-    }
-    
     public function setBreakable($flag)
     {
         $flag = $this->filterBooleanValue($flag);
@@ -898,7 +914,14 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
      */
     public function hasAttribute($name)
     {
-        return in_array($name, array_keys($this->attributes));
+        if(in_array($name, array_keys($this->attributes)))
+        {
+            return true;
+        }
+        
+        $class = get_called_class();
+        
+        return in_array($name, array_keys(self::$defaultAttributes[$class]));
     }
 
     /**
@@ -953,8 +976,8 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
         {
             $attributeNames = array_keys($this->attributes);
         }
-               
-        $this->attributesSnapshot = array_intersect_key($this->attributes, array_flip($attributeNames));
+        $class = get_class($this);
+        $this->attributesSnapshot = array_intersect_key($this->attributes + self::$defaultAttributes[$class], array_flip($attributeNames));
     }
 
     /**

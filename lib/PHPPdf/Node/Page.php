@@ -59,19 +59,25 @@ class Page extends Container
         $this->initializePlaceholders();
     }
 
+    protected static function setDefaultAttributes()
+    {
+        parent::setDefaultAttributes();
+        
+        static::addAttribute(self::ATTR_SIZE);
+        static::addAttribute('page-size', self::SIZE_A4);
+        static::addAttribute('encoding', 'utf-8');
+        static::addAttribute('static-size', true);
+        static::addAttribute('text-align', self::ALIGN_LEFT);
+        static::addAttribute('text-decoration', self::TEXT_DECORATION_NONE);
+        static::addAttribute('alpha', 1);
+        static::addAttribute('document-template');
+    }
+    
     public function initialize()
     {
         parent::initialize();
-
-        $this->addAttribute(self::ATTR_SIZE);       
-        $this->addAttribute('page-size', null, null, 'setPageSize');
+        
         $this->setAttribute('page-size', self::SIZE_A4);
-        $this->addAttribute('encoding', 'utf-8');
-        $this->addAttribute('static-size', true);
-        $this->setAttribute('text-align', self::ALIGN_LEFT);
-        $this->setAttribute('text-decoration', self::TEXT_DECORATION_NONE);
-        $this->setAttribute('alpha', 1);
-        $this->addAttribute('document-template');
     }
 
     protected static function initializeType()

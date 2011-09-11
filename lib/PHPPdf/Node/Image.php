@@ -19,12 +19,13 @@ use PHPPdf\Document,
  */
 class Image extends Node
 {
-    public function initialize()
+    protected static function setDefaultAttributes()
     {
-        parent::initialize();
-        $this->addAttribute('src');
+        parent::setDefaultAttributes();
+        
+        static::addAttribute('src');
     }
-
+    
     protected function doDraw(Document $document)
     {
         $callback = function($node)

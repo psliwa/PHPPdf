@@ -17,13 +17,13 @@ use PHPPdf\Document;
  */
 class ColumnableContainer extends Container
 {
-    public function initialize()
+    protected static function setDefaultAttributes()
     {
-        parent::initialize();
-
-        $this->addAttribute('number-of-columns', 2);
-        $this->addAttribute('margin-between-columns', 10);
-        $this->addAttribute('equals-columns', false);
+        parent::setDefaultAttributes();
+        
+        static::addAttribute('number-of-columns', 2);
+        static::addAttribute('margin-between-columns', 10);
+        static::addAttribute('equals-columns', false);
     }
 
     public function setNumberOfColumns($count)

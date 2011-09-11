@@ -12,16 +12,16 @@ namespace PHPPdf\Node\Runtime;
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
 class PageInfo extends PageText
-{
-    public function initialize()
+{    
+    protected static function setDefaultAttributes()
     {
-        parent::initialize();
+        parent::setDefaultAttributes();
+        
+        static::addAttribute('dummy-text', 'no. / no.');
 
-        $this->setAttribute('dummy-text', 'no. / no.');
-
-        $this->addAttribute('dummy-number', 'no.');
-        $this->addAttribute('format', '%s / %s');
-        $this->addAttribute('text-align', null);
+        static::addAttribute('dummy-number', 'no.');
+        static::addAttribute('format', '%s / %s');
+        static::addAttribute('text-align', null);
     }
 
     protected function refreshDummyText()
