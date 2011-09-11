@@ -8,13 +8,13 @@
 
 namespace PHPPdf\Node;
 
+use PHPPdf\Exception\UnregisteredNodeException;
+
 /**
  * Factory of the nodes based on Factory Method and Prototype design pattern
  *
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
-use PHPPdf\Exception\UnregisteredNodeException;
-
 class Factory implements \Serializable
 {
     private $prototypes = array();

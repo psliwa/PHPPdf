@@ -69,8 +69,6 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
 
     public function __construct(array $attributes = array())
     {
-        $this->boundary = new Boundary();
-
         static::initializeTypeIfNecessary();
 
         $this->initialize();
@@ -239,6 +237,11 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
      */
     public function getBoundary()
     {
+        if($this->boundary === null)
+        {
+            $this->setBoundary(new Boundary());
+        }
+
         return $this->boundary;
     }
     
@@ -1175,7 +1178,7 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
         $copy = clone $this;
         $copy->reset();
         $copy->removeParent();
-        $copy->boundary = new Boundary();
+        $copy->boundary = null;
         $copy->enhancementBag = clone $this->enhancementBag;
         $copy->drawingTasks = array();
 
@@ -1507,7 +1510,10 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
     
     protected function setDataFromUnserialize(array $data)
     {       
-        $this->setBoundary($data['boundary']);
+        if(isset($data['boundary']))
+        {
+            $this->setBoundary($data['boundary']);
+        }
         $this->attributes = $data['attributes'];
         $this->enhancementBag = new EnhancementBag($data['enhancementBag']);
         $this->setFormattersNames($data['formattersNames']);

@@ -24,7 +24,7 @@ class DynamicPage extends Page
     public function __construct(Page $prototype = null)
     {
         $this->setPrototypePage($prototype ? $prototype : new Page());
-
+        static::initializeTypeIfNecessary();
         $this->initialize();
     }
 

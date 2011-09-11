@@ -166,7 +166,7 @@ class Document
         {
             $heap->insert($task);
         }
-
+        
         foreach($heap as $task)
         {
             $task->invoke();
