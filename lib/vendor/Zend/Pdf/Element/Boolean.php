@@ -91,9 +91,4 @@ class Zend_Pdf_Element_Boolean extends Zend_Pdf_Element
     {
         return $this->value ? 'true' : 'false';
     }
-    
-    public function makeClone($factory, $processed, $mode)
-    {
-        return $this;
-    }
 }

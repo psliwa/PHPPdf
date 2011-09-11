@@ -441,7 +441,7 @@ class PageTest extends \PHPPdf\PHPUnit\Framework\TestCase
                  ->method('getHeight')
                  ->will($this->returnValue($height));
            
-        $this->page->preFormat($document);
+        $this->page->format($document);
         
         $this->assertEquals($width, $this->page->getWidth());
         $this->assertEquals($height, $this->page->getHeight());

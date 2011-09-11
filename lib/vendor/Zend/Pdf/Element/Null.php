@@ -84,9 +84,4 @@ class Zend_Pdf_Element_Null extends Zend_Pdf_Element
     {
         return 'null';
     }
-    
-    public function makeClone($factory, $processed, $mode)
-    {
-        return $this;
-    }
 }

@@ -141,8 +141,9 @@ class Zend_Pdf_Element_Array extends Zend_Pdf_Element
     {
         $newArray = new self();
 
-        //psliwa: don't make a copy
-        $newArray->items = $this->items;
+        foreach ($this->items as $key => $value) {
+            $newArray->items[$key] = $value->makeClone($factory, $processed, $mode);
+        }
 
         return $newArray;
     }
