@@ -147,21 +147,22 @@ XML;
 
     /**
      * @test
+     * @dataProvider formatterTypeProvider
      * @todo formatter class attribute is required
      */
-    public function setFormattersNamesForNode()
+    public function setFormattersNamesForNode($formatterType)
     {
         $xml = <<<XML
 <factory>
     <nodes>
         <node name="tag1" class="PHPPdf\Node\Container">
             <formatters>
-                <formatter class="PHPPdf\Formatter\FloatFormatter" />
+                <{$formatterType} class="PHPPdf\Formatter\FloatFormatter" />
             </formatters>
         </node>
         <node name="tag2" class="PHPPdf\Node\Container">
             <formatters>
-                <formatter class="PHPPdf\Formatter\FloatFormatter" />
+                <{$formatterType} class="PHPPdf\Formatter\FloatFormatter" />
             </formatters>
         </node>
     </nodes>
@@ -173,8 +174,16 @@ XML;
         {
             $node = $nodeFactory->getPrototype($tag);
 
-            $this->assertEquals(array('PHPPdf\Formatter\FloatFormatter'), $node->getFormattersNames());
+            $this->assertEquals(array('PHPPdf\Formatter\FloatFormatter'), $node->getFormattersNames($formatterType));
         }
+    }
+    
+    public function formatterTypeProvider()
+    {
+        return array(
+            array('pre'),
+            array('post'),
+        );
     }
     
     /**

@@ -55,10 +55,16 @@
 				<argument>40 40</argument>
 			</call>
 			<call method="setFormattersNames">
+				<argument>pre</argument>
 				<argument type="collection">
 					<argument>PHPPdf\Formatter\ConvertAttributesFormatter</argument>
 					<argument>PHPPdf\Formatter\StandardDimensionFormatter</argument>
 					<argument>PHPPdf\Formatter\ContainerFormatter</argument>
+				</argument>
+			</call>
+			<call method="setFormattersNames">
+				<argument>post</argument>
+				<argument type="collection">
 					<argument>PHPPdf\Formatter\FloatFormatter</argument>
 					<argument>PHPPdf\Formatter\ColumnBreakingFormatter</argument>
 				</argument>
@@ -68,10 +74,16 @@
 			<tag name="phppdf.node" />
 			<argument type="service" id="phppdf.node.page" />
 			<call method="setFormattersNames">
+				<argument>pre</argument>
 				<argument type="collection">
 					<argument>PHPPdf\Formatter\ConvertAttributesFormatter</argument>
 					<argument>PHPPdf\Formatter\StandardDimensionFormatter</argument>
 					<argument>PHPPdf\Formatter\ContainerFormatter</argument>
+				</argument>
+			</call>
+			<call method="setFormattersNames">
+				<argument>post</argument>
+				<argument type="collection">
 					<argument>PHPPdf\Formatter\FloatFormatter</argument>
 					<argument>PHPPdf\Formatter\PageBreakingFormatter</argument>
 				</argument>
@@ -81,11 +93,17 @@
 		<service id="phppdf.node.div" class="PHPPdf\Node\Container" public="false">
 			<tag name="phppdf.node" />
 			<call method="setFormattersNames">
+				<argument>pre</argument>
 				<argument type="collection">
 					<argument>PHPPdf\Formatter\ConvertAttributesFormatter</argument>
 					<argument>PHPPdf\Formatter\StandardDimensionFormatter</argument>
 					<argument>PHPPdf\Formatter\FirstPointPositionFormatter</argument>
 					<argument>PHPPdf\Formatter\ContainerFormatter</argument>
+				</argument>
+			</call>
+			<call method="setFormattersNames">
+				<argument>post</argument>
+				<argument type="collection">
 					<argument>PHPPdf\Formatter\ContainerDimensionFormatter</argument>
 					<argument>PHPPdf\Formatter\StandardPositionFormatter</argument>
 					<argument>PHPPdf\Formatter\FloatFormatter</argument>
@@ -98,12 +116,18 @@
 		<service id="phppdf.node.ul" class="PHPPdf\Node\BasicList" public="false">
 			<tag name="phppdf.node" />
 			<call method="setFormattersNames">
+				<argument>pre</argument>
 				<argument type="collection">
 					<argument>PHPPdf\Formatter\ConvertAttributesFormatter</argument>
 					<argument>PHPPdf\Formatter\StandardDimensionFormatter</argument>
 					<argument>PHPPdf\Formatter\FirstPointPositionFormatter</argument>
 					<argument>PHPPdf\Formatter\ListFormatter</argument>
 					<argument>PHPPdf\Formatter\ContainerFormatter</argument>
+				</argument>
+			</call>
+			<call method="setFormattersNames">
+				<argument>post</argument>
+				<argument type="collection">
 					<argument>PHPPdf\Formatter\ContainerDimensionFormatter</argument>
 					<argument>PHPPdf\Formatter\StandardPositionFormatter</argument>
 					<argument>PHPPdf\Formatter\FloatFormatter</argument>
@@ -119,12 +143,18 @@
 				<argument key="type">decimal</argument>
 			</argument>
 			<call method="setFormattersNames">
+				<argument>pre</argument>
 				<argument type="collection">
 					<argument>PHPPdf\Formatter\ConvertAttributesFormatter</argument>
 					<argument>PHPPdf\Formatter\StandardDimensionFormatter</argument>
 					<argument>PHPPdf\Formatter\FirstPointPositionFormatter</argument>
 					<argument>PHPPdf\Formatter\ListFormatter</argument>
 					<argument>PHPPdf\Formatter\ContainerFormatter</argument>
+				</argument>
+			</call>
+			<call method="setFormattersNames">
+				<argument>post</argument>
+				<argument type="collection">
 					<argument>PHPPdf\Formatter\ContainerDimensionFormatter</argument>
 					<argument>PHPPdf\Formatter\StandardPositionFormatter</argument>
 					<argument>PHPPdf\Formatter\FloatFormatter</argument>
@@ -140,11 +170,17 @@
 				<argument key="margin-left">10</argument>
 			</argument>
 			<call method="setFormattersNames">
+				<argument>pre</argument>
 				<argument type="collection">
 					<argument>PHPPdf\Formatter\ConvertAttributesFormatter</argument>
 					<argument>PHPPdf\Formatter\StandardDimensionFormatter</argument>
 					<argument>PHPPdf\Formatter\FirstPointPositionFormatter</argument>
 					<argument>PHPPdf\Formatter\ContainerFormatter</argument>
+				</argument>
+			</call>
+			<call method="setFormattersNames">
+				<argument>post</argument>
+				<argument type="collection">
 					<argument>PHPPdf\Formatter\ContainerDimensionFormatter</argument>
 					<argument>PHPPdf\Formatter\StandardPositionFormatter</argument>
 					<argument>PHPPdf\Formatter\FloatFormatter</argument>
@@ -158,11 +194,17 @@
 				<argument key="padding">5 0</argument>
 			</argument>
 			<call method="setFormattersNames">
+				<argument>pre</argument>
 				<argument type="collection">
 					<argument>PHPPdf\Formatter\ConvertAttributesFormatter</argument>
 					<argument>PHPPdf\Formatter\StandardDimensionFormatter</argument>
 					<argument>PHPPdf\Formatter\FirstPointPositionFormatter</argument>
 					<argument>PHPPdf\Formatter\ContainerFormatter</argument>
+				</argument>
+			</call>
+			<call method="setFormattersNames">
+				<argument>post</argument>
+				<argument type="collection">
 					<argument>PHPPdf\Formatter\ContainerDimensionFormatter</argument>
 					<argument>PHPPdf\Formatter\StandardPositionFormatter</argument>
 					<argument>PHPPdf\Formatter\FloatFormatter</argument>
@@ -174,11 +216,17 @@
 		<service id="phppdf.node.paragraph" class="PHPPdf\Node\Paragraph" public="false">
 			<tag name="phppdf.node" />
 			<call method="setFormattersNames">
+				<argument>pre</argument>
 				<argument type="collection">
 		            <argument>PHPPdf\Formatter\ConvertAttributesFormatter</argument>
 		            <argument>PHPPdf\Formatter\StandardDimensionFormatter</argument>
 		            <argument>PHPPdf\Formatter\FirstPointPositionFormatter</argument>
 		            <argument>PHPPdf\Formatter\ContainerFormatter</argument>
+				</argument>
+			</call>
+			<call method="setFormattersNames">
+				<argument>post</argument>
+				<argument type="collection">
 		            <argument>PHPPdf\Formatter\ParagraphFormatter</argument>
 		            <argument>PHPPdf\Formatter\ContainerDimensionFormatter</argument>
 		            <argument>PHPPdf\Formatter\StandardPositionFormatter</argument>
@@ -190,6 +238,7 @@
 		<service id="phppdf.node.text" class="PHPPdf\Node\Text" public="false">
 			<tag name="phppdf.node" />
 			<call method="setFormattersNames">
+				<argument>pre</argument>
 				<argument type="collection">
 					<argument>PHPPdf\Formatter\ConvertAttributesFormatter</argument>
 					<argument>PHPPdf\Formatter\TextDimensionFormatter</argument>
@@ -199,6 +248,7 @@
 		<service id="phppdf.node.span" class="PHPPdf\Node\Text" public="false">
 			<tag name="phppdf.node" />
 			<call method="setFormattersNames">
+				<argument>pre</argument>
 				<argument type="collection">
 					<argument>PHPPdf\Formatter\ConvertAttributesFormatter</argument>
 					<argument>PHPPdf\Formatter\TextDimensionFormatter</argument>
@@ -213,6 +263,7 @@
 				<argument key="color">blue</argument>
 			</argument>
 			<call method="setFormattersNames">
+				<argument>pre</argument>
 				<argument type="collection">
 					<argument>PHPPdf\Formatter\ConvertAttributesFormatter</argument>
 					<argument>PHPPdf\Formatter\TextDimensionFormatter</argument>
@@ -228,11 +279,17 @@
 				<argument key="margin">5 0</argument>
 			</argument>
 			<call method="setFormattersNames">
+				<argument>pre</argument>
 				<argument type="collection">
 					<argument>PHPPdf\Formatter\ConvertAttributesFormatter</argument>
 					<argument>PHPPdf\Formatter\StandardDimensionFormatter</argument>
 					<argument>PHPPdf\Formatter\FirstPointPositionFormatter</argument>
 					<argument>PHPPdf\Formatter\ContainerFormatter</argument>
+				</argument>
+			</call>
+			<call method="setFormattersNames">
+				<argument>post</argument>
+				<argument type="collection">
 					<argument>PHPPdf\Formatter\ContainerDimensionFormatter</argument>
 					<argument>PHPPdf\Formatter\StandardPositionFormatter</argument>
 					<argument>PHPPdf\Formatter\FloatFormatter</argument>
@@ -248,11 +305,17 @@
 				<argument key="margin">4 0</argument>
 			</argument>
 			<call method="setFormattersNames">
+				<argument>pre</argument>
 				<argument type="collection">
 					<argument>PHPPdf\Formatter\ConvertAttributesFormatter</argument>
 					<argument>PHPPdf\Formatter\StandardDimensionFormatter</argument>
 					<argument>PHPPdf\Formatter\FirstPointPositionFormatter</argument>
 					<argument>PHPPdf\Formatter\ContainerFormatter</argument>
+				</argument>
+			</call>
+			<call method="setFormattersNames">
+				<argument>post</argument>
+				<argument type="collection">
 					<argument>PHPPdf\Formatter\ContainerDimensionFormatter</argument>
 					<argument>PHPPdf\Formatter\StandardPositionFormatter</argument>
 					<argument>PHPPdf\Formatter\FloatFormatter</argument>
@@ -267,11 +330,17 @@
 				<argument key="margin">3 0</argument>
 			</argument>
 			<call method="setFormattersNames">
+				<argument>pre</argument>
 				<argument type="collection">
 					<argument>PHPPdf\Formatter\ConvertAttributesFormatter</argument>
 					<argument>PHPPdf\Formatter\StandardDimensionFormatter</argument>
 					<argument>PHPPdf\Formatter\FirstPointPositionFormatter</argument>
 					<argument>PHPPdf\Formatter\ContainerFormatter</argument>
+				</argument>
+			</call>
+			<call method="setFormattersNames">
+				<argument>post</argument>
+				<argument type="collection">
 					<argument>PHPPdf\Formatter\ContainerDimensionFormatter</argument>
 					<argument>PHPPdf\Formatter\StandardPositionFormatter</argument>
 					<argument>PHPPdf\Formatter\FloatFormatter</argument>
@@ -286,11 +355,17 @@
 				<argument key="margin">3 0</argument>
 			</argument>
 			<call method="setFormattersNames">
+				<argument>pre</argument>
 				<argument type="collection">
 					<argument>PHPPdf\Formatter\ConvertAttributesFormatter</argument>
 					<argument>PHPPdf\Formatter\StandardDimensionFormatter</argument>
 					<argument>PHPPdf\Formatter\FirstPointPositionFormatter</argument>
 					<argument>PHPPdf\Formatter\ContainerFormatter</argument>
+				</argument>
+			</call>
+			<call method="setFormattersNames">
+				<argument>post</argument>
+				<argument type="collection">
 					<argument>PHPPdf\Formatter\ContainerDimensionFormatter</argument>
 					<argument>PHPPdf\Formatter\StandardPositionFormatter</argument>
 					<argument>PHPPdf\Formatter\FloatFormatter</argument>
@@ -305,11 +380,17 @@
 				<argument key="margin">3 0</argument>
 			</argument>
 			<call method="setFormattersNames">
+				<argument>pre</argument>
 				<argument type="collection">
 					<argument>PHPPdf\Formatter\ConvertAttributesFormatter</argument>
 					<argument>PHPPdf\Formatter\StandardDimensionFormatter</argument>
 					<argument>PHPPdf\Formatter\FirstPointPositionFormatter</argument>
 					<argument>PHPPdf\Formatter\ContainerFormatter</argument>
+				</argument>
+			</call>
+			<call method="setFormattersNames">
+				<argument>post</argument>
+				<argument type="collection">
 					<argument>PHPPdf\Formatter\ContainerDimensionFormatter</argument>
 					<argument>PHPPdf\Formatter\StandardPositionFormatter</argument>
 					<argument>PHPPdf\Formatter\FloatFormatter</argument>
@@ -324,11 +405,17 @@
 				<argument key="margin">3 0</argument>
 			</argument>
 			<call method="setFormattersNames">
+				<argument>pre</argument>
 				<argument type="collection">
 					<argument>PHPPdf\Formatter\ConvertAttributesFormatter</argument>
 					<argument>PHPPdf\Formatter\StandardDimensionFormatter</argument>
 					<argument>PHPPdf\Formatter\FirstPointPositionFormatter</argument>
 					<argument>PHPPdf\Formatter\ContainerFormatter</argument>
+				</argument>
+			</call>
+			<call method="setFormattersNames">
+				<argument>post</argument>
+				<argument type="collection">
 					<argument>PHPPdf\Formatter\ContainerDimensionFormatter</argument>
 					<argument>PHPPdf\Formatter\StandardPositionFormatter</argument>
 					<argument>PHPPdf\Formatter\FloatFormatter</argument>
@@ -340,6 +427,7 @@
 		<service id="phppdf.node.page-info" class="PHPPdf\Node\Runtime\PageInfo" public="false">
 			<tag name="phppdf.node" />
 			<call method="setFormattersNames">
+				<argument>pre</argument>
 				<argument type="collection">
 					<argument>PHPPdf\Formatter\ConvertAttributesFormatter</argument>
 					<argument>PHPPdf\Formatter\TextDimensionFormatter</argument>
@@ -349,6 +437,7 @@
 		<service id="phppdf.node.page-number" class="PHPPdf\Node\Runtime\CurrentPageNumber" public="false">
 			<tag name="phppdf.node" />
 			<call method="setFormattersNames">
+				<argument>pre</argument>
 				<argument type="collection">
 					<argument>PHPPdf\Formatter\ConvertAttributesFormatter</argument>
 					<argument>PHPPdf\Formatter\TextDimensionFormatter</argument>
@@ -358,12 +447,18 @@
 		<service id="phppdf.node.table" class="PHPPdf\Node\Table" public="false">
 			<tag name="phppdf.node" />
 			<call method="setFormattersNames">
+				<argument>pre</argument>
 				<argument type="collection">
 					<argument>PHPPdf\Formatter\ConvertAttributesFormatter</argument>
 					<argument>PHPPdf\Formatter\StandardDimensionFormatter</argument>
 					<argument>PHPPdf\Formatter\TableColumnFormatter</argument>
 					<argument>PHPPdf\Formatter\FirstPointPositionFormatter</argument>
 					<argument>PHPPdf\Formatter\ContainerFormatter</argument>
+				</argument>
+			</call>
+			<call method="setFormattersNames">
+				<argument>post</argument>
+				<argument type="collection">
 					<argument>PHPPdf\Formatter\ContainerDimensionFormatter</argument>
 					<argument>PHPPdf\Formatter\TableFormatter</argument>
 					<argument>PHPPdf\Formatter\StandardPositionFormatter</argument>
@@ -376,11 +471,17 @@
 				<argument key="height">5</argument>
 			</argument>
 			<call method="setFormattersNames">
+				<argument>pre</argument>
 				<argument type="collection">
 					<argument>PHPPdf\Formatter\ConvertAttributesFormatter</argument>
 					<argument>PHPPdf\Formatter\StandardDimensionFormatter</argument>
 					<argument>PHPPdf\Formatter\FirstPointPositionFormatter</argument>
 					<argument>PHPPdf\Formatter\ContainerFormatter</argument>
+				</argument>
+			</call>
+			<call method="setFormattersNames">
+				<argument>post</argument>
+				<argument type="collection">
 					<argument>PHPPdf\Formatter\ContainerDimensionFormatter</argument>
 					<argument>PHPPdf\Formatter\StandardPositionFormatter</argument>
 					<argument>PHPPdf\Formatter\RowDimensionFormatter</argument>
@@ -397,11 +498,17 @@
 				</argument>
 			</call>
 			<call method="setFormattersNames">
+				<argument>pre</argument>
 				<argument type="collection">
 					<argument>PHPPdf\Formatter\ConvertAttributesFormatter</argument>
 					<argument>PHPPdf\Formatter\StandardDimensionFormatter</argument>
 					<argument>PHPPdf\Formatter\CellFirstPointPositionFormatter</argument>
 					<argument>PHPPdf\Formatter\ContainerFormatter</argument>
+				</argument>
+			</call>
+			<call method="setFormattersNames">
+				<argument>post</argument>
+				<argument type="collection">
 					<argument>PHPPdf\Formatter\ContainerDimensionFormatter</argument>
 					<argument>PHPPdf\Formatter\StandardPositionFormatter</argument>
 					<argument>PHPPdf\Formatter\FloatFormatter</argument>
@@ -415,6 +522,7 @@
 			</argument>
 
 			<call method="setFormattersNames">
+				<argument>pre</argument>
 				<argument type="collection">
 					<argument>PHPPdf\Formatter\ConvertAttributesFormatter</argument>
 					<argument>PHPPdf\Formatter\FirstPointPositionFormatter</argument>
@@ -429,11 +537,17 @@
 				<argument key="height">10</argument>
 			</argument>
 			<call method="setFormattersNames">
+				<argument>pre</argument>
 				<argument type="collection">
 					<argument>PHPPdf\Formatter\ConvertAttributesFormatter</argument>
 					<argument>PHPPdf\Formatter\StandardDimensionFormatter</argument>
 					<argument>PHPPdf\Formatter\FirstPointPositionFormatter</argument>
 					<argument>PHPPdf\Formatter\ContainerFormatter</argument>
+				</argument>
+			</call>
+			<call method="setFormattersNames">
+				<argument>post</argument>
+				<argument type="collection">
 					<argument>PHPPdf\Formatter\ContainerDimensionFormatter</argument>
 					<argument>PHPPdf\Formatter\StandardPositionFormatter</argument>
 					<argument>PHPPdf\Formatter\FloatFormatter</argument>
@@ -454,11 +568,17 @@
 				</argument>
 			</call>
 			<call method="setFormattersNames">
+				<argument>pre</argument>
 				<argument type="collection">
 					<argument>PHPPdf\Formatter\ConvertAttributesFormatter</argument>
 					<argument>PHPPdf\Formatter\StandardDimensionFormatter</argument>
 					<argument>PHPPdf\Formatter\FirstPointPositionFormatter</argument>
 					<argument>PHPPdf\Formatter\ContainerFormatter</argument>
+				</argument>
+			</call>
+			<call method="setFormattersNames">
+				<argument>post</argument>
+				<argument type="collection">
 					<argument>PHPPdf\Formatter\ContainerDimensionFormatter</argument>
 					<argument>PHPPdf\Formatter\StandardPositionFormatter</argument>
 					<argument>PHPPdf\Formatter\FloatFormatter</argument>
@@ -469,11 +589,17 @@
 		<service id="phppdf.node.nl" class="PHPPdf\Node\Container" public="false">
 			<tag name="phppdf.node" />
 			<call method="setFormattersNames">
+				<argument>pre</argument>
 				<argument type="collection">
 					<argument>PHPPdf\Formatter\ConvertAttributesFormatter</argument>
 					<argument>PHPPdf\Formatter\StandardDimensionFormatter</argument>
 					<argument>PHPPdf\Formatter\FirstPointPositionFormatter</argument>
 					<argument>PHPPdf\Formatter\ContainerFormatter</argument>
+				</argument>
+			</call>
+			<call method="setFormattersNames">
+				<argument>post</argument>
+				<argument type="collection">
 					<argument>PHPPdf\Formatter\ContainerDimensionFormatter</argument>
 					<argument>PHPPdf\Formatter\StandardPositionFormatter</argument>
 					<argument>PHPPdf\Formatter\FloatFormatter</argument>
@@ -487,6 +613,7 @@
 				<argument key="font-style">bold</argument>
 			</argument>
 			<call method="setFormattersNames">
+				<argument>pre</argument>
 				<argument type="collection">
 					<argument>PHPPdf\Formatter\ConvertAttributesFormatter</argument>
 					<argument>PHPPdf\Formatter\TextDimensionFormatter</argument>
@@ -499,6 +626,7 @@
 				<argument key="font-style">italic</argument>
 			</argument>
 			<call method="setFormattersNames">
+				<argument>pre</argument>
 				<argument type="collection">
 					<argument>PHPPdf\Formatter\ConvertAttributesFormatter</argument>
 					<argument>PHPPdf\Formatter\TextDimensionFormatter</argument>
@@ -512,11 +640,17 @@
 				<argument key="height">0.01</argument>
 			</argument>
 			<call method="setFormattersNames">
+				<argument>pre</argument>
 				<argument type="collection">
 					<argument>PHPPdf\Formatter\ConvertAttributesFormatter</argument>
 					<argument>PHPPdf\Formatter\StandardDimensionFormatter</argument>
 					<argument>PHPPdf\Formatter\FirstPointPositionFormatter</argument>
 					<argument>PHPPdf\Formatter\ContainerFormatter</argument>
+				</argument>
+			</call>
+			<call method="setFormattersNames">
+				<argument>post</argument>
+				<argument type="collection">
 					<argument>PHPPdf\Formatter\ContainerDimensionFormatter</argument>
 					<argument>PHPPdf\Formatter\StandardPositionFormatter</argument>
 					<argument>PHPPdf\Formatter\FloatFormatter</argument>
@@ -526,11 +660,17 @@
 		<service id="phppdf.node.column-layout" class="PHPPdf\Node\ColumnableContainer"  public="false">
 			<tag name="phppdf.node" />
 			<call method="setFormattersNames">
+				<argument>pre</argument>
 				<argument type="collection">
 					<argument>PHPPdf\Formatter\ConvertAttributesFormatter</argument>
 					<argument>PHPPdf\Formatter\StandardDimensionFormatter</argument>
 					<argument>PHPPdf\Formatter\FirstPointPositionFormatter</argument>
 					<argument>PHPPdf\Formatter\ContainerFormatter</argument>
+				</argument>
+			</call>
+			<call method="setFormattersNames">
+				<argument>post</argument>
+				<argument type="collection">
 					<argument>PHPPdf\Formatter\ContainerDimensionFormatter</argument>
 					<argument>PHPPdf\Formatter\StandardPositionFormatter</argument>
 					<argument>PHPPdf\Formatter\FloatFormatter</argument>

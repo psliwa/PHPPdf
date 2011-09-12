@@ -1428,26 +1428,46 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
     {
         $this->beforeFormat($document);
         
-        foreach($this->formattersNames as $formatterName)
+        $this->preFormat($document);
+        $this->postFormat($document);
+    }
+    
+    public function preFormat(Document $document)
+    {
+        $formattersNames = $this->getFormattersNames('pre');
+        
+        $this->invokeFormatter($document, $formattersNames);
+    }
+    
+    private function invokeFormatter(Document $document, array $formattersNames)
+    {
+        foreach($formattersNames as $formatterName)
         {
             $formatter = $document->getFormatter($formatterName);
             $formatter->format($this, $document);
         }
     }
-
-    public function setFormattersNames(array $formattersNames)
+    
+    public function postFormat(Document $document)
     {
-        $this->formattersNames = $formattersNames;
+        $formattersNames = $this->getFormattersNames('post');
+        
+        $this->invokeFormatter($document, $formattersNames);
     }
 
-    public function addFormatterName($formatterName)
+    public function setFormattersNames($type, array $formattersNames)
     {
-        $this->formattersNames[] = $formatterName;
+        $this->formattersNames[$type] = $formattersNames;
     }
 
-    public function getFormattersNames()
+    public function addFormatterName($type, $formatterName)
     {
-        return $this->formattersNames;
+        $this->formattersNames[$type][] = $formatterName;
+    }
+
+    public function getFormattersNames($type)
+    {
+        return isset($this->formattersNames[$type]) ? $this->formattersNames[$type] : array();
     }
     
     /**

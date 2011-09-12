@@ -63,7 +63,11 @@ class NodeFactoryParser extends XmlParser
 
     protected function parseElement(\XMLReader $reader)
     {
-        if($reader->name === self::GLYPH_TAG)
+        if($this->isFormattersParsing)
+        {
+            $this->parseFormatter($reader->name, $reader);
+        }
+        elseif($reader->name === self::GLYPH_TAG)
         {
             $this->parseNode($reader);
         }
@@ -74,10 +78,6 @@ class NodeFactoryParser extends XmlParser
         elseif($reader->name === self::FORMATTERS_TAG)
         {
             $this->isFormattersParsing = true;
-        }
-        elseif($reader->name === self::FORMATTER_TAG)
-        {
-            $this->parseFormatter($reader);
         }
         elseif($reader->name === self::INVOKE_TAG)
         {
@@ -130,13 +130,13 @@ class NodeFactoryParser extends XmlParser
         }
     }
 
-    private function parseFormatter(\XMLReader $reader)
+    private function parseFormatter($formatterType, \XMLReader $reader)
     {
         $node = $this->getLastElementFromStack();
 
         $formatterClassName = $reader->getAttribute('class');
 
-        $node->addFormatterName($formatterClassName);
+        $node->addFormatterName($formatterType, $formatterClassName);
     }
     
     private function parseInvoke(\XMLReader $reader)
