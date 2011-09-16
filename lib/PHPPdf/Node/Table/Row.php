@@ -8,6 +8,8 @@
 
 namespace PHPPdf\Node\Table;
 
+use PHPPdf\Document;
+
 use PHPPdf\Node\Table\Cell,
     PHPPdf\Node\Container,
     PHPPdf\Node\Listener,

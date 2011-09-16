@@ -8,6 +8,9 @@
 
 namespace PHPPdf\Node;
 
+use PHPPdf\Document;
+
+use PHPPdf\Parser\DocumentParserListener;
 use PHPPdf\Parser\Exception\DuplicatedIdException;
 
 /**
@@ -15,10 +18,14 @@ use PHPPdf\Parser\Exception\DuplicatedIdException;
  * 
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
-class Manager
+class Manager implements DocumentParserListener
 {
     private $nodes = array();
     private $wrappers = array();
+    
+    private $managedNodes = array();
+    
+    private $disableListening = 0;
     
     public function register($id, Node $node)
     {
@@ -59,7 +66,60 @@ class Manager
     
     public function clear()
     {
-        $this->nodes = array();
         $this->wrappers = array();
+        $this->flushAll($this->nodes);
+        $this->nodes = array();
+        $this->flush();
+    }
+    
+    public function attach(Node $node)
+    {
+        $this->managedNodes[] = $node;
+    }
+    
+    public function flush()
+    {
+        $this->flushAll($this->managedNodes);
+        
+        $this->managedNodes = array();
+    }
+    
+    private function flushAll(array $nodes)
+    {
+        foreach($nodes as $node)
+        {
+            $node->flush();
+        }
+    }
+    
+    public function onEndParsePlaceholders(Document $document, Node $node)
+    {
+        if($this->isPage($node))
+        {
+            $node->preFormat($document);
+        }
+    }
+    
+    public function onStartParseNode(Document $document, Node $node)
+    {
+
+    }
+    
+    private function isPage($node)
+    {
+        return $node instanceof \PHPPdf\Node\Page;
+    }
+    
+    public function onEndParseNode(Document $document, Node $node)
+    {
+        if(!$this->isPage($node) && $this->isPage($node->getParent()))
+        {
+            $node->format($document);
+        }
+
+        if($this->isPage($node))
+        {
+            $node->postFormat($document);
+        }
     }
 }

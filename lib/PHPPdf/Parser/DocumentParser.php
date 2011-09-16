@@ -58,6 +58,8 @@ class DocumentParser extends XmlParser
     private $currentParagraph = null;
     
     private $document;
+    
+    private $listeners = array();
 
     public function __construct(Document $document)
     {
@@ -70,6 +72,7 @@ class DocumentParser extends XmlParser
         $this->setStylesheetParser($stylesheetParser);
         $this->setEnhancementFactory($enhancementFactory);
         $this->nodeManager = new Manager();
+        $this->addListener($this->nodeManager);
         $this->setBehaviourFactory(new BehaviourFactory());
 
         $this->initialize();
@@ -88,6 +91,16 @@ class DocumentParser extends XmlParser
         $this->nodeManager->clear();
     }
     
+    public function addListener(DocumentParserListener $listener)
+    {
+        $this->listeners[] = $listener;
+    }
+    
+    public function clearListeners()
+    {
+        $this->listeners = array();
+    }
+
     protected function createReader($content)
     {
         $reader = new \XMLReader();
@@ -113,6 +126,7 @@ class DocumentParser extends XmlParser
             $innerParser = new self($this->document);
             $innerParser->setEnhancementFactory($this->getEnhancementFactory());
             $innerParser->setNodeFactory($this->getNodeFactory());
+            $innerParser->clearListeners();
 
             $this->innerParser = $innerParser;
         }
@@ -311,6 +325,10 @@ class DocumentParser extends XmlParser
         
         if($this->isntTextNode($node))
         {
+            if($this->currentParagraph !== null)
+            {
+                $this->fireOnEndParseNode($this->currentParagraph);
+            }
             $this->currentParagraph = null;
             $this->isPreviousText = false;
         }
@@ -341,10 +359,20 @@ class DocumentParser extends XmlParser
 
         $parentNode->add($node);
         $this->pushOnStack($node);
+        
+        $this->fireOnStartParseNode($node);
 
         if($isEmptyElement)
         {
             $this->parseEndElement($reader);
+        }
+    }
+    
+    private function fireOnStartParseNode(Node $node)
+    {
+        foreach($this->listeners as $listener)
+        {
+            $listener->onStartParseNode($this->document, $node);
         }
     }
 
@@ -433,6 +461,8 @@ class DocumentParser extends XmlParser
         if($reader->name === self::PLACEHOLDERS_TAG)
         {
             $this->inPlaceholder = false;
+            $node = $this->getLastElementFromStack();
+            $this->fireOnEndParsePlaceholders($node);
         }
         elseif($this->inBehaviour && $reader->name === self::BEHAVIOURS_TAG)
         {
@@ -441,14 +471,40 @@ class DocumentParser extends XmlParser
         elseif(!$this->inBehaviour)
         {
             $node = $this->popFromStack();
-            
+
             if($this->isntTextNode($node))
             {
                 $this->isPreviousText = false;
+                
+                if($this->currentParagraph !== null)
+                {
+                    $this->fireOnEndParseNode($this->currentParagraph);
+                }
                 $this->currentParagraph = null;
             }
             
+            if($reader->name !== self::ROOT_TAG)
+            {
+                $this->fireOnEndParseNode($node);
+            }
+            
             $this->popFromTagStack();
+        }
+    }
+    
+    private function fireOnEndParsePlaceholders(Node $node)
+    {
+        foreach($this->listeners as $listener)
+        {
+            $listener->onEndParsePlaceholders($this->document, $node);
+        }
+    }
+    
+    private function fireOnEndParseNode(Node $node)
+    {
+        foreach($this->listeners as $listener)
+        {
+            $listener->onEndParseNode($this->document, $node);
         }
     }
 
@@ -481,6 +537,12 @@ class DocumentParser extends XmlParser
             $textNode->setText($text);
             
             $parentNode->add($textNode);
+            
+            if($this->isntTextNode($parentNode))
+            {
+                $this->fireOnStartParseNode($textNode);
+                $this->fireOnEndParseNode($textNode);
+            }
         }
     }
     
@@ -492,6 +554,8 @@ class DocumentParser extends XmlParser
             $parentNode = $this->getLastElementFromStack();
             
             $parentNode->add($this->currentParagraph);
+            
+            $this->fireOnStartParseNode($this->currentParagraph);
         }
         
         return $this->currentParagraph;
@@ -501,7 +565,7 @@ class DocumentParser extends XmlParser
     {
         return $reader->name == $this->endTag;
     }
-    
+
     protected function parseRootAttributes(\XMLReader $reader)
     {
         while($reader->moveToNextAttribute())

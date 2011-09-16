@@ -212,4 +212,11 @@ class Table extends Container implements Listener
             $widthOfColumn -= $marginsLeft[$columnNumber] + $marginsRight[$columnNumber];
         });
     }
+    
+//    public function format(\PHPPdf\Document $document)
+//    {
+//        $this->beforeFormat($document);
+//        $this->preFormat($document);
+//        $this->postFormat($document);
+//    }
 }

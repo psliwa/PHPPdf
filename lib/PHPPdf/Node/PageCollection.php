@@ -36,10 +36,6 @@ class PageCollection extends Container
 
     public function format(Document $document)
     {
-        foreach($this->getChildren() as $page)
-        {
-            $page->format($document);
-        }
     }
     
     public function getGraphicsContext()

@@ -1425,16 +1425,25 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
      * Format node by given formatters.
      */
     public function format(Document $document)
-    {
-        $this->beforeFormat($document);
-        
+    {        
         $this->preFormat($document);
+        foreach($this->getChildren() as $child)
+        {
+            $child->format($document);
+        }
         $this->postFormat($document);
     }
     
     public function preFormat(Document $document)
     {
-        $formattersNames = $this->getFormattersNames('pre');
+        $this->beforeFormat($document);
+        
+        $this->doFormat('pre', $document);
+    }
+    
+    public function doFormat($type, Document $document)
+    {
+        $formattersNames = $this->getFormattersNames($type);
         
         $this->invokeFormatter($document, $formattersNames);
     }
@@ -1450,9 +1459,7 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
     
     public function postFormat(Document $document)
     {
-        $formattersNames = $this->getFormattersNames('post');
-        
-        $this->invokeFormatter($document, $formattersNames);
+        $this->doFormat('post', $document);
     }
 
     public function setFormattersNames($type, array $formattersNames)
@@ -1538,7 +1545,12 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
         }
         $this->attributes = $data['attributes'];
         $this->enhancementBag = new EnhancementBag($data['enhancementBag']);
-        $this->setFormattersNames($data['formattersNames']);
+
+        foreach((array) $data['formattersNames'] as $type => $names)
+        {
+            $this->setFormattersNames($type, $names);
+        }
+
         $this->priority = $data['priority'];
     }
     
@@ -1585,13 +1597,8 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
      */
     public function flush()
     {
-        $this->parent = null;
         $this->ancestorWithFontSize = null;
         $this->ancestorWithRotation = null;
-        $this->boundary = null;
-        $this->behaviours = array();
-        $this->enhancementBag = null;
-        $this->attributes = array();
         
         foreach($this->getChildren() as $child)
         {

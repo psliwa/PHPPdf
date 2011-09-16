@@ -136,13 +136,12 @@ class GraphicsContext implements BaseGraphicsContext
 
     public function setFont(BaseFont $font, $size)
     {
-        $this->addToQueue('doSetFont', func_get_args());
+        $this->addToQueue('doSetFont', array($font->getCurrentWrappedFont(), $size));
 
     }
     
-    protected function doSetFont(BaseFont $font, $size)
+    protected function doSetFont($fontResource, $size)
     {
-        $fontResource = $font->getCurrentWrappedFont();
         $this->page->setFont($fontResource, $size);
     }
 

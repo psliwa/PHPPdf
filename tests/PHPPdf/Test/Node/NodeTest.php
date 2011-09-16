@@ -359,14 +359,14 @@ class NodeTest extends \PHPPdf\PHPUnit\Framework\TestCase
         $this->node->mergeEnhancementAttributes('some-enhancement', array('attribute' => 'value'));
         $this->node->setAttribute('font-size', 123);
         $this->node->getBoundary()->setNext(0, 0);
-        $this->node->addFormatterName('SomeName');
+        $this->node->addFormatterName('pre', 'SomeName');
 
         $node = unserialize(serialize($this->node));
 
         $this->assertEquals($this->node->getEnhancementsAttributes(), $node->getEnhancementsAttributes());
         $this->assertEquals($this->node->getAttribute('font-size'), $node->getAttribute('font-size'));
         $this->assertEquals($this->node->getBoundary(), $node->getBoundary());
-        $this->assertEquals($this->node->getFormattersNames(), $node->getFormattersNames());
+        $this->assertEquals($this->node->getFormattersNames('pre'), $node->getFormattersNames('pre'));
     }
 
     /**
@@ -389,7 +389,7 @@ class NodeTest extends \PHPPdf\PHPUnit\Framework\TestCase
                      ->with($formatterName)
                      ->will($this->returnValue($formatterMock));
 
-        $this->node->setFormattersNames(array($formatterName));
+        $this->node->setFormattersNames('pre', array($formatterName));
         $this->node->format($documentMock);
     }
 

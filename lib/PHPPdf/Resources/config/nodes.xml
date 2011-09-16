@@ -13,18 +13,12 @@
 	            <attribute name="color" value="black" />
 	        </stylesheet>
 	        <formatters>
-	            <pre class="PHPPdf\Formatter\ConvertAttributesFormatter" />
-	            <pre class="PHPPdf\Formatter\StandardDimensionFormatter" />
-	            <pre class="PHPPdf\Formatter\ContainerFormatter" />
 	            <post class="PHPPdf\Formatter\FloatFormatter" />
 	            <post class="PHPPdf\Formatter\ColumnBreakingFormatter" />
 	        </formatters>
 	    </node>
 	    <node name="dynamic-page" class="PHPPdf\Node\DynamicPage">
 	        <formatters>
-	            <pre class="PHPPdf\Formatter\ConvertAttributesFormatter" />
-	            <pre class="PHPPdf\Formatter\StandardDimensionFormatter" />
-	            <pre class="PHPPdf\Formatter\ContainerFormatter" />
 	            <post class="PHPPdf\Formatter\FloatFormatter" />
 	            <post class="PHPPdf\Formatter\PageBreakingFormatter" />
 	        </formatters>
@@ -34,7 +28,7 @@
 	            <pre class="PHPPdf\Formatter\ConvertAttributesFormatter" />
 	            <pre class="PHPPdf\Formatter\StandardDimensionFormatter" />
 	            <pre class="PHPPdf\Formatter\FirstPointPositionFormatter" />
-	            <pre class="PHPPdf\Formatter\ContainerFormatter" />
+
 	            <post class="PHPPdf\Formatter\ContainerDimensionFormatter" />
 	            <post class="PHPPdf\Formatter\StandardPositionFormatter" />
 	            <post class="PHPPdf\Formatter\FloatFormatter" />
@@ -48,7 +42,7 @@
 	            <pre class="PHPPdf\Formatter\StandardDimensionFormatter" />
 	            <pre class="PHPPdf\Formatter\FirstPointPositionFormatter" />
 	            <pre class="PHPPdf\Formatter\ListFormatter" />
-	            <pre class="PHPPdf\Formatter\ContainerFormatter" />
+
 	            <post class="PHPPdf\Formatter\ContainerDimensionFormatter" />
 	            <post class="PHPPdf\Formatter\StandardPositionFormatter" />
 	            <post class="PHPPdf\Formatter\FloatFormatter" />
@@ -64,7 +58,7 @@
 	            <pre class="PHPPdf\Formatter\StandardDimensionFormatter" />
 	            <pre class="PHPPdf\Formatter\FirstPointPositionFormatter" />
 	            <pre class="PHPPdf\Formatter\ListFormatter" />
-	            <pre class="PHPPdf\Formatter\ContainerFormatter" />
+
 	            <post class="PHPPdf\Formatter\ContainerDimensionFormatter" />
 	            <post class="PHPPdf\Formatter\StandardPositionFormatter" />
 	            <post class="PHPPdf\Formatter\FloatFormatter" />
@@ -78,7 +72,7 @@
 	            <pre class="PHPPdf\Formatter\ConvertAttributesFormatter" />
 	            <pre class="PHPPdf\Formatter\StandardDimensionFormatter" />
 	            <pre class="PHPPdf\Formatter\FirstPointPositionFormatter" />
-	            <pre class="PHPPdf\Formatter\ContainerFormatter" />
+
 	            <post class="PHPPdf\Formatter\ContainerDimensionFormatter" />
 	            <post class="PHPPdf\Formatter\StandardPositionFormatter" />
 	            <post class="PHPPdf\Formatter\FloatFormatter" />
@@ -92,7 +86,7 @@
 	            <pre class="PHPPdf\Formatter\ConvertAttributesFormatter" />
 	            <pre class="PHPPdf\Formatter\StandardDimensionFormatter" />
 	            <pre class="PHPPdf\Formatter\FirstPointPositionFormatter" />
-	            <pre class="PHPPdf\Formatter\ContainerFormatter" />
+
 	            <post class="PHPPdf\Formatter\ContainerDimensionFormatter" />
 	            <post class="PHPPdf\Formatter\StandardPositionFormatter" />
 	            <post class="PHPPdf\Formatter\FloatFormatter" />
@@ -105,7 +99,7 @@
 	            <pre class="PHPPdf\Formatter\ConvertAttributesFormatter" />
 	            <pre class="PHPPdf\Formatter\StandardDimensionFormatter" />
 	            <pre class="PHPPdf\Formatter\FirstPointPositionFormatter" />
-	            <pre class="PHPPdf\Formatter\ContainerFormatter" />
+
 	            <post class="PHPPdf\Formatter\ParagraphFormatter" />
 	            <post class="PHPPdf\Formatter\ContainerDimensionFormatter" />
 	            <post class="PHPPdf\Formatter\StandardPositionFormatter" />
@@ -129,7 +123,7 @@
 	            <pre class="PHPPdf\Formatter\ConvertAttributesFormatter" />
 	            <pre class="PHPPdf\Formatter\StandardDimensionFormatter" />
 	            <pre class="PHPPdf\Formatter\FirstPointPositionFormatter" />
-	            <pre class="PHPPdf\Formatter\ContainerFormatter" />
+
 	            <post class="PHPPdf\Formatter\ContainerDimensionFormatter" />
 	            <post class="PHPPdf\Formatter\StandardPositionFormatter" />
 	            <post class="PHPPdf\Formatter\FloatFormatter" />
@@ -146,7 +140,7 @@
 	            <pre class="PHPPdf\Formatter\ConvertAttributesFormatter" />
 	            <pre class="PHPPdf\Formatter\StandardDimensionFormatter" />
 	            <pre class="PHPPdf\Formatter\FirstPointPositionFormatter" />
-	            <pre class="PHPPdf\Formatter\ContainerFormatter" />
+
 	            <post class="PHPPdf\Formatter\ContainerDimensionFormatter" />
 	            <post class="PHPPdf\Formatter\StandardPositionFormatter" />
 	            <post class="PHPPdf\Formatter\FloatFormatter" />
@@ -162,7 +156,7 @@
 	            <pre class="PHPPdf\Formatter\ConvertAttributesFormatter" />
 	            <pre class="PHPPdf\Formatter\StandardDimensionFormatter" />
 	            <pre class="PHPPdf\Formatter\FirstPointPositionFormatter" />
-	            <pre class="PHPPdf\Formatter\ContainerFormatter" />
+
 	            <post class="PHPPdf\Formatter\ContainerDimensionFormatter" />
 	            <post class="PHPPdf\Formatter\StandardPositionFormatter" />
 	            <post class="PHPPdf\Formatter\FloatFormatter" />
@@ -178,7 +172,7 @@
 	            <pre class="PHPPdf\Formatter\ConvertAttributesFormatter" />
 	            <pre class="PHPPdf\Formatter\StandardDimensionFormatter" />
 	            <pre class="PHPPdf\Formatter\FirstPointPositionFormatter" />
-	            <pre class="PHPPdf\Formatter\ContainerFormatter" />
+
 	            <post class="PHPPdf\Formatter\ContainerDimensionFormatter" />
 	            <post class="PHPPdf\Formatter\StandardPositionFormatter" />
 	            <post class="PHPPdf\Formatter\FloatFormatter" />
@@ -194,7 +188,7 @@
 	            <pre class="PHPPdf\Formatter\ConvertAttributesFormatter" />
 	            <pre class="PHPPdf\Formatter\StandardDimensionFormatter" />
 	            <pre class="PHPPdf\Formatter\FirstPointPositionFormatter" />
-	            <pre class="PHPPdf\Formatter\ContainerFormatter" />
+
 	            <post class="PHPPdf\Formatter\ContainerDimensionFormatter" />
 	            <post class="PHPPdf\Formatter\StandardPositionFormatter" />
 	            <post class="PHPPdf\Formatter\FloatFormatter" />
@@ -210,7 +204,7 @@
 	            <pre class="PHPPdf\Formatter\ConvertAttributesFormatter" />
 	            <pre class="PHPPdf\Formatter\StandardDimensionFormatter" />
 	            <pre class="PHPPdf\Formatter\FirstPointPositionFormatter" />
-	            <pre class="PHPPdf\Formatter\ContainerFormatter" />
+
 	            <post class="PHPPdf\Formatter\ContainerDimensionFormatter" />
 	            <post class="PHPPdf\Formatter\StandardPositionFormatter" />
 	            <post class="PHPPdf\Formatter\FloatFormatter" />
@@ -235,7 +229,7 @@
 	            <pre class="PHPPdf\Formatter\StandardDimensionFormatter" />
 	            <pre class="PHPPdf\Formatter\TableColumnFormatter" />
 	            <pre class="PHPPdf\Formatter\FirstPointPositionFormatter" />
-	            <pre class="PHPPdf\Formatter\ContainerFormatter" />
+
 	            <post class="PHPPdf\Formatter\ContainerDimensionFormatter" />
 	            <post class="PHPPdf\Formatter\TableFormatter" />
 	            <post class="PHPPdf\Formatter\StandardPositionFormatter" />
@@ -249,7 +243,7 @@
 	            <pre class="PHPPdf\Formatter\ConvertAttributesFormatter" />
 	            <pre class="PHPPdf\Formatter\StandardDimensionFormatter" />
 	            <pre class="PHPPdf\Formatter\FirstPointPositionFormatter" />
-	            <pre class="PHPPdf\Formatter\ContainerFormatter" />
+
 	            <post class="PHPPdf\Formatter\ContainerDimensionFormatter" />
 	            <post class="PHPPdf\Formatter\StandardPositionFormatter" />
 	            <post class="PHPPdf\Formatter\RowDimensionFormatter" />
@@ -263,7 +257,7 @@
 	            <pre class="PHPPdf\Formatter\ConvertAttributesFormatter" />
 	            <pre class="PHPPdf\Formatter\StandardDimensionFormatter" />
 	            <pre class="PHPPdf\Formatter\CellFirstPointPositionFormatter" />
-	            <pre class="PHPPdf\Formatter\ContainerFormatter" />
+
 	            <post class="PHPPdf\Formatter\ContainerDimensionFormatter" />
 	            <post class="PHPPdf\Formatter\StandardPositionFormatter" />
 	            <post class="PHPPdf\Formatter\FloatFormatter" />
@@ -288,7 +282,7 @@
 	            <pre class="PHPPdf\Formatter\ConvertAttributesFormatter" />
 	            <pre class="PHPPdf\Formatter\StandardDimensionFormatter" />
 	            <pre class="PHPPdf\Formatter\FirstPointPositionFormatter" />
-	            <pre class="PHPPdf\Formatter\ContainerFormatter" />
+
 	            <post class="PHPPdf\Formatter\ContainerDimensionFormatter" />
 	            <post class="PHPPdf\Formatter\StandardPositionFormatter" />
 	            <post class="PHPPdf\Formatter\FloatFormatter" />
@@ -304,7 +298,7 @@
 	            <pre class="PHPPdf\Formatter\ConvertAttributesFormatter" />
 	            <pre class="PHPPdf\Formatter\StandardDimensionFormatter" />
 	            <pre class="PHPPdf\Formatter\FirstPointPositionFormatter" />
-	            <pre class="PHPPdf\Formatter\ContainerFormatter" />
+
 	            <post class="PHPPdf\Formatter\ContainerDimensionFormatter" />
 	            <post class="PHPPdf\Formatter\StandardPositionFormatter" />
 	            <post class="PHPPdf\Formatter\FloatFormatter" />
@@ -315,7 +309,7 @@
 	            <pre class="PHPPdf\Formatter\ConvertAttributesFormatter" />
 	            <pre class="PHPPdf\Formatter\StandardDimensionFormatter" />
 	            <pre class="PHPPdf\Formatter\FirstPointPositionFormatter" />
-	            <pre class="PHPPdf\Formatter\ContainerFormatter" />
+
 	            <post class="PHPPdf\Formatter\ContainerDimensionFormatter" />
 	            <post class="PHPPdf\Formatter\StandardPositionFormatter" />
 	            <post class="PHPPdf\Formatter\FloatFormatter" />
@@ -373,7 +367,7 @@
 	            <pre class="PHPPdf\Formatter\ConvertAttributesFormatter" />
 	            <pre class="PHPPdf\Formatter\StandardDimensionFormatter" />
 	            <pre class="PHPPdf\Formatter\FirstPointPositionFormatter" />
-	            <pre class="PHPPdf\Formatter\ContainerFormatter" />
+
 	            <post class="PHPPdf\Formatter\ContainerDimensionFormatter" />
 	            <post class="PHPPdf\Formatter\StandardPositionFormatter" />
 	            <post class="PHPPdf\Formatter\FloatFormatter" />
@@ -388,7 +382,7 @@
 	            <pre class="PHPPdf\Formatter\ConvertAttributesFormatter" />
 	            <pre class="PHPPdf\Formatter\StandardDimensionFormatter" />
 	            <pre class="PHPPdf\Formatter\FirstPointPositionFormatter" />
-	            <pre class="PHPPdf\Formatter\ContainerFormatter" />
+
 	            <post class="PHPPdf\Formatter\ContainerDimensionFormatter" />
 	            <post class="PHPPdf\Formatter\StandardPositionFormatter" />
 	            <post class="PHPPdf\Formatter\FloatFormatter" />
@@ -403,7 +397,7 @@
 	            <pre class="PHPPdf\Formatter\ConvertAttributesFormatter" />
 	            <pre class="PHPPdf\Formatter\StandardDimensionFormatter" />
 	            <pre class="PHPPdf\Formatter\FirstPointPositionFormatter" />
-	            <pre class="PHPPdf\Formatter\ContainerFormatter" />
+
 	            <post class="PHPPdf\Formatter\ContainerDimensionFormatter" />
 	            <post class="PHPPdf\Formatter\StandardPositionFormatter" />
 	            <post class="PHPPdf\Formatter\FloatFormatter" />
@@ -414,7 +408,7 @@
 	            <pre class="PHPPdf\Formatter\ConvertAttributesFormatter" />
 	            <pre class="PHPPdf\Formatter\StandardDimensionFormatter" />
 	            <pre class="PHPPdf\Formatter\FirstPointPositionFormatter" />
-	            <pre class="PHPPdf\Formatter\ContainerFormatter" />
+
 	            <post class="PHPPdf\Formatter\ContainerDimensionFormatter" />
 	            <post class="PHPPdf\Formatter\StandardPositionFormatter" />
 	            <post class="PHPPdf\Formatter\FloatFormatter" />

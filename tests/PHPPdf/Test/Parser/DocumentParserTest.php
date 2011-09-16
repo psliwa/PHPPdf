@@ -1014,4 +1014,80 @@ XML;
             throw $e;
         }
     }
+    
+    /**
+     * @test
+     */
+    public function notifyParserListeners()
+    {
+        $xml = <<<XML
+<pdf>
+	<tag1>
+		<tag2 />
+	</tag1>
+</pdf>
+XML;
+        $node1 = $this->getMock('PHPPdf\Node\Container', array('setPriorityFromParent'));
+        $node2 = $this->getMock('PHPPdf\Node\Container', array('setPriorityFromParent'));
+        
+        $nodeFactoryMock = $this->getNodeFactoryMock(array(array('tag1', $node1), array('tag2', $node2)));
+        
+        $listener = $this->getMock('PHPPdf\Parser\DocumentParserListener');
+        
+        $listener->expects($this->at(0))
+                 ->method('onStartParseNode')
+                 ->with($this->documentMock, $node1);
+        $listener->expects($this->at(1))
+                 ->method('onStartParseNode')
+                 ->with($this->documentMock, $node2);
+        $listener->expects($this->at(2))
+                 ->method('onEndParseNode')
+                 ->with($this->documentMock, $node2);
+        $listener->expects($this->at(3))
+                 ->method('onEndParseNode')
+                 ->with($this->documentMock, $node1);
+        
+        $this->parser->setNodeFactory($nodeFactoryMock);
+        $this->parser->addListener($listener);
+        
+        $this->parser->parse($xml);
+    }
+    
+    /**
+     * @test
+     */
+    public function notifyParserListenersOnParagraph()
+    {
+        $xml = <<<XML
+<pdf>
+	Some text
+</pdf>
+XML;
+
+        $node = new Text();
+        $paragraph = new Paragraph();
+        
+        $nodeFactoryMock = $this->getNodeFactoryMock(array(array('paragraph', $paragraph), array('text', $node)));
+        
+        $listener = $this->getMock('PHPPdf\Parser\DocumentParserListener');
+        
+        $listener->expects($this->at(0))
+                 ->method('onStartParseNode')
+                 ->with($this->documentMock, $paragraph);
+        $listener->expects($this->at(1))
+                 ->method('onStartParseNode')
+                 ->with($this->documentMock, $node);
+        $listener->expects($this->at(2))
+                 ->method('onEndParseNode')
+                 ->with($this->documentMock, $node);
+        $listener->expects($this->at(3))
+                 ->method('onEndParseNode')
+                 ->with($this->documentMock, $paragraph);
+        
+        $this->parser->setNodeFactory($nodeFactoryMock);
+        $this->parser->addListener($listener);
+        
+        $this->parser->parse($xml);
+    }
+        
 }
