@@ -246,6 +246,7 @@ class NodeTest extends \PHPPdf\PHPUnit\Framework\TestCase
      */
     public function attributeSnapshot()
     {
+        $this->node->setAttribute('font-size', 12);
         $this->node->makeAttributesSnapshot();
         $snapshot = $this->node->getAttributesSnapshot();
 
