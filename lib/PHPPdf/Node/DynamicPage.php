@@ -20,6 +20,7 @@ class DynamicPage extends Page
     private $prototype = null;
     private $currentPage = null;
     private $pages = array();
+    private $currentPageNumber = 1;
 
     public function __construct(Page $prototype = null)
     {
@@ -33,9 +34,9 @@ class DynamicPage extends Page
         return $this->getCurrentPage()->getBoundary();
     }
 
-    public function getCurrentPage()
+    public function getCurrentPage($createIfNotExists = true)
     {
-        if($this->currentPage === null)
+        if($createIfNotExists && $this->currentPage === null)
         {
             $this->createNextPage();
         }
@@ -62,10 +63,8 @@ class DynamicPage extends Page
     public function createNextPage()
     {
         $this->currentPage = $this->prototype->copy();
-
-        $index = count($this->pages);
-        $this->currentPage->setContext(new PageContext($index+1, $this));
-        $this->pages[$index] = $this->currentPage;
+        $this->currentPage->setContext(new PageContext($this->currentPageNumber++, $this));
+        $this->pages[] = $this->currentPage;
 
         return $this->currentPage;
     }
@@ -83,11 +82,25 @@ class DynamicPage extends Page
     {
         $this->pages = array();
         $this->currentPage = null;
+        $this->currentPageNumber = 1;
     }
 
     public function getPages()
     {
         return $this->pages;
+    }
+    
+    public function removeAllPagesExceptsCurrent()
+    {
+        $this->pages = $this->currentPage ? array($this->currentPage) : array();
+    }
+    
+    public function getAllPagesExceptsCurrent()
+    {
+        $pages = $this->pages;
+        array_pop($pages);
+        
+        return $pages;
     }
 
     protected function doDraw(Document $document)

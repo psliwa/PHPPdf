@@ -33,10 +33,6 @@ class PageCollection extends Container
     {
         throw new \LogicException('PageCollection can\'t be broken.');
     }
-
-    public function format(Document $document)
-    {
-    }
     
     public function getGraphicsContext()
     {

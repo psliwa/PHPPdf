@@ -9,7 +9,6 @@
 namespace PHPPdf\Node;
 
 use PHPPdf\Document;
-
 use PHPPdf\Parser\DocumentParserListener;
 use PHPPdf\Parser\Exception\DuplicatedIdException;
 
@@ -24,8 +23,6 @@ class Manager implements DocumentParserListener
     private $wrappers = array();
     
     private $managedNodes = array();
-    
-    private $disableListening = 0;
     
     public function register($id, Node $node)
     {
@@ -92,7 +89,7 @@ class Manager implements DocumentParserListener
         }
     }
     
-    public function onEndParsePlaceholders(Document $document, Node $node)
+    public function onEndParsePlaceholders(Document $document, PageCollection $root, Node $node)
     {
         if($this->isPage($node))
         {
@@ -100,7 +97,7 @@ class Manager implements DocumentParserListener
         }
     }
     
-    public function onStartParseNode(Document $document, Node $node)
+    public function onStartParseNode(Document $document, PageCollection $root, Node $node)
     {
 
     }
@@ -110,16 +107,74 @@ class Manager implements DocumentParserListener
         return $node instanceof \PHPPdf\Node\Page;
     }
     
-    public function onEndParseNode(Document $document, Node $node)
+    public function onEndParseNode(Document $document, PageCollection $root, Node $node)
     {
         if(!$this->isPage($node) && $this->isPage($node->getParent()))
         {
             $node->format($document);
         }
-
+        
+        $this->processDynamicPage($document, $node);
+              
         if($this->isPage($node))
         {
             $node->postFormat($document);
+            
+            if(!$this->isDynamicPage($node) || count($node->getPages()) > 0)
+            {
+                $document->invokeTasks($node->getDrawingTasks($document));
+            }
+            
+            $node->flush();
+            $root->flush();
         }
+    }
+    
+    private function processDynamicPage(Document $document, Node $node)
+    {
+        if($this->isDynamicPage($node->getParent()) && $this->isOutOfPage($node))
+        {
+            $dynamicPage = $node->getParent();
+            $dynamicPage->postFormat($document);
+            
+            $pages = $dynamicPage->getAllPagesExceptsCurrent();
+            
+            foreach($pages as $page)
+            {
+                $document->invokeTasks($page->getDrawingTasks($document));
+                $page->flush();
+            }
+
+            $currentPage = $dynamicPage->getCurrentPage(false);
+            $dynamicPage->removeAllPagesExceptsCurrent();
+            
+            if($currentPage)
+            {
+                foreach($currentPage->getChildren() as $child)
+                {
+                    if(!$child->getAttribute('break'))
+                    {
+                        $dynamicPage->add($child);
+                    }
+                    else
+                    {
+                        $child->flush();
+                    }
+                }
+                $currentPage->removeAll();
+            }
+        }
+    }
+    
+    private function isDynamicPage($node)
+    {
+        return $node instanceof \PHPPdf\Node\DynamicPage;
+    }
+    
+    private function isOutOfPage(Node $node)
+    {
+        $page = $node->getParent();
+        
+        return $page->getDiagonalPoint()->getY() > $node->getFirstPoint()->getY();
     }
 }

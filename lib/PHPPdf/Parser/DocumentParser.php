@@ -72,10 +72,14 @@ class DocumentParser extends XmlParser
         $this->setStylesheetParser($stylesheetParser);
         $this->setEnhancementFactory($enhancementFactory);
         $this->nodeManager = new Manager();
-        $this->addListener($this->nodeManager);
         $this->setBehaviourFactory(new BehaviourFactory());
 
         $this->initialize();
+    }
+    
+    public function getNodeManager()
+    {
+        return $this->nodeManager;
     }
 
     private function initialize()
@@ -126,7 +130,6 @@ class DocumentParser extends XmlParser
             $innerParser = new self($this->document);
             $innerParser->setEnhancementFactory($this->getEnhancementFactory());
             $innerParser->setNodeFactory($this->getNodeFactory());
-            $innerParser->clearListeners();
 
             $this->innerParser = $innerParser;
         }
@@ -372,7 +375,7 @@ class DocumentParser extends XmlParser
     {
         foreach($this->listeners as $listener)
         {
-            $listener->onStartParseNode($this->document, $node);
+            $listener->onStartParseNode($this->document, $this->getFirstElementFromStack(), $node);
         }
     }
 
@@ -470,7 +473,7 @@ class DocumentParser extends XmlParser
         }
         elseif(!$this->inBehaviour)
         {
-            $node = $this->popFromStack();
+            $node = $this->getLastElementFromStack();
 
             if($this->isntTextNode($node))
             {
@@ -488,6 +491,7 @@ class DocumentParser extends XmlParser
                 $this->fireOnEndParseNode($node);
             }
             
+            $this->popFromStack();
             $this->popFromTagStack();
         }
     }
@@ -496,7 +500,7 @@ class DocumentParser extends XmlParser
     {
         foreach($this->listeners as $listener)
         {
-            $listener->onEndParsePlaceholders($this->document, $node);
+            $listener->onEndParsePlaceholders($this->document, $this->getFirstElementFromStack(), $node);
         }
     }
     
@@ -504,7 +508,7 @@ class DocumentParser extends XmlParser
     {
         foreach($this->listeners as $listener)
         {
-            $listener->onEndParseNode($this->document, $node);
+            $listener->onEndParseNode($this->document, $this->getFirstElementFromStack(), $node);
         }
     }
 

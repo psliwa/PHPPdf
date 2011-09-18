@@ -1085,14 +1085,14 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
             $coordinations = array();
             foreach($boundary as $point)
             {
-                $coorinations[] = $point->toArray();
+                $coordinations[] = $point->toArray();
             }
             
             $attributes = $node->getAttributes() + $node->getEnhancementsAttributes();
             
             $dumpText = var_export(array(
                 'attributes' => $attributes,
-                'coordinations' => $coorinations,
+                'coordinations' => $coordinations,
             ), true);
 
             $gc->attachStickyNote($firstPoint->getX(), $firstPoint->getY(), $diagonalPoint->getX(), $diagonalPoint->getY(), $dumpText);
@@ -1143,11 +1143,18 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
     public function getPreviousSibling()
     {
         $siblings = $this->getSiblings();
-        for($i=0, $count = count($siblings); $i<$count && $siblings[$i] !== $this; $i++)
+        $previous = null;
+        
+        foreach($siblings as $sibling)
         {
+            if($sibling === $this)
+            {
+                return $previous;
+            }
+            $previous = $sibling;
         }
-
-        return isset($siblings[$i-1]) ? $siblings[$i-1] : null;
+        
+        return null;
     }
     
     /**
@@ -1246,7 +1253,7 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
      */
     public function breakAt($height)
     {
-        if($this->shouldNotBeBroken($height))
+        if(!$this->shouldBeBroken($height))
         {
             return null;
         }
@@ -1254,11 +1261,11 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
         return $this->doBreakAt($height);
     }
     
-    protected function shouldNotBeBroken($height)
+    public function shouldBeBroken($height)
     {
         if($height <= 0 || $height >= $this->getHeight())
         {
-            return true;
+            return false;
         }
         
         try
@@ -1266,7 +1273,7 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
             $page = $this->getPage();
             if($page && $page->getHeight() < $this->getHeight())
             {
-                return false;
+                return true;
             }
         }
         catch(\LogicException $e)
@@ -1274,7 +1281,7 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
             //if node has no parent, breakable attribute will decide
         }
         
-        return !$this->getAttribute('breakable');
+        return $this->getAttribute('breakable');
     }
 
     protected function doBreakAt($height)

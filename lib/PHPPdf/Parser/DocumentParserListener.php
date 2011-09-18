@@ -8,6 +8,7 @@
 
 namespace PHPPdf\Parser;
 
+use PHPPdf\Node\PageCollection;
 use PHPPdf\Document;
 use PHPPdf\Node\Node;
 
@@ -16,6 +17,6 @@ use PHPPdf\Node\Node;
  */
 interface DocumentParserListener
 {
-    public function onStartParseNode(Document $document, Node $node);
-    public function onEndParseNode(Document $document, Node $node);
+    public function onStartParseNode(Document $document, PageCollection $root, Node $node);
+    public function onEndParseNode(Document $document, PageCollection $root, Node $node);
 }

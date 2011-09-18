@@ -1036,16 +1036,16 @@ XML;
         
         $listener->expects($this->at(0))
                  ->method('onStartParseNode')
-                 ->with($this->documentMock, $node1);
+                 ->with($this->documentMock, $this->isInstanceOf('PHPPdf\Node\PageCollection'), $node1);
         $listener->expects($this->at(1))
                  ->method('onStartParseNode')
-                 ->with($this->documentMock, $node2);
+                 ->with($this->documentMock, $this->isInstanceOf('PHPPdf\Node\PageCollection'), $node2);
         $listener->expects($this->at(2))
                  ->method('onEndParseNode')
-                 ->with($this->documentMock, $node2);
+                 ->with($this->documentMock, $this->isInstanceOf('PHPPdf\Node\PageCollection'), $node2);
         $listener->expects($this->at(3))
                  ->method('onEndParseNode')
-                 ->with($this->documentMock, $node1);
+                 ->with($this->documentMock, $this->isInstanceOf('PHPPdf\Node\PageCollection'), $node1);
         
         $this->parser->setNodeFactory($nodeFactoryMock);
         $this->parser->addListener($listener);
@@ -1073,16 +1073,16 @@ XML;
         
         $listener->expects($this->at(0))
                  ->method('onStartParseNode')
-                 ->with($this->documentMock, $paragraph);
+                 ->with($this->documentMock, $this->isInstanceOf('PHPPdf\Node\PageCollection'), $paragraph);
         $listener->expects($this->at(1))
                  ->method('onStartParseNode')
-                 ->with($this->documentMock, $node);
+                 ->with($this->documentMock, $this->isInstanceOf('PHPPdf\Node\PageCollection'), $node);
         $listener->expects($this->at(2))
                  ->method('onEndParseNode')
-                 ->with($this->documentMock, $node);
+                 ->with($this->documentMock, $this->isInstanceOf('PHPPdf\Node\PageCollection'), $node);
         $listener->expects($this->at(3))
                  ->method('onEndParseNode')
-                 ->with($this->documentMock, $paragraph);
+                 ->with($this->documentMock, $this->isInstanceOf('PHPPdf\Node\PageCollection'), $paragraph);
         
         $this->parser->setNodeFactory($nodeFactoryMock);
         $this->parser->addListener($listener);

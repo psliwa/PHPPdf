@@ -57,17 +57,24 @@ class FloatFormatter extends BaseFormatter
                 
                 $minYCoord = null;
                 $previousSiblingWithMinBottomYCoord = null;
-                for($i=0, $count = count($siblings); $i<$count && $siblings[$i] !== $child; $i++)
+                
+                foreach($siblings as $sib)
                 {
-                    $previousSibling = $siblings[$i];
+                    if($sib === $child)
+                    {
+                        break;
+                    }
+                    
+                    $previousSibling = $sib;
                     $bottomYCoord = $previousSibling->getDiagonalPoint()->getY() - $previousSibling->getMarginBottom();
                     
                     if($minYCoord === null || $bottomYCoord < $minYCoord)
                     {
                         $minYCoord = $bottomYCoord;
                         $previousSiblingWithMinBottomYCoord = $previousSibling;
-                    }                    
+                    }
                 }
+
                 if($minYCoord !== null)
                 {
                     $translateY = -($minYCoord - $y - $child->getMarginTop() - $child->getPaddingTop());
@@ -122,13 +129,18 @@ class FloatFormatter extends BaseFormatter
     {
         $siblings = $node->getSiblings();
         $floatedSibling = null;
-        for($i=0, $count=count($siblings); $i<$count && $siblings[$i] !== $node; $i++)
+        foreach($siblings as $sibling)
         {
-            if($siblings[$i]->getFloat() === $float)
+            if($sibling === $node)
             {
-                $floatedSibling = $siblings[$i];
+                break;
             }
-            elseif($siblings[$i]->getFloat() === Node::FLOAT_NONE)
+            
+            if($sibling->getFloat() === $float)
+            {
+                $floatedSibling = $sibling;
+            }
+            elseif($sibling->getFloat() === Node::FLOAT_NONE)
             {
                 $floatedSibling = null;
             }
@@ -166,9 +178,14 @@ class FloatFormatter extends BaseFormatter
 
                 $siblings = $node->getSiblings();
                 $overflowed = false;
-                for($i=0, $count=count($siblings); $i<$count && $siblings[$i] !== $node; $i++)
+                foreach($siblings as $sib)
                 {
-                    if($dummyBoundary->intersects($siblings[$i]->getBoundary()))
+                    if($sib === $node)
+                    {
+                        break;
+                    }
+                    
+                    if($dummyBoundary->intersects($sib->getBoundary()))
                     {
                         $overflowed = true;
                         break;

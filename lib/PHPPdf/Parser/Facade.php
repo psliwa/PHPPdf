@@ -45,7 +45,9 @@ class Facade
 
         $this->setCache(NullCache::getInstance());
         $document = new Document();
-        $this->setDocumentParser(new DocumentParser($document));
+        $documentParser = new DocumentParser($document);
+        $documentParser->addListener($documentParser->getNodeManager());
+        $this->setDocumentParser($documentParser);
         $this->setStylesheetParser(new StylesheetParser());
         $this->setDocument($document);
     }
