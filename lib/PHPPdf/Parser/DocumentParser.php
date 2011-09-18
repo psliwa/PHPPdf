@@ -150,10 +150,20 @@ class DocumentParser extends XmlParser
         }
 
         $pageCollection = parent::parse($content);
+        
+        $this->fireOnEndParsing($pageCollection);
 
         $this->initialize();
 
         return $pageCollection;
+    }
+    
+    private function fireOnEndParsing(PageCollection $root)
+    {
+        foreach($this->listeners as $listener)
+        {
+            $listener->onEndParsing($this->document, $root);
+        }
     }
 
     /**

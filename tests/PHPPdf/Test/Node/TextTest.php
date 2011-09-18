@@ -189,7 +189,7 @@ class TextTest extends \PHPPdf\PHPUnit\Framework\TestCase
         for($i=0; $i<3; $i++)
         {
             $linePart = $this->getMockBuilder('PHPPdf\Node\Paragraph\LinePart')
-                             ->setMethods(array('getDrawingTasks'))
+                             ->setMethods(array('getOrderedDrawingTasks'))
                              ->disableOriginalConstructor()
                              ->getMock();
             
@@ -197,14 +197,14 @@ class TextTest extends \PHPPdf\PHPUnit\Framework\TestCase
             $expectedTasks[] = $taskStub;
                              
             $linePart->expects($this->once())
-                     ->method('getDrawingTasks')
+                     ->method('getOrderedDrawingTasks')
                      ->with($documentStub)
                      ->will($this->returnValue(array($taskStub)));
                      
             $this->text->addLinePart($linePart);
         }
         
-        $actualTasks = $this->text->getDrawingTasks($documentStub);
+        $actualTasks = $this->text->getOrderedDrawingTasks($documentStub);
         
         $this->assertEquals($expectedTasks, $actualTasks);
     }

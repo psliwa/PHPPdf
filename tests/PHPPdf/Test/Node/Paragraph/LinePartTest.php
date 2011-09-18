@@ -147,7 +147,7 @@ class LinePartTest extends \PHPPdf\PHPUnit\Framework\TestCase
         $linePart->setWordSpacing($wordSpacing);
         $linePart->setLine($line);
         
-        $tasks = $linePart->getDrawingTasks($documentStub);
+        $tasks = $linePart->getOrderedDrawingTasks($documentStub);
         
         foreach($tasks as $task)
         {

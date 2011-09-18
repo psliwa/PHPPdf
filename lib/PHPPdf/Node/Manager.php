@@ -23,6 +23,7 @@ class Manager implements DocumentParserListener
     private $wrappers = array();
     
     private $managedNodes = array();
+    private $behavioursTasks = array();
     
     public function register($id, Node $node)
     {
@@ -63,6 +64,7 @@ class Manager implements DocumentParserListener
     
     public function clear()
     {
+        $this->behavioursTasks = array();
         $this->wrappers = array();
         $this->flushAll($this->nodes);
         $this->nodes = array();
@@ -112,6 +114,8 @@ class Manager implements DocumentParserListener
         if(!$this->isPage($node) && $this->isPage($node->getParent()))
         {
             $node->format($document);
+            
+            $this->behavioursTasks = array_merge($this->behavioursTasks, $node->getUnorderedDrawingTasks($document));
         }
         
         $this->processDynamicPage($document, $node);
@@ -122,7 +126,7 @@ class Manager implements DocumentParserListener
             
             if(!$this->isDynamicPage($node) || count($node->getPages()) > 0)
             {
-                $document->invokeTasks($node->getDrawingTasks($document));
+                $document->invokeTasks($node->getOrderedDrawingTasks($document));
             }
             
             $node->flush();
@@ -141,7 +145,7 @@ class Manager implements DocumentParserListener
             
             foreach($pages as $page)
             {
-                $document->invokeTasks($page->getDrawingTasks($document));
+                $document->invokeTasks($page->getOrderedDrawingTasks($document));
                 $page->flush();
             }
 
@@ -176,5 +180,11 @@ class Manager implements DocumentParserListener
         $page = $node->getParent();
         
         return $page->getDiagonalPoint()->getY() > $node->getFirstPoint()->getY();
+    }
+    
+    public function onEndParsing(Document $document, PageCollection $root)
+    {
+        $document->invokeTasks($this->behavioursTasks);
+        $this->behavioursTasks = array();
     }
 }

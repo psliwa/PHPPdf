@@ -19,4 +19,6 @@ interface DocumentParserListener
 {
     public function onStartParseNode(Document $document, PageCollection $root, Node $node);
     public function onEndParseNode(Document $document, PageCollection $root, Node $node);
+    public function onEndParsePlaceholders(Document $document, PageCollection $root, Node $node);
+    public function onEndParsing(Document $document, PageCollection $root);
 }

@@ -108,7 +108,7 @@ class DynamicPage extends Page
         $tasks = array();
         foreach($this->getPages() as $page)
         {
-            $childTasks = $page->getDrawingTasks($document);
+            $childTasks = $page->getOrderedDrawingTasks($document);
 
             foreach($childTasks as $task)
             {

@@ -99,7 +99,7 @@ class Paragraph extends Container
         return $this->lines;
     }
     
-    public function getDrawingTasks(Document $document)
+    public function getOrderedDrawingTasks(Document $document)
     {
         $lastIndex = count($this->lines) - 1;
         foreach($this->lines as $i => $line)
@@ -111,7 +111,7 @@ class Paragraph extends Container
         
         foreach($this->getChildren() as $text)
         {
-            $lineTasks = $text->getDrawingTasks($document);
+            $lineTasks = $text->getOrderedDrawingTasks($document);
             foreach($lineTasks as $task)
             {
                 $tasks[] = $task;

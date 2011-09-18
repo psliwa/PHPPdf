@@ -996,7 +996,7 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
      *
      * @return array Array of PHPPdf\Util\DrawingTask objects
      */
-    public function getDrawingTasks(Document $document)
+    public function getOrderedDrawingTasks(Document $document)
     {
         try
         {            
@@ -1006,6 +1006,27 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
         {
             throw new \PHPPdf\Exception\DrawingException(sprintf('Error while drawing node "%s"', get_class($this)), 0, $e);
         }
+    }
+    
+    public function getUnorderedDrawingTasks(Document $document)
+    {
+        $tasks = array();
+        
+        foreach($this->getChildren() as $node)
+        {
+            $tasks = array_merge($tasks, $node->getUnorderedDrawingTasks($document));
+        }
+        
+        foreach($this->behaviours as $behaviour)
+        {
+            $callback = function($behaviour, $node){
+                $behaviour->attach($node->getGraphicsContext(), $node);
+            };
+            $args = array($behaviour, $this);
+            $tasks[] = new DrawingTask($callback, $args);
+        }
+        
+        return $tasks;
     }
 
     protected function preDraw(Document $document)
@@ -1024,15 +1045,6 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
             $args = array($this, $document);
             $priority = $enhancement->getPriority() + $this->getPriority();
             $tasks[] = new DrawingTask($callback, $args, $priority);
-        }
-        
-        foreach($this->behaviours as $behaviour)
-        {
-            $callback = function($behaviour, $node){
-                $behaviour->attach($node->getGraphicsContext(), $node);
-            };
-            $args = array($behaviour, $this);
-            $tasks[] = new DrawingTask($callback, $args);
         }
         
         return $tasks;

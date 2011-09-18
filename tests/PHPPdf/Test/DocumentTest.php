@@ -20,11 +20,24 @@ class DocumentTest extends \PHPPdf\PHPUnit\Framework\TestCase
      */
     public function invokeDrawingTasksOfPagesWhenDrawMethodIsInvoked($assertArguments = true)
     {
-        $taskMock = $this->getMock('PHPPdf\Util\DrawingTask', array('__invoke'), array(), '', false);
-        $taskMock->expects($this->once())
-                 ->method('__invoke');
+        $tasks = array();
+        for($i=0; $i<2; $i++)
+        {
+            $taskMock = $this->getMockBuilder('PHPPdf\Util\DrawingTask')
+                             ->setMethods(array('__invoke'))
+                             ->disableOriginalConstructor()
+                             ->getMock();
+            $taskMock->expects($this->once())
+                     ->method('__invoke');
+            $tasks[] = $taskMock;
+        }
+                 
+        $taskMock2 = $this->getMockBuilder('PHPPdf\Util\DrawingTask')
+                          ->setMethods(array('__invoke'))
+                          ->disableOriginalConstructor()
+                          ->getMock();
 
-        $mock = $this->getMock('\PHPPdf\Node\PageCollection', array('getDrawingTasks', 'format'));
+        $mock = $this->getMock('\PHPPdf\Node\PageCollection', array('getOrderedDrawingTasks', 'getUnorderedDrawingTasks', 'format'));
 
         $matcher = $mock->expects($this->once())
                         ->method('format')
@@ -37,8 +50,12 @@ class DocumentTest extends \PHPPdf\PHPUnit\Framework\TestCase
 
         $mock->expects($this->once())
              ->after(1)
-             ->method('getDrawingTasks')
-             ->will($this->returnValue(array($taskMock)));
+             ->method('getOrderedDrawingTasks')
+             ->will($this->returnValue(array($tasks[0])));
+        $mock->expects($this->once())
+             ->after(1)
+             ->method('getUnorderedDrawingTasks')
+             ->will($this->returnValue(array($tasks[1])));
 
         $this->document->draw($mock);
     }
@@ -59,10 +76,10 @@ class DocumentTest extends \PHPPdf\PHPUnit\Framework\TestCase
      */
     public function throwExceptionWhenDocumentIsDrawTwiceWithoutReset()
     {
-        $mock = $this->getMock('\PHPPdf\Node\Page', array('getDrawingTasks'));
+        $mock = $this->getMock('\PHPPdf\Node\Page', array('getOrderedDrawingTasks'));
 
         $mock->expects($this->once())
-             ->method('getDrawingTasks')
+             ->method('getOrderedDrawingTasks')
              ->will($this->returnValue(array()));
 
         $this->document->draw(array($mock));

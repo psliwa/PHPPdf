@@ -158,7 +158,7 @@ class Page extends Container
         foreach($this->runtimeNodes as $node)
         {
             $node->evaluate();
-            $runtimeTasks = $node->getDrawingTasks($document);
+            $runtimeTasks = $node->getOrderedDrawingTasks($document);
 
             $tasks = array_merge($tasks, $runtimeTasks);
         }
@@ -439,7 +439,7 @@ class Page extends Container
 
         $tasks = array();
 
-        $tasks = array_merge($this->getDrawingTasksFromEnhancements($document), $this->footer->getDrawingTasks($document), $this->header->getDrawingTasks($document), $this->watermark->getDrawingTasks($document));
+        $tasks = array_merge($this->getDrawingTasksFromEnhancements($document), $this->footer->getOrderedDrawingTasks($document), $this->header->getOrderedDrawingTasks($document), $this->watermark->getOrderedDrawingTasks($document));
 
         $this->footer->removeAll();
         $this->header->removeAll();

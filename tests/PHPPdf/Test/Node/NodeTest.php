@@ -518,7 +518,7 @@ class NodeTest extends \PHPPdf\PHPUnit\Framework\TestCase
                  ->with($bag)
                  ->will($this->returnValue($enhancementStubs));
 
-        $drawingTasks = $this->node->getDrawingTasks($document);
+        $drawingTasks = $this->node->getOrderedDrawingTasks($document);
         
         $this->assertEquals(count($enhancementStubs), count($drawingTasks));
     }
@@ -559,7 +559,7 @@ class NodeTest extends \PHPPdf\PHPUnit\Framework\TestCase
             $this->node->addBehaviour($behaviour);
         }
         
-        $tasks = $this->node->getDrawingTasks(new Document());
+        $tasks = $this->node->getUnorderedDrawingTasks(new Document());
         
         foreach($tasks as $task)
         {

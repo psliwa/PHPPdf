@@ -154,7 +154,9 @@ class Document
 
         $pageCollection->format($this);
 
-        $tasks = $pageCollection->getDrawingTasks($this);
+        $tasks = $pageCollection->getOrderedDrawingTasks($this);
+        $this->invokeTasks($tasks);
+        $tasks = $pageCollection->getUnorderedDrawingTasks($this);
         $this->invokeTasks($tasks);
     }
 

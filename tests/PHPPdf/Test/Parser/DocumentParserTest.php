@@ -1046,6 +1046,9 @@ XML;
         $listener->expects($this->at(3))
                  ->method('onEndParseNode')
                  ->with($this->documentMock, $this->isInstanceOf('PHPPdf\Node\PageCollection'), $node1);
+        $listener->expects($this->at(4))
+                 ->method('onEndParsing')
+                 ->with($this->documentMock, $this->isInstanceOf('PHPPdf\Node\PageCollection'));
         
         $this->parser->setNodeFactory($nodeFactoryMock);
         $this->parser->addListener($listener);
@@ -1083,6 +1086,9 @@ XML;
         $listener->expects($this->at(3))
                  ->method('onEndParseNode')
                  ->with($this->documentMock, $this->isInstanceOf('PHPPdf\Node\PageCollection'), $paragraph);
+        $listener->expects($this->at(4))
+                 ->method('onEndParsing')
+                 ->with($this->documentMock, $this->isInstanceOf('PHPPdf\Node\PageCollection'));
         
         $this->parser->setNodeFactory($nodeFactoryMock);
         $this->parser->addListener($listener);

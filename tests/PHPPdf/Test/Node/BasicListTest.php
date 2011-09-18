@@ -58,7 +58,7 @@ class BasicListTest extends \PHPPdf\PHPUnit\Framework\TestCase
         $enumerationStrategy->expects($this->at($i))
                             ->method('reset');
         
-        $tasks = $this->list->getDrawingTasks($document);
+        $tasks = $this->list->getOrderedDrawingTasks($document);
         
         foreach($tasks as $task)
         {

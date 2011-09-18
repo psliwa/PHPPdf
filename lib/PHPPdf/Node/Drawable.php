@@ -18,7 +18,12 @@ use PHPPdf\Document;
 interface Drawable
 {
     /**
-     * @return array Array of DrawingTask objects
+     * @return array Ordered array of DrawingTask objects
      */
-    public function getDrawingTasks(Document $document);
+    public function getOrderedDrawingTasks(Document $document);
+
+    /**
+     * @return array Unordered array of DrawingTask objects
+     */
+    public function getUnorderedDrawingTasks(Document $document);
 }

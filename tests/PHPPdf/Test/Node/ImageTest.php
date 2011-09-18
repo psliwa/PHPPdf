@@ -50,7 +50,7 @@ class ImageTest extends \PHPPdf\PHPUnit\Framework\TestCase
 
         $this->image->setParent($pageMock);
 
-        $tasks = $this->image->getDrawingTasks(new Document());
+        $tasks = $this->image->getOrderedDrawingTasks(new Document());
 
         foreach($tasks as $task)
         {

@@ -27,7 +27,7 @@ class PageTest extends \PHPPdf\PHPUnit\Framework\TestCase
      */
     public function drawing()
     {
-        $tasks = $this->page->getDrawingTasks($this->document);
+        $tasks = $this->page->getOrderedDrawingTasks($this->document);
 
         foreach($tasks as $task)
         {
@@ -47,7 +47,7 @@ class PageTest extends \PHPPdf\PHPUnit\Framework\TestCase
               ->will($this->throwException(new \Exception('exception')));
          
         $this->page->add($child);
-        $tasks = $this->page->getDrawingTasks($this->document);
+        $tasks = $this->page->getOrderedDrawingTasks($this->document);
 
         foreach($tasks as $task)
         {
@@ -255,14 +255,14 @@ class PageTest extends \PHPPdf\PHPUnit\Framework\TestCase
     {
         $tasks = array(new DrawingTask(function(){}), new DrawingTask(function(){}));
         
-        $header = $this->getMock('PHPPdf\Node\Container', array('format', 'getHeight', 'getDrawingTasks'));
+        $header = $this->getMock('PHPPdf\Node\Container', array('format', 'getHeight', 'getOrderedDrawingTasks'));
         $header->expects($this->once())
                ->method('format');
         $header->expects($this->atLeastOnce())
                ->method('getHeight')
                ->will($this->returnValue(10));
         $header->expects($this->once())
-               ->method('getDrawingTasks')
+               ->method('getOrderedDrawingTasks')
                ->will($this->returnValue($tasks));
         
         $this->page->setHeader($header);
@@ -272,7 +272,7 @@ class PageTest extends \PHPPdf\PHPUnit\Framework\TestCase
             $this->page->prepareTemplate($this->document);
         }
 
-        $actualTasks = $this->page->getDrawingTasks($this->document);
+        $actualTasks = $this->page->getOrderedDrawingTasks($this->document);
         
         foreach($actualTasks as $task)
         {

@@ -95,7 +95,7 @@ class ParagraphTest extends \PHPPdf\PHPUnit\Framework\TestCase
             $this->paragraph->addLine($line);
         }
         
-        $this->paragraph->getDrawingTasks($documentStub);
+        $this->paragraph->getOrderedDrawingTasks($documentStub);
     }
     
     /**
@@ -110,7 +110,7 @@ class ParagraphTest extends \PHPPdf\PHPUnit\Framework\TestCase
         for($i=0; $i<3; $i++)
         {
             $text = $this->getMockBuilder('PHPPdf\Node\Text')
-                         ->setMethods(array('getDrawingTasks'))
+                         ->setMethods(array('getOrderedDrawingTasks'))
                          ->disableOriginalConstructor()
                          ->getMock();
             
@@ -118,14 +118,14 @@ class ParagraphTest extends \PHPPdf\PHPUnit\Framework\TestCase
             $expectedTasks[] = $taskStub;
                              
             $text->expects($this->once())
-                 ->method('getDrawingTasks')
+                 ->method('getOrderedDrawingTasks')
                  ->with($documentStub)
                  ->will($this->returnValue(array($taskStub)));
                      
             $this->paragraph->add($text);
         }
         
-        $actualTasks = $this->paragraph->getDrawingTasks($documentStub);
+        $actualTasks = $this->paragraph->getOrderedDrawingTasks($documentStub);
         
         $this->assertEquals($expectedTasks, $actualTasks);
     }
