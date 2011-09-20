@@ -29,23 +29,4 @@ class ManagerTest extends \PHPPdf\PHPUnit\Framework\TestCase
         
         $this->assertEquals($node, $wrapper->getNode());
     }
-    
-    /**
-     * @test
-     */
-    public function attachNodeAsManagable()
-    {
-        for($i=0; $i<2; $i++)
-        {
-            $node = $this->getMockBuilder('PHPPdf\Node\Node')
-                         ->setMethods(array('flush'))
-                         ->getMock();
-            $node->expects($this->once())
-                 ->method('flush');
-            $this->manager->attach($node);
-        }
-        
-        $this->manager->flush();
-        $this->manager->flush();
-    }
 }

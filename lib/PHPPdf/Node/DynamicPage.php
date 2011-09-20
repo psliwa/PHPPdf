@@ -21,12 +21,23 @@ class DynamicPage extends Page
     private $currentPage = null;
     private $pages = array();
     private $currentPageNumber = 1;
+    private $nodeFormattingMap = array();
 
     public function __construct(Page $prototype = null)
     {
         $this->setPrototypePage($prototype ? $prototype : new Page());
         static::initializeTypeIfNecessary();
         $this->initialize();
+    }
+    
+    public function markAsFormatted(Node $node)
+    {
+        $this->nodeFormattingMap[spl_object_hash($node)] = true;
+    }
+    
+    public function isMarkedAsFormatted(Node $node)
+    {
+        return isset($this->nodeFormattingMap[spl_object_hash($node)]);
     }
 
     public function getBoundary()
@@ -74,6 +85,7 @@ class DynamicPage extends Page
         $copy = parent::copy();
         $copy->prototype = $this->prototype->copy();
         $copy->reset();
+        $copy->nodeFormattingMap = array();
 
         return $copy;
     }

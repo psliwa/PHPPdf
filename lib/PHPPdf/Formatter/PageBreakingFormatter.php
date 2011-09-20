@@ -8,6 +8,8 @@
 
 namespace PHPPdf\Formatter;
 
+use PHPPdf\Node\ColumnableContainer;
+
 use PHPPdf\Node\Node,
     PHPPdf\Document;
 
@@ -32,13 +34,18 @@ class PageBreakingFormatter extends BaseFormatter
         foreach($this->node->getChildren() as $child)
         {
             $child->translate(0, -$this->totalVerticalTranslation);
-            
-            $columnFormatter->format($child, $document);   
+            if(!$node->isMarkedAsFormatted($child) && $child instanceof ColumnableContainer)
+            {
+                $columnFormatter->format($child, $document);   
+    
+                $verticalTranslation = $columnFormatter->getLastVerticalTranslation();
+            }
+            else
+            {
+                $verticalTranslation = 0;
+            }
 
-            $verticalTranslation = $columnFormatter->getLastVerticalTranslation();
-            
-            $this->breakChildIfNecessary($child);
-            
+            $this->breakChildIfNecessary($child);            
             $this->totalVerticalTranslation += -$verticalTranslation;
         }
         
@@ -52,6 +59,7 @@ class PageBreakingFormatter extends BaseFormatter
 
     private function breakChildIfNecessary(Node $node)
     {
+        $this->getSubjectOfBreaking()->markAsFormatted($node);
         $childHasBeenBroken = false;
         $childMayBeBroken = true;
         
@@ -69,6 +77,7 @@ class PageBreakingFormatter extends BaseFormatter
             if($this->shouldBeBroken($node, $pageYCoordEnd))
             {
                 $node = $this->breakChildAndGetProductOfBreaking($node);
+                $this->getSubjectOfBreaking()->markAsFormatted($node);
                 $childHasBeenBroken = true;
             }
             else

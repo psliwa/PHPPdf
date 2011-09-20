@@ -66,29 +66,7 @@ class Manager implements DocumentParserListener
     {
         $this->behavioursTasks = array();
         $this->wrappers = array();
-        $this->flushAll($this->nodes);
         $this->nodes = array();
-        $this->flush();
-    }
-    
-    public function attach(Node $node)
-    {
-        $this->managedNodes[] = $node;
-    }
-    
-    public function flush()
-    {
-        $this->flushAll($this->managedNodes);
-        
-        $this->managedNodes = array();
-    }
-    
-    private function flushAll(array $nodes)
-    {
-        foreach($nodes as $node)
-        {
-            $node->flush();
-        }
     }
     
     public function onEndParsePlaceholders(Document $document, PageCollection $root, Node $node)
@@ -101,7 +79,6 @@ class Manager implements DocumentParserListener
     
     public function onStartParseNode(Document $document, PageCollection $root, Node $node)
     {
-
     }
     
     private function isPage($node)
@@ -154,6 +131,7 @@ class Manager implements DocumentParserListener
             
             if($currentPage)
             {
+                $dynamicPage->removeAll();
                 foreach($currentPage->getChildren() as $child)
                 {
                     if(!$child->getAttribute('break'))
@@ -178,6 +156,11 @@ class Manager implements DocumentParserListener
     private function isOutOfPage(Node $node)
     {
         $page = $node->getParent();
+        
+        if($node->getAttribute('break'))
+        {
+            return true;
+        }
         
         return $page->getDiagonalPoint()->getY() > $node->getFirstPoint()->getY();
     }
