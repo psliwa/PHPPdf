@@ -13,9 +13,9 @@ PHPPdf\Autoloader::register();
 PHPPdf\Autoloader::register(dirname(__FILE__).'/../lib/vendor');
 
 // set different way of configuration
-$facade = PHPPdf\Parser\FacadeBuilder::create(new PHPPdf\Configuration\DependencyInjection\LoaderImpl())
+//$facade = PHPPdf\Parser\FacadeBuilder::create(new PHPPdf\Configuration\DependencyInjection\LoaderImpl())
 //->setCache('File', array('cache_dir' => __DIR__.'/cache/'))
-//$facade = PHPPdf\Parser\FacadeBuilder::create()
+$facade = PHPPdf\Parser\FacadeBuilder::create()
 // set cache
 //                                               ->setCache('File', array('cache_dir' => __DIR__.'/cache/'))
 //                                               ->setUseCacheForStylesheetConstraint(false)
