@@ -239,4 +239,16 @@ class DynamicPage extends Page
 
         parent::flush();
     }
+    
+    public function getUnorderedDrawingTasks(Document $document)
+    {
+        $tasks = array();
+        
+        foreach($this->getPages() as $page)
+        {
+            $tasks = array_merge($tasks, $page->getUnorderedDrawingTasks($document));
+        }
+        
+        return $tasks;
+    }
 }
