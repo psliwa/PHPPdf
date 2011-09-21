@@ -8,6 +8,8 @@
 
 namespace PHPPdf\Enhancement;
 
+use PHPPdf\Exception\Exception;
+
 use PHPPdf\Engine\GraphicsContext;
 
 use PHPPdf\Document;
@@ -27,14 +29,22 @@ class Background extends Enhancement
     const REPEAT_X = 1;
     const REPEAT_Y = 2;
     const REPEAT_ALL = 3;
+    
+    const POSITION_LEFT = 'left';
+    const POSITION_RIGHT = 'right';
+    const POSITION_TOP = 'top';
+    const POSITION_BOTTOM = 'bottom';
+    const POSITION_CENTER = 'center';
 
     private $image = null;
     private $repeat;
     private $useRealDimension;
     private $imageWidth = null;
     private $imageHeight = null;
+    private $positionX = null;
+    private $positionY = null;
 
-    public function __construct($color = null, $image = null, $repeat = self::REPEAT_NONE, $radius = null, $useRealDimension = false, $imageWidth = null, $imageHeight = null)
+    public function __construct($color = null, $image = null, $repeat = self::REPEAT_NONE, $radius = null, $useRealDimension = false, $imageWidth = null, $imageHeight = null, $positionX = self::POSITION_LEFT, $positionY = self::POSITION_TOP)
     {
         parent::__construct($color, $radius);
 
@@ -42,8 +52,27 @@ class Background extends Enhancement
         $this->setRepeat($repeat);
         $this->useRealDimension = Util::convertBooleanValue($useRealDimension);
         $this->setImageDimension($imageWidth, $imageHeight);
+        $this->setPosition($positionX, $positionY);
     }
     
+    private function setPosition($positionX, $positionY)
+    {
+        $allowedXPositions = array(self::POSITION_LEFT, self::POSITION_CENTER, self::POSITION_RIGHT);
+        if(!in_array($positionX, $allowedXPositions))
+        {
+            throw new Exception(sprintf('Invalid x position "%s" for background, allowed values: %s.', $positionX, implode(', ', $allowedXPositions)));
+        }
+
+        $allowedYPositions = array(self::POSITION_TOP, self::POSITION_CENTER, self::POSITION_BOTTOM);
+        if(!in_array($positionY, $allowedYPositions))
+        {
+            throw new Exception(sprintf('Invalid y position "%s" for background, allowed values: %s.', $positionY, implode(', ', $allowedYPositions)));
+        }
+
+        $this->positionX = $positionX;
+        $this->positionY = $positionY;
+    }
+
     private function setRepeat($repeat)
     {
         if(!is_numeric($repeat))
@@ -109,8 +138,8 @@ class Background extends Enhancement
             $repeatX = $this->repeat & self::REPEAT_X;
             $repeatY = $this->repeat & self::REPEAT_Y;
 
-            $currentX = $x;
-            $currentY = $y;
+            $currentX = $this->getXCoord($node, $width, $x);
+            $currentY = $y = $this->getYCoord($node, $height, $y);
 
             do
             {
@@ -127,6 +156,36 @@ class Background extends Enhancement
             while($repeatX && $currentX < $endX);
             
             $graphicsContext->restoreGS();
+        }
+    }
+    
+    private function getXCoord(Node $node, $width, $x)
+    {
+        switch($this->positionX)
+        {
+            case self::POSITION_RIGHT:
+                $realWidth = $node->getDiagonalPoint()->getX() - $node->getFirstPoint()->getX();
+                return ($x + $realWidth) - $width;
+            case self::POSITION_CENTER:
+                $realWidth = $node->getDiagonalPoint()->getX() - $node->getFirstPoint()->getX();
+                return ($x + $realWidth/2) - $width/2;
+            default:
+                return $x;
+        }
+    }
+    
+    private function getYCoord(Node $node, $height, $y)
+    {
+        switch($this->positionY)
+        {
+            case self::POSITION_BOTTOM:
+                $realHeight = $node->getFirstPoint()->getY() - $node->getDiagonalPoint()->getY();
+                return ($y - $realHeight) + $height;
+            case self::POSITION_CENTER:
+                $realHeight = $node->getFirstPoint()->getY() - $node->getDiagonalPoint()->getY();
+                return ($y - $realHeight/2) + $height/2;
+            default:
+                return $y;
         }
     }
     

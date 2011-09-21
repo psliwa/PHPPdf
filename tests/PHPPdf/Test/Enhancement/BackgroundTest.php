@@ -373,4 +373,45 @@ class BackgroundTest extends \PHPPdf\PHPUnit\Framework\TestCase
             array(null, '40%', 80, 80, 200, 200),
         );
     }
+    
+    /**
+     * @test
+     * @dataProvider positionProvider
+     */
+    public function drawImageAsBackgroundInProperPosition($positionX, $positionY, $expectedPositionX, $expectedPositionY)
+    {
+        $imagePath = 'image/path';
+
+        $image = $this->createImageMock(self::IMAGE_WIDTH, self::IMAGE_HEIGHT);        
+        $document = $this->createDocumentMock($imagePath, $image);
+        
+        $enhancement = new Background(null, $imagePath, Background::REPEAT_NONE, null, false, null, null, $positionX, $positionY);
+        
+        $gcMock = $this->getMockBuilder('PHPPdf\Engine\GraphicsContext')
+        			   ->getMock();
+
+        $x = 0;
+        $y = self::IMAGE_HEIGHT*2;
+        $nodeWidth = 100;
+        $nodeHeight = $y;
+        			   
+        $nodeMock = $this->getNodeMock($x, $y, $nodeWidth, $nodeHeight, $gcMock);
+        
+        $gcMock->expects($this->once())
+               ->method('drawImage')
+               ->with($image, $expectedPositionX, $expectedPositionY - self::IMAGE_HEIGHT, $expectedPositionX+self::IMAGE_WIDTH, $expectedPositionY);
+               
+        $enhancement->enhance($nodeMock, $document);
+    }
+    
+    public function positionProvider()
+    {
+        return array(
+            array(Background::POSITION_LEFT, Background::POSITION_TOP, 0, 2*self::IMAGE_HEIGHT),
+            array(Background::POSITION_RIGHT, Background::POSITION_TOP, 100 - self::IMAGE_WIDTH, 2*self::IMAGE_HEIGHT),
+            array(Background::POSITION_CENTER, Background::POSITION_TOP, 50 - self::IMAGE_WIDTH/2, 2*self::IMAGE_HEIGHT),
+            array(Background::POSITION_LEFT, Background::POSITION_BOTTOM, 0, self::IMAGE_HEIGHT),
+            array(Background::POSITION_LEFT, Background::POSITION_CENTER, 0, 2*3/4*self::IMAGE_HEIGHT),
+        );
+    }
 }
