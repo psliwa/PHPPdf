@@ -8,6 +8,8 @@
 
 namespace PHPPdf\Engine\ZF;
 
+use PHPPdf\Exception\Exception;
+
 use PHPPdf\Util;
 
 use PHPPdf\Exception\InvalidResourceException;
@@ -26,6 +28,7 @@ class Engine implements BaseEngine
     private $colors = array();
     private $images = array();
     private $graphicsContexts = array();
+    private $outlines = array();
     
     public function __construct(\Zend_Pdf $zendPdf = null)
     {
@@ -110,13 +113,24 @@ class Engine implements BaseEngine
         return $this->zendPdf;
     }
     
+    /**
+     * @internal
+     */
     public function registerOutline($id, \Zend_Pdf_Outline $outline)
     {
         $this->outlines[$id] = $outline;
     }
     
+    /**
+     * @internal
+     */
     public function getOutline($id)
     {
+        if(!isset($this->outlines[$id]))
+        {
+            throw new Exception(sprintf('Bookmark with id "%s" dosn\'t exist.', $id));
+        }
+        
         return $this->outlines[$id];
     }
     

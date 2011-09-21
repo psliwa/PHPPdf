@@ -26,18 +26,18 @@ class Factory
     /**
      * @return Behaviour
      */
-    public function create($name, $arg)
+    public function create($name, $mainArg, array $options = array())
     {
         switch($name)
         {
             case 'href':
-                return new GoToUrl($arg);
+                return new GoToUrl($mainArg);
             case 'ref':
-                return new GoToInternal($this->nodeManager->get($arg));
+                return new GoToInternal($this->nodeManager->get($mainArg));
             case 'bookmark':
-                return new Bookmark($arg);
+                return new Bookmark($mainArg, $options);
             case 'note':
-                return new StickyNote($arg);
+                return new StickyNote($mainArg);
             default:
                 throw new Exception(sprintf('Behaviour "%s" dosn\'t exist.', $name));
         }

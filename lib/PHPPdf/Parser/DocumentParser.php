@@ -301,11 +301,18 @@ class DocumentParser extends XmlParser
     {
         $behaviourName = $reader->name;
         
+        $options = array();
+        
+        while($reader->moveToNextAttribute())
+        {
+            $options[$reader->name] = $reader->value;
+        }
+        
         $this->seekReaderToNextTag($reader);
         
         $value = trim((string) $reader->value);
 
-        $parentNode->addBehaviour($this->behaviourFactory->create($behaviourName, $value));
+        $parentNode->addBehaviour($this->behaviourFactory->create($behaviourName, $value, $options));
     }
 
     private function isntIgnoredTag($tag)

@@ -927,7 +927,7 @@ XML;
     <tag1>
         <behaviours>
             <note>some text 1</note>
-            <bookmark>some text 2</bookmark>
+            <bookmark option1="value1" option2="value2">some text 2</bookmark>
         </behaviours>
     </tag1>
 </pdf>
@@ -942,6 +942,7 @@ XML;
 
         $args = array('some text 1', 'some text 2');
         $behaviourNames = array('note', 'bookmark');
+        $behaviourOptions = array(array(), array('option1' => 'value1', 'option2' => 'value2'));
         
         $behaviourFactoryMock->expects($this->atLeastOnce())
                              ->method('getSupportedBehaviourNames')
@@ -957,7 +958,7 @@ XML;
                               ->getMock();
             $matcher = $behaviourFactoryMock->expects($this->at($behaviourFactoryCallIndex))
                                              ->method('create')
-                                             ->with($behaviourName, $args[$i])
+                                             ->with($behaviourName, $args[$i], $behaviourOptions[$i])
                                              ->will($this->returnValue($behaviour));
                                              
             $nodeMock->expects($this->at($i))

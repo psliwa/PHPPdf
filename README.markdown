@@ -330,7 +330,41 @@ Every element has "href" and "ref" attribute, even div. You can't nest elements 
 Bookmarks
 ----------------
 
-Every tag has "bookmark" attribute, if you assign some value to this attribute, bookmark that refers to this tag will be automatically created. Bookmark of parent tag is also parent of children's bookmarks.
+Preferred way of bookmarks creation is "behaviours" tag. This way dosn't restrict structure of the document, owner of a parent bookmark dosn't have to be a parent of a child bookmark's owner.
+
+Example:
+
+    <pdf>
+	    <dynamic-page>
+		    <div>
+		        <behaviours>
+		            <bookmark id="1">parent bookmark</bookmark>
+		        </behaviours>
+		        Some content
+		    </div>
+		    <div>
+		        <behaviours>
+		            <bookmark parentId="1">children bookmark</bookmark>
+		        </behaviours>
+		        Some another content
+		    </div>
+		    <div>
+		        <behaviours>
+		            <bookmark parentId="1">another children bookmark</bookmark>
+		        </behaviours>
+		        Some another content
+		    </div>
+		    <div>
+		        <behaviours>
+		            <bookmark>another parent bookmark</bookmark>
+		        </behaviours>
+		       Some content
+		    </div>
+		</dynamic-page>
+    </pdf>
+
+
+Shortcut for "bookmark" behaviour is "bookmark" attribute, if you assign some value to this attribute, bookmark that refers to this tag will be automatically created. Bookmark of parent tag is also parent of children's bookmarks.
 
 Example:
 
@@ -351,7 +385,7 @@ Example:
 		</dynamic-page>
     </pdf>
 
-Above structure will create this bookmarks structure:
+Above structures (both examples) will create this bookmarks structure:
 
 * parent bookmark
     - children bookmark

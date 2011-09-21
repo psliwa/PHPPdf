@@ -329,7 +329,40 @@ Każdy element ma attrybuty "href" oraz "ref", nawet div. Nie możesz zagnieżd�
 Zakładki
 --------
 
-Każdy tag ma atrybut "bookmark", jeśli przypiszesz mu jakąś wartość to zostanie utworzona zakładka, która linkuje do tego tagu. Zakładka tagu rodzica jest również rodzicem zakładek dzieci tego tagu.
+Preferowany sposób tworzenia zakładek jest tag "behaviours". Ten sposób nie ogranicza struktury dokumentu, właściciel zakładki-rodzica nie musi być rodzicem zakładki-dziecka.
+
+Przykład:
+
+    <pdf>
+	    <dynamic-page>
+		    <div>
+		        <behaviours>
+		            <bookmark id="1">bookmark rodzica</bookmark>
+		        </behaviours>
+		        Jakaś treść
+		    </div>
+		    <div>
+		        <behaviours>
+		            <bookmark parentId="1">bookmark dziecka</bookmark>
+		        </behaviours>
+		        Inna treść
+		    </div>
+		    <div>
+		        <behaviours>
+		            <bookmark parentId="1">inny bookmark dziecka</bookmark>
+		        </behaviours>
+		        Inna treść
+		    </div>
+		    <div>
+		        <behaviours>
+		            <bookmark>inny bookmark rodzica</bookmark>
+		        </behaviours>
+		       Jakaś treść
+		    </div>
+		</dynamic-page>
+    </pdf>
+
+Skrótem dla tagu "behaviours" jest atrybut "bookmark", jeśli przypiszesz mu jakąś wartość to zostanie utworzona zakładka, która linkuje do tego tagu. Zakładka tagu rodzica jest również rodzicem zakładek dzieci tego tagu.
 
 Przykład:
 
@@ -344,13 +377,13 @@ Przykład:
 		            Inna treść
 		        </div>
 		    </div>
-		    <div bookmark="inny bookmark rodzica>
+		    <div bookmark="inny bookmark rodzica">
 		       Jakaś treść
 		    </div>
 		</dynamic-page>
     </pdf>
 
-Powyższa struktura utworzy poniższą strukturę zakładek:
+Powyższe struktury (obydwa przykłady) utworzą poniższą strukturę zakładek:
 
 * bookmark rodzica
     - bookmark dziecka

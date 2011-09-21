@@ -430,18 +430,27 @@ class GraphicsContext implements BaseGraphicsContext
     
     public function addBookmark($identifier, $name, $top, $parentIdentifier = null)
     {
-        $this->addToQueue('doAddBookmark', func_get_args());
-    }
-    
-    protected function doAddBookmark($identifier, $name, $top, $parentIdentifier = null)
-    {
         try
-        {
+        {   
             $destination = \Zend_Pdf_Destination_FitHorizontally::create($this->getPage(), $top);
             $action = \Zend_Pdf_Action_GoTo::create($destination);
             
             $outline = \Zend_Pdf_Outline::create($name, $action);
             
+            $this->engine->registerOutline($identifier, $outline);     
+            
+            $this->addToQueue('doAddBookmark', array($identifier, $outline, $parentIdentifier));
+        }
+        catch(\Zend_Pdf_Exception $e)
+        {
+            throw new Exception('Error while bookmark adding', 0, $e);
+        }
+    }
+
+    protected function doAddBookmark($identifier, \Zend_Pdf_Outline $outline, $parentIdentifier = null)
+    {
+        try
+        {            
             if($parentIdentifier !== null)
             {
                 $parent = $this->engine->getOutline($parentIdentifier);
@@ -451,8 +460,6 @@ class GraphicsContext implements BaseGraphicsContext
             {
                 $this->engine->getZendPdf()->outlines[] = $outline;
             }
-
-            $this->engine->registerOutline($identifier, $outline);            
         }
         catch(\Zend_Pdf_Exception $e)
         {

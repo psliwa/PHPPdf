@@ -16,11 +16,27 @@ use PHPPdf\Engine\GraphicsContext,
  */
 class Bookmark extends Behaviour
 {
-    private $name;
+    private static $bookmarks = array();
     
-    public function __construct($name)
+    private $name;
+    private $options = array(
+        'id' => null,
+        'parentId' => null,
+    );
+    
+    public function __construct($name, array $options = array())
     {
         $this->name = (string) $name;
+        
+        foreach($options as $optionName => $value)
+        {
+            if(!in_array($optionName, array_keys($this->options)))
+            {
+                throw new \InvalidArgumentException(sprintf('Option "%s" is not supported by "%s" class.', $optionName, get_class($this)));
+            }
+            
+            $this->options[$optionName] = $value;
+        }
     }
 
     protected function doAttach(GraphicsContext $gc, Node $node)
@@ -32,6 +48,11 @@ class Bookmark extends Behaviour
     
     private function getParentBookmarkIdentifier(Node $node)
     {
+        if($this->options['parentId'])
+        {
+            return $this->options['parentId'];
+        }
+        
         for($parent = $node->getParent(); $parent !== null; $parent = $parent->getParent())
         {
             foreach($parent->getBehaviours() as $behaviour)
@@ -44,5 +65,10 @@ class Bookmark extends Behaviour
         }
         
         return null;
+    }
+    
+    public function getUniqueId()
+    {
+        return $this->options['id'] ? : parent::getUniqueId();
     }
 }

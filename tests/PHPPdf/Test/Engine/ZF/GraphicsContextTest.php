@@ -552,8 +552,9 @@ class GraphicsContextTest extends \PHPPdf\PHPUnit\Framework\TestCase
         $engine = new Engine();
         $gc = new GraphicsContext($engine, $pageStub);
         
-        $gc->addBookmark(1, '1', 0, null);
+        //child bookmark can be added before parent
         $gc->addBookmark(2, '2', 10, 1);
+        $gc->addBookmark(1, '1', 0, null);
         $gc->addBookmark(3, '3', 0, null);
         $gc->commit();
         
@@ -639,5 +640,15 @@ class GraphicsContextTest extends \PHPPdf\PHPUnit\Framework\TestCase
             array(0.5, true),
             array(1, false),
         );
+    }
+    
+    /**
+     * @expectedException PHPPdf\Exception\Exception
+     */
+    public function throwExceptionIdParentOfBookmarkDosntExist()
+    {
+        $gc = new GraphicsContext(new Engine(), new \Zend_Pdf_Page('a4'));
+        
+        $gc->addBookmark('someId', 'some name', 100, 'unexistedParentId');
     }
 }

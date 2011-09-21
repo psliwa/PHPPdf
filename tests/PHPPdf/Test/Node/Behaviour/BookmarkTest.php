@@ -71,4 +71,40 @@ class BookmarkTest extends \PHPPdf\PHPUnit\Framework\TestCase
            
         $bookmark->attach($gc, $node);  
     }
+    
+    /**
+     * @test
+     */
+    public function bookmarkIdCanBeSetByConstructParameter()
+    {
+        $id = 'someId';
+        $bookmark = new Bookmark('some name', array('id' => $id));
+        
+        $this->assertEquals($id, $bookmark->getUniqueId());
+        
+        $bookmark1 = new Bookmark('some name');
+        $bookmark2 = new Bookmark('some name');
+        
+        $this->assertNotEmpty($bookmark1->getUniqueId(), $bookmark2->getUniqueId());
+    }
+    
+    /**
+     * @test
+     */
+    public function attachNestedBookmarksUsingParentId()
+    {
+        $parentId = 'parentId';
+
+        $bookmark = new Bookmark('child', array('parentId' => $parentId));
+        
+        $node = $this->getNodeStub(0, 50, 100, 50);
+        
+        $gc = $this->getMockBuilder('PHPPdf\Engine\GraphicsContext')
+                   ->getMock();
+        $gc->expects($this->once())
+           ->method('addBookmark')
+           ->with($bookmark->getUniqueId(), $this->anything(), $this->anything(), $parentId);
+           
+        $bookmark->attach($gc, $node);
+    }
 }
