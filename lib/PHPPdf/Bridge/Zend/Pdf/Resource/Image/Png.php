@@ -8,6 +8,10 @@
 
 namespace PHPPdf\Bridge\Zend\Pdf\Resource\Image;
 
+use PHPPdf\Exception\Exception;
+use PHPPdf\Stream\Fopen;
+use PHPPdf\Stream\String;
+
 /**
  * Content loading type has been changed, remote files are supported.
  * 
@@ -15,19 +19,15 @@ namespace PHPPdf\Bridge\Zend\Pdf\Resource\Image;
  */
 class Png extends \Zend_Pdf_Resource_Image_Png
 {
-    private $currentIndex = 0;
-    private $content;
-    private $contentLength;
-    private $isRemote;
+    private $stream;
     
     const PREDICATOR = 10;
     
     public function __construct($imageFileName)
     {
-        //if file is not remote, use original constructor
-        $this->isRemote = stripos($imageFileName, 'http') === 0;
+        $isRemote = stripos($imageFileName, 'http') === 0;
         
-        if (($this->content = $this->open($imageFileName)) === false ) {
+        if (($this->stream = $this->open($isRemote, $imageFileName)) === false ) {
             
             throw new \Zend_Pdf_Exception( "Can not open '$imageFileName' file for reading." );
         }
@@ -301,68 +301,44 @@ class Png extends \Zend_Pdf_Resource_Image_Png
         }
     }
     
-    private function open($imageFileName)
+    private function open($isRemote, $imageFileName)
     {
-        if($this->isRemote)
+        try 
         {
-            $content = @file_get_contents($imageFileName);
-            if($content !== false)
+            if($isRemote)
             {
-                $this->contentLength = strlen($content);
+                $content = @file_get_contents($imageFileName);
+                
+                if($content === false)
+                {
+                    return false;
+                }
+                
+                return new String($content);
             }
-            
-            return $content;
+            else
+            {
+                return new Fopen($imageFileName, 'rb');
+            }
         }
-        
-        return @fopen($imageFileName, 'rb');
+        catch(Exception $e)
+        {
+            return false;
+        }
     }
     
     private function seek($index)
     {
-        if($this->isRemote)
-        {
-            $this->currentIndex += $index;
-        }
-        else
-        {
-            fseek($this->content, $index, SEEK_CUR);
-        }
+        $this->stream->seek($index);
     }
     
     private function read($length)
     {
-        if($this->isRemote)
-        {
-            if($this->currentIndex >= $this->contentLength)
-            {
-                return false;
-            }
-            
-            $last = $this->currentIndex + $length;
-            
-            if($last > $this->contentLength)
-            {
-                $last = $this->contentLength - $this->currentIndex;
-            }
-            
-            $data = substr($this->content, $this->currentIndex, $length);
-            $this->seek($length);
-    
-            return $data;
-        }
-        
-        return fread($this->content, $length);
+        return $this->stream->read($length);
     }
     
     private function close()
     {
-        if($this->isRemote)
-        {
-            $this->content = $this->contentLength = $this->currentIndex = null;
-        }
-        else 
-        {
-            fclose($this->content);
-        }
+        $this->stream->close();
     }
 }

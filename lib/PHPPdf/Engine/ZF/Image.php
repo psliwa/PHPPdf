@@ -8,6 +8,8 @@
 
 namespace PHPPdf\Engine\ZF;
 
+use PHPPdf\Bridge\Zend\Pdf\Resource\Image\Tiff;
+
 use PHPPdf\Exception\InvalidResourceException,
     PHPPdf\Bridge\Zend\Pdf\Resource\Image\Png,
     PHPPdf\Engine\Image as BaseImage;
@@ -36,11 +38,13 @@ class Image implements BaseImage
             }
             elseif($imageType === IMAGETYPE_PNG)
             {
+//                echo 1;exit();
                 $this->zendImage = new Png($path);
             }
             elseif($imageType === IMAGETYPE_TIFF_II || $imageType === IMAGETYPE_TIFF_MM)
             {
-                $this->zendImage = new \Zend_Pdf_Resource_Image_Tiff($path);
+//                echo 2;exit();
+                $this->zendImage = new Tiff($path);
             }
             else
             {
