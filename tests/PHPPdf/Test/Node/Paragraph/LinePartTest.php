@@ -191,14 +191,27 @@ class LinePartTest extends \PHPPdf\PHPUnit\Framework\TestCase
     public function addLinePartToTextOnLinePartCreation()
     {
         $text = $this->getMockBuilder('PHPPdf\Node\Text')
-                     ->setMethods(array('addLinePart'))
+                     ->setMethods(array('addLinePart', 'removeLinePart'))
                      ->getMock();
                      
-        $text->expects($this->once())
+        $text->expects($this->at(0))
              ->method('addLinePart')
-             ->with($this->anything());
-        
+             ->with($this->isInstanceOf('PHPPdf\Node\Paragraph\LinePart'));
+             
+        $text->expects($this->at(1))
+             ->method('removeLinePart')
+             ->with($this->isInstanceOf('PHPPdf\Node\Paragraph\LinePart'));
+
         $linePart = new LinePart('', 0, 0, $text);
+
+        $newText = $this->getMockBuilder('PHPPdf\Node\Text')
+                        ->setMethods(array('addLinePart'))
+                        ->getMock();
+        $newText->expects($this->at(0))
+                ->method('addLinePart')
+                ->with($this->isInstanceOf('PHPPdf\Node\Paragraph\LinePart'));
+                
+        $linePart->setText($newText);
     }
     
     /**

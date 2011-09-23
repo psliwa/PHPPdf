@@ -211,7 +211,7 @@ class Paragraph extends Container
             $this->remove($text);
             $paragraphProduct->add($text);
         }
-        
+
         $paragraphProduct->translate(0, $yTranslation);
         $paragraphProduct->resize(0, -$yTranslation);
         $paragraphProduct->resize(0, $yTranslation);

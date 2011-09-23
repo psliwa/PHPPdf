@@ -205,6 +205,16 @@ class Text extends Node
         return $this->lineParts;
     }
     
+    public function removeLinePart(LinePart $linePart)
+    {
+        $key = array_search($linePart, $this->lineParts, true);
+        
+        if($key !== false)
+        {
+            unset($this->lineParts[$key]);
+        }
+    }
+    
     protected function setDataFromUnserialize(array $data)
     {
         parent::setDataFromUnserialize($data);

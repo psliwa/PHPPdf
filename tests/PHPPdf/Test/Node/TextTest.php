@@ -208,4 +208,30 @@ class TextTest extends \PHPPdf\PHPUnit\Framework\TestCase
         
         $this->assertEquals($expectedTasks, $actualTasks);
     }
+    
+    /**
+     * @test
+     */
+    public function removeLinePart()
+    {
+        $text = new Text();
+        
+        $linePart1 = $this->getMockBuilder('PHPPdf\Node\Paragraph\LinePart')
+                          ->disableOriginalConstructor()
+                          ->getMock();
+        $linePart2 = $this->getMockBuilder('PHPPdf\Node\Paragraph\LinePart')
+                          ->disableOriginalConstructor()
+                          ->getMock();
+                          
+        $text->addLinePart($linePart1);
+        $text->addLinePart($linePart2);
+        
+        $this->assertEquals(2, count($text->getLineParts()));
+        
+        $text->removeLinePart($linePart1);
+        
+        $this->assertEquals(1, count($text->getLineParts()));
+        $text->removeLinePart($linePart1);
+        $this->assertEquals(1, count($text->getLineParts()));
+    }
 }
