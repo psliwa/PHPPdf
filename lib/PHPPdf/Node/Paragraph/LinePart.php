@@ -150,6 +150,11 @@ class LinePart implements Drawable
         return array();
     }
     
+    public function getPostDrawingTasks(Document $document)
+    {
+        return array();
+    }
+    
     public function getFirstPoint()
     {
         $yTranslation = $this->line->getHeight() - $this->text->getLineHeightRecursively();

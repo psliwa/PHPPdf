@@ -154,7 +154,14 @@ class Page extends Container
         $originalTasks = parent::doDraw($document);
 
         $tasks = array_merge($tasks, $originalTasks);
+        
+        return $tasks;
+    }
 
+    public function getPostDrawingTasks(Document $document)
+    {
+        $tasks = array();
+        
         foreach($this->runtimeNodes as $node)
         {
             $node->evaluate();
@@ -578,13 +585,6 @@ class Page extends Container
                 $this->$placeholder = null;
             }
         }
-        
-        foreach($this->runtimeNodes as $node)
-        {
-            $node->flush();
-        }
-
-        $this->runtimeNodes = array();
 
         parent::flush();
     }

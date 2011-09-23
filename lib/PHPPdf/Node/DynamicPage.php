@@ -20,8 +20,10 @@ class DynamicPage extends Page
     private $prototype = null;
     private $currentPage = null;
     private $pages = array();
+    private $pagesHistory = array();
     private $currentPageNumber = 1;
     private $nodeFormattingMap = array();
+    private $numberOfPages = 0;
 
     public function __construct(Page $prototype = null)
     {
@@ -76,8 +78,15 @@ class DynamicPage extends Page
         $this->currentPage = $this->prototype->copy();
         $this->currentPage->setContext(new PageContext($this->currentPageNumber++, $this));
         $this->pages[] = $this->currentPage;
+        $this->pagesHistory[] = $this->currentPage;
+        $this->numberOfPages++;
 
         return $this->currentPage;
+    }
+    
+    public function getNumberOfPages()
+    {
+        return $this->numberOfPages;
     }
 
     public function copy()
@@ -86,6 +95,7 @@ class DynamicPage extends Page
         $copy->prototype = $this->prototype->copy();
         $copy->reset();
         $copy->nodeFormattingMap = array();
+        $copy->numberOfPages = 0;
 
         return $copy;
     }
@@ -95,6 +105,7 @@ class DynamicPage extends Page
         $this->pages = array();
         $this->currentPage = null;
         $this->currentPageNumber = 1;
+        $this->numberOfPages = 0;
     }
 
     public function getPages()
@@ -247,6 +258,18 @@ class DynamicPage extends Page
         foreach($this->getPages() as $page)
         {
             $tasks = array_merge($tasks, $page->getUnorderedDrawingTasks($document));
+        }
+        
+        return $tasks;
+    }
+    
+    public function getPostDrawingTasks(Document $document)
+    {
+        $tasks = array();
+        
+        foreach($this->pagesHistory as $page)
+        {
+            $tasks = array_merge($tasks, $page->getPostDrawingTasks($document));
         }
         
         return $tasks;

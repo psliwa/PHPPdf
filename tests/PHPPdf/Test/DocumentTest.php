@@ -21,7 +21,7 @@ class DocumentTest extends \PHPPdf\PHPUnit\Framework\TestCase
     public function invokeDrawingTasksOfPagesWhenDrawMethodIsInvoked($assertArguments = true)
     {
         $tasks = array();
-        for($i=0; $i<2; $i++)
+        for($i=0; $i<3; $i++)
         {
             $taskMock = $this->getMockBuilder('PHPPdf\Util\DrawingTask')
                              ->setMethods(array('__invoke'))
@@ -37,7 +37,7 @@ class DocumentTest extends \PHPPdf\PHPUnit\Framework\TestCase
                           ->disableOriginalConstructor()
                           ->getMock();
 
-        $mock = $this->getMock('\PHPPdf\Node\PageCollection', array('getOrderedDrawingTasks', 'getUnorderedDrawingTasks', 'format'));
+        $mock = $this->getMock('\PHPPdf\Node\PageCollection', array('getOrderedDrawingTasks', 'getUnorderedDrawingTasks', 'getPostDrawingTasks', 'format'));
 
         $matcher = $mock->expects($this->once())
                         ->method('format')
@@ -56,6 +56,10 @@ class DocumentTest extends \PHPPdf\PHPUnit\Framework\TestCase
              ->after(1)
              ->method('getUnorderedDrawingTasks')
              ->will($this->returnValue(array($tasks[1])));
+        $mock->expects($this->once())
+             ->after(1)
+             ->method('getPostDrawingTasks')
+             ->will($this->returnValue(array($tasks[2])));
 
         $this->document->draw($mock);
     }

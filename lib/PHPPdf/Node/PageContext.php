@@ -37,6 +37,6 @@ class PageContext
      */
     public function getNumberOfPages()
     {
-        return count($this->dynamicPage->getPages());
+        return $this->dynamicPage->getNumberOfPages();
     }
 }

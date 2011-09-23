@@ -1008,6 +1008,11 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
         }
     }
     
+    public function getPostDrawingTasks(Document $document)
+    {
+        return array();
+    }
+    
     public function getUnorderedDrawingTasks(Document $document)
     {
         $tasks = array();

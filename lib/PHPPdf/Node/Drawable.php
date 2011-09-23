@@ -26,4 +26,6 @@ interface Drawable
      * @return array Unordered array of DrawingTask objects
      */
     public function getUnorderedDrawingTasks(Document $document);
+    
+    public function getPostDrawingTasks(Document $document);
 }

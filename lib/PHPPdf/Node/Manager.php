@@ -105,6 +105,7 @@ class Manager implements DocumentParserListener
             {
                 $document->invokeTasks($node->getOrderedDrawingTasks($document));
             }
+            $document->invokeTasks($node->getPostDrawingTasks($document));
             
             $node->flush();
             $root->flush();
