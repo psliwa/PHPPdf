@@ -13,6 +13,7 @@ Table of contents
 1. [Standard tags](#tags)
 1. [Attributes](#attributes)
 1. [Complex attributes](#complex-attributes)
+1. [Units](#units)
 1. [Hyperlinks](#hyperlinks)
 1. [Bookmarks](#bookmarks)
 1. [Sticky notes](#notes)
@@ -307,6 +308,14 @@ It is possible to add several complex attributes in the same type (for instance 
     </pdf>
 
 In this example second border has "borderLeftAndRight" indentifie, if this border had not id, attributes from second border would be merged with attributes from first border. Default identifier "id" is as same as "name" attribute. "id" attributes for complex attributes hasn't nothing to attribute "id" of tags (using in inheritance). It is possible to create complex borders as same as in previous example (outerBorderLeftAndRight).
+
+<a name="units"></a>
+Units
+----------------
+
+Supported units for numerical attributes: in (inch), cm (centimeter), mm (milimeter), pt (point), pc (pica), px (pixel), % (percent - only for width and height).
+
+Currently unsupported units: em and ex
 
 <a name="hyperlinks"></a>
 Hyperlinks

@@ -13,6 +13,7 @@ Spis treści
 1. [Standardowe tagi](#tags)
 1. [Atrybut](#attributes)
 1. [Atrybuty złożone](#complex-attributes)
+1. [Jednostki](#units)
 1. [Hiperlinki](#hyperlinks)
 1. [Zakładki](#bookmarks)
 1. [Notatki](#notes)
@@ -306,6 +307,14 @@ Można dodawać kilka upiększeń tego samego typu (np. 3 różne obramowania) u
     </pdf>
 
 W tym przykładzie drugie obramowanie ma identyfikator "borderLeftAndRight", jakby go nie było to atrybuty drugiego obramowania zostały by złączone z atrybutami z pierwszego obramowania. Domyślny identyfikator "id" jest równy atrybutowi "name". Identyfikatory "id" dla upiększeń (enhancements) nie mają nic wspólnego z atrybutami "id" dla elementów (nodeów). Można tworzyć obramowania złożone manipulując pozycją, tak jak w powyższym przykładzie (outerBorderLeftAndRight).
+
+<a name="units"></a>
+Jednostki
+----------------
+
+Obsługiwane jednostki dla numerycznych atrybutów: in (cal), cm (centymetr), mm (milimetr), pt (punkt), pc (pica), px (pixel), % (procent - tylko dla width i height).
+
+Obecnie nieobslugiwane jednostki: em, ex
 
 <a name="hyperlinks"></a>
 Hiperlinki

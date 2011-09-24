@@ -37,49 +37,35 @@ class UnitConverterImpl implements UnitConverter
             return $value;
         }
         
-        if($this->isUnit($value, 'px'))
-        {
-            $value = $this->convertPxUnit($value);
-        }
-        elseif($this->isUnit($value, 'cm'))
-        {
-            $value = $this->convertCmUnit($value);
-        }
-        elseif($this->isUnit($value, 'in'))
-        {
-            $value = $this->convertInUnit($value);
-        }
-        elseif($this->isUnit($value, 'pt'))
-        {
-            $value = $this->convertPtUnit($value);
-        }
-        elseif($this->isUnit($value, 'pc'))
-        {
-            $value = 12*$this->convertPtUnit($value);
-        }
-        elseif($this->isUnit($value, 'mm'))
-        {
-            $value = $this->convertMmUnit($value);
-        }
-        else
-        {
-            foreach(array('em', 'ex') as $unit)
-            {
-                if($this->isUnit($value, $unit))
-                {
-                    throw new \InvalidArgumentException(sprintf('"%s" unit is not supported.', $unit));
-                }
-            }
-        }
+        $unit = strtolower(substr($value, -2, 2));
 
-        return $value;
+        return $this->doConvertUnit($value, $unit);
     }
     
-    private function isUnit($value, $unit)
+    private function doConvertUnit($value, $unit)
     {
-        return strpos($value, $unit) !== false;
+        switch($unit)
+        {
+            case 'px':
+                return $this->convertPxUnit($value);
+            case 'cm':
+                return $this->convertCmUnit($value);
+            case 'mm':
+                return $this->convertMmUnit($value);
+            case 'in':
+                return $this->convertInUnit($value);
+            case 'pt':
+                return $this->convertPtUnit($value);
+            case 'pc':
+                return 12*$this->convertPtUnit($value);
+            case 'em':
+            case 'ex':
+                throw new \InvalidArgumentException(sprintf('"%s" unit is not supported.', $unit));
+            default:
+                return $value;
+        }
     }
-    
+
     private function convertPxUnit($value)
     {
         $value = (float) $value;
