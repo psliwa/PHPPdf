@@ -15,7 +15,7 @@ namespace PHPPdf\Util;
  */
 class UnitConverterImpl implements UnitConverter
 {
-    //unit of x and y axes id 1/72 inch
+    //unit of x and y axes is 1/72 inch
     const UNITS_PER_INCH = 72;
 
     private $dpi;
@@ -53,9 +53,23 @@ class UnitConverterImpl implements UnitConverter
         {
             $value = $this->convertPtUnit($value);
         }
-        elseif($this->isUnit($value, 'mm') || $this->isUnit($value, 'em'))
+        elseif($this->isUnit($value, 'pc'))
+        {
+            $value = 12*$this->convertPtUnit($value);
+        }
+        elseif($this->isUnit($value, 'mm'))
         {
             $value = $this->convertMmUnit($value);
+        }
+        else
+        {
+            foreach(array('em', 'ex') as $unit)
+            {
+                if($this->isUnit($value, $unit))
+                {
+                    throw new \InvalidArgumentException(sprintf('"%s" unit is not supported.', $unit));
+                }
+            }
         }
 
         return $value;

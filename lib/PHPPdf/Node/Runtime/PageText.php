@@ -11,6 +11,7 @@ namespace PHPPdf\Node\Runtime;
 use PHPPdf\Node\Text,
     PHPPdf\Node\Runtime,
     PHPPdf\Node\Page,
+    PHPPdf\Util\UnitConverter,
     PHPPdf\Document;
 
 /**
@@ -21,9 +22,9 @@ abstract class PageText extends Text implements Runtime
     private $evaluated = false;
     private $page = null;
 
-    public function  __construct(array $attributes = array())
+    public function  __construct(array $attributes = array(), UnitConverter $converter = null)
     {
-        parent::__construct('', $attributes);
+        parent::__construct('', $attributes, $converter);
     }
 
     protected static function setDefaultAttributes()

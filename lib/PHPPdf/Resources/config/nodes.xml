@@ -7,9 +7,9 @@
 	    <node name="page" class="PHPPdf\Node\Page">
 	        <stylesheet>
 	            <attribute name="font-type" value="helvetica" />
-	            <attribute name="font-size" value="10" />
+	            <attribute name="font-size" value="12px" />
 	            <attribute name="font-style" value="normal" />
-	            <attribute name="margin" value="40 40" />
+	            <attribute name="margin" value="40px 40px" />
 	            <attribute name="color" value="black" />
 	        </stylesheet>
 	        <formatters>
@@ -66,7 +66,7 @@
 	    </node>
 	    <node name="li" class="PHPPdf\Node\BasicListItem">
 	    	<stylesheet>
-	    		<attribute name="margin-left" value="10" />
+	    		<attribute name="margin-left" value="10px" />
 	    	</stylesheet>
 	        <formatters>
 	            <pre class="PHPPdf\Formatter\ConvertAttributesFormatter" />
@@ -80,7 +80,7 @@
 	    </node>
 	    <node name="p" class="PHPPdf\Node\Container">
 	        <stylesheet>
-	            <attribute name="padding" value="5 0" />
+	            <attribute name="padding" value="12px 0" />
 	        </stylesheet>
 	        <formatters>
 	            <pre class="PHPPdf\Formatter\ConvertAttributesFormatter" />
@@ -115,9 +115,9 @@
 	    </node>
 	    <node name="h1" class="PHPPdf\Node\Container">
 	        <stylesheet>
-	            <attribute name="font-size" value="16" />
+	            <attribute name="font-size" value="18px" />
 	            <attribute name="font-style" value="bold" />
-	            <attribute name="margin" value="5 0" />
+	            <attribute name="margin" value="12px 0" />
 	        </stylesheet>
 	        <formatters>
 	            <pre class="PHPPdf\Formatter\ConvertAttributesFormatter" />
@@ -132,9 +132,9 @@
 	    </node>
 	    <node name="h2" class="PHPPdf\Node\Container">
 	        <stylesheet>
-	            <attribute name="font-size" value="14" />
+	            <attribute name="font-size" value="16px" />
 	            <attribute name="font-style" value="bold" />
-	            <attribute name="margin" value="4 0" />
+	            <attribute name="margin" value="12px 0" />
 	        </stylesheet>
 	        <formatters>
 	            <pre class="PHPPdf\Formatter\ConvertAttributesFormatter" />
@@ -149,8 +149,8 @@
 	    </node>
 	    <node name="h3" class="PHPPdf\Node\Container">
 	        <stylesheet>
-	            <attribute name="font-size" value="12" />
-	            <attribute name="margin" value="3 0" />
+	            <attribute name="font-size" value="14px" />
+	            <attribute name="margin" value="12px 0" />
 	        </stylesheet>
 	        <formatters>
 	            <pre class="PHPPdf\Formatter\ConvertAttributesFormatter" />
@@ -165,8 +165,7 @@
 	    </node>
 	    <node name="h4" class="PHPPdf\Node\Container">
 	        <stylesheet>
-	            <attribute name="font-size" value="12" />
-	            <attribute name="margin" value="3 0" />
+	            <attribute name="font-size" value="12px" />
 	        </stylesheet>
 	        <formatters>
 	            <pre class="PHPPdf\Formatter\ConvertAttributesFormatter" />
@@ -181,8 +180,7 @@
 	    </node>
 	    <node name="h5" class="PHPPdf\Node\Container">
 	        <stylesheet>
-	            <attribute name="font-size" value="12" />
-	            <attribute name="margin" value="3 0" />
+	            <attribute name="font-size" value="12px" />
 	        </stylesheet>
 	        <formatters>
 	            <pre class="PHPPdf\Formatter\ConvertAttributesFormatter" />
@@ -197,8 +195,7 @@
 	    </node>
 	    <node name="h6" class="PHPPdf\Node\Container">
 	        <stylesheet>
-	            <attribute name="font-size" value="12" />
-	            <attribute name="margin" value="3 0" />
+	            <attribute name="font-size" value="12px" />
 	        </stylesheet>
 	        <formatters>
 	            <pre class="PHPPdf\Formatter\ConvertAttributesFormatter" />
@@ -237,7 +234,7 @@
 	    </node>
 	    <node name="tr" class="PHPPdf\Node\Table\Row">
 	        <stylesheet>
-	            <attribute name="height" value="5" />
+	            <attribute name="height" value="5px" />
 	        </stylesheet>
 	        <formatters>
 	            <pre class="PHPPdf\Formatter\ConvertAttributesFormatter" />
@@ -251,7 +248,7 @@
 	    </node>
 	    <node name="td" class="PHPPdf\Node\Table\Cell">
 	        <stylesheet>
-	            <enhancement name="border" color="black" />
+	            <enhancement name="border" color="black" size="1px" />
 	        </stylesheet>
 	        <formatters>
 	            <pre class="PHPPdf\Formatter\ConvertAttributesFormatter" />
@@ -276,7 +273,7 @@
 	    </node>
 	    <node name="br" class="PHPPdf\Node\Container">
 	        <stylesheet>
-	            <attribute name="height" value="10" />
+	            <attribute name="height" value="12px" />
 	        </stylesheet>
 	        <formatters>
 	            <pre class="PHPPdf\Formatter\ConvertAttributesFormatter" />
@@ -290,8 +287,8 @@
 	    </node>
 	    <node name="hr" class="PHPPdf\Node\Container">
 	        <stylesheet>
-	            <attribute name="height" value="0.5" />
-	            <attribute name="margin" value="8 0" />
+	            <attribute name="height" value="1px" />
+	            <attribute name="margin" value="12px 0" />
 	            <enhancement name="background" color="black" />
 	        </stylesheet>
 	        <formatters>

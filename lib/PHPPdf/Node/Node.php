@@ -71,11 +71,15 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
     
     private $unitConverter = null;
 
-    public function __construct(array $attributes = array())
+    public function __construct(array $attributes = array(), UnitConverter $converter = null)
     {
         static::initializeTypeIfNecessary();
 
         $this->initialize();
+        if($converter)
+        {
+            $this->setUnitConverter($converter);
+        }
         $this->setAttributes($attributes);
     }
     

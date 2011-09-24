@@ -8,9 +8,9 @@
 
 namespace PHPPdf\Node;
 
-use PHPPdf\Node\Paragraph\LinePart;
-
 use PHPPdf\Node\Node,
+    PHPPdf\Util\UnitConverter,
+    PHPPdf\Node\Paragraph\LinePart,
     PHPPdf\Formatter\Formatter,
     PHPPdf\Document,
     PHPPdf\Util\Point,
@@ -32,11 +32,11 @@ class Text extends Node
     
     protected $lineParts = array();
 
-    public function __construct($text = '', array $attributes = array())
+    public function __construct($text = '', array $attributes = array(), UnitConverter $converter = null)
     {
         $this->setText($text);
         
-        parent::__construct($attributes);
+        parent::__construct($attributes, $converter);
     }
 
     public function initialize()

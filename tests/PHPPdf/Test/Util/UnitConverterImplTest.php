@@ -46,9 +46,9 @@ class UnitConverterImplTest extends TestCase
             array(3.2, 3.2, 12),
             array('10cm', 100),
             array('10mm', 10),
-            array('10em', 10),
             array('1in', UnitConverterImpl::UNITS_PER_INCH),
             array('1pt', 1),
+            array('1pc', 12),
         );
     }
     

@@ -8,10 +8,10 @@
 
 namespace PHPPdf\Node;
 
-use PHPPdf\Engine\GraphicsContext;
-
 use PHPPdf\Document,
     PHPPdf\Util\DrawingTask,
+    PHPPdf\Util\UnitConverter,
+    PHPPdf\Engine\GraphicsContext,
     PHPPdf\Util\Point,
     PHPPdf\Formatter\Formatter;
 
@@ -51,9 +51,9 @@ class Page extends Container
 
     private $preparedTemplate = false;
 
-    public function  __construct(array $attributes = array())
+    public function  __construct(array $attributes = array(), UnitConverter $converter = null)
     {
-        parent::__construct($attributes);
+        parent::__construct($attributes, $converter);
 
         $this->initializeBoundary();
         $this->initializePlaceholders();
