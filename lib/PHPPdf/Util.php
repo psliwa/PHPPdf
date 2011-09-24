@@ -20,16 +20,6 @@ final class Util
         throw new \BadMethodCallException(sprintf('Object of "%s" class can not be created.', __CLASS__));
     }
     
-    public static function convertFromPercentageValue($percent, $value)
-    {
-        if(strpos($percent, '%') !== false)
-        {
-            $percent = (double) $percent;
-            $percent = $value*$percent / 100;
-        }
-        return $percent;
-    }    
-    
     public static function convertBooleanValue($value)
     {
         $knownValues = array('true' => true, 'false' => false, 1 => true, 0 => false, '1' => true, '0' => false, 'yes' => true, 'no' => false);

@@ -839,9 +839,9 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
     
     protected function convertUnit($value)
     {
-        if($this->unitConverter !== null)
+        if($this->getUnitConverter())
         {
-            $value = $this->unitConverter->convertUnit($value);
+            return $this->getUnitConverter()->convertUnit($value);
         }
         
         return $value;
@@ -1500,7 +1500,8 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
         
         $potentiallyRelativeValue = $this->getAttribute($name);
         
-        $absoluteValue = \PHPPdf\Util::convertFromPercentageValue($potentiallyRelativeValue, $parentValue);
+        $absoluteValue = $this->unitConverter ? $this->unitConverter->convertPercentageValue($potentiallyRelativeValue, $parentValue) : $potentiallyRelativeValue;
+
         if($absoluteValue !== $potentiallyRelativeValue)
         {
             $this->setAttribute($name, $absoluteValue);

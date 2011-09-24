@@ -2,6 +2,7 @@
 
 namespace PHPPdf\Test\Formatter;
 
+use PHPPdf\Util\UnitConverterImpl;
 use PHPPdf\Document;
 use PHPPdf\Node\Page;
 use PHPPdf\Node\Container;
@@ -24,9 +25,10 @@ class ConvertAttributesFormatterTest extends \PHPPdf\PHPUnit\Framework\TestCase
     public function percentageConvert()
     {
         $page = new Page();
-        $node = new Container(array('width' => 200, 'height' => 100));
+        $unitConverter = new UnitConverterImpl();
+        $node = new Container(array('width' => 200, 'height' => 100), $unitConverter);
+        $child = new Container(array('width' => '70%', 'height' => '50%'), $unitConverter);
 
-        $child = new Container(array('width' => '70%', 'height' => '50%'));
         $node->add($child);
         $page->add($node);
 

@@ -191,14 +191,13 @@ class Background extends Enhancement
     {
         $width = $converter->convertUnit($this->imageWidth);
         $height = $converter->convertUnit($this->imageHeight);
-        
         if(!$width && !$height)
         {
             return array($image->getOriginalWidth(), $image->getOriginalHeight());
         }
         
-        list($width, $height) = $this->convertPercentageDimension($node, $width, $height);
-        
+        list($width, $height) = $this->convertPercentageDimension($converter, $node, $width, $height);
+
         $ratio = $image->getOriginalWidth() / $image->getOriginalHeight();
             
         list($width, $height) = Util::calculateDependantSizes($width, $height, $ratio);
@@ -206,11 +205,11 @@ class Background extends Enhancement
         return array($width, $height);
     }
     
-    private function convertPercentageDimension(Node $node, $width, $height)
+    private function convertPercentageDimension(UnitConverter $converter, Node $node, $width, $height)
     {
-        $width = Util::convertFromPercentageValue($width, $this->getWidth($node));
-        $height = Util::convertFromPercentageValue($height, $this->getHeight($node));
-        
+        $width = $converter->convertPercentageValue($width, $this->getWidth($node));
+        $height = $converter->convertPercentageValue($height, $this->getHeight($node));
+
         return array($width, $height);
     }
 

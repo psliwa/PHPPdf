@@ -161,8 +161,9 @@ class Table extends Container implements Listener
     public function convertRelativeWidthsOfColumns()
     {
         $tableWidth = $this->getWidth();
-        array_walk($this->widthsOfColumns, function(&$width, $key, $tableWidth){
-            $width = \PHPPdf\Util::convertFromPercentageValue($width, $tableWidth);
+        $unitConverter = $this->getUnitConverter();
+        array_walk($this->widthsOfColumns, function(&$width, $key, $tableWidth) use($unitConverter){
+            $width = $unitConverter ? $unitConverter->convertPercentageValue($width, $tableWidth) : $width;
         }, $tableWidth);
     }
 

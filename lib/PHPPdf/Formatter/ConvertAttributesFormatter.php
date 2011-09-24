@@ -33,11 +33,6 @@ class ConvertAttributesFormatter extends BaseFormatter
         $node->convertScalarAttribute('height');
     }
 
-    private function convertFromPercentageValue($value, $percent)
-    {
-        return Util::convertFromPercentageValue($percent, $value);
-    }
-
     private function convertAutoMargins(Node $node)
     {
         $parent = $node->getParent();

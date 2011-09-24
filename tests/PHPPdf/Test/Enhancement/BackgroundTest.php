@@ -91,7 +91,7 @@ class BackgroundTest extends \PHPPdf\PHPUnit\Framework\TestCase
     private function createDocumentMock($imagePath, $image)
     {
         $document = $this->getMockBuilder('PHPPdf\Document')
-                         ->setMethods(array('createImage', 'convertUnit'))
+                         ->setMethods(array('createImage', 'convertUnit', 'convertPercentageValue'))
                          ->getMock();
         $document->expects($this->once())
                  ->method('createImage')
@@ -336,12 +336,12 @@ class BackgroundTest extends \PHPPdf\PHPUnit\Framework\TestCase
             array('yes', true),
         );
     }
-    
+
     /**
      * @test
      * @dataProvider imageDimensionProvider
      */
-    public function useBackgrounImageDimension($imageWidth, $imageHeight, $expectedHorizontalTranslation, $expectedVertiacalTranslation, $nodeWidth = 100, $nodeHeight = 100)
+    public function useBackgrounImageDimension($percentWidth, $expectedWidth, $percentHeight, $expectedHeight, $expectedHorizontalTranslation, $expectedVertiacalTranslation, $nodeWidth = 100, $nodeHeight = 100)
     {
         $imagePath = 'image/path';
 
@@ -351,18 +351,24 @@ class BackgroundTest extends \PHPPdf\PHPUnit\Framework\TestCase
         $x = 0;
         $y = $nodeHeight;
 
-        $width = rand(10, 50);
-        $height = rand(10, 50);
-        
         $document->expects($this->at(1))
                  ->method('convertUnit')
-                 ->with($width)
-                 ->will($this->returnValue($imageWidth));
+                 ->with($percentWidth)
+                 ->will($this->returnValue($percentWidth));
         $document->expects($this->at(2))
                  ->method('convertUnit')
-                 ->with($height)
-                 ->will($this->returnValue($imageHeight));
-        $enhancement = new Background(null, $imagePath, Background::REPEAT_NONE, null, false, $width, $height);
+                 ->with($percentHeight)
+                 ->will($this->returnValue($percentHeight));
+        $document->expects($this->at(3))
+                 ->method('convertPercentageValue')
+                 ->with($percentWidth, $nodeWidth)
+                 ->will($this->returnValue($expectedWidth));
+        $document->expects($this->at(4))
+                 ->method('convertPercentageValue')
+                 ->with($percentHeight, $nodeHeight)
+                 ->will($this->returnValue($expectedHeight));
+
+        $enhancement = new Background(null, $imagePath, Background::REPEAT_NONE, null, false, $percentWidth, $percentHeight);
         
         $gcMock = $this->getMockBuilder('PHPPdf\Engine\GraphicsContext')
         			   ->getMock();
@@ -379,10 +385,10 @@ class BackgroundTest extends \PHPPdf\PHPUnit\Framework\TestCase
     public function imageDimensionProvider()
     {
         return array(
-            array(self::IMAGE_WIDTH / 2, null, self::IMAGE_WIDTH / 2, self::IMAGE_HEIGHT / 2),
-            array(null, self::IMAGE_HEIGHT / 2, self::IMAGE_WIDTH / 2, self::IMAGE_HEIGHT / 2),
-            array('30%', null, 60, 60, 200, 200),
-            array(null, '40%', 80, 80, 200, 200),
+            array(self::IMAGE_WIDTH / 2, self::IMAGE_WIDTH / 2, null, null, self::IMAGE_WIDTH / 2, self::IMAGE_HEIGHT / 2),
+            array(null, null, self::IMAGE_HEIGHT / 2, self::IMAGE_HEIGHT / 2, self::IMAGE_WIDTH / 2, self::IMAGE_HEIGHT / 2),
+            array('30%', 60, null, null, 60, 60, 200, 200),
+            array(null, null, '40%', 80, 80, 80, 200, 200),
         );
     }
     

@@ -2,6 +2,7 @@
 
 namespace PHPPdf\Test\Node;
 
+use PHPPdf\Util\UnitConverterImpl;
 use PHPPdf\Node\Table\Cell;
 use PHPPdf\Node\Table;
 use PHPPdf\Util\Boundary;
@@ -20,7 +21,7 @@ class TableTest extends \PHPPdf\PHPUnit\Framework\TestCase
 
     public function setUp()
     {
-        $this->table = new Table();
+        $this->table = new Table(array(), new UnitConverterImpl());
     }
 
     /**
