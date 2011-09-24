@@ -316,6 +316,8 @@ Obsługiwane jednostki dla numerycznych atrybutów: in (cal), cm (centymetr), mm
 
 Obecnie nieobslugiwane jednostki: em, ex
 
+Gdy jednostka zostanie pominięta (na przykład: font-size="10"), to jednostką jest standardowa, wewnętrzna jednostka pdf (1 standardowa jednostka = 1/72 cala).
+
 <a name="hyperlinks"></a>
 Hiperlinki
 ----------

@@ -317,6 +317,8 @@ Supported units for numerical attributes: in (inch), cm (centimeter), mm (milime
 
 Currently unsupported units: em and ex
 
+When unit has been skipped (for example: font-size="10"), then unit is standard, internal pdf unit (1 standard unit = 1/72 inch).
+
 <a name="hyperlinks"></a>
 Hyperlinks
 ----------------
