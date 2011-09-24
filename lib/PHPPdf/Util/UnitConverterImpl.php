@@ -15,7 +15,8 @@ namespace PHPPdf\Util;
  */
 class UnitConverterImpl implements UnitConverter
 {
-    const STANDARD_UNITS_PER_INCH = 25.4;
+    //unit of x and y axes id 1/72 inch
+    const UNITS_PER_INCH = 72;
 
     private $dpi;
     
@@ -68,7 +69,7 @@ class UnitConverterImpl implements UnitConverter
     private function convertPxUnit($value)
     {
         $value = (float) $value;
-        return $value * self::STANDARD_UNITS_PER_INCH/$this->dpi;
+        return $value * self::UNITS_PER_INCH/$this->dpi;
     }
 
     private function convertCmUnit($value)
@@ -80,13 +81,13 @@ class UnitConverterImpl implements UnitConverter
 
     private function convertInUnit($value)
     {
-        return ((float) $value)*self::STANDARD_UNITS_PER_INCH;
+        return ((float) $value)*self::UNITS_PER_INCH;
     }
        
     private function convertPtUnit($value)
     {
         $value = (float) $value;
-        return $value * self::STANDARD_UNITS_PER_INCH/72;
+        return $value * self::UNITS_PER_INCH/72;
     }
     
     private function convertMmUnit($value)

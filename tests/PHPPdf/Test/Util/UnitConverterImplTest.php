@@ -40,15 +40,15 @@ class UnitConverterImplTest extends TestCase
     public function unitProvider()
     {
         return array(
-            array('1px', 25.4, 1),
-            array('1px', 25.4/2, 2),
+            array('1px', UnitConverterImpl::UNITS_PER_INCH, 1),
+            array('1px', UnitConverterImpl::UNITS_PER_INCH/2, 2),
             array(3, 3, 12),
             array(3.2, 3.2, 12),
             array('10cm', 100),
             array('10mm', 10),
             array('10em', 10),
-            array('1in', 25.4),
-            array('1pt', 25.4/72),
+            array('1in', UnitConverterImpl::UNITS_PER_INCH),
+            array('1pt', 1),
         );
     }
     
