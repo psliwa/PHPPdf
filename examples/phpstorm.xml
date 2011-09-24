@@ -77,6 +77,8 @@
 				It’s even able to suggest tablenames and fieldnames of your DataBase in SQL. Just link the IDE with your datasource:
 				<img src="dir:/phpstorm/listing3.jpg" />
 			</p>
+			
+			<div height="20" />
 					
 			<h2>Hunt Down Code Flaws with Xdebug or Zend</h2>
 			<ul>
@@ -140,8 +142,6 @@
 				
 				<img src="dir:/phpstorm/listing7.jpg" />
 			</p>
-			
-			<div height="8" />
 			
 			<h2>JavaScript Debugger Based on Mozilla</h2>
 			<p>
