@@ -103,14 +103,30 @@ class BorderTest extends \PHPPdf\PHPUnit\Framework\TestCase
      */
     public function borderWithNotStandardSize()
     {
-        $size = 2;
+        $document = $this->getMockBuilder('PHPPdf\Document')
+                         ->setMethods(array('convertUnit'))
+                         ->getMock();
+        
+        $actualSize = '12px';
+        $expectedSize = 2;
+        
+        $document->expects($this->at(0))
+                 ->method('convertUnit')
+                 ->with($actualSize)
+                 ->will($this->returnValue($expectedSize));
+                 
+        //position conversion
+        $document->expects($this->at(1))
+                 ->method('convertUnit')
+                 ->with(0)
+                 ->will($this->returnValue(0));
 
         $gcMock = $this->getMockBuilder('PHPPdf\Engine\GraphicsContext')
         			   ->getMock();
 
         $gcMock->expects($this->once())
                ->method('setLineWidth')
-               ->with($size);
+               ->with($expectedSize);
         
         $gcMock->expects($this->once())
                ->method('drawLine')
@@ -118,9 +134,9 @@ class BorderTest extends \PHPPdf\PHPUnit\Framework\TestCase
 
         $nodeMock = $this->objectMother->getNodeMock(0, 10, 5, 7, $gcMock);
 
-        $border = new Border(null, Border::TYPE_LEFT, $size);
+        $border = new Border(null, Border::TYPE_LEFT, $actualSize);
 
-        $border->enhance($nodeMock, $this->document);
+        $border->enhance($nodeMock, $document);
     }
 
     /**
@@ -233,10 +249,25 @@ class BorderTest extends \PHPPdf\PHPUnit\Framework\TestCase
         $y = 100;
         $width = 50;
         $height = 30;
-        $position = 2;
+        $actualPosition = '12px';
+        $expectedPosition = 2;
         $size = 1;
         
-        $border = new Border(null, Border::TYPE_ALL, $size, null, Border::STYLE_SOLID, $position);
+        $document = $this->getMockBuilder('PHPPdf\Document')
+                         ->setMethods(array('convertUnit'))
+                         ->getMock();
+                         
+        //size conversion
+        $document->expects($this->at(0))
+                 ->method('convertUnit')
+                 ->with($size)
+                 ->will($this->returnValue($size));
+        $document->expects($this->at(1))
+                 ->method('convertUnit')
+                 ->with($actualPosition)
+                 ->will($this->returnValue($expectedPosition));
+        
+        $border = new Border(null, Border::TYPE_ALL, $size, null, Border::STYLE_SOLID, $actualPosition);
 
         $gcMock = $this->getMockBuilder('PHPPdf\Engine\GraphicsContext')
                        ->getMock();
@@ -246,10 +277,10 @@ class BorderTest extends \PHPPdf\PHPUnit\Framework\TestCase
 
         $gcMock->expects($this->once())
                ->method('drawPolygon')
-               ->with(array($x-$halfSize-$position, $x+$width+$position, $x+$width+$position, $x-$position, $x-$position),
-                      array($y+$position, $y+$position, $y-$height-$position, $y-$height-$position, $y+$halfSize+$position));
+               ->with(array($x-$halfSize-$expectedPosition, $x+$width+$expectedPosition, $x+$width+$expectedPosition, $x-$expectedPosition, $x-$expectedPosition),
+                      array($y+$expectedPosition, $y+$expectedPosition, $y-$height-$expectedPosition, $y-$height-$expectedPosition, $y+$halfSize+$expectedPosition));
 
-        $border->enhance($nodeMock, $this->document);
+        $border->enhance($nodeMock, $document);
     }
 
     /**
@@ -263,11 +294,26 @@ class BorderTest extends \PHPPdf\PHPUnit\Framework\TestCase
         $height = 30;
 
         $type = Border::TYPE_BOTTOM;
-        $position = 2;
+        $actualPosition = '12px';
+        $expectedPosition = 2;
         $size = 1;
         $halfSize = $size/2;
+        
+        $document = $this->getMockBuilder('PHPPdf\Document')
+                         ->setMethods(array('convertUnit'))
+                         ->getMock();
+                         
+        //size conversion
+        $document->expects($this->at(0))
+                 ->method('convertUnit')
+                 ->with($size)
+                 ->will($this->returnValue($size));
+        $document->expects($this->at(1))
+                 ->method('convertUnit')
+                 ->with($actualPosition)
+                 ->will($this->returnValue($expectedPosition));
 
-        $border = new Border(null, $type, $size, null, Border::STYLE_SOLID, $position);
+        $border = new Border(null, $type, $size, null, Border::STYLE_SOLID, $actualPosition);
 
         $gcMock = $this->getMockBuilder('PHPPdf\Engine\GraphicsContext')
         			   ->getMock();
@@ -276,8 +322,8 @@ class BorderTest extends \PHPPdf\PHPUnit\Framework\TestCase
 
         $gcMock->expects($this->once())
                ->method('drawLine')
-               ->with($x+$width+$position+$halfSize, $y-$height-$position, $x-$position-$halfSize, $y-$height-$position);
+               ->with($x+$width+$expectedPosition+$halfSize, $y-$height-$expectedPosition, $x-$expectedPosition-$halfSize, $y-$height-$expectedPosition);
 
-        $border->enhance($nodeMock, $this->document);
+        $border->enhance($nodeMock, $document);
     }
 }

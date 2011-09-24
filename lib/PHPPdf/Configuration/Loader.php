@@ -30,5 +30,10 @@ interface Loader
      */
     public function createFontRegistry();
     
+    /**
+     * @return PHPPdf\Util\UnitConverter
+     */
+    public function createUnitConverter();
+    
     public function setCache(Cache $cache);
 }

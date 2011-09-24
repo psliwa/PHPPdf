@@ -8,6 +8,8 @@
 
 namespace PHPPdf\Node;
 
+use PHPPdf\Util\UnitConverter;
+
 use PHPPdf\Document,
     PHPPdf\Util,
     PHPPdf\Node\Container,
@@ -66,6 +68,8 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
     
     private $ancestorWithRotation = null;
     private $ancestorWithFontSize = null;
+    
+    private $unitConverter = null;
 
     public function __construct(array $attributes = array())
     {
@@ -89,7 +93,7 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
     {
         //TODO refactoring
         $attributeWithGetters = array('width', 'height', 'margin-left', 'margin-right', 'margin-top', 'margin-bottom', 'padding-left', 'padding-right', 'padding-top', 'padding-bottom', 'font-type', 'font-size', 'float', 'breakable');
-        $attributeWithSetters = array('width', 'height', 'margin-left', 'margin-right', 'margin-top', 'margin-bottom', 'font-type', 'float', 'static-size', 'font-size', 'margin', 'padding', 'break', 'breakable', 'dump');
+        $attributeWithSetters = array('width', 'height', 'margin-left', 'margin-right', 'margin-top', 'margin-bottom', 'font-type', 'float', 'static-size', 'font-size', 'margin', 'padding', 'break', 'breakable', 'dump', 'padding-left', 'padding-right', 'padding-top', 'padding-bottom', 'min-width', 'line-height');
 
         $predicateGetters = array('breakable');
         
@@ -191,6 +195,16 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
         static::addAttribute('rotate', null);
     }
 
+    public function setUnitConverter(UnitConverter $unitConverter)
+    {
+        $this->unitConverter = $unitConverter;
+    }
+    
+    public function getUnitConverter()
+    {
+        return $this->unitConverter;
+    }
+    
     protected function addDrawingTasks(array $tasks)
     {
         foreach($tasks as $task)
@@ -494,6 +508,7 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
      */
     public function setWidth($width)
     {
+        $width = $this->convertUnit($width);
         $this->setAttributeDirectly('width', $width);
 
         if(\strpos($width, '%') !== false)
@@ -593,9 +608,20 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
      */
     public function setHeight($height)
     {
+        $height = $this->convertUnit($height);
         $this->setAttributeDirectly('height', $height);
 
         return $this;
+    }
+    
+    public function setLineHeight($value)
+    {
+        $this->setAttributeDirectly('line-height', $this->convertUnit($value));
+    }
+
+    public function setMinWidth($value)
+    {
+        $this->setAttributeDirectly('min-width', $this->convertUnit($value));
     }
 
     public function getHeight()
@@ -610,7 +636,7 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
 
     protected function setMarginAttribute($name, $value)
     {
-        $this->setAttributeDirectly($name, $value === self::MARGIN_AUTO ? $value : $this->convertToInteger($value));
+        $this->setAttributeDirectly($name, $value === self::MARGIN_AUTO ? $value : $this->convertUnit($value));
 
         return $this;
     }
@@ -722,6 +748,26 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
         return $this;
     }
     
+    public function setPaddingTop($value)
+    {
+        $this->setAttributeDirectly('padding-top', $this->convertUnit($value));
+    }
+
+    public function setPaddingBottom($value)
+    {
+        $this->setAttributeDirectly('padding-bottom', $this->convertUnit($value));
+    }
+
+    public function setPaddingLeft($value)
+    {
+        $this->setAttributeDirectly('padding-left', $this->convertUnit($value));
+    }
+
+    public function setPaddingRight($value)
+    {
+        $this->setAttributeDirectly('padding-right', $this->convertUnit($value));
+    }
+    
     public function getPaddingTop()
     {
         return $this->getAttributeDirectly('padding-top');
@@ -779,10 +825,22 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
     
     public function setFontSize($size)
     {
-        $this->setAttributeDirectly('font-size', (int)$size);
+        $size = $this->convertUnit($size);
+
+        $this->setAttributeDirectly('font-size', $size);
         $this->setAttribute('line-height', (int) ($size + $size*0.2));
 
         return $this;
+    }
+    
+    protected function convertUnit($value)
+    {
+        if($this->unitConverter !== null)
+        {
+            $value = $this->unitConverter->convertUnit($value);
+        }
+        
+        return $value;
     }
 
     /**

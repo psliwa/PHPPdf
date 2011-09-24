@@ -72,6 +72,42 @@ XML;
 
         $this->assertInstanceOf('PHPPdf\Node\Container', $nodeFactory->getPrototype('div'));
     }
+    
+    /**
+     * @test
+     */
+    public function setUnitConverter()
+    {
+        $xml = <<<XML
+<factory>
+    <nodes>
+        <node name="div" class="PHPPdf\Node\Container">
+        	<stylesheet>
+        		<attribute name="line-height" value="12px" />
+        	</stylesheet>
+        </node>
+    </nodes>
+</factory>
+XML;
+        
+        $unitConverter = $this->getMockBuilder('PHPPdf\Util\UnitConverter')
+                              ->getMock();
+
+        $expected = 123;
+        $unitConverter->expects($this->once())
+                      ->method('convertUnit')
+                      ->with('12px')
+                      ->will($this->returnValue($expected));
+
+        $this->parser->setUnitConverter($unitConverter);
+        
+        $nodeFactory = $this->parser->parse($xml);
+        
+        $div = $nodeFactory->getPrototype('div');
+
+        $this->assertEquals($unitConverter, $div->getUnitConverter());
+        $this->assertEquals($expected, $div->getAttribute('line-height'));
+    }
 
     /**
      * @test

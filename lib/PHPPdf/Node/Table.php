@@ -29,6 +29,17 @@ class Table extends Container implements Listener
         
         static::addAttribute('row-height');
     }
+    
+    protected static function initializeType()
+    {
+        parent::initializeType();
+        static::setAttributeSetters(array('row-height' => 'setRowHeight'));
+    }
+    
+    public function setRowHeight($value)
+    {
+        $this->setAttributeDirectly('row-height', $this->convertUnit($value));
+    }
 
     public function add(Node $node)
     {
@@ -212,11 +223,4 @@ class Table extends Container implements Listener
             $widthOfColumn -= $marginsLeft[$columnNumber] + $marginsRight[$columnNumber];
         });
     }
-    
-//    public function format(\PHPPdf\Document $document)
-//    {
-//        $this->beforeFormat($document);
-//        $this->preFormat($document);
-//        $this->postFormat($document);
-//    }
 }

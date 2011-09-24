@@ -8,13 +8,11 @@
 
 namespace PHPPdf\Enhancement;
 
-use PHPPdf\Exception\Exception;
-
-use PHPPdf\Engine\GraphicsContext;
-
-use PHPPdf\Document;
-
 use PHPPdf\Node\Page,
+    PHPPdf\Util\UnitConverter,
+    PHPPdf\Document,
+    PHPPdf\Engine\GraphicsContext,
+    PHPPdf\Exception\Exception,
     PHPPdf\Util,
     PHPPdf\Node\Node;
 
@@ -130,7 +128,7 @@ class Background extends Enhancement
             list($x, $y) = $this->getFirstPoint($node)->toArray();
             list($endX, $endY) = $this->getDiagonalPoint($node)->toArray();
                     
-            list($width, $height) = $this->getImageDimension($image, $node);
+            list($width, $height) = $this->getImageDimension($document, $image, $node);
 
             $graphicsContext->saveGS();
             $graphicsContext->clipRectangle($x, $y, $x+$this->getWidth($node), $y-$this->getHeight($node));
@@ -189,10 +187,10 @@ class Background extends Enhancement
         }
     }
     
-    private function getImageDimension($image, Node $node)
+    private function getImageDimension(UnitConverter $converter, $image, Node $node)
     {
-        $width = $this->imageWidth;
-        $height = $this->imageHeight;
+        $width = $converter->convertUnit($this->imageWidth);
+        $height = $converter->convertUnit($this->imageHeight);
         
         if(!$width && !$height)
         {

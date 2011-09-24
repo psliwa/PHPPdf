@@ -9,7 +9,8 @@
 namespace PHPPdf;
 
 
-use PHPPdf\Node\Node,
+use PHPPdf\Util\UnitConverter,
+    PHPPdf\Node\Node,
     PHPPdf\Engine\ZF\Engine,
     PHPPdf\Formatter as Formatters,
     PHPPdf\Node\Page,
@@ -25,7 +26,7 @@ use PHPPdf\Node\Node,
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  * @todo Inject Engine object form outside
  */
-class Document
+class Document implements UnitConverter
 {   
     const DRAWING_PRIORITY_BACKGROUND1 = 60;
     const DRAWING_PRIORITY_BACKGROUND2 = 50;
@@ -47,6 +48,8 @@ class Document
     private $fontRegistry = null;
 
     private $formatters = array();
+    
+    private $unitConverter = null;
 
     public function __construct()
     {
@@ -83,6 +86,11 @@ class Document
     public function setEnhancementFactory(EnhancementFactory $enhancementFactory)
     {
         $this->enhancementFactory = $enhancementFactory;
+    }
+    
+    public function setUnitConverter(UnitConverter $converter)
+    {
+        $this->unitConverter = $converter;
     }
 
     /**
@@ -278,6 +286,26 @@ class Document
         {
             $this->setFontDefinition($name, $definition);
         }
+    }
+    
+    public function convertUnit($value)
+    {
+        if($this->unitConverter)
+        {
+            return $this->unitConverter->convertUnit($value);
+        }
+        
+        return $value;
+    }
+    
+    public function convertPercentageValue($value, $width)
+    {
+        if($this->unitConverter)
+        {
+            return $this->unitConverter->convertPercentageValue($value, $width);
+        }
+        
+        return $value;
     }
 
     /**

@@ -8,6 +8,8 @@
 
 namespace PHPPdf\Configuration;
 
+use PHPPdf\Util\UnitConverterImpl;
+
 use PHPPdf\Parser\FontRegistryParser,
     PHPPdf\Parser\EnhancementFactoryParser,
     PHPPdf\Parser\NodeFactoryParser,
@@ -26,6 +28,8 @@ class LoaderImpl implements Loader
     private $enhancementFactory;
     private $nodeFactory;
     private $fontRegistry;
+    
+    private $unitConverter;
     
     private $cache;
     
@@ -93,9 +97,14 @@ class LoaderImpl implements Loader
     {
         $file = $this->nodeFile;
 
-        $doLoadNodes = function($content)
+        $unitConverter = $this->unitConverter;
+        $doLoadNodes = function($content) use($unitConverter)
         {
             $nodeFactoryParser = new NodeFactoryParser();
+            if($unitConverter)
+            {
+                $nodeFactoryParser->setUnitConverter($unitConverter);
+            }
 
             $nodeFactory = $nodeFactoryParser->parse($content);
 
@@ -171,5 +180,15 @@ class LoaderImpl implements Loader
         };
 
         return $this->getFromCacheOrCallClosure($file, $doLoadFonts);
-    }   
+    }
+    
+    public function createUnitConverter()
+    {
+        if($this->unitConverter === null)
+        {
+            $this->unitConverter = new UnitConverterImpl();
+        }
+        
+        return $this->unitConverter;
+    }
 }

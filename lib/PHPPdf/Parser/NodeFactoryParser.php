@@ -8,6 +8,8 @@
 
 namespace PHPPdf\Parser;
 
+use PHPPdf\Util\UnitConverter;
+
 use PHPPdf\Node\Factory as NodeFactory,
     PHPPdf\Parser\Exception\ParseException;
 
@@ -35,10 +37,17 @@ class NodeFactoryParser extends XmlParser
     private $currentArg = null;
     
     private $lastTag = null;
+    
+    private $unitConverter = null;
 
     public function __construct()
     {
         $this->stylesheetParser = new StylesheetParser();
+    }
+    
+    public function setUnitConverter(UnitConverter $converter)
+    {
+        $this->unitConverter = $converter;
     }
     
     protected function reset()
@@ -102,6 +111,10 @@ class NodeFactoryParser extends XmlParser
         }
 
         $node = new $class();
+        if($this->unitConverter)
+        {
+            $node->setUnitConverter($this->unitConverter);
+        }
         $root->addPrototype($name, $node);
 
         $this->pushOnStack($node);

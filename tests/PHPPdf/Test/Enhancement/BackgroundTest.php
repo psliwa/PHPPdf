@@ -26,7 +26,9 @@ class BackgroundTest extends \PHPPdf\PHPUnit\Framework\TestCase
     public function setUp()
     {
         $this->imagePath = TEST_RESOURCES_DIR.'/domek-min.jpg';
-        $this->document = new Document();
+        $this->document = $this->getMockBuilder('PHPPdf\Document')
+                               ->setMethods(array('convertUnit'))
+                               ->getMock();
     }
 
     /**
@@ -89,7 +91,7 @@ class BackgroundTest extends \PHPPdf\PHPUnit\Framework\TestCase
     private function createDocumentMock($imagePath, $image)
     {
         $document = $this->getMockBuilder('PHPPdf\Document')
-                         ->setMethods(array('createImage'))
+                         ->setMethods(array('createImage', 'convertUnit'))
                          ->getMock();
         $document->expects($this->once())
                  ->method('createImage')
@@ -349,8 +351,18 @@ class BackgroundTest extends \PHPPdf\PHPUnit\Framework\TestCase
         $x = 0;
         $y = $nodeHeight;
 
+        $width = rand(10, 50);
+        $height = rand(10, 50);
         
-        $enhancement = new Background(null, $imagePath, Background::REPEAT_NONE, null, false, $imageWidth, $imageHeight);
+        $document->expects($this->at(1))
+                 ->method('convertUnit')
+                 ->with($width)
+                 ->will($this->returnValue($imageWidth));
+        $document->expects($this->at(2))
+                 ->method('convertUnit')
+                 ->with($height)
+                 ->will($this->returnValue($imageHeight));
+        $enhancement = new Background(null, $imagePath, Background::REPEAT_NONE, null, false, $width, $height);
         
         $gcMock = $this->getMockBuilder('PHPPdf\Engine\GraphicsContext')
         			   ->getMock();

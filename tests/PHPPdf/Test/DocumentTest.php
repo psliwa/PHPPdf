@@ -183,4 +183,34 @@ class DocumentTest extends \PHPPdf\PHPUnit\Framework\TestCase
             array('UnexistedClass'),
         );
     }
+    
+    /**
+     * @test
+     */
+    public function useUnitConverterForConversions()
+    {
+        $unitConverter = $this->getMockBuilder('PHPPdf\Util\UnitConverter')
+                              ->getMock();
+                              
+        $this->document->setUnitConverter($unitConverter);
+        
+        $actualUnit = '12px';
+        $expectedUnit = 123;
+        $actualPercent = '10%';
+        $width = 120;
+        $expectedPercent = 10;
+        
+        $unitConverter->expects($this->at(0))
+                      ->method('convertUnit')
+                      ->with($actualUnit)
+                      ->will($this->returnValue($expectedUnit));
+                      
+        $unitConverter->expects($this->at(1))
+                      ->method('convertPercentageValue')
+                      ->with($actualPercent, $width)
+                      ->will($this->returnValue($expectedPercent));
+                      
+        $this->assertEquals($expectedUnit, $this->document->convertUnit($actualUnit));
+        $this->assertEquals($expectedPercent, $this->document->convertPercentageValue($actualPercent, $width));
+    }
 }

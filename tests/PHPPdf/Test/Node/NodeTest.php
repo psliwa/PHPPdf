@@ -627,4 +627,32 @@ class NodeTest extends \PHPPdf\PHPUnit\Framework\TestCase
             array(Node::ROTATE_OPPOSITE_DIAGONALLY, 100, 100, -pi()/4),
         );
     }
+    
+    /**
+     * @test
+     */
+    public function useUnitConverterToSetAttributes()
+    {
+        $converter = $this->getMockBuilder('PHPPdf\Util\UnitConverter')
+                         ->getMock();
+        $actual = '12px';
+        $expected = 123;
+
+        $converter->expects($this->at(0))
+                  ->method('convertUnit')
+                  ->with($actual)
+                  ->will($this->returnValue($expected));
+        $converter->expects($this->at(1))
+                  ->method('convertUnit')
+                  ->with($actual)
+                  ->will($this->returnValue($expected));
+                         
+        $this->node->setUnitConverter($converter);
+        
+        $this->node->setAttribute('line-height', $actual);
+        $this->node->setAttribute('padding-left', $actual);
+        
+        $this->assertEquals($expected, $this->node->getAttribute('line-height'));
+        $this->assertEquals($expected, $this->node->getAttribute('padding-left'));
+    }
 }

@@ -118,6 +118,12 @@ class Facade
     {
         $enhancementFactory = $this->configurationLoader->createEnhancementFactory();
         
+        $unitConverter = $this->configurationLoader->createUnitConverter();
+        if($unitConverter)
+        {
+            $this->getDocument()->setUnitConverter($unitConverter);
+        }
+        
         $this->getDocument()->setEnhancementFactory($enhancementFactory);
         $fontDefinitions = $this->configurationLoader->createFontRegistry();
         $this->getDocument()->addFontDefinitions($fontDefinitions);

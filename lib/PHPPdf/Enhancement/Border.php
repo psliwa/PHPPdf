@@ -11,6 +11,7 @@ namespace PHPPdf\Enhancement;
 use PHPPdf\Node\Page,
     PHPPdf\Node\Node,
     PHPPdf\Util\Boundary,
+    PHPPdf\Util\UnitConverter,
     PHPPdf\Engine\GraphicsContext,
     PHPPdf\Document;
 
@@ -102,10 +103,11 @@ class Border extends Enhancement
     protected function doEnhance($graphicsContext, Node $node, Document $document)
     {
         $graphicsContext->setLineDashingPattern($this->style);
-        $graphicsContext->setLineWidth($this->size);
+        $size = $document->convertUnit($this->size);
+        $graphicsContext->setLineWidth($size);
         $boundary = $node->getBoundary();
 
-        $points = $this->getPointsWithPositionCorrection($boundary);
+        $points = $this->getPointsWithPositionCorrection($document, $boundary);
 
         if($this->getRadius() !== null)
         {
@@ -116,11 +118,11 @@ class Border extends Enhancement
         }
         elseif($this->type == self::TYPE_ALL)
         {
-            $this->drawBoundary($graphicsContext, $points, GraphicsContext::SHAPE_DRAW_STROKE, $this->size/2);
+            $this->drawBoundary($graphicsContext, $points, GraphicsContext::SHAPE_DRAW_STROKE, $size/2);
         }
         else
         {
-            $halfSize = $this->size/2;
+            $halfSize = $size/2;
             foreach(array(self::TYPE_TOP, self::TYPE_RIGHT, self::TYPE_BOTTOM, self::TYPE_LEFT) as $type)
             {
                 if($this->type & $type)
@@ -139,19 +141,21 @@ class Border extends Enhancement
         }
     }
 
-    private function getPointsWithPositionCorrection(Boundary $boundary)
+    private function getPointsWithPositionCorrection(UnitConverter $converter, Boundary $boundary)
     {
         $points = array();
 
         $xSignMatrix = array(-1, 1, 1, -1, -1);
         $ySignMatrix = array(1, 1, -1, -1, 1);
+        
+        $position = $converter->convertUnit($this->position);
 
         foreach($boundary->getPoints() as $index => $point)
         {
             $xSign = isset($xSignMatrix[$index]) ? $xSignMatrix[$index] : 1;
             $ySign = isset($ySignMatrix[$index]) ? $ySignMatrix[$index] : 1;
 
-            $points[$index] = array($point->getX() + $this->position*$xSign, $point->getY() + $this->position*$ySign);
+            $points[$index] = array($point->getX() + $position*$xSign, $point->getY() + $position*$ySign);
         }
 
         return $points;

@@ -8,6 +8,8 @@
 
 namespace PHPPdf\Node;
 
+use PHPPdf\Util\UnitConverter;
+
 use PHPPdf\Exception\UnregisteredNodeException;
 
 /**
@@ -94,7 +96,7 @@ class Factory implements \Serializable
                 $product->$methodName($arg);
             }
         }
-        
+
         return $product;
     }
 

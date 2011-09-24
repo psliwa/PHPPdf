@@ -30,15 +30,25 @@ class LoaderImpl extends BaseLoader
     
     protected function loadNodes()
     {
+        return $this->getContainer()->get('phppdf.node_factory');
+    }
+    
+    private function getContainer()
+    {
         if(!$this->container)
         {
             $container = new ContainerBuilder();    
             $extension = new Extension();
             $extension->load(array(), $container);
-
-            $this->container = $container;           
+            
+            $this->container = $container;
         }
+        
+        return $this->container;
+    }
 
-        return $this->container->get('phppdf.node_factory');
+    public function createUnitConverter()
+    {
+        return $this->getContainer()->get('phppdf.unit_converter');
     }
 }
