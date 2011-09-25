@@ -20,31 +20,42 @@ use PHPPdf\Exception\InvalidResourceException,
 class Image implements BaseImage
 {
     private $zendImage;
+    private $path;
+    private $width;
+    private $height;
+    private $type;
     
     public function __construct($path)
     {
+        $this->path = $path;
+        
+        if(!$this->pathExists($path) || ($data = @getimagesize($path)) === false)
+        {
+            InvalidResourceException::invalidImageException($path);
+        }
+        
+        $this->width = $data[0];
+        $this->height = $data[1];
+        $this->type = $data[2];
+    }
+    
+    private function createImage($path)
+    {
         try
-        {            
-            if(!$this->pathExists($path) || ($data = @getimagesize($path)) === false)
-            {
-                InvalidResourceException::invalidImageException($path);
-            }
-            
-            $imageType = $data[2];
+        {
+            $imageType = $this->type;
             
             if($imageType === IMAGETYPE_JPEG || $imageType === IMAGETYPE_JPEG2000)
             {
-                $this->zendImage = new \Zend_Pdf_Resource_Image_Jpeg($path);
+                return new \Zend_Pdf_Resource_Image_Jpeg($path);
             }
             elseif($imageType === IMAGETYPE_PNG)
             {
-//                echo 1;exit();
-                $this->zendImage = new Png($path);
+                return new Png($path);
             }
             elseif($imageType === IMAGETYPE_TIFF_II || $imageType === IMAGETYPE_TIFF_MM)
             {
-//                echo 2;exit();
-                $this->zendImage = new Tiff($path);
+                return new Tiff($path);
             }
             else
             {
@@ -79,12 +90,12 @@ class Image implements BaseImage
     
     public function getOriginalHeight()
     {
-        return $this->zendImage->getPixelHeight();
+        return $this->getWrappedImage()->getPixelHeight();
     }
     
     public function getOriginalWidth()
     {
-        return $this->zendImage->getPixelWidth();
+        return $this->getWrappedImage()->getPixelWidth();
     }
     
     /**
@@ -94,6 +105,12 @@ class Image implements BaseImage
      */
     public function getWrappedImage()
     {
+        if(!$this->zendImage)
+        {
+            $this->zendImage = $this->createImage($this->path);
+            $this->path = null;
+        }
+
         return $this->zendImage;
     }
 }

@@ -340,5 +340,6 @@ class Png extends \Zend_Pdf_Resource_Image_Png
     private function close()
     {
         $this->stream->close();
+        $this->stream = null;
     }
 }

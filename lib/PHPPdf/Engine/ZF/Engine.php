@@ -32,21 +32,19 @@ class Engine implements BaseEngine
     
     public function __construct(\Zend_Pdf $zendPdf = null)
     {
-        $this->zendPdf = $zendPdf ? : new \Zend_Pdf();
+        $this->zendPdf = $zendPdf;
     }
     
     public function createGraphicsContext($graphicsContextSize)
     {
-        $page = new \Zend_Pdf_Page($graphicsContextSize);
-        
-        $gc = new GraphicsContext($this, $page);
+        $gc = new GraphicsContext($this, $graphicsContextSize);
         
         return $gc;
     }
     
     public function attachGraphicsContext(BaseGraphicsContext $gc)
     {
-        $this->zendPdf->pages[] = $gc->getPage();
+        $this->getZendPdf()->pages[] = $gc->getPage();
         $this->graphicsContexts[] = $gc;
     }
     
@@ -95,14 +93,14 @@ class Engine implements BaseEngine
     
     public function render()
     {
-        $this->zendPdf->properties['Producer'] = sprintf('PHPPdf %s', \PHPPdf\Version::VERSION);
+        $this->getZendPdf()->properties['Producer'] = sprintf('PHPPdf %s', \PHPPdf\Version::VERSION);
         
         foreach($this->graphicsContexts as $gc)
         {
             $gc->commit();
         }
 
-        return $this->zendPdf->render();
+        return $this->getZendPdf()->render();
     }
     
     /**
@@ -110,6 +108,11 @@ class Engine implements BaseEngine
      */
     public function getZendPdf()
     {
+        if(!$this->zendPdf)
+        {
+            $this->zendPdf = new \Zend_Pdf();
+        }
+        
         return $this->zendPdf;
     }
     
@@ -173,19 +176,19 @@ class Engine implements BaseEngine
         {
             case 'Trapped':
                 $value = $value === 'null' ? null : Util::convertBooleanValue($value);
-                $this->zendPdf->properties[$name] = $value;
+                $this->getZendPdf()->properties[$name] = $value;
                 break;
             case 'CreationDate':
             case 'ModDate':
                 $value = \Zend_Pdf::pdfDate(strtotime($value));
-                $this->zendPdf->properties[$name] = $value;
+                $this->getZendPdf()->properties[$name] = $value;
                 break;
             case 'Title':
             case 'Author':
             case 'Subject':
             case 'Keywords':
             case 'Creator':
-                $this->zendPdf->properties[$name] = $value;
+                $this->getZendPdf()->properties[$name] = $value;
                 break;
         }
     }

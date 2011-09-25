@@ -85,10 +85,7 @@ class Container extends Node
         foreach($this->children as $node)
         {
             $childTasks = $node->getOrderedDrawingTasks($document);
-            foreach($childTasks as $task)
-            {
-                $tasks[] = $task;
-            }
+            $tasks = array_merge($tasks, $childTasks);
         }
         
         return $tasks;

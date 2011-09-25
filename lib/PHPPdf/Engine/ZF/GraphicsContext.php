@@ -47,12 +47,21 @@ class GraphicsContext implements BaseGraphicsContext
      */
     private $page;
     
+    private $pageSize;
+    
     private $methodInvocationsQueue = array();
 
-    public function __construct(Engine $engine, \Zend_Pdf_Page $page)
+    public function __construct(Engine $engine, $pageOrPageSize)
     {
         $this->engine = $engine;
-        $this->page = $page;
+        if($pageOrPageSize instanceof \Zend_Pdf_Page)
+        {
+            $this->page = $pageOrPageSize;
+        }
+        else
+        {
+            $this->pageSize = $pageOrPageSize;
+        }
     }
     
     public function commit()
@@ -68,12 +77,12 @@ class GraphicsContext implements BaseGraphicsContext
 
     public function getWidth()
     {
-        return $this->page->getWidth();
+        return $this->getPage()->getWidth();
     }
 
     public function getHeight()
     {
-        return $this->page->getHeight();
+        return $this->getPage()->getHeight();
     }
 
     public function clipRectangle($x1, $y1, $x2, $y2)
@@ -88,7 +97,7 @@ class GraphicsContext implements BaseGraphicsContext
     
     protected function doClipRectangle($x1, $y1, $x2, $y2)
     {
-        $this->page->clipRectangle($x1, $y1, $x2, $y2);
+        $this->getPage()->clipRectangle($x1, $y1, $x2, $y2);
     }
 
     public function saveGS()
@@ -98,7 +107,7 @@ class GraphicsContext implements BaseGraphicsContext
     
     protected function doSaveGS()
     {
-        $this->page->saveGS();
+        $this->getPage()->saveGS();
         $this->memento = $this->state;
     }
 
@@ -109,7 +118,7 @@ class GraphicsContext implements BaseGraphicsContext
     
     protected function doRestoreGS()
     {
-        $this->page->restoreGS();
+        $this->getPage()->restoreGS();
         $this->state = $this->memento;
         $this->memento = self::$originalState;
     }
@@ -121,7 +130,8 @@ class GraphicsContext implements BaseGraphicsContext
     
     protected function doDrawImage(BaseImage $image, $x1, $y1, $x2, $y2)
     {
-        $this->page->drawImage($image->getWrappedImage(), $x1, $y1, $x2, $y2);
+        $zendImage = $image->getWrappedImage();
+        $this->getPage()->drawImage($zendImage, $x1, $y1, $x2, $y2);
     }
 
     public function drawLine($x1, $y1, $x2, $y2)
@@ -131,7 +141,7 @@ class GraphicsContext implements BaseGraphicsContext
     
     protected function doDrawLine($x1, $y1, $x2, $y2)
     {
-        $this->page->drawLine($x1, $y1, $x2, $y2);
+        $this->getPage()->drawLine($x1, $y1, $x2, $y2);
     }
 
     public function setFont(BaseFont $font, $size)
@@ -142,7 +152,7 @@ class GraphicsContext implements BaseGraphicsContext
     
     protected function doSetFont($fontResource, $size)
     {
-        $this->page->setFont($fontResource, $size);
+        $this->getPage()->setFont($fontResource, $size);
     }
 
     public function setFillColor($colorData)
@@ -155,7 +165,7 @@ class GraphicsContext implements BaseGraphicsContext
         $color = $this->getColor($colorData);
         if(!$this->state['fillColor'] || $color->getComponents() !== $this->state['fillColor']->getComponents())
         {
-            $this->page->setFillColor($color->getWrappedColor());
+            $this->getPage()->setFillColor($color->getWrappedColor());
             $this->state['fillColor'] = $color;
         }
     }
@@ -185,7 +195,7 @@ class GraphicsContext implements BaseGraphicsContext
         $color = $this->getColor($colorData);
         if(!$this->state['lineColor'] || $color->getComponents() !== $this->state['lineColor']->getComponents())
         {
-            $this->page->setLineColor($color->getWrappedColor());
+            $this->getPage()->setLineColor($color->getWrappedColor());
             $this->state['lineColor'] = $color;
         }
     }
@@ -197,7 +207,7 @@ class GraphicsContext implements BaseGraphicsContext
     
     protected function doDrawPolygon(array $x, array $y, $type)
     {
-        $this->page->drawPolygon($x, $y, $type);
+        $this->getPage()->drawPolygon($x, $y, $type);
     }
 
     public function drawText($text, $x, $y, $encoding, $wordSpacing = 0, $fillType = self::SHAPE_DRAW_FILL)
@@ -211,7 +221,7 @@ class GraphicsContext implements BaseGraphicsContext
         {
             if($wordSpacing == 0 && $fillType == self::SHAPE_DRAW_FILL)
             {
-                $this->page->drawText($text, $x, $y, $encoding);
+                $this->getPage()->drawText($text, $x, $y, $encoding);
             }
             else
             {
@@ -226,7 +236,7 @@ class GraphicsContext implements BaseGraphicsContext
     
     private function richDrawText($text, $x, $y, $encoding, $wordSpacing, $fillType)
     {
-        if($this->page->getFont() === null) 
+        if($this->getPage()->getFont() === null) 
         {
             throw new \Zend_Pdf_Exception('Font has not been set');
         }
@@ -246,12 +256,12 @@ class GraphicsContext implements BaseGraphicsContext
         
         $data = $this->getDataForTextDrawing($text, $x, $y, $encoding, $wordSpacing, $pdfFillType);
 
-        $this->page->rawWrite($data, 'Text');
+        $this->getPage()->rawWrite($data, 'Text');
     }
     
     private function getDataForTextDrawing($text, $x, $y, $encoding, $wordSpacing, $fillType)
     {
-        $font = $this->page->getFont();
+        $font = $this->getPage()->getFont();
         
         $xObj = new \Zend_Pdf_Element_Numeric($x);
         $yObj = new \Zend_Pdf_Element_Numeric($y);
@@ -302,11 +312,19 @@ class GraphicsContext implements BaseGraphicsContext
 
     public function __clone()
     {
-        $this->page = clone $this->page;
+        if($this->page)
+        {
+            $this->page = clone $this->getPage();
+        }
     }
 
     public function getPage()
     {
+        if(!$this->page)
+        {
+            $this->page = new \Zend_Pdf_Page($this->pageSize);
+            $this->pageSize = null;
+        }
         return $this->page;
     }
 
@@ -317,7 +335,7 @@ class GraphicsContext implements BaseGraphicsContext
     
     protected function doDrawRoundedRectangle($x1, $y1, $x2, $y2, $radius, $fillType = self::SHAPE_DRAW_FILL_AND_STROKE)
     {
-        $this->page->drawRoundedRectangle($x1, $y1, $x2, $y2, $radius, $this->translateFillType($fillType));
+        $this->getPage()->drawRoundedRectangle($x1, $y1, $x2, $y2, $radius, $this->translateFillType($fillType));
     }
     
     private function translateFillType($fillType)
@@ -344,7 +362,7 @@ class GraphicsContext implements BaseGraphicsContext
     {
         if(!$this->state['lineWidth'] || $this->state['lineWidth'] != $width)
         {
-            $this->page->setLineWidth($width);
+            $this->getPage()->setLineWidth($width);
             $this->state['lineWidth'] = $width;
         }
     }
@@ -365,7 +383,7 @@ class GraphicsContext implements BaseGraphicsContext
         
         if($this->state['lineDashingPattern'] === null || $this->state['lineDashingPattern'] !== $pattern)
         {
-            $this->page->setLineDashingPattern($pattern);
+            $this->getPage()->setLineDashingPattern($pattern);
             $this->state['lineDashingPattern'] = $pattern;
         }
     }
@@ -383,7 +401,7 @@ class GraphicsContext implements BaseGraphicsContext
             
             $annotation = $this->createAnnotationLink($x1, $y1, $x2, $y2, $uriAction);
             
-            $this->page->attachAnnotation($annotation);
+            $this->getPage()->attachAnnotation($annotation);
         }
         catch(\Zend_Pdf_Exception $e)
         {
@@ -404,7 +422,7 @@ class GraphicsContext implements BaseGraphicsContext
             
             $annotation = $this->createAnnotationLink($x1, $y1, $x2, $y2, $destination);
             
-            $this->page->attachAnnotation($annotation);
+            $this->getPage()->attachAnnotation($annotation);
         }
         catch(\Zend_Pdf_Exception $e)
         {
@@ -475,7 +493,7 @@ class GraphicsContext implements BaseGraphicsContext
     protected function doAttachStickyNote($x1, $y1, $x2, $y2, $text)
     {
         $annotation = \Zend_Pdf_Annotation_Text::create($x1, $y1, $x2, $y2, $text);
-        $this->page->attachAnnotation($annotation);
+        $this->getPage()->attachAnnotation($annotation);
     }
     
     public function setAlpha($alpha)
@@ -487,7 +505,7 @@ class GraphicsContext implements BaseGraphicsContext
     {
         if($this->state['alpha'] != $alpha)
         {
-            $this->page->setAlpha($alpha);
+            $this->getPage()->setAlpha($alpha);
             $this->state['alpha'] = $alpha;
         }
     }
@@ -500,14 +518,17 @@ class GraphicsContext implements BaseGraphicsContext
     
     protected function doRotate($x, $y, $angle)
     {
-        $this->page->rotate($x, $y, $angle);
+        $this->getPage()->rotate($x, $y, $angle);
     }
     
     public function copy()
     {
         $this->commit();
         $gc = clone $this;
-        $gc->page = clone $this->page;
+        if($this->page)
+        {
+            $gc->page = clone $this->getPage();
+        }
         
         return $gc;
     }
