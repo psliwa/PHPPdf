@@ -8,6 +8,7 @@
 
 namespace PHPPdf\Node\Paragraph;
 
+use PHPPdf\Util\DrawingTaskHeap;
 use PHPPdf\Node\Node,
     PHPPdf\Util\DrawingTask,
     PHPPdf\Document,
@@ -72,9 +73,9 @@ class LinePart implements Drawable
         $this->wordSpacing = $wordSpacing;
     }
     
-    public function getOrderedDrawingTasks(Document $document)
+    public function getOrderedDrawingTasks(Document $document, DrawingTaskHeap $tasks)
     {
-        return array(new DrawingTask(function(Text $text, $point, $words, $width, $document, $linePartWordSpacing) {
+        $tasks->insert(new DrawingTask(function(Text $text, $point, $words, $width, $document, $linePartWordSpacing) {
             $gc = $text->getGraphicsContext();
             $gc->saveGS();
             $fontSize = $text->getFontSizeRecursively();
@@ -145,14 +146,12 @@ class LinePart implements Drawable
         }, array($this->text, $this->getFirstPoint(), $this->words, $this->width, $document, $this->wordSpacing)));
     }
     
-    public function getUnorderedDrawingTasks(Document $document)
+    public function getUnorderedDrawingTasks(Document $document, DrawingTaskHeap $tasks)
     {
-        return array();
     }
     
-    public function getPostDrawingTasks(Document $document)
+    public function getPostDrawingTasks(Document $document, DrawingTaskHeap $tasks)
     {
-        return array();
     }
     
     public function getFirstPoint()

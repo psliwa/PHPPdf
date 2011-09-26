@@ -9,6 +9,8 @@
 namespace PHPPdf;
 
 
+use PHPPdf\Util\DrawingTaskHeap;
+
 use PHPPdf\Util\UnitConverter,
     PHPPdf\Node\Node,
     PHPPdf\Engine\ZF\Engine,
@@ -162,21 +164,23 @@ class Document implements UnitConverter
 
         $pageCollection->format($this);
 
-        $this->invokeTasks($pageCollection->getOrderedDrawingTasks($this));
-        $this->invokeTasks($pageCollection->getUnorderedDrawingTasks($this));
-        $this->invokeTasks($pageCollection->getPostDrawingTasks($this));
+        $tasks = new DrawingTaskHeap();
+        $pageCollection->getOrderedDrawingTasks($this, $tasks);
+        $pageCollection->getUnorderedDrawingTasks($this, $tasks);
+        $pageCollection->getPostDrawingTasks($this, $tasks);
+        $this->invokeTasks($tasks);
     }
 
-    public function invokeTasks(array $tasks)
+    public function invokeTasks($tasks)
     {
         //SplPriorityQueue and SplMaxHeap arent't deterministic for elements with the same priority - inserting order isn't queue order
-        $heap = new \PHPPdf\Util\DrawingTaskHeap();
-        foreach($tasks as $task)
-        {
-            $heap->insert($task);
-        }
+//        $heap = new \PHPPdf\Util\DrawingTaskHeap();
+//        foreach($tasks as $task)
+//        {
+//            $heap->insert($task);
+//        }
         
-        foreach($heap as $task)
+        foreach($tasks as $task)
         {
             $task->invoke();
         }

@@ -8,6 +8,8 @@
 
 namespace PHPPdf\Node;
 
+use PHPPdf\Util\DrawingTaskHeap;
+
 use PHPPdf\Document,
     PHPPdf\Node\Paragraph\Line;
 
@@ -99,7 +101,7 @@ class Paragraph extends Container
         return $this->lines;
     }
     
-    public function getOrderedDrawingTasks(Document $document)
+    public function getOrderedDrawingTasks(Document $document, DrawingTaskHeap $tasks)
     {
         $lastIndex = count($this->lines) - 1;
         foreach($this->lines as $i => $line)
@@ -107,24 +109,18 @@ class Paragraph extends Container
             $line->format($i != $lastIndex);
         }
         
-        $tasks = array();
-        
         foreach($this->getChildren() as $text)
         {
-            $lineTasks = $text->getOrderedDrawingTasks($document);
-            foreach($lineTasks as $task)
-            {
-                $tasks[] = $task;
-            }
+            $text->getOrderedDrawingTasks($document, $tasks);
         }
         
-        $tasks = array_merge($tasks, $this->getDrawingTasksFromEnhancements($document));
+        $this->getDrawingTasksFromEnhancements($document, $tasks);
         
         if($this->getAttribute('dump'))
         {
-            $tasks[] = $this->createDumpTask();
+            $tasks->insert($this->createDumpTask());
         }
-        
+
         return $tasks;
     }
     

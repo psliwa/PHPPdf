@@ -8,6 +8,8 @@
 
 namespace PHPPdf\Node\Runtime;
 
+use PHPPdf\Util\DrawingTaskHeap;
+
 use PHPPdf\Node\Text,
     PHPPdf\Node\Runtime,
     PHPPdf\Node\Page,
@@ -74,27 +76,24 @@ abstract class PageText extends Text implements Runtime
         $this->setText($text);
     }
 
-    protected function preDraw(Document $document)
+    protected function preDraw(Document $document, DrawingTaskHeap $tasks)
     {
         if($this->evaluated)
         {
-            return parent::preDraw($document);
+            parent::preDraw($document, $tasks);
         }
-        
-        return array();
     }
 
-    protected function doDraw(Document $document)
+    protected function doDraw(Document $document, DrawingTaskHeap $tasks)
     {
         if($this->evaluated)
         {
-            return parent::doDraw($document);
+            parent::doDraw($document, $tasks);
         }
         else
         {
             $page = $this->getPage();
             $page->markAsRuntimeNode($this);
-            return array();
         }
     }
 

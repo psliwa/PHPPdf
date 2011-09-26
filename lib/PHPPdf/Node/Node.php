@@ -8,6 +8,8 @@
 
 namespace PHPPdf\Node;
 
+use PHPPdf\Util\DrawingTaskHeap;
+
 use PHPPdf\Util\UnitConverter;
 
 use PHPPdf\Document,
@@ -1058,11 +1060,17 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
      *
      * @return array Array of PHPPdf\Util\DrawingTask objects
      */
-    public function getOrderedDrawingTasks(Document $document)
+    public function getOrderedDrawingTasks(Document $document, DrawingTaskHeap $tasks)
     {
         try
-        {            
-            return array_merge($this->preDraw($document), $this->doDraw($document), $this->postDraw($document));
+        {
+            $this->preDraw($document, $tasks);            
+            $this->doDraw($document, $tasks);
+            $this->postDraw($document, $tasks);
+//            foreach($this->postDraw($document) as $task)
+//            {
+//                $tasks->insert($task);
+//            }
         }
         catch(\Exception $e)
         {
@@ -1070,18 +1078,15 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
         }
     }
     
-    public function getPostDrawingTasks(Document $document)
+    public function getPostDrawingTasks(Document $document, DrawingTaskHeap $tasks)
     {
-        return array();
     }
     
-    public function getUnorderedDrawingTasks(Document $document)
+    public function getUnorderedDrawingTasks(Document $document, DrawingTaskHeap $tasks)
     {
-        $tasks = array();
-        
         foreach($this->getChildren() as $node)
         {
-            $tasks = array_merge($tasks, $node->getUnorderedDrawingTasks($document));
+            $node->getUnorderedDrawingTasks($document, $tasks);
         }
         
         foreach($this->behaviours as $behaviour)
@@ -1090,31 +1095,25 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
                 $behaviour->attach($node->getGraphicsContext(), $node);
             };
             $args = array($behaviour, $this);
-            $tasks[] = new DrawingTask($callback, $args);
+            $tasks->insert(new DrawingTask($callback, $args));
         }
-        
-        return $tasks;
     }
 
-    protected function preDraw(Document $document)
+    protected function preDraw(Document $document, DrawingTaskHeap $tasks)
     {
-        return $this->getDrawingTasksFromEnhancements($document);
+        $this->getDrawingTasksFromEnhancements($document, $tasks);
     }
     
-    protected function getDrawingTasksFromEnhancements(Document $document)
+    protected function getDrawingTasksFromEnhancements(Document $document, DrawingTaskHeap $tasks)
     {
-        $tasks = array();
-        
         $enhancements = $document->getEnhancements($this->enhancementBag);
         foreach($enhancements as $enhancement)
         {
             $callback = array($enhancement, 'enhance');
             $args = array($this, $document);
             $priority = $enhancement->getPriority() + $this->getPriority();
-            $tasks[] = new DrawingTask($callback, $args, $priority);
+            $tasks->insert(new DrawingTask($callback, $args, $priority));
         }
-        
-        return $tasks;
     }
 
     public function getPriority()
@@ -1138,19 +1137,16 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
         }
     }
 
-    protected function doDraw(Document $document)
+    protected function doDraw(Document $document, DrawingTaskHeap $tasks)
     {
-        return array();
     }
 
-    protected function postDraw(Document $document)
+    protected function postDraw(Document $document, DrawingTaskHeap $tasks)
     {
         if($this->getAttribute('dump'))
         {
-            return array($this->createDumpTask());
+            $tasks->insert($this->createDumpTask());
         }
-        
-        return array();
     }
     
     protected function createDumpTask()

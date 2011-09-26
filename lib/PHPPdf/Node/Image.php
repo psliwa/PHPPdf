@@ -8,6 +8,8 @@
 
 namespace PHPPdf\Node;
 
+use PHPPdf\Util\DrawingTaskHeap;
+
 use PHPPdf\Document,
     PHPPdf\Util\DrawingTask,
     PHPPdf\Node\Node;
@@ -26,7 +28,7 @@ class Image extends Node
         static::addAttribute('src');
     }
     
-    protected function doDraw(Document $document)
+    protected function doDraw(Document $document, DrawingTaskHeap $tasks)
     {
         $callback = function($node)
         {
@@ -61,7 +63,7 @@ class Image extends Node
         
         $drawingTask = new DrawingTask($callback, array($this));
 
-        return array($drawingTask);
+        $tasks->insert($drawingTask);
     }
 
     protected function beforeFormat(Document $document)

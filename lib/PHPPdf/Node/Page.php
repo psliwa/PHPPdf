@@ -8,6 +8,8 @@
 
 namespace PHPPdf\Node;
 
+use PHPPdf\Util\DrawingTaskHeap;
+
 use PHPPdf\Document,
     PHPPdf\Util\DrawingTask,
     PHPPdf\Util\UnitConverter,
@@ -138,39 +140,30 @@ class Page extends Container
         return $this;
     }
 
-    protected function doDraw(Document $document)
+    protected function doDraw(Document $document, DrawingTaskHeap $tasks)
     {
         $this->prepareGraphicsContext($document);
 
         $document->attachGraphicsContext($this->getGraphicsContext());
-
-        $tasks = array();
-        
+       
         if(!$this->preparedTemplate)
         {
-            $tasks = $this->getTemplateDrawingTasksAndFormatPlaceholders($document);
+            foreach($this->getTemplateDrawingTasksAndFormatPlaceholders($document) as $task)
+            {
+                $tasks->insert($task);
+            }
         }
         
-        $originalTasks = parent::doDraw($document);
-
-        $tasks = array_merge($tasks, $originalTasks);
-        
-        return $tasks;
+        parent::doDraw($document, $tasks);
     }
 
-    public function getPostDrawingTasks(Document $document)
+    public function getPostDrawingTasks(Document $document, DrawingTaskHeap $tasks)
     {
-        $tasks = array();
-        
         foreach($this->runtimeNodes as $node)
         {
             $node->evaluate();
-            $runtimeTasks = $node->getOrderedDrawingTasks($document);
-
-            $tasks = array_merge($tasks, $runtimeTasks);
+            $node->getOrderedDrawingTasks($document, $tasks);
         }
-        
-        return $tasks;
     }
     
     private function prepareGraphicsContext(Document $document)
@@ -444,10 +437,13 @@ class Page extends Container
         $this->getFooter()->format($document);
         $this->getWatermark()->format($document);
 
-        $tasks = array();
+        $tasks = new DrawingTaskHeap();
 
-        $tasks = array_merge($this->getDrawingTasksFromEnhancements($document), $this->footer->getOrderedDrawingTasks($document), $this->header->getOrderedDrawingTasks($document), $this->watermark->getOrderedDrawingTasks($document));
-
+        $this->getDrawingTasksFromEnhancements($document, $tasks);
+        $this->footer->getOrderedDrawingTasks($document, $tasks);
+        $this->header->getOrderedDrawingTasks($document, $tasks);
+        $this->watermark->getOrderedDrawingTasks($document, $tasks);
+        
         $this->footer->removeAll();
         $this->header->removeAll();
         $this->watermark->removeAll();
@@ -455,9 +451,8 @@ class Page extends Container
         return $tasks;
     }
     
-    protected function preDraw(Document $document)
+    protected function preDraw(Document $document, DrawingTaskHeap $tasks)
     {
-        return array();
     }
 
     private function formatConvertAttributes(Document $document)

@@ -8,6 +8,8 @@
 
 namespace PHPPdf\Node;
 
+use PHPPdf\Util\DrawingTaskHeap;
+
 use PHPPdf\Node\BasicList\EnumerationStrategyFactory;
 
 use PHPPdf\Node\BasicList\ImageEnumerationStrategy,
@@ -106,11 +108,11 @@ class BasicList extends Container
         return $this->getAttributeDirectly('image');
     }
     
-    protected function doDraw(Document $document)
+    protected function doDraw(Document $document, DrawingTaskHeap $tasks)
     {
-        $tasks = parent::doDraw($document);
+        parent::doDraw($document, $tasks);
         
-        $tasks[] = new DrawingTask(function(Node $node, Document $document) {
+        $tasks->insert(new DrawingTask(function(Node $node, Document $document) {
             $gc = $node->getGraphicsContext();
 
             $enumerationStrategy = $node->getEnumerationStrategy();
@@ -130,9 +132,7 @@ class BasicList extends Container
             }
 
             $enumerationStrategy->reset();
-        }, array($this, $document));
-        
-        return $tasks;
+        }, array($this, $document)));
     }
     
     /**

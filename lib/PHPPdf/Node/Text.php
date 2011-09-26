@@ -8,6 +8,8 @@
 
 namespace PHPPdf\Node;
 
+use PHPPdf\Util\DrawingTaskHeap;
+
 use PHPPdf\Node\Node,
     PHPPdf\Util\UnitConverter,
     PHPPdf\Node\Paragraph\LinePart,
@@ -83,17 +85,12 @@ class Text extends Node
         return $minWidth;
     }
 
-    protected function doDraw(Document $document)
+    protected function doDraw(Document $document, DrawingTaskHeap $tasks)
     {
-        $tasks = array();
-        
         foreach($this->lineParts as $part)
         {
-            $partTasks = $part->getOrderedDrawingTasks($document);
-            $tasks = array_merge($tasks, $partTasks);
+            $part->getOrderedDrawingTasks($document, $tasks);
         }
-        
-        return $tasks;
     }
 
     public function getStartLineDrawingXDimension($align, $lineWidth)

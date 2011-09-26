@@ -8,6 +8,8 @@
 
 namespace PHPPdf\Node;
 
+use PHPPdf\Util\DrawingTaskHeap;
+
 use PHPPdf\Node\Page,
     PHPPdf\Node\PageContext,
     PHPPdf\Document;
@@ -126,20 +128,12 @@ class DynamicPage extends Page
         return $pages;
     }
 
-    protected function doDraw(Document $document)
+    protected function doDraw(Document $document, DrawingTaskHeap $tasks)
     {
-        $tasks = array();
         foreach($this->getPages() as $page)
         {
-            $childTasks = $page->getOrderedDrawingTasks($document);
-
-            foreach($childTasks as $task)
-            {
-                $tasks[] = $task;
-            }
+            $page->getOrderedDrawingTasks($document, $tasks);
         }
-        
-        return $tasks;
     }
 
     public function getAttribute($name)
@@ -251,27 +245,19 @@ class DynamicPage extends Page
         parent::flush();
     }
     
-    public function getUnorderedDrawingTasks(Document $document)
+    public function getUnorderedDrawingTasks(Document $document, DrawingTaskHeap $tasks)
     {
-        $tasks = array();
-        
         foreach($this->getPages() as $page)
         {
-            $tasks = array_merge($tasks, $page->getUnorderedDrawingTasks($document));
+            $page->getUnorderedDrawingTasks($document, $tasks);
         }
-        
-        return $tasks;
     }
     
-    public function getPostDrawingTasks(Document $document)
+    public function getPostDrawingTasks(Document $document, DrawingTaskHeap $tasks)
     {
-        $tasks = array();
-        
         foreach($this->pagesHistory as $page)
         {
-            $tasks = array_merge($tasks, $page->getPostDrawingTasks($document));
+            $page->getPostDrawingTasks($document, $tasks);
         }
-        
-        return $tasks;
     }
 }

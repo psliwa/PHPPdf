@@ -8,6 +8,8 @@
 
 namespace PHPPdf\Node;
 
+use PHPPdf\Util\DrawingTaskHeap;
+
 use PHPPdf\Document;
 use PHPPdf\Parser\DocumentParserListener;
 use PHPPdf\Parser\Exception\DuplicatedIdException;
@@ -23,7 +25,12 @@ class Manager implements DocumentParserListener
     private $wrappers = array();
     
     private $managedNodes = array();
-    private $behavioursTasks = array();
+    private $behavioursTasks;
+    
+    public function __construct()
+    {
+        $this->behavioursTasks = new DrawingTaskHeap();
+    }
     
     public function register($id, Node $node)
     {
@@ -64,7 +71,7 @@ class Manager implements DocumentParserListener
     
     public function clear()
     {
-        $this->behavioursTasks = array();
+        $this->behavioursTasks = new DrawingTaskHeap();
         $this->wrappers = array();
         $this->nodes = array();
     }
@@ -91,8 +98,7 @@ class Manager implements DocumentParserListener
         if(!$this->isPage($node) && $this->isPage($node->getParent()))
         {
             $node->format($document);
-            
-            $this->behavioursTasks = array_merge($this->behavioursTasks, $node->getUnorderedDrawingTasks($document));
+            $node->getUnorderedDrawingTasks($document, $this->behavioursTasks);
         }
         
         $this->processDynamicPage($document, $node);
@@ -101,11 +107,13 @@ class Manager implements DocumentParserListener
         {
             $node->postFormat($document);
             
+            $tasks = new DrawingTaskHeap();
             if(!$this->isDynamicPage($node) || count($node->getPages()) > 0)
             {
-                $document->invokeTasks($node->getOrderedDrawingTasks($document));
+                $node->getOrderedDrawingTasks($document, $tasks);
             }
-            $document->invokeTasks($node->getPostDrawingTasks($document));
+            $node->getPostDrawingTasks($document, $tasks);
+            $document->invokeTasks($tasks);
             
             $node->flush();
             $root->flush();
@@ -123,7 +131,9 @@ class Manager implements DocumentParserListener
             
             foreach($pages as $page)
             {
-                $document->invokeTasks($page->getOrderedDrawingTasks($document));
+                $tasks = new DrawingTaskHeap();
+                $page->getOrderedDrawingTasks($document, $tasks);
+                $document->invokeTasks($tasks);
                 $page->flush();
             }
 
@@ -169,6 +179,6 @@ class Manager implements DocumentParserListener
     public function onEndParsing(Document $document, PageCollection $root)
     {
         $document->invokeTasks($this->behavioursTasks);
-        $this->behavioursTasks = array();
+        $this->behavioursTasks = new DrawingTaskHeap();
     }
 }

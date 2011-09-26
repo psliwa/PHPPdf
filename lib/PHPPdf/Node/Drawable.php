@@ -8,6 +8,7 @@
 
 namespace PHPPdf\Node;
 
+use PHPPdf\Util\DrawingTaskHeap;
 use PHPPdf\Document;
 
 /**
@@ -20,12 +21,12 @@ interface Drawable
     /**
      * @return array Ordered array of DrawingTask objects
      */
-    public function getOrderedDrawingTasks(Document $document);
+    public function getOrderedDrawingTasks(Document $document, DrawingTaskHeap $tasks);
 
     /**
      * @return array Unordered array of DrawingTask objects
      */
-    public function getUnorderedDrawingTasks(Document $document);
+    public function getUnorderedDrawingTasks(Document $document, DrawingTaskHeap $tasks);
     
-    public function getPostDrawingTasks(Document $document);
+    public function getPostDrawingTasks(Document $document, DrawingTaskHeap $tasks);
 }

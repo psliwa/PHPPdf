@@ -8,6 +8,8 @@
 
 namespace PHPPdf\Node;
 
+use PHPPdf\Util\DrawingTaskHeap;
+
 use PHPPdf\Document,
     PHPPdf\Formatter\Formatter;
 
@@ -67,11 +69,9 @@ class Container extends Node
         }
     }
 
-    protected function preDraw(Document $document)
+    protected function preDraw(Document $document, DrawingTaskHeap $tasks)
     {
-        $this->document = $document;
-
-        return parent::preDraw($document);
+        parent::preDraw($document, $tasks);
     }
 
     public function getDocument()
@@ -79,16 +79,12 @@ class Container extends Node
         return $this->document;
     }
 
-    protected function doDraw(Document $document)
+    protected function doDraw(Document $document, DrawingTaskHeap $tasks)
     {
-        $tasks = array();
         foreach($this->children as $node)
         {
-            $childTasks = $node->getOrderedDrawingTasks($document);
-            $tasks = array_merge($tasks, $childTasks);
+            $node->getOrderedDrawingTasks($document, $tasks);
         }
-        
-        return $tasks;
     }
 
     public function copy()
