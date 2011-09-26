@@ -61,7 +61,7 @@ class BasicListTest extends \PHPPdf\PHPUnit\Framework\TestCase
                             ->method('reset');
         
         $tasks = new DrawingTaskHeap();
-        $this->list->getOrderedDrawingTasks($document, $tasks);
+        $this->list->collectOrderedDrawingTasks($document, $tasks);
         
         foreach($tasks as $task)
         {

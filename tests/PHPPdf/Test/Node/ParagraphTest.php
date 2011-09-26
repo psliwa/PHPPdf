@@ -100,7 +100,7 @@ class ParagraphTest extends \PHPPdf\PHPUnit\Framework\TestCase
         }
         
         $tasks = new DrawingTaskHeap();
-        $this->paragraph->getOrderedDrawingTasks($documentStub, $tasks);
+        $this->paragraph->collectOrderedDrawingTasks($documentStub, $tasks);
     }
     
     /**
@@ -117,7 +117,7 @@ class ParagraphTest extends \PHPPdf\PHPUnit\Framework\TestCase
         for($i=0; $i<3; $i++)
         {
             $text = $this->getMockBuilder('PHPPdf\Node\Text')
-                         ->setMethods(array('getOrderedDrawingTasks'))
+                         ->setMethods(array('collectOrderedDrawingTasks'))
                          ->disableOriginalConstructor()
                          ->getMock();
             
@@ -125,7 +125,7 @@ class ParagraphTest extends \PHPPdf\PHPUnit\Framework\TestCase
             $expectedTasks[] = $taskStub;
                              
             $text->expects($this->once())
-                 ->method('getOrderedDrawingTasks')
+                 ->method('collectOrderedDrawingTasks')
                  ->with($documentStub, $this->isInstanceOf('PHPPdf\Util\DrawingTaskHeap'))
                  ->will($this->returnCallback(function() use($tasks, $taskStub){
                      $tasks->insert($taskStub);
@@ -134,7 +134,7 @@ class ParagraphTest extends \PHPPdf\PHPUnit\Framework\TestCase
             $this->paragraph->add($text);
         }
         
-        $this->paragraph->getOrderedDrawingTasks($documentStub, $tasks);
+        $this->paragraph->collectOrderedDrawingTasks($documentStub, $tasks);
         
         $this->assertEquals(count($expectedTasks), count($tasks));
     }

@@ -157,12 +157,12 @@ class Page extends Container
         parent::doDraw($document, $tasks);
     }
 
-    public function getPostDrawingTasks(Document $document, DrawingTaskHeap $tasks)
+    public function collectPostDrawingTasks(Document $document, DrawingTaskHeap $tasks)
     {
         foreach($this->runtimeNodes as $node)
         {
             $node->evaluate();
-            $node->getOrderedDrawingTasks($document, $tasks);
+            $node->collectOrderedDrawingTasks($document, $tasks);
         }
     }
     
@@ -440,9 +440,9 @@ class Page extends Container
         $tasks = new DrawingTaskHeap();
 
         $this->getDrawingTasksFromEnhancements($document, $tasks);
-        $this->footer->getOrderedDrawingTasks($document, $tasks);
-        $this->header->getOrderedDrawingTasks($document, $tasks);
-        $this->watermark->getOrderedDrawingTasks($document, $tasks);
+        $this->footer->collectOrderedDrawingTasks($document, $tasks);
+        $this->header->collectOrderedDrawingTasks($document, $tasks);
+        $this->watermark->collectOrderedDrawingTasks($document, $tasks);
         
         $this->footer->removeAll();
         $this->header->removeAll();

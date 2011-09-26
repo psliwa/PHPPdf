@@ -32,7 +32,7 @@ class CurrentPageNumberTest extends \PHPPdf\PHPUnit\Framework\TestCase
         $this->node->setParent($mock);
 
         $tasks = new DrawingTaskHeap();
-        $this->node->getOrderedDrawingTasks(new Document(), $tasks);
+        $this->node->collectOrderedDrawingTasks(new Document(), $tasks);
         $this->assertEquals(0, count($tasks));
     }
 
@@ -86,7 +86,7 @@ class CurrentPageNumberTest extends \PHPPdf\PHPUnit\Framework\TestCase
 
         $this->node->setParent($pageMock);
         $linePart = $this->getMockBuilder('PHPPdf\Node\Paragraph\LinePart')
-                         ->setMethods(array('setWords', 'getOrderedDrawingTasks'))
+                         ->setMethods(array('setWords', 'collectOrderedDrawingTasks'))
                          ->disableOriginalConstructor()
                          ->getMock();
                          
@@ -100,7 +100,7 @@ class CurrentPageNumberTest extends \PHPPdf\PHPUnit\Framework\TestCase
         $tasks = new DrawingTaskHeap();
 
         $linePart->expects($this->at(1))
-                 ->method('getOrderedDrawingTasks')
+                 ->method('collectOrderedDrawingTasks')
                  ->with($document, $this->isInstanceOf('PHPPdf\Util\DrawingTaskHeap'))
                  ->will($this->returnCallback(function() use($tasks, $drawingTaskStub){
                      $tasks->insert($drawingTaskStub);
@@ -109,7 +109,7 @@ class CurrentPageNumberTest extends \PHPPdf\PHPUnit\Framework\TestCase
         $this->node->addLinePart($linePart);
 
         $this->node->evaluate();
-        $this->node->getOrderedDrawingTasks(new Document(), $tasks);
+        $this->node->collectOrderedDrawingTasks(new Document(), $tasks);
         $this->assertEquals(1, count($tasks));
         $this->assertEquals($pageNumber, $this->node->getText());
     }

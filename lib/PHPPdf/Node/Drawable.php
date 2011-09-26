@@ -21,12 +21,12 @@ interface Drawable
     /**
      * @return array Ordered array of DrawingTask objects
      */
-    public function getOrderedDrawingTasks(Document $document, DrawingTaskHeap $tasks);
+    public function collectOrderedDrawingTasks(Document $document, DrawingTaskHeap $tasks);
 
     /**
      * @return array Unordered array of DrawingTask objects
      */
-    public function getUnorderedDrawingTasks(Document $document, DrawingTaskHeap $tasks);
+    public function collectUnorderedDrawingTasks(Document $document, DrawingTaskHeap $tasks);
     
-    public function getPostDrawingTasks(Document $document, DrawingTaskHeap $tasks);
+    public function collectPostDrawingTasks(Document $document, DrawingTaskHeap $tasks);
 }

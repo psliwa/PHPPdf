@@ -83,7 +83,7 @@ class Container extends Node
     {
         foreach($this->children as $node)
         {
-            $node->getOrderedDrawingTasks($document, $tasks);
+            $node->collectOrderedDrawingTasks($document, $tasks);
         }
     }
 

@@ -231,7 +231,7 @@ class PageBreakingFormatterTest extends \PHPPdf\PHPUnit\Framework\TestCase
 
         $this->page->add($nextSiblingOfBrokenContainer);
 
-        $this->page->getOrderedDrawingTasks(new Document());
+        $this->page->collectOrderedDrawingTasks(new Document());
 
         $this->assertEquals($brokenContainer->getDiagonalPoint()->getY(), $nextSiblingOfBrokenContainer->getFirstPoint()->getY());
     }

@@ -9,9 +9,7 @@
 namespace PHPPdf\Node;
 
 use PHPPdf\Util\DrawingTaskHeap;
-
 use PHPPdf\Util\UnitConverter;
-
 use PHPPdf\Document,
     PHPPdf\Util,
     PHPPdf\Node\Container,
@@ -1060,7 +1058,7 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
      *
      * @return array Array of PHPPdf\Util\DrawingTask objects
      */
-    public function getOrderedDrawingTasks(Document $document, DrawingTaskHeap $tasks)
+    public function collectOrderedDrawingTasks(Document $document, DrawingTaskHeap $tasks)
     {
         try
         {
@@ -1074,15 +1072,15 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
         }
     }
     
-    public function getPostDrawingTasks(Document $document, DrawingTaskHeap $tasks)
+    public function collectPostDrawingTasks(Document $document, DrawingTaskHeap $tasks)
     {
     }
     
-    public function getUnorderedDrawingTasks(Document $document, DrawingTaskHeap $tasks)
+    public function collectUnorderedDrawingTasks(Document $document, DrawingTaskHeap $tasks)
     {
         foreach($this->getChildren() as $node)
         {
-            $node->getUnorderedDrawingTasks($document, $tasks);
+            $node->collectUnorderedDrawingTasks($document, $tasks);
         }
         
         foreach($this->behaviours as $behaviour)

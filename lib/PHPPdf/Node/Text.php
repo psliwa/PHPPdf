@@ -89,7 +89,7 @@ class Text extends Node
     {
         foreach($this->lineParts as $part)
         {
-            $part->getOrderedDrawingTasks($document, $tasks);
+            $part->collectOrderedDrawingTasks($document, $tasks);
         }
     }
 

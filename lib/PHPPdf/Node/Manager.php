@@ -98,7 +98,7 @@ class Manager implements DocumentParserListener
         if(!$this->isPage($node) && $this->isPage($node->getParent()))
         {
             $node->format($document);
-            $node->getUnorderedDrawingTasks($document, $this->behavioursTasks);
+            $node->collectUnorderedDrawingTasks($document, $this->behavioursTasks);
         }
         
         $this->processDynamicPage($document, $node);
@@ -110,9 +110,9 @@ class Manager implements DocumentParserListener
             $tasks = new DrawingTaskHeap();
             if(!$this->isDynamicPage($node) || count($node->getPages()) > 0)
             {
-                $node->getOrderedDrawingTasks($document, $tasks);
+                $node->collectOrderedDrawingTasks($document, $tasks);
             }
-            $node->getPostDrawingTasks($document, $tasks);
+            $node->collectPostDrawingTasks($document, $tasks);
             $document->invokeTasks($tasks);
             
             $node->flush();
@@ -132,7 +132,7 @@ class Manager implements DocumentParserListener
             foreach($pages as $page)
             {
                 $tasks = new DrawingTaskHeap();
-                $page->getOrderedDrawingTasks($document, $tasks);
+                $page->collectOrderedDrawingTasks($document, $tasks);
                 $document->invokeTasks($tasks);
                 $page->flush();
             }
@@ -173,7 +173,7 @@ class Manager implements DocumentParserListener
             return true;
         }
         
-        return $page->getDiagonalPoint()->getY() > $node->getFirstPoint()->getY();
+        return $page->getDiagonalPoint()->getY() > $node->getFirstPoint()->getY() && $node->getFloat() == Node::FLOAT_NONE;
     }
     
     public function onEndParsing(Document $document, PageCollection $root)

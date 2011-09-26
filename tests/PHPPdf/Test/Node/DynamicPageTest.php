@@ -128,13 +128,13 @@ class DynamicPageTest extends \PHPPdf\PHPUnit\Framework\TestCase
         $expectedTasks->insert(new DrawingTask(function(){}));
         
         $page = $this->getMockBuilder('PHPPdf\Node\Page')
-                     ->setMethods(array('copy', 'getUnorderedDrawingTasks'))
+                     ->setMethods(array('copy', 'collectUnorderedDrawingTasks'))
                      ->getMock();
         $page->expects($this->once())
              ->method('copy')
              ->will($this->returnValue($page));
         $page->expects($this->once())
-             ->method('getUnorderedDrawingTasks')
+             ->method('collectUnorderedDrawingTasks')
              ->will($this->returnValue($expectedTasks));
              
         $dynamicPage = new DynamicPage($page);
@@ -142,10 +142,10 @@ class DynamicPageTest extends \PHPPdf\PHPUnit\Framework\TestCase
         $document = new Document();
         
         $tasks = new DrawingTaskHeap();
-        $dynamicPage->getUnorderedDrawingTasks($document, $tasks);
+        $dynamicPage->collectUnorderedDrawingTasks($document, $tasks);
         $this->assertEquals(0, count($tasks));
         
         $dynamicPage->createNextPage();
-        $dynamicPage->getUnorderedDrawingTasks($document, $tasks);
+        $dynamicPage->collectUnorderedDrawingTasks($document, $tasks);
     }
 }

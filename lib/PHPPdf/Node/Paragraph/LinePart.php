@@ -73,7 +73,7 @@ class LinePart implements Drawable
         $this->wordSpacing = $wordSpacing;
     }
     
-    public function getOrderedDrawingTasks(Document $document, DrawingTaskHeap $tasks)
+    public function collectOrderedDrawingTasks(Document $document, DrawingTaskHeap $tasks)
     {
         $tasks->insert(new DrawingTask(function(Text $text, $point, $words, $width, $document, $linePartWordSpacing) {
             $gc = $text->getGraphicsContext();
@@ -146,11 +146,11 @@ class LinePart implements Drawable
         }, array($this->text, $this->getFirstPoint(), $this->words, $this->width, $document, $this->wordSpacing)));
     }
     
-    public function getUnorderedDrawingTasks(Document $document, DrawingTaskHeap $tasks)
+    public function collectUnorderedDrawingTasks(Document $document, DrawingTaskHeap $tasks)
     {
     }
     
-    public function getPostDrawingTasks(Document $document, DrawingTaskHeap $tasks)
+    public function collectPostDrawingTasks(Document $document, DrawingTaskHeap $tasks)
     {
     }
     

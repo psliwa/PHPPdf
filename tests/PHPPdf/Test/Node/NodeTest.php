@@ -521,7 +521,7 @@ class NodeTest extends \PHPPdf\PHPUnit\Framework\TestCase
                  ->will($this->returnValue($enhancementStubs));
 
         $drawingTasks = new DrawingTaskHeap();
-        $this->node->getOrderedDrawingTasks($document, $drawingTasks);
+        $this->node->collectOrderedDrawingTasks($document, $drawingTasks);
         
         $this->assertEquals(count($enhancementStubs), count($drawingTasks));
     }
@@ -563,7 +563,7 @@ class NodeTest extends \PHPPdf\PHPUnit\Framework\TestCase
         }
         
         $tasks = new DrawingTaskHeap();
-        $this->node->getUnorderedDrawingTasks(new Document(), $tasks);
+        $this->node->collectUnorderedDrawingTasks(new Document(), $tasks);
         
         foreach($tasks as $task)
         {

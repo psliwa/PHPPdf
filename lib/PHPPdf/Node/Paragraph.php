@@ -101,7 +101,7 @@ class Paragraph extends Container
         return $this->lines;
     }
     
-    public function getOrderedDrawingTasks(Document $document, DrawingTaskHeap $tasks)
+    public function collectOrderedDrawingTasks(Document $document, DrawingTaskHeap $tasks)
     {
         $lastIndex = count($this->lines) - 1;
         foreach($this->lines as $i => $line)
@@ -111,7 +111,7 @@ class Paragraph extends Container
         
         foreach($this->getChildren() as $text)
         {
-            $text->getOrderedDrawingTasks($document, $tasks);
+            $text->collectOrderedDrawingTasks($document, $tasks);
         }
         
         $this->getDrawingTasksFromEnhancements($document, $tasks);

@@ -191,18 +191,18 @@ class TextTest extends \PHPPdf\PHPUnit\Framework\TestCase
         for($i=0; $i<3; $i++)
         {
             $linePart = $this->getMockBuilder('PHPPdf\Node\Paragraph\LinePart')
-                             ->setMethods(array('getOrderedDrawingTasks'))
+                             ->setMethods(array('collectOrderedDrawingTasks'))
                              ->disableOriginalConstructor()
                              ->getMock();
                              
             $linePart->expects($this->once())
-                     ->method('getOrderedDrawingTasks')
+                     ->method('collectOrderedDrawingTasks')
                      ->with($documentStub, $tasks);
                      
             $this->text->addLinePart($linePart);
         }
         
-        $this->text->getOrderedDrawingTasks($documentStub, $tasks);
+        $this->text->collectOrderedDrawingTasks($documentStub, $tasks);
     }
     
     /**

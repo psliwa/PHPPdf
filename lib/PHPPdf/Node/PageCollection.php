@@ -9,7 +9,6 @@
 namespace PHPPdf\Node;
 
 use PHPPdf\Util\DrawingTaskHeap;
-
 use PHPPdf\Document,
     PHPPdf\Node\Container,
     PHPPdf\Formatter\Formatter;
@@ -44,9 +43,9 @@ class PageCollection extends Container
     public function getAllDrawingTasks(Document $document)
     {
         $tasks = new DrawingTaskHeap();
-        $this->getOrderedDrawingTasks($document, $tasks);
-        $this->getUnorderedDrawingTasks($document, $tasks);
-        $this->getPostDrawingTasks($document, $tasks);
+        $this->collectOrderedDrawingTasks($document, $tasks);
+        $this->collectUnorderedDrawingTasks($document, $tasks);
+        $this->collectPostDrawingTasks($document, $tasks);
         
         return $tasks;
     }

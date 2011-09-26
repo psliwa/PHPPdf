@@ -150,7 +150,7 @@ class LinePartTest extends \PHPPdf\PHPUnit\Framework\TestCase
         $linePart->setLine($line);
         
         $tasks = new DrawingTaskHeap();
-        $linePart->getOrderedDrawingTasks($documentStub, $tasks);
+        $linePart->collectOrderedDrawingTasks($documentStub, $tasks);
         
         foreach($tasks as $task)
         {

@@ -132,7 +132,7 @@ class DynamicPage extends Page
     {
         foreach($this->getPages() as $page)
         {
-            $page->getOrderedDrawingTasks($document, $tasks);
+            $page->collectOrderedDrawingTasks($document, $tasks);
         }
     }
 
@@ -245,19 +245,19 @@ class DynamicPage extends Page
         parent::flush();
     }
     
-    public function getUnorderedDrawingTasks(Document $document, DrawingTaskHeap $tasks)
+    public function collectUnorderedDrawingTasks(Document $document, DrawingTaskHeap $tasks)
     {
         foreach($this->getPages() as $page)
         {
-            $page->getUnorderedDrawingTasks($document, $tasks);
+            $page->collectUnorderedDrawingTasks($document, $tasks);
         }
     }
     
-    public function getPostDrawingTasks(Document $document, DrawingTaskHeap $tasks)
+    public function collectPostDrawingTasks(Document $document, DrawingTaskHeap $tasks)
     {
         foreach($this->pagesHistory as $page)
         {
-            $page->getPostDrawingTasks($document, $tasks);
+            $page->collectPostDrawingTasks($document, $tasks);
         }
     }
 }
