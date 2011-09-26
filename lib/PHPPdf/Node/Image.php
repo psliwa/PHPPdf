@@ -78,7 +78,6 @@ class Image extends Node
         
         if(!$this->getWidth() && !$this->getHeight())
         {
-
             $this->setWidth($src->getOriginalWidth());
             $this->setHeight($src->getOriginalHeight());
         }

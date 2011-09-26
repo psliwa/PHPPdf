@@ -8,6 +8,8 @@
 
 namespace PHPPdf\Engine\ZF;
 
+use PHPPdf\Util\UnitConverter;
+
 use PHPPdf\Exception\Exception;
 
 use PHPPdf\Util;
@@ -29,10 +31,12 @@ class Engine implements BaseEngine
     private $images = array();
     private $graphicsContexts = array();
     private $outlines = array();
+    private $unitConverter;
     
-    public function __construct(\Zend_Pdf $zendPdf = null)
+    public function __construct(\Zend_Pdf $zendPdf = null, UnitConverter $unitConverter = null)
     {
         $this->zendPdf = $zendPdf;
+        $this->unitConverter = $unitConverter;
     }
     
     public function createGraphicsContext($graphicsContextSize)
@@ -77,7 +81,7 @@ class Engine implements BaseEngine
 
         if(!isset($this->images[$data]))
         {
-            $this->images[$data] = new Image($data);
+            $this->images[$data] = new Image($data, $this->unitConverter);
         }
         
         return $this->images[$data];

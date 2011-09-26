@@ -53,8 +53,12 @@ class Document implements UnitConverter
     
     private $unitConverter = null;
 
-    public function __construct()
+    public function __construct(UnitConverter $converter = null)
     {
+        if($converter)
+        {
+            $this->setUnitConverter($converter);
+        }
         $this->initialize();
     }
 
@@ -101,7 +105,7 @@ class Document implements UnitConverter
     public function initialize()
     {
         $this->processed = false;
-        $this->engine = new Engine();
+        $this->engine = new Engine(null, $this->unitConverter);
     }
     
     /**
@@ -282,7 +286,7 @@ class Document implements UnitConverter
         }
     }
     
-    public function convertUnit($value)
+    public function convertUnit($value, $unit = null)
     {
         if($this->unitConverter)
         {

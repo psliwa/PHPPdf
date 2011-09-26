@@ -30,14 +30,14 @@ class UnitConverterImpl implements UnitConverter
         $this->dpi = $dpi;
     }
     
-    public function convertUnit($value)
+    public function convertUnit($value, $unit = null)
     {
-        if(is_numeric($value))
+        if(is_numeric($value) && $unit === null)
         {
             return $value;
         }
         
-        $unit = strtolower(substr($value, -2, 2));
+        $unit = $unit ? : strtolower(substr($value, -2, 2));
 
         return $this->doConvertUnit($value, $unit);
     }
@@ -46,20 +46,20 @@ class UnitConverterImpl implements UnitConverter
     {
         switch($unit)
         {
-            case 'px':
+            case self::UNIT_PIXEL:
                 return $this->convertPxUnit($value);
-            case 'cm':
+            case self::UNIT_CENTIMETER:
                 return $this->convertCmUnit($value);
-            case 'mm':
+            case self::UNIT_MILIMETER:
                 return $this->convertMmUnit($value);
-            case 'in':
+            case self::UNIT_INCH:
                 return $this->convertInUnit($value);
-            case 'pt':
+            case self::UNIT_POINT:
                 return $this->convertPtUnit($value);
-            case 'pc':
+            case self::UNIT_PICA:
                 return 12*$this->convertPtUnit($value);
-            case 'em':
-            case 'ex':
+            case self::UNIT_EM:
+            case self::UNIT_EX:
                 throw new \InvalidArgumentException(sprintf('"%s" unit is not supported.', $unit));
             default:
                 return $value;

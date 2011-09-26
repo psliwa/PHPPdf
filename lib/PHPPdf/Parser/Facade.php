@@ -42,9 +42,11 @@ class Facade
     public function __construct(Loader $configurationLoader)
     {
         $this->configurationLoader = $configurationLoader;
+        
+        $unitConverter = $this->configurationLoader->createUnitConverter();
 
         $this->setCache(NullCache::getInstance());
-        $document = new Document();
+        $document = new Document($unitConverter);
         $documentParser = new DocumentParser($document);
         $documentParser->addListener($documentParser->getNodeManager());
         $this->setDocumentParser($documentParser);

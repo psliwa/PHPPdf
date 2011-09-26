@@ -8,6 +8,8 @@
 
 namespace PHPPdf\Node\BasicList;
 
+use PHPPdf\Util\UnitConverter;
+
 use PHPPdf\Document;
 
 use PHPPdf\Node\BasicList,
@@ -33,7 +35,7 @@ class ImageEnumerationStrategy extends AbstractEnumerationStrategy
         $image = $this->getImage($list);
         $fontSize = $list->getRecurseAttribute('font-size');
         
-        list($this->imageWidth, $this->imageHeight) = $this->getImageDimension($image, $fontSize);
+        list($this->imageWidth, $this->imageHeight) = $this->getImageDimension($document, $image, $fontSize);
         
         $xTranslation = 0;
         
@@ -57,7 +59,7 @@ class ImageEnumerationStrategy extends AbstractEnumerationStrategy
         return $image;
     }
     
-    private function getImageDimension($image, $fontSize)
+    private function getImageDimension(UnitConverter $converter, $image, $fontSize)
     {
         if($this->imageWidth === null && $this->imageHeight === null)
         {

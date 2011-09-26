@@ -8,6 +8,8 @@
 
 namespace PHPPdf\Engine\ZF;
 
+use PHPPdf\Util\UnitConverter;
+
 use PHPPdf\Bridge\Zend\Pdf\Resource\Image\Tiff;
 
 use PHPPdf\Exception\InvalidResourceException,
@@ -24,18 +26,24 @@ class Image implements BaseImage
     private $width;
     private $height;
     private $type;
+    private $unitConverter;
     
-    public function __construct($path)
+    /**
+     * Constructor
+     * 
+     * @param string $path Path to image
+     * @param UnitConverter $unitConverter Converter that converts image's size from pixels to standard unit
+     */
+    public function __construct($path, UnitConverter $unitConverter = null)
     {
         $this->path = $path;
+        $this->unitConverter = $unitConverter;
         
         if(!$this->pathExists($path) || ($data = @getimagesize($path)) === false)
         {
             InvalidResourceException::invalidImageException($path);
         }
         
-        $this->width = $data[0];
-        $this->height = $data[1];
         $this->type = $data[2];
     }
     
@@ -90,12 +98,22 @@ class Image implements BaseImage
     
     public function getOriginalHeight()
     {
-        return $this->getWrappedImage()->getPixelHeight();
+        if($this->height === null)
+        {
+            $height = $this->getWrappedImage()->getPixelHeight();
+            $this->height = $this->unitConverter ? $this->unitConverter->convertUnit($height, UnitConverter::UNIT_PIXEL) : $height;
+        }
+        return $this->height;
     }
     
     public function getOriginalWidth()
     {
-        return $this->getWrappedImage()->getPixelWidth();
+        if($this->width === null)
+        {
+            $width = $this->getWrappedImage()->getPixelWidth();
+            $this->width = $this->unitConverter ? $this->unitConverter->convertUnit($width, UnitConverter::UNIT_PIXEL) : $width;
+        }
+        return $this->width;
     }
     
     /**

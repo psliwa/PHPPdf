@@ -13,7 +13,13 @@ namespace PHPPdf\Engine;
  */
 interface Image
 {
+    /**
+     * @return float Image width in default document's unit
+     */
     public function getOriginalWidth();
     
+    /**
+     * @return float Image height in default document's unit
+     */
     public function getOriginalHeight();
 }

@@ -15,6 +15,15 @@ namespace PHPPdf\Util;
  */
 interface UnitConverter
 {
-    public function convertUnit($value);
+    const UNIT_PIXEL = 'px';
+    const UNIT_CENTIMETER = 'cm';
+    const UNIT_MILIMETER = 'mm';
+    const UNIT_INCH = 'in';
+    const UNIT_POINT = 'pt';
+    const UNIT_PICA = 'pc';
+    const UNIT_EM = 'em';
+    const UNIT_EX = 'ex';
+    
+    public function convertUnit($value, $unit = null);
     public function convertPercentageValue($percent, $value);
 }
