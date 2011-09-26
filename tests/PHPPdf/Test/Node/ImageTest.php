@@ -2,6 +2,8 @@
 
 namespace PHPPdf\Test\Node;
 
+use PHPPdf\Util\DrawingTaskHeap;
+
 use PHPPdf\Document;
 use PHPPdf\Node\Image;
 
@@ -50,7 +52,8 @@ class ImageTest extends \PHPPdf\PHPUnit\Framework\TestCase
 
         $this->image->setParent($pageMock);
 
-        $tasks = $this->image->getOrderedDrawingTasks(new Document());
+        $tasks = new DrawingTaskHeap();
+        $this->image->getOrderedDrawingTasks(new Document(), $tasks);
 
         foreach($tasks as $task)
         {

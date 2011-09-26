@@ -2,6 +2,8 @@
 
 namespace PHPPdf\Test\Node;
 
+use PHPPdf\Util\DrawingTaskHeap;
+
 use PHPPdf\Node\Node;
 use PHPPdf\Util\DrawingTask;
 use PHPPdf\Document;
@@ -27,7 +29,8 @@ class PageTest extends \PHPPdf\PHPUnit\Framework\TestCase
      */
     public function drawing()
     {
-        $tasks = $this->page->getOrderedDrawingTasks($this->document);
+        $tasks = new DrawingTaskHeap();
+        $this->page->getOrderedDrawingTasks($this->document, $tasks);
 
         foreach($tasks as $task)
         {
@@ -47,7 +50,9 @@ class PageTest extends \PHPPdf\PHPUnit\Framework\TestCase
               ->will($this->throwException(new \Exception('exception')));
          
         $this->page->add($child);
-        $tasks = $this->page->getOrderedDrawingTasks($this->document);
+        
+        $tasks = new DrawingTaskHeap();
+        $this->page->getOrderedDrawingTasks($this->document, $tasks);
 
         foreach($tasks as $task)
         {
@@ -271,8 +276,9 @@ class PageTest extends \PHPPdf\PHPUnit\Framework\TestCase
         {
             $this->page->prepareTemplate($this->document);
         }
-
-        $actualTasks = $this->page->getOrderedDrawingTasks($this->document);
+        
+        $actualTasks = new DrawingTaskHeap();
+        $this->page->getOrderedDrawingTasks($this->document, $actualTasks);
         
         foreach($actualTasks as $task)
         {

@@ -164,22 +164,12 @@ class Document implements UnitConverter
 
         $pageCollection->format($this);
 
-        $tasks = new DrawingTaskHeap();
-        $pageCollection->getOrderedDrawingTasks($this, $tasks);
-        $pageCollection->getUnorderedDrawingTasks($this, $tasks);
-        $pageCollection->getPostDrawingTasks($this, $tasks);
+        $tasks = $pageCollection->getAllDrawingTasks($this);
         $this->invokeTasks($tasks);
     }
 
     public function invokeTasks($tasks)
     {
-        //SplPriorityQueue and SplMaxHeap arent't deterministic for elements with the same priority - inserting order isn't queue order
-//        $heap = new \PHPPdf\Util\DrawingTaskHeap();
-//        foreach($tasks as $task)
-//        {
-//            $heap->insert($task);
-//        }
-        
         foreach($tasks as $task)
         {
             $task->invoke();

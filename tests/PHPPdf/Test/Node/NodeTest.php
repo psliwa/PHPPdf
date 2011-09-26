@@ -2,6 +2,8 @@
 
 namespace PHPPdf\Test\Node;
 
+use PHPPdf\Util\DrawingTaskHeap;
+
 use PHPPdf\Node\Page,
     PHPPdf\Enhancement\Background,
     PHPPdf\Enhancement\Border,
@@ -518,7 +520,8 @@ class NodeTest extends \PHPPdf\PHPUnit\Framework\TestCase
                  ->with($bag)
                  ->will($this->returnValue($enhancementStubs));
 
-        $drawingTasks = $this->node->getOrderedDrawingTasks($document);
+        $drawingTasks = new DrawingTaskHeap();
+        $this->node->getOrderedDrawingTasks($document, $drawingTasks);
         
         $this->assertEquals(count($enhancementStubs), count($drawingTasks));
     }
@@ -559,7 +562,8 @@ class NodeTest extends \PHPPdf\PHPUnit\Framework\TestCase
             $this->node->addBehaviour($behaviour);
         }
         
-        $tasks = $this->node->getUnorderedDrawingTasks(new Document());
+        $tasks = new DrawingTaskHeap();
+        $this->node->getUnorderedDrawingTasks(new Document(), $tasks);
         
         foreach($tasks as $task)
         {

@@ -2,6 +2,8 @@
 
 namespace PHPPdf\Test\Node;
 
+use PHPPdf\Util\DrawingTaskHeap;
+
 use PHPPdf\Util\DrawingTask;
 
 use PHPPdf\Document;
@@ -122,9 +124,8 @@ class DynamicPageTest extends \PHPPdf\PHPUnit\Framework\TestCase
      */
     public function getUnorderedTasksFromPages()
     {
-        $tasks = array(
-            new DrawingTask(function(){}),
-        );
+        $expectedTasks = new DrawingTaskHeap();
+        $expectedTasks->insert(new DrawingTask(function(){}));
         
         $page = $this->getMockBuilder('PHPPdf\Node\Page')
                      ->setMethods(array('copy', 'getUnorderedDrawingTasks'))
@@ -134,14 +135,17 @@ class DynamicPageTest extends \PHPPdf\PHPUnit\Framework\TestCase
              ->will($this->returnValue($page));
         $page->expects($this->once())
              ->method('getUnorderedDrawingTasks')
-             ->will($this->returnValue($tasks));
+             ->will($this->returnValue($expectedTasks));
              
         $dynamicPage = new DynamicPage($page);
         
         $document = new Document();
         
-        $this->assertEmpty($dynamicPage->getUnorderedDrawingTasks($document));        
+        $tasks = new DrawingTaskHeap();
+        $dynamicPage->getUnorderedDrawingTasks($document, $tasks);
+        $this->assertEquals(0, count($tasks));
+        
         $dynamicPage->createNextPage();
-        $this->assertEquals($tasks, $dynamicPage->getUnorderedDrawingTasks($document));
+        $dynamicPage->getUnorderedDrawingTasks($document, $tasks);
     }
 }

@@ -2,6 +2,10 @@
 
 namespace PHPPdf\Test\Node;
 
+use PHPPdf\Util\DrawingTask;
+
+use PHPPdf\Util\DrawingTaskHeap;
+
 use PHPPdf\Node\Paragraph\LinePart;
 use PHPPdf\Node\Paragraph\Line;
 use PHPPdf\Util\Point;
@@ -95,7 +99,8 @@ class ParagraphTest extends \PHPPdf\PHPUnit\Framework\TestCase
             $this->paragraph->addLine($line);
         }
         
-        $this->paragraph->getOrderedDrawingTasks($documentStub);
+        $tasks = new DrawingTaskHeap();
+        $this->paragraph->getOrderedDrawingTasks($documentStub, $tasks);
     }
     
     /**
@@ -107,6 +112,8 @@ class ParagraphTest extends \PHPPdf\PHPUnit\Framework\TestCase
         
         $expectedTasks = array();
         
+        $tasks = new DrawingTaskHeap();
+        
         for($i=0; $i<3; $i++)
         {
             $text = $this->getMockBuilder('PHPPdf\Node\Text')
@@ -114,20 +121,22 @@ class ParagraphTest extends \PHPPdf\PHPUnit\Framework\TestCase
                          ->disableOriginalConstructor()
                          ->getMock();
             
-            $taskStub = 'task '.$i;
+            $taskStub = new DrawingTask(function(){});
             $expectedTasks[] = $taskStub;
                              
             $text->expects($this->once())
                  ->method('getOrderedDrawingTasks')
-                 ->with($documentStub)
-                 ->will($this->returnValue(array($taskStub)));
+                 ->with($documentStub, $this->isInstanceOf('PHPPdf\Util\DrawingTaskHeap'))
+                 ->will($this->returnCallback(function() use($tasks, $taskStub){
+                     $tasks->insert($taskStub);
+                 }));
                      
             $this->paragraph->add($text);
         }
         
-        $actualTasks = $this->paragraph->getOrderedDrawingTasks($documentStub);
+        $this->paragraph->getOrderedDrawingTasks($documentStub, $tasks);
         
-        $this->assertEquals($expectedTasks, $actualTasks);
+        $this->assertEquals(count($expectedTasks), count($tasks));
     }
     
     /**

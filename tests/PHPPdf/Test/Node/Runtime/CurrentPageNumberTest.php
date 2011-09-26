@@ -2,6 +2,8 @@
 
 namespace PHPPdf\Test\Node\Runtime;
 
+use PHPPdf\Util\DrawingTaskHeap;
+
 use PHPPdf\Util\DrawingTask;
 use PHPPdf\Node\Runtime\CurrentPageNumber,
     PHPPdf\Document,
@@ -29,8 +31,9 @@ class CurrentPageNumberTest extends \PHPPdf\PHPUnit\Framework\TestCase
 
         $this->node->setParent($mock);
 
-        $tasks = $this->node->getOrderedDrawingTasks(new Document());
-        $this->assertEmpty($tasks);
+        $tasks = new DrawingTaskHeap();
+        $this->node->getOrderedDrawingTasks(new Document(), $tasks);
+        $this->assertEquals(0, count($tasks));
     }
 
     private function getPageMock()
@@ -90,17 +93,24 @@ class CurrentPageNumberTest extends \PHPPdf\PHPUnit\Framework\TestCase
         $linePart->expects($this->at(0))
                  ->method('setWords')
                  ->with($pageNumber);
-                         
+
+                 
+        $document = new Document();
         $drawingTaskStub = new DrawingTask(function(){});
+        $tasks = new DrawingTaskHeap();
+
         $linePart->expects($this->at(1))
                  ->method('getOrderedDrawingTasks')
-                 ->will($this->returnValue(array($drawingTaskStub)));
+                 ->with($document, $this->isInstanceOf('PHPPdf\Util\DrawingTaskHeap'))
+                 ->will($this->returnCallback(function() use($tasks, $drawingTaskStub){
+                     $tasks->insert($drawingTaskStub);
+                 }));
                  
         $this->node->addLinePart($linePart);
 
         $this->node->evaluate();
-        $tasks = $this->node->getOrderedDrawingTasks(new Document());
-        $this->assertEquals(array($drawingTaskStub), $tasks);
+        $this->node->getOrderedDrawingTasks(new Document(), $tasks);
+        $this->assertEquals(1, count($tasks));
         $this->assertEquals($pageNumber, $this->node->getText());
     }
 

@@ -2,6 +2,8 @@
 
 namespace PHPPdf\Test\Node;
 
+use PHPPdf\Util\DrawingTaskHeap;
+
 use PHPPdf\Node\Node;
 use PHPPdf\Node\Container;
 use PHPPdf\Document;
@@ -58,7 +60,8 @@ class BasicListTest extends \PHPPdf\PHPUnit\Framework\TestCase
         $enumerationStrategy->expects($this->at($i))
                             ->method('reset');
         
-        $tasks = $this->list->getOrderedDrawingTasks($document);
+        $tasks = new DrawingTaskHeap();
+        $this->list->getOrderedDrawingTasks($document, $tasks);
         
         foreach($tasks as $task)
         {

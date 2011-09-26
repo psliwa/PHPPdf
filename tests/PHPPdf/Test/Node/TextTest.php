@@ -2,6 +2,8 @@
 
 namespace PHPPdf\Test\Node;
 
+use PHPPdf\Util\DrawingTaskHeap;
+
 use PHPPdf\Util\DrawingTask;
 use PHPPdf\Node\Paragraph\LinePart;
 use PHPPdf\Util\Point;
@@ -184,7 +186,7 @@ class TextTest extends \PHPPdf\PHPUnit\Framework\TestCase
     {       
         $documentStub = new Document();
         
-        $expectedTasks = array();
+        $tasks = new DrawingTaskHeap();
         
         for($i=0; $i<3; $i++)
         {
@@ -192,21 +194,15 @@ class TextTest extends \PHPPdf\PHPUnit\Framework\TestCase
                              ->setMethods(array('getOrderedDrawingTasks'))
                              ->disableOriginalConstructor()
                              ->getMock();
-            
-            $taskStub = new DrawingTask(function(){});
-            $expectedTasks[] = $taskStub;
                              
             $linePart->expects($this->once())
                      ->method('getOrderedDrawingTasks')
-                     ->with($documentStub)
-                     ->will($this->returnValue(array($taskStub)));
+                     ->with($documentStub, $tasks);
                      
             $this->text->addLinePart($linePart);
         }
         
-        $actualTasks = $this->text->getOrderedDrawingTasks($documentStub);
-        
-        $this->assertEquals($expectedTasks, $actualTasks);
+        $this->text->getOrderedDrawingTasks($documentStub, $tasks);
     }
     
     /**

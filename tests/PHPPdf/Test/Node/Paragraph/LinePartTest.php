@@ -2,6 +2,8 @@
 
 namespace PHPPdf\Test\Node\Paragraph;
 
+use PHPPdf\Util\DrawingTaskHeap;
+
 use PHPPdf\Node\Text;
 use PHPPdf\Node\Node;
 use PHPPdf\Document;
@@ -147,7 +149,8 @@ class LinePartTest extends \PHPPdf\PHPUnit\Framework\TestCase
         $linePart->setWordSpacing($wordSpacing);
         $linePart->setLine($line);
         
-        $tasks = $linePart->getOrderedDrawingTasks($documentStub);
+        $tasks = new DrawingTaskHeap();
+        $linePart->getOrderedDrawingTasks($documentStub, $tasks);
         
         foreach($tasks as $task)
         {

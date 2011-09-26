@@ -2,6 +2,8 @@
 
 namespace PHPPdf\Test;
 
+use PHPPdf\Util\DrawingTaskHeap;
+
 use PHPPdf\Document,
     PHPPdf\Font\Registry as FontRegistry,
     PHPPdf\Node\Page;
@@ -32,12 +34,7 @@ class DocumentTest extends \PHPPdf\PHPUnit\Framework\TestCase
             $tasks[] = $taskMock;
         }
                  
-        $taskMock2 = $this->getMockBuilder('PHPPdf\Util\DrawingTask')
-                          ->setMethods(array('__invoke'))
-                          ->disableOriginalConstructor()
-                          ->getMock();
-
-        $mock = $this->getMock('\PHPPdf\Node\PageCollection', array('getOrderedDrawingTasks', 'getUnorderedDrawingTasks', 'getPostDrawingTasks', 'format'));
+        $mock = $this->getMock('\PHPPdf\Node\PageCollection', array('getAllDrawingTasks', 'format'));
 
         $matcher = $mock->expects($this->once())
                         ->method('format')
@@ -50,16 +47,8 @@ class DocumentTest extends \PHPPdf\PHPUnit\Framework\TestCase
 
         $mock->expects($this->once())
              ->after(1)
-             ->method('getOrderedDrawingTasks')
-             ->will($this->returnValue(array($tasks[0])));
-        $mock->expects($this->once())
-             ->after(1)
-             ->method('getUnorderedDrawingTasks')
-             ->will($this->returnValue(array($tasks[1])));
-        $mock->expects($this->once())
-             ->after(1)
-             ->method('getPostDrawingTasks')
-             ->will($this->returnValue(array($tasks[2])));
+             ->method('getAllDrawingTasks')
+             ->will($this->returnValue($tasks));
 
         $this->document->draw($mock);
     }
