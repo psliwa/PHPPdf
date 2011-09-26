@@ -1067,10 +1067,6 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
             $this->preDraw($document, $tasks);            
             $this->doDraw($document, $tasks);
             $this->postDraw($document, $tasks);
-//            foreach($this->postDraw($document) as $task)
-//            {
-//                $tasks->insert($task);
-//            }
         }
         catch(\Exception $e)
         {
