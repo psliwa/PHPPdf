@@ -26,7 +26,8 @@ class FacadeBuilder
     private $configurationLoader = null;
     private $cacheType = null;
     private $cacheOptions = null;
-    private $useCacheForStylesheetConstraint = false;
+    private $useCacheForStylesheetConstraint = true;
+    private $useCacheForConfigurationLoader = true;
 
     private function __construct(Loader $configurationLoader = null)
     {
@@ -48,9 +49,18 @@ class FacadeBuilder
         return new self($configuration);
     }
 
-    private function setConfigurationLoader(Loader $configurationLoader)
+    public function setConfigurationLoader(Loader $configurationLoader)
     {
         $this->configurationLoader = $configurationLoader;
+        
+        return $this;
+    }
+    
+    public function setUseCacheForConfigurationLoader($flag)
+    {
+        $this->useCacheForConfigurationLoader = (bool) $flag;
+        
+        return $this;
     }
 
     /**
@@ -67,7 +77,11 @@ class FacadeBuilder
         {
             $cache = new CacheImpl($this->cacheType, $this->cacheOptions);
             $facade->setCache($cache);
-            $this->configurationLoader->setCache($cache);
+            
+            if($this->useCacheForConfigurationLoader)
+            {
+                $this->configurationLoader->setCache($cache);
+            }
         }
 
         return $facade;

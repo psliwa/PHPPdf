@@ -69,4 +69,24 @@ class FacadeBuilderTest extends \PHPPdf\PHPUnit\Framework\TestCase
             array(true),
         );
     }
+    
+    /**
+     * @test
+     * @dataProvider booleanProvider
+     */
+    public function switchOnAndOffCacheForConfigurationLoader($useCache)
+    {
+        $this->builder->setUseCacheForConfigurationLoader($useCache);
+        $this->builder->setCache('File', array('cache_dir' => TEST_RESOURCES_DIR));
+        
+        $loader = $this->getMockBuilder('PHPPdf\Configuration\Loader')
+                       ->getMock();
+                       
+        $loader->expects($useCache ? $this->once() : $this->never())
+               ->method('setCache');
+               
+        $this->builder->setConfigurationLoader($loader);
+               
+        $this->builder->build();
+    }
 }

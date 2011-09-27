@@ -418,6 +418,8 @@ class DocumentParser extends XmlParser
             $node = $this->createNodeByTag($tag);            
         }
 
+        $node->setUnitConverter($this->document);
+
         return $node;
     }
     

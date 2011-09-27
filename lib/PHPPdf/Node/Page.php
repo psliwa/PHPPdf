@@ -520,7 +520,6 @@ class Page extends Container
     public function unserialize($serialized)
     {
         parent::unserialize($serialized);
-
         $this->initializePlaceholders();
     }
     
