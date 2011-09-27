@@ -156,7 +156,7 @@ class Engine implements BaseEngine
         try
         {
             $pdf = \Zend_Pdf::load($file);
-            $engine = new self($pdf);
+            $engine = new self($pdf, $this->unitConverter);
             
             foreach($pdf->pages as $page)
             {

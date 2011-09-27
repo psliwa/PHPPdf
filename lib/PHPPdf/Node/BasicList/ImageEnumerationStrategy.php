@@ -89,7 +89,7 @@ class ImageEnumerationStrategy extends AbstractEnumerationStrategy
     {
         $image = $this->getImage($list);
         $fontSize = $list->getRecurseAttribute('font-size');
-        list($width, $height) = $this->getImageDimension($image, $fontSize);
+        list($width, $height) = $this->getImageDimension($document, $image, $fontSize);
 
         return $width;        
     }
