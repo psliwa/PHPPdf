@@ -18,6 +18,6 @@ class CurrentPageNumber extends PageText
         $page = $this->getPage();
         $context = $page->getContext();
 
-        return $context->getPageNumber();
+        return sprintf($this->getAttribute('format'), $context->getPageNumber());
     }
 }

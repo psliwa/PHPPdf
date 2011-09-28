@@ -24,7 +24,8 @@ class CacheImpl implements Cache
     const ENGINE_SQLITE = 'Sqlite';
     const ENGINE_XCACHE = 'Xcache';
     const ENGINE_ZEND_PLATFORM = 'ZendPlatform';
-    const ENGINE_ZEND_SERVER = 'ZendServer';
+    const ENGINE_ZEND_SERVER_DISK = 'ZendServer_Disk';
+    const ENGINE_ZEND_SERVER_SH_MEM = 'ZendServer_ShMem';
 
     /**
      * @var Zend_Cache_Core

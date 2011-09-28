@@ -82,7 +82,9 @@ class CurrentPageNumberTest extends \PHPPdf\PHPUnit\Framework\TestCase
         $pageNumber = 5;
         $contextMock->expects($this->atLeastOnce())
                     ->method('getPageNumber')
-                    ->will($this->returnValue(5));
+                    ->will($this->returnValue($pageNumber));
+                    
+        $this->node->setAttribute('format', 'abc%s.');
 
         $this->node->setParent($pageMock);
         $linePart = $this->getMockBuilder('PHPPdf\Node\Paragraph\LinePart')
@@ -90,9 +92,10 @@ class CurrentPageNumberTest extends \PHPPdf\PHPUnit\Framework\TestCase
                          ->disableOriginalConstructor()
                          ->getMock();
                          
+        $expectedText = 'abc'.$pageNumber.'.';
         $linePart->expects($this->at(0))
                  ->method('setWords')
-                 ->with($pageNumber);
+                 ->with($expectedText);
 
                  
         $document = new Document();
@@ -111,7 +114,7 @@ class CurrentPageNumberTest extends \PHPPdf\PHPUnit\Framework\TestCase
         $this->node->evaluate();
         $this->node->collectOrderedDrawingTasks(new Document(), $tasks);
         $this->assertEquals(1, count($tasks));
-        $this->assertEquals($pageNumber, $this->node->getText());
+        $this->assertEquals($expectedText, $this->node->getText());
     }
 
     /**

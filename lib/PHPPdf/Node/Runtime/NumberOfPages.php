@@ -18,6 +18,6 @@ class NumberOfPages extends PageText
         $page = $this->getPage();
         $context = $page->getContext();
 
-        return $context->getNumberOfPages();
+        return sprintf($this->getAttribute('format'), $context->getNumberOfPages());
     }
 }

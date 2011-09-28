@@ -30,25 +30,27 @@ class UnitConverterImplTest extends TestCase
      * @test
      * @dataProvider unitProvider
      */
-    public function convertUnit($unit, $expected, $dpi = 1)
+    public function convertUnit($value, $expected, $unit = null, $dpi = 1)
     {
         $converter = new UnitConverterImpl($dpi);
         
-        $this->assertEquals($expected, $converter->convertUnit($unit), 'invalid unit conversion', 0.001);
+        $this->assertEquals($expected, $converter->convertUnit($value, $unit), 'invalid unit conversion', 0.001);
     }
 
     public function unitProvider()
     {
         return array(
-            array('1px', UnitConverterImpl::UNITS_PER_INCH, 1),
-            array('1px', UnitConverterImpl::UNITS_PER_INCH/2, 2),
+            array('1px', UnitConverterImpl::UNITS_PER_INCH, null, 1),
+            array('1px', UnitConverterImpl::UNITS_PER_INCH/2, null, 2),
             array(3, 3, 12),
             array(3.2, 3.2, 12),
-            array('10cm', 100),
-            array('10mm', 10),
+            array('10cm', 10*72/UnitConverterImpl::MM_PER_INCH*10),
+            array('10mm', 10*72/UnitConverterImpl::MM_PER_INCH),
             array('1in', UnitConverterImpl::UNITS_PER_INCH),
             array('1pt', 1),
             array('1pc', 12),
+            array(1, UnitConverterImpl::UNITS_PER_INCH, 'px', 1),
+            array('1pt', UnitConverterImpl::UNITS_PER_INCH, 'px', 1),
         );
     }
     

@@ -17,6 +17,7 @@ class UnitConverterImpl implements UnitConverter
 {
     //unit of x and y axes is 1/72 inch
     const UNITS_PER_INCH = 72;
+    const MM_PER_INCH = 25.3995;
 
     private $dpi;
     
@@ -74,9 +75,7 @@ class UnitConverterImpl implements UnitConverter
 
     private function convertCmUnit($value)
     {
-        $value = (float) $value;
-        
-        return $value * 10;
+        return $this->convertMmUnit($value)*10;
     }
 
     private function convertInUnit($value)
@@ -92,7 +91,7 @@ class UnitConverterImpl implements UnitConverter
     
     private function convertMmUnit($value)
     {
-        return (float) $value;
+        return $this->convertInUnit($value)/self::MM_PER_INCH;
     }
 
     public function convertPercentageValue($percent, $value)
