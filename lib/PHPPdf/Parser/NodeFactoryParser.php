@@ -29,6 +29,7 @@ class NodeFactoryParser extends XmlParser
     const FORMATTERS_TAG = 'formatters';
     const FORMATTER_TAG = 'formatter';
     const INVOKE_TAG = 'invoke';
+    const ALIAS_TAG = 'alias';
 
     private $stylesheetParser;
     private $isFormattersParsing = false;
@@ -37,6 +38,8 @@ class NodeFactoryParser extends XmlParser
     private $currentArg = null;
     
     private $lastTag = null;
+    private $currentAliases = array();
+    private $invokeMethods = array();
     
     private $unitConverter = null;
 
@@ -96,10 +99,15 @@ class NodeFactoryParser extends XmlParser
         {
             $this->parseInvokeArg($reader);
         }
+        elseif($reader->name === self::ALIAS_TAG)
+        {
+            $this->currentAliases[] = $reader->readString();
+        }
     }
 
     private function parseNode(\XMLReader $reader)
     {
+        $this->currentAliases = array();
         $root = $this->getLastElementFromStack();
 
         $name = trim($reader->getAttribute('name'));
@@ -157,8 +165,7 @@ class NodeFactoryParser extends XmlParser
         $method = $reader->getAttribute('method');
         $argId = $reader->getAttribute('argId');
         
-        $factory = $this->getFirstElementFromStack();
-        $factory->addInvocationsMethodsOnCreate($this->lastTag, $method, $argId);
+        $this->invokeMethods[] = array($method, $argId);
     }
     
     private function parseInvokeArg(\XMLReader $reader)
@@ -185,7 +192,20 @@ class NodeFactoryParser extends XmlParser
         }
         elseif(!$this->isFormattersParsing && $reader->name === self::GLYPH_TAG)
         {
-            $this->popFromStack();
+            $node = $this->popFromStack();
+            
+            $factory = $this->getFirstElementFromStack();
+
+            $factory->addAliases($this->lastTag, $this->currentAliases);
+
+            foreach($this->invokeMethods as $invokeMethod)
+            {
+                list($method, $argId) = $invokeMethod;
+                $factory->addInvocationsMethodsOnCreate($this->lastTag, $method, $argId);
+            }
+            
+            $this->currentAliases = array();
+            $this->invokeMethods = array();
         }
     }
 }

@@ -22,13 +22,32 @@ class Factory implements \Serializable
     private $prototypes = array();
     private $invocationsMethodsOnCreate = array();
     private $invokeArgs = array();
+    private $aliases = array();
 
-    public function addPrototype($name, Node $node, array $invocationsMethodsOnCreate = array())
+    public function addPrototype($name, Node $node, array $invocationsMethodsOnCreate = array(), array $aliases = array())
     {
         $name = (string) $name;
 
         $this->prototypes[$name] = $node;
         $this->invocationsMethodsOnCreate[$name] = $invocationsMethodsOnCreate;
+        
+        foreach($aliases as $alias)
+        {
+            $this->aliases[$alias] = $name;
+        }
+    }
+    
+    public function addAliases($name, array $aliases)
+    {
+        if(!isset($this->prototypes[$name]))
+        {
+            UnregisteredNodeException::nodeNotRegisteredException($name);
+        }
+        
+        foreach($aliases as $alias)
+        {
+            $this->aliases[$alias] = $name;
+        }
     }
     
     public function addPrototypes(array $prototypes)
@@ -84,9 +103,10 @@ class Factory implements \Serializable
      */
     public function create($name)
     {
-        $prototype = $this->getPrototype($name);
+        $name = $this->resolveName($name);
 
-        $product = $prototype->copy();
+        $prototype = $this->getPrototype($name);
+        $product = $prototype->copy();        
         
         foreach($this->invocationsMethodsOnCreate[$name] as $methodName => $argTag)
         {
@@ -112,15 +132,32 @@ class Factory implements \Serializable
         {
             UnregisteredNodeException::nodeNotRegisteredException($name);
         }
+        
+        $name = $this->resolveName($name);
 
         return $this->prototypes[$name];
+    }
+    
+    private function resolveName($name)
+    {
+        if(isset($this->prototypes[$name]))
+        {
+            return $name;
+        }
+        
+        if(!isset($this->aliases[$name]))
+        {
+            UnregisteredNodeException::nodeNotRegisteredException($name);
+        }
+        
+        return $this->resolveName($this->aliases[$name]);
     }
 
     public function hasPrototype($name)
     {
         $name = (string) $name;
 
-        return isset($this->prototypes[$name]);
+        return isset($this->prototypes[$name]) || isset($this->aliases[$name]);
     }
 
     public function serialize()
@@ -129,6 +166,7 @@ class Factory implements \Serializable
             'prototypes' => $this->prototypes,
             'invocationsMethodsOnCreate' => $this->invocationsMethodsOnCreate,
             'invokeArgs' => $this->invokeArgs,
+            'aliases' => $this->aliases,
         ));
     }
 
@@ -150,5 +188,7 @@ class Factory implements \Serializable
         {
             $this->addInvokeArg($tag, $value);
         }
+        
+        $this->aliases = (array) $data['aliases'];
     }
 }

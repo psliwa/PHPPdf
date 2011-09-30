@@ -230,15 +230,52 @@ XML;
         $xml = <<<XML
 <factory>
     <nodes>
-    	<node name="tag" class="PHPPdf\Node\Container">
+    	<node name="tag1" class="PHPPdf\Node\Container">
+    		<alias>tag2</alias>
     		<invoke method="setMarginLeft" argId="marginLeft" />
+    	</node>
+    	<node name="tag3" class="PHPPdf\Node\Container">
+    		<invoke method="setMarginLeft" argId="marginLeft2" />
     	</node>
     </nodes>
 </factory>
 XML;
         $nodeFactory = $this->parser->parse($xml);
         
-        $this->assertEquals(array('tag' => array('setMarginLeft' => 'marginLeft')), $nodeFactory->invocationsMethodsOnCreate());
+        $expected = array(
+            'tag1' => array('setMarginLeft' => 'marginLeft'),
+            'tag3' => array('setMarginLeft' => 'marginLeft2'),
+        );
+
+        $this->assertEquals($expected, $nodeFactory->invocationsMethodsOnCreate());
+    }
+    
+    /**
+     * @test
+     */
+    public function registerNodeAliases()
+    {
+        $xml = <<<XML
+<factory>
+    <nodes>
+    	<node name="tag1" class="PHPPdf\Node\Container">
+    		<alias>tag2</alias>
+    		<alias>tag3</alias>
+    		<invoke method="setMarginLeft" argId="marginLeft" />
+    	</node>
+    	<node name="tag4" class="PHPPdf\Node\Container">
+    		<alias>tag5</alias>
+    		<invoke method="setMarginLeft" argId="marginLeft" />
+    	</node>
+    </nodes>
+</factory>
+XML;
+
+        $nodeFactory = $this->parser->parse($xml);
+        
+        $this->assertTrue($nodeFactory->getPrototype('tag1') === $nodeFactory->getPrototype('tag2'));
+        $this->assertTrue($nodeFactory->getPrototype('tag1') === $nodeFactory->getPrototype('tag3'));
+        $this->assertTrue($nodeFactory->getPrototype('tag4') === $nodeFactory->getPrototype('tag5'));
     }
     
     /**

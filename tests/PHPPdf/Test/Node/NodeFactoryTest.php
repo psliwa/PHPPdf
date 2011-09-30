@@ -104,4 +104,22 @@ class NodeFactoryTest extends \PHPPdf\PHPUnit\Framework\TestCase
         
         $this->assertTrue($product === $this->factory->create($key));        
     }
+    
+    /**
+     * @test
+     */
+    public function addNodeAliases()
+    {
+        $prototype = new Container();
+        $aliases = array('alias1', 'alias2');
+        $key = 'key';
+        $this->factory->addPrototype($key, $prototype, array(), $aliases);
+        
+        foreach($aliases as $alias)
+        {
+            $this->assertTrue($prototype === $this->factory->getPrototype($alias));
+            
+            $copy = $this->factory->create($alias);
+        }
+    }
 }
