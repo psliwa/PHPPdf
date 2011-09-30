@@ -306,6 +306,7 @@
 	        </formatters>
 	    </node>
 	    <node name="i" class="PHPPdf\Node\Text">
+	    	<alias>em</alias>
 	        <stylesheet>
 	            <attribute name="font-style" value="italic" />
 	        </stylesheet>
