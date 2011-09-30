@@ -222,6 +222,11 @@ class LinePart implements Drawable
         $this->yTranslation += $translate;
     }
     
+    public function getXTranslation()
+    {
+        return $this->xTranslation;
+    }
+    
     public function flush()
     {
         $this->text = array();

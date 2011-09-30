@@ -62,6 +62,11 @@ class Line
         $this->xTranslation = $translation;
     }
     
+    public function getXTranslation()
+    {
+        return $this->xTranslation;
+    }
+    
     public function getParts()
     {
         return $this->parts;

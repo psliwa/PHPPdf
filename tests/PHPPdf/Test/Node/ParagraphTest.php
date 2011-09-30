@@ -2,6 +2,8 @@
 
 namespace PHPPdf\Test\Node;
 
+use PHPPdf\Node\Node;
+
 use PHPPdf\Util\DrawingTask;
 
 use PHPPdf\Util\DrawingTaskHeap;
@@ -278,6 +280,65 @@ class ParagraphTest extends \PHPPdf\PHPUnit\Framework\TestCase
             array(array(
                 20, 20 ,10            
             )),
+        );
+    }
+    
+    /**
+     * @test
+     * @dataProvider resizeWillTranslateLinesProvider
+     */
+    public function resizeWillTranslateLines($width, $align, array $linePartWidths, $resize, array $expectedXTranslations)
+    {
+        $this->paragraph->setAttribute('text-align', $align);
+        
+        $this->paragraph->getBoundary()->setNext(0, 100)
+                                       ->setNext($width, 100)
+                                       ->setNext($width, 0)
+                                       ->setNext(0, 0)
+                                       ->close();
+        
+        $lineWidth = array_sum($linePartWidths);
+        $firstXTranslation = 0;
+        
+        if($align == Node::ALIGN_RIGHT)
+        {
+            $firstXTranslation = $width - $lineWidth;
+        }
+        elseif($align == Node::ALIGN_CENTER)
+        {
+            $firstXTranslation = ($width -  $lineWidth)/2;
+        }
+        $line = new Line($this->paragraph, 0, 0);
+        
+        $xTranslation = $firstXTranslation;
+        
+        $text = new Text();
+        
+        foreach($linePartWidths as $linePartWidth)
+        {
+            $linePart = new LinePart('', $linePartWidth, $xTranslation, $text);
+            $line->addPart($linePart);
+            $xTranslation += $linePartWidth;
+        }
+        
+        $this->paragraph->addLine($line);
+
+        $this->paragraph->resize($resize, 0);
+        
+        foreach($line->getParts() as $i => $linePart)
+        {
+            $this->assertEquals($expectedXTranslations[$i], $linePart->getXTranslation());
+        }
+    }
+    
+    public function resizeWillTranslateLinesProvider()
+    {
+        return array(
+            array(200, Node::ALIGN_LEFT, array(30, 40, 50), 100, array(0, 30, 70)),
+            array(200, Node::ALIGN_RIGHT, array(30, 40, 50), 100, array(180, 210, 250)),
+            array(200, Node::ALIGN_CENTER, array(30, 40, 50), 100, array(90, 120, 160)),
+            array(200, Node::ALIGN_RIGHT, array(30, 40, 50), -50, array(30, 60, 100)),
+            array(200, Node::ALIGN_CENTER, array(30, 40, 50), -50, array(15, 45, 85)),
         );
     }
 }

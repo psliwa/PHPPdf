@@ -246,4 +246,22 @@ class Paragraph extends Container
         
         parent::flush();
     }
+    
+    public function resize($x, $y)
+    {
+        parent::resize($x, $y);
+
+        $textAlign = $this->getRecurseAttribute('text-align');
+        if(in_array($textAlign, array(self::ALIGN_CENTER, self::ALIGN_RIGHT)))
+        {
+            foreach($this->lines as $line)
+            {
+                $trans = $textAlign === self::ALIGN_CENTER ? $x/2 : $x;
+                foreach($line->getParts() as $part)
+                {
+                    $part->horizontalTranslate($trans);
+                }
+            }
+        }
+    }
 }
