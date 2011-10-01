@@ -182,18 +182,7 @@ class Png extends \Zend_Pdf_Resource_Image_Png
 
                 $colorSpace = new \Zend_Pdf_Element_Name('DeviceGray');
 
-                
-                $decodingObjFactory = \Zend_Pdf_ElementFactory::createFactory(1);
-                $decodingStream = $decodingObjFactory->newStreamObject($imageData);
-                $decodingStream->dictionary->Filter      = new \Zend_Pdf_Element_Name('FlateDecode');
-                $decodingStream->dictionary->DecodeParms = new \Zend_Pdf_Element_Dictionary();
-                $decodingStream->dictionary->DecodeParms->Predictor        = new \Zend_Pdf_Element_Numeric(self::PREDICATOR);
-                $decodingStream->dictionary->DecodeParms->Columns          = new \Zend_Pdf_Element_Numeric($width);
-                $decodingStream->dictionary->DecodeParms->Colors           = new \Zend_Pdf_Element_Numeric(2);   //GreyAlpha
-                $decodingStream->dictionary->DecodeParms->BitsPerComponent = new \Zend_Pdf_Element_Numeric($bits);
-                $decodingStream->skipFilters();
-
-                $pngDataRawDecoded = $decodingStream->value;
+                $pngDataRawDecoded = $this->decode($imageData, $width, 2, $bits);
 
                 //Iterate every pixel and copy out gray data and alpha channel (this will be slow)
                 for($pixel = 0, $pixelcount = ($width * $height); $pixel < $pixelcount; $pixel++) {
@@ -217,18 +206,7 @@ class Png extends \Zend_Pdf_Resource_Image_Png
 
                 $colorSpace = new \Zend_Pdf_Element_Name('DeviceRGB');
 
-                
-                $decodingObjFactory = \Zend_Pdf_ElementFactory::createFactory(1);
-                $decodingStream = $decodingObjFactory->newStreamObject($imageData);
-                $decodingStream->dictionary->Filter      = new \Zend_Pdf_Element_Name('FlateDecode');
-                $decodingStream->dictionary->DecodeParms = new \Zend_Pdf_Element_Dictionary();
-                $decodingStream->dictionary->DecodeParms->Predictor        = new \Zend_Pdf_Element_Numeric(self::PREDICATOR);
-                $decodingStream->dictionary->DecodeParms->Columns          = new \Zend_Pdf_Element_Numeric($width);
-                $decodingStream->dictionary->DecodeParms->Colors           = new \Zend_Pdf_Element_Numeric(4);   //RGBA
-                $decodingStream->dictionary->DecodeParms->BitsPerComponent = new \Zend_Pdf_Element_Numeric($bits);
-                $decodingStream->skipFilters();
-
-                $pngDataRawDecoded = $decodingStream->value;
+                $pngDataRawDecoded = $this->decode($imageData, $width, 4, $bits);
 
                 //Iterate every pixel and copy out rgb data and alpha channel (this will be slow)
                 for($pixel = 0, $pixelcount = ($width * $height); $pixel < $pixelcount; $pixel++) {
@@ -299,6 +277,21 @@ class Png extends \Zend_Pdf_Resource_Image_Png
         if ($compressed) {
             $this->_resource->skipFilters();
         }
+    }
+    
+    private function decode($imageData, $width, $colors, $bits)
+    {
+        $decodingObjFactory = \Zend_Pdf_ElementFactory::createFactory(1);
+        $decodingStream = $decodingObjFactory->newStreamObject($imageData);
+        $decodingStream->dictionary->Filter      = new \Zend_Pdf_Element_Name('FlateDecode');
+        $decodingStream->dictionary->DecodeParms = new \Zend_Pdf_Element_Dictionary();
+        $decodingStream->dictionary->DecodeParms->Predictor        = new \Zend_Pdf_Element_Numeric(self::PREDICATOR);
+        $decodingStream->dictionary->DecodeParms->Columns          = new \Zend_Pdf_Element_Numeric($width);
+        $decodingStream->dictionary->DecodeParms->Colors           = new \Zend_Pdf_Element_Numeric($colors);
+        $decodingStream->dictionary->DecodeParms->BitsPerComponent = new \Zend_Pdf_Element_Numeric($bits);
+        $decodingStream->skipFilters();
+
+        return $decodingStream->value;
     }
     
     private function open($isRemote, $imageFileName)

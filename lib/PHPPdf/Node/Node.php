@@ -905,8 +905,8 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
     {
         if(!isset($this->attributes[$name]))
         {
-            $class = get_called_class();
-            return isset(self::$defaultAttributes[$class][$name]) ? self::$defaultAttributes[$class][$name] : null;
+            $class = get_class($this);
+            return self::$defaultAttributes[$class][$name];
         }
         return $this->attributes[$name];
     }
@@ -979,14 +979,8 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
      */
     public function hasAttribute($name)
     {
-        if(in_array($name, array_keys($this->attributes)))
-        {
-            return true;
-        }
-        
-        $class = get_called_class();
-        
-        return in_array($name, array_keys(self::$defaultAttributes[$class]));
+        $class = get_class($this);
+        return array_key_exists($name, self::$defaultAttributes[$class]);
     }
 
     /**
@@ -1025,7 +1019,7 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
         if($value === null && $parent)
         {
             $value = $parent->getRecurseAttribute($name);
-            $this->setAttribute($name, $value);
+            $this->setAttributeDirectly($name, $value);
             return $value;
         }
 
