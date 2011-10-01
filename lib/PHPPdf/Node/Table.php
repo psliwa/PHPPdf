@@ -162,9 +162,28 @@ class Table extends Container implements Listener
     {
         $tableWidth = $this->getWidth();
         $unitConverter = $this->getUnitConverter();
-        array_walk($this->widthsOfColumns, function(&$width, $key, $tableWidth) use($unitConverter){
+        
+        $tableWidthMinusColumns = $tableWidth;
+        $columnsWithoutWidth = array();
+        array_walk($this->widthsOfColumns, function(&$width, $key, $tableWidth) use($unitConverter, &$tableWidthMinusColumns, &$columnsWithoutWidth){
             $width = $unitConverter ? $unitConverter->convertPercentageValue($width, $tableWidth) : $width;
+            if(!$width)
+            {
+                $columnsWithoutWidth[] = $key;
+            }
+            else
+            {
+                $tableWidthMinusColumns -= $width;
+            }
         }, $tableWidth);
+        
+        $numberOfColumnsWithoutWidth = count($columnsWithoutWidth);
+        $width = $numberOfColumnsWithoutWidth ? $tableWidthMinusColumns / $numberOfColumnsWithoutWidth : 0;
+        
+        foreach($columnsWithoutWidth as $column)
+        {
+            $this->widthsOfColumns[$column] = $width;
+        }
     }
 
     public function getNumberOfColumns()

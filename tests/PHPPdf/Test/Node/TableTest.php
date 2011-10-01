@@ -324,6 +324,7 @@ class TableTest extends \PHPPdf\PHPUnit\Framework\TestCase
         return array(
             array(100, array(100), array(100)),
             array(200, array('25%', '25%'), array(50, 50)),
+            array(100, array('25%', null), array(25, 75)),
         );
     }
 
