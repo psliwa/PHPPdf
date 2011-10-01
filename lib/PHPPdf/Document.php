@@ -8,19 +8,19 @@
 
 namespace PHPPdf;
 
-
-use PHPPdf\Util\DrawingTaskHeap;
-
 use PHPPdf\Util\UnitConverter,
     PHPPdf\Node\Node,
-    PHPPdf\Engine\ZF\Engine,
+    PHPPdf\Engine\ZF\Engine as ZfEngine,
     PHPPdf\Formatter as Formatters,
     PHPPdf\Node\Page,
     PHPPdf\Node\PageCollection,
     PHPPdf\Enhancement\EnhancementBag,
     PHPPdf\Font\Registry as FontRegistry,
     PHPPdf\Enhancement\Factory as EnhancementFactory,
-    PHPPdf\Exception\DrawingException;
+    PHPPdf\Exception\DrawingException,
+    PHPPdf\Engine\Engine,
+    PHPPdf\Engine\GraphicsContext,
+    PHPPdf\Util\DrawingTaskHeap;
 
 /**
  * Document to generate
@@ -28,7 +28,7 @@ use PHPPdf\Util\UnitConverter,
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  * @todo Inject Engine object form outside
  */
-class Document implements UnitConverter
+class Document implements UnitConverter, Engine
 {   
     const DRAWING_PRIORITY_BACKGROUND1 = 60;
     const DRAWING_PRIORITY_BACKGROUND2 = 50;
@@ -105,7 +105,7 @@ class Document implements UnitConverter
     public function initialize()
     {
         $this->processed = false;
-        $this->engine = new Engine(null, $this->unitConverter);
+        $this->engine = new ZfEngine(null, $this->unitConverter);
     }
     
     /**
@@ -229,9 +229,14 @@ class Document implements UnitConverter
         return $this->engine->createGraphicsContext($size);
     }
     
-    public function attachGraphicsContext($gc)
+    public function attachGraphicsContext(GraphicsContext $gc)
     {
         $this->engine->attachGraphicsContext($gc);
+    }
+    
+    public function getAttachedGraphicsContexts()
+    {
+        return $this->engine->getAttachedGraphicsContexts();
     }
     
     public function createColor($color)
