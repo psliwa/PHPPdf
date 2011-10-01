@@ -16,7 +16,9 @@ class ImageDimensionFormatterTest extends \PHPPdf\PHPUnit\Framework\TestCase
     public function setUp()
     {
         $this->formatter = new ImageDimensionFormatter();
-        $this->document = new Document();
+        $this->document = $this->getMockBuilder('PHPPdf\Document')
+                               ->setMethods(array('createImage'))
+                               ->getMock();
     }
 
     /**
@@ -30,10 +32,16 @@ class ImageDimensionFormatterTest extends \PHPPdf\PHPUnit\Framework\TestCase
         $imageWidth = 50;
         
         $imageResource = $this->createImageResourceMock($imageWidth, $imageHeight);
+        $imagePath = 'some/path';
         
         $image = new Image(array(
-            'src' => $imageResource,
+            'src' => $imagePath,
         ));
+        $this->document->expects($this->atLeastOnce())
+                       ->method('createImage')
+                       ->with($imagePath)
+                       ->will($this->returnValue($imageResource));
+
         $page->add($image);
         
         $this->formatter->format($image, $this->document);
@@ -66,20 +74,17 @@ class ImageDimensionFormatterTest extends \PHPPdf\PHPUnit\Framework\TestCase
 
         $height = 100;
         $width = 120;
+        $imagePath = 'image/path';
         
-        $imageResource = $this->getMockBuilder('PHPPdf\Engine\Image')
-                              ->setMethods(array('getOriginalHeight', 'getOriginalWidth'))
-                              ->getMock();
-                              
-        $imageResource->expects($this->atLeastOnce())
-                      ->method('getOriginalHeight')
-                      ->will($this->returnValue($height));
-        $imageResource->expects($this->atLeastOnce())
-                      ->method('getOriginalWidth')
-                      ->will($this->returnValue($width));
+        $imageResource = $this->createImageResourceMock($width, $height);
         
+        $this->document->expects($this->atLeastOnce())
+                       ->method('createImage')
+                       ->with($imagePath)
+                       ->will($this->returnValue($imageResource));
+                      
         $image = new Image(array(
-            'src' => $imageResource,
+            'src' => $imagePath,
         ));
 
         $container = new Container(array(
@@ -105,11 +110,18 @@ class ImageDimensionFormatterTest extends \PHPPdf\PHPUnit\Framework\TestCase
 
         $imageWidth = 100;
         $imageHeight = 120;
+        $imagePath = 'image/path';
         
         $imageResource = $this->createImageResourceMock($imageWidth, $imageHeight);
 
+        $this->document->expects($this->atLeastOnce())
+                       ->method('createImage')
+                       ->with($imagePath)
+                       ->will($this->returnValue($imageResource));
+        
+
         $image = new Image(array(
-            'src' => $imageResource,
+            'src' => $imagePath,
             'width' => $width,
             'height' => $height,
         ));

@@ -30,7 +30,8 @@ class Image extends Node
     
     protected function doDraw(Document $document, DrawingTaskHeap $tasks)
     {
-        $callback = function($node)
+        $sourceImage = $document->createImage($this->getAttribute('src'));
+        $callback = function($node, $sourceImage)
         {
             $gc = $node->getGraphicsContext();
             
@@ -52,8 +53,7 @@ class Image extends Node
             }
 
             list($x, $y) = $node->getStartDrawingPoint();
-            $image = $node->getAttribute('src');
-            $gc->drawImage($image, $x, $y-$node->getHeight(), $x+$node->getWidth(), $y);
+            $gc->drawImage($sourceImage, $x, $y-$node->getHeight(), $x+$node->getWidth(), $y);
             
             if($isAlphaSet || $rotationNode)
             {
@@ -61,25 +61,28 @@ class Image extends Node
             }
         };
         
-        $drawingTask = new DrawingTask($callback, array($this));
+        $drawingTask = new DrawingTask($callback, array($this, $sourceImage));
 
         $tasks->insert($drawingTask);
     }
 
     protected function beforeFormat(Document $document)
     {
-        $src = $this->getAttribute('src');
-
-        if(is_string($src))
-        {
-            $src = $document->createImage($src);
-            $this->setAttribute('src', $src);
-        }
-        
         if(!$this->getWidth() && !$this->getHeight())
         {
-            $this->setWidth($src->getOriginalWidth());
-            $this->setHeight($src->getOriginalHeight());
+            $src = $this->getAttribute('src');
+    
+            if(is_string($src))
+            {
+                $source = $document->createImage($src);
+            }
+            else
+            {
+                $source = $src;
+            }
+
+            $this->setWidth($source->getOriginalWidth());
+            $this->setHeight($source->getOriginalHeight());
         }
     }
 

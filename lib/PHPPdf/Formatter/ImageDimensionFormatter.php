@@ -8,6 +8,8 @@
 
 namespace PHPPdf\Formatter;
 
+use PHPPdf\Engine\Image;
+
 use PHPPdf\Util;
 
 use PHPPdf\Node as Nodes,
@@ -25,14 +27,15 @@ class ImageDimensionFormatter extends BaseFormatter
             $width = $node->getWidth();
             $height = $node->getHeight();
             $src = $node->getAttribute('src');
+            $source = $document->createImage($src);
 
-            $originalWidth = $src->getOriginalWidth();
-            $originalHeight = $src->getOriginalHeight();
+            $originalWidth = $source->getOriginalWidth();
+            $originalHeight = $source->getOriginalHeight();
             $originalRatio = $originalWidth/$originalHeight;
 
             if(!$width && !$height)
             {
-                list($width, $height) = $this->setDimensionsFromParent($node);
+                list($width, $height) = $this->setDimensionsFromParent($source, $node);
             }
             
             list($width, $height) = Util::calculateDependantSizes($width, $height, $originalRatio);
@@ -47,13 +50,12 @@ class ImageDimensionFormatter extends BaseFormatter
         return ($node instanceof Nodes\Image && (!$node->getWidth() || !$node->getHeight()));
     }
 
-    private function setDimensionsFromParent(Nodes\Node $node)
+    private function setDimensionsFromParent(Image $sourceImage, Nodes\Node $node)
     {
         $parent = $node->getParent();
-        $src = $node->getAttribute('src');
 
-        $width = $src->getOriginalWidth();
-        $height = $src->getOriginalHeight();
+        $width = $sourceImage->getOriginalWidth();
+        $height = $sourceImage->getOriginalHeight();
 
         if($width > $parent->getWidth() || $height > $parent->getHeight())
         {

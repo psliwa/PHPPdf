@@ -31,11 +31,22 @@ class ImageTest extends \PHPPdf\PHPUnit\Framework\TestCase
      */
     public function drawing()
     {
-        $pageMock = $this->getMock('PHPPdf\Node\Page', array('getGraphicsContext'));
-
+        $imagePath = 'some/path';
+        
+        $this->image->setAttribute('src', $imagePath);
+        
         $imageResource = $this->getMockBuilder('PHPPdf\Engine\Image')
                               ->getMock();
-        $this->image->setAttribute('src', $imageResource);
+        $document = $this->getMockBuilder('PHPPdf\Document')
+                         ->setMethods(array('createImage'))
+                         ->getMock();
+
+        $document->expects($this->atLeastOnce())
+                 ->method('createImage')
+                 ->with($imagePath)
+                 ->will($this->returnValue($imageResource));
+                 
+        $pageMock = $this->getMock('PHPPdf\Node\Page', array('getGraphicsContext'));      
 
         $gcMock = $this->getMockBuilder('PHPPdf\Engine\GraphicsContext')
         			   ->getMock();
@@ -48,12 +59,10 @@ class ImageTest extends \PHPPdf\PHPUnit\Framework\TestCase
                  ->method('getGraphicsContext')
                  ->will($this->returnValue($gcMock));
 
-        $document = new Document();
-
         $this->image->setParent($pageMock);
 
         $tasks = new DrawingTaskHeap();
-        $this->image->collectOrderedDrawingTasks(new Document(), $tasks);
+        $this->image->collectOrderedDrawingTasks($document, $tasks);
 
         foreach($tasks as $task)
         {
