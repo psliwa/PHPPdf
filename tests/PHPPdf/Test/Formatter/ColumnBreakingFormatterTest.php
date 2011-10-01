@@ -272,7 +272,7 @@ class ColumnBreakingFormatterTest extends \PHPPdf\PHPUnit\Framework\TestCase
         {
             if($i < ($count-1))
             {
-                $this->assertEquals($pageHeight, $columns[$i]->getHeight());
+                $this->assertEquals($pageHeight, $columns[$i]->getHeight(), $i);
             }
         }
     }

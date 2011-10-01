@@ -249,7 +249,6 @@ class ColumnBreakingFormatter extends BaseFormatter
         if($enlarge > 0)
         {
             $originalContainer->resize(0, $enlarge);
-            $originalContainer->setHeight($originalContainer->getHeight() + $enlarge);
             $productOfBroke->translate(0, $enlarge);
         }
     }

@@ -2,6 +2,7 @@
 
 namespace PHPPdf\Test\Node;
 
+use PHPPdf\ObjectMother\NodeObjectMother;
 use PHPPdf\Document,
     PHPPdf\Node\Container,
     PHPPdf\Util\Point,
@@ -13,10 +14,12 @@ class ContainerTest extends \PHPPdf\PHPUnit\Framework\TestCase
      * @var \PHPPdf\Node\Container
      */
     private $node;
+    private $objectMother;
 
     public function setUp()
     {
         $this->node = new Container();
+        $this->objectMother = new NodeObjectMother($this);
     }
 
     /**
@@ -117,7 +120,7 @@ class ContainerTest extends \PHPPdf\PHPUnit\Framework\TestCase
      */
     public function resizeCausesBoundaryPointsTranslations($horizontalResizeBy, $verticalResizeBy, $width, $childWidth, $paddingRight, $childMarginRight, $childRelativeWidth = null)
     {
-        $boundary = $this->createResizableBoundaryMock($width, $horizontalResizeBy, $verticalResizeBy);
+        $boundary = $this->createResizableBoundaryMock($width, $horizontalResizeBy, $verticalResizeBy, 2);
 
         if($childRelativeWidth !== null)
         {
@@ -130,7 +133,7 @@ class ContainerTest extends \PHPPdf\PHPUnit\Framework\TestCase
             $childResizeBy = $childResizeBy < 0 ? $childResizeBy : 0;
         }
 
-        $childBoundary = $this->createResizableBoundaryMock($childWidth, $childResizeBy, 0, $childResizeBy != 0 ? 2 : false);
+        $childBoundary = $this->createResizableBoundaryMock($childWidth, $childResizeBy, 0, $childResizeBy != 0 ? 4 : false);
 
         $child = new Container();
         $child->setAttribute('margin-right', $childMarginRight);
@@ -171,11 +174,14 @@ class ContainerTest extends \PHPPdf\PHPUnit\Framework\TestCase
 
     public function createResizableBoundaryMock($width, $horizontalResizeBy, $verticalResizeBy, $initSequence = 1)
     {
-        $boundary = $this->getMock('PHPPdf\Util\Boundary', array('pointTranslate', 'getDiagonalPoint'));
+        $boundary = $this->getMock('PHPPdf\Util\Boundary', array('pointTranslate', 'getDiagonalPoint', 'getFirstPoint'));
 
         $boundary->expects($this->atLeastOnce())
                  ->method('getDiagonalPoint')
                  ->will($this->returnValue(Point::getInstance($width, 0)));
+        $boundary->expects($this->any())
+                 ->method('getFirstPoint')
+                 ->will($this->returnValue(Point::getInstance(0, 0)));
 
         if($initSequence !== false)
         {
@@ -256,5 +262,40 @@ class ContainerTest extends \PHPPdf\PHPUnit\Framework\TestCase
         $child->add($leaf);
 
         $this->assertTrue($this->node->hasLeafDescendants());
+    }
+    
+    /**
+     * @test
+     */
+    public function childrenWithRelativeWidthWillBePropelyHorizontallyResized()
+    {
+        $width = 100;
+        $horizontalResize = 50;
+        
+        for($i=0; $i<2; $i++)
+        {
+            $child = new Container();
+            $child->setWidth(50);
+            $child->setRelativeWidth('50%');
+            
+            $boundary = $this->objectMother->getBoundaryStub(50*$i, 50, 50, 50);
+            $this->invokeMethod($child, 'setBoundary', array($boundary));
+            
+            $this->node->add($child);
+        }
+        
+        $boundary = $this->objectMother->getBoundaryStub(0, 50, $width, 50);
+        $this->invokeMethod($this->node, 'setBoundary', array($boundary));
+        
+        $this->node->resize($horizontalResize, 0);
+        
+        $children = $this->node->getChildren();
+        
+        $expectedWidth = ($width + $horizontalResize)/2;
+        foreach($children as $child)
+        {
+            $realWidth = $child->getDiagonalPoint()->getX() - $child->getFirstPoint()->getX();
+            $this->assertEquals($expectedWidth, $realWidth);
+        }
     }
 }

@@ -30,12 +30,17 @@ class Paragraph extends Container
     
     public function getWidth()
     {
-        return $this->getParent()->getWidth();
+        if($this->getParent())
+        {
+            return $this->getParent()->getWidth();
+        }
+        
+        return 0;
     }
     
     public function setWidth($width)
     {
-        $this->getParent()->setWidth($width);
+        //width of paragraph can't be set directly
         return $this;
     }
     
@@ -245,23 +250,5 @@ class Paragraph extends Container
         $this->lines = array();
         
         parent::flush();
-    }
-    
-    public function resize($x, $y)
-    {
-        parent::resize($x, $y);
-
-        $textAlign = $this->getRecurseAttribute('text-align');
-        if(in_array($textAlign, array(self::ALIGN_CENTER, self::ALIGN_RIGHT)))
-        {
-            foreach($this->lines as $line)
-            {
-                $trans = $textAlign === self::ALIGN_CENTER ? $x/2 : $x;
-                foreach($line->getParts() as $part)
-                {
-                    $part->horizontalTranslate($trans);
-                }
-            }
-        }
     }
 }

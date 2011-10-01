@@ -1285,21 +1285,26 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
     public function resize($x, $y)
     {
         $diagonalXCoord = $this->getDiagonalPoint()->getX() - $this->getPaddingRight();
+        $firstXCoord = $this->getFirstPoint()->getX() + $this->getPaddingLeft();
 
         $this->getBoundary()->pointTranslate(1, $x, 0);
         $this->getBoundary()->pointTranslate(2, $x, $y);
         $this->getBoundary()->pointTranslate(3, 0, $y);
+        
+        $this->setHeight($this->getHeight() + $y);
+        $this->setWidth($this->getWidth() + $x);
 
         foreach($this->getChildren() as $child)
         {
             $childDiagonalXCoord = $child->getDiagonalPoint()->getX() + $child->getMarginRight();
+            $childFirstXCoord = $child->getFirstPoint()->getX();
 
             $relativeWidth = $child->getRelativeWidth();
 
             if($relativeWidth !== null)
             {
-                $relativeWidth = ((int) $relativeWidth)/100;
-                $childResize = ($diagonalXCoord + $x) * $relativeWidth - $childDiagonalXCoord;
+                $relativeWidth = ($x + $diagonalXCoord - $firstXCoord)*((int) $relativeWidth)/100;
+                $childResize = (($childFirstXCoord + $relativeWidth) + $child->getMarginRight()) - $childDiagonalXCoord;
             }
             else
             {
