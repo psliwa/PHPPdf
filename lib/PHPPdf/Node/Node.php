@@ -1364,19 +1364,19 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
         $boundary->reset();
         $clone = $this->copy();
 
-        $boundary->setNext($clonedBoundary[0])
-                 ->setNext($clonedBoundary[1])
-                 ->setNext($clonedBoundary[2]->translate(0, - $heightComplement))
-                 ->setNext($clonedBoundary[3]->translate(0, - $heightComplement))
+        $boundary->setNext($clonedBoundary->getPoint(0))
+                 ->setNext($clonedBoundary->getPoint(1))
+                 ->setNext($clonedBoundary->getPoint(2)->translate(0, - $heightComplement))
+                 ->setNext($clonedBoundary->getPoint(3)->translate(0, - $heightComplement))
                  ->close();
 
         $boundaryOfClone = $clone->getBoundary();
         $boundaryOfClone->reset();
 
-        $boundaryOfClone->setNext($clonedBoundary[0]->translate(0, $height))
-                        ->setNext($clonedBoundary[1]->translate(0, $height))
-                        ->setNext($clonedBoundary[2])
-                        ->setNext($clonedBoundary[3])
+        $boundaryOfClone->setNext($clonedBoundary->getPoint(0)->translate(0, $height))
+                        ->setNext($clonedBoundary->getPoint(1)->translate(0, $height))
+                        ->setNext($clonedBoundary->getPoint(2))
+                        ->setNext($clonedBoundary->getPoint(3))
                         ->close();
 
         $clone->setHeight($this->getHeight() - $height);

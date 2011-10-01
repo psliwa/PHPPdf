@@ -114,7 +114,7 @@ class Border extends Enhancement
             $firstPoint = $points[3];
             $diagonalPoint = $points[1];
 
-            $this->drawRoundedBoundary($graphicsContext, $firstPoint[0], $firstPoint[1], $diagonalPoint[0], $diagonalPoint[1], GraphicsContext::SHAPE_DRAW_STROKE);
+            $this->drawRoundedBoundary($graphicsContext, $firstPoint->getX(), $firstPoint->getY(), $diagonalPoint->getX(), $diagonalPoint->getY(), GraphicsContext::SHAPE_DRAW_STROKE);
         }
         elseif($this->type == self::TYPE_ALL)
         {

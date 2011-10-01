@@ -350,10 +350,10 @@ class Page extends Container
         $this->setMarginBottom($this->getMarginBottom() + $height);
         $footer->setWidth($this->getWidth());
 
-        $footer->getBoundary()->setNext($boundary[3])
-                              ->setNext($boundary[2])
-                              ->setNext($boundary[2]->translate(0, $height))
-                              ->setNext($boundary[3]->translate(0, $height))
+        $footer->getBoundary()->setNext($boundary->getPoint(3))
+                              ->setNext($boundary->getPoint(2))
+                              ->setNext($boundary->getPoint(2)->translate(0, $height))
+                              ->setNext($boundary->getPoint(3)->translate(0, $height))
                               ->close();
 
         $this->footer = $footer;
@@ -382,10 +382,10 @@ class Page extends Container
         $this->setMarginTop($this->getMarginTop() + $height);
         $header->setWidth($this->getWidth());
 
-        $header->getBoundary()->setNext($boundary[0]->translate(0, -$height))
-                              ->setNext($boundary[1]->translate(0, -$height))
-                              ->setNext($boundary[1])
-                              ->setNext($boundary[0])
+        $header->getBoundary()->setNext($boundary->getPoint(0)->translate(0, -$height))
+                              ->setNext($boundary->getPoint(1)->translate(0, -$height))
+                              ->setNext($boundary->getPoint(1))
+                              ->setNext($boundary->getPoint(0))
                               ->close();
 
         $this->header = $header;

@@ -183,6 +183,11 @@ class Boundary implements \Countable, \Iterator, \ArrayAccess, \Serializable
     {
         return $this->points;
     }
+    
+    public function getPoint($i)
+    {
+        return $this->offsetGet($i);
+    }
 
     public function key()
     {
@@ -213,9 +218,9 @@ class Boundary implements \Countable, \Iterator, \ArrayAccess, \Serializable
      */
     public function translate($x, $y)
     {
-        foreach($this->points as $key => $point)
+        for($i=0; $i<$this->numberOfPoints; $i++)
         {
-            $this->points[$key] = $point->translate($x, $y);
+            $this->points[$i] = $this->points[$i]->translate($x, $y);
         }
 
         return $this;
@@ -230,9 +235,7 @@ class Boundary implements \Countable, \Iterator, \ArrayAccess, \Serializable
      */
     public function pointTranslate($pointIndex, $x, $y)
     {
-        $point = $this[$pointIndex];
-
-        $this->points[$pointIndex] = $point->translate($x, $y);
+        $this->points[$pointIndex] = $this->points[$pointIndex]->translate($x, $y);
 
         return $this;
     }
@@ -257,7 +260,7 @@ class Boundary implements \Countable, \Iterator, \ArrayAccess, \Serializable
     {
         if($this->diagonalPointXIndex !== null && $this->diagonalPointYIndex !== null)
         {
-            return Point::getInstance($this[$this->diagonalPointXIndex]->getX(), $this[$this->diagonalPointYIndex]->getY());
+            return Point::getInstance($this->points[$this->diagonalPointXIndex]->getX(), $this->points[$this->diagonalPointYIndex]->getY());
         }
 
         return null;

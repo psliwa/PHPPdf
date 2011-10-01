@@ -109,10 +109,10 @@ class Background extends Enhancement
             $boundary = $this->getBoundary($node);
             if($this->getRadius() !== null)
             {
-                $firstPoint = $boundary[3];
-                $diagonalPoint = $boundary[1];
+                $firstPoint = $boundary->getPoint(3);
+                $diagonalPoint = $boundary->getPoint(1);
                 
-                $this->drawRoundedBoundary($graphicsContext, $firstPoint[0], $firstPoint[1], $diagonalPoint[0], $diagonalPoint[1], GraphicsContext::SHAPE_DRAW_FILL_AND_STROKE);
+                $this->drawRoundedBoundary($graphicsContext, $firstPoint->getX(), $firstPoint->getY(), $diagonalPoint->getX(), $diagonalPoint->getY(), GraphicsContext::SHAPE_DRAW_FILL_AND_STROKE);
             }
             else
             {
