@@ -145,14 +145,8 @@ class Manager implements DocumentParserListener
                 $dynamicPage->removeAll();
                 foreach($currentPage->getChildren() as $child)
                 {
-                    if(!$child->getAttribute('break'))
-                    {
-                        $dynamicPage->add($child);
-                    }
-                    else
-                    {
-                        $child->flush();
-                    }
+                    $child->setAttribute('break', false);
+                    $dynamicPage->add($child);
                 }
                 $currentPage->removeAll();
             }

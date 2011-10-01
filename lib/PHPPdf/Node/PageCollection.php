@@ -49,4 +49,12 @@ class PageCollection extends Container
         
         return $tasks;
     }
+    
+    public function collectPostDrawingTasks(Document $document, DrawingTaskHeap $tasks)
+    {
+        foreach($this->getChildren() as $child)
+        {
+            $child->collectPostDrawingTasks($document, $tasks);
+        }
+    }
 }
