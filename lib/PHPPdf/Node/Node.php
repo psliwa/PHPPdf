@@ -540,7 +540,7 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
 
     public function getWidth()
     {
-        return $this->getWidthOrHeight('width');
+        return $this->getAttributeDirectly('width');
     }
     
     /**
@@ -562,11 +562,6 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
     public function getRealHeight()
     {
         return $this->getHeight();
-    }
-
-    private function getWidthOrHeight($sizeType)
-    {
-        return $this->getAttributeDirectly($sizeType);
     }
 
     public function getWidthWithMargins()
@@ -630,7 +625,7 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
 
     public function getHeight()
     {
-        return $this->getWidthOrHeight('height');
+        return $this->getAttributeDirectly('height');
     }
 
     public function setMarginTop($margin)

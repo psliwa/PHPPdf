@@ -45,6 +45,8 @@ class Image implements BaseImage
         }
         
         $this->type = $data[2];
+        $this->width = $unitConverter ? $unitConverter->convertUnit($data[0], UnitConverter::UNIT_PIXEL) : $data[0];
+        $this->height = $unitConverter ? $unitConverter->convertUnit($data[1], UnitConverter::UNIT_PIXEL) : $data[1];
     }
     
     private function createImage($path)
@@ -98,21 +100,11 @@ class Image implements BaseImage
     
     public function getOriginalHeight()
     {
-        if($this->height === null)
-        {
-            $height = $this->getWrappedImage()->getPixelHeight();
-            $this->height = $this->unitConverter ? $this->unitConverter->convertUnit($height, UnitConverter::UNIT_PIXEL) : $height;
-        }
         return $this->height;
     }
     
     public function getOriginalWidth()
     {
-        if($this->width === null)
-        {
-            $width = $this->getWrappedImage()->getPixelWidth();
-            $this->width = $this->unitConverter ? $this->unitConverter->convertUnit($width, UnitConverter::UNIT_PIXEL) : $width;
-        }
         return $this->width;
     }
     

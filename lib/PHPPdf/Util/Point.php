@@ -35,11 +35,10 @@ final class Point implements \ArrayAccess
      */
     public static function getInstance($x, $y)
     {
-        $index = sprintf('%s-%s', $x, $y);
+        $index = $x.'-'.$y;
         if(!isset(self::$pool[$index]))
         {
-            $point = new self($x, $y);
-            self::$pool[$index] = $point;
+            self::$pool[$index] = new self($x, $y);
         }
         
         return self::$pool[$index];
