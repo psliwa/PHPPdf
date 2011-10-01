@@ -40,7 +40,10 @@ class Paragraph extends Container
     
     public function setWidth($width)
     {
-        //width of paragraph can't be set directly
+        if($this->getParent())
+        {
+            $this->getParent()->setWidth($width);
+        }
         return $this;
     }
     
