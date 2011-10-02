@@ -326,4 +326,24 @@ class BorderTest extends \PHPPdf\PHPUnit\Framework\TestCase
 
         $border->enhance($nodeMock, $document);
     }
+    
+    /**
+     * @test
+     * @dataProvider typeProvider
+     */
+    public function borderWithNoneAsTypeIsEmpty($type, $expectedEmpty)
+    {
+        $border = new Border(null, $type);
+        
+        $this->assertEquals($expectedEmpty, $border->isEmpty());
+    }
+    
+    public function typeProvider()
+    {
+        return array(
+            array(Border::TYPE_NONE, true),
+            array(Border::TYPE_ALL, false),
+            array(Border::TYPE_LEFT, false),
+        );
+    }
 }

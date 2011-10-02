@@ -93,30 +93,51 @@ class DocumentTest extends \PHPPdf\PHPUnit\Framework\TestCase
      */
     public function creationOfEnhancements()
     {
-        $enhancementsParameters = array('border' => array('color' => 'red', 'name' => 'border'), 'background' => array('name' => 'background', 'color' => 'pink', 'repeat' => 'none'));
-        $enhancementStub = $this->getMock('PHPPdf\Enhancement\Border');
+        $enhancementsParameters = array('border' => array('color' => 'red', 'name' => 'border'), 'background' => array('name' => 'background', 'color' => 'pink', 'repeat' => 'none'), 'empty' => array('name' => 'empty'));
+        $enhancementStub = $this->getMockBuilder('PHPPdf\Enhancement\Border')
+                                ->setMethods(array('isEmpty'))
+                                ->getMock();
+                                
+        $enhancementStub->expects($this->exactly(2))
+                        ->method('isEmpty')
+                        ->will($this->returnValue(false));
+                                
+        $emptyEnhancementStub = $this->getMockBuilder('PHPPdf\Enhancement\Border')
+                                     ->setMethods(array('isEmpty'))
+                                     ->getMock();
+                                     
+        $emptyEnhancementStub->expects($this->once())
+                             ->method('isEmpty')
+                             ->will($this->returnValue(true));
 
         $enhancementBagMock = $this->getMock('PHPPdf\Enhancement\EnhancementBag', array('getAll'));
         $enhancementBagMock->expects($this->once())
                            ->method('getAll')
                            ->will($this->returnValue($enhancementsParameters));
+                           
+        $enhancementsMap = array(
+            'border' => $enhancementStub,
+            'background' => $enhancementStub,
+            'empty' => $emptyEnhancementStub,
+        );
 
         $enhancementFactoryMock = $this->getMock('PHPPdf\Enhancement\Factory', array('create'));
-        $enhancementFactoryMock->expects($this->at(0))
-                               ->method('create')
-                               ->with($this->equalTo('border'), $this->equalTo(array_diff_key($enhancementsParameters['border'], array('name' => true))))
-                               ->will($this->returnValue($enhancementStub));
-
-        $enhancementFactoryMock->expects($this->at(1))
-                               ->method('create')
-                               ->with($this->equalTo('background'), $this->equalTo(array_diff_key($enhancementsParameters['background'], array('name' => true))))
-                               ->will($this->returnValue($enhancementStub));
+        
+        $at = 0;
+        foreach($enhancementsParameters as $name => $params)
+        {
+            $enhancementFactoryMock->expects($this->at($at++))
+                                   ->method('create')
+                                   ->with($this->equalTo($name), $this->equalTo(array_diff_key($params, array('name' => true))))
+                                   ->will($this->returnValue($enhancementsMap[$name]));
+            
+        }
 
         $this->document->setEnhancementFactory($enhancementFactoryMock);
 
         $enhancements = $this->document->getEnhancements($enhancementBagMock);
 
-        $this->assertTrue(count($enhancements) === 2);
+        $this->assertTrue(count($enhancements) === 2, 'empty enhancement should not be returned by Document');
     }
 
     /**

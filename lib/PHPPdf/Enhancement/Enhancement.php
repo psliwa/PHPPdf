@@ -138,4 +138,9 @@ abstract class Enhancement
 
         return constant($const);
     }
+    
+    public function isEmpty()
+    {
+        return false;
+    }
 }

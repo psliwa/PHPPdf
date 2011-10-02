@@ -116,7 +116,7 @@ class Border extends Enhancement
 
             $this->drawRoundedBoundary($graphicsContext, $firstPoint[0], $firstPoint[1], $diagonalPoint[0], $diagonalPoint[1], GraphicsContext::SHAPE_DRAW_STROKE);
         }
-        elseif($this->type == self::TYPE_ALL)
+        elseif($this->type === self::TYPE_ALL)
         {
             $this->drawBoundary($graphicsContext, $points, GraphicsContext::SHAPE_DRAW_STROKE, $size/2);
         }
@@ -212,5 +212,10 @@ class Border extends Enhancement
     public function getStyle()
     {
         return $this->style;
+    }
+    
+    public function isEmpty()
+    {
+        return $this->getType() === self::TYPE_NONE;
     }
 }

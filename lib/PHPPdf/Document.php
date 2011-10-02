@@ -82,7 +82,13 @@ class Document implements UnitConverter, Engine
 
                 $name = $parameters['name'];
                 unset($parameters['name']);
-                $enhancements[] = $this->enhancementFactory->create($name, $parameters);
+                
+                $enhancement = $this->enhancementFactory->create($name, $parameters);
+                
+                if(!$enhancement->isEmpty())
+                {
+                    $enhancements[] = $enhancement;
+                }
             }
         }
 

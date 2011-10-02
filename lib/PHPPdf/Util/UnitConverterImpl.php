@@ -20,6 +20,7 @@ class UnitConverterImpl implements UnitConverter
     const MM_PER_INCH = 25.3995;
 
     private $dpi;
+    private $unitsPerPixel;
     
     public function __construct($dpi = 96)
     {
@@ -29,6 +30,7 @@ class UnitConverterImpl implements UnitConverter
         }
 
         $this->dpi = $dpi;
+        $this->unitsPerPixel = self::UNITS_PER_INCH/$this->dpi;
     }
     
     public function convertUnit($value, $unit = null)
@@ -70,7 +72,7 @@ class UnitConverterImpl implements UnitConverter
     private function convertPxUnit($value)
     {
         $value = (float) $value;
-        return $value * self::UNITS_PER_INCH/$this->dpi;
+        return $value * $this->unitsPerPixel;
     }
 
     private function convertCmUnit($value)
