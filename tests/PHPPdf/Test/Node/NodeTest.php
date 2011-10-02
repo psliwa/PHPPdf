@@ -452,9 +452,9 @@ class NodeTest extends \PHPPdf\PHPUnit\Framework\TestCase
     public function getEncodingIsDelegatedToPage()
     {
         $encoding = 'some-encoding';
-        $page = $this->getMock('PHPPdf\Node\Page', array('getAttribute'));
+        $page = $this->getMock('PHPPdf\Node\Page', array('getAttributeDirectly'));
         $page->expects($this->once())
-             ->method('getAttribute')
+             ->method('getAttributeDirectly')
              ->will($this->returnValue($encoding));
         
         $this->node->setParent($page);

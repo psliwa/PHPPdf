@@ -24,9 +24,8 @@ class ContainerDimensionFormatter extends BaseFormatter
         $minX = $maxX = $minY = $maxY = null;
         foreach($node->getChildren() as $child)
         {
-            $boundary = $child->getBoundary();
-            $firstPoint = $boundary->getFirstPoint();
-            $diagonalPoint = $boundary->getDiagonalPoint();
+            $firstPoint = $child->getFirstPoint();
+            $diagonalPoint = $child->getDiagonalPoint();
 
             $childMinX = $firstPoint->getX() - $child->getMarginLeft();
             $childMaxX = $diagonalPoint->getX() + $child->getMarginRight();

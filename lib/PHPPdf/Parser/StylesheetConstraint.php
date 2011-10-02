@@ -177,7 +177,7 @@ class StylesheetConstraint extends BagContainer implements \Countable
         $matchingIndex = 0;
         $constraintClasses = $constraint->getClasses();
         $classMatchingIndex = 0;
-        if(($constraint->getTag() == self::TAG_WILDCARD || $constraint->getTag() == $tag) && (!$constraintClasses || $classMatchingIndex = $this->getClassMatchingIndex($constraint, $classes)))
+        if(($constraint->getTag() === self::TAG_WILDCARD || $constraint->getTag() === $tag) && (!$constraintClasses || $classMatchingIndex = $this->getClassMatchingIndex($constraint, $classes)))
         {
             $matchingIndex += 1 + $classMatchingIndex;
         }

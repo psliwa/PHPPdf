@@ -81,7 +81,7 @@ final class Point implements \ArrayAccess
         {
             return 1;
         }
-        elseif($firstNumberAsInteger == $secondNumberAsInteger)
+        elseif($firstNumberAsInteger === $secondNumberAsInteger)
         {
             return 0;
         }

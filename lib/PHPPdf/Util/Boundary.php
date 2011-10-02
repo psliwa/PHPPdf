@@ -27,23 +27,22 @@ class Boundary implements \Countable, \Iterator, \ArrayAccess, \Serializable
      * 
      * @return Boundary Self
      */
-    public function setNext()
+    public function setNext($param1, $param2 = null)
     {
         if($this->closed)
         {
             throw new \LogicException('Boundary has been already closed.');
         }
 
-        $numberOfArgs = \func_num_args();
-        $args = \func_get_args();
-
+        $numberOfArgs = func_num_args();
+        
         if($numberOfArgs === 2)
         {
-            $point = Point::getInstance($args[0], $args[1]);
+            $point = Point::getInstance($param1, $param2);
         }
-        elseif($numberOfArgs === 1 && $args[0] instanceof Point)
+        elseif($param1 instanceof Point)
         {
-            $point = $args[0];
+            $point = $param1;
         }
         else
         {
@@ -66,7 +65,6 @@ class Boundary implements \Countable, \Iterator, \ArrayAccess, \Serializable
             $this->diagonalPointXIndex = $oldNumberOfPoints;
         }
 
-
         return $this;
     }
 
@@ -80,7 +78,8 @@ class Boundary implements \Countable, \Iterator, \ArrayAccess, \Serializable
             throw new \BadMethodCallException('Boundary must have at last three points.');
         }
 
-        $this->setNext($this->getFirstPoint());
+        $this->points[$this->numberOfPoints] = $this->getFirstPoint();
+        $this->numberOfPoints++;
 
         $this->closed = true;
     }

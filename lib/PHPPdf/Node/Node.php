@@ -789,7 +789,7 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
     
     public function getEncoding()
     {
-        return $this->getPage()->getAttribute('encoding');
+        return $this->getPage()->getAttributeDirectly('encoding');
     }
     
     public function getAlpha()
@@ -991,7 +991,6 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
         $this->throwExceptionIfAttributeDosntExist($name);
 
         $class = get_class($this);
-        $getters = self::$attributeGetters;
         if(isset(self::$attributeGetters[$class][$name]))
         {
             $methodName = self::$attributeGetters[$class][$name];

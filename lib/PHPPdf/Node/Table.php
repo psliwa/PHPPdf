@@ -238,9 +238,9 @@ class Table extends Container implements Listener
         $marginsLeft = $this->getMarginsLeftOfColumns();
         $marginsRight = $this->getMarginsRightOfColumns();
 
-        array_walk($this->widthsOfColumns, function(&$widthOfColumn, $columnNumber) use($marginsLeft, $marginsRight)
+        foreach($this->widthsOfColumns as $columnNumber => $widthOfColumn)
         {
-            $widthOfColumn -= $marginsLeft[$columnNumber] + $marginsRight[$columnNumber];
-        });
+            $this->widthsOfColumns[$columnNumber] -= $marginsLeft[$columnNumber] + $marginsRight[$columnNumber];
+        }
     }
 }
