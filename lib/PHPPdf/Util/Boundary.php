@@ -98,7 +98,7 @@ class Boundary implements \Countable, \Iterator, \ArrayAccess, \Serializable
         $compareFirstPoint = $boundary->getFirstPoint();
         $compareDiagonalPoint = $boundary->getDiagonalPoint();
 
-        foreach($boundary as $point)
+        foreach($boundary->points as $point)
         {
             if($this->contains($point))
             {

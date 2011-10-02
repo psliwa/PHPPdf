@@ -66,6 +66,11 @@ class FirstPointPositionFormatter extends BaseFormatter
     private function isNodeInSameRowAsPreviousSibling(Node $node, Node $previousSibling)
     {
         $oneOfNodesIsInline = $previousSibling->isInline() && $node->isInline();
+        
+        if(!$oneOfNodesIsInline)
+        {
+            return false;
+        }
 
         $parent = $node->getParent();
         $parentBoundary = $parent->getBoundary();
@@ -76,6 +81,6 @@ class FirstPointPositionFormatter extends BaseFormatter
 
         $rowIsOverflowed = !$node instanceof Nodes\Text && $parentEndX < $endX && $previousSibling->getFloat() !== Nodes\Node::FLOAT_RIGHT;
 
-        return !$rowIsOverflowed && $oneOfNodesIsInline;
+        return !$rowIsOverflowed;
     }
 }

@@ -32,11 +32,11 @@ class ContainerDimensionFormatter extends BaseFormatter
             $childMinY = $diagonalPoint->getY() - $child->getMarginBottom();
             $childMaxY = $firstPoint->getY() + $child->getMarginTop();
 
-            $this->changeValueIfIsLess($maxX, $childMaxX);
-            $this->changeValueIfIsLess($maxY, $childMaxY);
+            $maxX = $this->changeValueIfIsLess($maxX, $childMaxX);
+            $maxY = $this->changeValueIfIsLess($maxY, $childMaxY);
 
-            $this->changeValueIfIsGreater($minX, $childMinX);
-            $this->changeValueIfIsGreater($minY, $childMinY);
+            $minX = $this->changeValueIfIsGreater($minX, $childMinX);
+            $minY = $this->changeValueIfIsGreater($minY, $childMinY);
         }
 
         $paddingVertical = $node->getPaddingTop() + $node->getPaddingBottom();
@@ -56,19 +56,22 @@ class ContainerDimensionFormatter extends BaseFormatter
         }
     }
 
-    private function changeValueIfIsLess(&$value, $valueToSet)
+    private function changeValueIfIsLess($value, $valueToSet)
     {
         if($value === null || $value < $valueToSet)
         {
-            $value = $valueToSet;
+            return $valueToSet;
         }
+        
+        return $value;
     }
 
-    private function changeValueIfIsGreater(&$value, $valueToSet)
+    private function changeValueIfIsGreater($value, $valueToSet)
     {
         if($value === null || $value > $valueToSet)
         {
-            $value = $valueToSet;
+            return $valueToSet;
         }
+        return $value;
     }
 }

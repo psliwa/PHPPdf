@@ -24,6 +24,7 @@ class Factory implements \Serializable
     private $constructors = array();
     private $classes = array();
     private $constructorParameters = array();
+    private $instances = array();
     
     public function __construct(array $definitions = array())
     {
@@ -111,6 +112,23 @@ class Factory implements \Serializable
      * @return PHPPdf\Enhancement\Enhancement
      */
     public function create($name, array $parameters = array())
+    {
+        $key = $this->getInstanceKey($name, $parameters);
+        
+        if(!isset($this->instances[$key]))
+        {
+            $this->instances[$key] = $this->createInstance($name, $parameters);
+        }
+        
+        return $this->instances[$key];
+    }
+    
+    private function getInstanceKey($name, array $parameters)
+    {
+        return $name.serialize($parameters);
+    }
+    
+    private function createInstance($name, array $parameters)
     {
         $args = array();
         $constructor = $this->getConstructor($name);

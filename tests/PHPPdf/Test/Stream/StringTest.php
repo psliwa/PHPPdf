@@ -9,6 +9,6 @@ class StringTest extends StreamTest
 {
     public function setUp()
     {
-        $this->stream = new String('some string content');
+        $this->stream = new String(self::EXPECTED_STREAM_CONTENT);
     }
 }

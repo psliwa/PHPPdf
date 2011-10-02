@@ -18,6 +18,7 @@ use PHPPdf\Parser\Exception as Exceptions;
 abstract class XmlParser implements Parser
 {
     private $stack = array();
+    private $stackSize = 0;
     private $xmlReaderProvidedFromOutside = false;
 
     public function parse($content)
@@ -56,6 +57,7 @@ abstract class XmlParser implements Parser
         while(!$stopParsing && $this->read($reader));
 
         $this->stack = array();
+        $this->stackSize = 0;
         
         if(!$this->xmlReaderProvidedFromOutside)
         {
@@ -176,7 +178,7 @@ abstract class XmlParser implements Parser
 
     protected function &getLastElementFromStack()
     {
-        return $this->stack[count($this->stack)-1];
+        return $this->stack[$this->stackSize-1];
     }
     
     protected function &getFirstElementFromStack()
@@ -187,10 +189,12 @@ abstract class XmlParser implements Parser
     protected function pushOnStack(&$element)
     {
         $this->stack[] = &$element;
+        $this->stackSize++;
     }
 
     protected function popFromStack()
     {
+        $this->stackSize--;
         return array_pop($this->stack);
     }
 
@@ -205,5 +209,6 @@ abstract class XmlParser implements Parser
     protected function clearStack()
     {
         $this->stack = array();
+        $this->stackSize = 0;
     }
 }

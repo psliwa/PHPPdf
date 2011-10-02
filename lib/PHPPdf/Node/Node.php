@@ -1140,7 +1140,7 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
             
             $boundary = $node->getBoundary();
             $coordinations = array();
-            foreach($boundary as $point)
+            foreach($boundary->getPoints() as $point)
             {
                 $coordinations[] = $point->toArray();
             }
