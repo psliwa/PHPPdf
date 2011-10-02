@@ -335,8 +335,8 @@ class NodeTest extends \PHPPdf\PHPUnit\Framework\TestCase
 
         $this->invokeMethod($this->node, 'setBoundary', array($boundary));
 
-        $this->assertTrue($this->node->getFirstPoint() === Point::getInstance(10, 10));
-        $this->assertTrue($this->node->getDiagonalPoint() === Point::getInstance(20, 20));
+        $this->assertTrue($this->node->getFirstPoint() == Point::getInstance(10, 10));
+        $this->assertTrue($this->node->getDiagonalPoint() == Point::getInstance(20, 20));
     }
 
     /**

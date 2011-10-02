@@ -17,8 +17,6 @@ namespace PHPPdf\Util;
  */
 final class Point implements \ArrayAccess
 {
-    private static $pool = array();
-
     private $x;
     private $y;
 
@@ -35,18 +33,7 @@ final class Point implements \ArrayAccess
      */
     public static function getInstance($x, $y)
     {
-        $index = $x.'-'.$y;
-        if(!isset(self::$pool[$index]))
-        {
-            self::$pool[$index] = new self($x, $y);
-        }
-        
-        return self::$pool[$index];
-    }
-    
-    public static function clearInstances()
-    {
-        self::$pool = array();
+        return new self($x, $y);
     }
 
     public function getX()

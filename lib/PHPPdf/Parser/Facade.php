@@ -149,8 +149,6 @@ class Facade
         $this->getDocument()->draw($pageCollection);
         $pageCollection->flush();
         unset($pageCollection);
-
-        Point::clearInstances();
         
         $content = $this->getDocument()->render();
         $this->getDocument()->initialize();

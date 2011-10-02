@@ -219,7 +219,7 @@ class GraphicsContext implements BaseGraphicsContext
     {
         try 
         {
-            if($wordSpacing == 0 && $fillType == self::SHAPE_DRAW_FILL)
+            if($wordSpacing === 0 && $fillType === self::SHAPE_DRAW_FILL)
             {
                 $this->getPage()->drawText($text, $x, $y, $encoding);
             }
