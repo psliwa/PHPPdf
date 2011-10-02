@@ -106,7 +106,7 @@ class Boundary implements \Countable, \Iterator, \ArrayAccess, \Serializable
             }
         }
         
-        foreach($this as $point)
+        foreach($this->points as $point)
         {
             if($boundary->contains($point))
             {

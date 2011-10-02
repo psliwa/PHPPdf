@@ -56,7 +56,7 @@ final class Point implements \ArrayAccess
      */
     public function compareYCoord(Point $point, $precision = 1000)
     {
-        return $this->compare($this->getY(), $point->getY(), $precision);
+        return $this->compare($this->y, $point->y, $precision);
     }
     
     private function compare($firstNumber, $secondNumber, $precision)
@@ -91,7 +91,7 @@ final class Point implements \ArrayAccess
      */
     public function compareXCoord(Point $point, $precision = 1000)
     {
-        return $this->compare($this->getX(), $point->getX(), $precision);
+        return $this->compare($this->x, $point->x, $precision);
     }
 
     /**
@@ -111,7 +111,7 @@ final class Point implements \ArrayAccess
      */
     public function translate($x, $y)
     {
-        return self::getInstance($this->getX() + $x, $this->getY() - $y);
+        return self::getInstance($this->x + $x, $this->y - $y);
     }
 
     public function offsetExists($offset)
@@ -124,9 +124,9 @@ final class Point implements \ArrayAccess
         switch($offset)
         {
             case 0:
-                return $this->getX();
+                return $this->x;
             case 1:
-                return $this->getY();
+                return $this->y;
             default:
                 throw new \OutOfBoundsException(sprintf('Point implementation of ArrayAccess interface accept only "0" and "1" key, "%s" given.', $offset));
         }

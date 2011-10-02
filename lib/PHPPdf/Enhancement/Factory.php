@@ -125,7 +125,7 @@ class Factory implements \Serializable
     
     private function getInstanceKey($name, array $parameters)
     {
-        return $name.serialize($parameters);
+        return md5($name.serialize($parameters));
     }
     
     private function createInstance($name, array $parameters)
@@ -191,9 +191,10 @@ class Factory implements \Serializable
         preg_match_all('([A-Z]{1}[a-z0-9]*)', $name, $matches);
                
         $parts = $matches[0];
-        array_walk($parts, function(&$value){
-            $value = lcfirst($value);
-        });
+        foreach($parts as $key => $part)
+        {
+            $parts[$key] = lcfirst($part);
+        }
         
         return implode('-', $parts);
     }
