@@ -39,11 +39,6 @@ class String implements Stream
                 break;
         }
         
-        if($newIndex > $this->contentLength || $newIndex < 0)
-        {
-            return -1;
-        }
-        
         $this->currentIndex = $newIndex;
         
         return 0;
@@ -53,7 +48,7 @@ class String implements Stream
     {
         if($this->currentIndex >= $this->contentLength)
         {
-            return false;
+            return '';
         }
         
         $last = $this->currentIndex + $length;
