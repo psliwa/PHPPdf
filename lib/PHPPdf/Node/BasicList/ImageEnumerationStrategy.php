@@ -65,7 +65,6 @@ class ImageEnumerationStrategy extends AbstractEnumerationStrategy
         {
             $imageHeight = $image->getOriginalHeight();
             $imageWidth = $image->getOriginalWidth();
-            
             if($imageWidth > $fontSize)
             {
                 $imageHeight = $imageHeight * $fontSize/$imageWidth;

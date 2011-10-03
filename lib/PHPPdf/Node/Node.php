@@ -834,9 +834,9 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
     
     protected function convertUnit($value)
     {
-        if($this->getUnitConverter())
+        if($this->unitConverter)
         {
-            return $this->getUnitConverter()->convertUnit($value);
+            return $this->unitConverter->convertUnit($value);
         }
         
         return $value;
@@ -983,7 +983,7 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
      * 
      * @param string $name Name of attribute
      * 
-     * @throws InvalidAttributeException If attribute isn't supported by this node     * 
+     * @throws InvalidAttributeException If attribute isn't supported by this node
      * @return mixed Value of attribute
      */
     public function getAttribute($name)
@@ -1013,7 +1013,7 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
         if($value === null && $parent)
         {
             $value = $parent->getRecurseAttribute($name);
-            $this->setAttributeDirectly($name, $value);
+            $this->setAttribute($name, $value);
             return $value;
         }
 

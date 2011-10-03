@@ -113,23 +113,28 @@ class LinePart implements Drawable
             }
             $gc->drawText($words, $point->getX(), $point->getY() - $fontSize, $text->getEncoding(), $wordSpacing);
             
-            $textDecoration = $text->getTextDecorationRecursively();
+            $textDecoration = $text->getTextDecorationRecursively();        
             
-            $lineDecorationYTranslation = false;
-            
-            if($textDecoration == Node::TEXT_DECORATION_UNDERLINE)
+            switch($textDecoration)
             {
-                $lineDecorationYTranslation = -1;
+                case Node::TEXT_DECORATION_NONE:
+                    $lineDecorationYTranslation = false;
+                    break;
+                case Node::TEXT_DECORATION_UNDERLINE;
+                    $lineDecorationYTranslation = -1;
+                    break;
+                case Node::TEXT_DECORATION_LINE_THROUGH:
+                    $lineDecorationYTranslation = $fontSize / 3;
+                    break;
+                case Node::TEXT_DECORATION_OVERLINE;
+                    $lineDecorationYTranslation = $fontSize - 1;
+                    break;
+                default:
+                    //FIXME: throw exception?
+                    $lineDecorationYTranslation = false;
+                    break;
             }
-            elseif($textDecoration == Node::TEXT_DECORATION_LINE_THROUGH)
-            {
-                $lineDecorationYTranslation = $fontSize / 3;
-            }
-            elseif($textDecoration == Node::TEXT_DECORATION_OVERLINE)
-            {
-                $lineDecorationYTranslation = $fontSize - 1;
-            }
-            
+
             if($lineDecorationYTranslation !== false)
             {
                 $gc->setLineWidth(0.5);
