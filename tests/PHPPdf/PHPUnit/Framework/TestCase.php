@@ -36,4 +36,28 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
     {
         return new ValidateByCallback($closure, $testCase);
     }
+    
+    public function writeAttribute($object, $attributeName, $value)
+    {
+        $class = new \ReflectionClass(get_class($object));
+        $class->getParentClass();
+        $attribute = $this->getProperty($class, $attributeName);
+        $attribute->setAccessible(true);
+        $attribute->setValue($object, $value);
+    }
+    
+    private function getProperty(\ReflectionClass $class, $name)
+    {
+        while($class && !$class->hasProperty($name))
+        {
+            $class = $class->getParentClass();
+        }
+        
+        if($class)
+        {
+            return $class->getProperty($name);
+        }
+        
+        return null;
+    }
 }

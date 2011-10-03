@@ -32,17 +32,9 @@ class DrawingTask
     /**
      * @throws PHPPdf\Exception\DrawingException If error occurs while drawing
      */
-    public function __invoke()
-    {
-        return call_user_func_array($this->callback, $this->arguments);
-    }
-
-    /**
-     * @see PHPPdf\Util\DrawingTask::__invoke()
-     */
     public function invoke()
     {
-        return $this->__invoke();
+        return call_user_func_array($this->callback, $this->arguments);
     }
 
     public function getPriority()
@@ -58,5 +50,19 @@ class DrawingTask
     public function setOrder($order)
     {
         $this->order = (int) $order;
+    }
+    
+    public function compareTo(DrawingTask $task)
+    {
+        $diff = ($this->priority - $task->priority);
+
+        if($diff === 0)
+        {
+            return ($task->order - $this->order);
+        }
+        else
+        {
+            return $diff;
+        }
     }
 }

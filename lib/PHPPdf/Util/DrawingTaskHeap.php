@@ -27,13 +27,6 @@ class DrawingTaskHeap extends \SplHeap
 
     public function compare($value1, $value2)
     {
-        $diff = ($value1->getPriority() - $value2->getPriority());
-
-        if($diff === 0)
-        {
-            $diff = ($value2->getOrder() - $value1->getOrder());
-        }
-
-        return $diff;
+        return $value1->compareTo($value2);
     }
 }

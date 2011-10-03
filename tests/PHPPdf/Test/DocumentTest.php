@@ -26,11 +26,11 @@ class DocumentTest extends \PHPPdf\PHPUnit\Framework\TestCase
         for($i=0; $i<3; $i++)
         {
             $taskMock = $this->getMockBuilder('PHPPdf\Util\DrawingTask')
-                             ->setMethods(array('__invoke'))
+                             ->setMethods(array('invoke'))
                              ->disableOriginalConstructor()
                              ->getMock();
             $taskMock->expects($this->once())
-                     ->method('__invoke');
+                     ->method('invoke');
             $tasks[] = $taskMock;
         }
                  

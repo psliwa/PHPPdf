@@ -330,7 +330,7 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
 
     public function setParent(Container $node)
     {
-        $oldParent = $this->getParent();
+        $oldParent = $this->parent;
         if($oldParent)
         {
             $oldParent->remove($this);
@@ -360,7 +360,7 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
         $current = $this;
         do
         {
-            $parent = $current->getParent();
+            $parent = $current->parent;
             $current = $parent;
         }
         while($parent && !$parent instanceof $type);
@@ -373,7 +373,7 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
      */
     public function getSiblings()
     {
-        $parent = $this->getParent();
+        $parent = $this->parent;
 
         if(!$parent)
         {
@@ -1009,7 +1009,7 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
     public function getRecurseAttribute($name)
     {
         $value = $this->getAttribute($name);
-        $parent = $this->getParent();
+        $parent = $this->parent;
         if($value === null && $parent)
         {
             $value = $parent->getRecurseAttribute($name);
@@ -1110,7 +1110,7 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
 
     protected function setPriorityFromParent()
     {
-        $parentPriority = $this->getParent() ? $this->getParent()->getPriority() : 0;
+        $parentPriority = $this->parent ? $this->parent->getPriority() : 0;
         $this->priority = $parentPriority - 1;
 
         foreach($this->getChildren() as $child)
@@ -1241,7 +1241,7 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
     {
         $copy = clone $this;
         $copy->reset();
-        $copy->removeParent();
+        $copy->parent = null;
         $copy->boundary = null;
         $copy->enhancementBag = clone $this->enhancementBag;
         $copy->drawingTasks = array();
@@ -1476,9 +1476,9 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
     
     public function convertScalarAttribute($name, $parentValue = null)
     {
-        if($parentValue === null && ($parent = $this->getParent()))
+        if($parentValue === null && ($parent = $this->parent))
         {
-            $parentValue = $this->getParent()->getAttribute($name);
+            $parentValue = $this->parent->getAttribute($name);
         }
         
         $potentiallyRelativeValue = $this->getAttribute($name);
@@ -1643,7 +1643,7 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
     {
         if($this->ancestorWithRotation === null)
         {
-            $parent = $this->getParent();
+            $parent = $this->parent;
             $this->ancestorWithRotation = $this->getRotate() === null ? ($parent ? $parent->getAncestorWithRotation() : false) : $this;
         }
 
@@ -1654,7 +1654,7 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
     {
         if($this->ancestorWithFontSize === null)
         {
-            $parent = $this->getParent();
+            $parent = $this->parent;
             $this->ancestorWithFontSize = $this->getFontSize() === null ? ($parent ? $parent->getAncestorWithFontSize() : false) : $this;
         }
         

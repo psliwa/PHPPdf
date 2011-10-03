@@ -32,9 +32,11 @@ class CachingStylesheetConstraintTest extends \PHPPdf\PHPUnit\Framework\TestCase
     {
         $constraintMock = $this->getMock('PHPPdf\Parser\StylesheetConstraint', array('getTag', 'getClasses', 'find'));
 
-        $constraintMock->expects($this->atLeastOnce())
+        $constraintMock->expects($this->any())
                        ->method('getTag')
                        ->will($this->returnValue($tag));
+        //internally in StylesheetConstraint class $tag property is used insted of getTag() method (due to performance)
+        $this->writeAttribute($constraintMock, 'tag', $tag);
         $constraintMock->expects($this->atLeastOnce())
                        ->method('getClasses')
                        ->will($this->returnValue($classes));

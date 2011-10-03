@@ -39,10 +39,10 @@ class CellTest extends \PHPPdf\PHPUnit\Framework\TestCase
     public function tableGetter()
     {
         $table = $this->getMock('PHPPdf\Node\Table');
-        $row = $this->getMock('PHPPdf\Node\Table\Row', array('getParent'));
-        $row->expects($this->once())
-            ->method('getParent')
-            ->will($this->returnValue($table));
+        $row = $this->getMock('PHPPdf\Node\Table\Row');
+
+        //internally in Node class is used $parent propery (not getParent() method) due to performance
+        $this->writeAttribute($row, 'parent', $table);
 
         $this->cell->setParent($row);
 

@@ -209,9 +209,12 @@ class FloatFormatterTest extends \PHPPdf\PHPUnit\Framework\TestCase
               ->method('getFloat')
               ->will($this->returnValue($float));
 
-        $node->expects($this->atLeastOnce())
+        $node->expects($this->any())
               ->method('getParent')
               ->will($this->returnValue($parent));
+
+        //internally in Node class is used $parent propery (not getParent() method) due to performance
+        $this->writeAttribute($node, 'parent', $parent);
 
         return $node;
     }
