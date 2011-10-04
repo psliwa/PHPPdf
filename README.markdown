@@ -580,6 +580,8 @@ Known limitations
 Below is list of known limitations of library current version:
 
 * there no way to inject image into text with floating - will be introduced in next releases
+* partial support for float attribute within table element (float might works improperly within table)
+* vertical-align attribute works improperly if in element with this attribute set, are more than one element
 * border doesn't change dimensions of the element (in HTML do)
 
 <a name="todo"></a>
@@ -587,10 +589,10 @@ TODO - plans
 ----------------
 
 * automatic generating table of contents
-* document metadata
-* improve interpretation of attributes and fixing found bugs
 * improve table, header and footer for table, rowspan. Fix calculation of cell's min height when colspan is used.
-* refactoring
+* support for markdown syntax (markdown parser)
+* engine for image file generating
+* support for simple bar and pie charts
 
 <a name="requirements"></a>
 Technical requirements

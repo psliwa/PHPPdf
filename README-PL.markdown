@@ -577,6 +577,8 @@ Znane ograniczenia
 Poniżej przedstawiam listę ograniczeń obecnej wersji biblioteki:
 
 * brak możliwości wstawiania zdjęcia do tekstu z opływem (float) - zostanie wprowadzone w kolejnych wersjach
+* częściowa obsługa dla atrybutu float w tabelce (float może nie działać prawidłowo w tabelce)
+* atrybut vertical-align działa nieprawidłowo, jeśli w elemencie z ustawionym tym atrybutem, jest więcej niż jeden element
 * obramowanie nie zmienia rozmiaru elementu tak jak to jest w HTML - zabieg celowy, raczej nie planuję jego zmiany
 
 <a name="todo"></a>
@@ -584,12 +586,10 @@ TODO - czyli plany
 -------------------
 
 * automatycznie generowany spis treści
-* obsługa metadanych dokumentu
-* poprawa interpretacji wartości atrybutów i rozkładu elementów w dokumencie
 * poprawa działania tabelek, definiowanie nagłówków i stopek dla tabeli
-* obsługa rowspan, nagłówka i stopki dla tabeli
-* poprawienie wyliczania minimalnej wielkości komórki tabeli gdy jest użyty colspan
-* refaktoryzacja
+* obsługa składki markdown (parser markdown)
+* silnik do generowania plików graficznych
+* obsługa prosych wykresów słupkowych i kołowych
 
 <a name="requirements"></a>
 Wymagania techniczne
