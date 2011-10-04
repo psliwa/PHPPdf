@@ -254,4 +254,8 @@ class Paragraph extends Container
         
         parent::flush();
     }
+    
+    public function resize($x, $y)
+    {
+    }
 }

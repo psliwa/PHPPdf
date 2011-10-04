@@ -1284,25 +1284,32 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
 
         foreach($this->getChildren() as $child)
         {
-            $childDiagonalXCoord = $child->getDiagonalPoint()->getX() + $child->getMarginRight();
-            $childFirstXCoord = $child->getFirstPoint()->getX();
-
-            $relativeWidth = $child->getRelativeWidth();
-
-            if($relativeWidth !== null)
+            if($child->getFloat() === Node::FLOAT_RIGHT)
             {
-                $relativeWidth = ($x + $diagonalXCoord - $firstXCoord)*((int) $relativeWidth)/100;
-                $childResize = (($childFirstXCoord + $relativeWidth) + $child->getMarginRight()) - $childDiagonalXCoord;
+                $child->translate($x - $this->getPaddingRight(), 0);
             }
             else
             {
-                $childResize = $x + ($diagonalXCoord - $childDiagonalXCoord);
-                $childResize = $childResize < 0 ? $childResize : 0;
-            }
-
-            if($childResize != 0)
-            {
-                $child->resize($childResize, 0);
+                $childDiagonalXCoord = $child->getDiagonalPoint()->getX() + $child->getMarginRight();
+                $childFirstXCoord = $child->getFirstPoint()->getX();
+    
+                $relativeWidth = $child->getRelativeWidth();
+    
+                if($relativeWidth !== null)
+                {
+                    $relativeWidth = ($x + $diagonalXCoord - $firstXCoord)*((int) $relativeWidth)/100;
+                    $childResize = (($childFirstXCoord + $relativeWidth) + $child->getMarginRight()) - $childDiagonalXCoord;
+                }
+                else
+                {
+                    $childResize = $x + ($diagonalXCoord - $childDiagonalXCoord);
+                    $childResize = $childResize < 0 ? $childResize : 0;
+                }
+                
+                if($childResize != 0)
+                {
+                    $child->resize($childResize, 0);
+                }
             }
         }
     }

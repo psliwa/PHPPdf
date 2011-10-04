@@ -298,4 +298,49 @@ class ContainerTest extends \PHPPdf\PHPUnit\Framework\TestCase
             $this->assertEquals($expectedWidth, $realWidth);
         }
     }
+    
+    /**
+     * @test
+     */
+    public function moveButNotResizeChildWithRightFloatOnResizing()
+    {
+        $width = 100;
+        $height = 100;
+        $this->node->setWidth($width);
+        $this->node->setHeight($height);
+
+        $boundary = $this->objectMother->getBoundaryStub(0, $height, $width, $height);
+        
+        $this->invokeMethod($this->node, 'setBoundary', array($boundary));
+        
+        $childWidth = 50;
+        $childHeight = 100;
+        
+        $child = new Container(array(
+        	'width' => $childWidth, 
+        	'height' => $childHeight, 
+        	'float' => 'right'
+        ));
+        
+        $childBoundary = $this->objectMother->getBoundaryStub($width - $childWidth, $childHeight, $childWidth, $childHeight);
+        $this->invokeMethod($child, 'setBoundary', array($childBoundary));
+        
+        $this->node->add($child);
+        
+        $xResize = 20;
+        
+        $this->node->resize($xResize, 0);
+        
+        $expectedChildDiagonalXCoord = $width + $xResize;
+        $this->assertEquals($expectedChildDiagonalXCoord, $child->getDiagonalPoint()->getX());
+        $this->assertEquals($childWidth, $child->getWidth());
+        
+        $xResize = -40;
+        
+        $this->node->resize($xResize, 0);
+        
+        $expectedChildDiagonalXCoord = $expectedChildDiagonalXCoord + $xResize;
+        $this->assertEquals($expectedChildDiagonalXCoord, $child->getDiagonalPoint()->getX());
+        $this->assertEquals($childWidth, $child->getWidth());
+    }
 }
