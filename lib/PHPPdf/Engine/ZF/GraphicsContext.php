@@ -9,6 +9,7 @@
 namespace PHPPdf\Engine\ZF;
 
 use PHPPdf\Exception\Exception,
+    PHPPdf\Engine\AbstractGraphicsContext,
     PHPPdf\Engine\GraphicsContext as BaseGraphicsContext,
     PHPPdf\Engine\Color as BaseColor,
     PHPPdf\Engine\Font as BaseFont,
@@ -17,7 +18,7 @@ use PHPPdf\Exception\Exception,
 /**
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
-class GraphicsContext implements BaseGraphicsContext
+class GraphicsContext extends AbstractGraphicsContext
 {
     private $state = array(
         'fillColor' => null,
@@ -63,17 +64,6 @@ class GraphicsContext implements BaseGraphicsContext
             $this->pageSize = $pageOrPageSize;
         }
     }
-    
-    public function commit()
-    {
-        foreach($this->methodInvocationsQueue as $data)
-        {
-            list($method, $args) = $data;
-            call_user_func_array(array($this, $method), $args);
-        }
-        
-        $this->methodInvocationsQueue = array();
-    }
 
     public function getWidth()
     {
@@ -85,37 +75,17 @@ class GraphicsContext implements BaseGraphicsContext
         return $this->getPage()->getHeight();
     }
 
-    public function clipRectangle($x1, $y1, $x2, $y2)
-    {
-        $this->addToQueue('doClipRectangle', func_get_args());
-    }
-    
-    private function addToQueue($method, array $args)
-    {
-        $this->methodInvocationsQueue[] = array($method, $args);
-    }
-    
     protected function doClipRectangle($x1, $y1, $x2, $y2)
     {
         $this->getPage()->clipRectangle($x1, $y1, $x2, $y2);
     }
 
-    public function saveGS()
-    {
-        $this->addToQueue('doSaveGS', func_get_args());
-    }
-    
     protected function doSaveGS()
     {
         $this->getPage()->saveGS();
         $this->memento = $this->state;
     }
 
-    public function restoreGS()
-    {
-        $this->addToQueue('doRestoreGS', func_get_args());
-    }
-    
     protected function doRestoreGS()
     {
         $this->getPage()->restoreGS();
@@ -123,22 +93,12 @@ class GraphicsContext implements BaseGraphicsContext
         $this->memento = self::$originalState;
     }
 
-    public function drawImage(BaseImage $image, $x1, $y1, $x2, $y2)
-    {
-        $this->addToQueue('doDrawImage', func_get_args());
-    }
-    
     protected function doDrawImage(BaseImage $image, $x1, $y1, $x2, $y2)
     {
         $zendImage = $image->getWrappedImage();
         $this->getPage()->drawImage($zendImage, $x1, $y1, $x2, $y2);
     }
-
-    public function drawLine($x1, $y1, $x2, $y2)
-    {
-        $this->addToQueue('doDrawLine', func_get_args());
-    }
-    
+   
     protected function doDrawLine($x1, $y1, $x2, $y2)
     {
         $this->getPage()->drawLine($x1, $y1, $x2, $y2);
@@ -147,19 +107,13 @@ class GraphicsContext implements BaseGraphicsContext
     public function setFont(BaseFont $font, $size)
     {
         $this->addToQueue('doSetFont', array($font->getCurrentWrappedFont(), $size));
-
     }
-    
+
     protected function doSetFont($fontResource, $size)
     {
         $this->getPage()->setFont($fontResource, $size);
     }
 
-    public function setFillColor($colorData)
-    {
-        $this->addToQueue('doSetFillColor', func_get_args());
-    }
-    
     protected function doSetFillColor($colorData)
     {
         $color = $this->getColor($colorData);
@@ -185,11 +139,6 @@ class GraphicsContext implements BaseGraphicsContext
         return $colorData;
     }
 
-    public function setLineColor($colorData)
-    {
-        $this->addToQueue('doSetLineColor', func_get_args());
-    }
-    
     protected function doSetLineColor($colorData)
     {
         $color = $this->getColor($colorData);
@@ -200,21 +149,11 @@ class GraphicsContext implements BaseGraphicsContext
         }
     }
 
-    public function drawPolygon(array $x, array $y, $type)
-    {
-        $this->addToQueue('doDrawPolygon', func_get_args());
-    }
-    
     protected function doDrawPolygon(array $x, array $y, $type)
     {
         $this->getPage()->drawPolygon($x, $y, $type);
     }
 
-    public function drawText($text, $x, $y, $encoding, $wordSpacing = 0, $fillType = self::SHAPE_DRAW_FILL)
-    {
-        $this->addToQueue('doDrawText', func_get_args());
-    }
-    
     protected function doDrawText($text, $x, $y, $encoding, $wordSpacing = 0, $fillType = self::SHAPE_DRAW_FILL)
     {
         try 
@@ -328,11 +267,6 @@ class GraphicsContext implements BaseGraphicsContext
         return $this->page;
     }
 
-    public function drawRoundedRectangle($x1, $y1, $x2, $y2, $radius, $fillType = self::SHAPE_DRAW_FILL_AND_STROKE)
-    {
-        $this->addToQueue('doDrawRoundedRectangle', func_get_args());
-    }
-    
     protected function doDrawRoundedRectangle($x1, $y1, $x2, $y2, $radius, $fillType = self::SHAPE_DRAW_FILL_AND_STROKE)
     {
         $this->getPage()->drawRoundedRectangle($x1, $y1, $x2, $y2, $radius, $this->translateFillType($fillType));
@@ -352,11 +286,6 @@ class GraphicsContext implements BaseGraphicsContext
                 throw new \InvalidArgumentException(sprintf('Invalid filling type "%s".', $fillType));
         }
     }
-
-    public function setLineWidth($width)
-    {
-        $this->addToQueue('doSetLineWidth', func_get_args());
-    }
     
     protected function doSetLineWidth($width)
     {
@@ -365,11 +294,6 @@ class GraphicsContext implements BaseGraphicsContext
             $this->getPage()->setLineWidth($width);
             $this->state['lineWidth'] = $width;
         }
-    }
-
-    public function setLineDashingPattern($pattern)
-    {
-        $this->addToQueue('doSetLineDashingPattern', func_get_args());
     }
     
     protected function doSetLineDashingPattern($pattern)
@@ -387,12 +311,7 @@ class GraphicsContext implements BaseGraphicsContext
             $this->state['lineDashingPattern'] = $pattern;
         }
     }
-    
-    public function uriAction($x1, $y1, $x2, $y2, $uri)
-    {
-        $this->addToQueue('doUriAction', func_get_args());
-    }
-    
+
     protected function doUriAction($x1, $y1, $x2, $y2, $uri)
     {
         try
@@ -407,11 +326,6 @@ class GraphicsContext implements BaseGraphicsContext
         {
             throw new Exception(sprintf('Error wile adding uri action with uri="%s"', $uri), 0, $e);
         }
-    }
-    
-    public function goToAction(BaseGraphicsContext $gc, $x1, $y1, $x2, $y2, $top)
-    {
-        $this->addToQueue('doGoToAction', func_get_args());
     }
     
     protected function doGoToAction(BaseGraphicsContext $gc, $x1, $y1, $x2, $y2, $top)
@@ -485,20 +399,10 @@ class GraphicsContext implements BaseGraphicsContext
         }
     }
     
-    public function attachStickyNote($x1, $y1, $x2, $y2, $text)
-    {
-        $this->addToQueue('doAttachStickyNote', func_get_args());
-    }
-    
     protected function doAttachStickyNote($x1, $y1, $x2, $y2, $text)
     {
         $annotation = \Zend_Pdf_Annotation_Text::create($x1, $y1, $x2, $y2, $text);
         $this->getPage()->attachAnnotation($annotation);
-    }
-    
-    public function setAlpha($alpha)
-    {
-        $this->addToQueue('doSetAlpha', func_get_args());
     }
     
     protected function doSetAlpha($alpha)
@@ -510,12 +414,6 @@ class GraphicsContext implements BaseGraphicsContext
         }
     }
 
-    public function rotate($x, $y, $angle)
-    {
-        $this->addToQueue('doRotate', func_get_args());
-        
-    }
-    
     protected function doRotate($x, $y, $angle)
     {
         $this->getPage()->rotate($x, $y, $angle);
