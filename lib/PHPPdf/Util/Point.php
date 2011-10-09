@@ -111,6 +111,11 @@ final class Point implements \ArrayAccess
      */
     public function translate($x, $y)
     {
+        if(!$x && !$y)
+        {
+            return $this;
+        }
+
         return self::getInstance($this->x + $x, $this->y - $y);
     }
 
