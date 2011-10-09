@@ -1261,6 +1261,11 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
      */
     public function translate($x, $y)
     {
+        if(!$x && !$y)
+        {
+            return;
+        }
+        
         $this->getBoundary()->translate($x, $y);
     }
 
@@ -1272,6 +1277,11 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
      */
     public function resize($x, $y)
     {
+        if(!$x && !$y)
+        {
+            return;
+        }
+
         $diagonalXCoord = $this->getDiagonalPoint()->getX() - $this->getPaddingRight();
         $firstXCoord = $this->getFirstPoint()->getX() + $this->getPaddingLeft();
 

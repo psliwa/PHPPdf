@@ -239,7 +239,10 @@ class Boundary implements \Countable, \Iterator, \ArrayAccess, \Serializable
      */
     public function pointTranslate($pointIndex, $x, $y)
     {
-        $this->points[$pointIndex] = $this->points[$pointIndex]->translate($x, $y);
+        if($x || $y)
+        {
+            $this->points[$pointIndex] = $this->points[$pointIndex]->translate($x, $y);
+        }
 
         return $this;
     }
