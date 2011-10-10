@@ -32,8 +32,8 @@ if($_SERVER['argc'] < 3)
 $name = basename($_SERVER['argv'][1]);
 $destinationPath = $_SERVER['argv'][2];
 
-$documentFilename = './'.$name.'.xml';
-$stylesheetFilename = './'.$name.'-style.xml';
+$documentFilename = __DIR__.'/'.$name.'.xml';
+$stylesheetFilename = __DIR__.'/'.$name.'-style.xml';
 
 if(!is_readable($documentFilename) || !is_readable($stylesheetFilename))
 {

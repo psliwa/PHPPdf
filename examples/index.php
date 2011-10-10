@@ -13,8 +13,7 @@ PHPPdf\Autoloader::register();
 PHPPdf\Autoloader::register(dirname(__FILE__).'/../lib/vendor');
 
 // set different way of configuration
-//$facade = PHPPdf\Parser\FacadeBuilder::create(new PHPPdf\Configuration\DependencyInjection\LoaderImpl())
-//->setCache('File', array('cache_dir' => __DIR__.'/cache/'))
+//$facade = PHPPdf\Parser\FacadeBuilder::create(new PHPPdf\Configuration\DependencyInjection\LoaderImpl())->setCache('File', array('cache_dir' => __DIR__.'/cache/'))
 $facade = PHPPdf\Parser\FacadeBuilder::create()
 // set cache
 //                                               ->setCache('File', array('cache_dir' => __DIR__.'/cache/'))
@@ -37,8 +36,8 @@ if(!isset($_GET['name']))
 
 $name = basename($_GET['name']);
 
-$documentFilename = './'.$name.'.xml';
-$stylesheetFilename = './'.$name.'-style.xml';
+$documentFilename = __DIR__.'/'.$name.'.xml';
+$stylesheetFilename = __DIR__.'/'.$name.'-style.xml';
 
 if(!is_readable($documentFilename) || !is_readable($stylesheetFilename))
 {
