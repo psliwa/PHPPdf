@@ -26,7 +26,7 @@ abstract class AbstractGraphicsContext implements GraphicsContext
         $this->methodInvocationsQueue = array();
     }
     
-    final protected function addToQueue($method, array $args)
+    final protected function addToQueue($method, array $args = array())
     {
         $this->methodInvocationsQueue[] = array($method, $args);
     }
@@ -40,14 +40,14 @@ abstract class AbstractGraphicsContext implements GraphicsContext
     
     public function saveGS()
     {
-        $this->addToQueue('doSaveGS', func_get_args());
+        $this->addToQueue('doSaveGS');
     }
     
     abstract protected function doSaveGS();
     
     public function restoreGS()
     {
-        $this->addToQueue('doRestoreGS', func_get_args());
+        $this->addToQueue('doRestoreGS');
     }
     
     abstract protected function doRestoreGS();

@@ -61,6 +61,11 @@ final class Point implements \ArrayAccess
     
     private function compare($firstNumber, $secondNumber, $precision)
     {
+        if($firstNumber === $secondNumber)
+        {
+            return 0;
+        }
+        
         $firstNumberAsInteger = $this->convertToInteger($firstNumber, $precision);
         $secondNumberAsInteger = $this->convertToInteger($secondNumber, $precision);
         

@@ -103,6 +103,11 @@ class Container extends Node
 
     public function translate($x, $y)
     {
+        if(!$x && !$y)
+        {
+            return;
+        }
+        
         parent::translate($x, $y);
 
         foreach($this->getChildren() as $child)
