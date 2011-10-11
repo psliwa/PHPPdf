@@ -580,6 +580,7 @@ Poniżej przedstawiam listę ograniczeń obecnej wersji biblioteki:
 * częściowa obsługa dla atrybutu float w tabelce (float może nie działać prawidłowo w tabelce)
 * atrybut vertical-align działa nieprawidłowo, jeśli w elemencie z ustawionym tym atrybutem, jest więcej niż jeden element
 * obramowanie nie zmienia rozmiaru elementu tak jak to jest w HTML - zabieg celowy, raczej nie planuję jego zmiany
+* pliki png (zwłaszcza bez kompresji) są nieefektywne, powinny być używane pliki png z wysoką kompresją (poziom kompresji 6 lub większy) lub pliki jpeg
 
 <a name="todo"></a>
 TODO - czyli plany

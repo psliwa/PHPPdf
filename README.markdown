@@ -583,6 +583,7 @@ Below is list of known limitations of library current version:
 * partial support for float attribute within table element (float might works improperly within table)
 * vertical-align attribute works improperly if in element with this attribute set, are more than one element
 * border doesn't change dimensions of the element (in HTML do)
+* png files (expecially without compression) are inefficient, png files with height compression (compression level 6 or higher) or jpeg files should be used instead
 
 <a name="todo"></a>
 TODO - plans
