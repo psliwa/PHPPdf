@@ -6,12 +6,14 @@
  * License information is in LICENSE file
  */
 
-namespace PHPPdf\Stream;
+namespace PHPPdf\InputStream;
 
 /**
+ * Input stream interface
+ * 
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
-interface Stream
+interface InputStream
 {
     const SEEK_CUR = 1;
     const SEEK_SET = 2;

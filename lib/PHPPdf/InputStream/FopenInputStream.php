@@ -6,14 +6,16 @@
  * License information is in LICENSE file
  */
 
-namespace PHPPdf\Stream;
+namespace PHPPdf\InputStream;
 
 use PHPPdf\Exception\Exception;
 
 /**
+ * Adapter for fopen family functions
+ * 
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
-class Fopen implements Stream
+class FopenInputStream implements InputStream
 {
     private $fp;
     

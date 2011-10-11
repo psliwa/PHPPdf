@@ -8,11 +8,10 @@
 
 namespace PHPPdf\Bridge\Zend\Pdf\Resource\Image;
 
-use PHPPdf\Stream\Stream;
-
+use PHPPdf\InputStream\InputStream;
 use PHPPdf\Exception\Exception;
-use PHPPdf\Stream\String;
-use PHPPdf\Stream\Fopen;
+use PHPPdf\InputStream\StringInputStream;
+use PHPPdf\InputStream\FopenInputStream;
 
 /**
  * Content loading type has been changed, remote files are supported.
@@ -59,7 +58,7 @@ class Tiff extends \Zend_Pdf_Resource_Image_Tiff
          */
 
         while($ifdOffset > 0) {
-            if($this->seek($ifdOffset, Stream::SEEK_SET) == -1 || $ifdOffset+2 >= $this->_fileSize) {
+            if($this->seek($ifdOffset, InputStream::SEEK_SET) == -1 || $ifdOffset+2 >= $this->_fileSize) {
                 
                 throw new \Zend_Pdf_Exception("Could not seek to the image file directory as indexed by the file. Likely cause is TIFF corruption. Offset: ". $ifdOffset);
             }
@@ -136,9 +135,9 @@ class Tiff extends \Zend_Pdf_Resource_Image_Tiff
                     case \Zend_Pdf_Resource_Image_Tiff::TIFF_TAG_BITS_PER_SAMPLE:
                         if($valueCount>1) {
                             $fp = $this->tell();
-                            $this->seek($refOffset, Stream::SEEK_SET);
+                            $this->seek($refOffset, InputStream::SEEK_SET);
                             $this->_bitsPerSample = $this->unpackBytes(\Zend_Pdf_Resource_Image_Tiff::UNPACK_TYPE_SHORT, $this->read(2));
-                            $this->seek($fp, Stream::SEEK_SET);
+                            $this->seek($fp, InputStream::SEEK_SET);
                         } else {
                             $this->_bitsPerSample = $value;
                         }
@@ -216,10 +215,10 @@ class Tiff extends \Zend_Pdf_Resource_Image_Tiff
                         if($valueCount>1) {
                             $format = ($this->_endianType == \Zend_Pdf_Resource_Image_Tiff::TIFF_ENDIAN_LITTLE)?'V*':'N*';
                             $fp = $this->tell();
-                            $this->seek($refOffset, Stream::SEEK_SET);
+                            $this->seek($refOffset, InputStream::SEEK_SET);
                             $stripOffsetsBytes = $this->read($fieldLength);
                             $this->_imageDataOffset = unpack($format, $stripOffsetsBytes);
-                            $this->seek($fp, Stream::SEEK_SET);
+                            $this->seek($fp, InputStream::SEEK_SET);
                         } else {
                             $this->_imageDataOffset = $value;
                         }
@@ -228,10 +227,10 @@ class Tiff extends \Zend_Pdf_Resource_Image_Tiff
                         if($valueCount>1) {
                             $format = ($this->_endianType == \Zend_Pdf_Resource_Image_Tiff::TIFF_ENDIAN_LITTLE)?'V*':'N*';
                             $fp = $this->tell();
-                            $this->seek($refOffset, Stream::SEEK_SET);
+                            $this->seek($refOffset, InputStream::SEEK_SET);
                             $stripByteCountsBytes = $this->read($fieldLength);
                             $this->_imageDataLength = unpack($format, $stripByteCountsBytes);
-                            $this->seek($fp, Stream::SEEK_SET);
+                            $this->seek($fp, InputStream::SEEK_SET);
                         } else {
                             $this->_imageDataLength = $value;
                         }
@@ -256,11 +255,11 @@ class Tiff extends \Zend_Pdf_Resource_Image_Tiff
                 throw new \Zend_Pdf_Exception("TIFF: The image contained multiple data offsets but not multiple data lengths. Tiff may be corrupt.");
             }
             foreach($this->_imageDataOffset as $idx => $offset) {
-                $this->seek($this->_imageDataOffset[$idx], Stream::SEEK_SET);
+                $this->seek($this->_imageDataOffset[$idx], InputStream::SEEK_SET);
                 $imageDataBytes .= $this->read($this->_imageDataLength[$idx]);
             }
         } else {
-            $this->seek($this->_imageDataOffset, Stream::SEEK_SET);
+            $this->seek($this->_imageDataOffset, InputStream::SEEK_SET);
             $imageDataBytes = $this->read($this->_imageDataLength);
         }
         if($imageDataBytes === '') {
@@ -319,11 +318,11 @@ class Tiff extends \Zend_Pdf_Resource_Image_Tiff
                     return false;
                 }
                 
-                return new String($content);
+                return new StringInputStream($content);
             }
             else
             {
-                return new Fopen($imageFileName, 'rb');
+                return new FopenInputStream($imageFileName, 'rb');
             }
         }
         catch(Exception $e)
@@ -332,7 +331,7 @@ class Tiff extends \Zend_Pdf_Resource_Image_Tiff
         }
     }
     
-    private function seek($index, $seekMode = Stream::SEEK_CUR)
+    private function seek($index, $seekMode = InputStream::SEEK_CUR)
     {
         return $this->stream->seek($index, $seekMode);
     }

@@ -9,8 +9,8 @@
 namespace PHPPdf\Bridge\Zend\Pdf\Resource\Image;
 
 use PHPPdf\Exception\Exception;
-use PHPPdf\Stream\Fopen;
-use PHPPdf\Stream\String;
+use PHPPdf\InputStream\FopenInputStream;
+use PHPPdf\InputStream\StringInputStream;
 
 /**
  * Content loading type has been changed, remote files are supported.
@@ -307,11 +307,11 @@ class Png extends \Zend_Pdf_Resource_Image_Png
                     return false;
                 }
                 
-                return new String($content);
+                return new StringInputStream($content);
             }
             else
             {
-                return new Fopen($imageFileName, 'rb');
+                return new FopenInputStream($imageFileName, 'rb');
             }
         }
         catch(Exception $e)

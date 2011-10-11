@@ -10,14 +10,18 @@
                 <tr>
                     <td>
                         <div>
+                        <p>a</p>
                         </div>
                     </td>
                     <td>
                         <div>
+                        <p>a</p>
                         </div>
                     </td>
                     <td>
                         <div>
+                        <table><tr><td>a</td></tr></table>
+                        <table><tr><td><table><tr><td><table><tr><td>a</td></tr></table></td></tr></table></td></tr></table>
                         </div>
                     </td>
                 </tr>
@@ -37,16 +41,29 @@
                 </tr>
                 <tr>
                     <td>
+                        	<p float="right" width="30%" border.color="black" text-align="center">bb</p>
+                        	<p float="right" width="30%" border.color="black" text-align="center">bb</p>
+                        	<p float="right" width="30%" border.color="black" text-align="center">bb</p>
+                        	<p float="left" width="30%" border.color="black" text-align="center">bb</p>
+                        	<nl/>
+                        	<p float="none" width="75%" border.color="black" text-align="right">bb</p>
+                        	<nl/>
+                        	<p float="none" width="100%" border.color="black" text-align="right">bb</p>
+                        	<nl/>
+                        	<p float="none" width="50%" border.color="black" text-align="left">bb</p>
+                        	<nl/>
+
                         <div>
                         </div>
                     </td>
                     <td colspan="2">
                         <div>
+                        	<p float="none" width="100%" border.color="black" text-align="right">bb</p>
                         </div>
                     </td>
                 </tr>
             </table>
-
+            
             <div class="legend">
                 <h2>Legend:</h2>
                 <p>
@@ -71,5 +88,15 @@
                 </p>
             </div>
         </div>
+                                <div>
+                        	<p float="left" width="30%" border.color="black" text-align="center">bb</p>
+                        	<nl/>
+                        	<p float="left" width="30%" text-align="center" border.color="black">bb</p>
+                        	<nl/>
+                        	<p float="right" width="30%" text-align="right" border.color="black">bb</p>
+                        	<nl/>
+                        </div>
+        <break />
+        fasfas
     </dynamic-page>
 </pdf>

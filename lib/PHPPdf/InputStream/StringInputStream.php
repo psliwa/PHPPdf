@@ -6,12 +6,14 @@
  * License information is in LICENSE file
  */
 
-namespace PHPPdf\Stream;
+namespace PHPPdf\InputStream;
 
 /**
+ * Input stream that is able to read data form string
+ * 
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
-class String implements Stream
+class StringInputStream implements InputStream
 {
     private $currentIndex = 0;
     private $content;
