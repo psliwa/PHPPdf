@@ -11,6 +11,9 @@ namespace PHPPdf\Formatter;
 use PHPPdf\Node\Node,
     PHPPdf\Document;
 
+/**
+ * @author Piotr Śliwa <peter.pl7@gmail.com>
+ */
 class TableColumnFormatter extends BaseFormatter
 {
     public function format(Node $node, Document $document)

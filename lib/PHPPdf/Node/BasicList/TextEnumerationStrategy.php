@@ -14,6 +14,8 @@ use PHPPdf\Engine\GraphicsContext,
     PHPPdf\Node\BasicList;
 
 /**
+ * Enumeration strategy that draws text as enumeration element
+ * 
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
 abstract class TextEnumerationStrategy extends AbstractEnumerationStrategy

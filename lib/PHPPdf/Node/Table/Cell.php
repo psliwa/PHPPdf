@@ -13,6 +13,8 @@ use PHPPdf\Node\Container,
     PHPPdf\Node\Listener;
 
 /**
+ * Cell of the row
+ * 
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
 class Cell extends Container

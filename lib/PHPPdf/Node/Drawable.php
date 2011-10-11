@@ -12,21 +12,24 @@ use PHPPdf\Util\DrawingTaskHeap;
 use PHPPdf\Document;
 
 /**
- * Able to draw element
+ * Element being able to draw
  * 
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
 interface Drawable
 {
     /**
-     * @return array Ordered array of DrawingTask objects
+     * Insert to $tasks collection DrawingTask objects. Order of tasks is important
      */
     public function collectOrderedDrawingTasks(Document $document, DrawingTaskHeap $tasks);
 
     /**
-     * @return array Unordered array of DrawingTask objects
+     * Insert to $tasks collection DrawingTask objects. Order of tasks is not important
      */
     public function collectUnorderedDrawingTasks(Document $document, DrawingTaskHeap $tasks);
     
+    /**
+     * Insert to $tasks collection DrawingTask objects. This tasks must be evaluated on the end of all tasks
+     */
     public function collectPostDrawingTasks(Document $document, DrawingTaskHeap $tasks);
 }

@@ -13,6 +13,8 @@ use PHPPdf\Node\Table\Cell,
     PHPPdf\Node\Table\Row;
 
 /**
+ * Table element
+ * 
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
 class Table extends Container implements Listener

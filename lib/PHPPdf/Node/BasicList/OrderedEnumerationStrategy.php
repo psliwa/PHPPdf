@@ -9,10 +9,14 @@
 namespace PHPPdf\Node\BasicList;
 
 use PHPPdf\Document;
-
 use PHPPdf\Engine\GraphicsContext,
     PHPPdf\Node\BasicList;
 
+/**
+ * This enumeration strategy uses ordered sequence of chars (letters, numbers etc.) as enumeration element
+ * 
+ * @author Piotr Śliwa <peter.pl7@gmail.com>
+ */
 class OrderedEnumerationStrategy extends TextEnumerationStrategy
 {
     private $pattern = '%s.';

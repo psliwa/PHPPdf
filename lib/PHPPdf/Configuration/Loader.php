@@ -8,11 +8,13 @@
 
 namespace PHPPdf\Configuration;
 
-/**
- * @author Piotr Śliwa <peter.pl7@gmail.com>
- */
 use PHPPdf\Cache\Cache;
 
+/**
+ * Configuration loader
+ * 
+ * @author Piotr Śliwa <peter.pl7@gmail.com>
+ */
 interface Loader
 {
     /**
@@ -31,7 +33,7 @@ interface Loader
     public function createFontRegistry();
     
     /**
-     * @return PHPPdf\Util\UnitConverter
+     * @return UnitConverter
      */
     public function createUnitConverter();
     

@@ -11,11 +11,14 @@ namespace PHPPdf\Node\BasicList;
 use PHPPdf\Node\BasicList;
 
 /**
+ * Factory of enumeration strategy
+ * 
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
 class EnumerationStrategyFactory
 {
     /**
+     * @param string Type of enumeration strategy
      * @return EnumerationStrategy
      */
     public function create($type)

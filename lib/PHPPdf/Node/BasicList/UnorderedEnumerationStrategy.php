@@ -14,6 +14,8 @@ use PHPPdf\Engine\GraphicsContext,
     PHPPdf\Node\BasicList;
 
 /**
+ * Enumeration strategy that draws constant text as enumeration element
+ * 
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
 class UnorderedEnumerationStrategy extends TextEnumerationStrategy

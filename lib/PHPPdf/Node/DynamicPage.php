@@ -9,12 +9,13 @@
 namespace PHPPdf\Node;
 
 use PHPPdf\Util\DrawingTaskHeap;
-
 use PHPPdf\Node\Page,
     PHPPdf\Node\PageContext,
     PHPPdf\Document;
 
 /**
+ * Page being able to break
+ * 
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
 class DynamicPage extends Page
@@ -73,7 +74,7 @@ class DynamicPage extends Page
     }
 
     /**
-     * @return PHPPdf\Node\Page
+     * @return Page
      */
     public function createNextPage()
     {

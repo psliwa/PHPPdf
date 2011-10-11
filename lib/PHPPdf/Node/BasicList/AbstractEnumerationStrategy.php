@@ -9,10 +9,14 @@
 namespace PHPPdf\Node\BasicList;
 
 use PHPPdf\Document;
-
 use PHPPdf\Engine\GraphicsContext,
     PHPPdf\Node\BasicList;
 
+/**
+ * Base class for enumeration strategy
+ * 
+ * @author Piotr Śliwa <peter.pl7@gmail.com>
+ */
 abstract class AbstractEnumerationStrategy implements EnumerationStrategy
 {
     protected $index = 0;

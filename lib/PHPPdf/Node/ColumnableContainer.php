@@ -9,10 +9,11 @@
 namespace PHPPdf\Node;
 
 use PHPPdf\Util;
-
 use PHPPdf\Document;
 
 /**
+ * Container being able to format as columns
+ * 
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
 class ColumnableContainer extends Container

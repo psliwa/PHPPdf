@@ -14,12 +14,13 @@ use PHPPdf\Document,
     PHPPdf\Formatter\Formatter;
 
 /**
+ * Standard container element
+ * 
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
 class Container extends Node
 {
-    protected $children = array();
-    private $document = null;
+    private $children = array();
 
     /**
      * @param Node $node Child node object
@@ -72,11 +73,6 @@ class Container extends Node
     protected function preDraw(Document $document, DrawingTaskHeap $tasks)
     {
         parent::preDraw($document, $tasks);
-    }
-
-    public function getDocument()
-    {
-        return $this->document;
     }
 
     protected function doDraw(Document $document, DrawingTaskHeap $tasks)

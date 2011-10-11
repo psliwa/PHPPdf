@@ -1686,7 +1686,7 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
     {
         $this->ancestorWithFontSize = null;
         $this->ancestorWithRotation = null;
-        
+
         foreach($this->getChildren() as $child)
         {
             $child->flush();

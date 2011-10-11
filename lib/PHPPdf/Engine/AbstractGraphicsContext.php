@@ -9,6 +9,8 @@
 namespace PHPPdf\Engine;
 
 /**
+ * Base class for GraphicsContext classes.
+ * 
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
 abstract class AbstractGraphicsContext implements GraphicsContext

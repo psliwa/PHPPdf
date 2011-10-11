@@ -9,7 +9,6 @@
 namespace PHPPdf\Configuration;
 
 use PHPPdf\Util\UnitConverterImpl;
-
 use PHPPdf\Parser\FontRegistryParser,
     PHPPdf\Parser\EnhancementFactoryParser,
     PHPPdf\Parser\NodeFactoryParser,
@@ -17,6 +16,10 @@ use PHPPdf\Parser\FontRegistryParser,
     PHPPdf\Cache\Cache;
 
 /**
+ * Standard configuration loader.
+ * 
+ * Loads configuration from xml files.
+ * 
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
 class LoaderImpl implements Loader

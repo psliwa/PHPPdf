@@ -9,6 +9,8 @@
 namespace PHPPdf\Node;
 
 /**
+ * Item of BasicList
+ * 
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
 class BasicListItem extends Container

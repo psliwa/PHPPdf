@@ -106,9 +106,12 @@ class Factory implements \Serializable
 
     /**
      * Return instance of Enhancement registered under passed named and parameters.
+     * 
+     * Internally this method uses Flyweight pattern to reuse enhancement's objects
      *
      * @param string $name Name of enhancement
      * @param array $parameters Parameters of enhancement
+     * 
      * @return PHPPdf\Enhancement\Enhancement
      */
     public function create($name, array $parameters = array())

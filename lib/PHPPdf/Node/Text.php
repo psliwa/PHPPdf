@@ -93,23 +93,6 @@ class Text extends Node
         }
     }
 
-    public function getStartLineDrawingXDimension($align, $lineWidth)
-    {
-        $parent = $this->getParent();
-        $width = $parent->getWidth();
-        switch($align)
-        {
-            case self::ALIGN_LEFT:
-                return $this->getAttribute('padding-left');
-            case self::ALIGN_RIGHT:
-                return ($width - $lineWidth - $parent->getAttribute('padding-right') - $parent->getAttribute('padding-left'));
-            case self::ALIGN_CENTER:
-                return ($width - $parent->getAttribute('padding-right') - $parent->getAttribute('padding-left') - $lineWidth)/2;
-            default:
-                throw new \InvalidArgumentException(sprintf('Unsupported align type "%s".', $align));
-        }
-    }
-
     protected function doBreakAt($height)
     {
         $clone = null;
@@ -135,7 +118,7 @@ class Text extends Node
         return $clone;
     }
 
-    public function reorganize(Point $leftTopCornerPoint)
+    private function reorganize(Point $leftTopCornerPoint)
     {
         $boundary = $this->getBoundary();
         $boundary->reset();

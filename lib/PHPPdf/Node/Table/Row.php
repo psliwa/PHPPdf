@@ -16,6 +16,8 @@ use PHPPdf\Node\Table\Cell,
     PHPPdf\Node\Node;
 
 /**
+ * Row of the table
+ * 
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
 class Row extends Container implements Listener

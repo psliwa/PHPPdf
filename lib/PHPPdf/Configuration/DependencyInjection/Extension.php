@@ -13,6 +13,11 @@ use Symfony\Component\DependencyInjection\Extension\ExtensionInterface,
     Symfony\Component\DependencyInjection\Loader\XmlFileLoader,
     Symfony\Component\Config\FileLocator;
 
+/**
+ * Extension for DependencyInjection component from Symfony 2
+ * 
+ * @author Piotr Śliwa <peter.pl7@gmail.com>
+ */
 class Extension implements ExtensionInterface
 {
     public function load(array $config, ContainerBuilder $container)

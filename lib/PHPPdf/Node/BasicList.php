@@ -9,9 +9,7 @@
 namespace PHPPdf\Node;
 
 use PHPPdf\Util\DrawingTaskHeap;
-
 use PHPPdf\Node\BasicList\EnumerationStrategyFactory;
-
 use PHPPdf\Node\BasicList\ImageEnumerationStrategy,
     PHPPdf\Node\BasicList\EnumerationStrategy,
     PHPPdf\Node\BasicList\OrderedEnumerationStrategy,
@@ -20,6 +18,8 @@ use PHPPdf\Node\BasicList\ImageEnumerationStrategy,
     PHPPdf\Util\DrawingTask;
 
 /**
+ * Class of the list element
+ * 
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
 class BasicList extends Container
@@ -57,16 +57,29 @@ class BasicList extends Container
         static::setAttributeGetters(array('type' => 'getType', 'image' => 'getImage'));
     }
     
+    /**
+     * @internal
+     */
     public function isOmitEnumerationOfFirstElement()
     {
         return $this->omitEnumerationOfFirstElement;
     }
     
+    /**
+     * @internal
+     */
     public function setOmitEnumerationOfFirstElement($flag)
     {
         $this->omitEnumerationOfFirstElement = (boolean) $flag;
     }
     
+    /**
+     * Sets list type
+     * 
+     * Implementation of this method also clears enumeration strategy property
+     * 
+     * @param string List type
+     */
     public function setType($type)
     {
         $const = sprintf('%s::TYPE_%s', __CLASS__, strtoupper($type));
@@ -100,7 +113,6 @@ class BasicList extends Container
             $image = $document->createImage($image);
             $this->setAttribute('image', $image);
         }
-        
     }
     
     public function getImage()
@@ -136,9 +148,7 @@ class BasicList extends Container
     }
     
     /**
-     * TODO: use factory
-     * 
-     * @return PHPPdf\Node\BasicList\EnumerationStrategy
+     * @return EnumerationStrategy
      */
     public function getEnumerationStrategy()
     {

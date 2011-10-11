@@ -9,13 +9,13 @@
 namespace PHPPdf\Node\BasicList;
 
 use PHPPdf\Util\UnitConverter;
-
 use PHPPdf\Document;
-
 use PHPPdf\Node\BasicList,
     PHPPdf\Engine\GraphicsContext;
 
 /**
+ * This enumeration strategy uses image as enumeration element 
+ * 
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
 class ImageEnumerationStrategy extends AbstractEnumerationStrategy
