@@ -24,6 +24,7 @@
 	        </formatters>
 	    </node>
 	    <node name="div" class="PHPPdf\Node\Container">
+	    	<alias>pre</alias>
 	        <formatters>
 	            <pre class="PHPPdf\Formatter\ConvertAttributesFormatter" />
 	            <pre class="PHPPdf\Formatter\StandardDimensionFormatter" />
@@ -109,6 +110,7 @@
 	    
 	    <node name="text" class="PHPPdf\Node\Text">
 	    	<alias>span</alias>
+	    	<alias>code</alias>
 	        <formatters>
 	            <pre class="PHPPdf\Formatter\ConvertAttributesFormatter" />
 	            <pre class="PHPPdf\Formatter\TextDimensionFormatter" />

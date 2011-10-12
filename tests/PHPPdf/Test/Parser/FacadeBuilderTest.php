@@ -89,4 +89,31 @@ class FacadeBuilderTest extends \PHPPdf\PHPUnit\Framework\TestCase
                
         $this->builder->build();
     }
+    
+    /**
+     * @test
+     * @dataProvider injectProperDocumentParserToFacadeProvider
+     */
+    public function injectProperDocumentParserToFacade($type, $expectedClass)
+    {
+        $this->builder->setDocumentParserType($type);
+        
+        $facade = $this->builder->build();
+        
+        $this->assertInstanceof($expectedClass, $facade->getDocumentParser());
+    }
+    
+    public function injectProperDocumentParserToFacadeProvider()
+    {
+        return array(
+            array(
+                FacadeBuilder::PARSER_XML,
+                'PHPPdf\Parser\XmlDocumentParser',
+            ),
+            array(
+                FacadeBuilder::PARSER_MARKDOWN,
+                'PHPPdf\Parser\MarkdownDocumentParser',
+            ),
+        );
+    }
 }

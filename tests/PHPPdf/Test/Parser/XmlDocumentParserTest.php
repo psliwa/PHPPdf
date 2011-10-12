@@ -5,13 +5,13 @@ namespace PHPPdf\Test\Parser;
 use PHPPdf\Node\Container;
 use PHPPdf\Node\Paragraph;
 use PHPPdf\Node\Text;
-use PHPPdf\Parser\DocumentParser,
+use PHPPdf\Parser\XmlDocumentParser,
     PHPPdf\Node\Factory as NodeFactory,
     PHPPdf\Enhancement\Factory as EnhancementFactory,
     PHPPdf\Node\PageCollection,
     PHPPdf\Parser\StylesheetConstraint;
 
-class DocumentParserTest extends \PHPPdf\PHPUnit\Framework\TestCase
+class XmlDocumentParserTest extends \PHPPdf\PHPUnit\Framework\TestCase
 {
     private $parser;
     private $documentMock;
@@ -23,7 +23,7 @@ class DocumentParserTest extends \PHPPdf\PHPUnit\Framework\TestCase
                                    ->setMethods(array('setMetadataValue'))
                                    ->getMock();
         
-        $this->parser = new DocumentParser($this->documentMock);
+        $this->parser = new XmlDocumentParser($this->documentMock);
     }
 
     /**
@@ -467,7 +467,7 @@ XML;
                    //move after stylesheet close tag and return constraint                  
                    ->will($this->returnCompose(array(
                        $this->returnCallback(function() use($reader){                           
-                           while($reader->name != DocumentParser::STYLESHEET_TAG)
+                           while($reader->name != XmlDocumentParser::STYLESHEET_TAG)
                            {
                                $reader->next();
                            }

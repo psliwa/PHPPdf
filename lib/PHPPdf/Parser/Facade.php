@@ -11,11 +11,8 @@ namespace PHPPdf\Parser;
 use PHPPdf\Util\Point;
 
 use PHPPdf\Configuration\Loader;
-
 use PHPPdf\Node\TextTransformator;
-
-use PHPPdf\Parser\DocumentParser,
-    PHPPdf\Document,
+use PHPPdf\Document,
     PHPPdf\Parser\StylesheetParser,
     PHPPdf\Parser\EnhancementFactoryParser,
     PHPPdf\Parser\FontRegistryParser,
@@ -39,7 +36,7 @@ class Facade
     private $useCacheForStylesheetConstraint = false;
     private $configurationLoader;
 
-    public function __construct(Loader $configurationLoader)
+    public function __construct(Loader $configurationLoader, DocumentParser $documentParser)
     {
         $this->configurationLoader = $configurationLoader;
         
@@ -47,8 +44,12 @@ class Facade
 
         $this->setCache(NullCache::getInstance());
         $document = new Document($unitConverter);
-        $documentParser = new DocumentParser($document);
-        $documentParser->addListener($documentParser->getNodeManager());
+        $documentParser->setDocument($document);
+        $nodeManager = $documentParser->getNodeManager();
+        if($nodeManager)
+        {
+            $documentParser->addListener($nodeManager);
+        }
         $this->setDocumentParser($documentParser);
         $this->setStylesheetParser(new StylesheetParser());
         $this->setDocument($document);
@@ -60,7 +61,6 @@ class Facade
     }
 
     /**
-     *
      * @return DocumentParser
      */
     public function getDocumentParser()

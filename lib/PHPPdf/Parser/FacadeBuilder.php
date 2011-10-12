@@ -23,11 +23,15 @@ use PHPPdf\Cache\CacheImpl;
  */
 class FacadeBuilder
 {
+    const PARSER_XML = 'xml';
+    const PARSER_MARKDOWN = 'markdown';
+    
     private $configurationLoader = null;
     private $cacheType = null;
     private $cacheOptions = null;
     private $useCacheForStylesheetConstraint = true;
     private $useCacheForConfigurationLoader = true;
+    private $documentParserType = self::PARSER_XML;
 
     private function __construct(Loader $configurationLoader = null)
     {
@@ -70,7 +74,7 @@ class FacadeBuilder
      */
     public function build()
     {
-        $facade = new Facade($this->configurationLoader);
+        $facade = new Facade($this->configurationLoader, $this->createDocumentParser());
         $facade->setUseCacheForStylesheetConstraint($this->useCacheForStylesheetConstraint);
 
         if($this->cacheType && $this->cacheType !== 'Null')
@@ -85,6 +89,21 @@ class FacadeBuilder
         }
 
         return $facade;
+    }
+    
+    /**
+     * @return DocumentParser
+     */
+    private function createDocumentParser()
+    {
+        $parser = new XmlDocumentParser();
+        
+        if($this->documentParserType === self::PARSER_MARKDOWN)
+        {
+            $parser = new MarkdownDocumentParser($parser);
+        }
+        
+        return $parser;
     }
 
     /**
@@ -117,6 +136,16 @@ class FacadeBuilder
     {
         $this->useCacheForStylesheetConstraint = (bool) $useCache;
 
+        return $this;
+    }
+    
+    /**
+     * @return FacadeBuilder
+     */
+    public function setDocumentParserType($type)
+    {
+        $this->documentParserType = $type;
+        
         return $this;
     }
 }
