@@ -348,7 +348,7 @@
 			<tag name="phppdf.node" />
 			<argument type="collection">
 				<argument key="font-size">14px</argument>
-				<argument key="font-type">bold</argument>
+				<argument key="font-style">bold</argument>
 				<argument key="margin">12px 0</argument>
 			</argument>
 			<argument type="service" id="phppdf.unit_converter">
