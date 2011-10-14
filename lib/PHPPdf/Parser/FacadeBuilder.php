@@ -155,6 +155,12 @@ class FacadeBuilder
      */
     public function setDocumentParserType($type)
     {
+        $parserTypes = array(self::PARSER_XML, self::PARSER_MARKDOWN);
+        if(!in_array($type, $parserTypes))
+        {
+            throw new \InvalidArgumentException(sprintf('Unknown parser type "%s", expected one of: %s.', $type, implode(', ', $parserTypes)));
+        }
+
         $this->documentParserType = $type;
         
         return $this;
