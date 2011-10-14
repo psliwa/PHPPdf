@@ -9,9 +9,7 @@
 namespace PHPPdf\Parser;
 
 use PHPPdf\Configuration\LoaderImpl;
-
 use PHPPdf\Configuration\Loader;
-
 use PHPPdf\Cache\CacheImpl;
 
 /**
@@ -32,6 +30,8 @@ class FacadeBuilder
     private $useCacheForStylesheetConstraint = true;
     private $useCacheForConfigurationLoader = true;
     private $documentParserType = self::PARSER_XML;
+    private $markdownStylesheetFilepath = null;
+    private $markdownDocumentTemplateFilepath = null;
 
     private function __construct(Loader $configurationLoader = null)
     {
@@ -74,7 +74,14 @@ class FacadeBuilder
      */
     public function build()
     {
-        $facade = new Facade($this->configurationLoader, $this->createDocumentParser());
+        $documentParser = $this->createDocumentParser();
+        $facade = new Facade($this->configurationLoader, $documentParser);
+        
+        if($documentParser instanceof FacadeAware)
+        {
+            $documentParser->setFacade($facade);
+        }
+        
         $facade->setUseCacheForStylesheetConstraint($this->useCacheForStylesheetConstraint);
 
         if($this->cacheType && $this->cacheType !== 'Null')
@@ -101,6 +108,8 @@ class FacadeBuilder
         if($this->documentParserType === self::PARSER_MARKDOWN)
         {
             $parser = new MarkdownDocumentParser($parser);
+            $parser->setStylesheetFilepath($this->markdownStylesheetFilepath);
+            $parser->setDocumentTemplateFilepath($this->markdownDocumentTemplateFilepath);
         }
         
         return $parser;
@@ -111,6 +120,7 @@ class FacadeBuilder
      *
      * @param string $type Type of cache, see {@link PHPPdf\Cache\CacheImpl} engine constants
      * @param array $options Options for cache
+     * 
      * @return FacadeBuilder
      */
     public function setCache($type, array $options = array())
@@ -130,6 +140,7 @@ class FacadeBuilder
      *
      * @see setCache()
      * @param boolean $useCache Cache for Stylesheets should by used?
+     * 
      * @return FacadeBuilder
      */
     public function setUseCacheForStylesheetConstraint($useCache)
@@ -145,6 +156,34 @@ class FacadeBuilder
     public function setDocumentParserType($type)
     {
         $this->documentParserType = $type;
+        
+        return $this;
+    }
+    
+    /**
+     * Sets stylesheet filepath for markdown document parser
+     * 
+     * @param string|null $filepath Filepath
+     * 
+     * @return FacadeBuilder
+     */
+    public function setMarkdownStylesheetFilepath($filepath)
+    {
+        $this->markdownStylesheetFilepath = $filepath;
+        
+        return $this;
+    }
+    
+    /**
+     * Sets document template for markdown document parser
+     * 
+     * @param string|null $filepath Filepath to document template
+     * 
+     * @return FacadeBuilder
+     */
+    public function setMarkdownDocumentTemplateFilepath($filepath)
+    {
+        $this->markdownDocumentTemplateFilepath = $filepath;
         
         return $this;
     }

@@ -25,6 +25,8 @@
 	    </node>
 	    <node name="div" class="PHPPdf\Node\Container">
 	    	<alias>pre</alias>
+	    	<alias>br</alias>
+	    	<alias>nl</alias>
 	        <formatters>
 	            <pre class="PHPPdf\Formatter\ConvertAttributesFormatter" />
 	            <pre class="PHPPdf\Formatter\StandardDimensionFormatter" />
@@ -38,6 +40,9 @@
 	    </node>
 	    <node name="ul" class="PHPPdf\Node\BasicList">
 	    	<invoke method="setEnumerationStrategyFactory" argId="list.enumeration_factory" />
+	    	<stylesheet>
+	    		<attribute name="margin-left" value="12px" />
+	    	</stylesheet>
 	        <formatters>
 	            <pre class="PHPPdf\Formatter\ConvertAttributesFormatter" />
 	            <pre class="PHPPdf\Formatter\StandardDimensionFormatter" />
@@ -52,6 +57,7 @@
 	    <node name="ol" class="PHPPdf\Node\BasicList">
 	    	<stylesheet>
 	    		<attribute name="type" value="decimal" />
+	    		<attribute name="margin-left" value="12px" />
 	    	</stylesheet>
 	    	<invoke method="setEnumerationStrategyFactory" argId="list.enumeration_factory" />
 	        <formatters>
@@ -153,6 +159,7 @@
 	    <node name="h3" class="PHPPdf\Node\Container">
 	        <stylesheet>
 	            <attribute name="font-size" value="14px" />
+	            <attribute name="font-style" value="bold" />
 	            <attribute name="margin" value="12px 0" />
 	        </stylesheet>
 	        <formatters>
@@ -246,37 +253,12 @@
 	            <post class="PHPPdf\Formatter\StandardPositionFormatter" />
 	        </formatters>
 	    </node>
-	    <node name="br" class="PHPPdf\Node\Container">
-	        <stylesheet>
-	            <attribute name="height" value="12px" />
-	        </stylesheet>
-	        <formatters>
-	            <pre class="PHPPdf\Formatter\ConvertAttributesFormatter" />
-	            <pre class="PHPPdf\Formatter\StandardDimensionFormatter" />
-	            <pre class="PHPPdf\Formatter\FirstPointPositionFormatter" />
-
-	            <post class="PHPPdf\Formatter\ContainerDimensionFormatter" />
-	            <post class="PHPPdf\Formatter\StandardPositionFormatter" />
-	            <post class="PHPPdf\Formatter\FloatFormatter" />
-	        </formatters>
-	    </node>
 	    <node name="hr" class="PHPPdf\Node\Container">
 	        <stylesheet>
 	            <attribute name="height" value="1px" />
 	            <attribute name="margin" value="12px 0" />
 	            <enhancement name="background" color="black" />
 	        </stylesheet>
-	        <formatters>
-	            <pre class="PHPPdf\Formatter\ConvertAttributesFormatter" />
-	            <pre class="PHPPdf\Formatter\StandardDimensionFormatter" />
-	            <pre class="PHPPdf\Formatter\FirstPointPositionFormatter" />
-
-	            <post class="PHPPdf\Formatter\ContainerDimensionFormatter" />
-	            <post class="PHPPdf\Formatter\StandardPositionFormatter" />
-	            <post class="PHPPdf\Formatter\FloatFormatter" />
-	        </formatters>
-	    </node>
-	    <node name="nl" class="PHPPdf\Node\Container">
 	        <formatters>
 	            <pre class="PHPPdf\Formatter\ConvertAttributesFormatter" />
 	            <pre class="PHPPdf\Formatter\StandardDimensionFormatter" />

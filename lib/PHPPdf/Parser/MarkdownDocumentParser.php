@@ -8,6 +8,8 @@
 
 namespace PHPPdf\Parser;
 
+use PHPPdf\Util\DataSource;
+
 use PHPPdf\Bridge\Markdown\MarkdownParser;
 use PHPPdf\Document;
 use PHPPdf\Node\Factory as NodeFactory;
@@ -16,17 +18,23 @@ use PHPPdf\Enhancement\Factory as EnhancementFactory;
 /**
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
-class MarkdownDocumentParser implements DocumentParser
+class MarkdownDocumentParser implements DocumentParser, FacadeAware
 {
-    const DOCUMENT_TEMPLATE = '<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE pdf SYSTEM "%resources%/dtd/doctype.dtd"><pdf><dynamic-page>%MARKDOWN%</dynamic-page></pdf>';
-    
     private $documentParser;
     private $markdownParser;
+    private $stylesheetFilepath;
+    private $documentTemplateFilepath;
+    private $facade;
     
     public function __construct(DocumentParser $documentParser, Parser $markdownParser = null)
     {        
         $this->documentParser = $documentParser;        
         $this->markdownParser = $markdownParser ? : new MarkdownParser();
+    }
+    
+    public function setFacade(Facade $facade)
+    {
+        $this->facade = $facade;
     }
     
     public function parse($markdownDocument)
@@ -35,11 +43,35 @@ class MarkdownDocumentParser implements DocumentParser
         
         $relativePathToResources = str_replace('\\', '/', realpath(__DIR__.'/../Resources'));
         
-        $markdownOutput = str_replace('%MARKDOWN%', $markdownOutput, str_replace('%resources%', $relativePathToResources, self::DOCUMENT_TEMPLATE));
+        $documentTemplateSource = DataSource::fromFile($this->documentTemplateFilepath ? : __DIR__.'/../Resources/markdown/document.xml');
         
-        return $this->documentParser->parse($markdownOutput);
+        $markdownOutput = str_replace('%MARKDOWN%', $markdownOutput, str_replace('%resources%', $relativePathToResources, $documentTemplateSource->read()));
+        
+        return $this->documentParser->parse($markdownOutput, $this->getStylesheetConstraint());
     }
     
+    public function setStylesheetFilepath($filepath)
+    {
+        $this->stylesheetFilepath = $filepath;
+    }
+    
+    public function setDocumentTemplateFilepath($filepath)
+    {
+        $this->documentTemplateFilepath = $filepath;
+    }
+    
+    private function getStylesheetConstraint()
+    {
+        if($this->facade)
+        {
+            $markdownStylesheet = DataSource::fromFile($this->stylesheetFilepath ? : __DIR__.'/../Resources/markdown/stylesheet.xml');
+
+            return $this->facade->retrieveStylesheetConstraint($markdownStylesheet);
+        }
+
+        return null;
+    }
+
     public function setNodeFactory(NodeFactory $factory)
     {
         $this->documentParser->setNodeFactory($factory);

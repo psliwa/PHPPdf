@@ -46,7 +46,8 @@ abstract class AbstractEnumerationStrategy implements EnumerationStrategy
         list($xTranslation, $yTranslation) = $this->getEnumerationElementTranslations($document, $list);
         
         $xCoord = $point->getX() - $child->getMarginLeft() + $xTranslation;
-        $yCoord = $point->getY() - $yTranslation;
+        $subchild = current($child->getChildren());
+        $yCoord = $point->getY() - $yTranslation - ($subchild ? $subchild->getPaddingTop() : 0);
         
         $this->doDrawEnumeration($document, $list, $gc, $xCoord, $yCoord);
         

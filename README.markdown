@@ -24,6 +24,7 @@ Table of contents
 1. [Breaking pages and columns](#page-break)
 1. [Metadata](#metadata)
 1. [Configuration](#configuration)
+1. [Markdown support](#markdown)
 1. [Known limitations](#limitations)
 1. [TODO - plans](#todo)
 1. [Technical requirements](#requirements)
@@ -573,6 +574,29 @@ FacadeBuilder can be uset to build and configure Facade. Nowaday builder has onl
 
 There are two implementation of configuration loaders, standard and using DependencyInjection component from Symfony2. Second implementation is more flexible in configuration, but is less efficently. Default loader dosn't use DI container.
 
+<a name="markdown"></a>
+Markdown support
+----------------
+
+Library supports basic (official) markdown syntax. To convert markdown document to pdf, you should configure Facade object by MarkdownDocumentParser. You also might to use FacadeBuilder to do this for you.
+
+Example:
+
+    $facade = PHPPdf\Parser\FacadeBuilder::create()
+                                         ->setDocumentParserType(PHPPdf\Parser\FacadeBuilder::PARSER_MARKDOWN)
+                                         ->setMarkdownStylesheetFilepath(/** optionaly path to stylesheet in xml format */)
+                                         ->build();
+                                         
+By default in markdown pdf document helvetica font is used. If you want to use utf-8 characters or customize pdf document, you should provide your own stylesheet by FacadeBuilder::setMarkdownStylesheetFilepath method. Stylesheet structure has been described in [stylesheet](#stylesheet) chapter. By default stylesheet is empty, if you want to set another font type, stylesheet should look like:
+
+    <stylesheet>
+        <any font-type="DejaVuSans" />
+    </stylesheet>
+
+Internally MarkdownDocumentParser converts markdown document to html (via PHP markdown library), then converts html to xml, and at least xml to pdf document.
+
+Be aware of that, if you use in markdown document raw html that will be incompatible with xml syntax of PHPPdf (for example unexisted attribute or tag), document won't be parsed - exception will be thrown. Not all tags used in markdown implementation are propertly supported by PHPPdf, for example "pre" and "code" tags. Now "pre" tag is alias for "div", and "code" tag is alias for "span", be aware of that.
+
 <a name="limitations"></a>
 Known limitations
 ----------------
@@ -584,6 +608,7 @@ Below is list of known limitations of library current version:
 * vertical-align attribute works improperly if in element with this attribute set, are more than one element
 * border doesn't change dimensions of the element (in HTML do)
 * png files (expecially without compression) are inefficient, png files with high compression (compression level 6 or higher) or jpeg files should be used instead
+* not all tags are propertly supported, for example "pre" tag is alias to "div" and "code" tag is alias for "span"
 
 <a name="todo"></a>
 TODO - plans
@@ -591,7 +616,6 @@ TODO - plans
 
 * automatic generating table of contents
 * improve table, header and footer for table, rowspan. Fix calculation of cell's min height when colspan is used.
-* support for markdown syntax (markdown parser)
 * engine for image file generating
 * support for simple bar and pie charts
 

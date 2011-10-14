@@ -24,6 +24,7 @@ Spis treści
 1. [Łamanie stron i kolumn](#page-break)
 1. [Metadane](#metadata)
 1. [Konfiguracja](#configuration)
+1. [Markdown - wsparcie](#markdown)
 1. [Znane ograniczenia](#limitations)
 1. [TODO - czyli plany](#todo)
 1. [Wymagania techniczne](#requirements)
@@ -570,6 +571,29 @@ Można wykorzystać budowniczego fasady, który jak narazie ma opcje do ustawian
 
 Są dwie implementacje loaderów konfiguracji, zwykła oraz korzystająca z komponentu DependencyInjection z Symfony2. Druga implementacja daje większą elastyczność w konfigurowaniu biblioteki. Domyślnie używany jest loader, który nie korzysta z DI.
 
+<a name="markdown"></a>
+Markdown - wsparcie
+----------------
+
+Biblioteka wspiera podstawową (oficjalną) składnię markdown. Aby skonwertować dokument markdown do pdf'a, powinieneś skonfigurować obiekt Facade obiektem MarkdownDocumentParser. Możesz użyć FacadeBuilder, który zrobi to za Ciebie.
+
+Przykład:
+
+    $facade = PHPPdf\Parser\FacadeBuilder::create()
+                                         ->setDocumentParserType(PHPPdf\Parser\FacadeBuilder::PARSER_MARKDOWN)
+                                         ->setMarkdownStylesheetFilepath(/** opcjonalna ścieżka do pliku z arkuszem stylów o składni xml */)
+                                         ->build();
+
+Domyślnie w dokumencie jest użyta czcionka helvetica. Jeśli chcesz użyć znaków utf-8 lub dostosować wynikowy dokument pdf, powinieneś dostarczyć swój własny arkusz stylów poprzez metodę FacadeBuilder::setMarkdownStylesheetFilepath. Struktura arkuszy stylów została opisana w jednym z poprzednich [rozdziałów](#stylesheet). Domyślnie arkusz stylów jest pusty, jeśli chcesz ustawić inną czcionkę, arkusz stylów powinien wyglądać:
+
+    <stylesheet>
+        <any font-type="DejaVuSans" />
+    </stylesheet>
+
+Wewnętrznie MarkdownDocumentParser konwertuje dokument markdown do html'a (poprzez bibliotekę PHP markdown), następnie konwertuje html'a do xml'a i wreszcie xml'a do dokumentu pdf.
+
+Miej na uwadze to, że jeśli w dokumencie markdown użyjesz surowego html'a, który nie będzie kompatibilny ze składnią xml wspieraną przez PHPPdf (np. nieistniejący atrybut lub nazwa tagu), dokument się nie sparsuje - zostanie wyrzucony wyjątek. Nie wszystkie tagi użyte w implementacji markdown są poprawnie wspierane przez PHPPdf, np. tagi "pre" oraz "code". Obecnie tag "pre" jest aliasem "div", a tag "code" jest aliasem do "span".
+
 <a name="limitations"></a>
 Znane ograniczenia
 -------------------
@@ -581,6 +605,7 @@ Poniżej przedstawiam listę ograniczeń obecnej wersji biblioteki:
 * atrybut vertical-align działa nieprawidłowo, jeśli w elemencie z ustawionym tym atrybutem, jest więcej niż jeden element
 * obramowanie nie zmienia rozmiaru elementu tak jak to jest w HTML - zabieg celowy, raczej nie planuję jego zmiany
 * pliki png (zwłaszcza bez kompresji) są nieefektywne, powinny być używane pliki png z wysoką kompresją (poziom kompresji 6 lub większy) lub pliki jpeg
+* nie wszystkie tagi są poprawnie wspierane, np. tag "pre" obecnie jest aliasem do tagu "div", a tag "code" jest aliasem do tagu "span"
 
 <a name="todo"></a>
 TODO - czyli plany
@@ -588,7 +613,6 @@ TODO - czyli plany
 
 * automatycznie generowany spis treści
 * poprawa działania tabelek, definiowanie nagłówków i stopek dla tabeli
-* obsługa składki markdown (parser markdown)
 * silnik do generowania plików graficznych
 * obsługa prosych wykresów słupkowych i kołowych
 

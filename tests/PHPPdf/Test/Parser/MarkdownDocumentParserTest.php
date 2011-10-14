@@ -2,6 +2,8 @@
 
 namespace PHPPdf\Test\Parser;
 
+use PHPPdf\Parser\StylesheetConstraint;
+
 use PHPPdf\Document;
 
 use PHPPdf\Parser\MarkdownDocumentParser;
@@ -78,5 +80,31 @@ class MarkdownDocumentParserTest extends TestCase
                              ->will($this->returnValue($innerDocumentParserOutput));
                              
         $this->assertEquals($innerDocumentParserOutput, $this->markdownDocumentParser->parse($markdown));
+    }
+    
+    /**
+     * @test
+     */
+    public function useFacadeToCreateStylesheetConstraint()
+    {
+        $stylesheetConstraint = new StylesheetConstraint();
+        
+        $facade = $this->getMockBuilder('PHPPdf\Parser\Facade')
+                       ->setMethods(array('retrieveStylesheetConstraint'))
+                       ->disableOriginalConstructor()
+                       ->getMock();
+                       
+        $this->markdownDocumentParser->setFacade($facade);
+        
+        $facade->expects($this->once())
+               ->method('retrieveStylesheetConstraint')
+               ->with($this->isInstanceOf('PHPPdf\Util\DataSource'))
+               ->will($this->returnValue($stylesheetConstraint));
+               
+        $this->documentParser->expects($this->once())
+                             ->method('parse')
+                             ->with($this->isType('string'), $stylesheetConstraint);
+                             
+        $this->markdownDocumentParser->parse('markdown');
     }
 }

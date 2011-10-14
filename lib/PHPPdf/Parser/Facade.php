@@ -156,7 +156,7 @@ class Facade
         return $content;
     }
 
-    private function retrieveStylesheetConstraint($stylesheetXml)
+    public function retrieveStylesheetConstraint($stylesheetXml)
     {
        $stylesheetConstraint = null;
 
