@@ -1,45 +1,43 @@
 <?php
 
+/*
+ * Copyright 2011 Piotr Śliwa <peter.pl7@gmail.com>
+ *
+ * License information is in LICENSE file
+ */
+
 namespace PHPPdf\Parser;
 
+use PHPPdf\Bridge\Markdown\MarkdownParser;
 use PHPPdf\Document;
-
 use PHPPdf\Node\Factory as NodeFactory;
 use PHPPdf\Enhancement\Factory as EnhancementFactory;
 
+/**
+ * @author Piotr Śliwa <peter.pl7@gmail.com>
+ */
 class MarkdownDocumentParser implements DocumentParser
 {
     const DOCUMENT_TEMPLATE = '<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE pdf SYSTEM "%resources%/dtd/doctype.dtd"><pdf><dynamic-page>%MARKDOWN%</dynamic-page></pdf>';
     
     private $documentParser;
+    private $markdownParser;
     
-    public function __construct(XmlDocumentParser $documentParser)
-    {
-        if(!function_exists('Markdown'))
-        {
-            $markdownPath = __DIR__.'/../../vendor/Markdown/markdown.php';
-            if(file_exists($markdownPath))
-            {
-                require_once $markdownPath;
-            }
-            else
-            {
-                throw new \Exception('PHP Markdown library not found. Mabey you should call "> php vendors.php" command from root dir of PHPPdf library to download dependencies?');
-            }
-        }
-        
-        $this->documentParser = $documentParser;
+    public function __construct(DocumentParser $documentParser, Parser $markdownParser = null)
+    {        
+        $this->documentParser = $documentParser;        
+        $this->markdownParser = $markdownParser ? : new MarkdownParser();
     }
     
     public function parse($markdownDocument)
     {
-        $html = \Markdown($markdownDocument);
+        $markdownOutput = $this->markdownParser->parse($markdownDocument);
         
         $relativePathToResources = str_replace('\\', '/', realpath(__DIR__.'/../Resources'));
         
-        $xml = str_replace('%MARKDOWN%', $html, str_replace('%resources%', $relativePathToResources, self::DOCUMENT_TEMPLATE));
+        $markdownOutput = str_replace('%MARKDOWN%', $markdownOutput, str_replace('%resources%', $relativePathToResources, self::DOCUMENT_TEMPLATE));
         
-        return $this->documentParser->parse($xml);
+        return $this->documentParser->parse($markdownOutput);
     }
     
     public function setNodeFactory(NodeFactory $factory)
