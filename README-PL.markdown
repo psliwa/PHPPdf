@@ -590,7 +590,7 @@ Domyślnie w dokumencie jest użyta czcionka helvetica. Jeśli chcesz użyć zna
         <any font-type="DejaVuSans" />
     </stylesheet>
 
-Wewnętrznie MarkdownDocumentParser konwertuje dokument markdown do html'a (poprzez bibliotekę PHP markdown), następnie konwertuje html'a do xml'a i wreszcie xml'a do dokumentu pdf.
+Wewnętrznie MarkdownDocumentParser konwertuje dokument markdown do html'a (poprzez bibliotekę [PHP markdown](https://github.com/wolfie/php-markdown)), następnie konwertuje html'a do xml'a i wreszcie xml'a do dokumentu pdf.
 
 Miej na uwadze to, że jeśli w dokumencie markdown użyjesz surowego html'a, który nie będzie kompatibilny ze składnią xml wspieraną przez PHPPdf (np. nieistniejący atrybut lub nazwa tagu), dokument się nie sparsuje - zostanie wyrzucony wyjątek. Nie wszystkie tagi użyte w implementacji markdown są poprawnie wspierane przez PHPPdf, np. tagi "pre" oraz "code". Obecnie tag "pre" jest aliasem "div", a tag "code" jest aliasem do "span".
 

@@ -587,13 +587,13 @@ Example:
                                          ->setMarkdownStylesheetFilepath(/** optionaly path to stylesheet in xml format */)
                                          ->build();
                                          
-By default in markdown pdf document helvetica font is used. If you want to use utf-8 characters or customize pdf document, you should provide your own stylesheet by FacadeBuilder::setMarkdownStylesheetFilepath method. Stylesheet structure has been described in [stylesheet](#stylesheet) chapter. By default stylesheet is empty, if you want to set another font type, stylesheet should look like:
+By default, in markdown pdf document, helvetica font is used. If you want to use utf-8 characters or customize pdf document, you should provide your own stylesheet by FacadeBuilder::setMarkdownStylesheetFilepath method. Stylesheet structure has been described in [stylesheet](#stylesheet) chapter. By default stylesheet is empty, if you want to set another font type, stylesheet should looks like:
 
     <stylesheet>
         <any font-type="DejaVuSans" />
     </stylesheet>
 
-Internally MarkdownDocumentParser converts markdown document to html (via PHP markdown library), then converts html to xml, and at least xml to pdf document.
+Internally MarkdownDocumentParser converts markdown document to html (via [PHP markdown](https://github.com/wolfie/php-markdown) library), then converts html to xml, and at least xml to pdf document.
 
 Be aware of that, if you use in markdown document raw html that will be incompatible with xml syntax of PHPPdf (for example unexisted attribute or tag), document won't be parsed - exception will be thrown. Not all tags used in markdown implementation are propertly supported by PHPPdf, for example "pre" and "code" tags. Now "pre" tag is alias for "div", and "code" tag is alias for "span", be aware of that.
 
