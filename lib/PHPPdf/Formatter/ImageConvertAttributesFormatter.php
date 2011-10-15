@@ -8,19 +8,26 @@
 
 namespace PHPPdf\Formatter;
 
-use PHPPdf\Engine\Image;
-
-use PHPPdf\Util;
-
-use PHPPdf\Node as Nodes,
+use PHPPdf\Node\Image;
+use PHPPdf\Node\Node;
+use PHPPdf\Engine\Image as EngineImage;
+use PHPPdf\Util,
     PHPPdf\Document;
 
 /**
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
-class ImageDimensionFormatter extends BaseFormatter
+class ImageConvertAttributesFormatter extends ConvertAttributesFormatter
 {
-    public function format(Nodes\Node $node, Document $document)
+    public function format(Node $node, Document $document)
+    {
+        $this->convertPercentageDimensions($node);
+        $this->setSizesIfOneOfDimensionIsntSet($node, $document);
+        $this->convertAutoMargins($node);
+        $this->convertDegreesToRadians($node);
+    }
+    
+    private function setSizesIfOneOfDimensionIsntSet(Node $node, Document $document)
     {
         if($this->isImageAndSizesArentSet($node))
         {
@@ -45,12 +52,12 @@ class ImageDimensionFormatter extends BaseFormatter
         }
     }
 
-    private function isImageAndSizesArentSet(Nodes\Node $node)
+    private function isImageAndSizesArentSet(Node $node)
     {
-        return ($node instanceof Nodes\Image && (!$node->getWidth() || !$node->getHeight()));
+        return ($node instanceof Image && (!$node->getWidth() || !$node->getHeight()));
     }
 
-    private function setDimensionsFromParent(Image $sourceImage, Nodes\Node $node)
+    private function setDimensionsFromParent(EngineImage $sourceImage, Node $node)
     {
         $parent = $node->getParent();
 

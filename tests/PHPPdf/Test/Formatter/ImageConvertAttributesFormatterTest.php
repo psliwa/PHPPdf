@@ -2,20 +2,20 @@
 
 namespace PHPPdf\Test\Formatter;
 
+use PHPPdf\Formatter\ImageConvertAttributesFormatter;
 use PHPPdf\Document,
     PHPPdf\Node\Image,
-    PHPPdf\Formatter\ImageDimensionFormatter,
     PHPPdf\Node\Page,
     PHPPdf\Node\Container;
 
-class ImageDimensionFormatterTest extends \PHPPdf\PHPUnit\Framework\TestCase
+class ImageConvertAttributesFormatterTest extends \PHPPdf\PHPUnit\Framework\TestCase
 {
     private $formatter;
     private $document;
 
     public function setUp()
     {
-        $this->formatter = new ImageDimensionFormatter();
+        $this->formatter = new ImageConvertAttributesFormatter();
         $this->document = $this->getMockBuilder('PHPPdf\Document')
                                ->setMethods(array('createImage'))
                                ->getMock();

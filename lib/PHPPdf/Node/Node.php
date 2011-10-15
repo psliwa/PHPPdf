@@ -1499,7 +1499,7 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
         }
         
         $potentiallyRelativeValue = $this->getAttribute($name);
-        
+
         $absoluteValue = $this->unitConverter ? $this->unitConverter->convertPercentageValue($potentiallyRelativeValue, $parentValue) : $potentiallyRelativeValue;
 
         if($absoluteValue !== $potentiallyRelativeValue)

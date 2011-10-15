@@ -247,9 +247,8 @@
 	            <attribute name="margin" value="1" />
 	        </stylesheet>
 	        <formatters>
-	            <pre class="PHPPdf\Formatter\ConvertAttributesFormatter" />
+	            <pre class="PHPPdf\Formatter\ImageConvertAttributesFormatter" />
 	            <pre class="PHPPdf\Formatter\FirstPointPositionFormatter" />
-	            <pre class="PHPPdf\Formatter\ImageDimensionFormatter" />
 	            <post class="PHPPdf\Formatter\StandardPositionFormatter" />
 	        </formatters>
 	    </node>

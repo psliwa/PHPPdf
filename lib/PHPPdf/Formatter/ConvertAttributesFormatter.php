@@ -27,13 +27,13 @@ class ConvertAttributesFormatter extends BaseFormatter
         $this->convertDegreesToRadians($node);
     }
 
-    private function convertPercentageDimensions(Node $node)
+    protected function convertPercentageDimensions(Node $node)
     {       
         $node->convertScalarAttribute('width');
         $node->convertScalarAttribute('height');
     }
 
-    private function convertAutoMargins(Node $node)
+    protected function convertAutoMargins(Node $node)
     {
         $parent = $node->getParent();
 
@@ -68,7 +68,7 @@ class ConvertAttributesFormatter extends BaseFormatter
         return ($marginLeft === Node::MARGIN_AUTO && $marginRight === Node::MARGIN_AUTO);
     }
     
-    private function convertDegreesToRadians(Node $node)
+    protected function convertDegreesToRadians(Node $node)
     {
         $rotate = $node->getAttribute('rotate');
         
