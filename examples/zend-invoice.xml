@@ -4,8 +4,8 @@
     <dynamic-page>
         <placeholders>
             <header>
-                <div height="40">
-                    <div float="right" color="white" width="200" padding="6 0" text-align="center" font-size="12" font-style="bold" margin-bottom="20" background.color="black" background.radius="15">
+                <div height="65px">
+                    <div float="right" color="white" width="270px" padding="8px 0" text-align="center" font-size="16px" font-style="bold" margin-bottom="27px" background.color="black" background.radius="15">
                         Tax invoice
                     </div>
                 </div>
@@ -24,7 +24,7 @@
             </footer>
         </placeholders>
         <div>
-            <img src="dir:zend.jpg" float="left" width="100"></img>
+            <img src="dir:zend.jpg" float="left" width="133px"></img>
 
             <div class="invoice-data">
                 <p>Invoice # : IL-00516-10</p>
@@ -108,7 +108,7 @@
             </tr>
         </table>
 
-        <div width="85%" margin="20 auto">
+        <div width="85%" margin="27px auto">
             Zend reserves the right to charge interest at the lower of 1.5% per month or the highest allowable by local law on any portion of payment not received when due.
         </div>
     </dynamic-page>

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <pdf>
-	<page margin="0 0 30 0">
+	<page margin="0 0 40px 0">
 		<placeholders>
 			<footer>
-				<div height="30">
-					<div margin-left="50" color="#00709e" font-size="12">
+				<div height="40px">
+					<div margin-left="65px" color="#00709e" font-size="16px">
 						www.zend.com
 					</div>
 				</div>
@@ -12,7 +12,7 @@
 		</placeholders>
 		
 		<div height="33%" vertical-align="middle">
-			<img src="dir:/zend-studio/logo.jpg" height="70" margin-left="50" />
+			<img src="dir:/zend-studio/logo.jpg" height="93px" margin-left="65px" />
 		</div>
 	
 		<div height="66%">
@@ -29,13 +29,13 @@
 	<dynamic-page>
 		<placeholders>
 			<header>
-				<div height="30">Zend Studio 8 User Guide</div>
+				<div height="40px">Zend Studio 8 User Guide</div>
 			</header>
 			<footer>
-				<div height="30" vertical-align="bottom"><page-number /></div>
+				<div height="40px" vertical-align="bottom"><page-number /></div>
 			</footer>
 			<watermark>
-				<div rotate="diagonally" alpha="0.1" font-size="80" text-align="center">PHPPdf EXAMPLE</div>
+				<div rotate="diagonally" alpha="0.1" font-size="106px" text-align="center">PHPPdf EXAMPLE</div>
 			</watermark>
 		</placeholders>
 	
@@ -169,7 +169,7 @@
 		<p>This procedure describes how to debug a PHP Script from your workspace using an internal <a>PHP Executable</a>.</p>
 		
 		<div float="left" width="10%">
-			<img src="dir:/zend-studio/note.jpg" width="25" />
+			<img src="dir:/zend-studio/note.jpg" width="33px" />
 		</div>
 		<div float="left" width="90%">
 			<strong>To locally debug a PHP Script:</strong>
@@ -208,7 +208,7 @@
 		<h1>Creating a PHPDoc</h1>
 		<p>This procedure describes how to create a PHPDoc from your PHP files.</p>
 		<div float="left" width="10%">
-			<img src="dir:/zend-studio/note.jpg" width="25" />
+			<img src="dir:/zend-studio/note.jpg" width="33px" />
 		</div>
 		<div float="left" width="90%">
 			<strong>To create a PHPDoc:</strong>

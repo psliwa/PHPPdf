@@ -1,27 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <stylesheet>
-    <any font-size="8">
+    <any font-size="11px">
     </any>
     
     <p margin="0" padding="0">
     </p>
     
-    <any class="invoice-data" float="right" width="200" padding-top="10">
+    <any class="invoice-data" float="right" width="270px" padding-top="13px">
     </any>
     
-    <h3 font-style="bold" margin="0" font-size="10">
+    <h3 font-style="bold" margin="0" font-size="13px">
     </h3>
     
-    <div class="bill" width="50%" float="left" margin-top="20">
+    <div class="bill" width="50%" float="left" margin-top="27px">
     </div>
     
-    <table class="invoice" margin-top="20">
+    <table class="invoice" margin-top="27px">
         <tr class="head">
             <td text-align="center" background.color="#cccccc">
             </td>
         </tr>
         
-        <td border.type="all" border.size="0.5" border.color="#000000" padding="5">
+        <td border.type="all" border.size="1px" border.color="#000000" padding="6.5px">
         </td>
 
         <td class="no-border" border.type="none">
@@ -31,11 +31,11 @@
     <any class="center" text-align="center">
     </any>
 
-    <div class="footer" height="20">
+    <div class="footer" height="27px">
         <table>
             <tr border.type="none">
-                <td font-size="7" border.type="none">
-                    <b font-size="7">
+                <td font-size="9px" border.type="none">
+                    <b font-size="9px">
                     </b>
                 </td>
             </tr>

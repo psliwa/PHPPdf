@@ -115,7 +115,30 @@ class PageTest extends \PHPPdf\PHPUnit\Framework\TestCase
 
         $verticalMargin = 40;
         $horizontalMargin = 20;
-        $this->page->setMargin($verticalMargin, $horizontalMargin);
+        
+        $originalVerticalMargin = 33;
+        $originalHorizontalMargin = 22;
+        
+        $unitConverter = $this->getMock('PHPPdf\Util\UnitConverter');
+        $this->page->setUnitConverter($unitConverter);
+        
+        foreach(array(0, 2) as $i)
+        {
+            $unitConverter->expects($this->at($i))
+                          ->method('convertUnit')
+                          ->with($originalVerticalMargin)
+                          ->will($this->returnValue($verticalMargin));
+        }
+        
+        foreach(array(1, 3) as $i)
+        {
+            $unitConverter->expects($this->at($i))
+                          ->method('convertUnit')
+                          ->with($originalHorizontalMargin)
+                          ->will($this->returnValue($horizontalMargin));
+        }
+        
+        $this->page->setMargin($originalVerticalMargin, $originalHorizontalMargin);
 
         $this->assertEquals($height - 2*$verticalMargin, $this->page->getHeight());
         $this->assertEquals($width - 2*$horizontalMargin, $this->page->getWidth());
@@ -358,8 +381,8 @@ class PageTest extends \PHPPdf\PHPUnit\Framework\TestCase
     public function pageSizesProvider()
     {
         return array(
-            array(100, 50, array('margin' => array(0))),
-            array(77, 55, array('margin' => array(2, 3, 4, 5))),
+            array(100, 50, array('margin' => 0)),
+            array(77, 55, array('margin' => '2 3 4 5')),
         );
     }
     

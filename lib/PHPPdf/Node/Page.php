@@ -295,13 +295,15 @@ class Page extends Container
 
     protected function setMarginAttribute($name, $value)
     {
-        $value = (int) $value;
+        $value = $this->convertUnit($value);
 
         $diff = $value - $this->getAttribute($name);
 
         $this->translateMargin($name, $diff);
 
-        return parent::setMarginAttribute($name, $value);
+        $this->setAttributeDirectly($name, $value);
+        
+        return $this;
     }
 
     private function translateMargin($name, $value)

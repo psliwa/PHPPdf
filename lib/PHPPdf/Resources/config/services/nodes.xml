@@ -61,7 +61,7 @@
 				<argument type="service" id="phppdf.unit_converter" />
 			</argument>
 			<call method="setMargin">
-				<argument>40px 40px</argument>
+				<argument>52px 52px</argument>
 			</call>
 			<call method="setFormattersNames">
 				<argument>post</argument>

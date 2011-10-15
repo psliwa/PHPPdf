@@ -5,15 +5,15 @@
     
     <table background.color="yellow" width="100%">
         <tr border.color="blue">
-            <td margin="3" padding="3" height="20" border.color="red" background.color="white">
+            <td margin="4px" padding="4px" height="27px" border.color="red" background.color="white">
                 <div background.color="pink" height="100%">
                 </div>
             </td>
         </tr>
     </table>
 
-    <div class="legend" width="100%" margin-top="20">
-        <div class="square" width="12" height="12" float="left" margin="0 10">
+    <div class="legend" width="100%" margin-top="27px">
+        <div class="square" width="12" height="16px" float="left" margin="0 13px">
         </div>
         
         <div class="pink" background.color="pink">

@@ -4,26 +4,26 @@
     <dynamic-page>
     	<placeholders>
     		<header>
-    			<div height="14" background.color="black" color="white">
+    			<div height="18.5px" background.color="black" color="white">
     				header
     			</div>
     		</header>
     		<footer>
-    			<div height="14" background.color="black" color="white">
+    			<div height="18.5px" background.color="black" color="white">
     				footer
     			</div>
     		</footer>
     	</placeholders>
 
-        <div class="outside-column" height="100">
+        <div class="outside-column" height="133px">
             Column with "equals-columns" attribute off
         </div>
 
-        <column-layout id="column" number-of-columns="2" margin-between-columns="20">
-            <div height="1500" background.color="gray">
+        <column-layout id="column" number-of-columns="2" margin-between-columns="27">
+            <div height="1995px" background.color="gray">
                 Some long container
             </div>
-           <div height="2000" background.color="green">
+           <div height="2700px" background.color="green">
                 Some another long container
             </div>
         </column-layout>
@@ -33,7 +33,7 @@
         </div>
         
         <column-layout extends="column" equals-columns="true">
-            <div height="400" background.color="gray">
+            <div height="532px" background.color="gray">
                 Some container
             </div>
         </column-layout>
@@ -47,7 +47,7 @@
        		Before break
         	</div>
         	<break />
-        	<div background.color="blue" color="white" height="2000">
+        	<div background.color="blue" color="white" height="2700px">
         		Very long container after break.
        		</div>
         </column-layout>
