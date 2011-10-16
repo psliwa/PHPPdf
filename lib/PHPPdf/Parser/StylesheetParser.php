@@ -99,7 +99,7 @@ class StylesheetParser extends XmlParser
             throw new Exceptions\ParseException('Value of attribute is required.');
         }
 
-        $lastConstraint->getAttributeBag()->add($name, $value);
+        $lastConstraint->add($name, $value);
     }
 
     private function parseEnhancement(\XMLReader $reader)
@@ -126,7 +126,7 @@ class StylesheetParser extends XmlParser
             unset($attributes['id']);
         }
 
-        $lastConstraint->getEnhancementBag()->add($id, $attributes);
+        $lastConstraint->add($id, $attributes);
     }
 
     private function parseConstraint(\XMLReader $reader, $tag)
@@ -179,12 +179,12 @@ class StylesheetParser extends XmlParser
             {
                 if(false === ($index = strpos($name, '.')))
                 {
-                    $constraint->getAttributeBag()->add($name, $reader->value);
+                    $constraint->add($name, $reader->value);
                 }
                 else
                 {
                     list($enhancementName, $propertyName) = explode('.', $name);
-                    $constraint->getEnhancementBag()->add($enhancementName, array($propertyName => $reader->value, 'name' => $enhancementName));
+                    $constraint->add($enhancementName, array($propertyName => $reader->value, 'name' => $enhancementName));
                 }
             }
         }

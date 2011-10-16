@@ -19,53 +19,40 @@ use PHPPdf\Util\AttributeBag;
 class BagContainer implements \Serializable
 {
     protected $attributeBag;
-    protected $enhancementBag;
     protected $weight;
     protected $order = 0;
 
-    public function __construct(AttributeBag $attributeBag = null, AttributeBag $enhancementBag = null, $weight = 0)
+    public function __construct(array $attributes = array(), $weight = 0)
     {
-        if($attributeBag === null)
+        $attributeBag = new AttributeBag();
+        
+        foreach($attributes as $name => $value)
         {
-            $attributeBag = new AttributeBag();
-        }
-
-        if($enhancementBag === null)
-        {
-            $enhancementBag = new AttributeBag();
+            $attributeBag->add($name, $value);
         }
 
         $this->attributeBag = $attributeBag;
-        $this->enhancementBag = $enhancementBag;
         $this->weight = (double) $weight;
     }
 
     /**
      * @return AttributeBag
      */
-    public function getEnhancementBag()
-    {
-        return $this->enhancementBag;
-    }
-
-    /**
-     * @return AttributeBag
-     */
-    public function getAttributeBag()
+    protected function getAttributeBag()
     {
         return $this->attributeBag;
     }
-
-    public function setAttributeBag(AttributeBag $attributeBag)
+    
+    public function getAll()
     {
-        $this->attributeBag = $attributeBag;
-    }
-
-    public function setEnhancementBag(AttributeBag $enhancementBag)
-    {
-        $this->enhancementBag = $enhancementBag;
+        return $this->getAttributeBag()->getAll();
     }
     
+    public function add($name, $value)
+    {
+        $this->getAttributeBag()->add($name, $value);
+    }
+
     public function setOrder($order)
     {
         $this->order = (int) $order;
@@ -95,7 +82,6 @@ class BagContainer implements \Serializable
     {
         return array(
             'attributes' => $this->getAttributeBag()->getAll(),
-            'enhancements' => $this->getEnhancementBag()->getAll(),
             'weight' => $this->weight,
         );
     }
@@ -110,23 +96,23 @@ class BagContainer implements \Serializable
     protected function restoreDataAfterUnserialize($data)
     {
         $this->attributeBag = new AttributeBag($data['attributes']);
-        $this->enhancementBag = new AttributeBag($data['enhancements']);
         $this->weight = (float) $data['weight'];
     }
     
     public function apply(Node $node)
     {
-        $attributeBag = $this->getAttributeBag();
-        $enhancementBag = $this->getEnhancementBag();
-
-        foreach($attributeBag->getAll() as $name => $value)
+        $attributes = $this->getAll();
+        
+        foreach($attributes as $name => $value)
         {
-            $node->setAttribute($name, $value);
-        }
-
-        foreach($enhancementBag->getAll() as $name => $parameters)
-        {
-            $node->mergeEnhancementAttributes($name, $parameters);
+            if(is_array($value))
+            {
+                $node->mergeEnhancementAttributes($name, $value);
+            }
+            else
+            {
+                $node->setAttribute($name, $value);
+            }
         }
     }
 
@@ -141,16 +127,18 @@ class BagContainer implements \Serializable
     public static function merge(array $containers)
     {
         $attributeBags = array();
-        $enhancementBags = array();
 
         $weight = 0;
         foreach($containers as $container)
         {
             $weight += $container->getWeight();
             $attributeBags[] = $container->getAttributeBag();
-            $enhancementBags[] = $container->getEnhancementBag();
         }
 
-        return new BagContainer(AttributeBag::merge($attributeBags), AttributeBag::merge($enhancementBags), $weight);
+        $container = new BagContainer();
+        $container->attributeBag = AttributeBag::merge($attributeBags);
+        $container->weight = $weight;
+        
+        return $container;
     }
 }

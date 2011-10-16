@@ -123,7 +123,7 @@ class StylesheetConstraint extends BagContainer implements \Countable
     {
         if(count($query) === 0)
         {
-            return new BagContainer($this->getAttributeBag(), $this->getEnhancementBag());
+            return new BagContainer($this->getAll());
         }
 
         $containers = array();

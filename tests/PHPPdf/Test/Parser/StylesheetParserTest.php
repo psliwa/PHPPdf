@@ -15,7 +15,7 @@ class StylesheetParserTest extends \PHPPdf\PHPUnit\Framework\TestCase
     }
 
     /**
-     * @ test
+     * @test
      */
     public function parseEmptyXml()
     {
@@ -24,11 +24,11 @@ class StylesheetParserTest extends \PHPPdf\PHPUnit\Framework\TestCase
         $constraintContainer = $this->parser->parse($xml);
         $this->assertTrue($constraintContainer instanceof StylesheetConstraint);
         $this->assertEquals(0, count($constraintContainer));
-        $this->assertEquals(array(), $constraintContainer->getAttributeBag()->getAll());
+        $this->assertEquals(array(), $constraintContainer->getAll());
     }
 
     /**
-     * @ test
+     * @test
      */
     public function parseSimpleXmlWithOnlyAttributes()
     {
@@ -44,7 +44,7 @@ XML;
         $this->assertEquals(1, count($constraintContainer->count()));
         $this->assertTrue($this->hasConstraint($constraintContainer, 'tag'));
         $constraint = $this->getConstraint($constraintContainer, 'tag');
-        $this->assertEquals(array('someName' => 'someValue'), $constraint->getAttributeBag()->getAll());
+        $this->assertEquals(array('someName' => 'someValue'), $constraint->getAll());
     }
 
     private function hasConstraint(StylesheetConstraint $constraint, $tag, array $classes = array())
@@ -70,7 +70,7 @@ XML;
     }
 
     /**
-     * @ test
+     * @test
      * @expectedException PHPPdf\Parser\Exception\InvalidTagException
      */
     public function invalidRoot()
@@ -80,7 +80,7 @@ XML;
     }
 
     /**
-     * @ test
+     * @test
      */
     public function parseSimpleNeastedXmlWithOnlyAttributes()
     {
@@ -109,15 +109,15 @@ XML;
         $tag1 = $this->getConstraint($container, 'tag1');
         $this->assertEquals(1, count($tag1));
         $this->assertTrue($this->hasConstraint($tag1, 'tag2'));
-        $this->assertEquals(array('someName1' => 'someValue1'), $tag1->getAttributeBag()->getAll());
+        $this->assertEquals(array('someName1' => 'someValue1'), $tag1->getAll());
 
         $tag2 = $this->getConstraint($tag1, 'tag2');
         $this->assertEquals(0, count($tag2));
-        $this->assertEquals(array('someName2' => 'someValue2', 'someName3' => 'someValue3'), $tag2->getAttributeBag()->getAll());
+        $this->assertEquals(array('someName2' => 'someValue2', 'someName3' => 'someValue3'), $tag2->getAll());
 
         $tag3 = $this->getConstraint($container, 'tag3');
         $this->assertEquals(0, count($tag3));
-        $this->assertEquals(array('someName4' => 'someValue4'), $tag3->getAttributeBag()->getAll());
+        $this->assertEquals(array('someName4' => 'someValue4'), $tag3->getAll());
     }
 
     /**
@@ -138,19 +138,19 @@ XML;
         $this->assertEquals(1, count($container));
 
         $tag = $this->getConstraint($container, 'tag');
-        $enhancements = $tag->getEnhancementBag();
-        $this->assertEquals(2, count($enhancements));
+
+        $this->assertEquals(2, count($tag->getAll()));
 
         $all = array(
             'border' => array('name' => 'border', 'color' => 'red', 'type' => 'dotted'),
             'border-2' => array('name' => 'border', 'color' => 'yellow', 'type' => 'solid'),
         );
 
-        $this->assertEquals($all, $enhancements->getAll());
+        $this->assertEquals($all, $tag->getAll());
     }
 
     /**
-     * @ test
+     * @test
      * @expectedException PHPPdf\Parser\Exception\ParseException
      */
     public function enhancementNameIsRequired()
@@ -166,7 +166,7 @@ XML;
     }
 
     /**
-     * @ test
+     * @test
      * @expectedException PHPPdf\Parser\Exception\ParseException
      */
     public function attributeNameIsRequired()
@@ -182,7 +182,7 @@ XML;
     }
 
     /**
-     * @ test
+     * @test
      * @expectedException PHPPdf\Parser\Exception\ParseException
      */
     public function attributeValueIsRequired()
@@ -198,7 +198,7 @@ XML;
     }
 
     /**
-     * @ test
+     * @test
      * @dataProvider nullifyAttributeValueProvider
      */
     public function nullifyAttributeValueIsAllowed($value)
@@ -214,7 +214,7 @@ XML;
 
         $constraint = $this->getConstraint($container, 'tag');
 
-        $this->assertEquals(array('name' => $value), $constraint->getAttributeBag()->getAll());
+        $this->assertEquals(array('name' => $value), $constraint->getAll());
     }
 
     public function nullifyAttributeValueProvider()
@@ -226,7 +226,7 @@ XML;
     }
 
     /**
-     * @ test
+     * @test
      */
     public function tagWithClass()
     {
@@ -243,7 +243,7 @@ XML;
     }
 
     /**
-     * @ test
+     * @test
      */
     public function anyTag()
     {
@@ -259,7 +259,7 @@ XML;
     }
 
     /**
-     * @ test
+     * @test
      */
     public function parseFromXMLReaderDirectly()
     {
@@ -283,12 +283,12 @@ XML;
 
         $constraint = $this->parser->parse($reader);
 
-        $this->assertEquals(array('someName1' => 'someValue1', 'someName2' => 'someValue2'), $constraint->getAttributeBag()->getAll());
+        $this->assertEquals(array('someName1' => 'someValue1', 'someName2' => 'someValue2'), $constraint->getAll());
         $this->assertEquals(0, count($constraint->getConstraints()));
     }
 
     /**
-     * @ test
+     * @test
      */
     public function rootStylesheetConstraintMayByInjected()
     {
@@ -303,7 +303,7 @@ XML;
     }
     
     /**
-     * @ test
+     * @test
      * @expectedException PHPPdf\Parser\Exception\ParseException
      */
     public function throwExceptionIfUnknownTahHasBeenEncountedInParserSimpleMode()
@@ -322,7 +322,7 @@ XML;
     }
     
     /**
-     * @ test
+     * @test
      */
     public function parseFlatXmlStylesheetOnParserSimpleMode()
     {
@@ -336,11 +336,11 @@ XML;
         
         $resultConstraint = $this->parser->parse($xml);
 
-        $this->assertEquals(array('someName' => 'value'), $resultConstraint->getAttributeBag()->getAll());
+        $this->assertEquals(array('someName' => 'value'), $resultConstraint->getAll());
     }
     
     /**
-     * @ test
+     * @test
      */
     public function parseAttributesFromXmlAttributes()
     {
@@ -355,11 +355,11 @@ XML;
         $constraint = $this->getConstraint($resultConstraint, 'some-tag');
         
         $this->assertNotNull($constraint);
-        $this->assertEquals(array('someAttribute' => 'someValue'), $constraint->getAttributeBag()->getAll());
+        $this->assertEquals(array('someAttribute' => 'someValue'), $constraint->getAll());
     }
     
     /**
-     * @ test
+     * @test
      */
     public function parseEnhancementsFromXmlAttributes()
     {
@@ -374,11 +374,11 @@ XML;
         $constraint = $this->getConstraint($resultConstraint, 'some-tag');
         
         $this->assertNotEquals(false, $constraint);
-        $this->assertEquals(array('someEnhancement' => array('name' => 'someEnhancement', 'attribute' => 'value')), $constraint->getEnhancementBag()->getAll());
+        $this->assertEquals(array('someEnhancement' => array('name' => 'someEnhancement', 'attribute' => 'value')), $constraint->getAll());
     }
     
     /**
-     * @ test
+     * @test
      */
     public function validInterpretSelectorsAsShortTag()
     {
@@ -394,6 +394,6 @@ XML;
         $constraint = $this->getConstraint($resultConstraint, 'another-tag');
 
         $this->assertNotEquals(false, $constraint);
-        $this->assertEquals(array('attribute2' => 'value2'), $constraint->getAttributeBag()->getAll());
+        $this->assertEquals(array('attribute2' => 'value2'), $constraint->getAll());
     }
 }

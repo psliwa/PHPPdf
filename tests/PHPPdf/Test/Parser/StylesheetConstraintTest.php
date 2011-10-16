@@ -2,6 +2,7 @@
 
 namespace PHPPdf\Test\Parser;
 
+use PHPPdf\Parser\BagContainer;
 use PHPPdf\Parser\StylesheetConstraint,
     PHPPdf\Util\AttributeBag;
 
@@ -12,34 +13,6 @@ class StylesheetConstraintTest extends \PHPPdf\PHPUnit\Framework\TestCase
     public function setUp()
     {
         $this->constraint = new StylesheetConstraint();
-    }
-
-    /**
-     * @test
-     */
-    public function settingAttributeBag()
-    {
-        $defaultBag = $this->constraint->getAttributeBag();
-        $this->assertNotNull($defaultBag);
-
-        $bag = new AttributeBag();
-        $this->constraint->setAttributeBag($bag);
-        $this->assertTrue($bag === $this->constraint->getAttributeBag());
-        $this->assertFalse($defaultBag === $bag);
-    }
-
-    /**
-     * @test
-     */
-    public function settingEnhancementBag()
-    {
-        $defaultBag = $this->constraint->getEnhancementBag();
-        $this->assertNotNull($defaultBag);
-
-        $bag = new AttributeBag();
-        $this->constraint->setEnhancementBag($bag);
-        $this->assertTrue($bag === $this->constraint->getEnhancementBag());
-        $this->assertFalse($defaultBag === $bag);
     }
 
     /**
@@ -73,11 +46,11 @@ class StylesheetConstraintTest extends \PHPPdf\PHPUnit\Framework\TestCase
 
         if($isFound)
         {
-            $this->assertEquals($constraint->getAttributeBag()->getAll(), $container->getAttributeBag()->getAll());
+            $this->assertEquals($constraint->getAll(), $container->getAll());
         }
         else
         {
-            $this->assertEquals(array(), $container->getAttributeBag()->getAll());
+            $this->assertEquals(array(), $container->getAll());
         }
     }
 
@@ -136,15 +109,12 @@ class StylesheetConstraintTest extends \PHPPdf\PHPUnit\Framework\TestCase
             'someName2' => 'anotherValue2',
             'someName3' => 'yetAnotherValue3',
             'someName4' => 'someValue4',
-        ), $constraint->getAttributeBag()->getAll());
+        ), $constraint->getAll());
     }
 
     private function createContainer(array $attributes = array(), array $enhancements = array(), array $classes = array())
     {
-        $attributeBag = new AttributeBag($attributes);
-        $enhancementBag = new AttributeBag($enhancements);
-
-        $constraint = new StylesheetConstraint($attributeBag, $enhancementBag);
+        $constraint = new StylesheetConstraint(array_merge($attributes, $enhancements));
 
         foreach($classes as $class)
         {
@@ -190,12 +160,12 @@ class StylesheetConstraintTest extends \PHPPdf\PHPUnit\Framework\TestCase
     {
         $this->constraint->setTag('some-tag');
         $this->constraint->addWeight(5);
-        $this->constraint->getAttributeBag()->add('someName', 'someValue');
-        $this->constraint->getEnhancementBag()->add('someName', array('someKey' => 'someValue'));
+        $this->constraint->add('someName', 'someValue');
+        $this->constraint->add('someName', array('someKey' => 'someValue'));
         $this->constraint->addClass('some-class');
 
         $childConstraint = new StylesheetConstraint();
-        $childConstraint->getAttributeBag()->add('someName', 'someValue');
+        $childConstraint->add('someName', 'someValue');
         $childConstraint->setTag('some-tag');
         $this->constraint->addConstraint('some-constraint', $childConstraint);
 
@@ -208,8 +178,7 @@ class StylesheetConstraintTest extends \PHPPdf\PHPUnit\Framework\TestCase
     {
         $this->assertEquals($expected->getTag(), $actual->getTag());
         $this->assertEquals($expected->getWeight(), $actual->getWeight());
-        $this->assertEquals($expected->getAttributeBag()->getAll(), $actual->getAttributeBag()->getAll());
-        $this->assertEquals($expected->getEnhancementBag()->getAll(), $actual->getEnhancementBag()->getAll());
+        $this->assertEquals($expected->getAll(), $actual->getAll());
         $this->assertEquals($expected->getClasses(), $actual->getClasses());
 
         $actualConstraintChildren = $actual->getConstraints();
@@ -245,7 +214,7 @@ class StylesheetConstraintTest extends \PHPPdf\PHPUnit\Framework\TestCase
             'someName3' => 'someValue3',
         );
         
-        $actualAttributes = $constraint->getAttributeBag()->getAll();
+        $actualAttributes = $constraint->getAll();
         ksort($actualAttributes);
         
         $this->assertEquals($expectedAttributes, $actualAttributes);

@@ -446,20 +446,11 @@ XML;
         $reader->XML($xml);
         $reader->read();
         $reader->read();
-        
-        $attributes = array('someName1' => 'someValue1', 'someName2' => 'someValue2');
 
-        $attributeBagMock = $this->getAttributeBagMock($attributes);
-        $enhancementBagMock = $this->getEnhancementBagMock(array('someName' => array('attribute' => 'value')));
-
-        $constraintMock = $this->getMock('PHPPdf\Parser\StylesheetConstraint', array('getAttributeBag', 'getEnhancementBag'));
+        $constraintMock = $this->getMock('PHPPdf\Parser\StylesheetConstraint', array('apply'));
         $constraintMock->expects($this->once())
-                       ->method('getAttributeBag')
-                       ->will($this->returnValue($attributeBagMock));
-
-        $constraintMock->expects($this->once())
-                       ->method('getEnhancementBag')
-                       ->will($this->returnValue($enhancementBagMock));
+                       ->method('apply')
+                       ->with($this->isInstanceOf('PHPPdf\Node\Page'));
 
         $parserMock = $this->getMock('PHPPdf\Parser\StylesheetParser', array('parse'));
         $parserMock->expects($this->once())
@@ -475,11 +466,7 @@ XML;
                    )));
 
 
-        $nodeMock= $this->createNodeMock('PHPPdf\Node\Page', array('mergeEnhancementAttributes'));
-        $this->addNodeAttributesExpectations($nodeMock, $attributes, 1);
-        $nodeMock->expects($this->at(3))
-                  ->method('mergeEnhancementAttributes')
-                  ->with($this->equalTo('someName'), $this->equalTo(array('attribute' => 'value')));
+        $nodeMock = $this->createNodeMock('PHPPdf\Node\Page', array('mergeEnhancementAttributes'));
 
         $nodeFactoryMock = $this->getNodeFactoryMock(array(array('tag', $nodeMock)));
 
@@ -487,26 +474,6 @@ XML;
         $this->parser->setNodeFactory($nodeFactoryMock);
 
         $pageCollection = $this->parser->parse($reader);
-    }
-
-    private function getAttributeBagMock(array $attributes)
-    {
-        $attributeBagMock = $this->getMock('PHPPdf\Util\AttributeBag', array('getAll'));
-        $attributeBagMock->expects($this->once())
-                         ->method('getAll')
-                         ->will($this->returnValue($attributes));
-
-        return $attributeBagMock;
-    }
-
-    private function getEnhancementBagMock(array $enhancements)
-    {
-        $enhancementBagMock = $this->getMock('PHPPdf\Util\AttributeBag', array('getAll'));
-        $enhancementBagMock->expects($this->once())
-                           ->method('getAll')
-                           ->will($this->returnValue($enhancements));
-
-        return $enhancementBagMock;
     }
 
     private function getEnhancementFactoryMock(array $enhancements, array $enhancementMocks)
@@ -542,8 +509,8 @@ XML;
 
         $constraintMock = $this->getMock('PHPPdf\Parser\StylesheetConstraint', array('find'));
         $bagContainerMock1 = $this->getBagContainerMock(array('someName1' => 'someValue1'));
-        $bagContainerMock2 = $this->getBagContainerMock(array(), array('someName1' => array('someAttribute1' => 'someValue1')));
-        $bagContainerMock3 = $this->getBagContainerMock(array('someName2' => 'someValue2'), array('someName2' => array('someAttribute2' => 'someValue2')));
+        $bagContainerMock2 = $this->getBagContainerMock(array('someName4' => array('someAttribute1' => 'someValue1')));
+        $bagContainerMock3 = $this->getBagContainerMock(array('someName2' => 'someValue2', 'someName3' => array('someAttribute2' => 'someValue2')));
 
         $this->addExpectationToStylesheetConstraint($constraintMock, 0, array(
            array(
@@ -576,8 +543,8 @@ XML;
         $nodeMock1->expects($this->never())
                    ->method('mergeEnhancementAttributes');
 
-        $this->addEnhancementExpectationToNodeMock($nodeMock2, array('someName1' => array('someAttribute1' => 'someValue1')), 0);
-        $this->addEnhancementExpectationToNodeMock($nodeMock3, array('someName2' => array('someAttribute2' => 'someValue2')), 1);
+        $this->addEnhancementExpectationToNodeMock($nodeMock2, array('someName4' => array('someAttribute1' => 'someValue1')), 0);
+        $this->addEnhancementExpectationToNodeMock($nodeMock3, array('someName3' => array('someAttribute2' => 'someValue2')), 1);
 
         $mocks = array(array('tag1', $nodeMock1), array('tag2', $nodeMock2), array('tag3', $nodeMock3));
         $nodeFactoryMock = $this->getNodeFactoryMock($mocks);
@@ -589,17 +556,12 @@ XML;
 
     private function getBagContainerMock(array $attributes = array(), array $enhancements = array())
     {
-        $attributeBagMock = $this->getAttributeBagMock($attributes);
-        $enhancementBagMock = $this->getEnhancementBagMock($enhancements);
+        $attributes = array_merge($attributes, $enhancements);
 
-        $mock = $this->getMock('PHPPdf\Parser\BagContainer', array('getAttributeBag', 'getEnhancementBag'));
+        $mock = $this->getMock('PHPPdf\Parser\BagContainer', array('getAll'));
         $mock->expects($this->once())
-             ->method('getAttributeBag')
-             ->will($this->returnValue($attributeBagMock));
-        $mock->expects($this->once())
-             ->method('getEnhancementBag')
-             ->will($this->returnValue($enhancementBagMock));
-
+             ->method('getAll')
+             ->will($this->returnValue($attributes));
         return $mock;
     }
 

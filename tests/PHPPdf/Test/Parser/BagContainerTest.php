@@ -10,61 +10,26 @@ class BagContainerTest extends \PHPPdf\PHPUnit\Framework\TestCase
     /**
      * @test
      */
-    public function createObjectAndGettingAndSettingBags()
-    {
-        $attributeBag = new AttributeBag();
-        $enhancementBag = new AttributeBag();
-        $container = new BagContainer($attributeBag, $enhancementBag);
-
-        $this->assertTrue($container->getAttributeBag() === $attributeBag);
-        $this->assertTrue($container->getEnhancementBag() === $enhancementBag);
-
-        $anotherAttributeBag = new AttributeBag();
-        $anotherEnhancementBag = new AttributeBag();
-
-        $container->setAttributeBag($anotherAttributeBag);
-        $container->setEnhancementBag($anotherEnhancementBag);
-
-        $this->assertTrue($container->getAttributeBag() === $anotherAttributeBag);
-        $this->assertTrue($container->getEnhancementBag() === $anotherEnhancementBag);
-    }
-
-    /**
-     * @test
-     */
     public function mergeSeveralBagsIntoOne()
     {
-        $attributeBag1 = $this->getAttributeBagMock(array(
+        $attributes1 = array(
             'someName1' => 'someValue1',
             'someName2' => 'someValue2',
-        ));
-
-        $attributeBag2 = $this->getAttributeBagMock(array(
+        );
+        
+        $attributes2 = array(
             'someName2' => 'anotherValue2',
             'someName3' => 'someValue3',
-        ));
-
+        );
+        
         $containers = array(
-            new BagContainer($attributeBag1),
-            new BagContainer($attributeBag2),
+            new BagContainer($attributes1),
+            new BagContainer($attributes2),
         );
 
         $container = BagContainer::merge($containers);
-        $this->assertEquals(array(
-            'someName1' => 'someValue1',
-            'someName2' => 'anotherValue2',
-            'someName3' => 'someValue3',
-        ), $container->getAttributeBag()->getAll());
-    }
-
-    private function getAttributeBagMock($attributes)
-    {
-        $mock = $this->getMock('PHPPdf\Util\AttributeBag', array('getAll'));
-        $mock->expects($this->once())
-             ->method('getAll')
-             ->will($this->returnValue($attributes));
-
-        return $mock;
+        $expectedAttributes = array_merge($attributes1, $attributes2);
+        $this->assertEquals($expectedAttributes, $container->getAll());
     }
 
     /**
@@ -72,17 +37,13 @@ class BagContainerTest extends \PHPPdf\PHPUnit\Framework\TestCase
      */
     public function unserializedBagIsCopyOfSerializedBag()
     {
-        $attributeBag = new AttributeBag();
-        $attributeBag->add('someName', 'someValue');
-
-        $enhancementBag = new AttributeBag();
-        $enhancementBag->add('someName', array('someKey' => 'someValue'));
-
-        $container = new BagContainer($attributeBag, $enhancementBag);
+        $container = new BagContainer();
+        $container->add('someName1', 'someValue1');
+        $container->add('someName2', array('someKey' => 'someValue'));
 
         $unserializedContainer = unserialize(serialize($container));
 
-        $this->assertEquals($container->getAttributeBag()->getAll(), $unserializedContainer->getAttributeBag()->getAll());
-        $this->assertEquals($container->getEnhancementBag()->getAll(), $unserializedContainer->getEnhancementBag()->getAll());
+        $expectedAttributes = array('someName1' => 'someValue1', 'someName2' => array('someKey' => 'someValue'));
+        $this->assertEquals($expectedAttributes, $unserializedContainer->getAll());
     }
 }

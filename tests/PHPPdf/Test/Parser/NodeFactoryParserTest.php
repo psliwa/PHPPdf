@@ -142,26 +142,10 @@ XML;
 </factory>
 XML;
 
-        $attributes = array('font-size' => 123, 'breakable' => false);
-        $enhancements = array('name' => array('name' => 'value'));
-        $attributeBagMock = $this->getMock('PHPPdf\Util\AttributeBag', array('getAll'));
-        $attributeBagMock->expects($this->once())
-                         ->method('getAll')
-                         ->will($this->returnValue($attributes));
-
-        $enhancementBagMock = $this->getMock('PHPPdf\Util\AttributeBag', array('getAll'));
-        $enhancementBagMock->expects($this->once())
-                         ->method('getAll')
-                         ->will($this->returnValue($enhancements));
-
-        $bagContainerMock = $this->getMock('PHPPdf\Parser\BagContainer', array('getAttributeBag', 'getEnhancementBag'));
+        $bagContainerMock = $this->getMock('PHPPdf\Parser\BagContainer', array('apply'));
         $bagContainerMock->expects($this->once())
-                         ->method('getAttributeBag')
-                         ->will($this->returnValue($attributeBagMock));
-        $bagContainerMock->expects($this->once())
-                         ->method('getEnhancementBag')
-                         ->will($this->returnValue($enhancementBagMock));
-
+                         ->method('apply')
+                         ->with($this->isInstanceOf('PHPPdf\Node\Container'));
 
         $stylesheetParserMock = $this->getMock('PHPPdf\Parser\StylesheetParser', array('parse'));
         $stylesheetParserMock->expects($this->once())
@@ -171,14 +155,6 @@ XML;
         $this->parser->setStylesheetParser($stylesheetParserMock);
         
         $nodeFactory = $this->parser->parse($xml);
-        $node = $nodeFactory->getPrototype('div');
-
-        foreach($attributes as $name => $value)
-        {
-            $this->assertEquals($value, $node->getAttribute($name));
-        }
-
-        $this->assertEquals($enhancements, $node->getEnhancementsAttributes());
     }
 
     /**
