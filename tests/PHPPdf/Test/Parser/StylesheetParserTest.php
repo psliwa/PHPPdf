@@ -2,6 +2,8 @@
 
 namespace PHPPdf\Test\Parser;
 
+use PHPPdf\Parser\BagContainer;
+
 use PHPPdf\Parser\StylesheetParser,
     PHPPdf\Parser\StylesheetConstraint;
 
@@ -369,7 +371,18 @@ XML;
 </stylesheet>
 XML;
 
-        $resultConstraint = $this->parser->parse($xml);
+        $enhancementFactory = $this->getMockBuilder('PHPPdf\Enhancement\Factory')
+                                   ->setMethods(array('getDefinitionNames'))
+                                   ->disableOriginalConstructor()
+                                   ->getMock();
+        
+        $this->parser->setEnhancementFactory($enhancementFactory);
+        
+        $enhancementFactory->expects($this->atLeastOnce())
+                           ->method('getDefinitionNames')
+                           ->will($this->returnValue('someEnhancement'));
+
+        $resultConstraint = $this->parser->parse($xml);        
 
         $constraint = $this->getConstraint($resultConstraint, 'some-tag');
         
@@ -395,5 +408,38 @@ XML;
 
         $this->assertNotEquals(false, $constraint);
         $this->assertEquals(array('attribute2' => 'value2'), $constraint->getAll());
+    }
+    
+    /**
+     * @test
+     */
+    public function addConstraintsFromAttributes()
+    {
+        $xml = <<<XML
+<tag attribute1="value1" attribute2.property1="value2" attribute2.property2="value3" attribute3="value4" attribute4-property3="value5" attribute5-property4="value6"></tag>
+XML;
+
+        $reader = new \XMLReader();
+        $reader->XML($xml);
+        $reader->next();
+        
+        $enhancementFactory = $this->getMockBuilder('PHPPdf\Enhancement\Factory')
+                                   ->setMethods(array('getDefinitionNames'))
+                                   ->disableOriginalConstructor()
+                                   ->getMock();
+                                   
+        $this->parser->setEnhancementFactory($enhancementFactory);
+        
+        $enhancementFactory->expects($this->atLeastOnce())
+                           ->method('getDefinitionNames')
+                           ->will($this->returnValue(array('attribute2', 'attribute4')));
+                           
+        $constraint = new BagContainer();
+        
+        $this->parser->addConstraintsFromAttributes($constraint, $reader);
+        
+        $expectedAttributes = array('attribute1' => 'value1', 'attribute2' => array('name' => 'attribute2', 'property1' => 'value2', 'property2' => 'value3'), 'attribute3' => 'value4', 'attribute4' => array('name' => 'attribute4', 'property3' => 'value5'), 'attribute5-property4' => 'value6');
+        
+        $this->assertEquals($expectedAttributes, $constraint->getAll());
     }
 }

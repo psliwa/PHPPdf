@@ -92,6 +92,11 @@ class Factory implements \Serializable
     {
         return $this->definitions;
     }
+    
+    public function getDefinitionNames()
+    {
+        return array_keys($this->definitions);
+    }
 
     private function getConstructorParameters($name)
     {

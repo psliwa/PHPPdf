@@ -24,7 +24,7 @@ class XmlDocumentParserTest extends \PHPPdf\PHPUnit\Framework\TestCase
                                    ->setMethods(array('setMetadataValue'))
                                    ->getMock();
         
-        $this->enhancementFactoryMock = $this->getMock('PHPPdf\Enhancement\Factory', array('create'));
+        $this->enhancementFactoryMock = $this->getMock('PHPPdf\Enhancement\Factory', array('create', 'getDefinitionNames'));
 
         $this->parser = new XmlDocumentParser($this->enhancementFactoryMock, $this->documentMock);
     }
@@ -680,6 +680,10 @@ XML;
                   ->with('someEnhancement', array('name' => 'someEnhancement', 'property' => 'propertyValue'));
 
         $nodeFactoryMock = $this->getNodeFactoryMock(array(array('tag', $nodeMock)));
+        
+        $this->enhancementFactoryMock->expects($this->atLeastOnce())
+                                     ->method('getDefinitionNames')
+                                     ->will($this->returnValue(array('someEnhancement')));
 
         $this->parser->setNodeFactory($nodeFactoryMock);
 
