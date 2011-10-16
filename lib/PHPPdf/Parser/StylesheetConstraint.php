@@ -8,8 +8,7 @@
 
 namespace PHPPdf\Parser;
 
-use PHPPdf\Util\AttributeBag,
-    PHPPdf\Enhancement\EnhancementBag;
+use PHPPdf\Util\AttributeBag;
 
 /**
  * Constraints encapsulate Attribute and Enhancement Bag in tree structure.

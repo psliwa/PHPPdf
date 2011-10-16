@@ -8,13 +8,14 @@
 
 namespace PHPPdf;
 
+use PHPPdf\Util\AttributeBag;
+
 use PHPPdf\Util\UnitConverter,
     PHPPdf\Node\Node,
     PHPPdf\Engine\ZF\Engine as ZfEngine,
     PHPPdf\Formatter as Formatters,
     PHPPdf\Node\Page,
     PHPPdf\Node\PageCollection,
-    PHPPdf\Enhancement\EnhancementBag,
     PHPPdf\Font\Registry as FontRegistry,
     PHPPdf\Enhancement\Factory as EnhancementFactory,
     PHPPdf\Exception\DrawingException,
@@ -67,7 +68,7 @@ class Document implements UnitConverter, Engine
      * 
      * @return array Array of Enhancement objects
      */
-    public function getEnhancements(EnhancementBag $bag)
+    public function getEnhancements(AttributeBag $bag)
     {
         $enhancements = array();
 

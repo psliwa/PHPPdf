@@ -122,7 +122,7 @@ Atrybut "id" ma całkowicie inne znaczenie niż w HTML'u. Atrybut "name" jest al
 
     <pdf>
         <dynamic-page>
-            <div id="warstwa-1" color="red" font-type="judson" font-size="16">
+            <div id="warstwa-1" color="red" font-type="judson" font-size="16px">
                 <stylesheet>
                     <enhancement name="border" color="green" />
                 </stylesheet>
@@ -158,6 +158,7 @@ Przykład:
     </pdf>
 
 Drugi "div" będzie miał następujące atrybuty:
+
 - text-align: right
 - color: #aaaaaa
 - height: 200px

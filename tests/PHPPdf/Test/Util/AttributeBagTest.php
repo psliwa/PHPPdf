@@ -82,4 +82,23 @@ class AttributeBagTest extends \PHPPdf\PHPUnit\Framework\TestCase
 
         $this->assertEquals($this->bag->getAll(), $unserializedBag->getAll());
     }
+    
+    /**
+     * @test
+     */
+    public function mergeArrayAttributes()
+    {
+        $originalValue = array('key1' => 'value1', 'key2' => 'value2');
+        $newValue = array('key2' => 'value2a', 'key3' => 'value3');
+        $name = 'array';
+        
+        $this->bag->add($name, $originalValue);
+        
+        $this->assertEquals($originalValue, $this->bag->get($name));
+
+        $this->bag->add($name, $newValue);
+        
+        $expectedValue = array_merge($originalValue, $newValue);
+        $this->assertEquals($expectedValue, $this->bag->get($name));
+    }
 }

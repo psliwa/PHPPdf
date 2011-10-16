@@ -8,6 +8,8 @@
 
 namespace PHPPdf\Node;
 
+use PHPPdf\Util\AttributeBag;
+
 use PHPPdf\Util\DrawingTaskHeap;
 use PHPPdf\Util\UnitConverter;
 use PHPPdf\Document,
@@ -15,7 +17,6 @@ use PHPPdf\Document,
     PHPPdf\Node\Container,
     PHPPdf\Util\Boundary,
     PHPPdf\Util\DrawingTask,
-    PHPPdf\Enhancement\EnhancementBag,
     PHPPdf\Formatter\Formatter,
     PHPPdf\Node\Behaviour\Behaviour,
     PHPPdf\Exception\InvalidAttributeException,
@@ -387,10 +388,10 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
 
     public function initialize()
     {
-        $this->setEnhancementBag(new EnhancementBag());
+        $this->setEnhancementBag(new AttributeBag());
     }
     
-    protected function setEnhancementBag(EnhancementBag $bag)
+    protected function setEnhancementBag(AttributeBag $bag)
     {
         $this->enhancementBag = $bag;
     }
@@ -1639,7 +1640,7 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
             $this->setBoundary($data['boundary']);
         }
         $this->attributes = $data['attributes'];
-        $this->enhancementBag = new EnhancementBag($data['enhancementBag']);
+        $this->enhancementBag = new AttributeBag($data['enhancementBag']);
 
         foreach((array) $data['formattersNames'] as $type => $names)
         {

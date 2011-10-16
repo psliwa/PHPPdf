@@ -509,7 +509,7 @@ class NodeTest extends \PHPPdf\PHPUnit\Framework\TestCase
         $document = $this->getMockBuilder('PHPPdf\Document')
                          ->setMethods(array('getEnhancements'))
                          ->getMock();
-        $bag = $this->getMockBuilder('PHPPdf\Enhancement\EnhancementBag')
+        $bag = $this->getMockBuilder('PHPPdf\Util\AttributeBag')
                     ->getMock();
                          
                          

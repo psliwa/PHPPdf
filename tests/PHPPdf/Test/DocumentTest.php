@@ -110,7 +110,7 @@ class DocumentTest extends \PHPPdf\PHPUnit\Framework\TestCase
                              ->method('isEmpty')
                              ->will($this->returnValue(true));
 
-        $enhancementBagMock = $this->getMock('PHPPdf\Enhancement\EnhancementBag', array('getAll'));
+        $enhancementBagMock = $this->getMock('PHPPdf\Util\AttributeBag', array('getAll'));
         $enhancementBagMock->expects($this->once())
                            ->method('getAll')
                            ->will($this->returnValue($enhancementsParameters));
@@ -148,7 +148,7 @@ class DocumentTest extends \PHPPdf\PHPUnit\Framework\TestCase
     {
         $enhancements = array('some' => array('color' => 'red'));
 
-        $enhancementBagMock = $this->getMock('PHPPdf\Enhancement\EnhancementBag', array('getAll'));
+        $enhancementBagMock = $this->getMock('PHPPdf\Util\AttributeBag', array('getAll'));
         $enhancementBagMock->expects($this->once())
                            ->method('getAll')
                            ->will($this->returnValue($enhancements));

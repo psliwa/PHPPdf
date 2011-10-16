@@ -3,7 +3,6 @@
 namespace PHPPdf\Test\Parser;
 
 use PHPPdf\Util\AttributeBag,
-    PHPPdf\Enhancement\EnhancementBag,
     PHPPdf\Parser\BagContainer;
 
 class BagContainerTest extends \PHPPdf\PHPUnit\Framework\TestCase
@@ -14,14 +13,14 @@ class BagContainerTest extends \PHPPdf\PHPUnit\Framework\TestCase
     public function createObjectAndGettingAndSettingBags()
     {
         $attributeBag = new AttributeBag();
-        $enhancementBag = new EnhancementBag();
+        $enhancementBag = new AttributeBag();
         $container = new BagContainer($attributeBag, $enhancementBag);
 
         $this->assertTrue($container->getAttributeBag() === $attributeBag);
         $this->assertTrue($container->getEnhancementBag() === $enhancementBag);
 
         $anotherAttributeBag = new AttributeBag();
-        $anotherEnhancementBag = new EnhancementBag();
+        $anotherEnhancementBag = new AttributeBag();
 
         $container->setAttributeBag($anotherAttributeBag);
         $container->setEnhancementBag($anotherEnhancementBag);
@@ -76,7 +75,7 @@ class BagContainerTest extends \PHPPdf\PHPUnit\Framework\TestCase
         $attributeBag = new AttributeBag();
         $attributeBag->add('someName', 'someValue');
 
-        $enhancementBag = new EnhancementBag();
+        $enhancementBag = new AttributeBag();
         $enhancementBag->add('someName', array('someKey' => 'someValue'));
 
         $container = new BagContainer($attributeBag, $enhancementBag);

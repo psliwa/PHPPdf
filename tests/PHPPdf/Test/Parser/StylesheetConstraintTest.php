@@ -3,8 +3,7 @@
 namespace PHPPdf\Test\Parser;
 
 use PHPPdf\Parser\StylesheetConstraint,
-    PHPPdf\Util\AttributeBag,
-    PHPPdf\Enhancement\EnhancementBag;
+    PHPPdf\Util\AttributeBag;
 
 class StylesheetConstraintTest extends \PHPPdf\PHPUnit\Framework\TestCase
 {
@@ -37,7 +36,7 @@ class StylesheetConstraintTest extends \PHPPdf\PHPUnit\Framework\TestCase
         $defaultBag = $this->constraint->getEnhancementBag();
         $this->assertNotNull($defaultBag);
 
-        $bag = new EnhancementBag();
+        $bag = new AttributeBag();
         $this->constraint->setEnhancementBag($bag);
         $this->assertTrue($bag === $this->constraint->getEnhancementBag());
         $this->assertFalse($defaultBag === $bag);
@@ -143,7 +142,7 @@ class StylesheetConstraintTest extends \PHPPdf\PHPUnit\Framework\TestCase
     private function createContainer(array $attributes = array(), array $enhancements = array(), array $classes = array())
     {
         $attributeBag = new AttributeBag($attributes);
-        $enhancementBag = new EnhancementBag($enhancements);
+        $enhancementBag = new AttributeBag($enhancements);
 
         $constraint = new StylesheetConstraint($attributeBag, $enhancementBag);
 

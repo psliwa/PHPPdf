@@ -8,8 +8,7 @@
 
 namespace PHPPdf\Parser;
 
-use PHPPdf\Enhancement\EnhancementBag,
-    PHPPdf\Util\AttributeBag;
+use PHPPdf\Util\AttributeBag;
 
 /**
  * Class to encapsulate two bags: AttributeBag and EnhancementBag
@@ -23,7 +22,7 @@ class BagContainer implements \Serializable
     protected $weight;
     protected $order = 0;
 
-    public function __construct(AttributeBag $attributeBag = null, EnhancementBag $enhancementBag = null, $weight = 0)
+    public function __construct(AttributeBag $attributeBag = null, AttributeBag $enhancementBag = null, $weight = 0)
     {
         if($attributeBag === null)
         {
@@ -32,7 +31,7 @@ class BagContainer implements \Serializable
 
         if($enhancementBag === null)
         {
-            $enhancementBag = new EnhancementBag();
+            $enhancementBag = new AttributeBag();
         }
 
         $this->attributeBag = $attributeBag;
@@ -41,7 +40,7 @@ class BagContainer implements \Serializable
     }
 
     /**
-     * @return EnhancementBag
+     * @return AttributeBag
      */
     public function getEnhancementBag()
     {
@@ -61,7 +60,7 @@ class BagContainer implements \Serializable
         $this->attributeBag = $attributeBag;
     }
 
-    public function setEnhancementBag(EnhancementBag $enhancementBag)
+    public function setEnhancementBag(AttributeBag $enhancementBag)
     {
         $this->enhancementBag = $enhancementBag;
     }
@@ -110,8 +109,13 @@ class BagContainer implements \Serializable
     protected function restoreDataAfterUnserialize($data)
     {
         $this->attributeBag = new AttributeBag($data['attributes']);
-        $this->enhancementBag = new EnhancementBag($data['enhancements']);
+        $this->enhancementBag = new AttributeBag($data['enhancements']);
         $this->weight = (float) $data['weight'];
+    }
+    
+    public function apply(Node $node)
+    {
+        
     }
 
     /**
@@ -135,6 +139,6 @@ class BagContainer implements \Serializable
             $enhancementBags[] = $container->getEnhancementBag();
         }
 
-        return new BagContainer(AttributeBag::merge($attributeBags), EnhancementBag::merge($enhancementBags), $weight);
+        return new BagContainer(AttributeBag::merge($attributeBags), AttributeBag::merge($enhancementBags), $weight);
     }
 }

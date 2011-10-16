@@ -123,7 +123,7 @@ Inheritance
 
     <pdf>
         <dynamic-page>
-            <div id="layer-1" color="red" font-type="judson" font-size="16">
+            <div id="layer-1" color="red" font-type="judson" font-size="16px">
                 <stylesheet>
                     <enhancement name="border" color="green" />
                 </stylesheet>
@@ -159,6 +159,7 @@ Example:
     </pdf>
 
 Second "div" will have following attributes:
+
 - text-align: right
 - color: #aaaaaa
 - height: 200px

@@ -15,7 +15,7 @@ class StylesheetParserTest extends \PHPPdf\PHPUnit\Framework\TestCase
     }
 
     /**
-     * @test
+     * @ test
      */
     public function parseEmptyXml()
     {
@@ -28,7 +28,7 @@ class StylesheetParserTest extends \PHPPdf\PHPUnit\Framework\TestCase
     }
 
     /**
-     * @test
+     * @ test
      */
     public function parseSimpleXmlWithOnlyAttributes()
     {
@@ -70,7 +70,7 @@ XML;
     }
 
     /**
-     * @test
+     * @ test
      * @expectedException PHPPdf\Parser\Exception\InvalidTagException
      */
     public function invalidRoot()
@@ -80,7 +80,7 @@ XML;
     }
 
     /**
-     * @test
+     * @ test
      */
     public function parseSimpleNeastedXmlWithOnlyAttributes()
     {
@@ -150,7 +150,7 @@ XML;
     }
 
     /**
-     * @test
+     * @ test
      * @expectedException PHPPdf\Parser\Exception\ParseException
      */
     public function enhancementNameIsRequired()
@@ -166,7 +166,7 @@ XML;
     }
 
     /**
-     * @test
+     * @ test
      * @expectedException PHPPdf\Parser\Exception\ParseException
      */
     public function attributeNameIsRequired()
@@ -182,7 +182,7 @@ XML;
     }
 
     /**
-     * @test
+     * @ test
      * @expectedException PHPPdf\Parser\Exception\ParseException
      */
     public function attributeValueIsRequired()
@@ -198,7 +198,7 @@ XML;
     }
 
     /**
-     * @test
+     * @ test
      * @dataProvider nullifyAttributeValueProvider
      */
     public function nullifyAttributeValueIsAllowed($value)
@@ -226,7 +226,7 @@ XML;
     }
 
     /**
-     * @test
+     * @ test
      */
     public function tagWithClass()
     {
@@ -243,7 +243,7 @@ XML;
     }
 
     /**
-     * @test
+     * @ test
      */
     public function anyTag()
     {
@@ -259,7 +259,7 @@ XML;
     }
 
     /**
-     * @test
+     * @ test
      */
     public function parseFromXMLReaderDirectly()
     {
@@ -288,7 +288,7 @@ XML;
     }
 
     /**
-     * @test
+     * @ test
      */
     public function rootStylesheetConstraintMayByInjected()
     {
@@ -303,7 +303,7 @@ XML;
     }
     
     /**
-     * @test
+     * @ test
      * @expectedException PHPPdf\Parser\Exception\ParseException
      */
     public function throwExceptionIfUnknownTahHasBeenEncountedInParserSimpleMode()
@@ -322,7 +322,7 @@ XML;
     }
     
     /**
-     * @test
+     * @ test
      */
     public function parseFlatXmlStylesheetOnParserSimpleMode()
     {
@@ -340,7 +340,7 @@ XML;
     }
     
     /**
-     * @test
+     * @ test
      */
     public function parseAttributesFromXmlAttributes()
     {
@@ -359,7 +359,7 @@ XML;
     }
     
     /**
-     * @test
+     * @ test
      */
     public function parseEnhancementsFromXmlAttributes()
     {
@@ -378,7 +378,7 @@ XML;
     }
     
     /**
-     * @test
+     * @ test
      */
     public function validInterpretSelectorsAsShortTag()
     {

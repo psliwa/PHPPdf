@@ -149,7 +149,7 @@ XML;
                          ->method('getAll')
                          ->will($this->returnValue($attributes));
 
-        $enhancementBagMock = $this->getMock('PHPPdf\Enhancement\EnhancementBag', array('getAll'));
+        $enhancementBagMock = $this->getMock('PHPPdf\Util\AttributeBag', array('getAll'));
         $enhancementBagMock->expects($this->once())
                          ->method('getAll')
                          ->will($this->returnValue($enhancements));
