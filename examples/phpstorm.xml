@@ -118,7 +118,7 @@
 			<h2>Quick Color Preview</h2>
 			
 			<p>
-				We know: The Devil is in the details.<nl />
+				We know: The Devil is in the details.<br />
 				PhpStorm makes your work easier even when it comes down to little things like selecting the color of an HTML or CSS element. The editor visualizes the colors used in your code.
 				
 				<img src="dir:/phpstorm/listing6.jpg" />
@@ -160,9 +160,9 @@
 			</p>
 			<p>
 				Type <span class="code">div.feature>h4+p</span>, press <strong>TAB</strong> and you’ll get
-				<p class="code">&lt;div class=”feature”&gt;<nl />
-	&lt;h4&gt;&lt;/h4&gt;<nl />
-	&lt;p&gt;&lt;/p&gt;<nl />
+				<p class="code">&lt;div class=”feature”&gt;<br />
+	&lt;h4&gt;&lt;/h4&gt;<br />
+	&lt;p&gt;&lt;/p&gt;<br />
 &lt;/div&gt;</p>
 			</p>
 		</column-layout>

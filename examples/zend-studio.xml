@@ -41,10 +41,10 @@
 	
 		<h1>Disclaimer</h1>
 		<p>The information in this document is subject to change without notice and does not represent a commitment on the part of Zend Technologies Ltd. No part of this manual may be reproduced or transmitted in any form or by any means, electronic or mechanical, including photocopying, recording, or information storage and retrieval systems, for any purpose other than the purchaser’s personal use, without the written permission of Zend Technologies Ltd.</p>
-		<p>All trademarks mentioned in this document, belong to their respective owners.<nl />
+		<p>All trademarks mentioned in this document, belong to their respective owners.<br />
 		© 1999-2010 Zend Technologies Ltd. All rights reserved.</p>
 		<p>Zend Studio 8.0 User Guide issued October 2010.</p>
-		<p>Product Version: 8.x<nl />
+		<p>Product Version: 8.x<br />
 		DN: ZS-UG-281010-08-19</p>
 				
 		<break />
@@ -113,12 +113,12 @@
 						<li>Select the Debug tab.</li>
 						<li>From the Debug Server Configuration area of the Debug tab, select 'internal'' from the Debug Mode category.</li>
 						<li>Click <strong>Apply</strong> and <strong>OK</strong>.</li>
-						<li>In the main toolbar, click Go to start the Debugger. <nl />-or- from the Menu Bar select <strong>Debug | Go</strong>.</li>
+						<li>In the main toolbar, click Go to start the Debugger. <br />-or- from the Menu Bar select <strong>Debug | Go</strong>.</li>
 					</ul>
 				</td>
 				<td>
 					<ul type="decimal">
-						<li>Click the arrow next to the debug button on the toolbar and select <strong>Debug As | PHP Script</strong>. <nl />-Or- In PHP Explorer view, right-click the required file and select <strong>Debug As | PHP Script</strong>.</li>
+						<li>Click the arrow next to the debug button on the toolbar and select <strong>Debug As | PHP Script</strong>. <br />-Or- In PHP Explorer view, right-click the required file and select <strong>Debug As | PHP Script</strong>.</li>
 					</ul>
 				</td>
 			</tr>
@@ -146,7 +146,7 @@
 				<td>
 					<ul type="decimal">
 						<li>
-							Click the arrow next to the debug button on the toolbar and select Debug Configurations... -or- In PHP Explorer view, right-click and select <strong>Debug as | Debug Configurations...</strong><nl />
+							Click the arrow next to the debug button on the toolbar and select Debug Configurations... -or- In PHP Explorer view, right-click and select <strong>Debug as | Debug Configurations...</strong><br />
 							A Debug dialog will open.
 						</li>
 						<li>Double-click the PHP Script option to create a new debug configuration and enter a name for it.</li>
@@ -192,7 +192,7 @@
 			</ul>
 		</div>
 		<p>
-			A number of views will open with relevant debug information.<nl />
+			A number of views will open with relevant debug information.<br />
 			See the Running and Analyzing Debugger results topic for more information on the outcome of a debugging process.
 		</p>
 		
