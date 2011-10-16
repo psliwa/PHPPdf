@@ -148,11 +148,11 @@ Example:
 
     <pdf>
         <page>
-            <div id="1" color="#cccccc" height="100" text-align="right">
+            <div id="1" color="#cccccc" height="100px" text-align="right">
             </div>
-            <div extends="1" color="#aaaaaa" height="150">
+            <div extends="1" color="#aaaaaa" height="150px">
                 <stylesheet>
-                    <attribute name="height" value="200" />
+                    <attribute name="height" value="200px" />
                 </stylesheet>
             </div>
         </page>
@@ -161,7 +161,7 @@ Example:
 Second "div" will have following attributes:
 - text-align: right
 - color: #aaaaaa
-- height: 200
+- height: 200px
 
 <a name="stylesheet"></a>
 Stylesheet structure
@@ -173,9 +173,9 @@ Short style:
 
     <stylesheet>
         <!-- style attributes are embeded as xml attributes, class attribute has the same meaning as in HTML/CSS -->
-        <div class="class" font-size="12" color="gray" background.color="yellow">
+        <div class="class" font-size="12px" color="gray" background.color="yellow">
             <!-- nested element, equivalent CSS selector syntax: "div.class p" -->
-            <p margin="10 15">
+            <p margin="10px 15px">
             </p>
         </div>
 
@@ -184,7 +184,7 @@ Short style:
         </any>
 
         <h2 class="header">
-            <span font-size="9">
+            <span font-size="9px">
             </span>
             
             <div font-style="bold">
@@ -197,14 +197,14 @@ Long style:
     <stylesheet>
         <div class="class">
             <!-- simple and complex (enhancements) attributes are nested in "div.class" selector path -->
-            <attribute name="font-size" value="12" />
+            <attribute name="font-size" value="12px" />
             <attribute name="color" value="grey" />
             <!-- equivalent of background.color attribute -->
             <enhancement name="background" color="yellow" />
 
             <!-- another nested element, equivalent CSS selector syntax: "div.class p" -->
             <p>
-                <attribute name="margin" value="10 15" />
+                <attribute name="margin" value="10px 15px" />
             </p>
         </div>
 
@@ -215,7 +215,7 @@ Long style:
 
         <h2 class="header">
             <span>
-                <attribute name="font-size" value="9" />
+                <attribute name="font-size" value="9px" />
             </span>
             <div>
                 <attribute name="font-style" value="bold" />
@@ -241,14 +241,14 @@ There are tags that only are bags for attributes, set of tags etc:
 * attribute - simple attribute declaration, direct child of "stylesheet" tag. Required attributes of this element: name - attribute name, value - attribute value
 * enhancement - complex attribute declaration, direct child of "stylesheet" tag. Required attributes of this element: name - complex attribute name
 * placeholders - defines placeholders for parent tag. Children tags of placeholder are specyfic for every parent tag.
-* metadata - defines metadata of pdf document, direct child of document root (TODO: not implemented yet)
+* metadata - defines metadata of pdf document, direct child of document root
 * behaviours - defines behaviours for parent tag. Supported behaviours: href, ref, bookmark, note (action as same as for attributes with as same as name)
 
 <a name="attributes"></a>
 Attributes
 ----------------
 
-* width and height: rigidly sets height and width, there are no units. Relative values in percent are supported. 
+* width and height: rigidly sets height and width, supported units are described in separate [section](#units). Relative values in percent are supported. 
 * margin (margin-top, margin-bottom, margin-left, margin-right): margin similar to margin from HTML/CSS. Margins of simblings are pooled. For side margins possible is "auto" value, it works similar as in HTML/CSS.
 * padding (padding-top, padding-bottom, padding-left, padding-right): works similiar as in HTML/CSS
 * font-type - font name must occurs in fonts.xml config file, otherwise exception will be thrown
@@ -278,7 +278,7 @@ Complex attributes
     - color: border color
     - style: posible values: solid (solid line), dotted (predefined dotted line) or any definition in the form of integers separated by space
     - type: which edges will be shown - default "top+bottom+left+right" (all edges). "none" value is possible (it disable border)
-    - size: border size, there are no unit
+    - size: border size
     - radius: corner rounding in radians (attention: if this parameter is set, type paramete will be ignored, rounded border always will be full - this will be fixed in future)
     - position: border translation relative to original position. Positive values extends border, negative values decrases border. Owing to manipulation of this parameter, you can obtain complex pattern as border if you add another borders with different styles and positions. 
 
@@ -287,7 +287,7 @@ Complex attributes
     - image: background image
     - repeat: way of image repeating (none|x|y|all)
     - radius: rounding background corners (for now only works with color background)
-    - use-real-dimension: attribute uses only by page (or dynamic-page). True for filling also margins, false in otherwise.
+    - use-real-dimension: attribute only used by page (or dynamic-page). True for filling also margins, false in otherwise.
     - image-width: custom width of background image, percentage values are allowed
     - image-height: custom height of background image, percentage values are allowed
     - position-x: horizontal position for image of background, allowed values: left, center, right (default: left)
@@ -301,8 +301,8 @@ It is possible to add several complex attributes in the same type (for instance 
                 <stylesheet>
                     <!-- Top and bootom edges are red, side edges are yellow-gray --> 
                     <enhancement name="border" color="red" type="top+bottom" />
-                    <enhancement id="borderLeftAndRight" name="border" color="yellow" type="left+right" size="4" />
-                    <enhancement id="outerBorderLeftAndRight" name="border" color="gray" type="left+right" size="2" position="1" />
+                    <enhancement id="borderLeftAndRight" name="border" color="yellow" type="left+right" size="4px" />
+                    <enhancement id="outerBorderLeftAndRight" name="border" color="gray" type="left+right" size="2px" position="1px" />
                 </stylesheet>
             </div>
         </dynamic-page>
@@ -444,12 +444,12 @@ Repetitive headers and footers
         <dynamic-page>
             <placeholders>
                 <header>
-                    <div height="50" width="100%">
+                    <div height="50px" width="100%">
                         Header
                     </div>
                 </header>
                 <footer>
-                    <div height="50" width="100%">
+                    <div height="50px" width="100%">
                         Footer
                     </div>
                 </footer>
@@ -511,10 +511,7 @@ Page can be separated on columns:
     <pdf>
         <dynamic-page>
             <column-layout>
-                <div width="100%" height="2500">
-                    <stylesheet>
-                        <enhancement name="background" color="green" />
-                    </stylesheet>
+                <div width="100%" height="2500px" background.color="green">
                 </div>
             </column-layout>
         </dynamic-page>

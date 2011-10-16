@@ -147,11 +147,11 @@ Przykład:
 
     <pdf>
         <page>
-            <div id="1" color="#cccccc" height="100" text-align="right">
+            <div id="1" color="#cccccc" height="100px" text-align="right">
             </div>
-            <div extends="1" color="#aaaaaa" height="150">
+            <div extends="1" color="#aaaaaa" height="150px">
                 <stylesheet>
-                    <attribute name="height" value="200" />
+                    <attribute name="height" value="200px" />
                 </stylesheet>
             </div>
         </page>
@@ -160,7 +160,7 @@ Przykład:
 Drugi "div" będzie miał następujące atrybuty:
 - text-align: right
 - color: #aaaaaa
-- height: 200
+- height: 200px
 
 <a name="stylesheet"></a>
 Struktura arkusza stylów.
@@ -172,9 +172,9 @@ Krótki sposób:
 
     <stylesheet>
         <!-- style są wbudowane w tag jako atrybuty xml, atrybut "class" ma takie samo znaczenie co w HTML/CSS -->
-        <div class="class" font-size="12" color="gray" background.color="yellow">
+        <div class="class" font-size="12px" color="gray" background.color="yellow">
             <!-- element zagnieżdżony, odpowiednik selektora z CSS: "div.class p" -->
-            <p margin="10 15">
+            <p margin="10px 15px">
             </p>
         </div>
 
@@ -183,7 +183,7 @@ Krótki sposób:
         </any>
 
         <h2 class="header">
-            <span font-size="9">
+            <span font-size="9px">
             </span>
             
             <div font-style="bold">
@@ -196,14 +196,14 @@ Długi sposób:
     <stylesheet>
         <div class="klasa">
             <!-- atrybuty proste i złożone zagnieżdzone w ścieżce selektora div.klasa -->
-            <attribute name="font-size" value="12" />
+            <attribute name="font-size" value="12px" />
             <attribute name="color" value="grey" />
             <!-- odpowiednik atrybutu background.color -->
             <enhancement name="background" color="yellow" />
 
             <!-- kolejny element, odpowiadająca składnia selektora z CSS: "div.klasa p" -->
             <p>
-                <attribute name="margin" value="10 15" />
+                <attribute name="margin" value="10px 15px" />
             </p>
         </div>
 
@@ -214,7 +214,7 @@ Długi sposób:
 
         <h2 class="naglowek">
             <span>
-                <attribute name="font-size" value="9" />
+                <attribute name="font-size" value="9px" />
             </span>
             <div>
                 <attribute name="font-style" value="bold" />
@@ -240,14 +240,14 @@ Istnieją tagi, które służą jedynie do określania wartości atrybutów, zbi
 * attribute - atrybut, bezpośredni element podrzędny dla "stylesheet". Wymagane atrybute tego elementu: name - nazwa atrybutu, value - wartość atrybutu
 * enhancement - atrybut złożony (upiększenie), bezpośredni element podrzędny dla "stylesheet". Wymagany atrybut tego elementu: name - nazwa.
 * placeholders - definiuje wartości "slotów" dla elementu podrzędnego. Elementy podrzędne "placeholders" są specyficzne dla tagu nadrzędnego.
-* metadata - definiuje dane meta dla dokumentu pdf, bezpośredni element podrzędny korzenia dokumentu (TODO)
+* metadata - definiuje dane meta dla dokumentu pdf, bezpośredni element podrzędny korzenia dokumentu
 * behaviours - definiuje zachowania dla elementu nadrzędnego. Obsługiwane zachowania: ref, href, bookmark, note (działanie takie samo jak dla atrybutów o tych samych nazwach)
 
 <a name="attributes"></a>
 Atrybuty
 ---------
 
-* width oraz height: ustawienie wysokości i szerokości na sztywno, nie są obsługiwane jednostki. Jest możliwe użycie wartości relatywnych wyrażonych w procentach
+* width oraz height: ustawienie wysokości i szerokości na sztywno, wspierane jednostki miary są opisane w osobnym [rozdziale](#units). Jest możliwe użycie wartości relatywnych wyrażonych w procentach
 * margin (margin-top, margin-bottom, margin-left, margin-right): margines podobny jak w HTML/CSS z taką różnicą, że marginesy sąsiadów się sumują. Dla marginesów bocznym możliwa jest wartość "auto" - działa podobnie jak w HTML/CSS
 * padding (padding-top, padding-bottom, padding-left, padding-right): dopełnienie wewnętrzne - tak jak w HTML/CSS
 * font-type - typ czcionki. Nazwa czcionki musi występować w pliku konfiguracyjnym fonts.xml, w przeciwnym wypadku zostanie wyrzucony wyjątek
@@ -301,8 +301,8 @@ Można dodawać kilka upiększeń tego samego typu (np. 3 różne obramowania) u
                 <stylesheet>
                     <!-- Górna i dolna krawędź czerwona, boczne żółto-szare -->
                     <enhancement name="border" color="red" type="top+bottom" />
-                    <enhancement id="borderLeftAndRight" name="border" color="yellow" type="left+right" size="4" />
-                    <enhancement id="outerBorderLeftAndRight" name="border" color="gray" type="left+right" size="2" position="1" />
+                    <enhancement id="borderLeftAndRight" name="border" color="yellow" type="left+right" size="4px" />
+                    <enhancement id="outerBorderLeftAndRight" name="border" color="gray" type="left+right" size="2px" position="1px" />
                 </stylesheet>
             </div>
         </dynamic-page>
@@ -442,12 +442,12 @@ Aby dodać powtarzalny nagłówek i/bądź stopkę należy wykorzystać tag "pla
         <dynamic-page>
             <placeholders>
                 <header>
-                    <div height="50" width="100%">
+                    <div height="50px" width="100%">
                         Nagłówek
                     </div>
                 </header>
                 <footer>
-                    <div height="50" width="100%">
+                    <div height="50px" width="100%">
                         Stopka
                     </div>
                 </footer>
@@ -509,10 +509,7 @@ Strona może być podzielona na kolumny.
     <pdf>
         <dynamic-page>
             <column-layout>
-                <div width="100%" height="2500">
-                    <stylesheet>
-                        <enhancement name="background" color="green" />
-                    </stylesheet>
+                <div width="100%" height="2500px" background.color="green">
                 </div>
             </column-layout>
         </dynamic-page>
