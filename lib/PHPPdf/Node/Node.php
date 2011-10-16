@@ -97,7 +97,7 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
     {
         //TODO refactoring
         $attributeWithGetters = array('width', 'height', 'margin-left', 'margin-right', 'margin-top', 'margin-bottom', 'padding-left', 'padding-right', 'padding-top', 'padding-bottom', 'font-type', 'font-size', 'float', 'breakable');
-        $attributeWithSetters = array('width', 'height', 'margin-left', 'margin-right', 'margin-top', 'margin-bottom', 'font-type', 'float', 'static-size', 'font-size', 'margin', 'padding', 'break', 'breakable', 'dump', 'padding-left', 'padding-right', 'padding-top', 'padding-bottom', 'min-width', 'line-height');
+        $attributeWithSetters = array('width', 'height', 'margin-left', 'margin-right', 'margin-top', 'margin-bottom', 'font-type', 'float', 'static-size', 'font-size', 'margin', 'padding', 'break', 'breakable', 'dump', 'padding-left', 'padding-right', 'padding-top', 'padding-bottom', 'min-width', 'line-height', 'line-break');
 
         $predicateGetters = array('breakable');
         
@@ -197,6 +197,8 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
         
         static::addAttribute('alpha', null);
         static::addAttribute('rotate', null);
+        
+        static::addAttribute('line-break', false);
     }
 
     public function setUnitConverter(UnitConverter $unitConverter)
@@ -962,6 +964,12 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
     {
         $flag = $this->filterBooleanValue($flag);
         $this->setAttributeDirectly('break', $flag);
+    }
+    
+    public function setLineBreak($flag)
+    {
+        $flag = $this->filterBooleanValue($flag);
+        $this->setAttributeDirectly('line-break', $flag);
     }
     
     final protected function filterBooleanValue($value)

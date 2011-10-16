@@ -34,7 +34,7 @@
 					<argument key="tr" type="service" id="phppdf.node.tr" />
 					<argument key="td" type="service" id="phppdf.node.td" />
 					<argument key="img" type="service" id="phppdf.node.img" />
-					<argument key="br" type="service" id="phppdf.node.div" />
+					<argument key="br" type="service" id="phppdf.node.br" />
 					<argument key="hr" type="service" id="phppdf.node.hr" />
 					<argument key="nl" type="service" id="phppdf.node.div" />
 					<argument key="b" type="service" id="phppdf.node.b" />
@@ -87,6 +87,34 @@
 		<service id="phppdf.node.div" class="PHPPdf\Node\Container" public="false">
 			<tag name="phppdf.node" />
 			<argument type="collection"></argument>
+			<argument type="service" id="phppdf.unit_converter">
+				<argument type="service" id="phppdf.unit_converter" />
+			</argument>
+			<call method="setFormattersNames">
+				<argument>pre</argument>
+				<argument type="collection">
+					<argument>PHPPdf\Formatter\ConvertAttributesFormatter</argument>
+					<argument>PHPPdf\Formatter\StandardDimensionFormatter</argument>
+					<argument>PHPPdf\Formatter\FirstPointPositionFormatter</argument>
+
+				</argument>
+			</call>
+			<call method="setFormattersNames">
+				<argument>post</argument>
+				<argument type="collection">
+					<argument>PHPPdf\Formatter\ContainerDimensionFormatter</argument>
+					<argument>PHPPdf\Formatter\StandardPositionFormatter</argument>
+					<argument>PHPPdf\Formatter\FloatFormatter</argument>
+					<argument>PHPPdf\Formatter\VerticalAlignFormatter</argument>
+				</argument>
+			</call>
+		</service>
+
+		<service id="phppdf.node.br" class="PHPPdf\Node\Container" public="false">
+			<tag name="phppdf.node" />
+			<argument type="collection">
+				<argument key="line-break" type="constant">true</argument>
+			</argument>
 			<argument type="service" id="phppdf.unit_converter">
 				<argument type="service" id="phppdf.unit_converter" />
 			</argument>

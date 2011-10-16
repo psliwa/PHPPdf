@@ -60,6 +60,11 @@ class FirstPointPositionFormatter extends BaseFormatter
             {
                 $preferredYCoord = $siblingEndY - ($previousSibling->getMarginBottom() + $node->getMarginTop());
             }
+            
+            if($this->isLineBreak($node, $previousSibling))
+            {
+                $preferredYCoord -= $node->getLineHeightRecursively();
+            }
         }
     }
 
@@ -82,5 +87,10 @@ class FirstPointPositionFormatter extends BaseFormatter
         $rowIsOverflowed = !$node instanceof Nodes\Text && $parentEndX < $endX && $previousSibling->getFloat() !== Nodes\Node::FLOAT_RIGHT;
 
         return !$rowIsOverflowed;
+    }
+    
+    private function isLineBreak(Node $node, Node $previousSibling)
+    {
+        return ($node->getAttribute('line-break') && $previousSibling->getAttribute('line-break'));
     }
 }
