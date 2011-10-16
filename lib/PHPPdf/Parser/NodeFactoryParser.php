@@ -137,18 +137,7 @@ class NodeFactoryParser extends XmlParser
 
         $node = $this->getLastElementFromStack();
 
-        $attributeBag = $bagContainer->getAttributeBag();
-        $enhancementBag = $bagContainer->getEnhancementBag();
-
-        foreach($attributeBag->getAll() as $name => $value)
-        {
-            $node->setAttribute($name, $value);
-        }
-
-        foreach($enhancementBag->getAll() as $name => $parameters)
-        {
-            $node->mergeEnhancementAttributes($name, $parameters);
-        }
+        $bagContainer->apply($node);
     }
 
     private function parseFormatter($formatterType, \XMLReader $reader)

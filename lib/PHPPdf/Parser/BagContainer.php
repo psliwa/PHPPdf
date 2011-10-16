@@ -8,6 +8,7 @@
 
 namespace PHPPdf\Parser;
 
+use PHPPdf\Node\Node;
 use PHPPdf\Util\AttributeBag;
 
 /**
@@ -115,7 +116,18 @@ class BagContainer implements \Serializable
     
     public function apply(Node $node)
     {
-        
+        $attributeBag = $this->getAttributeBag();
+        $enhancementBag = $this->getEnhancementBag();
+
+        foreach($attributeBag->getAll() as $name => $value)
+        {
+            $node->setAttribute($name, $value);
+        }
+
+        foreach($enhancementBag->getAll() as $name => $parameters)
+        {
+            $node->mergeEnhancementAttributes($name, $parameters);
+        }
     }
 
     /**

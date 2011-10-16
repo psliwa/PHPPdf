@@ -325,18 +325,7 @@ class XmlDocumentParser extends XmlParser implements DocumentParser
     
     private function setNodeStylesheet(Node $node, BagContainer $bagContainer)
     {
-        $attributeBag = $bagContainer->getAttributeBag();
-        $enhancementBag = $bagContainer->getEnhancementBag();
-
-        foreach($attributeBag->getAll() as $name => $value)
-        {
-            $node->setAttribute($name, $value);
-        }
-
-        foreach($enhancementBag->getAll() as $name => $parameters)
-        {
-            $node->mergeEnhancementAttributes($name, $parameters);
-        }
+        $bagContainer->apply($node);
     }
 
     private function parseNode(\XMLReader $reader, Node $parentNode)
