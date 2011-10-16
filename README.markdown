@@ -119,7 +119,7 @@ Library is very strict in respect of corectness of tags and attributes. If unexi
 Inheritance
 ----------------
 
-"id" attribute has entirely different mean than in HTML. Id must by unique in whole document, otherwise parsing error occurs. Id attribute is used to identify tags in inheritance. Example:
+"id" attribute has entirely different mean than in HTML. "name" attribute is alias to "id". Id must by unique in whole document, otherwise parsing error occurs. Id attribute is used to identify tags in inheritance. Example:
 
     <pdf>
         <dynamic-page>
@@ -333,6 +333,7 @@ Example:
             <a href="http://google.com">go to google.com</a>
             <br />
             <a ref="some-id">go to another tag</a>
+            <a href="#some-id">go to another tag</a> <!-- anchor style ref -->
             <page-break />
             <p id="some-id">Yep, this is another tag! ;)</p>
         </dynamic-page>

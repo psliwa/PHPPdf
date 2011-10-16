@@ -118,7 +118,7 @@ Biblioteka jest bardzo rygorystyczna pod względem poprawności tagów i atrybut
 Dziedziczenie
 --------------
 
-Atrybut "id" ma całkowicie inne znaczenie niż w HTML'u. Id musi być unikalne w obrębie dokumentu, w przeciwnym wypadku wystąpi błąd parsowania. Służy on do identyfikowania elementów przy dziedziczeniu. Przykład:
+Atrybut "id" ma całkowicie inne znaczenie niż w HTML'u. Atrybut "name" jest aliasem do "id". Id musi być unikalne w obrębie dokumentu, w przeciwnym wypadku wystąpi błąd parsowania. Służy on m. in. do identyfikowania elementów przy dziedziczeniu. Przykład:
 
     <pdf>
         <dynamic-page>
@@ -268,6 +268,7 @@ Atrybuty
 * dump - dozwolone wartości: true or false. Tworzy notatkę z informacjami przeznaczonymi do debugowania, np. wartości atrybutów, pozycja itp.
 * rotate - kąt obrotu elementu. Obsługa tego atrybutu nie jest w pełni zaimplementowana, działa poprawnie ze znakami wodnymi (patrz sekcja "Znaki wodne"). Możliwe wartości: XXdeg (w stopniach), XX (w radianach), diagonally, -diagonally.
 * alpha - możliwe wartości: od 0 do 1. Przeźroczystość elementu i jego dzieci.
+* line-break - złamanie lini (true lub false), domyślnie ustawione na true tylko dla tagu "br"
 
 <a name="complex-attributes"></a>
 Atrybuty złożone
@@ -332,6 +333,7 @@ Przykład:
             <a href="http://google.com">idź do google.com</a>
             <br />
             <a ref="some-id">idź do innego tagu</a>
+            <a href="#some-id">go to another tag</a> <!-- anchor style ref -->
             <page-break />
             <p id="some-id">Tak, to jest inny tag! ;)</p>
         </dynamic-page>

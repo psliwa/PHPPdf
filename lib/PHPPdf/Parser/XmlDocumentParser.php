@@ -31,6 +31,7 @@ class XmlDocumentParser extends XmlParser implements DocumentParser
 {
     const ROOT_TAG = 'pdf';
     const ATTRIBUTE_ID = 'id';
+    const ATTRIBUTE_NAME = 'name';
     const ATTRIBUTE_EXTENDS = 'extends';
     const ATTRIBUTE_CLASS = 'class';
     const STYLESHEET_TAG = 'stylesheet';
@@ -365,7 +366,7 @@ class XmlDocumentParser extends XmlParser implements DocumentParser
         $bagContainer = $this->getStylesheetConstraint()->find($this->tagStack);
         $this->setNodeStylesheet($node, $bagContainer);
     
-        $id = $reader->getAttribute(self::ATTRIBUTE_ID);
+        $id = $this->getIdAttribute($reader);
     
         if($id)
         {
@@ -388,6 +389,21 @@ class XmlDocumentParser extends XmlParser implements DocumentParser
         {
             $this->parseEndElement($reader);
         }
+    }
+    
+    private function getIdAttribute(\XMLReader $reader)
+    {
+        foreach(array(self::ATTRIBUTE_ID, self::ATTRIBUTE_NAME) as $attributeName)
+        {
+            $id = $reader->getAttribute($attributeName);
+            
+            if($id)
+            {
+                return $id;
+            }
+        }
+        
+        return null;
     }
     
     private function fireOnStartParseNode(Node $node)
@@ -461,7 +477,7 @@ class XmlDocumentParser extends XmlParser implements DocumentParser
         
         $stylesheetParser = $this->getStylesheetParser();
         
-        $ignoredTags = array_merge($this->behaviourFactory->getSupportedBehaviourNames(), array(self::ATTRIBUTE_ID, self::ATTRIBUTE_EXTENDS, self::ATTRIBUTE_CLASS));
+        $ignoredTags = array_merge($this->behaviourFactory->getSupportedBehaviourNames(), array(self::ATTRIBUTE_ID, self::ATTRIBUTE_NAME, self::ATTRIBUTE_EXTENDS, self::ATTRIBUTE_CLASS));
         
         $stylesheetParser->addConstraintsFromAttributes($bagContainer, $reader, $ignoredTags);
 

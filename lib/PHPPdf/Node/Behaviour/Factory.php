@@ -31,7 +31,15 @@ class Factory
         switch($name)
         {
             case 'href':
-                return new GoToUrl($mainArg);
+                if(strpos($mainArg, '#') === 0)
+                {
+                    //anchor detected, go to "ref" section
+                    $mainArg = substr($mainArg, 1);
+                }
+                else
+                {
+                    return new GoToUrl($mainArg);
+                }
             case 'ref':
                 return new GoToInternal($this->nodeManager->get($mainArg));
             case 'bookmark':
