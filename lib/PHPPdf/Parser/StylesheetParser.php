@@ -183,7 +183,7 @@ class StylesheetParser extends XmlParser
             
             if(!in_array($name, $ignoredAttributes))
             {
-                if($complexAttributeName = $this->getComplexAttribute($name))
+                if($complexAttributeName = $this->getComplexAttributeName($name))
                 {
                     $propertyName = substr($name, strlen($complexAttributeName) + 1);
                     $constraint->add($complexAttributeName, array('name' => $complexAttributeName, $propertyName => $reader->value));
@@ -196,7 +196,7 @@ class StylesheetParser extends XmlParser
         }
     }
     
-    private function getComplexAttribute($name)
+    private function getComplexAttributeName($name)
     {
         if(!$this->enhancementFactory)
         {
@@ -207,7 +207,7 @@ class StylesheetParser extends XmlParser
         
         foreach($complexAttributesNames as $complexAttributeName)
         {
-            if(strpos($name, $complexAttributeName) === 0)
+            if(strpos($name, $complexAttributeName) === 0 && in_array(substr($name, strlen($complexAttributeName), 1), array('.', '-')))
             {
                 return $complexAttributeName;
             }

@@ -416,7 +416,7 @@ XML;
     public function addConstraintsFromAttributes()
     {
         $xml = <<<XML
-<tag attribute1="value1" attribute2.property1="value2" attribute2.property2="value3" attribute3="value4" attribute4-property3="value5" attribute5-property4="value6"></tag>
+<tag attribute1="value1" attribute2.property1="value2" attribute2.property2="value3" attribute3="value4" attribute4-property3="value5" attribute5-property4="value6" attribute6="value7"></tag>
 XML;
 
         $reader = new \XMLReader();
@@ -432,13 +432,13 @@ XML;
         
         $enhancementFactory->expects($this->atLeastOnce())
                            ->method('getDefinitionNames')
-                           ->will($this->returnValue(array('attribute2', 'attribute4')));
+                           ->will($this->returnValue(array('attribute2', 'attribute4', 'attribute6')));
                            
         $constraint = new BagContainer();
         
         $this->parser->addConstraintsFromAttributes($constraint, $reader);
         
-        $expectedAttributes = array('attribute1' => 'value1', 'attribute2' => array('name' => 'attribute2', 'property1' => 'value2', 'property2' => 'value3'), 'attribute3' => 'value4', 'attribute4' => array('name' => 'attribute4', 'property3' => 'value5'), 'attribute5-property4' => 'value6');
+        $expectedAttributes = array('attribute1' => 'value1', 'attribute2' => array('name' => 'attribute2', 'property1' => 'value2', 'property2' => 'value3'), 'attribute3' => 'value4', 'attribute4' => array('name' => 'attribute4', 'property3' => 'value5'), 'attribute5-property4' => 'value6', 'attribute6' => 'value7');
         
         $this->assertEquals($expectedAttributes, $constraint->getAll());
     }
