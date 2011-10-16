@@ -275,6 +275,8 @@ Attributes
 Complex attributes
 ----------------
 
+Complex attributes can be set by notation "attributeName.attributeProperty" or "attributeName-attributeProperty" (for example: border.color="black" or border-color="black").
+
 * border:
     - color: border color
     - style: posible values: solid (solid line), dotted (predefined dotted line) or any definition in the form of integers separated by space

@@ -275,6 +275,8 @@ Atrybuty
 Atrybuty złożone
 ----------------
 
+Atrybuty złożone mogą zostać ustawione za pomocą notacji "nazwaAtrybutu.nazwaWłaściwości" lub "nazwaAtrybutu-nazwaWłaściwości" (np. border.color="black" lub border-color="black").
+
 * border:
     - color: kolor obramowania
     - style: styl obramowania, możliwe wartości: solid (linia ciągła), dotted (predefiniowana linia przerywana) lub własna definicja w postaci ciągu liczb oddzielonych spacjami
