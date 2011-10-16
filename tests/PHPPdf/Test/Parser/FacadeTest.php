@@ -18,16 +18,11 @@ class FacadeTest extends \PHPPdf\PHPUnit\Framework\TestCase
         $this->loaderMock = $this->getMockBuilder('PHPPdf\Configuration\Loader')
                                  ->getMock();
         $this->documentParser = $this->getMock('PHPPdf\Parser\DocumentParser');
-        $this->facade = new Facade($this->loaderMock, $this->documentParser);
-    }
-
-    /**
-     * @test
-     */
-    public function facadeHaveDefaultsParsers()
-    {
-        $this->assertEquals($this->documentParser, $this->facade->getDocumentParser());
-        $this->assertInstanceOf('PHPPdf\Parser\StylesheetParser', $this->facade->getStylesheetParser());
+        $this->stylesheetParser = $this->getMockBuilder('PHPPdf\Parser\StylesheetParser')
+                                       ->setMethods(array('parse'))
+                                       ->disableOriginalConstructor()
+                                       ->getMock();
+        $this->facade = new Facade($this->loaderMock, $this->documentParser, $this->stylesheetParser);
     }
 
     /**
@@ -108,10 +103,10 @@ class FacadeTest extends \PHPPdf\PHPUnit\Framework\TestCase
                              ->with($this->equalTo($xml), $this->equalTo($constraintMock))
                              ->will($this->returnValue($pageCollectionMock));
 
-        $stylesheetParserMock->expects($this->once())
-                             ->method('parse')
-                             ->with($this->equalTo($stylesheet))
-                             ->will($this->returnValue($constraintMock));
+        $this->stylesheetParser->expects($this->once())
+                               ->method('parse')
+                               ->with($this->equalTo($stylesheet))
+                               ->will($this->returnValue($constraintMock));
 
         $documentMock->expects($this->at(2))
                 ->method('draw')
@@ -122,7 +117,6 @@ class FacadeTest extends \PHPPdf\PHPUnit\Framework\TestCase
         $documentMock->expects($this->at(4))
                 ->method('initialize');
 
-        $this->facade->setStylesheetParser($stylesheetParserMock);
         $this->facade->setDocument($documentMock);
 
         $result = $this->facade->render($xml, $stylesheet);
@@ -136,7 +130,7 @@ class FacadeTest extends \PHPPdf\PHPUnit\Framework\TestCase
      */
     public function dontCacheStylesheetConstraintByDefault($numberOfCacheMethodInvoking, $useCache)
     {
-        $facade = new Facade(new LoaderImpl(), $this->documentParser);
+        $facade = new Facade(new LoaderImpl(), $this->documentParser, $this->stylesheetParser);
 
         $cache = $this->getMock('PHPPdf\Cache\NullCache', array('test', 'save', 'load'));
         $cache->expects($this->exactly($numberOfCacheMethodInvoking))
@@ -151,12 +145,11 @@ class FacadeTest extends \PHPPdf\PHPUnit\Framework\TestCase
                              ->method('parse')
                              ->will($this->returnValue(new \PHPPdf\Node\PageCollection()));
 
-        $stylesheetParserMock = $this->getMock('PHPPdf\Parser\StylesheetParser', array('parse'));
-        $stylesheetParserMock->expects($this->once())
-                             ->method('parse')
-                             ->will($this->returnValue(new \PHPPdf\Parser\CachingStylesheetConstraint()));
+        $this->stylesheetParser->expects($this->once())
+                                 ->method('parse')
+                                 ->will($this->returnValue(new \PHPPdf\Parser\CachingStylesheetConstraint()));
 
-        $facade->setStylesheetParser($stylesheetParserMock);
+
         $facade->setCache($cache);
 
         $facade->setUseCacheForStylesheetConstraint($useCache);

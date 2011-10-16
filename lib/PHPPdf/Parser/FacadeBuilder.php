@@ -75,7 +75,10 @@ class FacadeBuilder
     public function build()
     {
         $documentParser = $this->createDocumentParser();
-        $facade = new Facade($this->configurationLoader, $documentParser);
+        $stylesheetParser = new StylesheetParser();
+        $stylesheetParser->setEnhancementFactory($this->configurationLoader->createEnhancementFactory());
+        
+        $facade = new Facade($this->configurationLoader, $documentParser, $stylesheetParser);
         
         if($documentParser instanceof FacadeAware)
         {
@@ -103,7 +106,7 @@ class FacadeBuilder
      */
     private function createDocumentParser()
     {
-        $parser = new XmlDocumentParser();
+        $parser = new XmlDocumentParser($this->configurationLoader->createEnhancementFactory());
         
         if($this->documentParserType === self::PARSER_MARKDOWN)
         {

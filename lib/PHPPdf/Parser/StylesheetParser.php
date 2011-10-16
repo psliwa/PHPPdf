@@ -9,7 +9,7 @@
 namespace PHPPdf\Parser;
 
 use PHPPdf\Parser\Exception\ParseException;
-
+use PHPPdf\Enhancement\Factory as EnhancementFactory;
 use PHPPdf\Parser\StylesheetConstraint,
     PHPPdf\Parser\Exception as Exceptions;
 
@@ -28,6 +28,7 @@ class StylesheetParser extends XmlParser
     
     private $throwsExceptionOnConstraintTag = false;
     private $root;
+    private $enhancementFactory;
 
     public function __construct(StylesheetConstraint $root = null, $throwExceptionOnConstraintTag = false)
     {
@@ -45,6 +46,11 @@ class StylesheetParser extends XmlParser
         $this->throwsExceptionOnConstraintTag = (boolean) $flag;
     }
 
+    public function setEnhancementFactory(EnhancementFactory $enhancementFactory)
+    {
+        $this->enhancementFactory = $enhancementFactory;
+    }
+    
     /**
      * @return StylesheetConstraint
      */

@@ -15,6 +15,7 @@ class XmlDocumentParserTest extends \PHPPdf\PHPUnit\Framework\TestCase
 {
     private $parser;
     private $documentMock;
+    private $enhancementFactoryMock;
 
     public function setUp()
     {
@@ -23,7 +24,9 @@ class XmlDocumentParserTest extends \PHPPdf\PHPUnit\Framework\TestCase
                                    ->setMethods(array('setMetadataValue'))
                                    ->getMock();
         
-        $this->parser = new XmlDocumentParser($this->documentMock);
+        $this->enhancementFactoryMock = $this->getMock('PHPPdf\Enhancement\Factory', array('create'));
+
+        $this->parser = new XmlDocumentParser($this->enhancementFactoryMock, $this->documentMock);
     }
 
     /**
@@ -32,16 +35,12 @@ class XmlDocumentParserTest extends \PHPPdf\PHPUnit\Framework\TestCase
     public function settingAndGettingProperties()
     {
         $factory = new NodeFactory();
-        $enhancementFactory = new EnhancementFactory();
 
         $this->assertTrue($this->parser->getNodeFactory() instanceof NodeFactory);
-        $this->assertTrue($this->parser->getEnhancementFactory() instanceof EnhancementFactory);
         
         $this->parser->setNodeFactory($factory);
-        $this->parser->setEnhancementFactory($enhancementFactory);
 
         $this->assertTrue($factory === $this->parser->getNodeFactory());
-        $this->assertTrue($enhancementFactory === $this->parser->getEnhancementFactory());
     }
 
     /**
@@ -474,23 +473,6 @@ XML;
         $this->parser->setNodeFactory($nodeFactoryMock);
 
         $pageCollection = $this->parser->parse($reader);
-    }
-
-    private function getEnhancementFactoryMock(array $enhancements, array $enhancementMocks)
-    {
-        $enhancementFactoryMock = $this->getMock('PHPPdf\Enhancement\Factory', array('create'));
-
-        $i = 0;
-        foreach($enhancements as $name => $parameters)
-        {
-            $enhancementFactoryMock->expects($this->at($i))
-                                   ->method('create')
-                                   ->with($this->equalTo($name), $this->equalTo($parameters))
-                                   ->will($this->returnValue($enhancementMocks[$i]));
-            $i++;
-        }
-
-        return $enhancementFactoryMock;
     }
 
     /**

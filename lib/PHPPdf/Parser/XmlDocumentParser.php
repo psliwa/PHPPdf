@@ -59,12 +59,12 @@ class XmlDocumentParser extends XmlParser implements DocumentParser
     
     private $listeners = array();
 
-    public function __construct(Document $document = null)
+    public function __construct(EnhancementFactory $enhancementFactory, Document $document = null)
     {
         $this->document = $document;
         $factory = new NodeFactory();        
         $stylesheetParser = new StylesheetParser(null, true);
-        $enhancementFactory = new EnhancementFactory();
+        $stylesheetParser->setEnhancementFactory($enhancementFactory);
 
         $this->setNodeFactory($factory);
         $this->setStylesheetParser($stylesheetParser);
@@ -130,8 +130,7 @@ class XmlDocumentParser extends XmlParser implements DocumentParser
     {
         if($this->innerParser === null)
         {
-            $innerParser = new self($this->document);
-            $innerParser->setEnhancementFactory($this->getEnhancementFactory());
+            $innerParser = new self($this->getEnhancementFactory(), $this->document);
             $innerParser->setNodeFactory($this->getNodeFactory());
 
             $this->innerParser = $innerParser;

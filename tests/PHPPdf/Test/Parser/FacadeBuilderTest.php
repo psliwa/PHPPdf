@@ -16,13 +16,19 @@ class FacadeBuilderTest extends \PHPPdf\PHPUnit\Framework\TestCase
         $this->configurationLoader = $this->getMockBuilder('PHPPdf\Configuration\Loader')
                                           ->getMock();
         $this->builder = FacadeBuilder::create($this->configurationLoader);
+        
+        $enhancementFactory = $this->getMock('PHPPdf\Enhancement\Factory');
+        
+        $this->configurationLoader->expects($this->any())
+                                  ->method('createEnhancementFactory')
+                                  ->will($this->returnValue($enhancementFactory));
     }
 
     /**
      * @test
      */
     public function returnFacadeOnBuildMethod()
-    {
+    {        
         $facade = $this->builder->build();
         $this->assertInstanceOf('PHPPdf\Parser\Facade', $facade);
         $configurationLoader = $this->readAttribute($facade, 'configurationLoader');
@@ -78,14 +84,9 @@ class FacadeBuilderTest extends \PHPPdf\PHPUnit\Framework\TestCase
     {
         $this->builder->setUseCacheForConfigurationLoader($useCache);
         $this->builder->setCache('File', array('cache_dir' => TEST_RESOURCES_DIR));
-        
-        $loader = $this->getMockBuilder('PHPPdf\Configuration\Loader')
-                       ->getMock();
                        
-        $loader->expects($useCache ? $this->once() : $this->never())
-               ->method('setCache');
-               
-        $this->builder->setConfigurationLoader($loader);
+        $this->configurationLoader->expects($useCache ? $this->once() : $this->never())
+                                  ->method('setCache');
                
         $this->builder->build();
     }

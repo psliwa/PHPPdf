@@ -36,7 +36,7 @@ class Facade
     private $useCacheForStylesheetConstraint = false;
     private $configurationLoader;
 
-    public function __construct(Loader $configurationLoader, DocumentParser $documentParser)
+    public function __construct(Loader $configurationLoader, DocumentParser $documentParser, StylesheetParser $stylesheetParser)
     {
         $this->configurationLoader = $configurationLoader;
         
@@ -51,7 +51,7 @@ class Facade
             $documentParser->addListener($nodeManager);
         }
         $this->setDocumentParser($documentParser);
-        $this->setStylesheetParser(new StylesheetParser());
+        $this->setStylesheetParser($stylesheetParser);
         $this->setDocument($document);
     }
 
