@@ -66,6 +66,16 @@ class ComplexAttributeFactoryTest extends \PHPPdf\PHPUnit\Framework\TestCase
             array('some-parameter', 'some value', 'someParameter'),
         );
     }
+    
+    /**
+     * @test
+     * @expectedException InvalidArgumentException
+     */
+    public function throwExceptionIfPassedParameterDosntExist()
+    {
+        $this->factory->addDefinition('stub', 'PHPPdf\Stub\ComplexAttribute\ComplexAttributeStub');
+        $this->factory->create('stub', array('color' => '#cccccc', 'unexisted-parameter' => 'value'));
+    }
 
     /**
      * @test

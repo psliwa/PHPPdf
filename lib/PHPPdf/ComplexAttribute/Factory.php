@@ -149,11 +149,17 @@ class Factory implements \Serializable
 
             $args[$parameter->getName()] = $value;
         }
+        
+        if($parameters)
+        {
+            throw new \InvalidArgumentException(sprintf('Unexpected parameters (%s) passed to "%s" complex attribute.', implode(', ', array_keys($parameters)), $name));
+        }        
+        
         $class = $this->getClass($name);
         return $class->newInstanceArgs($args);
     }
     
-    private function getParameterValue(\ReflectionParameter $parameter, array $values, $complexAttributeName)
+    private function getParameterValue(\ReflectionParameter $parameter, array &$values, $complexAttributeName)
     {
         $acceptableNames = $this->getAcceptableParameterNames($parameter);
         if(!$this->existsAtLeastOneKey($acceptableNames, $values) && !$parameter->isOptional())
@@ -166,6 +172,7 @@ class Factory implements \Serializable
             if(isset($values[$name]))
             {
                 $value = $values[$name];
+                unset($values[$name]);
                 break;
             }
         }
