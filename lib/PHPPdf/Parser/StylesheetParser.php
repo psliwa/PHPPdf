@@ -209,7 +209,7 @@ class StylesheetParser extends XmlParser
         {
             $attributes = array();
             
-            if(@preg_match_all('/([a-zA-Z0-9\-]+)\s*:\s*(.+)\s*;/U', $reader->value, $matches, \PREG_SET_ORDER))
+            if(@preg_match_all('/([a-zA-Z0-9\-\.]+)\s*:\s*(.+)\s*;/U', $reader->value, $matches, \PREG_SET_ORDER))
             {
                 foreach($matches as $match)
                 {

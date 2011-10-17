@@ -449,7 +449,7 @@ XML;
     public function addMultipleAttributesFromStyleAttribute()
     {
         $xml = <<<XML
-<tag style="attribute1: value1; attribute2: value2; attribute3-property: value3;"></tag>
+<tag style="attribute1: value1; attribute2: value2; attribute3-property: value3; attribute4.property: value4;"></tag>
 XML;
 
         $reader = new \XMLReader();
@@ -465,13 +465,13 @@ XML;
         
         $complexAttributeFactory->expects($this->atLeastOnce())
                            ->method('getDefinitionNames')
-                           ->will($this->returnValue(array('attribute3')));
+                           ->will($this->returnValue(array('attribute3', 'attribute4')));
                            
         $constraint = new BagContainer();
         
         $this->parser->addConstraintsFromAttributes($constraint, $reader);
         
-        $expectedAttributes = array('attribute1' => 'value1', 'attribute2' => 'value2', 'attribute3' => array('name' => 'attribute3', 'property' => 'value3'));
+        $expectedAttributes = array('attribute1' => 'value1', 'attribute2' => 'value2', 'attribute3' => array('name' => 'attribute3', 'property' => 'value3'), 'attribute4' => array('name' => 'attribute4', 'property' => 'value4'));
         
         $this->assertEquals($expectedAttributes, $constraint->getAll());
     }
