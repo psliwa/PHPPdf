@@ -6,7 +6,7 @@
  * License information is in LICENSE file
  */
 
-namespace PHPPdf\Enhancement;
+namespace PHPPdf\ComplexAttribute;
 
 use PHPPdf\Node\Node,
     PHPPdf\Node\Page,
@@ -14,11 +14,11 @@ use PHPPdf\Node\Node,
     PHPPdf\Document;
 
 /**
- * Base class of enhancement node's visual representation.
+ * Base class of complex attribute
  *
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
-abstract class Enhancement
+abstract class ComplexAttribute
 {
     private $color;
     private $radius;

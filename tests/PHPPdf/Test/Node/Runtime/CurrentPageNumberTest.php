@@ -48,11 +48,11 @@ class CurrentPageNumberTest extends \PHPPdf\PHPUnit\Framework\TestCase
     /**
      * @test
      */
-    public function cannotMergeEnhancements()
+    public function cannotMergeComplexAttributes()
     {
-        $this->node->mergeEnhancementAttributes('name', array('name' => 'value'));
+        $this->node->mergeComplexAttributes('name', array('name' => 'value'));
 
-        $this->assertEmpty($this->node->getEnhancementsAttributes());
+        $this->assertEmpty($this->node->getComplexAttributes());
     }
 
     /**

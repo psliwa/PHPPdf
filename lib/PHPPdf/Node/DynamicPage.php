@@ -152,9 +152,9 @@ class DynamicPage extends Page
         return $this->getPrototypePage()->setAttribute($name, $value);
     }
     
-    public function mergeEnhancementAttributes($name, array $attributes = array())
+    public function mergeComplexAttributes($name, array $attributes = array())
     {
-        $this->prototype->mergeEnhancementAttributes($name, $attributes);
+        $this->prototype->mergeComplexAttributes($name, $attributes);
     }
 
     protected function getAttributeDirectly($name)

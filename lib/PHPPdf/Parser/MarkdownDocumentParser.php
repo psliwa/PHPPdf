@@ -13,7 +13,7 @@ use PHPPdf\Util\DataSource;
 use PHPPdf\Bridge\Markdown\MarkdownParser;
 use PHPPdf\Document;
 use PHPPdf\Node\Factory as NodeFactory;
-use PHPPdf\Enhancement\Factory as EnhancementFactory;
+use PHPPdf\ComplexAttribute\Factory as ComplexAttributeFactory;
 
 /**
  * @author Piotr Śliwa <peter.pl7@gmail.com>
@@ -77,9 +77,9 @@ class MarkdownDocumentParser implements DocumentParser, FacadeAware
         $this->documentParser->setNodeFactory($factory);
     }
     
-    public function setEnhancementFactory(EnhancementFactory $enhancementFactory)
+    public function setComplexAttributeFactory(ComplexAttributeFactory $complexAttributeFactory)
     {
-        $this->documentParser->setEnhancementFactory($enhancementFactory);
+        $this->documentParser->setComplexAttributeFactory($complexAttributeFactory);
     }
     
     public function addListener(DocumentParserListener $listener)

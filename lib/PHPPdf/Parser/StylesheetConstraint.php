@@ -11,7 +11,7 @@ namespace PHPPdf\Parser;
 use PHPPdf\Util\AttributeBag;
 
 /**
- * Constraints encapsulate Attribute and Enhancement Bag in tree structure.
+ * Constraints encapsulate Attribute and ComplexAttribute Bag in tree structure.
  *
  * This class provides find method. One single object of StylesheetConstraint may by act as
  * repository of BagContainers.

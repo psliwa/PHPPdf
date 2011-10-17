@@ -6,7 +6,7 @@
  * License information is in LICENSE file
  */
 
-namespace PHPPdf\Enhancement;
+namespace PHPPdf\ComplexAttribute;
 
 use PHPPdf\Node\Page,
     PHPPdf\Util\UnitConverter,
@@ -21,7 +21,7 @@ use PHPPdf\Node\Page,
  *
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
-class Background extends Enhancement
+class Background extends ComplexAttribute
 {
     const REPEAT_NONE = 0;
     const REPEAT_X = 1;

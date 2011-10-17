@@ -17,7 +17,7 @@ use PHPPdf\Util\UnitConverter,
     PHPPdf\Node\Page,
     PHPPdf\Node\PageCollection,
     PHPPdf\Font\Registry as FontRegistry,
-    PHPPdf\Enhancement\Factory as EnhancementFactory,
+    PHPPdf\ComplexAttribute\Factory as ComplexAttributeFactory,
     PHPPdf\Exception\DrawingException,
     PHPPdf\Engine\Engine,
     PHPPdf\Engine\GraphicsContext,
@@ -46,7 +46,7 @@ class Document implements UnitConverter, Engine
      */
     private $engine;
 
-    private $enhancementFactory = null;
+    private $complexAttributeFactory = null;
 
     private $fontRegistry = null;
 
@@ -64,15 +64,15 @@ class Document implements UnitConverter, Engine
     }
 
     /**
-     * Create enhancements objects depends on bag content
+     * Create complexAttributes objects depends on bag content
      * 
-     * @return array Array of Enhancement objects
+     * @return array Array of ComplexAttribute objects
      */
-    public function getEnhancements(AttributeBag $bag)
+    public function getComplexAttributes(AttributeBag $bag)
     {
-        $enhancements = array();
+        $complexAttributes = array();
 
-        if($this->enhancementFactory !== null)
+        if($this->complexAttributeFactory !== null)
         {
             foreach($bag->getAll() as $id => $parameters)
             {
@@ -84,21 +84,21 @@ class Document implements UnitConverter, Engine
                 $name = $parameters['name'];
                 unset($parameters['name']);
                 
-                $enhancement = $this->enhancementFactory->create($name, $parameters);
+                $complexAttribute = $this->complexAttributeFactory->create($name, $parameters);
                 
-                if(!$enhancement->isEmpty())
+                if(!$complexAttribute->isEmpty())
                 {
-                    $enhancements[] = $enhancement;
+                    $complexAttributes[] = $complexAttribute;
                 }
             }
         }
 
-        return $enhancements;
+        return $complexAttributes;
     }
 
-    public function setEnhancementFactory(EnhancementFactory $enhancementFactory)
+    public function setComplexAttributeFactory(ComplexAttributeFactory $complexAttributeFactory)
     {
-        $this->enhancementFactory = $enhancementFactory;
+        $this->complexAttributeFactory = $complexAttributeFactory;
     }
     
     public function setUnitConverter(UnitConverter $converter)

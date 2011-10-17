@@ -102,7 +102,7 @@ class DynamicPageTest extends \PHPPdf\PHPUnit\Framework\TestCase
                 'setAttribute', 'color', 'white',
             ),
             array(
-                'mergeEnhancementAttributes', 'border', array(),
+                'mergeComplexAttributes', 'border', array(),
             ),
         );
     }

@@ -21,7 +21,7 @@ class FacadeConfiguration
     {
         $this->configFiles = array(
             'node' => __DIR__.'/../Resources/config/nodes.xml',
-            'enhancement' => __DIR__.'/../Resources/config/enhancements.xml',
+            'complex-attribute' => __DIR__.'/../Resources/config/complex-attributes.xml',
             'font' => __DIR__.'/../Resources/config/fonts.xml',
         );
     }
@@ -55,21 +55,21 @@ class FacadeConfiguration
     }
 
     /**
-     * Set config file for populating enhancement factory
+     * Set config file for populating complex attribute factory
      *
      * @param string $file
      * @return FacadeConfiguration
      */
-    public function setEnhancementsConfigFile($file)
+    public function setComplexAttributesConfigFile($file)
     {
-        $this->configFiles['enhancement'] = $file;
+        $this->configFiles['complex-attribute'] = $file;
 
         return $this;
     }
 
-    public function getEnhancementsConfigFile()
+    public function getComplexAttributesConfigFile()
     {
-        return $this->configFiles['enhancement'];
+        return $this->configFiles['complex-attribute'];
     }
     
     /**

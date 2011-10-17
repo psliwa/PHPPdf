@@ -1,11 +1,11 @@
 <?php
 
-namespace PHPPdf\Test\Enhancement;
+namespace PHPPdf\Test\ComplexAttribute;
 
 use PHPPdf\Engine\GraphicsContext;
 use PHPPdf\ObjectMother\NodeObjectMother;
 use PHPPdf\Document;
-use PHPPdf\Enhancement\Background,
+use PHPPdf\ComplexAttribute\Background,
     PHPPdf\Node\Page,
     PHPPdf\Util\Point;
 
@@ -248,9 +248,9 @@ class BackgroundTest extends \PHPPdf\PHPUnit\Framework\TestCase
      */
     public function convertRepeatAsStringToConstat($string, $expected)
     {
-        $enhancement = new Background(null, null, $string);
+        $complexAttribute = new Background(null, null, $string);
         
-        $this->assertEquals($expected, $enhancement->getRepeat());
+        $this->assertEquals($expected, $complexAttribute->getRepeat());
     }
     
     public function repeatProvider()
@@ -268,7 +268,7 @@ class BackgroundTest extends \PHPPdf\PHPUnit\Framework\TestCase
      */
     public function useRealBoundaryWhenRealDimensionParameterIsSetted()
     {
-        $enhancement = new Background('black', null, Background::REPEAT_ALL, null, true);
+        $complexAttribute = new Background('black', null, Background::REPEAT_ALL, null, true);
         
         $node = $this->getMockBuilder('PHPPdf\Node\Container')
                       ->setMethods(array('getRealBoundary', 'getBoundary', 'getGraphicsContext'))
@@ -311,7 +311,7 @@ class BackgroundTest extends \PHPPdf\PHPUnit\Framework\TestCase
               ->method('getGraphicsContext')
               ->will($this->returnValue($gc));
              
-        $enhancement->enhance($node, $this->document);
+        $complexAttribute->enhance($node, $this->document);
     }
     
     /**
@@ -320,9 +320,9 @@ class BackgroundTest extends \PHPPdf\PHPUnit\Framework\TestCase
      */
     public function convertStringBooleanValuesToBooleanTypeForUseRealDimensionParameter($value, $expected)
     {
-        $enhancement = new Background('black', null, Background::REPEAT_ALL, null, $value);
+        $complexAttribute = new Background('black', null, Background::REPEAT_ALL, null, $value);
         
-        $this->assertTrue($expected === $this->readAttribute($enhancement, 'useRealDimension'));
+        $this->assertTrue($expected === $this->readAttribute($complexAttribute, 'useRealDimension'));
     }
     
     public function booleanProvider()
@@ -368,7 +368,7 @@ class BackgroundTest extends \PHPPdf\PHPUnit\Framework\TestCase
                  ->with($percentHeight, $nodeHeight)
                  ->will($this->returnValue($expectedHeight));
 
-        $enhancement = new Background(null, $imagePath, Background::REPEAT_NONE, null, false, $percentWidth, $percentHeight);
+        $complexAttribute = new Background(null, $imagePath, Background::REPEAT_NONE, null, false, $percentWidth, $percentHeight);
         
         $gcMock = $this->getMockBuilder('PHPPdf\Engine\GraphicsContext')
         			   ->getMock();
@@ -379,7 +379,7 @@ class BackgroundTest extends \PHPPdf\PHPUnit\Framework\TestCase
                ->method('drawImage')
                ->with($image, $x, $y-$expectedVertiacalTranslation, $x+$expectedHorizontalTranslation, $y);
                
-        $enhancement->enhance($nodeMock, $document);
+        $complexAttribute->enhance($nodeMock, $document);
     }
     
     public function imageDimensionProvider()
@@ -403,7 +403,7 @@ class BackgroundTest extends \PHPPdf\PHPUnit\Framework\TestCase
         $image = $this->createImageMock(self::IMAGE_WIDTH, self::IMAGE_HEIGHT);        
         $document = $this->createDocumentMock($imagePath, $image);
         
-        $enhancement = new Background(null, $imagePath, Background::REPEAT_NONE, null, false, null, null, $positionX, $positionY);
+        $complexAttribute = new Background(null, $imagePath, Background::REPEAT_NONE, null, false, null, null, $positionX, $positionY);
         
         $gcMock = $this->getMockBuilder('PHPPdf\Engine\GraphicsContext')
         			   ->getMock();
@@ -419,7 +419,7 @@ class BackgroundTest extends \PHPPdf\PHPUnit\Framework\TestCase
                ->method('drawImage')
                ->with($image, $expectedPositionX, $expectedPositionY - self::IMAGE_HEIGHT, $expectedPositionX+self::IMAGE_WIDTH, $expectedPositionY);
                
-        $enhancement->enhance($nodeMock, $document);
+        $complexAttribute->enhance($nodeMock, $document);
     }
     
     public function positionProvider()

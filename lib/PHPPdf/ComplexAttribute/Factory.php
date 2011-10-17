@@ -6,15 +6,15 @@
  * License information is in LICENSE file
  */
 
-namespace PHPPdf\Enhancement;
+namespace PHPPdf\ComplexAttribute;
 
-use PHPPdf\Enhancement\Exception\DefinitionNotFoundException;
+use PHPPdf\ComplexAttribute\Exception\DefinitionNotFoundException;
 
 /**
- * Factory of Enhancement objects.
+ * Factory of ComplexAttribute objects.
  *
  * Factory may by populated by (@see addDefinition()) method. Factory determines
- * enhancement parameters (also determines if parameter is required or not)
+ * complexAttribute parameters (also determines if parameter is required or not)
  *
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
@@ -110,14 +110,14 @@ class Factory implements \Serializable
     }
 
     /**
-     * Return instance of Enhancement registered under passed named and parameters.
+     * Return instance of ComplexAttribute registered under passed named and parameters.
      * 
-     * Internally this method uses Flyweight pattern to reuse enhancement's objects
+     * Internally this method uses Flyweight pattern to reuse complexAttribute's objects
      *
-     * @param string $name Name of enhancement
-     * @param array $parameters Parameters of enhancement
+     * @param string $name Name of complexAttribute
+     * @param array $parameters Parameters of complexAttribute
      * 
-     * @return PHPPdf\Enhancement\Enhancement
+     * @return PHPPdf\ComplexAttribute\ComplexAttribute
      */
     public function create($name, array $parameters = array())
     {
@@ -153,12 +153,12 @@ class Factory implements \Serializable
         return $class->newInstanceArgs($args);
     }
     
-    private function getParameterValue(\ReflectionParameter $parameter, array $values, $enhancementName)
+    private function getParameterValue(\ReflectionParameter $parameter, array $values, $complexAttributeName)
     {
         $acceptableNames = $this->getAcceptableParameterNames($parameter);
         if(!$this->existsAtLeastOneKey($acceptableNames, $values) && !$parameter->isOptional())
         {
-            throw new \InvalidArgumentException(sprintf('Parameter "%s" is required for "%s" enhancement.', $parameter->getName(), $enhancementName));
+            throw new \InvalidArgumentException(sprintf('Parameter "%s" is required for "%s" complexAttribute.', $parameter->getName(), $complexAttributeName));
         }
 
         foreach($acceptableNames as $name)

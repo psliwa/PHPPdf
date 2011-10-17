@@ -76,7 +76,7 @@ class FacadeBuilder
     {
         $documentParser = $this->createDocumentParser();
         $stylesheetParser = new StylesheetParser();
-        $stylesheetParser->setEnhancementFactory($this->configurationLoader->createEnhancementFactory());
+        $stylesheetParser->setComplexAttributeFactory($this->configurationLoader->createComplexAttributeFactory());
         
         $facade = new Facade($this->configurationLoader, $documentParser, $stylesheetParser);
         
@@ -106,7 +106,7 @@ class FacadeBuilder
      */
     private function createDocumentParser()
     {
-        $parser = new XmlDocumentParser($this->configurationLoader->createEnhancementFactory());
+        $parser = new XmlDocumentParser($this->configurationLoader->createComplexAttributeFactory());
         
         if($this->documentParserType === self::PARSER_MARKDOWN)
         {

@@ -18,7 +18,7 @@ use PHPPdf\Node\Text,
     PHPPdf\Node\Node,
     PHPPdf\Parser\BagContainer,
     PHPPdf\Parser\Exception as Exceptions,
-    PHPPdf\Enhancement\Factory as EnhancementFactory,
+    PHPPdf\ComplexAttribute\Factory as ComplexAttributeFactory,
     PHPPdf\Parser\StylesheetConstraint,
     PHPPdf\Node\Behaviour\Factory as BehaviourFactory;
 
@@ -39,10 +39,10 @@ class XmlDocumentParser extends XmlParser implements DocumentParser
     const BEHAVIOURS_TAG = 'behaviours';
     
     private $factory = null;
-    private $enhancementFactory = null;
+    private $complexAttributeFactory = null;
     private $stylesheetConstraint = null;
     private $stylesheetParser = null;
-    private $ignoredTags = array('attribute', 'enhancement');
+    private $ignoredTags = array('attribute', 'enhancement', 'complex-attribute');
     private $tagStack = array();
     private $innerParser = null;
     private $inPlaceholder = false;
@@ -59,16 +59,16 @@ class XmlDocumentParser extends XmlParser implements DocumentParser
     
     private $listeners = array();
 
-    public function __construct(EnhancementFactory $enhancementFactory, Document $document = null)
+    public function __construct(ComplexAttributeFactory $complexAttributeFactory, Document $document = null)
     {
         $this->document = $document;
         $factory = new NodeFactory();        
         $stylesheetParser = new StylesheetParser(null, true);
-        $stylesheetParser->setEnhancementFactory($enhancementFactory);
+        $stylesheetParser->setComplexAttributeFactory($complexAttributeFactory);
 
         $this->setNodeFactory($factory);
         $this->setStylesheetParser($stylesheetParser);
-        $this->setEnhancementFactory($enhancementFactory);
+        $this->setComplexAttributeFactory($complexAttributeFactory);
         $this->nodeManager = new Manager();
         $this->setBehaviourFactory(new BehaviourFactory());
 
@@ -130,7 +130,7 @@ class XmlDocumentParser extends XmlParser implements DocumentParser
     {
         if($this->innerParser === null)
         {
-            $innerParser = new self($this->getEnhancementFactory(), $this->document);
+            $innerParser = new self($this->getComplexAttributeFactory(), $this->document);
             $innerParser->setNodeFactory($this->getNodeFactory());
 
             $this->innerParser = $innerParser;
@@ -196,16 +196,16 @@ class XmlDocumentParser extends XmlParser implements DocumentParser
     }
 
     /**
-     * @return EnhancementFactory
+     * @return ComplexAttributeFactory
      */
-    public function getEnhancementFactory()
+    public function getComplexAttributeFactory()
     {
-        return $this->enhancementFactory;
+        return $this->complexAttributeFactory;
     }
 
-    public function setEnhancementFactory(EnhancementFactory $enhancementFactory)
+    public function setComplexAttributeFactory(ComplexAttributeFactory $complexAttributeFactory)
     {
-        $this->enhancementFactory = $enhancementFactory;
+        $this->complexAttributeFactory = $complexAttributeFactory;
     }
 
     /**

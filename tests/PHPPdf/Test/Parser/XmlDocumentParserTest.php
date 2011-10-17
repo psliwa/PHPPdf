@@ -7,7 +7,7 @@ use PHPPdf\Node\Paragraph;
 use PHPPdf\Node\Text;
 use PHPPdf\Parser\XmlDocumentParser,
     PHPPdf\Node\Factory as NodeFactory,
-    PHPPdf\Enhancement\Factory as EnhancementFactory,
+    PHPPdf\ComplexAttribute\Factory as ComplexAttributeFactory,
     PHPPdf\Node\PageCollection,
     PHPPdf\Parser\StylesheetConstraint;
 
@@ -15,7 +15,7 @@ class XmlDocumentParserTest extends \PHPPdf\PHPUnit\Framework\TestCase
 {
     private $parser;
     private $documentMock;
-    private $enhancementFactoryMock;
+    private $complexAttributeFactoryMock;
 
     public function setUp()
     {
@@ -24,9 +24,9 @@ class XmlDocumentParserTest extends \PHPPdf\PHPUnit\Framework\TestCase
                                    ->setMethods(array('setMetadataValue'))
                                    ->getMock();
         
-        $this->enhancementFactoryMock = $this->getMock('PHPPdf\Enhancement\Factory', array('create', 'getDefinitionNames'));
+        $this->complexAttributeFactoryMock = $this->getMock('PHPPdf\ComplexAttribute\Factory', array('create', 'getDefinitionNames'));
 
-        $this->parser = new XmlDocumentParser($this->enhancementFactoryMock, $this->documentMock);
+        $this->parser = new XmlDocumentParser($this->complexAttributeFactoryMock, $this->documentMock);
     }
 
     /**
@@ -436,7 +436,7 @@ XML;
         <stylesheet>
             <attribute someName1="someValue1" />
             <attribute someName2="someValue2" />
-            <enhancement name="someName" attribute="value" />
+            <complex-attribute name="someName" attribute="value" />
         </stylesheet>
     </tag>
 </pdf>
@@ -465,7 +465,7 @@ XML;
                    )));
 
 
-        $nodeMock = $this->createNodeMock('PHPPdf\Node\Page', array('mergeEnhancementAttributes'));
+        $nodeMock = $this->createNodeMock('PHPPdf\Node\Page', array('mergeComplexAttributes'));
 
         $nodeFactoryMock = $this->getNodeFactoryMock(array(array('tag', $nodeMock)));
 
@@ -518,15 +518,15 @@ XML;
            )
         ), $bagContainerMock3);
 
-        $nodeMock1 = $this->getNodeMock(array('someName1' => 'someValue1'), 'PHPPdf\Node\Page', array('mergeEnhancementAttributes'));
-        $nodeMock2 = $this->getNodeMock(array(), 'PHPPdf\Node\Page', array('mergeEnhancementAttributes'));
-        $nodeMock3 = $this->getNodeMock(array('someName2' => 'someValue2'), 'PHPPdf\Node\Page', array('mergeEnhancementAttributes'));
+        $nodeMock1 = $this->getNodeMock(array('someName1' => 'someValue1'), 'PHPPdf\Node\Page', array('mergeComplexAttributes'));
+        $nodeMock2 = $this->getNodeMock(array(), 'PHPPdf\Node\Page', array('mergeComplexAttributes'));
+        $nodeMock3 = $this->getNodeMock(array('someName2' => 'someValue2'), 'PHPPdf\Node\Page', array('mergeComplexAttributes'));
 
         $nodeMock1->expects($this->never())
-                   ->method('mergeEnhancementAttributes');
+                   ->method('mergeComplexAttributes');
 
-        $this->addEnhancementExpectationToNodeMock($nodeMock2, array('someName4' => array('someAttribute1' => 'someValue1')), 0);
-        $this->addEnhancementExpectationToNodeMock($nodeMock3, array('someName3' => array('someAttribute2' => 'someValue2')), 1);
+        $this->addComplexAttributeExpectationToNodeMock($nodeMock2, array('someName4' => array('someAttribute1' => 'someValue1')), 0);
+        $this->addComplexAttributeExpectationToNodeMock($nodeMock3, array('someName3' => array('someAttribute2' => 'someValue2')), 1);
 
         $mocks = array(array('tag1', $nodeMock1), array('tag2', $nodeMock2), array('tag3', $nodeMock3));
         $nodeFactoryMock = $this->getNodeFactoryMock($mocks);
@@ -536,9 +536,9 @@ XML;
         $this->parser->parse($xml, $constraintMock);
     }
 
-    private function getBagContainerMock(array $attributes = array(), array $enhancements = array())
+    private function getBagContainerMock(array $attributes = array(), array $complexAttributes = array())
     {
-        $attributes = array_merge($attributes, $enhancements);
+        $attributes = array_merge($attributes, $complexAttributes);
 
         $mock = $this->getMock('PHPPdf\Parser\BagContainer', array('getAll'));
         $mock->expects($this->once())
@@ -555,12 +555,12 @@ XML;
                        ->will($this->returnValue($bagContainerMock));
     }
 
-    private function addEnhancementExpectationToNodeMock($node, $enhancements, $initSequence)
+    private function addComplexAttributeExpectationToNodeMock($node, $complexAttributes, $initSequence)
     {
-        foreach($enhancements as $name => $parameters)
+        foreach($complexAttributes as $name => $parameters)
         {
             $node->expects($this->at($initSequence++))
-                  ->method('mergeEnhancementAttributes')
+                  ->method('mergeComplexAttributes')
                   ->with($this->equalTo($name), $this->equalTo($parameters));
         }
     }
@@ -662,28 +662,28 @@ XML;
     /**
      * @test
      */
-    public function readEnhancementsInAttributeStyle()
+    public function readComplexAttributesInAttributeStyle()
     {
         $xml = <<<XML
 <pdf>
-	<tag someAttribute="someValue" someEnhancement.property="propertyValue"></tag>
+	<tag someAttribute="someValue" someComplexAttribute.property="propertyValue"></tag>
 </pdf>
 XML;
 
-        $nodeMock = $this->getMock('PHPPdf\Node\Container', array('setAttribute', 'mergeEnhancementAttributes'));
+        $nodeMock = $this->getMock('PHPPdf\Node\Container', array('setAttribute', 'mergeComplexAttributes'));
         $nodeMock->expects($this->once())
                   ->method('setAttribute')
                   ->id('attribute')
                   ->with('someAttribute', 'someValue');
         $nodeMock->expects($this->once())
-                  ->method('mergeEnhancementAttributes')
-                  ->with('someEnhancement', array('name' => 'someEnhancement', 'property' => 'propertyValue'));
+                  ->method('mergeComplexAttributes')
+                  ->with('someComplexAttribute', array('name' => 'someComplexAttribute', 'property' => 'propertyValue'));
 
         $nodeFactoryMock = $this->getNodeFactoryMock(array(array('tag', $nodeMock)));
         
-        $this->enhancementFactoryMock->expects($this->atLeastOnce())
+        $this->complexAttributeFactoryMock->expects($this->atLeastOnce())
                                      ->method('getDefinitionNames')
-                                     ->will($this->returnValue(array('someEnhancement')));
+                                     ->will($this->returnValue(array('someComplexAttribute')));
 
         $this->parser->setNodeFactory($nodeFactoryMock);
 

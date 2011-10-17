@@ -1,26 +1,26 @@
 <?php
 
-namespace PHPPdf\Test\Enhancement;
+namespace PHPPdf\Test\ComplexAttribute;
 
-use PHPPdf\Enhancement\Factory as EnhancementFactory;
-use PHPPdf\Stub\Enhancement\EnhancementStub;
+use PHPPdf\ComplexAttribute\Factory as ComplexAttributeFactory;
+use PHPPdf\Stub\ComplexAttribute\ComplexAttributeStub;
 
-class EnhancementFactoryTest extends \PHPPdf\PHPUnit\Framework\TestCase
+class ComplexAttributeFactoryTest extends \PHPPdf\PHPUnit\Framework\TestCase
 {
     private $factory;
 
     public function setUp()
     {
-        $this->factory = new EnhancementFactory();
+        $this->factory = new ComplexAttributeFactory();
     }
 
     /**
      * @test
      */
-    public function setDefinitionOfEnhancement()
+    public function setDefinitionOfComplexAttribute()
     {
         $this->assertFalse($this->factory->hasDefinition('stub'));
-        $this->factory->addDefinition('stub', 'EnhancementStub');
+        $this->factory->addDefinition('stub', 'ComplexAttributeStub');
         $this->assertTrue($this->factory->hasDefinition('stub'));
     }
 
@@ -29,7 +29,7 @@ class EnhancementFactoryTest extends \PHPPdf\PHPUnit\Framework\TestCase
      */
     public function getParameterNames()
     {
-        $this->factory->addDefinition('stub', 'PHPPdf\Stub\Enhancement\EnhancementStub');
+        $this->factory->addDefinition('stub', 'PHPPdf\Stub\ComplexAttribute\ComplexAttributeStub');
         $parameters = $this->factory->getParameters('stub');
 
         $this->assertEquals(array('color', 'someParameter'), $parameters);
@@ -41,7 +41,7 @@ class EnhancementFactoryTest extends \PHPPdf\PHPUnit\Framework\TestCase
      */
     public function requiredParametersMustBePassed()
     {
-        $this->factory->addDefinition('stub', 'PHPPdf\Stub\Enhancement\EnhancementStub');
+        $this->factory->addDefinition('stub', 'PHPPdf\Stub\ComplexAttribute\ComplexAttributeStub');
         $this->factory->create('stub', array());
     }
 
@@ -51,12 +51,12 @@ class EnhancementFactoryTest extends \PHPPdf\PHPUnit\Framework\TestCase
      */
     public function createUsingValidParameters($parameterName, $parameterValue, $propertyName)
     {
-        $this->factory->addDefinition('stub', 'PHPPdf\Stub\Enhancement\EnhancementStub');
-        $enhancement = $this->factory->create('stub', array('color' => '#cccccc', $parameterName => $parameterValue));
+        $this->factory->addDefinition('stub', 'PHPPdf\Stub\ComplexAttribute\ComplexAttributeStub');
+        $complexAttribute = $this->factory->create('stub', array('color' => '#cccccc', $parameterName => $parameterValue));
 
-        $this->assertNotNull($enhancement);
-        $this->assertInstanceOf('PHPPdf\Stub\Enhancement\EnhancementStub', $enhancement);
-        $this->assertEquals($parameterValue, $this->readAttribute($enhancement, $propertyName));
+        $this->assertNotNull($complexAttribute);
+        $this->assertInstanceOf('PHPPdf\Stub\ComplexAttribute\ComplexAttributeStub', $complexAttribute);
+        $this->assertEquals($parameterValue, $this->readAttribute($complexAttribute, $propertyName));
     }
     
     public function parameterNamesProvider()
@@ -69,7 +69,7 @@ class EnhancementFactoryTest extends \PHPPdf\PHPUnit\Framework\TestCase
 
     /**
      * @test
-     * @expectedException PHPPdf\Enhancement\Exception\DefinitionNotFoundException
+     * @expectedException PHPPdf\ComplexAttribute\Exception\DefinitionNotFoundException
      */
     public function throwExceptionIfDefinitionDosntFound()
     {
@@ -81,8 +81,8 @@ class EnhancementFactoryTest extends \PHPPdf\PHPUnit\Framework\TestCase
      */
     public function unserializedFactoryIsCopyOfSerializedFactory()
     {
-        $this->factory->addDefinition('stub1', 'PHPPdf\Stub\Enhancement\EnhancementStub');
-        $this->factory->addDefinition('stub2', 'PHPPdf\Stub\Enhancement\EnhancementStub');
+        $this->factory->addDefinition('stub1', 'PHPPdf\Stub\ComplexAttribute\ComplexAttributeStub');
+        $this->factory->addDefinition('stub2', 'PHPPdf\Stub\ComplexAttribute\ComplexAttributeStub');
         
         $this->factory->create('stub1', array('color' => '#ffffff'));
 

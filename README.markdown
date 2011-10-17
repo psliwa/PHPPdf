@@ -86,7 +86,7 @@ Adding DOCTYPE declaration is strongly recommended in order to replace html enti
 
     <!DOCTYPE pdf SYSTEM "%resources%/dtd/doctype.dtd">
 
-Root of document has to be "pdf". "dynamic-page" tag is auto breakable page. "page" tag is an alternative, represents only single, no breakable page. Way of attribute setting is different than in HTML. In order to set background and border you have to use complex attributes, where first part of attribute name is complex attribute type, second part is property of this attribute. Complex attribute parts are separate by dot ("."). Other way to setting complex attributes is using "enhancement" tag. Example:
+Root of document has to be "pdf". "dynamic-page" tag is auto breakable page. "page" tag is an alternative, represents only single, no breakable page. Way of attribute setting is different than in HTML. In order to set background and border you have to use complex attributes, where first part of attribute name is complex attribute type, second part is property of this attribute. Complex attribute parts are separate by dot ("."). Other way to setting complex attributes is using "complex-attribute" tag. Example:
 
     <pdf>
         <dynamic-page>
@@ -103,8 +103,8 @@ Alternative syntax ("stylesheet" tag):
             <div>
                 <stylesheet>
                     <attribute color="red" />
-                    <enhancement name="border" color="black" />
-                    <enhancement name="background" color="pink" />
+                    <complex-attribute name="border" color="black" />
+                    <complex-attribute name="background" color="pink" />
                 </stylesheet>
                 This text is red on pink backgroun into black border
             </div>
@@ -125,7 +125,7 @@ Inheritance
         <dynamic-page>
             <div id="layer-1" color="red" font-type="judson" font-size="16px">
                 <stylesheet>
-                    <enhancement name="border" color="green" />
+                    <complex-attribute name="border" color="green" />
                 </stylesheet>
                 Layer 1
             </div>
@@ -197,11 +197,11 @@ Long style:
 
     <stylesheet>
         <div class="class">
-            <!-- simple and complex (enhancements) attributes are nested in "div.class" selector path -->
+            <!-- simple and complex attributes are nested in "div.class" selector path -->
             <attribute name="font-size" value="12px" />
             <attribute name="color" value="grey" />
             <!-- equivalent of background.color attribute -->
-            <enhancement name="background" color="yellow" />
+            <complex-attribute name="background" color="yellow" />
 
             <!-- another nested element, equivalent CSS selector syntax: "div.class p" -->
             <p>
@@ -240,7 +240,7 @@ There are tags that only are bags for attributes, set of tags etc:
 
 * stylesheet - stylesheet for parent
 * attribute - simple attribute declaration, direct child of "stylesheet" tag. Required attributes of this element: name - attribute name, value - attribute value
-* enhancement - complex attribute declaration, direct child of "stylesheet" tag. Required attributes of this element: name - complex attribute name
+* complex-attribute - complex attribute declaration, direct child of "stylesheet" tag. Required attributes of this element: name - complex attribute name
 * placeholders - defines placeholders for parent tag. Children tags of placeholder are specyfic for every parent tag.
 * metadata - defines metadata of pdf document, direct child of document root
 * behaviours - defines behaviours for parent tag. Supported behaviours: href, ref, bookmark, note (action as same as for attributes with as same as name)
@@ -303,9 +303,9 @@ It is possible to add several complex attributes in the same type (for instance 
             <div>
                 <stylesheet>
                     <!-- Top and bootom edges are red, side edges are yellow-gray --> 
-                    <enhancement name="border" color="red" type="top+bottom" />
-                    <enhancement id="borderLeftAndRight" name="border" color="yellow" type="left+right" size="4px" />
-                    <enhancement id="outerBorderLeftAndRight" name="border" color="gray" type="left+right" size="2px" position="1px" />
+                    <complex-attribute name="border" color="red" type="top+bottom" />
+                    <complex-attribute id="borderLeftAndRight" name="border" color="yellow" type="left+right" size="4px" />
+                    <complex-attribute id="outerBorderLeftAndRight" name="border" color="gray" type="left+right" size="2px" position="1px" />
                 </stylesheet>
             </div>
         </dynamic-page>
@@ -556,7 +556,7 @@ Configuration
 
 Library has three primary config files that allow you to adopt library to specyfic needs and to extending.
 
-* enhancements.xml - declarations of complex attributes classes to logical names that identify attribute in whole library.
+* complex-attributes.xml - declarations of complex attributes classes to logical names that identify attribute in whole library.
 * nodes.xml - definitions of allowed tags in xml document with default attributes and formatting objects.
 * fonts.xml - definitions of fonts and assigning them to logical names that identify font in whole library.
 

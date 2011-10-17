@@ -22,10 +22,10 @@ class LoaderImpl extends BaseLoader
 {
     private $container;
     
-    public function __construct(ContainerInterface $container = null, $enhancementFile = null, $fontFile = null)
+    public function __construct(ContainerInterface $container = null, $complexAttributeFile = null, $fontFile = null)
     {
         $this->container = $container;
-        parent::__construct(null, $enhancementFile, $fontFile);
+        parent::__construct(null, $complexAttributeFile, $fontFile);
     }
     
     protected function loadNodes()

@@ -112,9 +112,9 @@ class StylesheetConstraintTest extends \PHPPdf\PHPUnit\Framework\TestCase
         ), $constraint->getAll());
     }
 
-    private function createContainer(array $attributes = array(), array $enhancements = array(), array $classes = array())
+    private function createContainer(array $attributes = array(), array $complexAttributes = array(), array $classes = array())
     {
-        $constraint = new StylesheetConstraint(array_merge($attributes, $enhancements));
+        $constraint = new StylesheetConstraint(array_merge($attributes, $complexAttributes));
 
         foreach($classes as $class)
         {

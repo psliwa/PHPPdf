@@ -514,7 +514,7 @@
 			<argument type="service" id="phppdf.unit_converter">
 				<argument type="service" id="phppdf.unit_converter" />
 			</argument>
-			<call method="mergeEnhancementAttributes">
+			<call method="mergeComplexAttributes">
 				<argument>border</argument>
 				<argument type="collection">
 					<argument key="name">border</argument>
@@ -567,7 +567,7 @@
 			<argument type="service" id="phppdf.unit_converter">
 				<argument type="service" id="phppdf.unit_converter" />
 			</argument>
-			<call method="mergeEnhancementAttributes">
+			<call method="mergeComplexAttributes">
 				<argument>background</argument>
 				<argument type="collection">
 					<argument key="name">background</argument>

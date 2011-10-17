@@ -4,7 +4,7 @@
     <dynamic-page>
         <div width="100%" height="100%">
             <stylesheet>
-                <enhancement name="border" color="green" />
+                <complex-attribute name="border" color="green" />
             </stylesheet>
             <table>
                 <tr>

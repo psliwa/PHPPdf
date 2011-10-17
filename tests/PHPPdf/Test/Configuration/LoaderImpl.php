@@ -11,7 +11,7 @@ class LoaderImplTest extends \PHPPdf\PHPUnit\Framework\TestCase
         $loader = new LoaderImpl();
         
         $nodeFile = $this->readAttribute($loader, 'nodeFile');
-        $enhancementFile = $this->readAttribute($loader, 'enhancementFile');
+        $complexAttributeFile = $this->readAttribute($loader, 'complexAttributeFile');
         $fontFile = $this->readAttribute($loader, 'fontFile');
  
         $cache = $this->getMock('PHPPdf\Cache\NullCache', array('test', 'save'));
@@ -35,7 +35,7 @@ class LoaderImplTest extends \PHPPdf\PHPUnit\Framework\TestCase
     {
         return array(
             array('nodeFile', 'createNodeFactory', new PHPPdf\Node\Factory()),
-            array('enhancementFile', 'createEnhancementFactory', new \PHPPdf\Enhancement\Factory()),
+            array('complexAttributeFile', 'createComplexAttributeFactory', new \PHPPdf\ComplexAttribute\Factory()),
             array('fontFile', 'createFontRegistry', new PHPPdf\Font\Registry()),
         );
     }
@@ -49,7 +49,7 @@ class LoaderImplTest extends \PHPPdf\PHPUnit\Framework\TestCase
         $loader = new LoaderImpl();
         
         $nodeFile = $this->readAttribute($loader, 'nodeFile');
-        $enhancementFile = $this->readAttribute($loader, 'enhancementFile');
+        $complexAttributeFile = $this->readAttribute($loader, 'complexAttributeFile');
         $fontFile = $this->readAttribute($loader, 'fontFile');
 
         $cache = $this->getMock('PHPPdf\Cache\NullCache', array('test', 'save', 'load'));

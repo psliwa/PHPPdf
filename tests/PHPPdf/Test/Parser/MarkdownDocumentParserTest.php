@@ -40,7 +40,7 @@ class MarkdownDocumentParserTest extends TestCase
     {
         return array(
             array('setNodeFactory', $this->getMock('PHPPdf\Node\Factory')),
-            array('setEnhancementFactory', $this->getMock('PHPPdf\Enhancement\Factory')),
+            array('setComplexAttributeFactory', $this->getMock('PHPPdf\ComplexAttribute\Factory')),
             array('addListener', $this->getMock('PHPPdf\Parser\DocumentParserListener')),
             array('setDocument', new Document()),
         );

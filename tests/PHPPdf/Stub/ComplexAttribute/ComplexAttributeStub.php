@@ -1,13 +1,13 @@
 <?php
 
-namespace PHPPdf\Stub\Enhancement;
+namespace PHPPdf\Stub\ComplexAttribute;
 
 use PHPPdf\Document;
-use PHPPdf\Enhancement\Enhancement,
+use PHPPdf\ComplexAttribute\ComplexAttribute,
     PHPPdf\Node\Page,
     PHPPdf\Node\Node;
 
-class EnhancementStub extends Enhancement
+class ComplexAttributeStub extends ComplexAttribute
 {
     private $color;
     private $someParameter;

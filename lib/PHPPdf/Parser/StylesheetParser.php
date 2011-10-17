@@ -9,7 +9,7 @@
 namespace PHPPdf\Parser;
 
 use PHPPdf\Parser\Exception\ParseException;
-use PHPPdf\Enhancement\Factory as EnhancementFactory;
+use PHPPdf\ComplexAttribute\Factory as ComplexAttributeFactory;
 use PHPPdf\Parser\StylesheetConstraint,
     PHPPdf\Parser\Exception as Exceptions;
 
@@ -23,12 +23,13 @@ class StylesheetParser extends XmlParser
     const ROOT_TAG = 'stylesheet';
     const ATTRIBUTE_TAG = 'attribute';
     const ENHANCEMENT_TAG = 'enhancement';
+    const COMPLEX_ATTRIBUTE_TAG = 'complex-attribute';
     const ANY_TAG = 'any';
     const ATTRIBUTE_CLASS = 'class';
     
     private $throwsExceptionOnConstraintTag = false;
     private $root;
-    private $enhancementFactory;
+    private $complexAttributeFactory;
 
     public function __construct(StylesheetConstraint $root = null, $throwExceptionOnConstraintTag = false)
     {
@@ -46,9 +47,9 @@ class StylesheetParser extends XmlParser
         $this->throwsExceptionOnConstraintTag = (boolean) $flag;
     }
 
-    public function setEnhancementFactory(EnhancementFactory $enhancementFactory)
+    public function setComplexAttributeFactory(ComplexAttributeFactory $complexAttributeFactory)
     {
-        $this->enhancementFactory = $enhancementFactory;
+        $this->complexAttributeFactory = $complexAttributeFactory;
     }
     
     /**
@@ -77,9 +78,9 @@ class StylesheetParser extends XmlParser
         {
             $this->parseAttribute($reader);
         }
-        elseif($tag === self::ENHANCEMENT_TAG)
+        elseif($tag === self::ENHANCEMENT_TAG || $tag === self::COMPLEX_ATTRIBUTE_TAG)
         {
-            $this->parseEnhancement($reader);
+            $this->parseComplexAttribute($reader);
         }
         else
         {
@@ -108,7 +109,7 @@ class StylesheetParser extends XmlParser
         $lastConstraint->add($name, $value);
     }
 
-    private function parseEnhancement(\XMLReader $reader)
+    private function parseComplexAttribute(\XMLReader $reader)
     {
         $lastConstraint = $this->getLastElementFromStack();
 
@@ -121,7 +122,7 @@ class StylesheetParser extends XmlParser
 
         if(!isset($attributes['name']))
         {
-            throw new Exceptions\ParseException('Name of enhancement is required.');
+            throw new Exceptions\ParseException('Name of complex attribute is required.');
         }
 
         $id = $attributes['name'];
@@ -198,12 +199,12 @@ class StylesheetParser extends XmlParser
     
     private function getComplexAttributeName($name)
     {
-        if(!$this->enhancementFactory)
+        if(!$this->complexAttributeFactory)
         {
             return false;
         }
         
-        $complexAttributesNames = (array) $this->enhancementFactory->getDefinitionNames();
+        $complexAttributesNames = (array) $this->complexAttributeFactory->getDefinitionNames();
         
         foreach($complexAttributesNames as $complexAttributeName)
         {

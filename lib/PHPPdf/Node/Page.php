@@ -441,7 +441,7 @@ class Page extends Container
 
         $tasks = new DrawingTaskHeap();
 
-        $this->getDrawingTasksFromEnhancements($document, $tasks);
+        $this->getDrawingTasksFromComplexAttributes($document, $tasks);
         $this->footer->collectOrderedDrawingTasks($document, $tasks);
         $this->header->collectOrderedDrawingTasks($document, $tasks);
         $this->watermark->collectOrderedDrawingTasks($document, $tasks);

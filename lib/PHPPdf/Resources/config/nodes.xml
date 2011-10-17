@@ -245,7 +245,7 @@
 	    </node>
 	    <node name="td" class="PHPPdf\Node\Table\Cell">
 	        <stylesheet>
-	            <enhancement name="border" color="black" size="1px" />
+	            <complex-attribute name="border" color="black" size="1px" />
 	        </stylesheet>
 	        <formatters>
 	            <pre class="PHPPdf\Formatter\ConvertAttributesFormatter" />
@@ -271,7 +271,7 @@
 	        <stylesheet>
 	            <attribute name="height" value="1px" />
 	            <attribute name="margin" value="12px 0" />
-	            <enhancement name="background" color="black" />
+	            <complex-attribute name="background" color="black" />
 	        </stylesheet>
 	        <formatters>
 	            <pre class="PHPPdf\Formatter\ConvertAttributesFormatter" />

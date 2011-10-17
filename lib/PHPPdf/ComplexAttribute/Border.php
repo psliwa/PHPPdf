@@ -6,7 +6,7 @@
  * License information is in LICENSE file
  */
 
-namespace PHPPdf\Enhancement;
+namespace PHPPdf\ComplexAttribute;
 
 use PHPPdf\Node\Page,
     PHPPdf\Node\Node,
@@ -28,7 +28,7 @@ use PHPPdf\Node\Page,
  *
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
-class Border extends Enhancement
+class Border extends ComplexAttribute
 {
     const TYPE_NONE = 0;
     const TYPE_TOP = 1;

@@ -1,10 +1,10 @@
 <?php
 
-namespace PHPPdf\Test\Enhancement;
+namespace PHPPdf\Test\ComplexAttribute;
 
 use PHPPdf\Document;
 use PHPPdf\ObjectMother\NodeObjectMother;
-use PHPPdf\Enhancement\Border;
+use PHPPdf\ComplexAttribute\Border;
 use PHPPdf\Util\Boundary;
 use PHPPdf\Node\Page;
 use PHPPdf\Util\Point;

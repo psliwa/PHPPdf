@@ -8,29 +8,29 @@
 
 namespace PHPPdf\Parser;
 
-use PHPPdf\Enhancement\Factory as EnhancementFactory,
+use PHPPdf\ComplexAttribute\Factory as ComplexAttributeFactory,
     PHPPdf\Parser\Exception\ParseException;
 
 /**
- * Enhancement factory parser
+ * ComplexAttribute factory parser
  * 
- * Parses config file for enhancements and creates EnhancementFactory
+ * Parses config file for complexAttributes and creates ComplexAttributeFactory
  * 
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
-class EnhancementFactoryParser extends XmlParser
+class ComplexAttributeFactoryParser extends XmlParser
 {
-    const ROOT_TAG = 'enhancements';
-    const ENHANCEMENT_TAG = 'enhancement';
+    const ROOT_TAG = 'complex-attributes';
+    const COMPLEX_ATTRIBUTE_TAG = 'complex-attribute';
 
     protected function createRoot()
     {
-        return new EnhancementFactory();
+        return new ComplexAttributeFactory();
     }
 
     protected function parseElement(\XMLReader $reader)
     {
-        if($reader->name === self::ENHANCEMENT_TAG)
+        if($reader->name === self::COMPLEX_ATTRIBUTE_TAG)
         {
             $root = $this->getLastElementFromStack();
 

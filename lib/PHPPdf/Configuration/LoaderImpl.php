@@ -10,7 +10,7 @@ namespace PHPPdf\Configuration;
 
 use PHPPdf\Util\UnitConverterImpl;
 use PHPPdf\Parser\FontRegistryParser,
-    PHPPdf\Parser\EnhancementFactoryParser,
+    PHPPdf\Parser\ComplexAttributeFactoryParser,
     PHPPdf\Parser\NodeFactoryParser,
     PHPPdf\Cache\NullCache,
     PHPPdf\Cache\Cache;
@@ -25,10 +25,10 @@ use PHPPdf\Parser\FontRegistryParser,
 class LoaderImpl implements Loader
 {
     private $nodeFile = null;
-    private $enhancementFile = null;
+    private $complexAttributeFile = null;
     private $fontFile = null;
     
-    private $enhancementFactory;
+    private $complexAttributeFactory;
     private $nodeFactory;
     private $fontRegistry;
     
@@ -36,16 +36,16 @@ class LoaderImpl implements Loader
     
     private $cache;
     
-    public function __construct($nodeFile = null, $enhancementFile = null, $fontFile = null)
+    public function __construct($nodeFile = null, $complexAttributeFile = null, $fontFile = null)
     {
         if($nodeFile === null)
         {
             $nodeFile = __DIR__.'/../Resources/config/nodes.xml';
         }
         
-        if($enhancementFile === null)
+        if($complexAttributeFile === null)
         {
-            $enhancementFile = __DIR__.'/../Resources/config/enhancements.xml';
+            $complexAttributeFile = __DIR__.'/../Resources/config/complex-attributes.xml';
         }
         
         if($fontFile === null)
@@ -54,7 +54,7 @@ class LoaderImpl implements Loader
         }
         
         $this->nodeFile = $nodeFile;        
-        $this->enhancementFile = $enhancementFile;        
+        $this->complexAttributeFile = $complexAttributeFile;        
         $this->fontFile = $fontFile;   
 
         $this->setCache(NullCache::getInstance());
@@ -65,14 +65,14 @@ class LoaderImpl implements Loader
         $this->cache = $cache;
     }
 
-	public function createEnhancementFactory()
+	public function createComplexAttributeFactory()
     {
-        if($this->enhancementFactory === null)
+        if($this->complexAttributeFactory === null)
         {
-            $this->enhancementFactory = $this->loadEnhancements();
+            $this->complexAttributeFactory = $this->loadComplexAttributes();
         }        
 
-        return $this->enhancementFactory;
+        return $this->complexAttributeFactory;
     }
 
 	public function createFontRegistry()
@@ -155,19 +155,19 @@ class LoaderImpl implements Loader
         return $file;
     }
 
-    private function loadEnhancements()
+    private function loadComplexAttributes()
     {
-        $file = $this->enhancementFile;
+        $file = $this->complexAttributeFile;
 
-        $doLoadEnhancements = function($content)
+        $doLoadComplexAttributes = function($content)
         {
-            $enhancementFactoryParser = new EnhancementFactoryParser();
-            $enhancementFactory = $enhancementFactoryParser->parse($content);
+            $complexAttributeFactoryParser = new ComplexAttributeFactoryParser();
+            $complexAttributeFactory = $complexAttributeFactoryParser->parse($content);
 
-            return $enhancementFactory;
+            return $complexAttributeFactory;
         };
 
-        return $this->getFromCacheOrCallClosure($file, $doLoadEnhancements);
+        return $this->getFromCacheOrCallClosure($file, $doLoadComplexAttributes);
     }
 
     protected function loadFonts()

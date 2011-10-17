@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<enhancements>
-    <enhancement name="border" class="PHPPdf\Enhancement\Border" />
-    <enhancement name="background" class="PHPPdf\Enhancement\Background" />
-</enhancements>

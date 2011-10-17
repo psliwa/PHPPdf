@@ -21,8 +21,8 @@ class FacadeConfigurationTest extends \PHPPdf\PHPUnit\Framework\TestCase
         $this->facadeConfiguration->setNodesConfigFile('a');
         $this->assertEquals('a', $this->facadeConfiguration->getNodesConfigFile());
 
-        $this->facadeConfiguration->setEnhancementsConfigFile('b');
-        $this->assertEquals('b', $this->facadeConfiguration->getEnhancementsConfigFile());
+        $this->facadeConfiguration->setComplexAttributesConfigFile('b');
+        $this->assertEquals('b', $this->facadeConfiguration->getComplexAttributesConfigFile());
 
         $this->facadeConfiguration->setFontsConfigFile('c');
         $this->assertEquals('c', $this->facadeConfiguration->getFontsConfigFile());
@@ -34,7 +34,7 @@ class FacadeConfigurationTest extends \PHPPdf\PHPUnit\Framework\TestCase
     public function fluentInterface()
     {
         $this->assertTrue($this->facadeConfiguration === $this->facadeConfiguration->setNodesConfigFile('a'));
-        $this->assertTrue($this->facadeConfiguration === $this->facadeConfiguration->setEnhancementsConfigFile('a'));
+        $this->assertTrue($this->facadeConfiguration === $this->facadeConfiguration->setComplexAttributesConfigFile('a'));
         $this->assertTrue($this->facadeConfiguration === $this->facadeConfiguration->setFontsConfigFile('a'));
     }
 
@@ -44,7 +44,7 @@ class FacadeConfigurationTest extends \PHPPdf\PHPUnit\Framework\TestCase
     public function defaultConfiguration()
     {
         $this->assertNotNull($this->facadeConfiguration->getNodesConfigFile());
-        $this->assertNotNull($this->facadeConfiguration->getEnhancementsConfigFile());
+        $this->assertNotNull($this->facadeConfiguration->getComplexAttributesConfigFile());
         $this->assertNotNull($this->facadeConfiguration->getFontsConfigFile());
     }
 }

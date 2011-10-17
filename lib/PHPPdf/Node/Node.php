@@ -62,7 +62,7 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
 
     private $boundary = null;
 
-    private $enhancementBag = null;
+    private $complexAttributeBag = null;
     private $formattersNames = array();
     
     private $behaviours = array();
@@ -226,31 +226,31 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
     }
 
     /**
-     * Add enhancement attributes, if enhancement with passed name is exists, it will be
+     * Add complexAttribute attributes, if complexAttribute with passed name is exists, it will be
      * merged.
      * 
-     * @param string $name Name of enhancement
-     * @param array $attributes Attributes of enhancement
+     * @param string $name Name of complexAttribute
+     * @param array $attributes Attributes of complexAttribute
      */
-    public function mergeEnhancementAttributes($name, array $attributes = array())
+    public function mergeComplexAttributes($name, array $attributes = array())
     {
-        $this->enhancementBag->add($name, $attributes);
+        $this->complexAttributeBag->add($name, $attributes);
     }
 
     /**
-     * Get all enhancement data or data of enhancement with passed name
+     * Get all complexAttribute data or data of complexAttribute with passed name
      * 
-     * @param string $name Name of enhancement to get
-     * @return array If $name is null, data of all enhancements will be returned, otherwise data of enhancement with passed name will be returned.
+     * @param string $name Name of complexAttribute to get
+     * @return array If $name is null, data of all complexAttributes will be returned, otherwise data of complexAttribute with passed name will be returned.
      */
-    public function getEnhancementsAttributes($name = null)
+    public function getComplexAttributes($name = null)
     {
         if($name === null)
         {
-            return $this->enhancementBag->getAll();
+            return $this->complexAttributeBag->getAll();
         }
 
-        return $this->enhancementBag->get($name);
+        return $this->complexAttributeBag->get($name);
     }
 
     /**
@@ -388,12 +388,12 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
 
     public function initialize()
     {
-        $this->setEnhancementBag(new AttributeBag());
+        $this->setComplexAttributeBag(new AttributeBag());
     }
     
-    protected function setEnhancementBag(AttributeBag $bag)
+    protected function setComplexAttributeBag(AttributeBag $bag)
     {
-        $this->enhancementBag = $bag;
+        $this->complexAttributeBag = $bag;
     }
     
     public function addBehaviour(Behaviour $behaviour)
@@ -1092,17 +1092,17 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
 
     protected function preDraw(Document $document, DrawingTaskHeap $tasks)
     {
-        $this->getDrawingTasksFromEnhancements($document, $tasks);
+        $this->getDrawingTasksFromComplexAttributes($document, $tasks);
     }
     
-    protected function getDrawingTasksFromEnhancements(Document $document, DrawingTaskHeap $tasks)
+    protected function getDrawingTasksFromComplexAttributes(Document $document, DrawingTaskHeap $tasks)
     {
-        $enhancements = $document->getEnhancements($this->enhancementBag);
-        foreach($enhancements as $enhancement)
+        $complexAttributes = $document->getComplexAttributes($this->complexAttributeBag);
+        foreach($complexAttributes as $complexAttribute)
         {
-            $callback = array($enhancement, 'enhance');
+            $callback = array($complexAttribute, 'enhance');
             $args = array($this, $document);
-            $priority = $enhancement->getPriority() + $this->getPriority();
+            $priority = $complexAttribute->getPriority() + $this->getPriority();
             $tasks->insert(new DrawingTask($callback, $args, $priority));
         }
     }
@@ -1154,7 +1154,7 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
                 $coordinations[] = $point->toArray();
             }
             
-            $attributes = $node->getAttributes() + $node->getEnhancementsAttributes();
+            $attributes = $node->getAttributes() + $node->getComplexAttributes();
             
             $dumpText = var_export(array(
                 'attributes' => $attributes,
@@ -1252,7 +1252,7 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
         $copy->reset();
         $copy->parent = null;
         $copy->boundary = null;
-        $copy->enhancementBag = clone $this->enhancementBag;
+        $copy->complexAttributeBag = clone $this->complexAttributeBag;
         $copy->drawingTasks = array();
 
         return $copy;
@@ -1609,7 +1609,7 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
         $data = array(
             'boundary' => $this->getBoundary(),
             'attributes' => $this->attributes,
-            'enhancementBag' => $this->enhancementBag->getAll(),
+            'complexAttributeBag' => $this->complexAttributeBag->getAll(),
             'formattersNames' => $this->formattersNames,
             'priority' => $this->priority,
         );
@@ -1640,7 +1640,7 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
             $this->setBoundary($data['boundary']);
         }
         $this->attributes = $data['attributes'];
-        $this->enhancementBag = new AttributeBag($data['enhancementBag']);
+        $this->complexAttributeBag = new AttributeBag($data['complexAttributeBag']);
 
         foreach((array) $data['formattersNames'] as $type => $names)
         {

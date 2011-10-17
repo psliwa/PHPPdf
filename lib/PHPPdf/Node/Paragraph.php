@@ -122,7 +122,7 @@ class Paragraph extends Container
             $text->collectOrderedDrawingTasks($document, $tasks);
         }
         
-        $this->getDrawingTasksFromEnhancements($document, $tasks);
+        $this->getDrawingTasksFromComplexAttributes($document, $tasks);
         
         if($this->getAttribute('dump'))
         {

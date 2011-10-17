@@ -14,7 +14,7 @@ use PHPPdf\Configuration\Loader;
 use PHPPdf\Node\TextTransformator;
 use PHPPdf\Document,
     PHPPdf\Parser\StylesheetParser,
-    PHPPdf\Parser\EnhancementFactoryParser,
+    PHPPdf\Parser\ComplexAttributeFactoryParser,
     PHPPdf\Parser\FontRegistryParser,
     PHPPdf\Cache\Cache,
     PHPPdf\Cache\NullCache,
@@ -118,7 +118,7 @@ class Facade
      */
     public function render($documentContent, $stylesheetContent = null)
     {
-        $enhancementFactory = $this->configurationLoader->createEnhancementFactory();
+        $complexAttributeFactory = $this->configurationLoader->createComplexAttributeFactory();
         
         $unitConverter = $this->configurationLoader->createUnitConverter();
         if($unitConverter)
@@ -126,10 +126,10 @@ class Facade
             $this->getDocument()->setUnitConverter($unitConverter);
         }
         
-        $this->getDocument()->setEnhancementFactory($enhancementFactory);
+        $this->getDocument()->setComplexAttributeFactory($complexAttributeFactory);
         $fontDefinitions = $this->configurationLoader->createFontRegistry();
         $this->getDocument()->addFontDefinitions($fontDefinitions);
-        $this->getDocumentParser()->setEnhancementFactory($enhancementFactory);
+        $this->getDocumentParser()->setComplexAttributeFactory($complexAttributeFactory);
         $this->getDocumentParser()->setNodeFactory($this->configurationLoader->createNodeFactory());
 
         $stylesheetConstraint = $this->retrieveStylesheetConstraint($stylesheetContent);

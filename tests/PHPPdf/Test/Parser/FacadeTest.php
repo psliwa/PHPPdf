@@ -64,7 +64,7 @@ class FacadeTest extends \PHPPdf\PHPUnit\Framework\TestCase
         $content = 'pdf content';
 
         $documentMock = $this->getMockBuilder('PHPPdf\Document')
-                             ->setMethods(array('draw', 'initialize', 'render', 'addFontDefinitions', 'setEnhancementFactory'))
+                             ->setMethods(array('draw', 'initialize', 'render', 'addFontDefinitions', 'setComplexAttributeFactory'))
                              ->getMock();
 
         $stylesheetParserMock = $this->getMock('PHPPdf\Parser\StylesheetParser', array('parse'));
@@ -72,15 +72,15 @@ class FacadeTest extends \PHPPdf\PHPUnit\Framework\TestCase
         $pageCollectionMock = $this->getMock('PHPPdf\Node\PageCollection', array());
         
         $nodeFactoryMock = $this->getMock('PHPPdf\Node\Factory');
-        $enhancementFactoryMock = $this->getMock('PHPPdf\Enhancement\Factory');
+        $complexAttributeFactoryMock = $this->getMock('PHPPdf\ComplexAttribute\Factory');
         $fontDefinitionsStub = array('some-data');
         
         $this->loaderMock->expects($this->atLeastOnce())
                          ->method('createNodeFactory')
                          ->will($this->returnValue($nodeFactoryMock));
         $this->loaderMock->expects($this->atLeastOnce())
-                         ->method('createEnhancementFactory')
-                         ->will($this->returnValue($enhancementFactoryMock));
+                         ->method('createComplexAttributeFactory')
+                         ->will($this->returnValue($complexAttributeFactoryMock));
         $this->loaderMock->expects($this->atLeastOnce())
                          ->method('createFontRegistry')
                          ->will($this->returnValue($fontDefinitionsStub));
@@ -89,11 +89,11 @@ class FacadeTest extends \PHPPdf\PHPUnit\Framework\TestCase
                      ->method('addFontDefinitions')
                      ->with($fontDefinitionsStub);
         $documentMock->expects($this->once())
-                     ->method('setEnhancementFactory')
-                     ->with($enhancementFactoryMock);
+                     ->method('setComplexAttributeFactory')
+                     ->with($complexAttributeFactoryMock);
         $this->documentParser->expects($this->once())
-                             ->method('setEnhancementFactory')
-                             ->with($enhancementFactoryMock);
+                             ->method('setComplexAttributeFactory')
+                             ->with($complexAttributeFactoryMock);
         $this->documentParser->expects($this->once())
                              ->method('setNodeFactory')
                              ->with($nodeFactoryMock);

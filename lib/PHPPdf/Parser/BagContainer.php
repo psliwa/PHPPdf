@@ -12,7 +12,7 @@ use PHPPdf\Node\Node;
 use PHPPdf\Util\AttributeBag;
 
 /**
- * Class to encapsulate two bags: AttributeBag and EnhancementBag
+ * Class to encapsulate two bags: AttributeBag and ComplexAttributeBag
  *
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
@@ -107,7 +107,7 @@ class BagContainer implements \Serializable
         {
             if(is_array($value))
             {
-                $node->mergeEnhancementAttributes($name, $value);
+                $node->mergeComplexAttributes($name, $value);
             }
             else
             {

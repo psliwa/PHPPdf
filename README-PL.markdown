@@ -85,7 +85,7 @@ Zalecane jest dodawanie następującej deklaracji DOCTYPE do dokumentów, pozwal
 
     <!DOCTYPE pdf SYSTEM "%resources%/dtd/doctype.dtd">
 
-Korzeń dokumentu musi się nazywać "pdf". Element "dynamic-page" jest stroną, która się dynamicznie dzieli gdy zostanie przepełniona. Alternatywą jest tag "page", czyli pojedyńcza niepodzielna strona. Są różnice w nadawaniu atrybutom wartości w stosunku do HTML. Aby nadać obramowanie i tło warstwie należy posłużyć się atrybutem złożonym "border" oraz "background", atrybuty te mają swoje własne właściwości, np. kolor, rozmiar, zaokrąglenie. Alternatywną składnią do ustawiania atrybutów oraz atrybutów złożonych (enhancement) jest element "stylesheet". Przykład:
+Korzeń dokumentu musi się nazywać "pdf". Element "dynamic-page" jest stroną, która się dynamicznie dzieli gdy zostanie przepełniona. Alternatywą jest tag "page", czyli pojedyńcza niepodzielna strona. Są różnice w nadawaniu atrybutom wartości w stosunku do HTML. Aby nadać obramowanie i tło warstwie należy posłużyć się atrybutem złożonym "border" oraz "background", atrybuty te mają swoje własne właściwości, np. kolor, rozmiar, zaokrąglenie. Alternatywną składnią do ustawiania atrybutów oraz atrybutów złożonych (complex-attribute) jest element "stylesheet". Przykład:
 
     <pdf>
         <dynamic-page>
@@ -102,8 +102,8 @@ Alternatywna składnia (element stylesheet):
             <div>
                 <stylesheet>
                     <attribute color="red" />
-                    <enhancement name="border" color="black" />
-                    <enhancement name="background" color="pink" />
+                    <complex-attribute name="border" color="black" />
+                    <complex-attribute name="background" color="pink" />
                 </stylesheet>
                 Ten tekst jest czerwony na różowym tle w czarnym obramowaniu
             </div>
@@ -124,7 +124,7 @@ Atrybut "id" ma całkowicie inne znaczenie niż w HTML'u. Atrybut "name" jest al
         <dynamic-page>
             <div id="warstwa-1" color="red" font-type="judson" font-size="16px">
                 <stylesheet>
-                    <enhancement name="border" color="green" />
+                    <complex-attribute name="border" color="green" />
                 </stylesheet>
                 Warstwa 1
             </div>
@@ -134,7 +134,7 @@ Atrybut "id" ma całkowicie inne znaczenie niż w HTML'u. Atrybut "name" jest al
         </dynamic-page>
     </pdf>
 
-Druga warstwa dziedziczy wszstkie atrybuty proste i złożone (upiększenia) po pierwszej, nawet te które zostały nadane z zewnętrznego arkuszu stylów.
+Druga warstwa dziedziczy wszstkie atrybuty proste i złożone po pierwszej, nawet te które zostały nadane z zewnętrznego arkuszu stylów.
 
 Priorytety nadawania wartości atrybutom:
 
@@ -200,7 +200,7 @@ Długi sposób:
             <attribute name="font-size" value="12px" />
             <attribute name="color" value="grey" />
             <!-- odpowiednik atrybutu background.color -->
-            <enhancement name="background" color="yellow" />
+            <complex-attribute name="background" color="yellow" />
 
             <!-- kolejny element, odpowiadająca składnia selektora z CSS: "div.klasa p" -->
             <p>
@@ -239,7 +239,7 @@ Istnieją tagi, które służą jedynie do określania wartości atrybutów, zbi
 
 * stylesheet - style dla elementu nadrzędnego
 * attribute - atrybut, bezpośredni element podrzędny dla "stylesheet". Wymagane atrybute tego elementu: name - nazwa atrybutu, value - wartość atrybutu
-* enhancement - atrybut złożony (upiększenie), bezpośredni element podrzędny dla "stylesheet". Wymagany atrybut tego elementu: name - nazwa.
+* complex-attribute - atrybut złożony, bezpośredni element podrzędny dla "stylesheet". Wymagany atrybut tego elementu: name - nazwa.
 * placeholders - definiuje wartości "slotów" dla elementu podrzędnego. Elementy podrzędne "placeholders" są specyficzne dla tagu nadrzędnego.
 * metadata - definiuje dane meta dla dokumentu pdf, bezpośredni element podrzędny korzenia dokumentu
 * behaviours - definiuje zachowania dla elementu nadrzędnego. Obsługiwane zachowania: ref, href, bookmark, note (działanie takie samo jak dla atrybutów o tych samych nazwach)
@@ -303,15 +303,15 @@ Można dodawać kilka upiększeń tego samego typu (np. 3 różne obramowania) u
             <div>
                 <stylesheet>
                     <!-- Górna i dolna krawędź czerwona, boczne żółto-szare -->
-                    <enhancement name="border" color="red" type="top+bottom" />
-                    <enhancement id="borderLeftAndRight" name="border" color="yellow" type="left+right" size="4px" />
-                    <enhancement id="outerBorderLeftAndRight" name="border" color="gray" type="left+right" size="2px" position="1px" />
+                    <complex-attribute name="border" color="red" type="top+bottom" />
+                    <complex-attribute id="borderLeftAndRight" name="border" color="yellow" type="left+right" size="4px" />
+                    <complex-attribute id="outerBorderLeftAndRight" name="border" color="gray" type="left+right" size="2px" position="1px" />
                 </stylesheet>
             </div>
         </dynamic-page>
     </pdf>
 
-W tym przykładzie drugie obramowanie ma identyfikator "borderLeftAndRight", jakby go nie było to atrybuty drugiego obramowania zostały by złączone z atrybutami z pierwszego obramowania. Domyślny identyfikator "id" jest równy atrybutowi "name". Identyfikatory "id" dla upiększeń (enhancements) nie mają nic wspólnego z atrybutami "id" dla elementów (nodeów). Można tworzyć obramowania złożone manipulując pozycją, tak jak w powyższym przykładzie (outerBorderLeftAndRight).
+W tym przykładzie drugie obramowanie ma identyfikator "borderLeftAndRight", jakby go nie było to atrybuty drugiego obramowania zostały by złączone z atrybutami z pierwszego obramowania. Domyślny identyfikator "id" jest równy atrybutowi "name". Identyfikatory "id" dla atrybutów złożonych (complex-attributes) nie mają nic wspólnego z atrybutami "id" dla elementów (nodeów). Można tworzyć obramowania złożone manipulując pozycją, tak jak w powyższym przykładzie (outerBorderLeftAndRight).
 
 <a name="units"></a>
 Jednostki
@@ -554,13 +554,13 @@ Konfiguracja
 
 Biblioteka ma 3 podstawowe pliki konfiguracyjne, które pozwalają na dostosowanie biblioteki do swoich potrzeb oraz do jej rozszerzenia.
 
-* enhancements.xml - przypisywanie klas upiększeń (atrybutów złożonych) pod nazwy logiczne, które identyfikują dany typ upiększenia w obrębie całej biblioteki
+* complex-attributes.xml - przypisywanie klas upiększeń (atrybutów złożonych) pod nazwy logiczne, które identyfikują dany typ atrybutu złożonego w obrębie całej biblioteki
 * nodes.xml - definiowanie tagów dostępnych w dokumencie xml wraz z domyślnymi stylami oraz obiektami formatującymi
 * fonts.xml - definowanie czcionek i przypisywanie ich do nazw logicznych, które identyfikują daną czcionkę w obrębie całej biblioteki
 
 Aby zmienić domyślne pliki konfiguracyjne należy przekazać do konstruktora fasady odpowiednio skonfigurowany obiekt ładujący konfigurację.
 
-    $loader = new PHPPdf\Configuration\LoaderImpl('/sciezka/do/pliku/nodes.xml', '/sciezka/do/pliku/enhancements.xml', '/sciezka/do/pliku/fonts.xml');
+    $loader = new PHPPdf\Configuration\LoaderImpl('/sciezka/do/pliku/nodes.xml', '/sciezka/do/pliku/complex-attributes.xml', '/sciezka/do/pliku/fonts.xml');
     $facade = new PHPPdf\Parser\Facade($loader);
 
 Można wykorzystać budowniczego fasady, który jak narazie ma opcje do ustawiania cache.

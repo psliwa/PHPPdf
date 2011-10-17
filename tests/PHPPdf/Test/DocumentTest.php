@@ -91,75 +91,75 @@ class DocumentTest extends \PHPPdf\PHPUnit\Framework\TestCase
     /**
      * @test
      */
-    public function creationOfEnhancements()
+    public function creationOfComplexAttributes()
     {
-        $enhancementsParameters = array('border' => array('color' => 'red', 'name' => 'border'), 'background' => array('name' => 'background', 'color' => 'pink', 'repeat' => 'none'), 'empty' => array('name' => 'empty'));
-        $enhancementStub = $this->getMockBuilder('PHPPdf\Enhancement\Border')
+        $complexAttributesParameters = array('border' => array('color' => 'red', 'name' => 'border'), 'background' => array('name' => 'background', 'color' => 'pink', 'repeat' => 'none'), 'empty' => array('name' => 'empty'));
+        $complexAttributeStub = $this->getMockBuilder('PHPPdf\ComplexAttribute\Border')
                                 ->setMethods(array('isEmpty'))
                                 ->getMock();
                                 
-        $enhancementStub->expects($this->exactly(2))
+        $complexAttributeStub->expects($this->exactly(2))
                         ->method('isEmpty')
                         ->will($this->returnValue(false));
                                 
-        $emptyEnhancementStub = $this->getMockBuilder('PHPPdf\Enhancement\Border')
+        $emptyComplexAttributeStub = $this->getMockBuilder('PHPPdf\ComplexAttribute\Border')
                                      ->setMethods(array('isEmpty'))
                                      ->getMock();
                                      
-        $emptyEnhancementStub->expects($this->once())
+        $emptyComplexAttributeStub->expects($this->once())
                              ->method('isEmpty')
                              ->will($this->returnValue(true));
 
-        $enhancementBagMock = $this->getMock('PHPPdf\Util\AttributeBag', array('getAll'));
-        $enhancementBagMock->expects($this->once())
+        $complexAttributeBagMock = $this->getMock('PHPPdf\Util\AttributeBag', array('getAll'));
+        $complexAttributeBagMock->expects($this->once())
                            ->method('getAll')
-                           ->will($this->returnValue($enhancementsParameters));
+                           ->will($this->returnValue($complexAttributesParameters));
                            
-        $enhancementsMap = array(
-            'border' => $enhancementStub,
-            'background' => $enhancementStub,
-            'empty' => $emptyEnhancementStub,
+        $complexAttributesMap = array(
+            'border' => $complexAttributeStub,
+            'background' => $complexAttributeStub,
+            'empty' => $emptyComplexAttributeStub,
         );
 
-        $enhancementFactoryMock = $this->getMock('PHPPdf\Enhancement\Factory', array('create'));
+        $complexAttributeFactoryMock = $this->getMock('PHPPdf\ComplexAttribute\Factory', array('create'));
         
         $at = 0;
-        foreach($enhancementsParameters as $name => $params)
+        foreach($complexAttributesParameters as $name => $params)
         {
-            $enhancementFactoryMock->expects($this->at($at++))
+            $complexAttributeFactoryMock->expects($this->at($at++))
                                    ->method('create')
                                    ->with($this->equalTo($name), $this->equalTo(array_diff_key($params, array('name' => true))))
-                                   ->will($this->returnValue($enhancementsMap[$name]));
+                                   ->will($this->returnValue($complexAttributesMap[$name]));
             
         }
 
-        $this->document->setEnhancementFactory($enhancementFactoryMock);
+        $this->document->setComplexAttributeFactory($complexAttributeFactoryMock);
 
-        $enhancements = $this->document->getEnhancements($enhancementBagMock);
+        $complexAttributes = $this->document->getComplexAttributes($complexAttributeBagMock);
 
-        $this->assertTrue(count($enhancements) === 2, 'empty enhancement should not be returned by Document');
+        $this->assertTrue(count($complexAttributes) === 2, 'empty complexAttribute should not be returned by Document');
     }
 
     /**
      * @test
      * @expectedException \InvalidArgumentException
      */
-    public function failureOfEnhancementCreation()
+    public function failureOfComplexAttributeCreation()
     {
-        $enhancements = array('some' => array('color' => 'red'));
+        $complexAttributes = array('some' => array('color' => 'red'));
 
-        $enhancementBagMock = $this->getMock('PHPPdf\Util\AttributeBag', array('getAll'));
-        $enhancementBagMock->expects($this->once())
+        $complexAttributeBagMock = $this->getMock('PHPPdf\Util\AttributeBag', array('getAll'));
+        $complexAttributeBagMock->expects($this->once())
                            ->method('getAll')
-                           ->will($this->returnValue($enhancements));
+                           ->will($this->returnValue($complexAttributes));
 
-        $enhancementFactoryMock = $this->getMock('PHPPdf\Enhancement\Factory', array('create'));
-        $enhancementFactoryMock->expects($this->never())
+        $complexAttributeFactoryMock = $this->getMock('PHPPdf\ComplexAttribute\Factory', array('create'));
+        $complexAttributeFactoryMock->expects($this->never())
                                ->method('create');
 
-        $this->document->setEnhancementFactory($enhancementFactoryMock);
+        $this->document->setComplexAttributeFactory($complexAttributeFactoryMock);
 
-        $this->document->getEnhancements($enhancementBagMock);
+        $this->document->getComplexAttributes($complexAttributeBagMock);
     }
 
     /**

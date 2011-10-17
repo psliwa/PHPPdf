@@ -5,8 +5,8 @@ namespace PHPPdf\Test\Node;
 use PHPPdf\Util\DrawingTaskHeap;
 
 use PHPPdf\Node\Page,
-    PHPPdf\Enhancement\Background,
-    PHPPdf\Enhancement\Border,
+    PHPPdf\ComplexAttribute\Background,
+    PHPPdf\ComplexAttribute\Border,
     PHPPdf\Document,
     PHPPdf\Util\Point,
     PHPPdf\Node\Node,
@@ -265,13 +265,13 @@ class NodeTest extends \PHPPdf\PHPUnit\Framework\TestCase
     /**
      * @test
      */
-    public function mergeEnhancements()
+    public function mergeComplexAttributes()
     {
-        $this->node->mergeEnhancementAttributes('border', array('color' => 'red'));
-        $this->assertEquals(array('border' => array('color' => 'red')), $this->node->getEnhancementsAttributes());
+        $this->node->mergeComplexAttributes('border', array('color' => 'red'));
+        $this->assertEquals(array('border' => array('color' => 'red')), $this->node->getComplexAttributes());
 
-        $this->node->mergeEnhancementAttributes('border', array('style' => 'dotted'));
-        $this->assertEquals(array('border' => array('color' => 'red', 'style' => 'dotted')), $this->node->getEnhancementsAttributes());
+        $this->node->mergeComplexAttributes('border', array('style' => 'dotted'));
+        $this->assertEquals(array('border' => array('color' => 'red', 'style' => 'dotted')), $this->node->getComplexAttributes());
     }
 
     /**
@@ -357,16 +357,16 @@ class NodeTest extends \PHPPdf\PHPUnit\Framework\TestCase
     /**
      * @test
      */
-    public function serializeWithAttributesAndEnhancementBagAndFormattersNames()
+    public function serializeWithAttributesAndComplexAttributeBagAndFormattersNames()
     {
-        $this->node->mergeEnhancementAttributes('some-enhancement', array('attribute' => 'value'));
+        $this->node->mergeComplexAttributes('some-complexAttribute', array('attribute' => 'value'));
         $this->node->setAttribute('font-size', 123);
         $this->node->getBoundary()->setNext(0, 0);
         $this->node->addFormatterName('pre', 'SomeName');
 
         $node = unserialize(serialize($this->node));
 
-        $this->assertEquals($this->node->getEnhancementsAttributes(), $node->getEnhancementsAttributes());
+        $this->assertEquals($this->node->getComplexAttributes(), $node->getComplexAttributes());
         $this->assertEquals($this->node->getAttribute('font-size'), $node->getAttribute('font-size'));
         $this->assertEquals($this->node->getBoundary(), $node->getBoundary());
         $this->assertEquals($this->node->getFormattersNames('pre'), $node->getFormattersNames('pre'));
@@ -499,34 +499,34 @@ class NodeTest extends \PHPPdf\PHPUnit\Framework\TestCase
     
     /**
      * @test
-     * @dataProvider enhancementStubsProvider
+     * @dataProvider complexAttributeStubsProvider
      */
-    public function forEachEnhancementAddOneDrawingTask(array $enhancementStubs)
+    public function forEachComplexAttributeAddOneDrawingTask(array $complexAttributeStubs)
     {
         $page = new Page();
         $page->add($this->node);
         
         $document = $this->getMockBuilder('PHPPdf\Document')
-                         ->setMethods(array('getEnhancements'))
+                         ->setMethods(array('getComplexAttributes'))
                          ->getMock();
         $bag = $this->getMockBuilder('PHPPdf\Util\AttributeBag')
                     ->getMock();
                          
                          
-        $this->invokeMethod($this->node, 'setEnhancementBag', array($bag));
+        $this->invokeMethod($this->node, 'setComplexAttributeBag', array($bag));
         
         $document->expects($this->once())
-                 ->method('getEnhancements')
+                 ->method('getComplexAttributes')
                  ->with($bag)
-                 ->will($this->returnValue($enhancementStubs));
+                 ->will($this->returnValue($complexAttributeStubs));
 
         $drawingTasks = new DrawingTaskHeap();
         $this->node->collectOrderedDrawingTasks($document, $drawingTasks);
         
-        $this->assertEquals(count($enhancementStubs), count($drawingTasks));
+        $this->assertEquals(count($complexAttributeStubs), count($drawingTasks));
     }
     
-    public function enhancementStubsProvider()
+    public function complexAttributeStubsProvider()
     {
         return array(
             array(

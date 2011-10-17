@@ -23,9 +23,9 @@ interface Loader
     public function createNodeFactory();
     
     /**
-     * @return PHPPdf\Enhancement\Factory
+     * @return PHPPdf\ComplexAttribute\Factory
      */
-    public function createEnhancementFactory();
+    public function createComplexAttributeFactory();
     
     /**
      * @return PHPPdf\Font\Registry

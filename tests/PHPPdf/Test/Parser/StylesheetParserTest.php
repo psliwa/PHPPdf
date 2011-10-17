@@ -125,12 +125,12 @@ XML;
     /**
      * @test
      */
-    public function parseSimpleXmlWithOnlyEnhancements()
+    public function parseSimpleXmlWithOnlyComplexAttributes()
     {
         $xml = <<<XML
 <stylesheet>
     <tag>
-        <enhancement name="border" color="red" type="dotted" />
+        <complex-attribute name="border" color="red" type="dotted" />
         <enhancement id="border-2" name="border" color="yellow" type="solid" />
     </tag>
 </stylesheet>
@@ -155,12 +155,12 @@ XML;
      * @test
      * @expectedException PHPPdf\Parser\Exception\ParseException
      */
-    public function enhancementNameIsRequired()
+    public function complexAttributeNameIsRequired()
     {
         $xml = <<<XML
 <stylesheet>
     <tag>
-        <enhancement color="red" type="dotted" />
+        <complex-attribute color="red" type="dotted" />
     </tag>
 </stylesheet>
 XML;
@@ -363,31 +363,31 @@ XML;
     /**
      * @test
      */
-    public function parseEnhancementsFromXmlAttributes()
+    public function parseComplexAttributesFromXmlAttributes()
     {
         $xml = <<<XML
 <stylesheet>
-	<some-tag someEnhancement.attribute="value" />
+	<some-tag someComplexAttribute.attribute="value" />
 </stylesheet>
 XML;
 
-        $enhancementFactory = $this->getMockBuilder('PHPPdf\Enhancement\Factory')
+        $complexAttributeFactory = $this->getMockBuilder('PHPPdf\ComplexAttribute\Factory')
                                    ->setMethods(array('getDefinitionNames'))
                                    ->disableOriginalConstructor()
                                    ->getMock();
         
-        $this->parser->setEnhancementFactory($enhancementFactory);
+        $this->parser->setComplexAttributeFactory($complexAttributeFactory);
         
-        $enhancementFactory->expects($this->atLeastOnce())
+        $complexAttributeFactory->expects($this->atLeastOnce())
                            ->method('getDefinitionNames')
-                           ->will($this->returnValue('someEnhancement'));
+                           ->will($this->returnValue('someComplexAttribute'));
 
         $resultConstraint = $this->parser->parse($xml);        
 
         $constraint = $this->getConstraint($resultConstraint, 'some-tag');
         
         $this->assertNotEquals(false, $constraint);
-        $this->assertEquals(array('someEnhancement' => array('name' => 'someEnhancement', 'attribute' => 'value')), $constraint->getAll());
+        $this->assertEquals(array('someComplexAttribute' => array('name' => 'someComplexAttribute', 'attribute' => 'value')), $constraint->getAll());
     }
     
     /**
@@ -423,14 +423,14 @@ XML;
         $reader->XML($xml);
         $reader->next();
         
-        $enhancementFactory = $this->getMockBuilder('PHPPdf\Enhancement\Factory')
+        $complexAttributeFactory = $this->getMockBuilder('PHPPdf\ComplexAttribute\Factory')
                                    ->setMethods(array('getDefinitionNames'))
                                    ->disableOriginalConstructor()
                                    ->getMock();
                                    
-        $this->parser->setEnhancementFactory($enhancementFactory);
+        $this->parser->setComplexAttributeFactory($complexAttributeFactory);
         
-        $enhancementFactory->expects($this->atLeastOnce())
+        $complexAttributeFactory->expects($this->atLeastOnce())
                            ->method('getDefinitionNames')
                            ->will($this->returnValue(array('attribute2', 'attribute4', 'attribute6')));
                            
