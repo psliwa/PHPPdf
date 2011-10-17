@@ -270,6 +270,8 @@ Attributes
 * dump - allowed values: true or false. Create sticky note with debug informations (attributes, position etc.)
 * rotate - angle of element rotation. This attribute isn't fully implemented, works corectly for watermarks (see "Watermarks" section). Possible values: XXdeg (in degrees), XX (in radians), diagonally, -diagonally.
 * alpha - possible values: from 0 to 1. Transparency for element and his children.
+* line-break - line break (true or false), by default set on true only for "br" tag
+* style - as same as in html, this attribute can be used to set another attributes, for example: style="width: 100px; height: 200px; margin: 20px 0;". Every attribute must be finished by ";" char, even the last.
 
 <a name="complex-attributes"></a>
 Complex attributes

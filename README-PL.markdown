@@ -269,7 +269,8 @@ Atrybuty
 * dump - dozwolone wartości: true or false. Tworzy notatkę z informacjami przeznaczonymi do debugowania, np. wartości atrybutów, pozycja itp.
 * rotate - kąt obrotu elementu. Obsługa tego atrybutu nie jest w pełni zaimplementowana, działa poprawnie ze znakami wodnymi (patrz sekcja "Znaki wodne"). Możliwe wartości: XXdeg (w stopniach), XX (w radianach), diagonally, -diagonally.
 * alpha - możliwe wartości: od 0 do 1. Przeźroczystość elementu i jego dzieci.
-* line-break - złamanie lini (true lub false), domyślnie ustawione na true tylko dla tagu "br"
+* line-break - złamanie linii (true lub false), domyślnie ustawione na true tylko dla tagu "br"
+* style - to samo co w html'u, ten atrybut służy do ustawiania wartości innym atrybutom, np.: style="width: 100px; height: 200px; margin: 20px 0;". Każdy atrybut musi być zakonczony średnikiem (";"), nawet ostatni.
 
 <a name="complex-attributes"></a>
 Atrybuty złożone

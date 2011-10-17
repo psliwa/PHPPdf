@@ -26,6 +26,7 @@ class StylesheetParser extends XmlParser
     const COMPLEX_ATTRIBUTE_TAG = 'complex-attribute';
     const ANY_TAG = 'any';
     const ATTRIBUTE_CLASS = 'class';
+    const STYLE_ATTRIBUTE = 'style';
     
     private $throwsExceptionOnConstraintTag = false;
     private $root;
@@ -180,21 +181,49 @@ class StylesheetParser extends XmlParser
     {
         while($reader->moveToNextAttribute())
         {
-            $name = $reader->name;
+            $attributes = $this->getAttributesFromXmlAttribute($reader);
             
-            if(!in_array($name, $ignoredAttributes))
+            foreach($attributes as $name => $value)
             {
-                if($complexAttributeName = $this->getComplexAttributeName($name))
+                if(!in_array($name, $ignoredAttributes))
                 {
-                    $propertyName = substr($name, strlen($complexAttributeName) + 1);
-                    $constraint->add($complexAttributeName, array('name' => $complexAttributeName, $propertyName => $reader->value));
-                }
-                else
-                {
-                    $constraint->add($name, $reader->value);
+                    if($complexAttributeName = $this->getComplexAttributeName($name))
+                    {
+                        $propertyName = substr($name, strlen($complexAttributeName) + 1);
+                        $constraint->add($complexAttributeName, array('name' => $complexAttributeName, $propertyName => $value));
+                    }
+                    else
+                    {
+                        $constraint->add($name, $value);
+                    }
                 }
             }
         }
+    }
+    
+    private function getAttributesFromXmlAttribute(\XMLReader $reader)
+    {
+        $name = $reader->name;
+        
+        if($name === self::STYLE_ATTRIBUTE)
+        {
+            $attributes = array();
+            
+            if(@preg_match_all('/([a-zA-Z0-9\-]+)\s*:\s*(.+)\s*;/U', $reader->value, $matches, \PREG_SET_ORDER))
+            {
+                foreach($matches as $match)
+                {
+                    $attributes[trim($match[1])] = trim($match[2]);
+                }
+            }
+
+            return $attributes;
+        }
+        else
+        {
+            return array($name => $reader->value);
+        }
+        
     }
     
     private function getComplexAttributeName($name)

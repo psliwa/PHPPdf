@@ -442,4 +442,37 @@ XML;
         
         $this->assertEquals($expectedAttributes, $constraint->getAll());
     }
+    
+    /**
+     * @test
+     */
+    public function addMultipleAttributesFromStyleAttribute()
+    {
+        $xml = <<<XML
+<tag style="attribute1: value1; attribute2: value2; attribute3-property: value3;"></tag>
+XML;
+
+        $reader = new \XMLReader();
+        $reader->XML($xml);
+        $reader->next();
+        
+        $complexAttributeFactory = $this->getMockBuilder('PHPPdf\ComplexAttribute\Factory')
+                                   ->setMethods(array('getDefinitionNames'))
+                                   ->disableOriginalConstructor()
+                                   ->getMock();
+                                   
+        $this->parser->setComplexAttributeFactory($complexAttributeFactory);
+        
+        $complexAttributeFactory->expects($this->atLeastOnce())
+                           ->method('getDefinitionNames')
+                           ->will($this->returnValue(array('attribute3')));
+                           
+        $constraint = new BagContainer();
+        
+        $this->parser->addConstraintsFromAttributes($constraint, $reader);
+        
+        $expectedAttributes = array('attribute1' => 'value1', 'attribute2' => 'value2', 'attribute3' => array('name' => 'attribute3', 'property' => 'value3'));
+        
+        $this->assertEquals($expectedAttributes, $constraint->getAll());
+    }
 }
