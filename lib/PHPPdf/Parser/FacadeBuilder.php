@@ -8,8 +8,8 @@
 
 namespace PHPPdf\Parser;
 
-use PHPPdf\Configuration\LoaderImpl;
-use PHPPdf\Configuration\Loader;
+use PHPPdf\Core\Configuration\LoaderImpl;
+use PHPPdf\Core\Configuration\Loader;
 use PHPPdf\Cache\CacheImpl;
 
 /**

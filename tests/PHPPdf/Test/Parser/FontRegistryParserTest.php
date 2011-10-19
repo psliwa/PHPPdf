@@ -2,7 +2,7 @@
 
 namespace PHPPdf\Test\Parser;
 
-use PHPPdf\Engine\Font;
+use PHPPdf\Core\Engine\Font;
 use PHPPdf\Parser\FontRegistryParser;
 
 class FontRegistryParserTest extends \PHPPdf\PHPUnit\Framework\TestCase

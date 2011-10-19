@@ -2,7 +2,7 @@
 
 namespace PHPPdf\Test\Parser;
 
-use PHPPdf\ComplexAttribute\Factory as ComplexAttributeFactory,
+use PHPPdf\Core\ComplexAttribute\Factory as ComplexAttributeFactory,
     PHPPdf\Parser\ComplexAttributeFactoryParser;
 
 class ComplexAttributeFactoryParserTest extends \PHPPdf\PHPUnit\Framework\TestCase
@@ -43,8 +43,8 @@ class ComplexAttributeFactoryParserTest extends \PHPPdf\PHPUnit\Framework\TestCa
     {
         $xml = <<<XML
 <complex-attributes>
-    <complex-attribute name="border" class="PHPPdf\ComplexAttribute\Border" />
-    <complex-attribute name="background" class="PHPPdf\ComplexAttribute\Background" />
+    <complex-attribute name="border" class="PHPPdf\Core\ComplexAttribute\Border" />
+    <complex-attribute name="background" class="PHPPdf\Core\ComplexAttribute\Background" />
 </complex-attributes>
 XML;
         $complexAttributeFactory = $this->parser->parse($xml);
@@ -64,7 +64,7 @@ XML;
         $xml = <<<XML
 <complex-attributes>
     <complex-attribute name="border" />
-    <complex-attribute name="background" class="PHPPdf\ComplexAttribute\Background" />
+    <complex-attribute name="background" class="PHPPdf\Core\ComplexAttribute\Background" />
 </complex-attributes>
 XML;
 

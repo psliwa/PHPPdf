@@ -8,9 +8,9 @@
 
 namespace PHPPdf\Parser;
 
-use PHPPdf\Node\PageCollection;
+use PHPPdf\Core\Node\PageCollection;
 use PHPPdf\Document;
-use PHPPdf\Node\Node;
+use PHPPdf\Core\Node\Node;
 
 /**
  * @author Piotr Śliwa <peter.pl7@gmail.com>

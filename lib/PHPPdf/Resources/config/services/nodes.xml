@@ -6,7 +6,7 @@
 	<services>
 		<service id="phppdf.unit_converter" class="PHPPdf\Core\UnitConverterImpl"></service>
 	
-		<service id="phppdf.node_factory" class="PHPPdf\Node\Factory">
+		<service id="phppdf.node_factory" class="PHPPdf\Core\Node\Factory">
 			<call method="addPrototypes">
 				<argument type="collection">
 					<argument key="page" type="service" id="phppdf.node.page" />
@@ -49,7 +49,7 @@
 			</call>
 		</service>
 			
-		<service id="phppdf.node.page" class="PHPPdf\Node\Page" public="false">
+		<service id="phppdf.node.page" class="PHPPdf\Core\Node\Page" public="false">
 			<tag name="phppdf.node" />
 			<argument type="collection">
 				<argument key="font-type">helvetica</argument>
@@ -66,25 +66,25 @@
 			<call method="setFormattersNames">
 				<argument>post</argument>
 				<argument type="collection">
-					<argument>PHPPdf\Formatter\FloatFormatter</argument>
-					<argument>PHPPdf\Formatter\ColumnBreakingFormatter</argument>
+					<argument>PHPPdf\Core\Formatter\FloatFormatter</argument>
+					<argument>PHPPdf\Core\Formatter\ColumnBreakingFormatter</argument>
 				</argument>
 			</call>
 		</service>
-		<service id="phppdf.node.dynamic-page" class="PHPPdf\Node\DynamicPage" public="false">
+		<service id="phppdf.node.dynamic-page" class="PHPPdf\Core\Node\DynamicPage" public="false">
 			<tag name="phppdf.node" />
 			<argument type="service" id="phppdf.node.page" />
 			<argument type="service" id="phppdf.unit_converter"></argument>
 			<call method="setFormattersNames">
 				<argument>post</argument>
 				<argument type="collection">
-					<argument>PHPPdf\Formatter\FloatFormatter</argument>
-					<argument>PHPPdf\Formatter\PageBreakingFormatter</argument>
+					<argument>PHPPdf\Core\Formatter\FloatFormatter</argument>
+					<argument>PHPPdf\Core\Formatter\PageBreakingFormatter</argument>
 				</argument>
 			</call>
 		</service>
 		
-		<service id="phppdf.node.div" class="PHPPdf\Node\Container" public="false">
+		<service id="phppdf.node.div" class="PHPPdf\Core\Node\Container" public="false">
 			<tag name="phppdf.node" />
 			<argument type="collection"></argument>
 			<argument type="service" id="phppdf.unit_converter">
@@ -93,24 +93,24 @@
 			<call method="setFormattersNames">
 				<argument>pre</argument>
 				<argument type="collection">
-					<argument>PHPPdf\Formatter\ConvertAttributesFormatter</argument>
-					<argument>PHPPdf\Formatter\StandardDimensionFormatter</argument>
-					<argument>PHPPdf\Formatter\FirstPointPositionFormatter</argument>
+					<argument>PHPPdf\Core\Formatter\ConvertAttributesFormatter</argument>
+					<argument>PHPPdf\Core\Formatter\StandardDimensionFormatter</argument>
+					<argument>PHPPdf\Core\Formatter\FirstPointPositionFormatter</argument>
 
 				</argument>
 			</call>
 			<call method="setFormattersNames">
 				<argument>post</argument>
 				<argument type="collection">
-					<argument>PHPPdf\Formatter\ContainerDimensionFormatter</argument>
-					<argument>PHPPdf\Formatter\StandardPositionFormatter</argument>
-					<argument>PHPPdf\Formatter\FloatFormatter</argument>
-					<argument>PHPPdf\Formatter\VerticalAlignFormatter</argument>
+					<argument>PHPPdf\Core\Formatter\ContainerDimensionFormatter</argument>
+					<argument>PHPPdf\Core\Formatter\StandardPositionFormatter</argument>
+					<argument>PHPPdf\Core\Formatter\FloatFormatter</argument>
+					<argument>PHPPdf\Core\Formatter\VerticalAlignFormatter</argument>
 				</argument>
 			</call>
 		</service>
 
-		<service id="phppdf.node.br" class="PHPPdf\Node\Container" public="false">
+		<service id="phppdf.node.br" class="PHPPdf\Core\Node\Container" public="false">
 			<tag name="phppdf.node" />
 			<argument type="collection">
 				<argument key="line-break" type="constant">true</argument>
@@ -121,25 +121,25 @@
 			<call method="setFormattersNames">
 				<argument>pre</argument>
 				<argument type="collection">
-					<argument>PHPPdf\Formatter\ConvertAttributesFormatter</argument>
-					<argument>PHPPdf\Formatter\StandardDimensionFormatter</argument>
-					<argument>PHPPdf\Formatter\FirstPointPositionFormatter</argument>
+					<argument>PHPPdf\Core\Formatter\ConvertAttributesFormatter</argument>
+					<argument>PHPPdf\Core\Formatter\StandardDimensionFormatter</argument>
+					<argument>PHPPdf\Core\Formatter\FirstPointPositionFormatter</argument>
 
 				</argument>
 			</call>
 			<call method="setFormattersNames">
 				<argument>post</argument>
 				<argument type="collection">
-					<argument>PHPPdf\Formatter\ContainerDimensionFormatter</argument>
-					<argument>PHPPdf\Formatter\StandardPositionFormatter</argument>
-					<argument>PHPPdf\Formatter\FloatFormatter</argument>
-					<argument>PHPPdf\Formatter\VerticalAlignFormatter</argument>
+					<argument>PHPPdf\Core\Formatter\ContainerDimensionFormatter</argument>
+					<argument>PHPPdf\Core\Formatter\StandardPositionFormatter</argument>
+					<argument>PHPPdf\Core\Formatter\FloatFormatter</argument>
+					<argument>PHPPdf\Core\Formatter\VerticalAlignFormatter</argument>
 				</argument>
 			</call>
 		</service>
 
-		<service id="phppdf.node.ul.enumeration_factory" class="PHPPdf\Node\BasicList\EnumerationStrategyFactory" />
-		<service id="phppdf.node.ul" class="PHPPdf\Node\BasicList" public="false">
+		<service id="phppdf.node.ul.enumeration_factory" class="PHPPdf\Core\Node\BasicList\EnumerationStrategyFactory" />
+		<service id="phppdf.node.ul" class="PHPPdf\Core\Node\BasicList" public="false">
 			<tag name="phppdf.node" />
 			<argument type="collection">
 				<argument key="margin-left">12px</argument>
@@ -150,26 +150,26 @@
 			<call method="setFormattersNames">
 				<argument>pre</argument>
 				<argument type="collection">
-					<argument>PHPPdf\Formatter\ConvertAttributesFormatter</argument>
-					<argument>PHPPdf\Formatter\StandardDimensionFormatter</argument>
-					<argument>PHPPdf\Formatter\FirstPointPositionFormatter</argument>
-					<argument>PHPPdf\Formatter\ListFormatter</argument>
+					<argument>PHPPdf\Core\Formatter\ConvertAttributesFormatter</argument>
+					<argument>PHPPdf\Core\Formatter\StandardDimensionFormatter</argument>
+					<argument>PHPPdf\Core\Formatter\FirstPointPositionFormatter</argument>
+					<argument>PHPPdf\Core\Formatter\ListFormatter</argument>
 
 				</argument>
 			</call>
 			<call method="setFormattersNames">
 				<argument>post</argument>
 				<argument type="collection">
-					<argument>PHPPdf\Formatter\ContainerDimensionFormatter</argument>
-					<argument>PHPPdf\Formatter\StandardPositionFormatter</argument>
-					<argument>PHPPdf\Formatter\FloatFormatter</argument>
+					<argument>PHPPdf\Core\Formatter\ContainerDimensionFormatter</argument>
+					<argument>PHPPdf\Core\Formatter\StandardPositionFormatter</argument>
+					<argument>PHPPdf\Core\Formatter\FloatFormatter</argument>
 				</argument>
 			</call>
 			<call method="setEnumerationStrategyFactory">
 				<argument id="phppdf.node.ul.enumeration_factory" type="service" />
 			</call>
 		</service>
-		<service id="phppdf.node.ol" class="PHPPdf\Node\BasicList" public="false">
+		<service id="phppdf.node.ol" class="PHPPdf\Core\Node\BasicList" public="false">
 			<tag name="phppdf.node" />
 			<argument type="collection">
 				<argument key="margin-left">12px</argument>
@@ -181,26 +181,26 @@
 			<call method="setFormattersNames">
 				<argument>pre</argument>
 				<argument type="collection">
-					<argument>PHPPdf\Formatter\ConvertAttributesFormatter</argument>
-					<argument>PHPPdf\Formatter\StandardDimensionFormatter</argument>
-					<argument>PHPPdf\Formatter\FirstPointPositionFormatter</argument>
-					<argument>PHPPdf\Formatter\ListFormatter</argument>
+					<argument>PHPPdf\Core\Formatter\ConvertAttributesFormatter</argument>
+					<argument>PHPPdf\Core\Formatter\StandardDimensionFormatter</argument>
+					<argument>PHPPdf\Core\Formatter\FirstPointPositionFormatter</argument>
+					<argument>PHPPdf\Core\Formatter\ListFormatter</argument>
 
 				</argument>
 			</call>
 			<call method="setFormattersNames">
 				<argument>post</argument>
 				<argument type="collection">
-					<argument>PHPPdf\Formatter\ContainerDimensionFormatter</argument>
-					<argument>PHPPdf\Formatter\StandardPositionFormatter</argument>
-					<argument>PHPPdf\Formatter\FloatFormatter</argument>
+					<argument>PHPPdf\Core\Formatter\ContainerDimensionFormatter</argument>
+					<argument>PHPPdf\Core\Formatter\StandardPositionFormatter</argument>
+					<argument>PHPPdf\Core\Formatter\FloatFormatter</argument>
 				</argument>
 			</call>
 			<call method="setEnumerationStrategyFactory">
 				<argument id="phppdf.node.ul.enumeration_factory" type="service" />
 			</call>
 		</service>
-		<service id="phppdf.node.li" class="PHPPdf\Node\BasicListItem" public="false">
+		<service id="phppdf.node.li" class="PHPPdf\Core\Node\BasicListItem" public="false">
 			<tag name="phppdf.node" />
 			<argument type="collection">
 				<argument key="margin-left">10px</argument>
@@ -211,23 +211,23 @@
 			<call method="setFormattersNames">
 				<argument>pre</argument>
 				<argument type="collection">
-					<argument>PHPPdf\Formatter\ConvertAttributesFormatter</argument>
-					<argument>PHPPdf\Formatter\StandardDimensionFormatter</argument>
-					<argument>PHPPdf\Formatter\FirstPointPositionFormatter</argument>
+					<argument>PHPPdf\Core\Formatter\ConvertAttributesFormatter</argument>
+					<argument>PHPPdf\Core\Formatter\StandardDimensionFormatter</argument>
+					<argument>PHPPdf\Core\Formatter\FirstPointPositionFormatter</argument>
 
 				</argument>
 			</call>
 			<call method="setFormattersNames">
 				<argument>post</argument>
 				<argument type="collection">
-					<argument>PHPPdf\Formatter\ContainerDimensionFormatter</argument>
-					<argument>PHPPdf\Formatter\StandardPositionFormatter</argument>
-					<argument>PHPPdf\Formatter\FloatFormatter</argument>
+					<argument>PHPPdf\Core\Formatter\ContainerDimensionFormatter</argument>
+					<argument>PHPPdf\Core\Formatter\StandardPositionFormatter</argument>
+					<argument>PHPPdf\Core\Formatter\FloatFormatter</argument>
 				</argument>
 			</call>
 		</service>
 		
-		<service id="phppdf.node.p" class="PHPPdf\Node\Container" public="false">
+		<service id="phppdf.node.p" class="PHPPdf\Core\Node\Container" public="false">
 			<tag name="phppdf.node" />
 			<argument type="collection">
 				<argument key="padding">12px 0</argument>
@@ -238,24 +238,24 @@
 			<call method="setFormattersNames">
 				<argument>pre</argument>
 				<argument type="collection">
-					<argument>PHPPdf\Formatter\ConvertAttributesFormatter</argument>
-					<argument>PHPPdf\Formatter\StandardDimensionFormatter</argument>
-					<argument>PHPPdf\Formatter\FirstPointPositionFormatter</argument>
+					<argument>PHPPdf\Core\Formatter\ConvertAttributesFormatter</argument>
+					<argument>PHPPdf\Core\Formatter\StandardDimensionFormatter</argument>
+					<argument>PHPPdf\Core\Formatter\FirstPointPositionFormatter</argument>
 
 				</argument>
 			</call>
 			<call method="setFormattersNames">
 				<argument>post</argument>
 				<argument type="collection">
-					<argument>PHPPdf\Formatter\ContainerDimensionFormatter</argument>
-					<argument>PHPPdf\Formatter\StandardPositionFormatter</argument>
-					<argument>PHPPdf\Formatter\FloatFormatter</argument>
-					<argument>PHPPdf\Formatter\VerticalAlignFormatter</argument>
+					<argument>PHPPdf\Core\Formatter\ContainerDimensionFormatter</argument>
+					<argument>PHPPdf\Core\Formatter\StandardPositionFormatter</argument>
+					<argument>PHPPdf\Core\Formatter\FloatFormatter</argument>
+					<argument>PHPPdf\Core\Formatter\VerticalAlignFormatter</argument>
 				</argument>
 			</call>
 		</service>
 
-		<service id="phppdf.node.paragraph" class="PHPPdf\Node\Paragraph" public="false">
+		<service id="phppdf.node.paragraph" class="PHPPdf\Core\Node\Paragraph" public="false">
 			<tag name="phppdf.node" />
 			<argument type="collection"></argument>
 			<argument type="service" id="phppdf.unit_converter">
@@ -264,23 +264,23 @@
 			<call method="setFormattersNames">
 				<argument>pre</argument>
 				<argument type="collection">
-		            <argument>PHPPdf\Formatter\ConvertAttributesFormatter</argument>
-		            <argument>PHPPdf\Formatter\StandardDimensionFormatter</argument>
-		            <argument>PHPPdf\Formatter\FirstPointPositionFormatter</argument>
+		            <argument>PHPPdf\Core\Formatter\ConvertAttributesFormatter</argument>
+		            <argument>PHPPdf\Core\Formatter\StandardDimensionFormatter</argument>
+		            <argument>PHPPdf\Core\Formatter\FirstPointPositionFormatter</argument>
 				</argument>
 			</call>
 			<call method="setFormattersNames">
 				<argument>post</argument>
 				<argument type="collection">
-		            <argument>PHPPdf\Formatter\ParagraphFormatter</argument>
-		            <argument>PHPPdf\Formatter\ContainerDimensionFormatter</argument>
-		            <argument>PHPPdf\Formatter\StandardPositionFormatter</argument>
-		            <argument>PHPPdf\Formatter\FloatFormatter</argument>
+		            <argument>PHPPdf\Core\Formatter\ParagraphFormatter</argument>
+		            <argument>PHPPdf\Core\Formatter\ContainerDimensionFormatter</argument>
+		            <argument>PHPPdf\Core\Formatter\StandardPositionFormatter</argument>
+		            <argument>PHPPdf\Core\Formatter\FloatFormatter</argument>
 				</argument>
 			</call>
 		</service>
 
-		<service id="phppdf.node.text" class="PHPPdf\Node\Text" public="false">
+		<service id="phppdf.node.text" class="PHPPdf\Core\Node\Text" public="false">
 			<tag name="phppdf.node" />
 			<argument></argument>
 			<argument type="collection"></argument>
@@ -290,12 +290,12 @@
 			<call method="setFormattersNames">
 				<argument>pre</argument>
 				<argument type="collection">
-					<argument>PHPPdf\Formatter\ConvertAttributesFormatter</argument>
-					<argument>PHPPdf\Formatter\TextDimensionFormatter</argument>
+					<argument>PHPPdf\Core\Formatter\ConvertAttributesFormatter</argument>
+					<argument>PHPPdf\Core\Formatter\TextDimensionFormatter</argument>
 				</argument>
 			</call>
 		</service>
-		<service id="phppdf.node.a" class="PHPPdf\Node\Text" public="false">
+		<service id="phppdf.node.a" class="PHPPdf\Core\Node\Text" public="false">
 			<tag name="phppdf.node" />
 			<argument></argument>
 			<argument type="collection">
@@ -308,13 +308,13 @@
 			<call method="setFormattersNames">
 				<argument>pre</argument>
 				<argument type="collection">
-					<argument>PHPPdf\Formatter\ConvertAttributesFormatter</argument>
-					<argument>PHPPdf\Formatter\TextDimensionFormatter</argument>
+					<argument>PHPPdf\Core\Formatter\ConvertAttributesFormatter</argument>
+					<argument>PHPPdf\Core\Formatter\TextDimensionFormatter</argument>
 				</argument>
 			</call>
 		</service>
 		
-		<service id="phppdf.node.h1" class="PHPPdf\Node\Container" public="false">
+		<service id="phppdf.node.h1" class="PHPPdf\Core\Node\Container" public="false">
 			<tag name="phppdf.node" />
 			<argument type="collection">
 				<argument key="font-size">18px</argument>
@@ -327,23 +327,23 @@
 			<call method="setFormattersNames">
 				<argument>pre</argument>
 				<argument type="collection">
-					<argument>PHPPdf\Formatter\ConvertAttributesFormatter</argument>
-					<argument>PHPPdf\Formatter\StandardDimensionFormatter</argument>
-					<argument>PHPPdf\Formatter\FirstPointPositionFormatter</argument>
+					<argument>PHPPdf\Core\Formatter\ConvertAttributesFormatter</argument>
+					<argument>PHPPdf\Core\Formatter\StandardDimensionFormatter</argument>
+					<argument>PHPPdf\Core\Formatter\FirstPointPositionFormatter</argument>
 
 				</argument>
 			</call>
 			<call method="setFormattersNames">
 				<argument>post</argument>
 				<argument type="collection">
-					<argument>PHPPdf\Formatter\ContainerDimensionFormatter</argument>
-					<argument>PHPPdf\Formatter\StandardPositionFormatter</argument>
-					<argument>PHPPdf\Formatter\FloatFormatter</argument>
-					<argument>PHPPdf\Formatter\VerticalAlignFormatter</argument>
+					<argument>PHPPdf\Core\Formatter\ContainerDimensionFormatter</argument>
+					<argument>PHPPdf\Core\Formatter\StandardPositionFormatter</argument>
+					<argument>PHPPdf\Core\Formatter\FloatFormatter</argument>
+					<argument>PHPPdf\Core\Formatter\VerticalAlignFormatter</argument>
 				</argument>
 			</call>
 		</service>
-		<service id="phppdf.node.h2" class="PHPPdf\Node\Container" public="false">
+		<service id="phppdf.node.h2" class="PHPPdf\Core\Node\Container" public="false">
 			<tag name="phppdf.node" />
 			<argument type="collection">
 				<argument key="font-size">16px</argument>
@@ -356,23 +356,23 @@
 			<call method="setFormattersNames">
 				<argument>pre</argument>
 				<argument type="collection">
-					<argument>PHPPdf\Formatter\ConvertAttributesFormatter</argument>
-					<argument>PHPPdf\Formatter\StandardDimensionFormatter</argument>
-					<argument>PHPPdf\Formatter\FirstPointPositionFormatter</argument>
+					<argument>PHPPdf\Core\Formatter\ConvertAttributesFormatter</argument>
+					<argument>PHPPdf\Core\Formatter\StandardDimensionFormatter</argument>
+					<argument>PHPPdf\Core\Formatter\FirstPointPositionFormatter</argument>
 
 				</argument>
 			</call>
 			<call method="setFormattersNames">
 				<argument>post</argument>
 				<argument type="collection">
-					<argument>PHPPdf\Formatter\ContainerDimensionFormatter</argument>
-					<argument>PHPPdf\Formatter\StandardPositionFormatter</argument>
-					<argument>PHPPdf\Formatter\FloatFormatter</argument>
-					<argument>PHPPdf\Formatter\VerticalAlignFormatter</argument>
+					<argument>PHPPdf\Core\Formatter\ContainerDimensionFormatter</argument>
+					<argument>PHPPdf\Core\Formatter\StandardPositionFormatter</argument>
+					<argument>PHPPdf\Core\Formatter\FloatFormatter</argument>
+					<argument>PHPPdf\Core\Formatter\VerticalAlignFormatter</argument>
 				</argument>
 			</call>
 		</service>
-		<service id="phppdf.node.h3" class="PHPPdf\Node\Container" public="false">
+		<service id="phppdf.node.h3" class="PHPPdf\Core\Node\Container" public="false">
 			<tag name="phppdf.node" />
 			<argument type="collection">
 				<argument key="font-size">14px</argument>
@@ -385,23 +385,23 @@
 			<call method="setFormattersNames">
 				<argument>pre</argument>
 				<argument type="collection">
-					<argument>PHPPdf\Formatter\ConvertAttributesFormatter</argument>
-					<argument>PHPPdf\Formatter\StandardDimensionFormatter</argument>
-					<argument>PHPPdf\Formatter\FirstPointPositionFormatter</argument>
+					<argument>PHPPdf\Core\Formatter\ConvertAttributesFormatter</argument>
+					<argument>PHPPdf\Core\Formatter\StandardDimensionFormatter</argument>
+					<argument>PHPPdf\Core\Formatter\FirstPointPositionFormatter</argument>
 
 				</argument>
 			</call>
 			<call method="setFormattersNames">
 				<argument>post</argument>
 				<argument type="collection">
-					<argument>PHPPdf\Formatter\ContainerDimensionFormatter</argument>
-					<argument>PHPPdf\Formatter\StandardPositionFormatter</argument>
-					<argument>PHPPdf\Formatter\FloatFormatter</argument>
-					<argument>PHPPdf\Formatter\VerticalAlignFormatter</argument>
+					<argument>PHPPdf\Core\Formatter\ContainerDimensionFormatter</argument>
+					<argument>PHPPdf\Core\Formatter\StandardPositionFormatter</argument>
+					<argument>PHPPdf\Core\Formatter\FloatFormatter</argument>
+					<argument>PHPPdf\Core\Formatter\VerticalAlignFormatter</argument>
 				</argument>
 			</call>
 		</service>
-		<service id="phppdf.node.h4" class="PHPPdf\Node\Container" public="false">
+		<service id="phppdf.node.h4" class="PHPPdf\Core\Node\Container" public="false">
 			<tag name="phppdf.node" />
 			<argument type="collection">
 				<argument key="font-size">12px</argument>
@@ -412,24 +412,24 @@
 			<call method="setFormattersNames">
 				<argument>pre</argument>
 				<argument type="collection">
-					<argument>PHPPdf\Formatter\ConvertAttributesFormatter</argument>
-					<argument>PHPPdf\Formatter\StandardDimensionFormatter</argument>
-					<argument>PHPPdf\Formatter\FirstPointPositionFormatter</argument>
+					<argument>PHPPdf\Core\Formatter\ConvertAttributesFormatter</argument>
+					<argument>PHPPdf\Core\Formatter\StandardDimensionFormatter</argument>
+					<argument>PHPPdf\Core\Formatter\FirstPointPositionFormatter</argument>
 
 				</argument>
 			</call>
 			<call method="setFormattersNames">
 				<argument>post</argument>
 				<argument type="collection">
-					<argument>PHPPdf\Formatter\ContainerDimensionFormatter</argument>
-					<argument>PHPPdf\Formatter\StandardPositionFormatter</argument>
-					<argument>PHPPdf\Formatter\FloatFormatter</argument>
-					<argument>PHPPdf\Formatter\VerticalAlignFormatter</argument>
+					<argument>PHPPdf\Core\Formatter\ContainerDimensionFormatter</argument>
+					<argument>PHPPdf\Core\Formatter\StandardPositionFormatter</argument>
+					<argument>PHPPdf\Core\Formatter\FloatFormatter</argument>
+					<argument>PHPPdf\Core\Formatter\VerticalAlignFormatter</argument>
 				</argument>
 			</call>
 		</service>
 		
-		<service id="phppdf.node.page-info" class="PHPPdf\Node\Runtime\PageInfo" public="false">
+		<service id="phppdf.node.page-info" class="PHPPdf\Core\Node\Runtime\PageInfo" public="false">
 			<tag name="phppdf.node" />
 			<argument type="collection"></argument>
 			<argument type="service" id="phppdf.unit_converter">
@@ -438,12 +438,12 @@
 			<call method="setFormattersNames">
 				<argument>pre</argument>
 				<argument type="collection">
-					<argument>PHPPdf\Formatter\ConvertAttributesFormatter</argument>
-					<argument>PHPPdf\Formatter\TextDimensionFormatter</argument>
+					<argument>PHPPdf\Core\Formatter\ConvertAttributesFormatter</argument>
+					<argument>PHPPdf\Core\Formatter\TextDimensionFormatter</argument>
 				</argument>
 			</call>
 		</service>
-		<service id="phppdf.node.page-number" class="PHPPdf\Node\Runtime\CurrentPageNumber" public="false">
+		<service id="phppdf.node.page-number" class="PHPPdf\Core\Node\Runtime\CurrentPageNumber" public="false">
 			<tag name="phppdf.node" />
 			<argument type="collection"></argument>
 			<argument type="service" id="phppdf.unit_converter">
@@ -452,12 +452,12 @@
 			<call method="setFormattersNames">
 				<argument>pre</argument>
 				<argument type="collection">
-					<argument>PHPPdf\Formatter\ConvertAttributesFormatter</argument>
-					<argument>PHPPdf\Formatter\TextDimensionFormatter</argument>
+					<argument>PHPPdf\Core\Formatter\ConvertAttributesFormatter</argument>
+					<argument>PHPPdf\Core\Formatter\TextDimensionFormatter</argument>
 				</argument>
 			</call>
 		</service>
-		<service id="phppdf.node.table" class="PHPPdf\Node\Table" public="false">
+		<service id="phppdf.node.table" class="PHPPdf\Core\Node\Table" public="false">
 			<tag name="phppdf.node" />
 			<argument type="collection"></argument>
 			<argument type="service" id="phppdf.unit_converter">
@@ -466,23 +466,23 @@
 			<call method="setFormattersNames">
 				<argument>pre</argument>
 				<argument type="collection">
-					<argument>PHPPdf\Formatter\ConvertAttributesFormatter</argument>
-					<argument>PHPPdf\Formatter\StandardDimensionFormatter</argument>
-					<argument>PHPPdf\Formatter\TableColumnFormatter</argument>
-					<argument>PHPPdf\Formatter\FirstPointPositionFormatter</argument>
+					<argument>PHPPdf\Core\Formatter\ConvertAttributesFormatter</argument>
+					<argument>PHPPdf\Core\Formatter\StandardDimensionFormatter</argument>
+					<argument>PHPPdf\Core\Formatter\TableColumnFormatter</argument>
+					<argument>PHPPdf\Core\Formatter\FirstPointPositionFormatter</argument>
 
 				</argument>
 			</call>
 			<call method="setFormattersNames">
 				<argument>post</argument>
 				<argument type="collection">
-					<argument>PHPPdf\Formatter\ContainerDimensionFormatter</argument>
-					<argument>PHPPdf\Formatter\TableFormatter</argument>
-					<argument>PHPPdf\Formatter\StandardPositionFormatter</argument>
+					<argument>PHPPdf\Core\Formatter\ContainerDimensionFormatter</argument>
+					<argument>PHPPdf\Core\Formatter\TableFormatter</argument>
+					<argument>PHPPdf\Core\Formatter\StandardPositionFormatter</argument>
 				</argument>
 			</call>
 		</service>
-		<service id="phppdf.node.tr" class="PHPPdf\Node\Table\Row" public="false">
+		<service id="phppdf.node.tr" class="PHPPdf\Core\Node\Table\Row" public="false">
 			<tag name="phppdf.node" />
 			<argument type="collection">
 				<argument key="height">5px</argument>
@@ -493,22 +493,22 @@
 			<call method="setFormattersNames">
 				<argument>pre</argument>
 				<argument type="collection">
-					<argument>PHPPdf\Formatter\ConvertAttributesFormatter</argument>
-					<argument>PHPPdf\Formatter\StandardDimensionFormatter</argument>
-					<argument>PHPPdf\Formatter\FirstPointPositionFormatter</argument>
+					<argument>PHPPdf\Core\Formatter\ConvertAttributesFormatter</argument>
+					<argument>PHPPdf\Core\Formatter\StandardDimensionFormatter</argument>
+					<argument>PHPPdf\Core\Formatter\FirstPointPositionFormatter</argument>
 
 				</argument>
 			</call>
 			<call method="setFormattersNames">
 				<argument>post</argument>
 				<argument type="collection">
-					<argument>PHPPdf\Formatter\ContainerDimensionFormatter</argument>
-					<argument>PHPPdf\Formatter\StandardPositionFormatter</argument>
-					<argument>PHPPdf\Formatter\RowDimensionFormatter</argument>
+					<argument>PHPPdf\Core\Formatter\ContainerDimensionFormatter</argument>
+					<argument>PHPPdf\Core\Formatter\StandardPositionFormatter</argument>
+					<argument>PHPPdf\Core\Formatter\RowDimensionFormatter</argument>
 				</argument>
 			</call>
 		</service>
-		<service id="phppdf.node.td" class="PHPPdf\Node\Table\Cell" public="false">
+		<service id="phppdf.node.td" class="PHPPdf\Core\Node\Table\Cell" public="false">
 			<tag name="phppdf.node" />
 			<argument type="collection"></argument>
 			<argument type="service" id="phppdf.unit_converter">
@@ -525,22 +525,22 @@
 			<call method="setFormattersNames">
 				<argument>pre</argument>
 				<argument type="collection">
-					<argument>PHPPdf\Formatter\ConvertAttributesFormatter</argument>
-					<argument>PHPPdf\Formatter\StandardDimensionFormatter</argument>
-					<argument>PHPPdf\Formatter\CellFirstPointPositionFormatter</argument>
+					<argument>PHPPdf\Core\Formatter\ConvertAttributesFormatter</argument>
+					<argument>PHPPdf\Core\Formatter\StandardDimensionFormatter</argument>
+					<argument>PHPPdf\Core\Formatter\CellFirstPointPositionFormatter</argument>
 
 				</argument>
 			</call>
 			<call method="setFormattersNames">
 				<argument>post</argument>
 				<argument type="collection">
-					<argument>PHPPdf\Formatter\ContainerDimensionFormatter</argument>
-					<argument>PHPPdf\Formatter\StandardPositionFormatter</argument>
-					<argument>PHPPdf\Formatter\FloatFormatter</argument>
+					<argument>PHPPdf\Core\Formatter\ContainerDimensionFormatter</argument>
+					<argument>PHPPdf\Core\Formatter\StandardPositionFormatter</argument>
+					<argument>PHPPdf\Core\Formatter\FloatFormatter</argument>
 				</argument>
 			</call>
 		</service>
-		<service id="phppdf.node.img" class="PHPPdf\Node\Image" public="false">
+		<service id="phppdf.node.img" class="PHPPdf\Core\Node\Image" public="false">
 			<tag name="phppdf.node" />
 			<argument type="collection">
 				<argument key="margin">1</argument>
@@ -551,14 +551,14 @@
 			<call method="setFormattersNames">
 				<argument>pre</argument>
 				<argument type="collection">
-					<argument>PHPPdf\Formatter\ImageConvertAttributesFormatter</argument>
-					<argument>PHPPdf\Formatter\FirstPointPositionFormatter</argument>
-					<argument>PHPPdf\Formatter\StandardPositionFormatter</argument>
+					<argument>PHPPdf\Core\Formatter\ImageConvertAttributesFormatter</argument>
+					<argument>PHPPdf\Core\Formatter\FirstPointPositionFormatter</argument>
+					<argument>PHPPdf\Core\Formatter\StandardPositionFormatter</argument>
 				</argument>
 			</call>
 		</service>
 
-		<service id="phppdf.node.hr" class="PHPPdf\Node\Container" public="false">
+		<service id="phppdf.node.hr" class="PHPPdf\Core\Node\Container" public="false">
 			<tag name="phppdf.node" />
 			<argument type="collection">
 				<argument key="height">0.5</argument>
@@ -577,23 +577,23 @@
 			<call method="setFormattersNames">
 				<argument>pre</argument>
 				<argument type="collection">
-					<argument>PHPPdf\Formatter\ConvertAttributesFormatter</argument>
-					<argument>PHPPdf\Formatter\StandardDimensionFormatter</argument>
-					<argument>PHPPdf\Formatter\FirstPointPositionFormatter</argument>
+					<argument>PHPPdf\Core\Formatter\ConvertAttributesFormatter</argument>
+					<argument>PHPPdf\Core\Formatter\StandardDimensionFormatter</argument>
+					<argument>PHPPdf\Core\Formatter\FirstPointPositionFormatter</argument>
 
 				</argument>
 			</call>
 			<call method="setFormattersNames">
 				<argument>post</argument>
 				<argument type="collection">
-					<argument>PHPPdf\Formatter\ContainerDimensionFormatter</argument>
-					<argument>PHPPdf\Formatter\StandardPositionFormatter</argument>
-					<argument>PHPPdf\Formatter\FloatFormatter</argument>
+					<argument>PHPPdf\Core\Formatter\ContainerDimensionFormatter</argument>
+					<argument>PHPPdf\Core\Formatter\StandardPositionFormatter</argument>
+					<argument>PHPPdf\Core\Formatter\FloatFormatter</argument>
 				</argument>
 			</call>
 		</service>
 		
-		<service id="phppdf.node.b" class="PHPPdf\Node\Text" public="false">
+		<service id="phppdf.node.b" class="PHPPdf\Core\Node\Text" public="false">
 			<tag name="phppdf.node" />
 			<argument></argument>
 			<argument type="collection">
@@ -605,12 +605,12 @@
 			<call method="setFormattersNames">
 				<argument>pre</argument>
 				<argument type="collection">
-					<argument>PHPPdf\Formatter\ConvertAttributesFormatter</argument>
-					<argument>PHPPdf\Formatter\TextDimensionFormatter</argument>
+					<argument>PHPPdf\Core\Formatter\ConvertAttributesFormatter</argument>
+					<argument>PHPPdf\Core\Formatter\TextDimensionFormatter</argument>
 				</argument>
 			</call>
 		</service>
-		<service id="phppdf.node.i" class="PHPPdf\Node\Text" public="false">
+		<service id="phppdf.node.i" class="PHPPdf\Core\Node\Text" public="false">
 			<tag name="phppdf.node" />
 			<argument></argument>
 			<argument type="collection">
@@ -622,12 +622,12 @@
 			<call method="setFormattersNames">
 				<argument>pre</argument>
 				<argument type="collection">
-					<argument>PHPPdf\Formatter\ConvertAttributesFormatter</argument>
-					<argument>PHPPdf\Formatter\TextDimensionFormatter</argument>
+					<argument>PHPPdf\Core\Formatter\ConvertAttributesFormatter</argument>
+					<argument>PHPPdf\Core\Formatter\TextDimensionFormatter</argument>
 				</argument>
 			</call>
 		</service>
-		<service id="phppdf.node.page-break" class="PHPPdf\Node\Container" public="false">
+		<service id="phppdf.node.page-break" class="PHPPdf\Core\Node\Container" public="false">
 			<tag name="phppdf.node" />
 			<argument type="collection">
 				<argument key="break">true</argument>
@@ -639,22 +639,22 @@
 			<call method="setFormattersNames">
 				<argument>pre</argument>
 				<argument type="collection">
-					<argument>PHPPdf\Formatter\ConvertAttributesFormatter</argument>
-					<argument>PHPPdf\Formatter\StandardDimensionFormatter</argument>
-					<argument>PHPPdf\Formatter\FirstPointPositionFormatter</argument>
+					<argument>PHPPdf\Core\Formatter\ConvertAttributesFormatter</argument>
+					<argument>PHPPdf\Core\Formatter\StandardDimensionFormatter</argument>
+					<argument>PHPPdf\Core\Formatter\FirstPointPositionFormatter</argument>
 
 				</argument>
 			</call>
 			<call method="setFormattersNames">
 				<argument>post</argument>
 				<argument type="collection">
-					<argument>PHPPdf\Formatter\ContainerDimensionFormatter</argument>
-					<argument>PHPPdf\Formatter\StandardPositionFormatter</argument>
-					<argument>PHPPdf\Formatter\FloatFormatter</argument>
+					<argument>PHPPdf\Core\Formatter\ContainerDimensionFormatter</argument>
+					<argument>PHPPdf\Core\Formatter\StandardPositionFormatter</argument>
+					<argument>PHPPdf\Core\Formatter\FloatFormatter</argument>
 				</argument>
 			</call>
 		</service>
-		<service id="phppdf.node.column-layout" class="PHPPdf\Node\ColumnableContainer"  public="false">
+		<service id="phppdf.node.column-layout" class="PHPPdf\Core\Node\ColumnableContainer"  public="false">
 			<tag name="phppdf.node" />
 			<argument type="collection"></argument>
 			<argument type="service" id="phppdf.unit_converter">
@@ -663,18 +663,18 @@
 			<call method="setFormattersNames">
 				<argument>pre</argument>
 				<argument type="collection">
-					<argument>PHPPdf\Formatter\ConvertAttributesFormatter</argument>
-					<argument>PHPPdf\Formatter\StandardDimensionFormatter</argument>
-					<argument>PHPPdf\Formatter\FirstPointPositionFormatter</argument>
+					<argument>PHPPdf\Core\Formatter\ConvertAttributesFormatter</argument>
+					<argument>PHPPdf\Core\Formatter\StandardDimensionFormatter</argument>
+					<argument>PHPPdf\Core\Formatter\FirstPointPositionFormatter</argument>
 
 				</argument>
 			</call>
 			<call method="setFormattersNames">
 				<argument>post</argument>
 				<argument type="collection">
-					<argument>PHPPdf\Formatter\ContainerDimensionFormatter</argument>
-					<argument>PHPPdf\Formatter\StandardPositionFormatter</argument>
-					<argument>PHPPdf\Formatter\FloatFormatter</argument>
+					<argument>PHPPdf\Core\Formatter\ContainerDimensionFormatter</argument>
+					<argument>PHPPdf\Core\Formatter\StandardPositionFormatter</argument>
+					<argument>PHPPdf\Core\Formatter\FloatFormatter</argument>
 				</argument>
 			</call>
 		</service>

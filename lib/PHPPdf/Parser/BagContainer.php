@@ -8,7 +8,7 @@
 
 namespace PHPPdf\Parser;
 
-use PHPPdf\Node\Node;
+use PHPPdf\Core\Node\Node;
 use PHPPdf\Core\AttributeBag;
 
 /**

@@ -13,11 +13,11 @@ class FacadeBuilderTest extends \PHPPdf\PHPUnit\Framework\TestCase
 
     public function setUp()
     {
-        $this->configurationLoader = $this->getMockBuilder('PHPPdf\Configuration\Loader')
+        $this->configurationLoader = $this->getMockBuilder('PHPPdf\Core\Configuration\Loader')
                                           ->getMock();
         $this->builder = FacadeBuilder::create($this->configurationLoader);
         
-        $complexAttributeFactory = $this->getMock('PHPPdf\ComplexAttribute\Factory');
+        $complexAttributeFactory = $this->getMock('PHPPdf\Core\ComplexAttribute\Factory');
         
         $this->configurationLoader->expects($this->any())
                                   ->method('createComplexAttributeFactory')

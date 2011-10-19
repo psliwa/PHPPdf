@@ -6,7 +6,7 @@ use PHPPdf\Core\DrawingTaskHeap;
 
 use PHPPdf\Document,
     PHPPdf\Font\Registry as FontRegistry,
-    PHPPdf\Node\Page;
+    PHPPdf\Core\Node\Page;
 
 class DocumentTest extends \PHPPdf\PHPUnit\Framework\TestCase
 {
@@ -34,7 +34,7 @@ class DocumentTest extends \PHPPdf\PHPUnit\Framework\TestCase
             $tasks[] = $taskMock;
         }
                  
-        $mock = $this->getMock('\PHPPdf\Node\PageCollection', array('getAllDrawingTasks', 'format'));
+        $mock = $this->getMock('\PHPPdf\Core\Node\PageCollection', array('getAllDrawingTasks', 'format'));
 
         $matcher = $mock->expects($this->once())
                         ->method('format')
@@ -69,7 +69,7 @@ class DocumentTest extends \PHPPdf\PHPUnit\Framework\TestCase
      */
     public function throwExceptionWhenDocumentIsDrawTwiceWithoutReset()
     {
-        $mock = $this->getMock('\PHPPdf\Node\Page', array('collectOrderedDrawingTasks'));
+        $mock = $this->getMock('\PHPPdf\Core\Node\Page', array('collectOrderedDrawingTasks'));
 
         $mock->expects($this->once())
              ->method('collectOrderedDrawingTasks')
@@ -85,7 +85,7 @@ class DocumentTest extends \PHPPdf\PHPUnit\Framework\TestCase
      */
     public function drawingArgumentMustBeAnArrayOfPages()
     {
-        $this->document->draw(array(new \PHPPdf\Node\Container()));
+        $this->document->draw(array(new \PHPPdf\Core\Node\Container()));
     }
 
     /**
@@ -94,7 +94,7 @@ class DocumentTest extends \PHPPdf\PHPUnit\Framework\TestCase
     public function creationOfComplexAttributes()
     {
         $complexAttributesParameters = array('border' => array('color' => 'red', 'name' => 'border'), 'background' => array('name' => 'background', 'color' => 'pink', 'repeat' => 'none'), 'empty' => array('name' => 'empty'));
-        $complexAttributeStub = $this->getMockBuilder('PHPPdf\ComplexAttribute\Border')
+        $complexAttributeStub = $this->getMockBuilder('PHPPdf\Core\ComplexAttribute\Border')
                                 ->setMethods(array('isEmpty'))
                                 ->getMock();
                                 
@@ -102,7 +102,7 @@ class DocumentTest extends \PHPPdf\PHPUnit\Framework\TestCase
                         ->method('isEmpty')
                         ->will($this->returnValue(false));
                                 
-        $emptyComplexAttributeStub = $this->getMockBuilder('PHPPdf\ComplexAttribute\Border')
+        $emptyComplexAttributeStub = $this->getMockBuilder('PHPPdf\Core\ComplexAttribute\Border')
                                      ->setMethods(array('isEmpty'))
                                      ->getMock();
                                      
@@ -121,7 +121,7 @@ class DocumentTest extends \PHPPdf\PHPUnit\Framework\TestCase
             'empty' => $emptyComplexAttributeStub,
         );
 
-        $complexAttributeFactoryMock = $this->getMock('PHPPdf\ComplexAttribute\Factory', array('create'));
+        $complexAttributeFactoryMock = $this->getMock('PHPPdf\Core\ComplexAttribute\Factory', array('create'));
         
         $at = 0;
         foreach($complexAttributesParameters as $name => $params)
@@ -153,7 +153,7 @@ class DocumentTest extends \PHPPdf\PHPUnit\Framework\TestCase
                            ->method('getAll')
                            ->will($this->returnValue($complexAttributes));
 
-        $complexAttributeFactoryMock = $this->getMock('PHPPdf\ComplexAttribute\Factory', array('create'));
+        $complexAttributeFactoryMock = $this->getMock('PHPPdf\Core\ComplexAttribute\Factory', array('create'));
         $complexAttributeFactoryMock->expects($this->never())
                                ->method('create');
 
@@ -167,7 +167,7 @@ class DocumentTest extends \PHPPdf\PHPUnit\Framework\TestCase
      */
     public function createFormatterByClassName()
     {
-        $className = 'PHPPdf\Formatter\FloatFormatter';
+        $className = 'PHPPdf\Core\Formatter\FloatFormatter';
 
         $formatter = $this->document->getFormatter($className);
 

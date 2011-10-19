@@ -2,7 +2,7 @@
 
 namespace PHPPdf\Stub\Node;
 
-use PHPPdf\Node\Container;
+use PHPPdf\Core\Node\Container;
 
 class StubComposeNode extends Container
 {

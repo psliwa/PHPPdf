@@ -3,9 +3,9 @@
 namespace PHPPdf\Stub\ComplexAttribute;
 
 use PHPPdf\Document;
-use PHPPdf\ComplexAttribute\ComplexAttribute,
-    PHPPdf\Node\Page,
-    PHPPdf\Node\Node;
+use PHPPdf\Core\ComplexAttribute\ComplexAttribute,
+    PHPPdf\Core\Node\Page,
+    PHPPdf\Core\Node\Node;
 
 class ComplexAttributeStub extends ComplexAttribute
 {

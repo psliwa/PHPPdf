@@ -11,15 +11,15 @@ namespace PHPPdf;
 use PHPPdf\Core\AttributeBag;
 
 use PHPPdf\Core\UnitConverter,
-    PHPPdf\Node\Node,
-    PHPPdf\Engine\ZF\Engine as ZfEngine,
-    PHPPdf\Formatter as Formatters,
-    PHPPdf\Node\Page,
-    PHPPdf\Node\PageCollection,
-    PHPPdf\ComplexAttribute\Factory as ComplexAttributeFactory,
+    PHPPdf\Core\Node\Node,
+    PHPPdf\Core\Engine\ZF\Engine as ZfEngine,
+    PHPPdf\Core\Formatter as Formatters,
+    PHPPdf\Core\Node\Page,
+    PHPPdf\Core\Node\PageCollection,
+    PHPPdf\Core\ComplexAttribute\Factory as ComplexAttributeFactory,
     PHPPdf\Exception\DrawingException,
-    PHPPdf\Engine\Engine,
-    PHPPdf\Engine\GraphicsContext,
+    PHPPdf\Core\Engine\Engine,
+    PHPPdf\Core\Engine\GraphicsContext,
     PHPPdf\Core\DrawingTaskHeap;
 
 /**
@@ -41,7 +41,7 @@ class Document implements UnitConverter, Engine
     private $processed = false;
 
     /**
-     * @var PHPPdf\Engine\Engine
+     * @var PHPPdf\Core\Engine\Engine
      */
     private $engine;
 
@@ -157,7 +157,7 @@ class Document implements UnitConverter, Engine
             {
                 if(!$page instanceof Page)
                 {
-                    throw new DrawingException(sprintf('Not all elements of passed array are PHPPdf\Node\Page type. One of them is "%s".', get_class($page)));
+                    throw new DrawingException(sprintf('Not all elements of passed array are PHPPdf\Core\Node\Page type. One of them is "%s".', get_class($page)));
                 }
 
                 $pageCollection->add($page);
@@ -198,7 +198,7 @@ class Document implements UnitConverter, Engine
 
     /**
      * @param string $className Formatter class name
-     * @return PHPPdf\Formatter\Formatter
+     * @return PHPPdf\Core\Formatter\Formatter
      */
     public function getFormatter($className)
     {

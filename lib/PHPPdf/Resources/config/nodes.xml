@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <factory>
 	<invoke-args>
-		<invoke-arg id="list.enumeration_factory" class="PHPPdf\Node\BasicList\EnumerationStrategyFactory" />
+		<invoke-arg id="list.enumeration_factory" class="PHPPdf\Core\Node\BasicList\EnumerationStrategyFactory" />
 	</invoke-args>
 	<nodes>
-	    <node name="page" class="PHPPdf\Node\Page">
+	    <node name="page" class="PHPPdf\Core\Node\Page">
 	        <stylesheet>
 	            <attribute name="font-type" value="helvetica" />
 	            <attribute name="font-size" value="12px" />
@@ -13,307 +13,307 @@
 	            <attribute name="color" value="black" />
 	        </stylesheet>
 	        <formatters>
-	            <post class="PHPPdf\Formatter\FloatFormatter" />
-	            <post class="PHPPdf\Formatter\ColumnBreakingFormatter" />
+	            <post class="PHPPdf\Core\Formatter\FloatFormatter" />
+	            <post class="PHPPdf\Core\Formatter\ColumnBreakingFormatter" />
 	        </formatters>
 	    </node>
-	    <node name="dynamic-page" class="PHPPdf\Node\DynamicPage">
+	    <node name="dynamic-page" class="PHPPdf\Core\Node\DynamicPage">
 	        <formatters>
-	            <post class="PHPPdf\Formatter\FloatFormatter" />
-	            <post class="PHPPdf\Formatter\PageBreakingFormatter" />
+	            <post class="PHPPdf\Core\Formatter\FloatFormatter" />
+	            <post class="PHPPdf\Core\Formatter\PageBreakingFormatter" />
 	        </formatters>
 	    </node>
-	    <node name="div" class="PHPPdf\Node\Container">
+	    <node name="div" class="PHPPdf\Core\Node\Container">
 	    	<alias>pre</alias>
 	    	<alias>nl</alias>
 	        <formatters>
-	            <pre class="PHPPdf\Formatter\ConvertAttributesFormatter" />
-	            <pre class="PHPPdf\Formatter\StandardDimensionFormatter" />
-	            <pre class="PHPPdf\Formatter\FirstPointPositionFormatter" />
+	            <pre class="PHPPdf\Core\Formatter\ConvertAttributesFormatter" />
+	            <pre class="PHPPdf\Core\Formatter\StandardDimensionFormatter" />
+	            <pre class="PHPPdf\Core\Formatter\FirstPointPositionFormatter" />
 
-	            <post class="PHPPdf\Formatter\ContainerDimensionFormatter" />
-	            <post class="PHPPdf\Formatter\StandardPositionFormatter" />
-	            <post class="PHPPdf\Formatter\FloatFormatter" />
-	            <post class="PHPPdf\Formatter\VerticalAlignFormatter" />
+	            <post class="PHPPdf\Core\Formatter\ContainerDimensionFormatter" />
+	            <post class="PHPPdf\Core\Formatter\StandardPositionFormatter" />
+	            <post class="PHPPdf\Core\Formatter\FloatFormatter" />
+	            <post class="PHPPdf\Core\Formatter\VerticalAlignFormatter" />
 	        </formatters>
 	    </node>
-	    <node name="br" class="PHPPdf\Node\Container">
+	    <node name="br" class="PHPPdf\Core\Node\Container">
 	        <stylesheet>
 	            <attribute name="line-break" value="1" />
 	        </stylesheet>
 	        <formatters>
-	            <pre class="PHPPdf\Formatter\ConvertAttributesFormatter" />
-	            <pre class="PHPPdf\Formatter\StandardDimensionFormatter" />
-	            <pre class="PHPPdf\Formatter\FirstPointPositionFormatter" />
+	            <pre class="PHPPdf\Core\Formatter\ConvertAttributesFormatter" />
+	            <pre class="PHPPdf\Core\Formatter\StandardDimensionFormatter" />
+	            <pre class="PHPPdf\Core\Formatter\FirstPointPositionFormatter" />
 
-	            <post class="PHPPdf\Formatter\ContainerDimensionFormatter" />
-	            <post class="PHPPdf\Formatter\StandardPositionFormatter" />
-	            <post class="PHPPdf\Formatter\FloatFormatter" />
-	            <post class="PHPPdf\Formatter\VerticalAlignFormatter" />
+	            <post class="PHPPdf\Core\Formatter\ContainerDimensionFormatter" />
+	            <post class="PHPPdf\Core\Formatter\StandardPositionFormatter" />
+	            <post class="PHPPdf\Core\Formatter\FloatFormatter" />
+	            <post class="PHPPdf\Core\Formatter\VerticalAlignFormatter" />
 	        </formatters>
 	    </node>
 	    
-	    <node name="ul" class="PHPPdf\Node\BasicList">
+	    <node name="ul" class="PHPPdf\Core\Node\BasicList">
 	    	<invoke method="setEnumerationStrategyFactory" argId="list.enumeration_factory" />
 	    	<stylesheet>
 	    		<attribute name="margin-left" value="12px" />
 	    	</stylesheet>
 	        <formatters>
-	            <pre class="PHPPdf\Formatter\ConvertAttributesFormatter" />
-	            <pre class="PHPPdf\Formatter\StandardDimensionFormatter" />
-	            <pre class="PHPPdf\Formatter\FirstPointPositionFormatter" />
-	            <pre class="PHPPdf\Formatter\ListFormatter" />
+	            <pre class="PHPPdf\Core\Formatter\ConvertAttributesFormatter" />
+	            <pre class="PHPPdf\Core\Formatter\StandardDimensionFormatter" />
+	            <pre class="PHPPdf\Core\Formatter\FirstPointPositionFormatter" />
+	            <pre class="PHPPdf\Core\Formatter\ListFormatter" />
 
-	            <post class="PHPPdf\Formatter\ContainerDimensionFormatter" />
-	            <post class="PHPPdf\Formatter\StandardPositionFormatter" />
-	            <post class="PHPPdf\Formatter\FloatFormatter" />
+	            <post class="PHPPdf\Core\Formatter\ContainerDimensionFormatter" />
+	            <post class="PHPPdf\Core\Formatter\StandardPositionFormatter" />
+	            <post class="PHPPdf\Core\Formatter\FloatFormatter" />
 	        </formatters>
 	    </node>
-	    <node name="ol" class="PHPPdf\Node\BasicList">
+	    <node name="ol" class="PHPPdf\Core\Node\BasicList">
 	    	<stylesheet>
 	    		<attribute name="type" value="decimal" />
 	    		<attribute name="margin-left" value="12px" />
 	    	</stylesheet>
 	    	<invoke method="setEnumerationStrategyFactory" argId="list.enumeration_factory" />
 	        <formatters>
-	            <pre class="PHPPdf\Formatter\ConvertAttributesFormatter" />
-	            <pre class="PHPPdf\Formatter\StandardDimensionFormatter" />
-	            <pre class="PHPPdf\Formatter\FirstPointPositionFormatter" />
-	            <pre class="PHPPdf\Formatter\ListFormatter" />
+	            <pre class="PHPPdf\Core\Formatter\ConvertAttributesFormatter" />
+	            <pre class="PHPPdf\Core\Formatter\StandardDimensionFormatter" />
+	            <pre class="PHPPdf\Core\Formatter\FirstPointPositionFormatter" />
+	            <pre class="PHPPdf\Core\Formatter\ListFormatter" />
 
-	            <post class="PHPPdf\Formatter\ContainerDimensionFormatter" />
-	            <post class="PHPPdf\Formatter\StandardPositionFormatter" />
-	            <post class="PHPPdf\Formatter\FloatFormatter" />
+	            <post class="PHPPdf\Core\Formatter\ContainerDimensionFormatter" />
+	            <post class="PHPPdf\Core\Formatter\StandardPositionFormatter" />
+	            <post class="PHPPdf\Core\Formatter\FloatFormatter" />
 	        </formatters>
 	    </node>
-	    <node name="li" class="PHPPdf\Node\BasicListItem">
+	    <node name="li" class="PHPPdf\Core\Node\BasicListItem">
 	    	<stylesheet>
 	    		<attribute name="margin-left" value="10px" />
 	    	</stylesheet>
 	        <formatters>
-	            <pre class="PHPPdf\Formatter\ConvertAttributesFormatter" />
-	            <pre class="PHPPdf\Formatter\StandardDimensionFormatter" />
-	            <pre class="PHPPdf\Formatter\FirstPointPositionFormatter" />
+	            <pre class="PHPPdf\Core\Formatter\ConvertAttributesFormatter" />
+	            <pre class="PHPPdf\Core\Formatter\StandardDimensionFormatter" />
+	            <pre class="PHPPdf\Core\Formatter\FirstPointPositionFormatter" />
 
-	            <post class="PHPPdf\Formatter\ContainerDimensionFormatter" />
-	            <post class="PHPPdf\Formatter\StandardPositionFormatter" />
-	            <post class="PHPPdf\Formatter\FloatFormatter" />
+	            <post class="PHPPdf\Core\Formatter\ContainerDimensionFormatter" />
+	            <post class="PHPPdf\Core\Formatter\StandardPositionFormatter" />
+	            <post class="PHPPdf\Core\Formatter\FloatFormatter" />
 	        </formatters>
 	    </node>
-	    <node name="p" class="PHPPdf\Node\Container">
+	    <node name="p" class="PHPPdf\Core\Node\Container">
 	        <stylesheet>
 	            <attribute name="padding" value="12px 0" />
 	        </stylesheet>
 	        <formatters>
-	            <pre class="PHPPdf\Formatter\ConvertAttributesFormatter" />
-	            <pre class="PHPPdf\Formatter\StandardDimensionFormatter" />
-	            <pre class="PHPPdf\Formatter\FirstPointPositionFormatter" />
+	            <pre class="PHPPdf\Core\Formatter\ConvertAttributesFormatter" />
+	            <pre class="PHPPdf\Core\Formatter\StandardDimensionFormatter" />
+	            <pre class="PHPPdf\Core\Formatter\FirstPointPositionFormatter" />
 
-	            <post class="PHPPdf\Formatter\ContainerDimensionFormatter" />
-	            <post class="PHPPdf\Formatter\StandardPositionFormatter" />
-	            <post class="PHPPdf\Formatter\FloatFormatter" />
-	            <post class="PHPPdf\Formatter\VerticalAlignFormatter" />
+	            <post class="PHPPdf\Core\Formatter\ContainerDimensionFormatter" />
+	            <post class="PHPPdf\Core\Formatter\StandardPositionFormatter" />
+	            <post class="PHPPdf\Core\Formatter\FloatFormatter" />
+	            <post class="PHPPdf\Core\Formatter\VerticalAlignFormatter" />
 	        </formatters>
 	    </node>
 	    
-	    <node name="paragraph" class="PHPPdf\Node\Paragraph">
+	    <node name="paragraph" class="PHPPdf\Core\Node\Paragraph">
 	        <formatters>
-	            <pre class="PHPPdf\Formatter\ConvertAttributesFormatter" />
-	            <pre class="PHPPdf\Formatter\StandardDimensionFormatter" />
-	            <pre class="PHPPdf\Formatter\FirstPointPositionFormatter" />
+	            <pre class="PHPPdf\Core\Formatter\ConvertAttributesFormatter" />
+	            <pre class="PHPPdf\Core\Formatter\StandardDimensionFormatter" />
+	            <pre class="PHPPdf\Core\Formatter\FirstPointPositionFormatter" />
 
-	            <post class="PHPPdf\Formatter\ParagraphFormatter" />
-	            <post class="PHPPdf\Formatter\ContainerDimensionFormatter" />
-	            <post class="PHPPdf\Formatter\StandardPositionFormatter" />
+	            <post class="PHPPdf\Core\Formatter\ParagraphFormatter" />
+	            <post class="PHPPdf\Core\Formatter\ContainerDimensionFormatter" />
+	            <post class="PHPPdf\Core\Formatter\StandardPositionFormatter" />
 
 	        </formatters>
 	    </node>
 	    
-	    <node name="text" class="PHPPdf\Node\Text">
+	    <node name="text" class="PHPPdf\Core\Node\Text">
 	    	<alias>span</alias>
 	    	<alias>code</alias>
 	        <formatters>
-	            <pre class="PHPPdf\Formatter\ConvertAttributesFormatter" />
-	            <pre class="PHPPdf\Formatter\TextDimensionFormatter" />
+	            <pre class="PHPPdf\Core\Formatter\ConvertAttributesFormatter" />
+	            <pre class="PHPPdf\Core\Formatter\TextDimensionFormatter" />
 	        </formatters>
 	    </node>
-	    <node name="h1" class="PHPPdf\Node\Container">
+	    <node name="h1" class="PHPPdf\Core\Node\Container">
 	        <stylesheet>
 	            <attribute name="font-size" value="18px" />
 	            <attribute name="font-style" value="bold" />
 	            <attribute name="margin" value="12px 0" />
 	        </stylesheet>
 	        <formatters>
-	            <pre class="PHPPdf\Formatter\ConvertAttributesFormatter" />
-	            <pre class="PHPPdf\Formatter\StandardDimensionFormatter" />
-	            <pre class="PHPPdf\Formatter\FirstPointPositionFormatter" />
+	            <pre class="PHPPdf\Core\Formatter\ConvertAttributesFormatter" />
+	            <pre class="PHPPdf\Core\Formatter\StandardDimensionFormatter" />
+	            <pre class="PHPPdf\Core\Formatter\FirstPointPositionFormatter" />
 
-	            <post class="PHPPdf\Formatter\ContainerDimensionFormatter" />
-	            <post class="PHPPdf\Formatter\StandardPositionFormatter" />
-	            <post class="PHPPdf\Formatter\FloatFormatter" />
-	            <post class="PHPPdf\Formatter\VerticalAlignFormatter" />
+	            <post class="PHPPdf\Core\Formatter\ContainerDimensionFormatter" />
+	            <post class="PHPPdf\Core\Formatter\StandardPositionFormatter" />
+	            <post class="PHPPdf\Core\Formatter\FloatFormatter" />
+	            <post class="PHPPdf\Core\Formatter\VerticalAlignFormatter" />
 	        </formatters>
 	    </node>
-	    <node name="h2" class="PHPPdf\Node\Container">
+	    <node name="h2" class="PHPPdf\Core\Node\Container">
 	        <stylesheet>
 	            <attribute name="font-size" value="16px" />
 	            <attribute name="font-style" value="bold" />
 	            <attribute name="margin" value="12px 0" />
 	        </stylesheet>
 	        <formatters>
-	            <pre class="PHPPdf\Formatter\ConvertAttributesFormatter" />
-	            <pre class="PHPPdf\Formatter\StandardDimensionFormatter" />
-	            <pre class="PHPPdf\Formatter\FirstPointPositionFormatter" />
+	            <pre class="PHPPdf\Core\Formatter\ConvertAttributesFormatter" />
+	            <pre class="PHPPdf\Core\Formatter\StandardDimensionFormatter" />
+	            <pre class="PHPPdf\Core\Formatter\FirstPointPositionFormatter" />
 
-	            <post class="PHPPdf\Formatter\ContainerDimensionFormatter" />
-	            <post class="PHPPdf\Formatter\StandardPositionFormatter" />
-	            <post class="PHPPdf\Formatter\FloatFormatter" />
-	            <post class="PHPPdf\Formatter\VerticalAlignFormatter" />
+	            <post class="PHPPdf\Core\Formatter\ContainerDimensionFormatter" />
+	            <post class="PHPPdf\Core\Formatter\StandardPositionFormatter" />
+	            <post class="PHPPdf\Core\Formatter\FloatFormatter" />
+	            <post class="PHPPdf\Core\Formatter\VerticalAlignFormatter" />
 	        </formatters>
 	    </node>
-	    <node name="h3" class="PHPPdf\Node\Container">
+	    <node name="h3" class="PHPPdf\Core\Node\Container">
 	        <stylesheet>
 	            <attribute name="font-size" value="14px" />
 	            <attribute name="font-style" value="bold" />
 	            <attribute name="margin" value="12px 0" />
 	        </stylesheet>
 	        <formatters>
-	            <pre class="PHPPdf\Formatter\ConvertAttributesFormatter" />
-	            <pre class="PHPPdf\Formatter\StandardDimensionFormatter" />
-	            <pre class="PHPPdf\Formatter\FirstPointPositionFormatter" />
+	            <pre class="PHPPdf\Core\Formatter\ConvertAttributesFormatter" />
+	            <pre class="PHPPdf\Core\Formatter\StandardDimensionFormatter" />
+	            <pre class="PHPPdf\Core\Formatter\FirstPointPositionFormatter" />
 
-	            <post class="PHPPdf\Formatter\ContainerDimensionFormatter" />
-	            <post class="PHPPdf\Formatter\StandardPositionFormatter" />
-	            <post class="PHPPdf\Formatter\FloatFormatter" />
-	            <post class="PHPPdf\Formatter\VerticalAlignFormatter" />
+	            <post class="PHPPdf\Core\Formatter\ContainerDimensionFormatter" />
+	            <post class="PHPPdf\Core\Formatter\StandardPositionFormatter" />
+	            <post class="PHPPdf\Core\Formatter\FloatFormatter" />
+	            <post class="PHPPdf\Core\Formatter\VerticalAlignFormatter" />
 	        </formatters>
 	    </node>
-	    <node name="h4" class="PHPPdf\Node\Container">
+	    <node name="h4" class="PHPPdf\Core\Node\Container">
 	    	<alias>h5</alias>
 	    	<alias>h6</alias>
 	        <stylesheet>
 	            <attribute name="font-size" value="12px" />
 	        </stylesheet>
 	        <formatters>
-	            <pre class="PHPPdf\Formatter\ConvertAttributesFormatter" />
-	            <pre class="PHPPdf\Formatter\StandardDimensionFormatter" />
-	            <pre class="PHPPdf\Formatter\FirstPointPositionFormatter" />
+	            <pre class="PHPPdf\Core\Formatter\ConvertAttributesFormatter" />
+	            <pre class="PHPPdf\Core\Formatter\StandardDimensionFormatter" />
+	            <pre class="PHPPdf\Core\Formatter\FirstPointPositionFormatter" />
 
-	            <post class="PHPPdf\Formatter\ContainerDimensionFormatter" />
-	            <post class="PHPPdf\Formatter\StandardPositionFormatter" />
-	            <post class="PHPPdf\Formatter\FloatFormatter" />
-	            <post class="PHPPdf\Formatter\VerticalAlignFormatter" />
+	            <post class="PHPPdf\Core\Formatter\ContainerDimensionFormatter" />
+	            <post class="PHPPdf\Core\Formatter\StandardPositionFormatter" />
+	            <post class="PHPPdf\Core\Formatter\FloatFormatter" />
+	            <post class="PHPPdf\Core\Formatter\VerticalAlignFormatter" />
 	        </formatters>
 	    </node>
-	    <node name="page-info" class="PHPPdf\Node\Runtime\PageInfo">
+	    <node name="page-info" class="PHPPdf\Core\Node\Runtime\PageInfo">
 	        <formatters>
-	            <pre class="PHPPdf\Formatter\ConvertAttributesFormatter" />
-	            <pre class="PHPPdf\Formatter\TextDimensionFormatter" />
+	            <pre class="PHPPdf\Core\Formatter\ConvertAttributesFormatter" />
+	            <pre class="PHPPdf\Core\Formatter\TextDimensionFormatter" />
 	        </formatters>
 	    </node>
-	    <node name="page-number" class="PHPPdf\Node\Runtime\CurrentPageNumber">
+	    <node name="page-number" class="PHPPdf\Core\Node\Runtime\CurrentPageNumber">
 	        <formatters>
-	            <pre class="PHPPdf\Formatter\ConvertAttributesFormatter" />
-	            <pre class="PHPPdf\Formatter\TextDimensionFormatter" />
+	            <pre class="PHPPdf\Core\Formatter\ConvertAttributesFormatter" />
+	            <pre class="PHPPdf\Core\Formatter\TextDimensionFormatter" />
 	        </formatters>
 	    </node>
-	    <node name="table" class="PHPPdf\Node\Table">
+	    <node name="table" class="PHPPdf\Core\Node\Table">
 	        <formatters>
-	            <pre class="PHPPdf\Formatter\ConvertAttributesFormatter" />
-	            <pre class="PHPPdf\Formatter\StandardDimensionFormatter" />
-	            <pre class="PHPPdf\Formatter\TableColumnFormatter" />
-	            <pre class="PHPPdf\Formatter\FirstPointPositionFormatter" />
+	            <pre class="PHPPdf\Core\Formatter\ConvertAttributesFormatter" />
+	            <pre class="PHPPdf\Core\Formatter\StandardDimensionFormatter" />
+	            <pre class="PHPPdf\Core\Formatter\TableColumnFormatter" />
+	            <pre class="PHPPdf\Core\Formatter\FirstPointPositionFormatter" />
 
-	            <post class="PHPPdf\Formatter\ContainerDimensionFormatter" />
-	            <post class="PHPPdf\Formatter\TableFormatter" />
-	            <post class="PHPPdf\Formatter\StandardPositionFormatter" />
+	            <post class="PHPPdf\Core\Formatter\ContainerDimensionFormatter" />
+	            <post class="PHPPdf\Core\Formatter\TableFormatter" />
+	            <post class="PHPPdf\Core\Formatter\StandardPositionFormatter" />
 	        </formatters>
 	    </node>
-	    <node name="tr" class="PHPPdf\Node\Table\Row">
+	    <node name="tr" class="PHPPdf\Core\Node\Table\Row">
 	        <stylesheet>
 	            <attribute name="height" value="5px" />
 	        </stylesheet>
 	        <formatters>
-	            <pre class="PHPPdf\Formatter\ConvertAttributesFormatter" />
-	            <pre class="PHPPdf\Formatter\StandardDimensionFormatter" />
-	            <pre class="PHPPdf\Formatter\FirstPointPositionFormatter" />
+	            <pre class="PHPPdf\Core\Formatter\ConvertAttributesFormatter" />
+	            <pre class="PHPPdf\Core\Formatter\StandardDimensionFormatter" />
+	            <pre class="PHPPdf\Core\Formatter\FirstPointPositionFormatter" />
 
-	            <post class="PHPPdf\Formatter\ContainerDimensionFormatter" />
-	            <post class="PHPPdf\Formatter\StandardPositionFormatter" />
-	            <post class="PHPPdf\Formatter\RowDimensionFormatter" />
+	            <post class="PHPPdf\Core\Formatter\ContainerDimensionFormatter" />
+	            <post class="PHPPdf\Core\Formatter\StandardPositionFormatter" />
+	            <post class="PHPPdf\Core\Formatter\RowDimensionFormatter" />
 	        </formatters>
 	    </node>
-	    <node name="td" class="PHPPdf\Node\Table\Cell">
+	    <node name="td" class="PHPPdf\Core\Node\Table\Cell">
 	        <stylesheet>
 	            <complex-attribute name="border" color="black" size="1px" />
 	        </stylesheet>
 	        <formatters>
-	            <pre class="PHPPdf\Formatter\ConvertAttributesFormatter" />
-	            <pre class="PHPPdf\Formatter\StandardDimensionFormatter" />
-	            <pre class="PHPPdf\Formatter\CellFirstPointPositionFormatter" />
+	            <pre class="PHPPdf\Core\Formatter\ConvertAttributesFormatter" />
+	            <pre class="PHPPdf\Core\Formatter\StandardDimensionFormatter" />
+	            <pre class="PHPPdf\Core\Formatter\CellFirstPointPositionFormatter" />
 
-	            <post class="PHPPdf\Formatter\ContainerDimensionFormatter" />
-	            <post class="PHPPdf\Formatter\StandardPositionFormatter" />
-	            <post class="PHPPdf\Formatter\FloatFormatter" />
+	            <post class="PHPPdf\Core\Formatter\ContainerDimensionFormatter" />
+	            <post class="PHPPdf\Core\Formatter\StandardPositionFormatter" />
+	            <post class="PHPPdf\Core\Formatter\FloatFormatter" />
 	        </formatters>
 	    </node>
-	    <node name="img" class="PHPPdf\Node\Image">
+	    <node name="img" class="PHPPdf\Core\Node\Image">
 	        <stylesheet>
 	            <attribute name="margin" value="1" />
 	        </stylesheet>
 	        <formatters>
-	            <pre class="PHPPdf\Formatter\ImageConvertAttributesFormatter" />
-	            <pre class="PHPPdf\Formatter\FirstPointPositionFormatter" />
-	            <post class="PHPPdf\Formatter\StandardPositionFormatter" />
+	            <pre class="PHPPdf\Core\Formatter\ImageConvertAttributesFormatter" />
+	            <pre class="PHPPdf\Core\Formatter\FirstPointPositionFormatter" />
+	            <post class="PHPPdf\Core\Formatter\StandardPositionFormatter" />
 	        </formatters>
 	    </node>
-	    <node name="hr" class="PHPPdf\Node\Container">
+	    <node name="hr" class="PHPPdf\Core\Node\Container">
 	        <stylesheet>
 	            <attribute name="height" value="1px" />
 	            <attribute name="margin" value="12px 0" />
 	            <complex-attribute name="background" color="black" />
 	        </stylesheet>
 	        <formatters>
-	            <pre class="PHPPdf\Formatter\ConvertAttributesFormatter" />
-	            <pre class="PHPPdf\Formatter\StandardDimensionFormatter" />
-	            <pre class="PHPPdf\Formatter\FirstPointPositionFormatter" />
+	            <pre class="PHPPdf\Core\Formatter\ConvertAttributesFormatter" />
+	            <pre class="PHPPdf\Core\Formatter\StandardDimensionFormatter" />
+	            <pre class="PHPPdf\Core\Formatter\FirstPointPositionFormatter" />
 
-	            <post class="PHPPdf\Formatter\ContainerDimensionFormatter" />
-	            <post class="PHPPdf\Formatter\StandardPositionFormatter" />
-	            <post class="PHPPdf\Formatter\FloatFormatter" />
+	            <post class="PHPPdf\Core\Formatter\ContainerDimensionFormatter" />
+	            <post class="PHPPdf\Core\Formatter\StandardPositionFormatter" />
+	            <post class="PHPPdf\Core\Formatter\FloatFormatter" />
 	        </formatters>
 	    </node>
-	    <node name="a" class="PHPPdf\Node\Text">
+	    <node name="a" class="PHPPdf\Core\Node\Text">
 	    	<stylesheet>
 	    		<attribute name="text-decoration" value="underline" />
 	    		<attribute name="color" value="blue" />
 	    	</stylesheet>
 	        <formatters>
-	            <pre class="PHPPdf\Formatter\ConvertAttributesFormatter" />
-	            <pre class="PHPPdf\Formatter\TextDimensionFormatter" />
+	            <pre class="PHPPdf\Core\Formatter\ConvertAttributesFormatter" />
+	            <pre class="PHPPdf\Core\Formatter\TextDimensionFormatter" />
 	        </formatters>
 	    </node>
-	    <node name="b" class="PHPPdf\Node\Text">
+	    <node name="b" class="PHPPdf\Core\Node\Text">
 	    	<alias>strong</alias>
 	        <stylesheet>
 	            <attribute name="font-style" value="bold" />
 	        </stylesheet>
 	        <formatters>
-	            <pre class="PHPPdf\Formatter\ConvertAttributesFormatter" />
-	            <pre class="PHPPdf\Formatter\TextDimensionFormatter" />
+	            <pre class="PHPPdf\Core\Formatter\ConvertAttributesFormatter" />
+	            <pre class="PHPPdf\Core\Formatter\TextDimensionFormatter" />
 	        </formatters>
 	    </node>
-	    <node name="i" class="PHPPdf\Node\Text">
+	    <node name="i" class="PHPPdf\Core\Node\Text">
 	    	<alias>em</alias>
 	        <stylesheet>
 	            <attribute name="font-style" value="italic" />
 	        </stylesheet>
 	        <formatters>
-	            <pre class="PHPPdf\Formatter\ConvertAttributesFormatter" />
-	            <pre class="PHPPdf\Formatter\TextDimensionFormatter" />
+	            <pre class="PHPPdf\Core\Formatter\ConvertAttributesFormatter" />
+	            <pre class="PHPPdf\Core\Formatter\TextDimensionFormatter" />
 	        </formatters>
 	    </node>
-	    <node name="page-break" class="PHPPdf\Node\Container">
+	    <node name="page-break" class="PHPPdf\Core\Node\Container">
 	    	<alias>break</alias>
 	    	<alias>column-break</alias>
 	        <stylesheet>
@@ -321,24 +321,24 @@
 	            <attribute name="height" value="0.01" />
 	        </stylesheet>
 	        <formatters>
-	            <pre class="PHPPdf\Formatter\ConvertAttributesFormatter" />
-	            <pre class="PHPPdf\Formatter\StandardDimensionFormatter" />
-	            <pre class="PHPPdf\Formatter\FirstPointPositionFormatter" />
+	            <pre class="PHPPdf\Core\Formatter\ConvertAttributesFormatter" />
+	            <pre class="PHPPdf\Core\Formatter\StandardDimensionFormatter" />
+	            <pre class="PHPPdf\Core\Formatter\FirstPointPositionFormatter" />
 
-	            <post class="PHPPdf\Formatter\ContainerDimensionFormatter" />
-	            <post class="PHPPdf\Formatter\StandardPositionFormatter" />
-	            <post class="PHPPdf\Formatter\FloatFormatter" />
+	            <post class="PHPPdf\Core\Formatter\ContainerDimensionFormatter" />
+	            <post class="PHPPdf\Core\Formatter\StandardPositionFormatter" />
+	            <post class="PHPPdf\Core\Formatter\FloatFormatter" />
 	        </formatters>
 	    </node>
-	    <node name="column-layout" class="PHPPdf\Node\ColumnableContainer">
+	    <node name="column-layout" class="PHPPdf\Core\Node\ColumnableContainer">
 	        <formatters>
-	            <pre class="PHPPdf\Formatter\ConvertAttributesFormatter" />
-	            <pre class="PHPPdf\Formatter\StandardDimensionFormatter" />
-	            <pre class="PHPPdf\Formatter\FirstPointPositionFormatter" />
+	            <pre class="PHPPdf\Core\Formatter\ConvertAttributesFormatter" />
+	            <pre class="PHPPdf\Core\Formatter\StandardDimensionFormatter" />
+	            <pre class="PHPPdf\Core\Formatter\FirstPointPositionFormatter" />
 
-	            <post class="PHPPdf\Formatter\ContainerDimensionFormatter" />
-	            <post class="PHPPdf\Formatter\StandardPositionFormatter" />
-	            <post class="PHPPdf\Formatter\FloatFormatter" />
+	            <post class="PHPPdf\Core\Formatter\ContainerDimensionFormatter" />
+	            <post class="PHPPdf\Core\Formatter\StandardPositionFormatter" />
+	            <post class="PHPPdf\Core\Formatter\FloatFormatter" />
 	        </formatters>
 	    </node>
 	</nodes>

@@ -2,8 +2,8 @@
 
 namespace PHPPdf\ObjectMother;
 
-use PHPPdf\Node\Container;
-use PHPPdf\Engine\GraphicsContext;
+use PHPPdf\Core\Node\Container;
+use PHPPdf\Core\Engine\GraphicsContext;
 
 class NodeObjectMother
 {
@@ -16,7 +16,7 @@ class NodeObjectMother
 
     public function getPageMock($x, $y)
     {
-        $gcMock = $this->getMockBuilder('PHPPdf\Engine\GraphicsContext')
+        $gcMock = $this->getMockBuilder('PHPPdf\Core\Engine\GraphicsContext')
         			   ->getMock();
         $gcMock->expects($this->test->once())
                  ->method('drawPolygon')
@@ -29,7 +29,7 @@ class NodeObjectMother
 
     public function getEmptyPageMock($graphicsContext)
     {
-        $pageMock = $this->test->getMock('PHPPdf\Node\Page', array('getGraphicsContext'));
+        $pageMock = $this->test->getMock('PHPPdf\Core\Node\Page', array('getGraphicsContext'));
 
         $pageMock->expects($this->test->atLeastOnce())
                  ->method('getGraphicsContext')
@@ -42,7 +42,7 @@ class NodeObjectMother
     {
         $boundaryMock = $this->getBoundaryStub($x, $y, $width, $height);
 
-        $nodeMock = $this->test->getMock('PHPPdf\Node\Node', array('getBoundary', 'getWidth', 'getHeight', 'getGraphicsContext'));
+        $nodeMock = $this->test->getMock('PHPPdf\Core\Node\Node', array('getBoundary', 'getWidth', 'getHeight', 'getGraphicsContext'));
 
         $nodeMock->expects($this->test->atLeastOnce())
                   ->method('getBoundary')

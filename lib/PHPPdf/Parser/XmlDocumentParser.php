@@ -9,18 +9,18 @@
 namespace PHPPdf\Parser;
 
 use PHPPdf\Document;
-use PHPPdf\Node\Manager;
-use PHPPdf\Node\NodeWrapper;
-use PHPPdf\Node\Text,
+use PHPPdf\Core\Node\Manager;
+use PHPPdf\Core\Node\NodeWrapper;
+use PHPPdf\Core\Node\Text,
     PHPPdf\Parser\Exception\ParseException,
-    PHPPdf\Node\Factory as NodeFactory,
-    PHPPdf\Node\PageCollection,
-    PHPPdf\Node\Node,
+    PHPPdf\Core\Node\Factory as NodeFactory,
+    PHPPdf\Core\Node\PageCollection,
+    PHPPdf\Core\Node\Node,
     PHPPdf\Parser\BagContainer,
     PHPPdf\Parser\Exception as Exceptions,
-    PHPPdf\ComplexAttribute\Factory as ComplexAttributeFactory,
+    PHPPdf\Core\ComplexAttribute\Factory as ComplexAttributeFactory,
     PHPPdf\Parser\StylesheetConstraint,
-    PHPPdf\Node\Behaviour\Factory as BehaviourFactory;
+    PHPPdf\Core\Node\Behaviour\Factory as BehaviourFactory;
 
 /**
  * Parse document to graph of Nodes

@@ -2,7 +2,7 @@
 
 namespace PHPPdf\Test\Parser;
 
-use PHPPdf\Configuration\LoaderImpl;
+use PHPPdf\Core\Configuration\LoaderImpl;
 use PHPPdf\Parser\Facade,
     PHPPdf\Parser\FacadeConfiguration;
 
@@ -15,7 +15,7 @@ class FacadeTest extends \PHPPdf\PHPUnit\Framework\TestCase
 
     public function setUp()
     {
-        $this->loaderMock = $this->getMockBuilder('PHPPdf\Configuration\Loader')
+        $this->loaderMock = $this->getMockBuilder('PHPPdf\Core\Configuration\Loader')
                                  ->getMock();
         $this->documentParser = $this->getMock('PHPPdf\Parser\DocumentParser');
         $this->stylesheetParser = $this->getMockBuilder('PHPPdf\Parser\StylesheetParser')
@@ -69,10 +69,10 @@ class FacadeTest extends \PHPPdf\PHPUnit\Framework\TestCase
 
         $stylesheetParserMock = $this->getMock('PHPPdf\Parser\StylesheetParser', array('parse'));
         $constraintMock = $this->getMock('PHPPdf\Parser\StylesheetConstraint');
-        $pageCollectionMock = $this->getMock('PHPPdf\Node\PageCollection', array());
+        $pageCollectionMock = $this->getMock('PHPPdf\Core\Node\PageCollection', array());
         
-        $nodeFactoryMock = $this->getMock('PHPPdf\Node\Factory');
-        $complexAttributeFactoryMock = $this->getMock('PHPPdf\ComplexAttribute\Factory');
+        $nodeFactoryMock = $this->getMock('PHPPdf\Core\Node\Factory');
+        $complexAttributeFactoryMock = $this->getMock('PHPPdf\Core\ComplexAttribute\Factory');
         $fontDefinitionsStub = array('some-data');
         
         $this->loaderMock->expects($this->atLeastOnce())
@@ -143,7 +143,7 @@ class FacadeTest extends \PHPPdf\PHPUnit\Framework\TestCase
 
         $this->documentParser->expects($this->once())
                              ->method('parse')
-                             ->will($this->returnValue(new \PHPPdf\Node\PageCollection()));
+                             ->will($this->returnValue(new \PHPPdf\Core\Node\PageCollection()));
 
         $this->stylesheetParser->expects($this->once())
                                  ->method('parse')

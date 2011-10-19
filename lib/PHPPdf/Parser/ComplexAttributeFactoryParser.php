@@ -8,7 +8,7 @@
 
 namespace PHPPdf\Parser;
 
-use PHPPdf\ComplexAttribute\Factory as ComplexAttributeFactory,
+use PHPPdf\Core\ComplexAttribute\Factory as ComplexAttributeFactory,
     PHPPdf\Parser\Exception\ParseException;
 
 /**

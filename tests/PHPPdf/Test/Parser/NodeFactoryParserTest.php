@@ -4,7 +4,7 @@ namespace PHPPdf\Test\Parser;
 
 use PHPPdf\Parser\NodeFactoryParser,
     PHPPdf\Parser\StylesheetParser,
-    PHPPdf\Node\Factory as NodeFactory;
+    PHPPdf\Core\Node\Factory as NodeFactory;
 
 class NodeFactoryParserTest extends \PHPPdf\PHPUnit\Framework\TestCase
 {
@@ -56,9 +56,9 @@ class NodeFactoryParserTest extends \PHPPdf\PHPUnit\Framework\TestCase
         $xml = <<<XML
 <factory>
     <nodes>
-        <node name="div" class="PHPPdf\Node\Container">
+        <node name="div" class="PHPPdf\Core\Node\Container">
         </node>
-        <node name="p" class="PHPPdf\Node\Container">
+        <node name="p" class="PHPPdf\Core\Node\Container">
         </node>
     </nodes>
 </factory>
@@ -70,7 +70,7 @@ XML;
         
         $this->assertFalse($nodeFactory->hasPrototype('anotherTag'));
 
-        $this->assertInstanceOf('PHPPdf\Node\Container', $nodeFactory->getPrototype('div'));
+        $this->assertInstanceOf('PHPPdf\Core\Node\Container', $nodeFactory->getPrototype('div'));
     }
     
     /**
@@ -81,7 +81,7 @@ XML;
         $xml = <<<XML
 <factory>
     <nodes>
-        <node name="div" class="PHPPdf\Node\Container">
+        <node name="div" class="PHPPdf\Core\Node\Container">
         	<stylesheet>
         		<attribute name="line-height" value="12px" />
         	</stylesheet>
@@ -134,7 +134,7 @@ XML;
         $xml = <<<XML
 <factory>
     <nodes>
-        <node name="div" class="PHPPdf\Node\Container">
+        <node name="div" class="PHPPdf\Core\Node\Container">
             <stylesheet>
             </stylesheet>
         </node>
@@ -145,7 +145,7 @@ XML;
         $bagContainerMock = $this->getMock('PHPPdf\Parser\BagContainer', array('apply'));
         $bagContainerMock->expects($this->once())
                          ->method('apply')
-                         ->with($this->isInstanceOf('PHPPdf\Node\Container'));
+                         ->with($this->isInstanceOf('PHPPdf\Core\Node\Container'));
 
         $stylesheetParserMock = $this->getMock('PHPPdf\Parser\StylesheetParser', array('parse'));
         $stylesheetParserMock->expects($this->once())
@@ -167,14 +167,14 @@ XML;
         $xml = <<<XML
 <factory>
     <nodes>
-        <node name="tag1" class="PHPPdf\Node\Container">
+        <node name="tag1" class="PHPPdf\Core\Node\Container">
             <formatters>
-                <{$formatterType} class="PHPPdf\Formatter\FloatFormatter" />
+                <{$formatterType} class="PHPPdf\Core\Formatter\FloatFormatter" />
             </formatters>
         </node>
-        <node name="tag2" class="PHPPdf\Node\Container">
+        <node name="tag2" class="PHPPdf\Core\Node\Container">
             <formatters>
-                <{$formatterType} class="PHPPdf\Formatter\FloatFormatter" />
+                <{$formatterType} class="PHPPdf\Core\Formatter\FloatFormatter" />
             </formatters>
         </node>
     </nodes>
@@ -186,7 +186,7 @@ XML;
         {
             $node = $nodeFactory->getPrototype($tag);
 
-            $this->assertEquals(array('PHPPdf\Formatter\FloatFormatter'), $node->getFormattersNames($formatterType));
+            $this->assertEquals(array('PHPPdf\Core\Formatter\FloatFormatter'), $node->getFormattersNames($formatterType));
         }
     }
     
@@ -206,11 +206,11 @@ XML;
         $xml = <<<XML
 <factory>
     <nodes>
-    	<node name="tag1" class="PHPPdf\Node\Container">
+    	<node name="tag1" class="PHPPdf\Core\Node\Container">
     		<alias>tag2</alias>
     		<invoke method="setMarginLeft" argId="marginLeft" />
     	</node>
-    	<node name="tag3" class="PHPPdf\Node\Container">
+    	<node name="tag3" class="PHPPdf\Core\Node\Container">
     		<invoke method="setMarginLeft" argId="marginLeft2" />
     	</node>
     </nodes>
@@ -234,12 +234,12 @@ XML;
         $xml = <<<XML
 <factory>
     <nodes>
-    	<node name="tag1" class="PHPPdf\Node\Container">
+    	<node name="tag1" class="PHPPdf\Core\Node\Container">
     		<alias>tag2</alias>
     		<alias>tag3</alias>
     		<invoke method="setMarginLeft" argId="marginLeft" />
     	</node>
-    	<node name="tag4" class="PHPPdf\Node\Container">
+    	<node name="tag4" class="PHPPdf\Core\Node\Container">
     		<alias>tag5</alias>
     		<invoke method="setMarginLeft" argId="marginLeft" />
     	</node>

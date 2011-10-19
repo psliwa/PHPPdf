@@ -3,7 +3,7 @@
 namespace PHPPdf\Test\Font;
 
 use PHPPdf\FontRegistry,
-    PHPPdf\Engine\Font;
+    PHPPdf\Core\Engine\Font;
 
 class FontRegistryTest extends \PHPPdf\PHPUnit\Framework\TestCase
 {

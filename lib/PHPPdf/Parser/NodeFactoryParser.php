@@ -10,7 +10,7 @@ namespace PHPPdf\Parser;
 
 use PHPPdf\Core\UnitConverter;
 
-use PHPPdf\Node\Factory as NodeFactory,
+use PHPPdf\Core\Node\Factory as NodeFactory,
     PHPPdf\Parser\Exception\ParseException;
 
 /**

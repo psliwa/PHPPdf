@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <complex-attributes>
-    <complex-attribute name="border" class="PHPPdf\ComplexAttribute\Border" />
-    <complex-attribute name="background" class="PHPPdf\ComplexAttribute\Background" />
+    <complex-attribute name="border" class="PHPPdf\Core\ComplexAttribute\Border" />
+    <complex-attribute name="background" class="PHPPdf\Core\ComplexAttribute\Background" />
 </complex-attributes>

@@ -56,7 +56,7 @@ class FontRegistryParser extends XmlParser
     {
         $name = $reader->name;
 
-        $const = sprintf('PHPPdf\Engine\Font::STYLE_%s', str_replace('-', '_', strtoupper($name)));
+        $const = sprintf('PHPPdf\Core\Engine\Font::STYLE_%s', str_replace('-', '_', strtoupper($name)));
         $style = \constant($const);
 
         $this->currentFontStyles[$style] = $this->createFont($reader, $name, $style);

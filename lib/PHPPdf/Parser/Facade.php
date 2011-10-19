@@ -10,8 +10,8 @@ namespace PHPPdf\Parser;
 
 use PHPPdf\Core\Point;
 
-use PHPPdf\Configuration\Loader;
-use PHPPdf\Node\TextTransformator;
+use PHPPdf\Core\Configuration\Loader;
+use PHPPdf\Core\Node\TextTransformator;
 use PHPPdf\Document,
     PHPPdf\Parser\StylesheetParser,
     PHPPdf\Parser\ComplexAttributeFactoryParser,

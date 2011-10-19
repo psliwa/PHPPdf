@@ -2,7 +2,7 @@
 
 namespace PHPPdf\Stub\Node;
 
-use PHPPdf\Node\Node;
+use PHPPdf\Core\Node\Node;
 
 class StubNode extends Node
 {
