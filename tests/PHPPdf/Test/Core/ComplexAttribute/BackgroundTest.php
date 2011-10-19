@@ -4,7 +4,7 @@ namespace PHPPdf\Test\Core\ComplexAttribute;
 
 use PHPPdf\Core\Engine\GraphicsContext;
 use PHPPdf\ObjectMother\NodeObjectMother;
-use PHPPdf\Document;
+use PHPPdf\Core\Document;
 use PHPPdf\Core\ComplexAttribute\Background,
     PHPPdf\Core\Node\Page,
     PHPPdf\Core\Point;
@@ -26,7 +26,7 @@ class BackgroundTest extends \PHPPdf\PHPUnit\Framework\TestCase
     public function setUp()
     {
         $this->imagePath = TEST_RESOURCES_DIR.'/domek-min.jpg';
-        $this->document = $this->getMockBuilder('PHPPdf\Document')
+        $this->document = $this->getMockBuilder('PHPPdf\Core\Document')
                                ->setMethods(array('convertUnit'))
                                ->getMock();
     }
@@ -90,7 +90,7 @@ class BackgroundTest extends \PHPPdf\PHPUnit\Framework\TestCase
     
     private function createDocumentMock($imagePath, $image)
     {
-        $document = $this->getMockBuilder('PHPPdf\Document')
+        $document = $this->getMockBuilder('PHPPdf\Core\Document')
                          ->setMethods(array('createImage', 'convertUnit', 'convertPercentageValue'))
                          ->getMock();
         $document->expects($this->once())

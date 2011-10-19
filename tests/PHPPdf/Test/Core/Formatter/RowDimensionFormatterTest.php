@@ -4,7 +4,7 @@ namespace PHPPdf\Test\Core\Formatter;
 
 use PHPPdf\Core\Formatter\RowDimensionFormatter,
     PHPPdf\Core\Boundary,
-    PHPPdf\Document;
+    PHPPdf\Core\Document;
 
 class RowDimensionFormatterTest extends \PHPPdf\PHPUnit\Framework\TestCase
 {

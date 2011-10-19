@@ -14,7 +14,7 @@ use PHPPdf\Core\Node\Node,
     PHPPdf\Core\UnitConverter,
     PHPPdf\Core\Node\Paragraph\LinePart,
     PHPPdf\Core\Formatter\Formatter,
-    PHPPdf\Document,
+    PHPPdf\Core\Document,
     PHPPdf\Core\Point,
     PHPPdf\Core\DrawingTask;
 

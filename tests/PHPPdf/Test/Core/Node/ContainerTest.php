@@ -3,7 +3,7 @@
 namespace PHPPdf\Test\Core\Node;
 
 use PHPPdf\ObjectMother\NodeObjectMother;
-use PHPPdf\Document,
+use PHPPdf\Core\Document,
     PHPPdf\Core\Node\Container,
     PHPPdf\Core\Point,
     PHPPdf\Core\Node\Node;

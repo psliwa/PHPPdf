@@ -7,7 +7,7 @@ use PHPPdf\Core\Node\Container;
 use PHPPdf\ObjectMother\NodeObjectMother;
 
 use PHPPdf\Core\Formatter\FirstPointPositionFormatter,
-    PHPPdf\Document;
+    PHPPdf\Core\Document;
 
 class FirstPointPositionFormatterTest extends \PHPPdf\PHPUnit\Framework\TestCase
 {

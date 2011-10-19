@@ -8,7 +8,7 @@
 
 namespace PHPPdf\Core;
 
-use PHPPdf\Document;
+use PHPPdf\Core\Document;
 
 /**
  * Encapsulate drawing task (callback + arguments + priority + order)

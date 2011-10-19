@@ -4,7 +4,7 @@ namespace PHPPdf\Test\Core\Node;
 
 use PHPPdf\Core\DrawingTaskHeap;
 
-use PHPPdf\Document;
+use PHPPdf\Core\Document;
 use PHPPdf\Core\Node\Image;
 
 class ImageTest extends \PHPPdf\PHPUnit\Framework\TestCase
@@ -37,7 +37,7 @@ class ImageTest extends \PHPPdf\PHPUnit\Framework\TestCase
         
         $imageResource = $this->getMockBuilder('PHPPdf\Core\Engine\Image')
                               ->getMock();
-        $document = $this->getMockBuilder('PHPPdf\Document')
+        $document = $this->getMockBuilder('PHPPdf\Core\Document')
                          ->setMethods(array('createImage'))
                          ->getMock();
 

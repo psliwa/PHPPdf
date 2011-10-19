@@ -3,7 +3,7 @@
 namespace PHPPdf\Test\Core\Formatter;
 
 use PHPPdf\Core\Formatter\CellFirstPointPositionFormatter,
-    PHPPdf\Document,
+    PHPPdf\Core\Document,
     PHPPdf\Core\Point;
 
 class CellFirstPointPositionFormatterTest extends \PHPPdf\PHPUnit\Framework\TestCase

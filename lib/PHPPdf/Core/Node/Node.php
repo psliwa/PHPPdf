@@ -12,7 +12,7 @@ use PHPPdf\Core\AttributeBag;
 
 use PHPPdf\Core\DrawingTaskHeap;
 use PHPPdf\Core\UnitConverter;
-use PHPPdf\Document,
+use PHPPdf\Core\Document,
     PHPPdf\Util,
     PHPPdf\Core\Node\Container,
     PHPPdf\Core\Boundary,

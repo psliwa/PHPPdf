@@ -11,7 +11,7 @@ namespace PHPPdf\Core\Formatter;
 use PHPPdf\Core\Node\ColumnableContainer;
 
 use PHPPdf\Core\Node\Node,
-    PHPPdf\Document;
+    PHPPdf\Core\Document;
 
 /**
  * TODO: refactoring

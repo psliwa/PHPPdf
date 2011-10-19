@@ -9,7 +9,7 @@
 namespace PHPPdf\Core\Formatter;
 
 use PHPPdf\Core\Node\Node,
-    PHPPdf\Document;
+    PHPPdf\Core\Document;
 
 class RowDimensionFormatter extends BaseFormatter
 {

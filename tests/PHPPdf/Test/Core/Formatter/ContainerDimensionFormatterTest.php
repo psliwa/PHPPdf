@@ -2,7 +2,7 @@
 
 namespace PHPPdf\Test\Core\Formatter;
 
-use PHPPdf\Document;
+use PHPPdf\Core\Document;
 use PHPPdf\Core\Boundary;
 use PHPPdf\Core\Node\Node;
 use PHPPdf\Core\Node\Container;

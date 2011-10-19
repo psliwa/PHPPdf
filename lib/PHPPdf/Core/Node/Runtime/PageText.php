@@ -14,7 +14,7 @@ use PHPPdf\Core\Node\Text,
     PHPPdf\Core\Node\Runtime,
     PHPPdf\Core\Node\Page,
     PHPPdf\Core\UnitConverter,
-    PHPPdf\Document;
+    PHPPdf\Core\Document;
 
 /**
  * @author Piotr Śliwa <peter.pl7@gmail.com>

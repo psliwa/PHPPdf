@@ -5,7 +5,7 @@ namespace PHPPdf\Test\Core\Formatter;
 use PHPPdf\Core\Formatter\FloatFormatter,
     PHPPdf\Core\Boundary,
     PHPPdf\Core\Formatter\Chain,
-    PHPPdf\Document,
+    PHPPdf\Core\Document,
     PHPPdf\Core\Node\Node,
     PHPPdf\Core\Node\Page;
 

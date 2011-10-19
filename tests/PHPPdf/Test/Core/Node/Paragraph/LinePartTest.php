@@ -6,7 +6,7 @@ use PHPPdf\Core\DrawingTaskHeap;
 
 use PHPPdf\Core\Node\Text;
 use PHPPdf\Core\Node\Node;
-use PHPPdf\Document;
+use PHPPdf\Core\Document;
 use PHPPdf\Core\Point;
 use PHPPdf\Core\Node\Paragraph\LinePart;
 

@@ -11,7 +11,7 @@ namespace PHPPdf\Core\Node\Paragraph;
 use PHPPdf\Core\DrawingTaskHeap;
 use PHPPdf\Core\Node\Node,
     PHPPdf\Core\DrawingTask,
-    PHPPdf\Document,
+    PHPPdf\Core\Document,
     PHPPdf\Core\Point,
     PHPPdf\Core\Node\Drawable,
     PHPPdf\Core\Node\Text;

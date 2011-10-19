@@ -6,9 +6,7 @@
  * License information is in LICENSE file
  */
 
-namespace PHPPdf;
-
-use PHPPdf\Document;
+namespace PHPPdf\Core;
 
 /**
  * @author Piotr Śliwa <peter.pl7@gmail.com>

@@ -2,7 +2,7 @@
 
 namespace PHPPdf\Test\Core\Node;
 
-use PHPPdf\Document;
+use PHPPdf\Core\Document;
 use PHPPdf\Core\Node\Page;
 use PHPPdf\Core\Node\PageCollection;
 

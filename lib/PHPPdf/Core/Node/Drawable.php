@@ -9,7 +9,7 @@
 namespace PHPPdf\Core\Node;
 
 use PHPPdf\Core\DrawingTaskHeap;
-use PHPPdf\Document;
+use PHPPdf\Core\Document;
 
 /**
  * Element being able to draw

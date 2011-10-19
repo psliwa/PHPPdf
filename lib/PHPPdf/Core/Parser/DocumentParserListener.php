@@ -9,7 +9,7 @@
 namespace PHPPdf\Core\Parser;
 
 use PHPPdf\Core\Node\PageCollection;
-use PHPPdf\Document;
+use PHPPdf\Core\Document;
 use PHPPdf\Core\Node\Node;
 
 /**

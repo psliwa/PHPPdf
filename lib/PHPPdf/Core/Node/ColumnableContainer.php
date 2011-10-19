@@ -9,7 +9,7 @@
 namespace PHPPdf\Core\Node;
 
 use PHPPdf\Util;
-use PHPPdf\Document;
+use PHPPdf\Core\Document;
 
 /**
  * Container being able to format as columns

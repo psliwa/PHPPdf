@@ -3,7 +3,7 @@
 namespace PHPPdf\Test\Core\Formatter;
 
 use PHPPdf\Core\UnitConverterImpl;
-use PHPPdf\Document;
+use PHPPdf\Core\Document;
 use PHPPdf\Core\Node\Page;
 use PHPPdf\Core\Node\Container;
 use PHPPdf\Core\Formatter\ConvertAttributesFormatter;

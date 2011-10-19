@@ -19,7 +19,7 @@ class XmlDocumentParserTest extends \PHPPdf\PHPUnit\Framework\TestCase
 
     public function setUp()
     {
-        $this->documentMock = $this->getMockBuilder('PHPPdf\Document')
+        $this->documentMock = $this->getMockBuilder('PHPPdf\Core\Document')
                                    ->disableOriginalConstructor()
                                    ->setMethods(array('setMetadataValue'))
                                    ->getMock();

@@ -9,7 +9,7 @@
 namespace PHPPdf\Core\Formatter;
 
 use PHPPdf\Core\Node as Nodes,
-    PHPPdf\Document,
+    PHPPdf\Core\Document,
     PHPPdf\Core\Boundary;
 
 /**

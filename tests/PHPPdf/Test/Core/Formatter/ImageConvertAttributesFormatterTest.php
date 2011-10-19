@@ -3,7 +3,7 @@
 namespace PHPPdf\Test\Core\Formatter;
 
 use PHPPdf\Core\Formatter\ImageConvertAttributesFormatter;
-use PHPPdf\Document,
+use PHPPdf\Core\Document,
     PHPPdf\Core\Node\Image,
     PHPPdf\Core\Node\Page,
     PHPPdf\Core\Node\Container;
@@ -16,7 +16,7 @@ class ImageConvertAttributesFormatterTest extends \PHPPdf\PHPUnit\Framework\Test
     public function setUp()
     {
         $this->formatter = new ImageConvertAttributesFormatter();
-        $this->document = $this->getMockBuilder('PHPPdf\Document')
+        $this->document = $this->getMockBuilder('PHPPdf\Core\Document')
                                ->setMethods(array('createImage'))
                                ->getMock();
     }

@@ -6,7 +6,7 @@ use PHPPdf\Core\Node\ColumnableContainer,
     PHPPdf\Core\Node\Container,
     PHPPdf\Core\Node\Page,
     PHPPdf\Core\Boundary,
-    PHPPdf\Document,
+    PHPPdf\Core\Document,
     PHPPdf\Core\Formatter\ColumnBreakingFormatter;
 
 class ColumnBreakingFormatterTest extends \PHPPdf\PHPUnit\Framework\TestCase

@@ -4,7 +4,7 @@ namespace PHPPdf\Test\Core\Formatter;
 
 use PHPPdf\Core\Formatter\TableColumnFormatter,
     PHPPdf\ObjectMother\TableObjectMother,
-    PHPPdf\Document;
+    PHPPdf\Core\Document;
 
 class TableColumnFormatterTest extends \PHPPdf\PHPUnit\Framework\TestCase
 {

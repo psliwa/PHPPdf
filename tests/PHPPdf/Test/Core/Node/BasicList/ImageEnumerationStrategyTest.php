@@ -2,7 +2,7 @@
 
 namespace PHPPdf\Test\Core\Node\BasicList;
 
-use PHPPdf\Document;
+use PHPPdf\Core\Document;
 use PHPPdf\Core\Node\BasicList;
 use PHPPdf\Core\Point;
 use PHPPdf\Core\Node\BasicList\ImageEnumerationStrategy;

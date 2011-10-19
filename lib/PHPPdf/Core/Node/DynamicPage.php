@@ -11,7 +11,7 @@ namespace PHPPdf\Core\Node;
 use PHPPdf\Core\DrawingTaskHeap;
 use PHPPdf\Core\Node\Page,
     PHPPdf\Core\Node\PageContext,
-    PHPPdf\Document;
+    PHPPdf\Core\Document;
 
 /**
  * Page being able to break

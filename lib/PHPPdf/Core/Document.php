@@ -6,12 +6,9 @@
  * License information is in LICENSE file
  */
 
-namespace PHPPdf;
+namespace PHPPdf\Core;
 
-use PHPPdf\Core\AttributeBag;
-
-use PHPPdf\Core\UnitConverter,
-    PHPPdf\Core\Node\Node,
+use PHPPdf\Core\Node\Node,
     PHPPdf\Core\Engine\ZF\Engine as ZfEngine,
     PHPPdf\Core\Formatter as Formatters,
     PHPPdf\Core\Node\Page,
@@ -19,8 +16,7 @@ use PHPPdf\Core\UnitConverter,
     PHPPdf\Core\ComplexAttribute\Factory as ComplexAttributeFactory,
     PHPPdf\Exception\DrawingException,
     PHPPdf\Core\Engine\Engine,
-    PHPPdf\Core\Engine\GraphicsContext,
-    PHPPdf\Core\DrawingTaskHeap;
+    PHPPdf\Core\Engine\GraphicsContext;
 
 /**
  * Document to generate
@@ -261,7 +257,7 @@ class Document implements UnitConverter, Engine
         {
             if(strpos($value, '/') !== false)
             {
-                $value = str_replace('%resources%', __DIR__.'/Resources', $value);
+                $value = str_replace('%resources%', __DIR__.'/../Resources', $value);
                 $data[$name] = $value;
             }
         }

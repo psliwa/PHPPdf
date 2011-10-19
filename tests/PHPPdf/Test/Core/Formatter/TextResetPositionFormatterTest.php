@@ -2,7 +2,7 @@
 
 namespace PHPPdf\Test\Core\Formatter;
 
-use PHPPdf\Document,
+use PHPPdf\Core\Document,
     PHPPdf\Core\Point,
     PHPPdf\Core\Boundary,
     PHPPdf\Core\Formatter\TextResetPositionFormatter;

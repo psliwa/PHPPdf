@@ -6,7 +6,7 @@ use PHPPdf\Core\DrawingTaskHeap;
 
 use PHPPdf\Core\Node\Node;
 use PHPPdf\Core\Node\Container;
-use PHPPdf\Document;
+use PHPPdf\Core\Document;
 use PHPPdf\Core\Node\BasicList;
 use PHPPdf\ObjectMother\NodeObjectMother;
 

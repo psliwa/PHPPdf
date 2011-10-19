@@ -5,7 +5,7 @@ namespace PHPPdf\Test\Core\Node\Paragraph;
 use PHPPdf\Core\Node\Node;
 use PHPPdf\Core\Node\Paragraph;
 use PHPPdf\Core\Point,
-    PHPPdf\Document,
+    PHPPdf\Core\Document,
     PHPPdf\Core\Node\Paragraph\Line;
 
 class LineTest extends \PHPPdf\PHPUnit\Framework\TestCase

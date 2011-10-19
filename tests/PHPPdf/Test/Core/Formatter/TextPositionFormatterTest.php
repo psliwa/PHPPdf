@@ -4,7 +4,7 @@ namespace PHPPdf\Test\Core\Formatter;
 
 use PHPPdf\Core\Formatter\TextPositionFormatter,
     PHPPdf\Core\Point,
-    PHPPdf\Document;
+    PHPPdf\Core\Document;
 
 class TextPositionFormatterTest extends \PHPPdf\PHPUnit\Framework\TestCase
 {

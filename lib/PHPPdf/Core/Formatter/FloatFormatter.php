@@ -10,7 +10,7 @@ namespace PHPPdf\Core\Formatter;
 
 use PHPPdf\Core\Node\Node,
     PHPPdf\Core\Node\Text,
-    PHPPdf\Document,
+    PHPPdf\Core\Document,
     PHPPdf\Core\Boundary;
 
 /**

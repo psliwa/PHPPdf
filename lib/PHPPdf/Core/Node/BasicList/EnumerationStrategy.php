@@ -9,7 +9,7 @@
 namespace PHPPdf\Core\Node\BasicList;
 
 
-use PHPPdf\Document;
+use PHPPdf\Core\Document;
 use PHPPdf\Core\Engine\GraphicsContext,
     PHPPdf\Core\Node\BasicList;
 

@@ -14,7 +14,7 @@ use PHPPdf\Core\Node\Paragraph;
 
 use PHPPdf\Core\Point;
 
-use PHPPdf\Document;
+use PHPPdf\Core\Document;
 
 /**
  * @author Piotr Śliwa <peter.pl7@gmail.com>

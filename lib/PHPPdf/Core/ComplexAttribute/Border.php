@@ -13,7 +13,7 @@ use PHPPdf\Core\Node\Page,
     PHPPdf\Core\Boundary,
     PHPPdf\Core\UnitConverter,
     PHPPdf\Core\Engine\GraphicsContext,
-    PHPPdf\Document;
+    PHPPdf\Core\Document;
 
 /**
  * Enhance node by drawing border

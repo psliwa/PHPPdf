@@ -6,7 +6,7 @@ use PHPPdf\Core\DrawingTaskHeap;
 
 use PHPPdf\Core\DrawingTask;
 use PHPPdf\Core\Node\Runtime\CurrentPageNumber,
-    PHPPdf\Document,
+    PHPPdf\Core\Document,
     PHPPdf\Core\Node\DynamicPage,
     PHPPdf\Core\Node\Page;
 

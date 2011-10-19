@@ -11,7 +11,7 @@ namespace PHPPdf\Core\Parser;
 use PHPPdf\Core\Point;
 use PHPPdf\Core\Configuration\Loader;
 use PHPPdf\Core\Node\TextTransformator;
-use PHPPdf\Document,
+use PHPPdf\Core\Document,
     PHPPdf\Core\Parser\StylesheetParser,
     PHPPdf\Core\Parser\ComplexAttributeFactoryParser,
     PHPPdf\Core\Parser\FontRegistryParser,
@@ -85,7 +85,7 @@ class Facade
     /**
      * Returns pdf document object
      * 
-     * @return PHPPdf\Document
+     * @return PHPPdf\Core\Document
      */
     public function getDocument()
     {

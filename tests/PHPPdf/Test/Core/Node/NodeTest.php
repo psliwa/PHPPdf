@@ -7,7 +7,7 @@ use PHPPdf\Core\DrawingTaskHeap;
 use PHPPdf\Core\Node\Page,
     PHPPdf\Core\ComplexAttribute\Background,
     PHPPdf\Core\ComplexAttribute\Border,
-    PHPPdf\Document,
+    PHPPdf\Core\Document,
     PHPPdf\Core\Point,
     PHPPdf\Core\Node\Node,
     PHPPdf\Stub\Node\StubNode,
@@ -379,7 +379,7 @@ class NodeTest extends \PHPPdf\PHPUnit\Framework\TestCase
     {
         $formatterName = 'someFormatter';
 
-        $documentMock = $this->getMock('PHPPdf\Document', array('getFormatter'));
+        $documentMock = $this->getMock('PHPPdf\Core\Document', array('getFormatter'));
 
         $formatterMock = $this->getMock('PHPPdf\Core\Formatter\Formatter', array('format'));
         $formatterMock->expects($this->once())
@@ -506,7 +506,7 @@ class NodeTest extends \PHPPdf\PHPUnit\Framework\TestCase
         $page = new Page();
         $page->add($this->node);
         
-        $document = $this->getMockBuilder('PHPPdf\Document')
+        $document = $this->getMockBuilder('PHPPdf\Core\Document')
                          ->setMethods(array('getComplexAttributes'))
                          ->getMock();
         $bag = $this->getMockBuilder('PHPPdf\Core\AttributeBag')

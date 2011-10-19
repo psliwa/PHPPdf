@@ -13,7 +13,7 @@ use PHPPdf\Core\DrawingTaskHeap;
 use PHPPdf\Core\Node\Paragraph\LinePart;
 use PHPPdf\Core\Node\Paragraph\Line;
 use PHPPdf\Core\Point;
-use PHPPdf\Document;
+use PHPPdf\Core\Document;
 use PHPPdf\Core\Node\Text;
 use PHPPdf\Core\Node\Paragraph;
 

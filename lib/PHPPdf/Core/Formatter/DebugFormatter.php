@@ -8,7 +8,7 @@
 
 namespace PHPPdf\Core\Formatter;
 
-use PHPPdf\Document,
+use PHPPdf\Core\Document,
     PHPPdf\Core\Node\Node;
 
 /**

@@ -10,7 +10,7 @@ namespace PHPPdf\Core\ComplexAttribute;
 
 use PHPPdf\Core\Node\Page,
     PHPPdf\Core\UnitConverter,
-    PHPPdf\Document,
+    PHPPdf\Core\Document,
     PHPPdf\Core\Engine\GraphicsContext,
     PHPPdf\Exception\Exception,
     PHPPdf\Util,

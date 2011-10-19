@@ -45,9 +45,9 @@ class FacadeTest extends \PHPPdf\PHPUnit\Framework\TestCase
      */
     public function gettingAndSettingPdf()
     {
-        $this->assertInstanceOf('PHPPdf\Document', $this->facade->getDocument());
+        $this->assertInstanceOf('PHPPdf\Core\Document', $this->facade->getDocument());
 
-        $document = new \PHPPdf\Document();
+        $document = new \PHPPdf\Core\Document();
         $this->facade->setDocument($document);
 
         $this->assertTrue($this->facade->getDocument() === $document);
@@ -63,7 +63,7 @@ class FacadeTest extends \PHPPdf\PHPUnit\Framework\TestCase
         $stylesheet = '<stylesheet></stylesheet>';
         $content = 'pdf content';
 
-        $documentMock = $this->getMockBuilder('PHPPdf\Document')
+        $documentMock = $this->getMockBuilder('PHPPdf\Core\Document')
                              ->setMethods(array('draw', 'initialize', 'render', 'addFontDefinitions', 'setComplexAttributeFactory'))
                              ->getMock();
 

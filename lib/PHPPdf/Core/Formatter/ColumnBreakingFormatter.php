@@ -11,7 +11,7 @@ namespace PHPPdf\Core\Formatter;
 use PHPPdf\Core\Point;
 
 use PHPPdf\Core\Node\Node,
-    PHPPdf\Document,
+    PHPPdf\Core\Document,
     PHPPdf\Core\Boundary,
     PHPPdf\Core\Node\ColumnableContainer,
     PHPPdf\Core\Node\Container;

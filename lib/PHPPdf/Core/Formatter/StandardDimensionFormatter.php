@@ -10,7 +10,7 @@ namespace PHPPdf\Core\Formatter;
 
 use PHPPdf\Core\Formatter\BaseFormatter,
     PHPPdf\Core\Node\Node,
-    PHPPdf\Document;
+    PHPPdf\Core\Document;
 
 /**
  * Calculates real dimension of node

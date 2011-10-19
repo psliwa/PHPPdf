@@ -1,10 +1,9 @@
 <?php
 
-namespace PHPPdf\Test;
+namespace PHPPdf\Test\Core;
 
 use PHPPdf\Core\DrawingTaskHeap;
-
-use PHPPdf\Document,
+use PHPPdf\Core\Document,
     PHPPdf\Font\Registry as FontRegistry,
     PHPPdf\Core\Node\Page;
 

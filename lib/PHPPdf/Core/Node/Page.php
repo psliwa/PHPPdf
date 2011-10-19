@@ -10,7 +10,7 @@ namespace PHPPdf\Core\Node;
 
 use PHPPdf\Core\DrawingTaskHeap;
 
-use PHPPdf\Document,
+use PHPPdf\Core\Document,
     PHPPdf\Core\DrawingTask,
     PHPPdf\Core\UnitConverter,
     PHPPdf\Core\Engine\GraphicsContext,

@@ -11,7 +11,7 @@ namespace PHPPdf\Core\ComplexAttribute;
 use PHPPdf\Core\Node\Node,
     PHPPdf\Core\Node\Page,
     PHPPdf\Core\Engine\GraphicsContext,
-    PHPPdf\Document;
+    PHPPdf\Core\Document;
 
 /**
  * Base class of complex attribute

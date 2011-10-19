@@ -5,7 +5,7 @@ namespace PHPPdf\Test\Core\Formatter;
 use PHPPdf\Core\Formatter\PageBreakingFormatter,
     PHPPdf\Core\Node\DynamicPage,
     PHPPdf\Core\Boundary,
-    PHPPdf\Document,
+    PHPPdf\Core\Document,
     PHPPdf\Core\Node\Container;
 
 class PageBreakingFormatterTest extends \PHPPdf\PHPUnit\Framework\TestCase

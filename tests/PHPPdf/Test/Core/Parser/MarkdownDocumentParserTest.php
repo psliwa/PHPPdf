@@ -4,7 +4,7 @@ namespace PHPPdf\Test\Core\Parser;
 
 use PHPPdf\Core\Parser\StylesheetConstraint;
 
-use PHPPdf\Document;
+use PHPPdf\Core\Document;
 
 use PHPPdf\Core\Parser\MarkdownDocumentParser;
 

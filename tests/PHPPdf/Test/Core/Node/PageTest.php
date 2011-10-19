@@ -6,7 +6,7 @@ use PHPPdf\Core\DrawingTaskHeap;
 
 use PHPPdf\Core\Node\Node;
 use PHPPdf\Core\DrawingTask;
-use PHPPdf\Document;
+use PHPPdf\Core\Document;
 use PHPPdf\Core\Node\Page;
 use PHPPdf\Core\Node\PageContext;
 use PHPPdf\Core\Node\DynamicPage;
@@ -330,7 +330,7 @@ class PageTest extends \PHPPdf\PHPUnit\Framework\TestCase
         $this->page->setHeader($footer);
         $this->page->setWatermark($watermark);
 
-        $this->page->format(new \PHPPdf\Document());
+        $this->page->format(new \PHPPdf\Core\Document());
     }
 
     private function getPlaceholderMockWithNeverFormatMethodInvocation()
@@ -427,7 +427,7 @@ class PageTest extends \PHPPdf\PHPUnit\Framework\TestCase
             $this->page->setContext($pageContext);
         }
         
-        $document = $this->getMockBuilder('PHPPdf\Document')
+        $document = $this->getMockBuilder('PHPPdf\Core\Document')
                          ->disableOriginalConstructor()
                          ->setMethods(array('loadEngine'))
                          ->getMock();

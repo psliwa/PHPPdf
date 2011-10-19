@@ -70,7 +70,7 @@ abstract class EnumerationStrategyTest extends \PHPPdf\PHPUnit\Framework\TestCas
                          ->method('getCharsWidth');
         }
 
-        $document = $this->getMockBuilder('PHPPdf\Document')
+        $document = $this->getMockBuilder('PHPPdf\Core\Document')
                          ->setMethods(array('getFont'))
                          ->getMock();
         

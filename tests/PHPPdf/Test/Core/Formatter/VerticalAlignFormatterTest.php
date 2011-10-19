@@ -4,7 +4,7 @@ namespace PHPPdf\Test\Core\Formatter;
 
 use PHPPdf\Core\Node\Container;
 use PHPPdf\ObjectMother\NodeObjectMother;
-use PHPPdf\Document,
+use PHPPdf\Core\Document,
     PHPPdf\Core\Formatter\VerticalAlignFormatter;
 
 class VerticalAlignFormatterTest extends \PHPPdf\PHPUnit\Framework\TestCase

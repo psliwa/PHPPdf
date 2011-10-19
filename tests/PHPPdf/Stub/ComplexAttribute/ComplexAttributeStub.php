@@ -2,7 +2,7 @@
 
 namespace PHPPdf\Stub\ComplexAttribute;
 
-use PHPPdf\Document;
+use PHPPdf\Core\Document;
 use PHPPdf\Core\ComplexAttribute\ComplexAttribute,
     PHPPdf\Core\Node\Page,
     PHPPdf\Core\Node\Node;

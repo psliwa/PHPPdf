@@ -3,7 +3,7 @@
 namespace PHPPdf\Test\Core\Formatter;
 
 use PHPPdf\Core\Node\BasicList;
-use PHPPdf\Document;
+use PHPPdf\Core\Document;
 use PHPPdf\Core\Formatter\ListFormatter;
 
 class ListFormatterTest extends \PHPPdf\PHPUnit\Framework\TestCase

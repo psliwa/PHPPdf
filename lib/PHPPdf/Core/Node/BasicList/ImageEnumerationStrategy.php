@@ -9,7 +9,7 @@
 namespace PHPPdf\Core\Node\BasicList;
 
 use PHPPdf\Core\UnitConverter;
-use PHPPdf\Document;
+use PHPPdf\Core\Document;
 use PHPPdf\Core\Node\BasicList,
     PHPPdf\Core\Engine\GraphicsContext;
 

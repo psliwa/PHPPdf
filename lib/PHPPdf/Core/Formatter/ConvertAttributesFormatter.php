@@ -11,7 +11,7 @@ namespace PHPPdf\Core\Formatter;
 use PHPPdf\Core\Formatter\BaseFormatter,
     PHPPdf\Core\Node\Node,
     PHPPdf\Util,
-    PHPPdf\Document;
+    PHPPdf\Core\Document;
 
 /**
  * Convert values of some attributes

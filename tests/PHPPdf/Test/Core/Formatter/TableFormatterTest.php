@@ -3,7 +3,7 @@
 namespace PHPPdf\Test\Core\Formatter;
 
 use PHPPdf\Core\Formatter\TableFormatter,
-    PHPPdf\Document,
+    PHPPdf\Core\Document,
     PHPPdf\Core\Boundary,
     PHPPdf\Core\Node\Table\Row,
     PHPPdf\Core\Node\Table,

@@ -2,7 +2,7 @@
 
 namespace PHPPdf\Test\Core\ComplexAttribute;
 
-use PHPPdf\Document;
+use PHPPdf\Core\Document;
 use PHPPdf\ObjectMother\NodeObjectMother;
 use PHPPdf\Core\ComplexAttribute\Border;
 use PHPPdf\Core\Boundary;
@@ -103,7 +103,7 @@ class BorderTest extends \PHPPdf\PHPUnit\Framework\TestCase
      */
     public function borderWithNotStandardSize()
     {
-        $document = $this->getMockBuilder('PHPPdf\Document')
+        $document = $this->getMockBuilder('PHPPdf\Core\Document')
                          ->setMethods(array('convertUnit'))
                          ->getMock();
         
@@ -253,7 +253,7 @@ class BorderTest extends \PHPPdf\PHPUnit\Framework\TestCase
         $expectedPosition = 2;
         $size = 1;
         
-        $document = $this->getMockBuilder('PHPPdf\Document')
+        $document = $this->getMockBuilder('PHPPdf\Core\Document')
                          ->setMethods(array('convertUnit'))
                          ->getMock();
                          
@@ -299,7 +299,7 @@ class BorderTest extends \PHPPdf\PHPUnit\Framework\TestCase
         $size = 1;
         $halfSize = $size/2;
         
-        $document = $this->getMockBuilder('PHPPdf\Document')
+        $document = $this->getMockBuilder('PHPPdf\Core\Document')
                          ->setMethods(array('convertUnit'))
                          ->getMock();
                          

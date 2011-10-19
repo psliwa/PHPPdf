@@ -12,7 +12,7 @@ use PHPPdf\Core\Node\Image;
 use PHPPdf\Core\Node\Node;
 use PHPPdf\Core\Engine\Image as EngineImage;
 use PHPPdf\Util,
-    PHPPdf\Document;
+    PHPPdf\Core\Document;
 
 /**
  * @author Piotr Śliwa <peter.pl7@gmail.com>

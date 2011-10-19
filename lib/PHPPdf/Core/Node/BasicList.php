@@ -14,7 +14,7 @@ use PHPPdf\Core\Node\BasicList\ImageEnumerationStrategy,
     PHPPdf\Core\Node\BasicList\EnumerationStrategy,
     PHPPdf\Core\Node\BasicList\OrderedEnumerationStrategy,
     PHPPdf\Core\Node\BasicList\UnorderedEnumerationStrategy,
-    PHPPdf\Document,
+    PHPPdf\Core\Document,
     PHPPdf\Core\DrawingTask;
 
 /**
