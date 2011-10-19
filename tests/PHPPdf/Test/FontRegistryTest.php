@@ -2,7 +2,7 @@
 
 namespace PHPPdf\Test\Font;
 
-use PHPPdf\Font\Registry,
+use PHPPdf\FontRegistry,
     PHPPdf\Engine\Font;
 
 class FontRegistryTest extends \PHPPdf\PHPUnit\Framework\TestCase
@@ -15,7 +15,7 @@ class FontRegistryTest extends \PHPPdf\PHPUnit\Framework\TestCase
         $this->document = $this->getMockBuilder('PHPPdf\Document')
                                ->setMethods(array('createFont'))
                                ->getMock();
-        $this->registry = new Registry($this->document);
+        $this->registry = new FontRegistry($this->document);
     }
 
     /**

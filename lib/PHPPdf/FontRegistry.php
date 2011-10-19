@@ -6,14 +6,14 @@
  * License information is in LICENSE file
  */
 
-namespace PHPPdf\Font;
+namespace PHPPdf;
 
 use PHPPdf\Document;
 
 /**
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
-class Registry implements \Countable
+class FontRegistry implements \Countable
 {
     private $fonts = array();
     private $document = null;

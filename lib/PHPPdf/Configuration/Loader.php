@@ -28,7 +28,7 @@ interface Loader
     public function createComplexAttributeFactory();
     
     /**
-     * @return PHPPdf\Font\Registry
+     * @return FontRegistry
      */
     public function createFontRegistry();
     
