@@ -6,7 +6,7 @@
 	<services>
 		<service id="phppdf.unit_converter" class="PHPPdf\Core\UnitConverterImpl"></service>
 	
-		<service id="phppdf.node_factory" class="PHPPdf\Core\Node\Factory">
+		<service id="phppdf.node_factory" class="PHPPdf\Core\Node\NodeFactory">
 			<call method="addPrototypes">
 				<argument type="collection">
 					<argument key="page" type="service" id="phppdf.node.page" />
