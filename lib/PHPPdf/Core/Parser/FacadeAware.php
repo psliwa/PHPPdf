@@ -6,7 +6,7 @@
  * License information is in LICENSE file
  */
 
-namespace PHPPdf\Parser;
+namespace PHPPdf\Core\Parser;
 
 /**
  * Interface of type that is aware of Facade existance.

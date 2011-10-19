@@ -6,8 +6,9 @@
  * License information is in LICENSE file
  */
 
-namespace PHPPdf\Parser;
+namespace PHPPdf\Core\Parser;
 
+use PHPPdf\Parser\XmlParser;
 use PHPPdf\Document;
 use PHPPdf\Core\Node\Manager;
 use PHPPdf\Core\Node\NodeWrapper;
@@ -16,10 +17,10 @@ use PHPPdf\Core\Node\Text,
     PHPPdf\Core\Node\Factory as NodeFactory,
     PHPPdf\Core\Node\PageCollection,
     PHPPdf\Core\Node\Node,
-    PHPPdf\Parser\BagContainer,
-    PHPPdf\Parser\Exception as Exceptions,
+    PHPPdf\Core\Parser\BagContainer,
+    PHPPdf\Core\Parser\Exception as Exceptions,
     PHPPdf\Core\ComplexAttribute\Factory as ComplexAttributeFactory,
-    PHPPdf\Parser\StylesheetConstraint,
+    PHPPdf\Core\Parser\StylesheetConstraint,
     PHPPdf\Core\Node\Behaviour\Factory as BehaviourFactory;
 
 /**

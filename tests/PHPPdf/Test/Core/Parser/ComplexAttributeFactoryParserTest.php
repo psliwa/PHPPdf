@@ -1,9 +1,9 @@
 <?php
 
-namespace PHPPdf\Test\Parser;
+namespace PHPPdf\Test\Core\Parser;
 
 use PHPPdf\Core\ComplexAttribute\Factory as ComplexAttributeFactory,
-    PHPPdf\Parser\ComplexAttributeFactoryParser;
+    PHPPdf\Core\Parser\ComplexAttributeFactoryParser;
 
 class ComplexAttributeFactoryParserTest extends \PHPPdf\PHPUnit\Framework\TestCase
 {

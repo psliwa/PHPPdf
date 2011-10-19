@@ -1,9 +1,9 @@
 <?php
 
-namespace PHPPdf\Test\Parser;
+namespace PHPPdf\Test\Core\Parser;
 
 use PHPPdf\Core\AttributeBag,
-    PHPPdf\Parser\BagContainer;
+    PHPPdf\Core\Parser\BagContainer;
 
 class BagContainerTest extends \PHPPdf\PHPUnit\Framework\TestCase
 {

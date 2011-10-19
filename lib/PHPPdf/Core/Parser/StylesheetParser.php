@@ -6,12 +6,12 @@
  * License information is in LICENSE file
  */
 
-namespace PHPPdf\Parser;
+namespace PHPPdf\Core\Parser;
 
-use PHPPdf\Parser\Exception\ParseException;
+use PHPPdf\Parser\XmlParser;
 use PHPPdf\Core\ComplexAttribute\Factory as ComplexAttributeFactory;
-use PHPPdf\Parser\StylesheetConstraint,
-    PHPPdf\Parser\Exception as Exceptions;
+use PHPPdf\Core\Parser\StylesheetConstraint;
+use PHPPdf\Parser\Exception\ParseException;
 
 /**
  * Xml stylesheet parser
@@ -97,14 +97,14 @@ class StylesheetParser extends XmlParser
 
         if(!$name)
         {
-            throw new Exceptions\ParseException('Name of attribute is required.');
+            throw new ParseException('Name of attribute is required.');
         }
 
         $value = $reader->getAttribute('value');
 
         if($value === null)
         {
-            throw new Exceptions\ParseException('Value of attribute is required.');
+            throw new ParseException('Value of attribute is required.');
         }
 
         $lastConstraint->add($name, $value);
@@ -123,7 +123,7 @@ class StylesheetParser extends XmlParser
 
         if(!isset($attributes['name']))
         {
-            throw new Exceptions\ParseException('Name of complex attribute is required.');
+            throw new ParseException('Name of complex attribute is required.');
         }
 
         $id = $attributes['name'];
@@ -155,7 +155,7 @@ class StylesheetParser extends XmlParser
 
         if(!$tag)
         {
-            throw new Exceptions\ParseException('You must set tag name.');
+            throw new ParseException('You must set tag name.');
         }
 
         $lastConstraint->addConstraint($tag, $constraint);

@@ -1,10 +1,10 @@
 <?php
 
-namespace PHPPdf\Test\Parser;
+namespace PHPPdf\Test\Core\Parser;
 
-use PHPPdf\Parser\FacadeBuilder,
+use PHPPdf\Core\Parser\FacadeBuilder,
     PHPPdf\Cache\CacheImpl,
-    PHPPdf\Parser\FacadeConfiguration;
+    PHPPdf\Core\Parser\FacadeConfiguration;
 
 class FacadeBuilderTest extends \PHPPdf\PHPUnit\Framework\TestCase
 {
@@ -30,7 +30,7 @@ class FacadeBuilderTest extends \PHPPdf\PHPUnit\Framework\TestCase
     public function returnFacadeOnBuildMethod()
     {        
         $facade = $this->builder->build();
-        $this->assertInstanceOf('PHPPdf\Parser\Facade', $facade);
+        $this->assertInstanceOf('PHPPdf\Core\Parser\Facade', $facade);
         $configurationLoader = $this->readAttribute($facade, 'configurationLoader');
         $this->assertTrue($configurationLoader === $this->configurationLoader);
     }
@@ -109,11 +109,11 @@ class FacadeBuilderTest extends \PHPPdf\PHPUnit\Framework\TestCase
         return array(
             array(
                 FacadeBuilder::PARSER_XML,
-                'PHPPdf\Parser\XmlDocumentParser',
+                'PHPPdf\Core\Parser\XmlDocumentParser',
             ),
             array(
                 FacadeBuilder::PARSER_MARKDOWN,
-                'PHPPdf\Parser\MarkdownDocumentParser',
+                'PHPPdf\Core\Parser\MarkdownDocumentParser',
             ),
         );
     }

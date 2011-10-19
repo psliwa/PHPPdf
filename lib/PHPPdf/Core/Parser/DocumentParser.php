@@ -6,8 +6,9 @@
  * License information is in LICENSE file
  */
 
-namespace PHPPdf\Parser;
+namespace PHPPdf\Core\Parser;
 
+use PHPPdf\Parser\Parser;
 use PHPPdf\Document;
 use PHPPdf\Core\Node\Factory as NodeFactory;
 use PHPPdf\Core\ComplexAttribute\Factory as ComplexAttributeFactory;

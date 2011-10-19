@@ -6,10 +6,10 @@
  * License information is in LICENSE file
  */
 
-namespace PHPPdf\Parser;
+namespace PHPPdf\Core\Parser;
 
+use PHPPdf\Parser\Parser;
 use PHPPdf\Core\DataSource;
-
 use PHPPdf\Bridge\Markdown\MarkdownParser;
 use PHPPdf\Document;
 use PHPPdf\Core\Node\Factory as NodeFactory;
@@ -41,9 +41,9 @@ class MarkdownDocumentParser implements DocumentParser, FacadeAware
     {
         $markdownOutput = $this->markdownParser->parse($markdownDocument);
         
-        $relativePathToResources = str_replace('\\', '/', realpath(__DIR__.'/../Resources'));
+        $relativePathToResources = str_replace('\\', '/', realpath(__DIR__.'/../../Resources'));
         
-        $documentTemplateSource = DataSource::fromFile($this->documentTemplateFilepath ? : __DIR__.'/../Resources/markdown/document.xml');
+        $documentTemplateSource = DataSource::fromFile($this->documentTemplateFilepath ? : __DIR__.'/../../Resources/markdown/document.xml');
         
         $markdownOutput = str_replace('%MARKDOWN%', $markdownOutput, str_replace('%resources%', $relativePathToResources, $documentTemplateSource->read()));
         
@@ -64,7 +64,7 @@ class MarkdownDocumentParser implements DocumentParser, FacadeAware
     {
         if($this->facade)
         {
-            $markdownStylesheet = DataSource::fromFile($this->stylesheetFilepath ? : __DIR__.'/../Resources/markdown/stylesheet.xml');
+            $markdownStylesheet = DataSource::fromFile($this->stylesheetFilepath ? : __DIR__.'/../../Resources/markdown/stylesheet.xml');
 
             return $this->facade->retrieveStylesheetConstraint($markdownStylesheet);
         }

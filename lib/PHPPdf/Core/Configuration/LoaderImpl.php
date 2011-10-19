@@ -9,9 +9,9 @@
 namespace PHPPdf\Core\Configuration;
 
 use PHPPdf\Core\UnitConverterImpl;
-use PHPPdf\Parser\FontRegistryParser,
-    PHPPdf\Parser\ComplexAttributeFactoryParser,
-    PHPPdf\Parser\NodeFactoryParser,
+use PHPPdf\Core\Parser\FontRegistryParser,
+    PHPPdf\Core\Parser\ComplexAttributeFactoryParser,
+    PHPPdf\Core\Parser\NodeFactoryParser,
     PHPPdf\Cache\NullCache,
     PHPPdf\Cache\Cache;
 

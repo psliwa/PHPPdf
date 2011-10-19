@@ -11,8 +11,8 @@ namespace PHPPdf\Core\Node;
 use PHPPdf\Core\DrawingTaskHeap;
 
 use PHPPdf\Document;
-use PHPPdf\Parser\DocumentParserListener;
-use PHPPdf\Parser\Exception\DuplicatedIdException;
+use PHPPdf\Core\Parser\DocumentParserListener;
+use PHPPdf\Core\Parser\Exception\DuplicatedIdException;
 
 /**
  * Manager of nodes

@@ -6,12 +6,12 @@
  * License information is in LICENSE file
  */
 
-namespace PHPPdf\Parser;
+namespace PHPPdf\Core\Parser;
 
+use PHPPdf\Parser\XmlParser;
 use PHPPdf\Core\UnitConverter;
-
-use PHPPdf\Core\Node\Factory as NodeFactory,
-    PHPPdf\Parser\Exception\ParseException;
+use PHPPdf\Core\Node\Factory as NodeFactory;
+use PHPPdf\Parser\Exception\ParseException;
 
 /**
  * Parser for node config file

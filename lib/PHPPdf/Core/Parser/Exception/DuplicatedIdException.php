@@ -6,7 +6,9 @@
  * License information is in LICENSE file
  */
 
-namespace PHPPdf\Parser\Exception;
+namespace PHPPdf\Core\Parser\Exception;
+
+use PHPPdf\Parser\Exception\ParseException;
 
 /**
  * Occurs when id has been duplicated

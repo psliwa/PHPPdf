@@ -6,7 +6,7 @@
  * License information is in LICENSE file
  */
 
-namespace PHPPdf\Parser;
+namespace PHPPdf\Core\Parser;
 
 /**
  * Configuration for Facade. Contains informations about config files.
@@ -20,9 +20,9 @@ class FacadeConfiguration
     public function __construct()
     {
         $this->configFiles = array(
-            'node' => __DIR__.'/../Resources/config/nodes.xml',
-            'complex-attribute' => __DIR__.'/../Resources/config/complex-attributes.xml',
-            'font' => __DIR__.'/../Resources/config/fonts.xml',
+            'node' => __DIR__.'/../../Resources/config/nodes.xml',
+            'complex-attribute' => __DIR__.'/../../Resources/config/complex-attributes.xml',
+            'font' => __DIR__.'/../../Resources/config/fonts.xml',
         );
     }
 

@@ -1,11 +1,11 @@
 <?php
 
-namespace PHPPdf\Test\Parser;
+namespace PHPPdf\Test\Core\Parser;
 
-use PHPPdf\Parser\BagContainer;
+use PHPPdf\Core\Parser\BagContainer;
 
-use PHPPdf\Parser\StylesheetParser,
-    PHPPdf\Parser\StylesheetConstraint;
+use PHPPdf\Core\Parser\StylesheetParser,
+    PHPPdf\Core\Parser\StylesheetConstraint;
 
 class StylesheetParserTest extends \PHPPdf\PHPUnit\Framework\TestCase
 {

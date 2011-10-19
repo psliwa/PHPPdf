@@ -1,9 +1,9 @@
 <?php
 
-namespace PHPPdf\Test\Parser;
+namespace PHPPdf\Test\Core\Parser;
 
 use PHPPdf\Core\Engine\Font;
-use PHPPdf\Parser\FontRegistryParser;
+use PHPPdf\Core\Parser\FontRegistryParser;
 
 class FontRegistryParserTest extends \PHPPdf\PHPUnit\Framework\TestCase
 {

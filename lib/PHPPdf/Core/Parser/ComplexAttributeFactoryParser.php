@@ -6,10 +6,11 @@
  * License information is in LICENSE file
  */
 
-namespace PHPPdf\Parser;
+namespace PHPPdf\Core\Parser;
 
-use PHPPdf\Core\ComplexAttribute\Factory as ComplexAttributeFactory,
-    PHPPdf\Parser\Exception\ParseException;
+use PHPPdf\Parser\Exception\ParseException;
+use PHPPdf\Parser\XmlParser;
+use PHPPdf\Core\ComplexAttribute\Factory as ComplexAttributeFactory;
 
 /**
  * ComplexAttribute factory parser

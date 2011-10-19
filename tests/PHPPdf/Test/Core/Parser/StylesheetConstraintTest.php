@@ -1,9 +1,9 @@
 <?php
 
-namespace PHPPdf\Test\Parser;
+namespace PHPPdf\Test\Core\Parser;
 
-use PHPPdf\Parser\BagContainer;
-use PHPPdf\Parser\StylesheetConstraint,
+use PHPPdf\Core\Parser\BagContainer;
+use PHPPdf\Core\Parser\StylesheetConstraint,
     PHPPdf\Core\AttributeBag;
 
 class StylesheetConstraintTest extends \PHPPdf\PHPUnit\Framework\TestCase

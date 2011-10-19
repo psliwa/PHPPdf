@@ -1,9 +1,9 @@
 <?php
 
-namespace PHPPdf\Test\Parser;
+namespace PHPPdf\Test\Core\Parser;
 
-use PHPPdf\Parser\NodeFactoryParser,
-    PHPPdf\Parser\StylesheetParser,
+use PHPPdf\Core\Parser\NodeFactoryParser,
+    PHPPdf\Core\Parser\StylesheetParser,
     PHPPdf\Core\Node\Factory as NodeFactory;
 
 class NodeFactoryParserTest extends \PHPPdf\PHPUnit\Framework\TestCase
@@ -142,12 +142,12 @@ XML;
 </factory>
 XML;
 
-        $bagContainerMock = $this->getMock('PHPPdf\Parser\BagContainer', array('apply'));
+        $bagContainerMock = $this->getMock('PHPPdf\Core\Parser\BagContainer', array('apply'));
         $bagContainerMock->expects($this->once())
                          ->method('apply')
                          ->with($this->isInstanceOf('PHPPdf\Core\Node\Container'));
 
-        $stylesheetParserMock = $this->getMock('PHPPdf\Parser\StylesheetParser', array('parse'));
+        $stylesheetParserMock = $this->getMock('PHPPdf\Core\Parser\StylesheetParser', array('parse'));
         $stylesheetParserMock->expects($this->once())
                              ->method('parse')
                              ->will($this->returnValue($bagContainerMock));

@@ -1,15 +1,15 @@
 <?php
 
-namespace PHPPdf\Test\Parser;
+namespace PHPPdf\Test\Core\Parser;
 
 use PHPPdf\Core\Node\Container;
 use PHPPdf\Core\Node\Paragraph;
 use PHPPdf\Core\Node\Text;
-use PHPPdf\Parser\XmlDocumentParser,
+use PHPPdf\Core\Parser\XmlDocumentParser,
     PHPPdf\Core\Node\Factory as NodeFactory,
     PHPPdf\Core\ComplexAttribute\Factory as ComplexAttributeFactory,
     PHPPdf\Core\Node\PageCollection,
-    PHPPdf\Parser\StylesheetConstraint;
+    PHPPdf\Core\Parser\StylesheetConstraint;
 
 class XmlDocumentParserTest extends \PHPPdf\PHPUnit\Framework\TestCase
 {
@@ -355,7 +355,7 @@ XML;
 
     /**
      * @test
-     * @expectedException \PHPPdf\Parser\Exception\DuplicatedIdException
+     * @expectedException \PHPPdf\Core\Parser\Exception\DuplicatedIdException
      */
     public function idMustBeUnique()
     {
@@ -379,7 +379,7 @@ XML;
 
     /**
      * @test
-     * @expectedException \PHPPdf\Parser\Exception\IdNotFoundException
+     * @expectedException \PHPPdf\Core\Parser\Exception\IdNotFoundException
      */
     public function extendsAfterUnexistedIdIsForbidden()
     {
@@ -446,12 +446,12 @@ XML;
         $reader->read();
         $reader->read();
 
-        $constraintMock = $this->getMock('PHPPdf\Parser\StylesheetConstraint', array('apply'));
+        $constraintMock = $this->getMock('PHPPdf\Core\Parser\StylesheetConstraint', array('apply'));
         $constraintMock->expects($this->once())
                        ->method('apply')
                        ->with($this->isInstanceOf('PHPPdf\Core\Node\Page'));
 
-        $parserMock = $this->getMock('PHPPdf\Parser\StylesheetParser', array('parse'));
+        $parserMock = $this->getMock('PHPPdf\Core\Parser\StylesheetParser', array('parse'));
         $parserMock->expects($this->once())
                    ->method('parse') 
                    //move after stylesheet close tag and return constraint                  
@@ -489,7 +489,7 @@ XML;
 </pdf>
 XML;
 
-        $constraintMock = $this->getMock('PHPPdf\Parser\StylesheetConstraint', array('find'));
+        $constraintMock = $this->getMock('PHPPdf\Core\Parser\StylesheetConstraint', array('find'));
         $bagContainerMock1 = $this->getBagContainerMock(array('someName1' => 'someValue1'));
         $bagContainerMock2 = $this->getBagContainerMock(array('someName4' => array('someAttribute1' => 'someValue1')));
         $bagContainerMock3 = $this->getBagContainerMock(array('someName2' => 'someValue2', 'someName3' => array('someAttribute2' => 'someValue2')));
@@ -540,7 +540,7 @@ XML;
     {
         $attributes = array_merge($attributes, $complexAttributes);
 
-        $mock = $this->getMock('PHPPdf\Parser\BagContainer', array('getAll'));
+        $mock = $this->getMock('PHPPdf\Core\Parser\BagContainer', array('getAll'));
         $mock->expects($this->once())
              ->method('getAll')
              ->will($this->returnValue($attributes));
@@ -981,7 +981,7 @@ XML;
         
         $nodeFactoryMock = $this->getNodeFactoryMock(array(array('tag1', $node1), array('tag2', $node2)));
         
-        $listener = $this->getMock('PHPPdf\Parser\DocumentParserListener');
+        $listener = $this->getMock('PHPPdf\Core\Parser\DocumentParserListener');
         
         $listener->expects($this->at(0))
                  ->method('onStartParseNode')
@@ -1021,7 +1021,7 @@ XML;
         
         $nodeFactoryMock = $this->getNodeFactoryMock(array(array('paragraph', $paragraph), array('text', $node)));
         
-        $listener = $this->getMock('PHPPdf\Parser\DocumentParserListener');
+        $listener = $this->getMock('PHPPdf\Core\Parser\DocumentParserListener');
         
         $listener->expects($this->at(0))
                  ->method('onStartParseNode')

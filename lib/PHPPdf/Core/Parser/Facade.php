@@ -6,20 +6,19 @@
  * License information is in LICENSE file
  */
 
-namespace PHPPdf\Parser;
+namespace PHPPdf\Core\Parser;
 
 use PHPPdf\Core\Point;
-
 use PHPPdf\Core\Configuration\Loader;
 use PHPPdf\Core\Node\TextTransformator;
 use PHPPdf\Document,
-    PHPPdf\Parser\StylesheetParser,
-    PHPPdf\Parser\ComplexAttributeFactoryParser,
-    PHPPdf\Parser\FontRegistryParser,
+    PHPPdf\Core\Parser\StylesheetParser,
+    PHPPdf\Core\Parser\ComplexAttributeFactoryParser,
+    PHPPdf\Core\Parser\FontRegistryParser,
     PHPPdf\Cache\Cache,
     PHPPdf\Cache\NullCache,
     PHPPdf\Core\DataSource,
-    PHPPdf\Parser\NodeFactoryParser;
+    PHPPdf\Core\Parser\NodeFactoryParser;
 
 /**
  * Simple facade whom encapsulate logical complexity of this library

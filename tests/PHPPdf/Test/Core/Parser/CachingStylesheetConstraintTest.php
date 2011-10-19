@@ -1,9 +1,9 @@
 <?php
 
-namespace PHPPdf\Test\Parser;
+namespace PHPPdf\Test\Core\Parser;
 
-use PHPPdf\Parser\CachingStylesheetConstraint,
-    PHPPdf\Parser\BagContainer,
+use PHPPdf\Core\Parser\CachingStylesheetConstraint,
+    PHPPdf\Core\Parser\BagContainer,
     PHPPdf\Cache\NullCache;
 
 class CachingStylesheetConstraintTest extends \PHPPdf\PHPUnit\Framework\TestCase
@@ -30,7 +30,7 @@ class CachingStylesheetConstraintTest extends \PHPPdf\PHPUnit\Framework\TestCase
 
     private function getConstraintMock($tag, array $classes, $bag)
     {
-        $constraintMock = $this->getMock('PHPPdf\Parser\StylesheetConstraint', array('getTag', 'getClasses', 'find'));
+        $constraintMock = $this->getMock('PHPPdf\Core\Parser\StylesheetConstraint', array('getTag', 'getClasses', 'find'));
 
         $constraintMock->expects($this->any())
                        ->method('getTag')

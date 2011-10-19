@@ -6,10 +6,11 @@
  * License information is in LICENSE file
  */
 
-namespace PHPPdf\Parser;
+namespace PHPPdf\Core\Parser;
 
-use PHPPdf\Font\Registry,
-    PHPPdf\Parser\Exception\ParseException;
+use PHPPdf\Parser\XmlParser;
+use PHPPdf\Font\Registry;
+use PHPPdf\Parser\Exception\ParseException;
 
 /**
  * Parser for font config file

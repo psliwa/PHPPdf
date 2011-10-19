@@ -1,12 +1,12 @@
 <?php
 
-namespace PHPPdf\Test\Parser;
+namespace PHPPdf\Test\Core\Parser;
 
-use PHPPdf\Parser\StylesheetConstraint;
+use PHPPdf\Core\Parser\StylesheetConstraint;
 
 use PHPPdf\Document;
 
-use PHPPdf\Parser\MarkdownDocumentParser;
+use PHPPdf\Core\Parser\MarkdownDocumentParser;
 
 use PHPPdf\PHPUnit\Framework\TestCase;
 
@@ -19,7 +19,7 @@ class MarkdownDocumentParserTest extends TestCase
     public function setUp()
     {
         $this->markdownParser = $this->getMock('PHPPdf\Parser\Parser');
-        $this->documentParser = $this->getMock('PHPPdf\Parser\DocumentParser');
+        $this->documentParser = $this->getMock('PHPPdf\Core\Parser\DocumentParser');
         
         $this->markdownDocumentParser = new MarkdownDocumentParser($this->documentParser, $this->markdownParser);
     }
@@ -41,7 +41,7 @@ class MarkdownDocumentParserTest extends TestCase
         return array(
             array('setNodeFactory', $this->getMock('PHPPdf\Core\Node\Factory')),
             array('setComplexAttributeFactory', $this->getMock('PHPPdf\Core\ComplexAttribute\Factory')),
-            array('addListener', $this->getMock('PHPPdf\Parser\DocumentParserListener')),
+            array('addListener', $this->getMock('PHPPdf\Core\Parser\DocumentParserListener')),
             array('setDocument', new Document()),
         );
     }
@@ -89,7 +89,7 @@ class MarkdownDocumentParserTest extends TestCase
     {
         $stylesheetConstraint = new StylesheetConstraint();
         
-        $facade = $this->getMockBuilder('PHPPdf\Parser\Facade')
+        $facade = $this->getMockBuilder('PHPPdf\Core\Parser\Facade')
                        ->setMethods(array('retrieveStylesheetConstraint'))
                        ->disableOriginalConstructor()
                        ->getMock();
