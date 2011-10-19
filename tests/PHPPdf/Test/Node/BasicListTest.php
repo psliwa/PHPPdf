@@ -2,7 +2,7 @@
 
 namespace PHPPdf\Test\Node;
 
-use PHPPdf\Util\DrawingTaskHeap;
+use PHPPdf\Core\DrawingTaskHeap;
 
 use PHPPdf\Node\Node;
 use PHPPdf\Node\Container;

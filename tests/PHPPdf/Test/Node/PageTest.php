@@ -2,16 +2,16 @@
 
 namespace PHPPdf\Test\Node;
 
-use PHPPdf\Util\DrawingTaskHeap;
+use PHPPdf\Core\DrawingTaskHeap;
 
 use PHPPdf\Node\Node;
-use PHPPdf\Util\DrawingTask;
+use PHPPdf\Core\DrawingTask;
 use PHPPdf\Document;
 use PHPPdf\Node\Page;
 use PHPPdf\Node\PageContext;
 use PHPPdf\Node\DynamicPage;
 use PHPPdf\Node\Container;
-use PHPPdf\Util\Boundary;
+use PHPPdf\Core\Boundary;
 
 class PageTest extends \PHPPdf\PHPUnit\Framework\TestCase
 {
@@ -119,7 +119,7 @@ class PageTest extends \PHPPdf\PHPUnit\Framework\TestCase
         $originalVerticalMargin = 33;
         $originalHorizontalMargin = 22;
         
-        $unitConverter = $this->getMock('PHPPdf\Util\UnitConverter');
+        $unitConverter = $this->getMock('PHPPdf\Core\UnitConverter');
         $this->page->setUnitConverter($unitConverter);
         
         foreach(array(0, 2) as $i)

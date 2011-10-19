@@ -8,12 +8,12 @@
 
 namespace PHPPdf\Node\Runtime;
 
-use PHPPdf\Util\DrawingTaskHeap;
+use PHPPdf\Core\DrawingTaskHeap;
 
 use PHPPdf\Node\Text,
     PHPPdf\Node\Runtime,
     PHPPdf\Node\Page,
-    PHPPdf\Util\UnitConverter,
+    PHPPdf\Core\UnitConverter,
     PHPPdf\Document;
 
 /**

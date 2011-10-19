@@ -8,7 +8,7 @@
 
 namespace PHPPdf\Parser;
 
-use PHPPdf\Util\Point;
+use PHPPdf\Core\Point;
 
 use PHPPdf\Configuration\Loader;
 use PHPPdf\Node\TextTransformator;
@@ -18,7 +18,7 @@ use PHPPdf\Document,
     PHPPdf\Parser\FontRegistryParser,
     PHPPdf\Cache\Cache,
     PHPPdf\Cache\NullCache,
-    PHPPdf\Util\DataSource,
+    PHPPdf\Core\DataSource,
     PHPPdf\Parser\NodeFactoryParser;
 
 /**

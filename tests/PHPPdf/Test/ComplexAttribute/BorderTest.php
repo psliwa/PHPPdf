@@ -5,9 +5,9 @@ namespace PHPPdf\Test\ComplexAttribute;
 use PHPPdf\Document;
 use PHPPdf\ObjectMother\NodeObjectMother;
 use PHPPdf\ComplexAttribute\Border;
-use PHPPdf\Util\Boundary;
+use PHPPdf\Core\Boundary;
 use PHPPdf\Node\Page;
-use PHPPdf\Util\Point;
+use PHPPdf\Core\Point;
 use PHPPdf\Engine\GraphicsContext;
 
 class BorderTest extends \PHPPdf\PHPUnit\Framework\TestCase

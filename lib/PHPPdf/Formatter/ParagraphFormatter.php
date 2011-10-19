@@ -13,7 +13,7 @@ use PHPPdf\Node\Paragraph\LinePart;
 use PHPPdf\Node\Node;
 use PHPPdf\Document;
 use PHPPdf\Node\Text;
-use PHPPdf\Util\Point;
+use PHPPdf\Core\Point;
 
 /**
  * TODO: refactoring

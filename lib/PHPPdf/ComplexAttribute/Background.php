@@ -9,7 +9,7 @@
 namespace PHPPdf\ComplexAttribute;
 
 use PHPPdf\Node\Page,
-    PHPPdf\Util\UnitConverter,
+    PHPPdf\Core\UnitConverter,
     PHPPdf\Document,
     PHPPdf\Engine\GraphicsContext,
     PHPPdf\Exception\Exception,

@@ -9,7 +9,7 @@
 namespace PHPPdf\Parser;
 
 use PHPPdf\Node\Node;
-use PHPPdf\Util\AttributeBag;
+use PHPPdf\Core\AttributeBag;
 
 /**
  * Class to encapsulate two bags: AttributeBag and ComplexAttributeBag

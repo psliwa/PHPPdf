@@ -3,7 +3,7 @@
 namespace PHPPdf\Test\Formatter;
 
 use PHPPdf\Document,
-    PHPPdf\Util\Point,
+    PHPPdf\Core\Point,
     PHPPdf\Node\Node,
     PHPPdf\Node\Container,
     PHPPdf\Node\Page,

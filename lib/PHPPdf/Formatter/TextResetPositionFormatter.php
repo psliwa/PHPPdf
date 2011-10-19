@@ -10,7 +10,7 @@ namespace PHPPdf\Formatter;
 
 use PHPPdf\Node as Nodes,
     PHPPdf\Document,
-    PHPPdf\Util\Point;
+    PHPPdf\Core\Point;
 
 /**
  * Calculates text's real dimension

@@ -4,7 +4,7 @@ namespace PHPPdf\Test\Formatter;
 
 use PHPPdf\Formatter\CellFirstPointPositionFormatter,
     PHPPdf\Document,
-    PHPPdf\Util\Point;
+    PHPPdf\Core\Point;
 
 class CellFirstPointPositionFormatterTest extends \PHPPdf\PHPUnit\Framework\TestCase
 {
@@ -27,7 +27,7 @@ class CellFirstPointPositionFormatterTest extends \PHPPdf\PHPUnit\Framework\Test
                ->method('getFirstPoint')
                ->will($this->returnValue($firstPoint));
 
-        $boundary = $this->getMock('PHPPdf\Util\Boundary', array('setNext'));
+        $boundary = $this->getMock('PHPPdf\Core\Boundary', array('setNext'));
         $boundary->expects($this->once())
                  ->method('setNext')
                  ->with($firstPoint);

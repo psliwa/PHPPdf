@@ -6,7 +6,7 @@ require_once __DIR__.'/EnumerationStrategyTest.php';
 
 use PHPPdf\Node\BasicList\EnumerationStrategy;
 use PHPPdf\Node\BasicList;
-use PHPPdf\Util\Point;
+use PHPPdf\Core\Point;
 use PHPPdf\Node\Container;
 use PHPPdf\Node\BasicList\OrderedEnumerationStrategy;
 

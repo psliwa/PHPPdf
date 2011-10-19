@@ -5,7 +5,7 @@ namespace PHPPdf\Test\Node;
 use PHPPdf\ObjectMother\NodeObjectMother;
 use PHPPdf\Document,
     PHPPdf\Node\Container,
-    PHPPdf\Util\Point,
+    PHPPdf\Core\Point,
     PHPPdf\Node\Node;
 
 class ContainerTest extends \PHPPdf\PHPUnit\Framework\TestCase
@@ -174,7 +174,7 @@ class ContainerTest extends \PHPPdf\PHPUnit\Framework\TestCase
 
     public function createResizableBoundaryMock($width, $horizontalResizeBy, $verticalResizeBy, $initSequence = 1)
     {
-        $boundary = $this->getMock('PHPPdf\Util\Boundary', array('pointTranslate', 'getDiagonalPoint', 'getFirstPoint'));
+        $boundary = $this->getMock('PHPPdf\Core\Boundary', array('pointTranslate', 'getDiagonalPoint', 'getFirstPoint'));
 
         $boundary->expects($this->atLeastOnce())
                  ->method('getDiagonalPoint')

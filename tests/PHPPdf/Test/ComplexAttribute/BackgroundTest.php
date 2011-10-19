@@ -7,7 +7,7 @@ use PHPPdf\ObjectMother\NodeObjectMother;
 use PHPPdf\Document;
 use PHPPdf\ComplexAttribute\Background,
     PHPPdf\Node\Page,
-    PHPPdf\Util\Point;
+    PHPPdf\Core\Point;
 
 class BackgroundTest extends \PHPPdf\PHPUnit\Framework\TestCase
 {
@@ -190,7 +190,7 @@ class BackgroundTest extends \PHPPdf\PHPUnit\Framework\TestCase
 
     private function getBoundaryStub($x, $y, $width, $height)
     {
-        $boundaryMock = new \PHPPdf\Util\Boundary();
+        $boundaryMock = new \PHPPdf\Core\Boundary();
 
         $points = array(
             Point::getInstance($x, $y),

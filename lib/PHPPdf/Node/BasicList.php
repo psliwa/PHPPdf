@@ -8,14 +8,14 @@
 
 namespace PHPPdf\Node;
 
-use PHPPdf\Util\DrawingTaskHeap;
+use PHPPdf\Core\DrawingTaskHeap;
 use PHPPdf\Node\BasicList\EnumerationStrategyFactory;
 use PHPPdf\Node\BasicList\ImageEnumerationStrategy,
     PHPPdf\Node\BasicList\EnumerationStrategy,
     PHPPdf\Node\BasicList\OrderedEnumerationStrategy,
     PHPPdf\Node\BasicList\UnorderedEnumerationStrategy,
     PHPPdf\Document,
-    PHPPdf\Util\DrawingTask;
+    PHPPdf\Core\DrawingTask;
 
 /**
  * Class of the list element

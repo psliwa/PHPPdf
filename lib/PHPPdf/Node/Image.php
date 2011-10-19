@@ -8,10 +8,10 @@
 
 namespace PHPPdf\Node;
 
-use PHPPdf\Util\DrawingTaskHeap;
+use PHPPdf\Core\DrawingTaskHeap;
 
 use PHPPdf\Document,
-    PHPPdf\Util\DrawingTask,
+    PHPPdf\Core\DrawingTask,
     PHPPdf\Node\Node;
 
 /**

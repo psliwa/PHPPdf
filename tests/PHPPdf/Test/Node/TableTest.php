@@ -2,10 +2,10 @@
 
 namespace PHPPdf\Test\Node;
 
-use PHPPdf\Util\UnitConverterImpl;
+use PHPPdf\Core\UnitConverterImpl;
 use PHPPdf\Node\Table\Cell;
 use PHPPdf\Node\Table;
-use PHPPdf\Util\Boundary;
+use PHPPdf\Core\Boundary;
 use PHPPdf\Node as Nodes;
 use PHPPdf\ObjectMother\TableObjectMother;
 

@@ -4,7 +4,7 @@
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
 	<services>
-		<service id="phppdf.unit_converter" class="PHPPdf\Util\UnitConverterImpl"></service>
+		<service id="phppdf.unit_converter" class="PHPPdf\Core\UnitConverterImpl"></service>
 	
 		<service id="phppdf.node_factory" class="PHPPdf\Node\Factory">
 			<call method="addPrototypes">

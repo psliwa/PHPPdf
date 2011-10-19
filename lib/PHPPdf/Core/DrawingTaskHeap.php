@@ -6,7 +6,7 @@
  * License information is in LICENSE file
  */
 
-namespace PHPPdf\Util;
+namespace PHPPdf\Core;
 
 /**
  * Heap of drawing tasks.

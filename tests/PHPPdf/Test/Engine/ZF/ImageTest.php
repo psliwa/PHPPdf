@@ -3,7 +3,7 @@
 namespace PHPPdf\Test\Engine\ZF;
 
 use PHPPdf\Engine\ZF\Image;
-use PHPPdf\Util\UnitConverter;
+use PHPPdf\Core\UnitConverter;
 
 class ImageTest extends \PHPPdf\PHPUnit\Framework\TestCase
 {
@@ -34,7 +34,7 @@ class ImageTest extends \PHPPdf\PHPUnit\Framework\TestCase
      */
     public function convertImageSizeByUnitConverter()
     {
-        $converter = $this->getMockBuilder('PHPPdf\Util\UnitConverter')
+        $converter = $this->getMockBuilder('PHPPdf\Core\UnitConverter')
                           ->getMock();
                           
         $size = 100;

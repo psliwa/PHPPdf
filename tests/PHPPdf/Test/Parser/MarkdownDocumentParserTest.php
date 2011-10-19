@@ -98,7 +98,7 @@ class MarkdownDocumentParserTest extends TestCase
         
         $facade->expects($this->once())
                ->method('retrieveStylesheetConstraint')
-               ->with($this->isInstanceOf('PHPPdf\Util\DataSource'))
+               ->with($this->isInstanceOf('PHPPdf\Core\DataSource'))
                ->will($this->returnValue($stylesheetConstraint));
                
         $this->documentParser->expects($this->once())

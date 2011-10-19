@@ -2,12 +2,12 @@
 
 namespace PHPPdf\Test\Node\Paragraph;
 
-use PHPPdf\Util\DrawingTaskHeap;
+use PHPPdf\Core\DrawingTaskHeap;
 
 use PHPPdf\Node\Text;
 use PHPPdf\Node\Node;
 use PHPPdf\Document;
-use PHPPdf\Util\Point;
+use PHPPdf\Core\Point;
 use PHPPdf\Node\Paragraph\LinePart;
 
 class LinePartTest extends \PHPPdf\PHPUnit\Framework\TestCase

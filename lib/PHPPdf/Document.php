@@ -8,9 +8,9 @@
 
 namespace PHPPdf;
 
-use PHPPdf\Util\AttributeBag;
+use PHPPdf\Core\AttributeBag;
 
-use PHPPdf\Util\UnitConverter,
+use PHPPdf\Core\UnitConverter,
     PHPPdf\Node\Node,
     PHPPdf\Engine\ZF\Engine as ZfEngine,
     PHPPdf\Formatter as Formatters,
@@ -20,7 +20,7 @@ use PHPPdf\Util\UnitConverter,
     PHPPdf\Exception\DrawingException,
     PHPPdf\Engine\Engine,
     PHPPdf\Engine\GraphicsContext,
-    PHPPdf\Util\DrawingTaskHeap;
+    PHPPdf\Core\DrawingTaskHeap;
 
 /**
  * Document to generate

@@ -1,9 +1,9 @@
 <?php
 
-namespace PHPPdf\Test\Util;
+namespace PHPPdf\Test\Core;
 
-use PHPPdf\Util\Boundary;
-use PHPPdf\Util\Point;
+use PHPPdf\Core\Boundary;
+use PHPPdf\Core\Point;
 
 class BoundaryTest extends \PHPPdf\PHPUnit\Framework\TestCase
 {

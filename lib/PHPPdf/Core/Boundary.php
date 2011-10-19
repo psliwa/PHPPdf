@@ -6,7 +6,7 @@
  * License information is in LICENSE file
  */
 
-namespace PHPPdf\Util;
+namespace PHPPdf\Core;
 
 /**
  * Set of ordered points whom determine boundary and shape of node element.
@@ -274,7 +274,7 @@ class Boundary implements \Countable, \Iterator, \ArrayAccess, \Serializable
     }
     
     /**
-     * @return PHPPdf\Util\Point Point that divides line between first and diagonal points on half
+     * @return PHPPdf\Core\Point Point that divides line between first and diagonal points on half
      */
     public function getMiddlePoint()
     {

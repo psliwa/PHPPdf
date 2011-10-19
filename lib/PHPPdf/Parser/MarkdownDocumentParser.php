@@ -8,7 +8,7 @@
 
 namespace PHPPdf\Parser;
 
-use PHPPdf\Util\DataSource;
+use PHPPdf\Core\DataSource;
 
 use PHPPdf\Bridge\Markdown\MarkdownParser;
 use PHPPdf\Document;

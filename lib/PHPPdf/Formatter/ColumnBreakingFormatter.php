@@ -8,11 +8,11 @@
 
 namespace PHPPdf\Formatter;
 
-use PHPPdf\Util\Point;
+use PHPPdf\Core\Point;
 
 use PHPPdf\Node\Node,
     PHPPdf\Document,
-    PHPPdf\Util\Boundary,
+    PHPPdf\Core\Boundary,
     PHPPdf\Node\ColumnableContainer,
     PHPPdf\Node\Container;
 

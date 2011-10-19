@@ -3,8 +3,8 @@
 namespace PHPPdf\Test\Formatter;
 
 use PHPPdf\Document,
-    PHPPdf\Util\Point,
-    PHPPdf\Util\Boundary,
+    PHPPdf\Core\Point,
+    PHPPdf\Core\Boundary,
     PHPPdf\Formatter\TextResetPositionFormatter;
 
 class TextResetPositionFormatterTest extends \PHPPdf\PHPUnit\Framework\TestCase

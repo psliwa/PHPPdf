@@ -2,7 +2,7 @@
 
 namespace PHPPdf\Test;
 
-use PHPPdf\Util\DrawingTaskHeap;
+use PHPPdf\Core\DrawingTaskHeap;
 
 use PHPPdf\Document,
     PHPPdf\Font\Registry as FontRegistry,
@@ -25,7 +25,7 @@ class DocumentTest extends \PHPPdf\PHPUnit\Framework\TestCase
         $tasks = array();
         for($i=0; $i<3; $i++)
         {
-            $taskMock = $this->getMockBuilder('PHPPdf\Util\DrawingTask')
+            $taskMock = $this->getMockBuilder('PHPPdf\Core\DrawingTask')
                              ->setMethods(array('invoke'))
                              ->disableOriginalConstructor()
                              ->getMock();
@@ -110,7 +110,7 @@ class DocumentTest extends \PHPPdf\PHPUnit\Framework\TestCase
                              ->method('isEmpty')
                              ->will($this->returnValue(true));
 
-        $complexAttributeBagMock = $this->getMock('PHPPdf\Util\AttributeBag', array('getAll'));
+        $complexAttributeBagMock = $this->getMock('PHPPdf\Core\AttributeBag', array('getAll'));
         $complexAttributeBagMock->expects($this->once())
                            ->method('getAll')
                            ->will($this->returnValue($complexAttributesParameters));
@@ -148,7 +148,7 @@ class DocumentTest extends \PHPPdf\PHPUnit\Framework\TestCase
     {
         $complexAttributes = array('some' => array('color' => 'red'));
 
-        $complexAttributeBagMock = $this->getMock('PHPPdf\Util\AttributeBag', array('getAll'));
+        $complexAttributeBagMock = $this->getMock('PHPPdf\Core\AttributeBag', array('getAll'));
         $complexAttributeBagMock->expects($this->once())
                            ->method('getAll')
                            ->will($this->returnValue($complexAttributes));
@@ -199,7 +199,7 @@ class DocumentTest extends \PHPPdf\PHPUnit\Framework\TestCase
      */
     public function useUnitConverterForConversions()
     {
-        $unitConverter = $this->getMockBuilder('PHPPdf\Util\UnitConverter')
+        $unitConverter = $this->getMockBuilder('PHPPdf\Core\UnitConverter')
                               ->getMock();
                               
         $this->document->setUnitConverter($unitConverter);

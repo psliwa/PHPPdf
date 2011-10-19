@@ -2,7 +2,7 @@
 
 namespace PHPPdf\Test\Formatter;
 
-use PHPPdf\Util\UnitConverterImpl;
+use PHPPdf\Core\UnitConverterImpl;
 use PHPPdf\Document;
 use PHPPdf\Node\Page;
 use PHPPdf\Node\Container;

@@ -10,7 +10,7 @@ namespace PHPPdf\Formatter;
 
 use PHPPdf\Node as Nodes,
     PHPPdf\Document,
-    PHPPdf\Util\Boundary;
+    PHPPdf\Core\Boundary;
 
 /**
  * Calculates real position of node

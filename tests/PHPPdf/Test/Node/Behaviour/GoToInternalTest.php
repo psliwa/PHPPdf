@@ -2,7 +2,7 @@
 
 namespace PHPPdf\Test\Node\Behaviour;
 
-use PHPPdf\Util\Point,
+use PHPPdf\Core\Point,
     PHPPdf\ObjectMother\NodeObjectMother,
     PHPPdf\Node\Container,
     PHPPdf\Node\Behaviour\GoToInternal;

@@ -13,7 +13,7 @@ class TableObjectMother
 
     public function getCellMockWithTranslateAndResizeExpectations($width, $newWidth, $translateX)
     {
-        $boundary = $this->test->getMock('PHPPdf\Util\Boundary', array('pointTranslate', 'getMinWidth'));
+        $boundary = $this->test->getMock('PHPPdf\Core\Boundary', array('pointTranslate', 'getMinWidth'));
 
         $cell = $this->getCellMockWithResizeExpectations($width, $newWidth);
 

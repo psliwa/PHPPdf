@@ -2,7 +2,7 @@
 
 namespace PHPPdf\Test\Parser;
 
-use PHPPdf\Util\AttributeBag,
+use PHPPdf\Core\AttributeBag,
     PHPPdf\Parser\BagContainer;
 
 class BagContainerTest extends \PHPPdf\PHPUnit\Framework\TestCase

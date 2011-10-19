@@ -1,8 +1,8 @@
 <?php
 
-namespace PHPPdf\Test\Util;
+namespace PHPPdf\Test\Core;
 
-use PHPPdf\Util\AttributeBag;
+use PHPPdf\Core\AttributeBag;
 
 class AttributeBagTest extends \PHPPdf\PHPUnit\Framework\TestCase
 {

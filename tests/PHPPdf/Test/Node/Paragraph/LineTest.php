@@ -4,7 +4,7 @@ namespace PHPPdf\Test\Node\Paragraph;
 
 use PHPPdf\Node\Node;
 use PHPPdf\Node\Paragraph;
-use PHPPdf\Util\Point,
+use PHPPdf\Core\Point,
     PHPPdf\Document,
     PHPPdf\Node\Paragraph\Line;
 

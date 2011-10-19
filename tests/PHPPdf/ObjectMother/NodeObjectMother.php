@@ -68,7 +68,7 @@ class NodeObjectMother
 
     public function getBoundaryStub($x, $y, $width, $height)
     {
-        $boundary = new \PHPPdf\Util\Boundary();
+        $boundary = new \PHPPdf\Core\Boundary();
 
         $boundary->setNext($x, $y)
                  ->setNext($x+$width, $y)

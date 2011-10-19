@@ -4,7 +4,7 @@ namespace PHPPdf\Test\Formatter;
 
 use PHPPdf\Formatter\PageBreakingFormatter,
     PHPPdf\Node\DynamicPage,
-    PHPPdf\Util\Boundary,
+    PHPPdf\Core\Boundary,
     PHPPdf\Document,
     PHPPdf\Node\Container;
 

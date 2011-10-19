@@ -4,7 +4,7 @@ namespace PHPPdf\Test\Formatter;
 
 use PHPPdf\Formatter\TableFormatter,
     PHPPdf\Document,
-    PHPPdf\Util\Boundary,
+    PHPPdf\Core\Boundary,
     PHPPdf\Node\Table\Row,
     PHPPdf\Node\Table,
     PHPPdf\ObjectMother\TableObjectMother,

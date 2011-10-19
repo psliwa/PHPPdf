@@ -6,7 +6,7 @@
  * License information is in LICENSE file
  */
 
-namespace PHPPdf\Util;
+namespace PHPPdf\Core;
 
 /**
  * Point object
@@ -112,7 +112,7 @@ final class Point implements \ArrayAccess
     /**
      * @param integer $x First coordinate of vector
      * @param integer $y Second coordinate of vector
-     * @return PHPPdf\Util\Point Translated point by given vector
+     * @return PHPPdf\Core\Point Translated point by given vector
      */
     public function translate($x, $y)
     {

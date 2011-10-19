@@ -10,8 +10,8 @@ namespace PHPPdf\ComplexAttribute;
 
 use PHPPdf\Node\Page,
     PHPPdf\Node\Node,
-    PHPPdf\Util\Boundary,
-    PHPPdf\Util\UnitConverter,
+    PHPPdf\Core\Boundary,
+    PHPPdf\Core\UnitConverter,
     PHPPdf\Engine\GraphicsContext,
     PHPPdf\Document;
 

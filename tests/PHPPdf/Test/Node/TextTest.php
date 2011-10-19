@@ -2,11 +2,11 @@
 
 namespace PHPPdf\Test\Node;
 
-use PHPPdf\Util\DrawingTaskHeap;
+use PHPPdf\Core\DrawingTaskHeap;
 
-use PHPPdf\Util\DrawingTask;
+use PHPPdf\Core\DrawingTask;
 use PHPPdf\Node\Paragraph\LinePart;
-use PHPPdf\Util\Point;
+use PHPPdf\Core\Point;
 use PHPPdf\Document;
 use PHPPdf\Node\Text;
 use PHPPdf\Node\Page;

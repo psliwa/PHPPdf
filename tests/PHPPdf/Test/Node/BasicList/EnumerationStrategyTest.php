@@ -3,7 +3,7 @@
 namespace PHPPdf\Test\Node\BasicList;
 
 use PHPPdf\Node\BasicList\EnumerationStrategy;
-use PHPPdf\Util\Point;
+use PHPPdf\Core\Point;
 use PHPPdf\Node\BasicList;
 
 abstract class EnumerationStrategyTest extends \PHPPdf\PHPUnit\Framework\TestCase

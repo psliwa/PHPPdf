@@ -3,7 +3,7 @@
 namespace PHPPdf\Test\Formatter;
 
 use PHPPdf\Formatter\TextPositionFormatter,
-    PHPPdf\Util\Point,
+    PHPPdf\Core\Point,
     PHPPdf\Document;
 
 class TextPositionFormatterTest extends \PHPPdf\PHPUnit\Framework\TestCase
@@ -46,7 +46,7 @@ class TextPositionFormatterTest extends \PHPPdf\PHPUnit\Framework\TestCase
              ->method('getParent')
              ->will($this->returnValue($parentMock));
 
-        $boundaryMock = $this->getMock('\PHPPdf\Util\Boundary', array(
+        $boundaryMock = $this->getMock('\PHPPdf\Core\Boundary', array(
             'getFirstPoint',
             'setNext',
             'close',

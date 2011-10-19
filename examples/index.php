@@ -46,7 +46,7 @@ if(!is_readable($documentFilename) || !is_readable($stylesheetFilename))
 
 $xml = str_replace('dir:', __DIR__.'/', file_get_contents($documentFilename));
 $stylesheetXml = str_replace('dir:', __DIR__.'/', file_get_contents($stylesheetFilename));
-$stylesheet = PHPPdf\Util\DataSource::fromString($stylesheetXml);
+$stylesheet = PHPPdf\Core\DataSource::fromString($stylesheetXml);
 
 $start = microtime(true);
 

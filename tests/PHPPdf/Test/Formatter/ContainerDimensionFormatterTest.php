@@ -3,7 +3,7 @@
 namespace PHPPdf\Test\Formatter;
 
 use PHPPdf\Document;
-use PHPPdf\Util\Boundary;
+use PHPPdf\Core\Boundary;
 use PHPPdf\Node\Node;
 use PHPPdf\Node\Container;
 use PHPPdf\Formatter\ContainerDimensionFormatter;

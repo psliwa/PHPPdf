@@ -8,15 +8,15 @@
 
 namespace PHPPdf\Node;
 
-use PHPPdf\Util\DrawingTaskHeap;
+use PHPPdf\Core\DrawingTaskHeap;
 
 use PHPPdf\Node\Node,
-    PHPPdf\Util\UnitConverter,
+    PHPPdf\Core\UnitConverter,
     PHPPdf\Node\Paragraph\LinePart,
     PHPPdf\Formatter\Formatter,
     PHPPdf\Document,
-    PHPPdf\Util\Point,
-    PHPPdf\Util\DrawingTask;
+    PHPPdf\Core\Point,
+    PHPPdf\Core\DrawingTask;
 
 /**
  * Text node

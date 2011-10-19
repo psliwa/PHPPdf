@@ -4,7 +4,7 @@ namespace PHPPdf\Test\Node\BasicList;
 
 use PHPPdf\Document;
 use PHPPdf\Node\BasicList;
-use PHPPdf\Util\Point;
+use PHPPdf\Core\Point;
 use PHPPdf\Node\BasicList\ImageEnumerationStrategy;
 
 class ImageEnumerationStrategyTest extends \PHPPdf\PHPUnit\Framework\TestCase

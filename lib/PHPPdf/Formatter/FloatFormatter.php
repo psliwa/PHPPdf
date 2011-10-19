@@ -11,7 +11,7 @@ namespace PHPPdf\Formatter;
 use PHPPdf\Node\Node,
     PHPPdf\Node\Text,
     PHPPdf\Document,
-    PHPPdf\Util\Boundary;
+    PHPPdf\Core\Boundary;
 
 /**
  * @author Piotr Śliwa <peter.pl7@gmail.com>

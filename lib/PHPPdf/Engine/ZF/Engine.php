@@ -8,7 +8,7 @@
 
 namespace PHPPdf\Engine\ZF;
 
-use PHPPdf\Util\UnitConverter;
+use PHPPdf\Core\UnitConverter;
 
 use PHPPdf\Exception\Exception;
 

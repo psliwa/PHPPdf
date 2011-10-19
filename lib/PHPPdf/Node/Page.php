@@ -8,13 +8,13 @@
 
 namespace PHPPdf\Node;
 
-use PHPPdf\Util\DrawingTaskHeap;
+use PHPPdf\Core\DrawingTaskHeap;
 
 use PHPPdf\Document,
-    PHPPdf\Util\DrawingTask,
-    PHPPdf\Util\UnitConverter,
+    PHPPdf\Core\DrawingTask,
+    PHPPdf\Core\UnitConverter,
     PHPPdf\Engine\GraphicsContext,
-    PHPPdf\Util\Point,
+    PHPPdf\Core\Point,
     PHPPdf\Formatter\Formatter;
 
 /**

@@ -8,19 +8,19 @@
 
 namespace PHPPdf\Node;
 
-use PHPPdf\Util\AttributeBag;
+use PHPPdf\Core\AttributeBag;
 
-use PHPPdf\Util\DrawingTaskHeap;
-use PHPPdf\Util\UnitConverter;
+use PHPPdf\Core\DrawingTaskHeap;
+use PHPPdf\Core\UnitConverter;
 use PHPPdf\Document,
     PHPPdf\Util,
     PHPPdf\Node\Container,
-    PHPPdf\Util\Boundary,
-    PHPPdf\Util\DrawingTask,
+    PHPPdf\Core\Boundary,
+    PHPPdf\Core\DrawingTask,
     PHPPdf\Formatter\Formatter,
     PHPPdf\Node\Behaviour\Behaviour,
     PHPPdf\Exception\InvalidAttributeException,
-    PHPPdf\Util\Point;
+    PHPPdf\Core\Point;
 
 /**
  * Base node class
@@ -254,7 +254,7 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
     }
 
     /**
-     * @return PHPPdf\Util\Boundary
+     * @return PHPPdf\Core\Boundary
      */
     public function getBoundary()
     {
@@ -267,7 +267,7 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
     }
     
     /**
-     * @return PHPPdf\Util\Boundary Boundary with no translated points by margins, paddings etc.
+     * @return PHPPdf\Core\Boundary Boundary with no translated points by margins, paddings etc.
      */
     public function getRealBoundary()
     {
@@ -283,7 +283,7 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
      * Gets point of left upper corner of this node or null if boundaries have not been
      * calculated yet.
      *
-     * @return PHPPdf\Util\Point
+     * @return PHPPdf\Core\Point
      */
     public function getFirstPoint()
     {
@@ -294,7 +294,7 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
      * Gets point of left upper corner of this node, this method works on boundary from {@see getRealBoundary()}
      * on contrast to {@see getFirstPoint()} method.
      * 
-     * @return PHPPdf\Util\Point
+     * @return PHPPdf\Core\Point
      */
     public function getRealFirstPoint()
     {
@@ -305,7 +305,7 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
      * Get point of right bottom corner of this node or null if boundaries have not been
      * calculated yet.
      *
-     * @return PHPPdf\Util\Point
+     * @return PHPPdf\Core\Point
      */
     public function getDiagonalPoint()
     {
@@ -316,7 +316,7 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
      * Gets point of right bottom corner of this node, this method works on boundary from {@see getRealBoundary()}
      * on contrast to {@see getDiagonalPoint()} method.
      * 
-     * @return PHPPdf\Util\Point
+     * @return PHPPdf\Core\Point
      */
     public function getRealDiagonalPoint()
     {
@@ -324,7 +324,7 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
     }
     
     /**
-     * @return PHPPdf\Util\Point Point that divides line between first and diagonal points on half
+     * @return PHPPdf\Core\Point Point that divides line between first and diagonal points on half
      */
     public function getMiddlePoint()
     {
@@ -1051,9 +1051,9 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
     }
 
     /**
-     * Returns array of PHPPdf\Util\DrawingTask objects. Those objects encapsulate drawing function.
+     * Returns array of PHPPdf\Core\DrawingTask objects. Those objects encapsulate drawing function.
      *
-     * @return array Array of PHPPdf\Util\DrawingTask objects
+     * @return array Array of PHPPdf\Core\DrawingTask objects
      */
     public function collectOrderedDrawingTasks(Document $document, DrawingTaskHeap $tasks)
     {

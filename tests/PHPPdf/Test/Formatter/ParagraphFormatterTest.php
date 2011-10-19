@@ -5,7 +5,7 @@ namespace PHPPdf\Test\Formatter;
 use PHPPdf\Node\Node;
 use PHPPdf\Node\Container;
 use PHPPdf\Document;
-use PHPPdf\Util\Point;
+use PHPPdf\Core\Point;
 use PHPPdf\Node\Text;
 use PHPPdf\Node\Paragraph;
 use PHPPdf\Formatter\ParagraphFormatter;

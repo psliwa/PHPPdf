@@ -1,8 +1,8 @@
 <?php
 
-namespace PHPPdf\Test\Util;
+namespace PHPPdf\Test\Core;
 
-use PHPPdf\Util\StringDataSource;
+use PHPPdf\Core\StringDataSource;
 
 class StringDataSourceTest extends \PHPPdf\PHPUnit\Framework\TestCase
 {

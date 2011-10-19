@@ -2,13 +2,13 @@
 
 namespace PHPPdf\Test\Node;
 
-use PHPPdf\Util\DrawingTaskHeap;
+use PHPPdf\Core\DrawingTaskHeap;
 
 use PHPPdf\Node\Page,
     PHPPdf\ComplexAttribute\Background,
     PHPPdf\ComplexAttribute\Border,
     PHPPdf\Document,
-    PHPPdf\Util\Point,
+    PHPPdf\Core\Point,
     PHPPdf\Node\Node,
     PHPPdf\Stub\Node\StubNode,
     PHPPdf\Stub\Node\StubComposeNode,
@@ -322,7 +322,7 @@ class NodeTest extends \PHPPdf\PHPUnit\Framework\TestCase
      */
     public function gettingBoundaryPoints()
     {
-        $boundary = $this->getMock('PHPPdf\Util\Boundary', array('getFirstPoint', 'getDiagonalPoint'));
+        $boundary = $this->getMock('PHPPdf\Core\Boundary', array('getFirstPoint', 'getDiagonalPoint'));
         $boundary->expects($this->once())
                  ->id('first-point')
                  ->method('getFirstPoint')
@@ -509,7 +509,7 @@ class NodeTest extends \PHPPdf\PHPUnit\Framework\TestCase
         $document = $this->getMockBuilder('PHPPdf\Document')
                          ->setMethods(array('getComplexAttributes'))
                          ->getMock();
-        $bag = $this->getMockBuilder('PHPPdf\Util\AttributeBag')
+        $bag = $this->getMockBuilder('PHPPdf\Core\AttributeBag')
                     ->getMock();
                          
                          
@@ -637,7 +637,7 @@ class NodeTest extends \PHPPdf\PHPUnit\Framework\TestCase
      */
     public function useUnitConverterToSetAttributes()
     {
-        $converter = $this->getMockBuilder('PHPPdf\Util\UnitConverter')
+        $converter = $this->getMockBuilder('PHPPdf\Core\UnitConverter')
                          ->getMock();
         $actual = '12px';
         $expected = 123;

@@ -6,13 +6,13 @@ use PHPPdf\Node\Container;
 
 use PHPPdf\Node\Node;
 
-use PHPPdf\Util\DrawingTask;
+use PHPPdf\Core\DrawingTask;
 
-use PHPPdf\Util\DrawingTaskHeap;
+use PHPPdf\Core\DrawingTaskHeap;
 
 use PHPPdf\Node\Paragraph\LinePart;
 use PHPPdf\Node\Paragraph\Line;
-use PHPPdf\Util\Point;
+use PHPPdf\Core\Point;
 use PHPPdf\Document;
 use PHPPdf\Node\Text;
 use PHPPdf\Node\Paragraph;
@@ -130,7 +130,7 @@ class ParagraphTest extends \PHPPdf\PHPUnit\Framework\TestCase
                              
             $text->expects($this->once())
                  ->method('collectOrderedDrawingTasks')
-                 ->with($documentStub, $this->isInstanceOf('PHPPdf\Util\DrawingTaskHeap'))
+                 ->with($documentStub, $this->isInstanceOf('PHPPdf\Core\DrawingTaskHeap'))
                  ->will($this->returnCallback(function() use($tasks, $taskStub){
                      $tasks->insert($taskStub);
                  }));

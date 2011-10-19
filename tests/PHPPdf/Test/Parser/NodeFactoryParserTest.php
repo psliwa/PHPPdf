@@ -90,7 +90,7 @@ XML;
 </factory>
 XML;
         
-        $unitConverter = $this->getMockBuilder('PHPPdf\Util\UnitConverter')
+        $unitConverter = $this->getMockBuilder('PHPPdf\Core\UnitConverter')
                               ->getMock();
 
         $expected = 123;

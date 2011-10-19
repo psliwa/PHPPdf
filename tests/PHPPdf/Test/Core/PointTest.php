@@ -1,8 +1,8 @@
 <?php
 
-namespace PHPPdf\Test\Util;
+namespace PHPPdf\Test\Core;
 
-use PHPPdf\Util\Point;
+use PHPPdf\Core\Point;
 
 class PointTest extends \PHPPdf\PHPUnit\Framework\TestCase
 {

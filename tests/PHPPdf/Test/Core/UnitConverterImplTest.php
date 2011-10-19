@@ -1,8 +1,8 @@
 <?php
 
-namespace PHPPdf\Test\Util;
+namespace PHPPdf\Test\Core;
 
-use PHPPdf\Util\UnitConverterImpl;
+use PHPPdf\Core\UnitConverterImpl;
 use PHPPdf\PHPUnit\Framework\TestCase;
 
 class UnitConverterImplTest extends TestCase

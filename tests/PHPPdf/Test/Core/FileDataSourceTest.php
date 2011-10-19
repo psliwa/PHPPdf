@@ -1,8 +1,8 @@
 <?php
 
-namespace PHPPdf\Test\Util;
+namespace PHPPdf\Test\Core;
 
-use PHPPdf\Util\FileDataSource;
+use PHPPdf\Core\FileDataSource;
 
 class FileDataSourceTest extends \PHPPdf\PHPUnit\Framework\TestCase
 {

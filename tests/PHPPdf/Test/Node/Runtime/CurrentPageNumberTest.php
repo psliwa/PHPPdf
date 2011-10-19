@@ -2,9 +2,9 @@
 
 namespace PHPPdf\Test\Node\Runtime;
 
-use PHPPdf\Util\DrawingTaskHeap;
+use PHPPdf\Core\DrawingTaskHeap;
 
-use PHPPdf\Util\DrawingTask;
+use PHPPdf\Core\DrawingTask;
 use PHPPdf\Node\Runtime\CurrentPageNumber,
     PHPPdf\Document,
     PHPPdf\Node\DynamicPage,
@@ -104,7 +104,7 @@ class CurrentPageNumberTest extends \PHPPdf\PHPUnit\Framework\TestCase
 
         $linePart->expects($this->at(1))
                  ->method('collectOrderedDrawingTasks')
-                 ->with($document, $this->isInstanceOf('PHPPdf\Util\DrawingTaskHeap'))
+                 ->with($document, $this->isInstanceOf('PHPPdf\Core\DrawingTaskHeap'))
                  ->will($this->returnCallback(function() use($tasks, $drawingTaskStub){
                      $tasks->insert($drawingTaskStub);
                  }));

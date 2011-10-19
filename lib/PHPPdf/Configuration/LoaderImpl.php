@@ -8,7 +8,7 @@
 
 namespace PHPPdf\Configuration;
 
-use PHPPdf\Util\UnitConverterImpl;
+use PHPPdf\Core\UnitConverterImpl;
 use PHPPdf\Parser\FontRegistryParser,
     PHPPdf\Parser\ComplexAttributeFactoryParser,
     PHPPdf\Parser\NodeFactoryParser,

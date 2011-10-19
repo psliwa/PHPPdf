@@ -8,11 +8,11 @@
 
 namespace PHPPdf\Node\Paragraph;
 
-use PHPPdf\Util\DrawingTaskHeap;
+use PHPPdf\Core\DrawingTaskHeap;
 use PHPPdf\Node\Node,
-    PHPPdf\Util\DrawingTask,
+    PHPPdf\Core\DrawingTask,
     PHPPdf\Document,
-    PHPPdf\Util\Point,
+    PHPPdf\Core\Point,
     PHPPdf\Node\Drawable,
     PHPPdf\Node\Text;
 

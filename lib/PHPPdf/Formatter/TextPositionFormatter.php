@@ -9,7 +9,7 @@
 namespace PHPPdf\Formatter;
 
 use PHPPdf\Document,
-    PHPPdf\Util\Point,
+    PHPPdf\Core\Point,
     PHPPdf\Node\Node;
 
 class TextPositionFormatter extends BaseFormatter

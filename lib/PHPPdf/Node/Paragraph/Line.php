@@ -12,7 +12,7 @@ use PHPPdf\Node\Node;
 
 use PHPPdf\Node\Paragraph;
 
-use PHPPdf\Util\Point;
+use PHPPdf\Core\Point;
 
 use PHPPdf\Document;
 
@@ -111,7 +111,7 @@ class Line
     }
     
     /**
-     * @return PHPPdf\Util\Point
+     * @return PHPPdf\Core\Point
      */
     public function getFirstPoint()
     {

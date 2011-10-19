@@ -8,7 +8,7 @@
 
 namespace PHPPdf\Node;
 
-use PHPPdf\Util\UnitConverter;
+use PHPPdf\Core\UnitConverter;
 
 use PHPPdf\Exception\UnregisteredNodeException;
 

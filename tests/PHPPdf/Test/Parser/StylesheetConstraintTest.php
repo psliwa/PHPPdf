@@ -4,7 +4,7 @@ namespace PHPPdf\Test\Parser;
 
 use PHPPdf\Parser\BagContainer;
 use PHPPdf\Parser\StylesheetConstraint,
-    PHPPdf\Util\AttributeBag;
+    PHPPdf\Core\AttributeBag;
 
 class StylesheetConstraintTest extends \PHPPdf\PHPUnit\Framework\TestCase
 {

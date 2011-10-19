@@ -3,7 +3,7 @@
 namespace PHPPdf\Test\Formatter;
 
 use PHPPdf\Formatter\RowDimensionFormatter,
-    PHPPdf\Util\Boundary,
+    PHPPdf\Core\Boundary,
     PHPPdf\Document;
 
 class RowDimensionFormatterTest extends \PHPPdf\PHPUnit\Framework\TestCase
@@ -40,7 +40,7 @@ class RowDimensionFormatterTest extends \PHPPdf\PHPUnit\Framework\TestCase
 
     private function getBoundaryMockWithEnlargeAsserts($enlargeBy)
     {
-        $boundary = $this->getMock('PHPPdf\Util\Boundary', array('pointTranslate'));
+        $boundary = $this->getMock('PHPPdf\Core\Boundary', array('pointTranslate'));
         $boundary->expects($this->at(0))
                  ->method('pointTranslate')
                  ->with(2, 0, $enlargeBy)

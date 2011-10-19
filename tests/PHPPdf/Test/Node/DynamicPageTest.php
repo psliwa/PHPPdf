@@ -2,16 +2,16 @@
 
 namespace PHPPdf\Test\Node;
 
-use PHPPdf\Util\DrawingTaskHeap;
+use PHPPdf\Core\DrawingTaskHeap;
 
-use PHPPdf\Util\DrawingTask;
+use PHPPdf\Core\DrawingTask;
 
 use PHPPdf\Document;
 use PHPPdf\Node\Page;
 use PHPPdf\Node\PageCollection;
 use PHPPdf\Node\DynamicPage;
-use PHPPdf\Util\Point;
-use PHPPdf\Util\Boundary;
+use PHPPdf\Core\Point;
+use PHPPdf\Core\Boundary;
 
 class DynamicPageTest extends \PHPPdf\PHPUnit\Framework\TestCase
 {
