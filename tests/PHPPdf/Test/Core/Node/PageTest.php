@@ -40,7 +40,7 @@ class PageTest extends \PHPPdf\PHPUnit\Framework\TestCase
 
     /**
      * @test
-     * @expectedException PHPPdf\Exception\DrawingException
+     * @expectedException PHPPdf\Core\Exception\DrawingException
      */
     public function failureDrawing()
     {

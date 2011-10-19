@@ -19,7 +19,7 @@ use PHPPdf\Core\Document,
     PHPPdf\Core\DrawingTask,
     PHPPdf\Core\Formatter\Formatter,
     PHPPdf\Core\Node\Behaviour\Behaviour,
-    PHPPdf\Exception\InvalidAttributeException,
+    PHPPdf\Core\Exception\InvalidAttributeException,
     PHPPdf\Core\Point;
 
 /**
@@ -1065,7 +1065,7 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
         }
         catch(\Exception $e)
         {
-            throw new \PHPPdf\Exception\DrawingException(sprintf('Error while drawing node "%s"', get_class($this)), 0, $e);
+            throw new \PHPPdf\Core\Exception\DrawingException(sprintf('Error while drawing node "%s"', get_class($this)), 0, $e);
         }
     }
     

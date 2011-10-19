@@ -13,8 +13,8 @@ use PHPPdf\Core\Node\Node,
     PHPPdf\Core\Formatter as Formatters,
     PHPPdf\Core\Node\Page,
     PHPPdf\Core\Node\PageCollection,
-    PHPPdf\Core\ComplexAttribute\Factory as ComplexAttributeFactory,
-    PHPPdf\Exception\DrawingException,
+    PHPPdf\Core\ComplexAttribute\ComplexAttributeFactory,
+    PHPPdf\Core\Exception\DrawingException,
     PHPPdf\Core\Engine\Engine,
     PHPPdf\Core\Engine\GraphicsContext;
 

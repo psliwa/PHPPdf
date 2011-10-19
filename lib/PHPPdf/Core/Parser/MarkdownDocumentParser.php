@@ -12,8 +12,8 @@ use PHPPdf\Parser\Parser;
 use PHPPdf\DataSource\DataSource;
 use PHPPdf\Bridge\Markdown\MarkdownParser;
 use PHPPdf\Core\Document;
-use PHPPdf\Core\Node\Factory as NodeFactory;
-use PHPPdf\Core\ComplexAttribute\Factory as ComplexAttributeFactory;
+use PHPPdf\Core\Node\NodeFactory;
+use PHPPdf\Core\ComplexAttribute\ComplexAttributeFactory;
 use PHPPdf\Core\FacadeAware;
 use PHPPdf\Core\Facade;
 

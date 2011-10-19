@@ -33,7 +33,7 @@ class NodeTest extends \PHPPdf\PHPUnit\Framework\TestCase
 
     /**
      * @test
-     * @expectedException PHPPdf\Exception\InvalidAttributeException
+     * @expectedException PHPPdf\Core\Exception\InvalidAttributeException
      */
     public function failureSettingAttribute()
     {

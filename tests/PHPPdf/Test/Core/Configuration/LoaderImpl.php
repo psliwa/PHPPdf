@@ -34,8 +34,8 @@ class LoaderImplTest extends \PHPPdf\PHPUnit\Framework\TestCase
     public function configFileGetterProvider()
     {
         return array(
-            array('nodeFile', 'createNodeFactory', new PHPPdf\Core\Node\Factory()),
-            array('complexAttributeFile', 'createComplexAttributeFactory', new \PHPPdf\Core\ComplexAttribute\Factory()),
+            array('nodeFile', 'createNodeFactory', new PHPPdf\Core\Node\NodeFactory()),
+            array('complexAttributeFile', 'createComplexAttributeFactory', new \PHPPdf\Core\ComplexAttribute\ComplexAttributeFactory()),
             array('fontFile', 'createFontRegistry', new PHPPdf\Font\Registry()),
         );
     }

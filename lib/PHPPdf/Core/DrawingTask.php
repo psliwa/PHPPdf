@@ -30,7 +30,7 @@ class DrawingTask
     }
     
     /**
-     * @throws PHPPdf\Exception\DrawingException If error occurs while drawing
+     * @throws PHPPdf\Core\Exception\DrawingException If error occurs while drawing
      */
     public function invoke()
     {

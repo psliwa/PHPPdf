@@ -2,7 +2,7 @@
 
 namespace PHPPdf\Test\Core\ComplexAttribute;
 
-use PHPPdf\Core\ComplexAttribute\Factory as ComplexAttributeFactory;
+use PHPPdf\Core\ComplexAttribute\ComplexAttributeFactory;
 use PHPPdf\Stub\ComplexAttribute\ComplexAttributeStub;
 
 class ComplexAttributeFactoryTest extends \PHPPdf\PHPUnit\Framework\TestCase

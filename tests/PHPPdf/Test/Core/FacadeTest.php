@@ -71,8 +71,8 @@ class FacadeTest extends \PHPPdf\PHPUnit\Framework\TestCase
         $constraintMock = $this->getMock('PHPPdf\Core\Parser\StylesheetConstraint');
         $pageCollectionMock = $this->getMock('PHPPdf\Core\Node\PageCollection', array());
         
-        $nodeFactoryMock = $this->getMock('PHPPdf\Core\Node\Factory');
-        $complexAttributeFactoryMock = $this->getMock('PHPPdf\Core\ComplexAttribute\Factory');
+        $nodeFactoryMock = $this->getMock('PHPPdf\Core\Node\NodeFactory');
+        $complexAttributeFactoryMock = $this->getMock('PHPPdf\Core\ComplexAttribute\ComplexAttributeFactory');
         $fontDefinitionsStub = array('some-data');
         
         $this->loaderMock->expects($this->atLeastOnce())

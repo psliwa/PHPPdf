@@ -6,8 +6,8 @@ use PHPPdf\Core\Node\Container;
 use PHPPdf\Core\Node\Paragraph;
 use PHPPdf\Core\Node\Text;
 use PHPPdf\Core\Parser\XmlDocumentParser,
-    PHPPdf\Core\Node\Factory as NodeFactory,
-    PHPPdf\Core\ComplexAttribute\Factory as ComplexAttributeFactory,
+    PHPPdf\Core\Node\NodeFactory,
+    PHPPdf\Core\ComplexAttribute\ComplexAttributeFactory,
     PHPPdf\Core\Node\PageCollection,
     PHPPdf\Core\Parser\StylesheetConstraint;
 
@@ -24,7 +24,7 @@ class XmlDocumentParserTest extends \PHPPdf\PHPUnit\Framework\TestCase
                                    ->setMethods(array('setMetadataValue'))
                                    ->getMock();
         
-        $this->complexAttributeFactoryMock = $this->getMock('PHPPdf\Core\ComplexAttribute\Factory', array('create', 'getDefinitionNames'));
+        $this->complexAttributeFactoryMock = $this->getMock('PHPPdf\Core\ComplexAttribute\ComplexAttributeFactory', array('create', 'getDefinitionNames'));
 
         $this->parser = new XmlDocumentParser($this->complexAttributeFactoryMock, $this->documentMock);
     }
@@ -117,7 +117,7 @@ class XmlDocumentParserTest extends \PHPPdf\PHPUnit\Framework\TestCase
     
     private function getNodeFactoryMock(array $mocks = array(), $indexStep = 1, $excatly = false)
     {
-        $factoryMock = $this->getMock('PHPPdf\Core\Node\Factory', array('create'));
+        $factoryMock = $this->getMock('PHPPdf\Core\Node\NodeFactory', array('create'));
         
         $index = 0;
         foreach($mocks as $mockData)

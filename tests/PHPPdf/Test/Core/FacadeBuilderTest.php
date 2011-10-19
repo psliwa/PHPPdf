@@ -17,7 +17,7 @@ class FacadeBuilderTest extends \PHPPdf\PHPUnit\Framework\TestCase
                                           ->getMock();
         $this->builder = FacadeBuilder::create($this->configurationLoader);
         
-        $complexAttributeFactory = $this->getMock('PHPPdf\Core\ComplexAttribute\Factory');
+        $complexAttributeFactory = $this->getMock('PHPPdf\Core\ComplexAttribute\ComplexAttributeFactory');
         
         $this->configurationLoader->expects($this->any())
                                   ->method('createComplexAttributeFactory')

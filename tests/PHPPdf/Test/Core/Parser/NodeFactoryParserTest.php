@@ -4,7 +4,7 @@ namespace PHPPdf\Test\Core\Parser;
 
 use PHPPdf\Core\Parser\NodeFactoryParser,
     PHPPdf\Core\Parser\StylesheetParser,
-    PHPPdf\Core\Node\Factory as NodeFactory;
+    PHPPdf\Core\Node\NodeFactory;
 
 class NodeFactoryParserTest extends \PHPPdf\PHPUnit\Framework\TestCase
 {

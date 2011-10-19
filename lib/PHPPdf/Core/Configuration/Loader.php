@@ -23,7 +23,7 @@ interface Loader
     public function createNodeFactory();
     
     /**
-     * @return PHPPdf\Core\ComplexAttribute\Factory
+     * @return ComplexAttributeFactory
      */
     public function createComplexAttributeFactory();
     

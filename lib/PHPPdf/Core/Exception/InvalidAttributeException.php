@@ -6,7 +6,9 @@
  * License information is in LICENSE file
  */
 
-namespace PHPPdf\Exception;
+namespace PHPPdf\Core\Exception;
+
+use PHPPdf\Exception\Exception;
 
 /**
  * @author Piotr Śliwa <peter.pl7@gmail.com>

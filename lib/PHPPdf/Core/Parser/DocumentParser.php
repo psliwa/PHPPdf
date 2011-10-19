@@ -10,8 +10,8 @@ namespace PHPPdf\Core\Parser;
 
 use PHPPdf\Parser\Parser;
 use PHPPdf\Core\Document;
-use PHPPdf\Core\Node\Factory as NodeFactory;
-use PHPPdf\Core\ComplexAttribute\Factory as ComplexAttributeFactory;
+use PHPPdf\Core\Node\NodeFactory;
+use PHPPdf\Core\ComplexAttribute\ComplexAttributeFactory;
 
 /**
  * Document praser interface

@@ -80,7 +80,7 @@ class DocumentTest extends \PHPPdf\PHPUnit\Framework\TestCase
 
     /**
      * @test
-     * @expectedException \PHPPdf\Exception\DrawingException
+     * @expectedException \PHPPdf\Core\Exception\DrawingException
      */
     public function drawingArgumentMustBeAnArrayOfPages()
     {
@@ -120,7 +120,7 @@ class DocumentTest extends \PHPPdf\PHPUnit\Framework\TestCase
             'empty' => $emptyComplexAttributeStub,
         );
 
-        $complexAttributeFactoryMock = $this->getMock('PHPPdf\Core\ComplexAttribute\Factory', array('create'));
+        $complexAttributeFactoryMock = $this->getMock('PHPPdf\Core\ComplexAttribute\ComplexAttributeFactory', array('create'));
         
         $at = 0;
         foreach($complexAttributesParameters as $name => $params)
@@ -152,7 +152,7 @@ class DocumentTest extends \PHPPdf\PHPUnit\Framework\TestCase
                            ->method('getAll')
                            ->will($this->returnValue($complexAttributes));
 
-        $complexAttributeFactoryMock = $this->getMock('PHPPdf\Core\ComplexAttribute\Factory', array('create'));
+        $complexAttributeFactoryMock = $this->getMock('PHPPdf\Core\ComplexAttribute\ComplexAttributeFactory', array('create'));
         $complexAttributeFactoryMock->expects($this->never())
                                ->method('create');
 

@@ -371,7 +371,7 @@ XML;
 </stylesheet>
 XML;
 
-        $complexAttributeFactory = $this->getMockBuilder('PHPPdf\Core\ComplexAttribute\Factory')
+        $complexAttributeFactory = $this->getMockBuilder('PHPPdf\Core\ComplexAttribute\ComplexAttributeFactory')
                                    ->setMethods(array('getDefinitionNames'))
                                    ->disableOriginalConstructor()
                                    ->getMock();
@@ -423,7 +423,7 @@ XML;
         $reader->XML($xml);
         $reader->next();
         
-        $complexAttributeFactory = $this->getMockBuilder('PHPPdf\Core\ComplexAttribute\Factory')
+        $complexAttributeFactory = $this->getMockBuilder('PHPPdf\Core\ComplexAttribute\ComplexAttributeFactory')
                                    ->setMethods(array('getDefinitionNames'))
                                    ->disableOriginalConstructor()
                                    ->getMock();
@@ -456,7 +456,7 @@ XML;
         $reader->XML($xml);
         $reader->next();
         
-        $complexAttributeFactory = $this->getMockBuilder('PHPPdf\Core\ComplexAttribute\Factory')
+        $complexAttributeFactory = $this->getMockBuilder('PHPPdf\Core\ComplexAttribute\ComplexAttributeFactory')
                                    ->setMethods(array('getDefinitionNames'))
                                    ->disableOriginalConstructor()
                                    ->getMock();

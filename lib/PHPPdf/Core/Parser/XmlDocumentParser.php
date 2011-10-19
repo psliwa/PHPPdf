@@ -14,12 +14,12 @@ use PHPPdf\Core\Node\Manager;
 use PHPPdf\Core\Node\NodeWrapper;
 use PHPPdf\Core\Node\Text,
     PHPPdf\Parser\Exception\ParseException,
-    PHPPdf\Core\Node\Factory as NodeFactory,
+    PHPPdf\Core\Node\NodeFactory,
     PHPPdf\Core\Node\PageCollection,
     PHPPdf\Core\Node\Node,
     PHPPdf\Core\Parser\BagContainer,
     PHPPdf\Core\Parser\Exception as Exceptions,
-    PHPPdf\Core\ComplexAttribute\Factory as ComplexAttributeFactory,
+    PHPPdf\Core\ComplexAttribute\ComplexAttributeFactory,
     PHPPdf\Core\Parser\StylesheetConstraint,
     PHPPdf\Core\Node\Behaviour\Factory as BehaviourFactory;
 
@@ -436,7 +436,7 @@ class XmlDocumentParser extends XmlParser implements DocumentParser
         {
             return $this->getNodeFactory()->create($tag);
         }
-        catch(\PHPPdf\Exception\UnregisteredNodeException $e)
+        catch(\PHPPdf\Core\Exception\UnregisteredNodeException $e)
         {
             throw new ParseException(sprintf('Unknown tag "%s".', $tag), 0, $e);
         }

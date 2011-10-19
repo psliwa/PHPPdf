@@ -2,7 +2,7 @@
 
 namespace PHPPdf\Test\Core\Node;
 
-use PHPPdf\Core\Node\Factory as NodeFactory,
+use PHPPdf\Core\Node\NodeFactory,
     PHPPdf\Core\Node\Container;
 
 class NodeFactoryTest extends \PHPPdf\PHPUnit\Framework\TestCase
@@ -47,7 +47,7 @@ class NodeFactoryTest extends \PHPPdf\PHPUnit\Framework\TestCase
 
     /**
      * @test
-     * @expectedException PHPPdf\Exception\UnregisteredNodeException
+     * @expectedException PHPPdf\Core\Exception\UnregisteredNodeException
      */
     public function creatingNotExistedNode()
     {
@@ -56,7 +56,7 @@ class NodeFactoryTest extends \PHPPdf\PHPUnit\Framework\TestCase
 
     /**
      * @test
-     * @expectedException PHPPdf\Exception\UnregisteredNodeException
+     * @expectedException PHPPdf\Core\Exception\UnregisteredNodeException
      */
     public function gettingNotExistingPrototype()
     {
