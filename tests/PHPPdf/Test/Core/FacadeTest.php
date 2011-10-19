@@ -1,10 +1,10 @@
 <?php
 
-namespace PHPPdf\Test\Core\Parser;
+namespace PHPPdf\Test\Core;
 
 use PHPPdf\Core\Configuration\LoaderImpl;
-use PHPPdf\Core\Parser\Facade,
-    PHPPdf\Core\Parser\FacadeConfiguration;
+use PHPPdf\Core\Facade,
+    PHPPdf\Core\FacadeConfiguration;
 
 class FacadeTest extends \PHPPdf\PHPUnit\Framework\TestCase
 {

@@ -6,8 +6,11 @@
  * License information is in LICENSE file
  */
 
-namespace PHPPdf\Core\Parser;
+namespace PHPPdf\Core;
 
+use PHPPdf\Core\Parser\XmlDocumentParser;
+use PHPPdf\Core\Parser\MarkdownDocumentParser;
+use PHPPdf\Core\Parser\StylesheetParser;
 use PHPPdf\Core\Configuration\LoaderImpl;
 use PHPPdf\Core\Configuration\Loader;
 use PHPPdf\Cache\CacheImpl;

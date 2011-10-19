@@ -6,7 +6,7 @@
  * License information is in LICENSE file
  */
 
-namespace PHPPdf\Core;
+namespace PHPPdf\DataSource;
 
 /**
  * File data source class

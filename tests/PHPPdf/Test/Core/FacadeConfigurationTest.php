@@ -1,8 +1,8 @@
 <?php
 
-namespace PHPPdf\Test\Core\Parser;
+namespace PHPPdf\Test\Core;
 
-use PHPPdf\Core\Parser\FacadeConfiguration;
+use PHPPdf\Core\FacadeConfiguration;
 
 class FacadeConfigurationTest extends \PHPPdf\PHPUnit\Framework\TestCase
 {
