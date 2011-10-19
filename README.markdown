@@ -54,7 +54,7 @@ The simplest way of library using:
     PHPPdf\Autoloader::register();
     PHPPdf\Autoloader::register('/path/to/library/lib/vendor');
 
-    $facade = new PHPPdf\Parser\Facade(new PHPPdf\Configuration\Loader());
+    $facade = new PHPPdf\Core\Facade(new PHPPdf\Core\Configuration\Loader());
 
     //$documentXml and $stylesheetXml are strings contains XML documents, $stylesheetXml is optional
     $content = $facade->render($documentXml, $stylesheetXml);
@@ -564,14 +564,14 @@ Library has three primary config files that allow you to adopt library to specyf
 
 In order to change default config files, you must pass to Facade constructor configured Loader object:
 
-    $loader = new PHPPdf\Configuration\LoaderImpl('/path/to/file/nodes.xml', '/path/to/file/enhancements.xml', '/path/to/file/fonts.xml');
-    $facade = new PHPPdf\Parser\Facade($loader);
+    $loader = new PHPPdf\Core\Configuration\LoaderImpl('/path/to/file/nodes.xml', '/path/to/file/enhancements.xml', '/path/to/file/fonts.xml');
+    $facade = new PHPPdf\Core\Facade($loader);
 
 FacadeBuilder can be uset to build and configure Facade. Nowaday builder has only cache setting responsibilites:
     
-    $builder = PHPPdf\Parser\FacadeBuilder::create(/* you can pass specyfic configuration loader object */)
-                                          ->setCache('File', array('cache_dir' => './cache'))
-                                          ->setUseCacheForStylesheetConstraint(true); //stylesheets will be also use cache
+    $builder = PHPPdf\Core\FacadeBuilder::create(/* you can pass specyfic configuration loader object */)
+                                        ->setCache('File', array('cache_dir' => './cache'))
+                                        ->setUseCacheForStylesheetConstraint(true); //stylesheets will be also use cache
 
     $facade = $builder->build();
 
@@ -585,10 +585,10 @@ Library supports basic (official) markdown syntax. To convert markdown document 
 
 Example:
 
-    $facade = PHPPdf\Parser\FacadeBuilder::create()
-                                         ->setDocumentParserType(PHPPdf\Parser\FacadeBuilder::PARSER_MARKDOWN)
-                                         ->setMarkdownStylesheetFilepath(/** optionaly path to stylesheet in xml format */)
-                                         ->build();
+    $facade = PHPPdf\Core\FacadeBuilder::create()
+                                       ->setDocumentParserType(PHPPdf\Core\FacadeBuilder::PARSER_MARKDOWN)
+                                       ->setMarkdownStylesheetFilepath(/** optionaly path to stylesheet in xml format */)
+                                       ->build();
                                          
 By default, in markdown pdf document, helvetica font is used. If you want to use utf-8 characters or customize pdf document, you should provide your own stylesheet by FacadeBuilder::setMarkdownStylesheetFilepath method. Stylesheet structure has been described in [stylesheet](#stylesheet) chapter. By default stylesheet is empty, if you want to set another font type, stylesheet should looks like:
 

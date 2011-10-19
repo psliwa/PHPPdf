@@ -53,7 +53,7 @@ Najprostrzy sposób wykorzystania biblioteki:
     PHPPdf\Autoloader::register();
     PHPPdf\Autoloader::register('sciezka/do/biblioteki/lib/vendor');
 
-    $facade = new PHPPdf\Parser\Facade(new PHPPdf\Configuration\Loader());
+    $facade = new PHPPdf\Core\Facade(new PHPPdf\Core\Configuration\Loader());
 
     //$documentXml i $stylesheetXml to ciągi znaków zawierające dokumenty XML, $stylesheetXml jest opcjonalne
     $content = $facade->render($documentXml, $stylesheetXml);
@@ -561,14 +561,14 @@ Biblioteka ma 3 podstawowe pliki konfiguracyjne, które pozwalają na dostosowan
 
 Aby zmienić domyślne pliki konfiguracyjne należy przekazać do konstruktora fasady odpowiednio skonfigurowany obiekt ładujący konfigurację.
 
-    $loader = new PHPPdf\Configuration\LoaderImpl('/sciezka/do/pliku/nodes.xml', '/sciezka/do/pliku/complex-attributes.xml', '/sciezka/do/pliku/fonts.xml');
-    $facade = new PHPPdf\Parser\Facade($loader);
+    $loader = new PHPPdf\Core\Configuration\LoaderImpl('/sciezka/do/pliku/nodes.xml', '/sciezka/do/pliku/complex-attributes.xml', '/sciezka/do/pliku/fonts.xml');
+    $facade = new PHPPdf\Core\Facade($loader);
 
 Można wykorzystać budowniczego fasady, który jak narazie ma opcje do ustawiania cache.
     
-    $builder = PHPPdf\Parser\FacadeBuilder::create(/* można przekazać obiekt loadera konfiguracji */)
-                                          ->setCache('File', array('cache_dir' => './cache'))
-                                          ->setUseCacheForStylesheetConstraint(true); //szablony stylów również będą korzystały z cache
+    $builder = PHPPdf\Core\FacadeBuilder::create(/* można przekazać obiekt loadera konfiguracji */)
+                                        ->setCache('File', array('cache_dir' => './cache'))
+                                        ->setUseCacheForStylesheetConstraint(true); //szablony stylów również będą korzystały z cache
 
     $facade = $builder->build();
 
@@ -582,8 +582,8 @@ Biblioteka wspiera podstawową (oficjalną) składnię markdown. Aby skonwertowa
 
 Przykład:
 
-    $facade = PHPPdf\Parser\FacadeBuilder::create()
-                                         ->setDocumentParserType(PHPPdf\Parser\FacadeBuilder::PARSER_MARKDOWN)
+    $facade = PHPPdf\Core\FacadeBuilder::create()
+                                         ->setDocumentParserType(PHPPdf\Core\FacadeBuilder::PARSER_MARKDOWN)
                                          ->setMarkdownStylesheetFilepath(/** opcjonalna ścieżka do pliku z arkuszem stylów o składni xml */)
                                          ->build();
 
