@@ -32,9 +32,20 @@ Spis treści
 Instalacja
 ----------
 
-Biblioteka opcjonalnie korzysta z innych bibliotek (komponent Symfony2 do DependencyInjection), które można pobrać wywołując polecenie:
+Biblioteka posiada zależności do zewnętrznych bibliotek: 
+
+* Symfony/Component/DependencyInjection
+* Symfony/Component/Config
+* php-markdown
+* Zend_Pdf (Zend Framework w wersji 2.0.x)
+* Zend_Memory (Zend Framework w wersji 2.0.x)
+* Zend_Cache (Zend Framework w wersji 2.0.x)
+
+Aby biblioteka była gotowa do użytku, trzeba pobrać te zależności. Należy wywołać z wysokości głównego katalogu biblioteki polecenie (należy mieć zainstalowanego klienta git):
 
     php vendors.php
+    
+Alternatywnie zależności można umieścić ręcznie w katalogu "lib/vendor", konieczne do działania są tylko zależności Zend_Pdf, Zend_Memory oraz Zend_Cache.
     
 <a name="symfony2-bundle"></a>
 Symfony2 bundle
@@ -48,7 +59,7 @@ Parsowanie dokumentu i tworzenie pdf'a.
 
 Najprostrzy sposób wykorzystania biblioteki:
 
-    //zarejestrowanie autoloadera PHPPdf oraz vendor (Zend_Pdf)
+    //zarejestrowanie autoloadera PHPPdf oraz vendor (Zend_Pdf i inne zależności)
     require_once 'PHPPdf/Autoloader.php';
     PHPPdf\Autoloader::register();
     PHPPdf\Autoloader::register('sciezka/do/biblioteki/lib/vendor');

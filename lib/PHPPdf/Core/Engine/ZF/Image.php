@@ -9,12 +9,11 @@
 namespace PHPPdf\Core\Engine\ZF;
 
 use PHPPdf\Core\UnitConverter;
-
 use PHPPdf\Bridge\Zend\Pdf\Resource\Image\Tiff;
-
-use PHPPdf\Exception\InvalidResourceException,
-    PHPPdf\Bridge\Zend\Pdf\Resource\Image\Png,
-    PHPPdf\Core\Engine\Image as BaseImage;
+use PHPPdf\Exception\InvalidResourceException;
+use PHPPdf\Bridge\Zend\Pdf\Resource\Image\Png;
+use PHPPdf\Core\Engine\Image as BaseImage;
+use Zend\Pdf\Resource\Image\Jpeg;
 
 /**
  * @author Piotr Śliwa <peter.pl7@gmail.com>
@@ -57,7 +56,7 @@ class Image implements BaseImage
             
             if($imageType === IMAGETYPE_JPEG || $imageType === IMAGETYPE_JPEG2000)
             {
-                return new \Zend_Pdf_Resource_Image_Jpeg($path);
+                return new Jpeg($path);
             }
             elseif($imageType === IMAGETYPE_PNG)
             {
@@ -72,7 +71,7 @@ class Image implements BaseImage
                 InvalidResourceException::unsupportetImageTypeException($path);
             }
         }
-        catch(\Zend_Pdf_Exception $e)
+        catch(\Zend\Pdf\Exception $e)
         {
             InvalidResourceException::invalidImageException($path, $e);
         }
@@ -111,7 +110,7 @@ class Image implements BaseImage
     /**
      * @internal Public method within PHPPdf\Core\Engine\ZF namespace
      * 
-     * @return Zend_Pdf_Resource_Image
+     * @return Zend\Pdf\Resource\Image
      */
     public function getWrappedImage()
     {

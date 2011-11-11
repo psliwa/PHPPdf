@@ -8,8 +8,9 @@
 
 namespace PHPPdf\Core\Engine\ZF;
 
-use PHPPdf\Exception\InvalidResourceException,
-    PHPPdf\Core\Engine\Font as BaseFont;
+use PHPPdf\Exception\InvalidResourceException;
+use PHPPdf\Core\Engine\Font as BaseFont;
+use Zend\Pdf\Font as ZendFont;
 
 /**
  * @author Piotr Śliwa <peter.pl7@gmail.com>
@@ -93,7 +94,7 @@ class Font implements BaseFont
     /**
      * @internal Public method within PHPPdf\Core\Engine\ZF namespace
      * 
-     * @return Zend_Pdf_Resource_Font
+     * @return Zend\Pdf\Resource\Font
      */
     public function getCurrentWrappedFont()
     {
@@ -110,17 +111,17 @@ class Font implements BaseFont
                 if($this->isNamedFont($data))
                 {
                     $name = $this->retrieveFontName($data);
-                    $this->fontResources[$style] = \Zend_Pdf_Font::fontWithName($name);
+                    $this->fontResources[$style] = ZendFont::fontWithName($name);
                 }
                 else 
                 {
-                    $this->fontResources[$style] = \Zend_Pdf_Font::fontWithPath($data);
+                    $this->fontResources[$style] = ZendFont::fontWithPath($data);
                 }
             }
             
             return $this->fontResources[$style];
         }
-        catch(\Zend_Pdf_Exception $e)
+        catch(\Zend\Pdf\Exception $e)
         {
             InvalidResourceException::invalidFontException($this->fontResources[$style], $e);
         }
@@ -133,7 +134,7 @@ class Font implements BaseFont
     
     private static function retrieveFontName($name)
     {
-        $const = sprintf('\Zend_Pdf_Font::FONT_%s', str_replace('-', '_', strtoupper($name)));
+        $const = sprintf('Zend\Pdf\Font::FONT_%s', str_replace('-', '_', strtoupper($name)));
 
         if(!defined($const))
         {

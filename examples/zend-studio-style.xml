@@ -8,7 +8,7 @@
 	
 	<dynamic-page margin="52px 93px">
 
-		<h1 font-size="40xp" font-style="normal" color="#00709e"></h1>
+		<h1 font-size="40px" font-style="normal" color="#00709e"></h1>
 		<h2 color="#00709e"></h2>
 		<p font-size="14.5px" line-height="24px"></p>
 		<li font-size="14.5px" line-height="24px"></li>

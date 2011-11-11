@@ -8,16 +8,20 @@
 
 namespace PHPPdf\Bridge\Zend\Pdf\Resource\Image;
 
-use PHPPdf\Exception\Exception;
 use PHPPdf\InputStream\FopenInputStream;
 use PHPPdf\InputStream\StringInputStream;
+use Zend\Pdf\Resource\Image\Png as BasePng;
+use Zend\Pdf\Exception;
+use Zend\Pdf;
+use Zend\Pdf\ObjectFactory;
+use Zend\Pdf\InternalType;
 
 /**
  * Content loading type has been changed, remote files are supported.
  * 
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
-class Png extends \Zend_Pdf_Resource_Image_Png
+class Png extends BasePng
 {
     private $stream;
     
@@ -29,16 +33,16 @@ class Png extends \Zend_Pdf_Resource_Image_Png
         
         if (($this->stream = $this->open($isRemote, $imageFileName)) === false ) {
             
-            throw new \Zend_Pdf_Exception( "Can not open '$imageFileName' file for reading." );
+            throw new Exception\IOException("Can not open '$imageFileName' file for reading.");
         }
 
-        \Zend_Pdf_Resource_Image::__construct();
+        \Zend\Pdf\Resource\Image\AbstractImage::__construct();
         
         //Check if the file is a PNG
         $this->seek(1);
         if ('PNG' != $this->read(3)) {
             
-            throw new \Zend_Pdf_Exception('Image is not a PNG');
+            throw new Exception\DomainException('Image is not a PNG');
         }
         $this->seek(12); //Signature bytes (Includes the IHDR chunk) IHDR processed linerarly because it doesnt contain a variable chunk length
         $wtmp = unpack('Ni',$this->read(4)); //Unpack a 4-Byte Long
@@ -51,9 +55,8 @@ class Png extends \Zend_Pdf_Resource_Image_Png
         $compression = ord($this->read(1));
         $prefilter = ord($this->read(1));
 
-        if (($interlacing = ord($this->read(1))) != \Zend_Pdf_Resource_Image_Png::PNG_INTERLACING_DISABLED) {
-            
-            throw new \Zend_Pdf_Exception( "Only non-interlaced images are currently supported." );
+        if (($interlacing = ord($this->read(1))) != self::PNG_INTERLACING_DISABLED) {
+            throw new Exception\NotImplementedException('Only non-interlaced images are currently supported.');
         }
 
         $this->_width = $width;
@@ -96,38 +99,38 @@ class Png extends \Zend_Pdf_Resource_Image_Png
                 case 'tRNS': //Basic (non-alpha channel) transparency.
                     $trnsData = $this->read($chunkLength);
                     switch ($color) {
-                        case \Zend_Pdf_Resource_Image_Png::PNG_CHANNEL_GRAY:
+                        case self::PNG_CHANNEL_GRAY:
                             $baseColor = ord(substr($trnsData, 1, 1));
-                            $transparencyData = array(new \Zend_Pdf_Element_Numeric($baseColor),
-                                                      new \Zend_Pdf_Element_Numeric($baseColor));
+                            $transparencyData = array(new InternalType\NumericObject($baseColor),
+                                                      new InternalType\NumericObject($baseColor));
                             break;
 
-                        case \Zend_Pdf_Resource_Image_Png::PNG_CHANNEL_RGB:
+                        case self::PNG_CHANNEL_RGB:
                             $red = ord(substr($trnsData,1,1));
                             $green = ord(substr($trnsData,3,1));
                             $blue = ord(substr($trnsData,5,1));
-                            $transparencyData = array(new \Zend_Pdf_Element_Numeric($red),
-                                                      new \Zend_Pdf_Element_Numeric($red),
-                                                      new \Zend_Pdf_Element_Numeric($green),
-                                                      new \Zend_Pdf_Element_Numeric($green),
-                                                      new \Zend_Pdf_Element_Numeric($blue),
-                                                      new \Zend_Pdf_Element_Numeric($blue));
+                            $transparencyData = array(new InternalType\NumericObject($red),
+                                                      new InternalType\NumericObject($red),
+                                                      new InternalType\NumericObject($green),
+                                                      new InternalType\NumericObject($green),
+                                                      new InternalType\NumericObject($blue),
+                                                      new InternalType\NumericObject($blue));
                             break;
 
-                        case \Zend_Pdf_Resource_Image_Png::PNG_CHANNEL_INDEXED:
+                        case self::PNG_CHANNEL_INDEXED:
                             //Find the first transparent color in the index, we will mask that. (This is a bit of a hack. This should be a SMask and mask all entries values).
                             if(($trnsIdx = strpos($trnsData, "\0")) !== false) {
-                                $transparencyData = array(new \Zend_Pdf_Element_Numeric($trnsIdx),
-                                                          new \Zend_Pdf_Element_Numeric($trnsIdx));
+                                $transparencyData = array(new InternalType\NumericObject($trnsIdx),
+                                                          new InternalType\NumericObject($trnsIdx));
                             }
                             break;
 
-                        case \Zend_Pdf_Resource_Image_Png::PNG_CHANNEL_GRAY_ALPHA:
+                        case self::PNG_CHANNEL_GRAY_ALPHA:
                             // Fall through to the next case
 
-                        case \Zend_Pdf_Resource_Image_Png::PNG_CHANNEL_RGB_ALPHA:
+                        case self::PNG_CHANNEL_RGB_ALPHA:
                             
-                            throw new \Zend_Pdf_Exception( "tRNS chunk illegal for Alpha Channel Images" );
+                            throw new Exception\CorruptedImageException("tRNS chunk illegal for Alpha Channel Images");
                             break;
                     }
                     $this->seek(4); //4 Byte Ending Sequence
@@ -148,39 +151,37 @@ class Png extends \Zend_Pdf_Resource_Image_Png
         $imageDataTmp = '';
         $smaskData = '';
         switch ($color) {
-            case \Zend_Pdf_Resource_Image_Png::PNG_CHANNEL_RGB:
-                $colorSpace = new \Zend_Pdf_Element_Name('DeviceRGB');
+            case self::PNG_CHANNEL_RGB:
+                $colorSpace = new InternalType\NameObject('DeviceRGB');
                 break;
 
-            case \Zend_Pdf_Resource_Image_Png::PNG_CHANNEL_GRAY:
-                $colorSpace = new \Zend_Pdf_Element_Name('DeviceGray');
+            case self::PNG_CHANNEL_GRAY:
+                $colorSpace = new InternalType\NameObject('DeviceGray');
                 break;
 
-            case \Zend_Pdf_Resource_Image_Png::PNG_CHANNEL_INDEXED:
+            case self::PNG_CHANNEL_INDEXED:
                 if(empty($paletteData)) {
-                    
-                    throw new \Zend_Pdf_Exception( "PNG Corruption: No palette data read for indexed type PNG." );
+                    throw new Exception\CorruptedImageException("PNG Corruption: No palette data read for indexed type PNG.");
                 }
-                $colorSpace = new \Zend_Pdf_Element_Array();
-                $colorSpace->items[] = new \Zend_Pdf_Element_Name('Indexed');
-                $colorSpace->items[] = new \Zend_Pdf_Element_Name('DeviceRGB');
-                $colorSpace->items[] = new \Zend_Pdf_Element_Numeric((strlen($paletteData)/3-1));
-                $paletteObject = $this->_objectFactory->newObject(new \Zend_Pdf_Element_String_Binary($paletteData));
+                $colorSpace = new InternalType\ArrayObject();
+                $colorSpace->items[] = new InternalType\NameObject('Indexed');
+                $colorSpace->items[] = new InternalType\NameObject('DeviceRGB');
+                $colorSpace->items[] = new InternalType\NumericObject((strlen($paletteData)/3-1));
+                $paletteObject = $this->_objectFactory->newObject(new InternalType\BinaryStringObject($paletteData));
                 $colorSpace->items[] = $paletteObject;
                 break;
 
-            case \Zend_Pdf_Resource_Image_Png::PNG_CHANNEL_GRAY_ALPHA:
+            case self::PNG_CHANNEL_GRAY_ALPHA:
                 /*
                  * To decode PNG's with alpha data we must create two images from one. One image will contain the Gray data
                  * the other will contain the Gray transparency overlay data. The former will become the object data and the latter
                  * will become the Shadow Mask (SMask).
                  */
                 if($bits > 8) {
-                    
-                    throw new \Zend_Pdf_Exception("Alpha PNGs with bit depth > 8 are not yet supported");
+                    throw new Exception\NotImplementedException('Alpha PNGs with bit depth > 8 are not yet supported');
                 }
 
-                $colorSpace = new \Zend_Pdf_Element_Name('DeviceGray');
+                $colorSpace = new InternalType\NameObject('DeviceGray');
 
                 $pngDataRawDecoded = $this->decode($imageData, $width, 2, $bits);
 
@@ -193,18 +194,17 @@ class Png extends \Zend_Pdf_Resource_Image_Png
                 $imageData  = $imageDataTmp; //Overwrite image data with the gray channel without alpha
                 break;
 
-            case \Zend_Pdf_Resource_Image_Png::PNG_CHANNEL_RGB_ALPHA:
+            case self::PNG_CHANNEL_RGB_ALPHA:
                 /*
                  * To decode PNG's with alpha data we must create two images from one. One image will contain the RGB data
                  * the other will contain the Gray transparency overlay data. The former will become the object data and the latter
                  * will become the Shadow Mask (SMask).
                  */
                 if($bits > 8) {
-                    
-                    throw new \Zend_Pdf_Exception("Alpha PNGs with bit depth > 8 are not yet supported");
+                    throw new Exception\NotImplementedException('Alpha PNGs with bit depth > 8 are not yet supported');
                 }
 
-                $colorSpace = new \Zend_Pdf_Element_Name('DeviceRGB');
+                $colorSpace = new InternalType\NameObject('DeviceRGB');
 
                 $pngDataRawDecoded = $this->decode($imageData, $width, 4, $bits);
 
@@ -219,13 +219,11 @@ class Png extends \Zend_Pdf_Resource_Image_Png
                 break;
 
             default:
-                
-                throw new \Zend_Pdf_Exception( "PNG Corruption: Invalid color space." );
+                throw new Exception\CorruptedImageException('PNG Corruption: Invalid color space.');
         }
 
         if(empty($imageData)) {
-            
-            throw new \Zend_Pdf_Exception( "Corrupt PNG Image. Mandatory IDAT chunk not found." );
+            throw new Exception\CorruptedImageException('Corrupt PNG Image. Mandatory IDAT chunk not found.');
         }
 
         $imageDictionary = $this->_resource->dictionary;
@@ -234,41 +232,41 @@ class Png extends \Zend_Pdf_Resource_Image_Png
              * Includes the Alpha transparency data as a Gray Image, then assigns the image as the Shadow Mask for the main image data.
              */
             $smaskStream = $this->_objectFactory->newStreamObject($smaskData);
-            $smaskStream->dictionary->Type             = new \Zend_Pdf_Element_Name('XObject');
-            $smaskStream->dictionary->Subtype          = new \Zend_Pdf_Element_Name('Image');
-            $smaskStream->dictionary->Width            = new \Zend_Pdf_Element_Numeric($width);
-            $smaskStream->dictionary->Height           = new \Zend_Pdf_Element_Numeric($height);
-            $smaskStream->dictionary->ColorSpace       = new \Zend_Pdf_Element_Name('DeviceGray');
-            $smaskStream->dictionary->BitsPerComponent = new \Zend_Pdf_Element_Numeric($bits);
+            $smaskStream->dictionary->Type             = new InternalType\NameObject('XObject');
+            $smaskStream->dictionary->Subtype          = new InternalType\NameObject('Image');
+            $smaskStream->dictionary->Width            = new InternalType\NumericObject($width);
+            $smaskStream->dictionary->Height           = new InternalType\NumericObject($height);
+            $smaskStream->dictionary->ColorSpace       = new InternalType\NameObject('DeviceGray');
+            $smaskStream->dictionary->BitsPerComponent = new InternalType\NumericObject($bits);
             $imageDictionary->SMask = $smaskStream;
 
             // Encode stream with FlateDecode filter
             $smaskStreamDecodeParms = array();
-            $smaskStreamDecodeParms['Predictor']        = new \Zend_Pdf_Element_Numeric(self::PREDICATOR);
-            $smaskStreamDecodeParms['Columns']          = new \Zend_Pdf_Element_Numeric($width);
-            $smaskStreamDecodeParms['Colors']           = new \Zend_Pdf_Element_Numeric(1);
-            $smaskStreamDecodeParms['BitsPerComponent'] = new \Zend_Pdf_Element_Numeric(8);
-            $smaskStream->dictionary->DecodeParms  = new \Zend_Pdf_Element_Dictionary($smaskStreamDecodeParms);
-            $smaskStream->dictionary->Filter       = new \Zend_Pdf_Element_Name('FlateDecode');
+            $smaskStreamDecodeParms['Predictor']        = new InternalType\NumericObject(self::PREDICATOR);
+            $smaskStreamDecodeParms['Columns']          = new InternalType\NumericObject($width);
+            $smaskStreamDecodeParms['Colors']           = new InternalType\NumericObject(1);
+            $smaskStreamDecodeParms['BitsPerComponent'] = new InternalType\NumericObject(8);
+            $smaskStream->dictionary->DecodeParms  = new InternalType\DictionaryObject($smaskStreamDecodeParms);
+            $smaskStream->dictionary->Filter       = new InternalType\NameObject('FlateDecode');
         }
 
         if(!empty($transparencyData)) {
             //This is experimental and not properly tested.
-            $imageDictionary->Mask = new \Zend_Pdf_Element_Array($transparencyData);
+            $imageDictionary->Mask = new InternalType\ArrayObject($transparencyData);
         }
 
-        $imageDictionary->Width            = new \Zend_Pdf_Element_Numeric($width);
-        $imageDictionary->Height           = new \Zend_Pdf_Element_Numeric($height);
+        $imageDictionary->Width            = new InternalType\NumericObject($width);
+        $imageDictionary->Height           = new InternalType\NumericObject($height);
         $imageDictionary->ColorSpace       = $colorSpace;
-        $imageDictionary->BitsPerComponent = new \Zend_Pdf_Element_Numeric($bits);
-        $imageDictionary->Filter       = new \Zend_Pdf_Element_Name('FlateDecode');
+        $imageDictionary->BitsPerComponent = new InternalType\NumericObject($bits);
+        $imageDictionary->Filter       = new InternalType\NameObject('FlateDecode');
 
         $decodeParms = array();
-        $decodeParms['Predictor']        = new \Zend_Pdf_Element_Numeric(self::PREDICATOR); // Optimal prediction
-        $decodeParms['Columns']          = new \Zend_Pdf_Element_Numeric($width);
-        $decodeParms['Colors']           = new \Zend_Pdf_Element_Numeric((($color==\Zend_Pdf_Resource_Image_Png::PNG_CHANNEL_RGB || $color==\Zend_Pdf_Resource_Image_Png::PNG_CHANNEL_RGB_ALPHA)?(3):(1)));
-        $decodeParms['BitsPerComponent'] = new \Zend_Pdf_Element_Numeric($bits);
-        $imageDictionary->DecodeParms  = new \Zend_Pdf_Element_Dictionary($decodeParms);
+        $decodeParms['Predictor']        = new InternalType\NumericObject(self::PREDICATOR); // Optimal prediction
+        $decodeParms['Columns']          = new InternalType\NumericObject($width);
+        $decodeParms['Colors']           = new InternalType\NumericObject((($color==self::PNG_CHANNEL_RGB || $color==self::PNG_CHANNEL_RGB_ALPHA)?(3):(1)));
+        $decodeParms['BitsPerComponent'] = new InternalType\NumericObject($bits);
+        $imageDictionary->DecodeParms  = new InternalType\DictionaryObject($decodeParms);
 
         //Include only the image IDAT section data.
         $this->_resource->value = $imageData;
@@ -281,14 +279,14 @@ class Png extends \Zend_Pdf_Resource_Image_Png
     
     private function decode($imageData, $width, $colors, $bits)
     {
-        $decodingObjFactory = \Zend_Pdf_ElementFactory::createFactory(1);
+        $decodingObjFactory = ObjectFactory::createFactory(1);
         $decodingStream = $decodingObjFactory->newStreamObject($imageData);
-        $decodingStream->dictionary->Filter      = new \Zend_Pdf_Element_Name('FlateDecode');
-        $decodingStream->dictionary->DecodeParms = new \Zend_Pdf_Element_Dictionary();
-        $decodingStream->dictionary->DecodeParms->Predictor        = new \Zend_Pdf_Element_Numeric(self::PREDICATOR);
-        $decodingStream->dictionary->DecodeParms->Columns          = new \Zend_Pdf_Element_Numeric($width);
-        $decodingStream->dictionary->DecodeParms->Colors           = new \Zend_Pdf_Element_Numeric($colors);
-        $decodingStream->dictionary->DecodeParms->BitsPerComponent = new \Zend_Pdf_Element_Numeric($bits);
+        $decodingStream->dictionary->Filter      = new InternalType\NameObject('FlateDecode');
+        $decodingStream->dictionary->DecodeParms = new InternalType\DictionaryObject();
+        $decodingStream->dictionary->DecodeParms->Predictor        = new InternalType\NumericObject(self::PREDICATOR);
+        $decodingStream->dictionary->DecodeParms->Columns          = new InternalType\NumericObject($width);
+        $decodingStream->dictionary->DecodeParms->Colors           = new InternalType\NumericObject($colors);
+        $decodingStream->dictionary->DecodeParms->BitsPerComponent = new InternalType\NumericObject($bits);
         $decodingStream->skipFilters();
 
         return $decodingStream->value;
@@ -314,7 +312,7 @@ class Png extends \Zend_Pdf_Resource_Image_Png
                 return new FopenInputStream($imageFileName, 'rb');
             }
         }
-        catch(Exception $e)
+        catch(\PHPPdf\Exception\Exception $e)
         {
             return false;
         }

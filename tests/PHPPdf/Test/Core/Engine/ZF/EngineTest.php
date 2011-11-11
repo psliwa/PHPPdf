@@ -13,7 +13,7 @@ class EngineTest extends \PHPPdf\PHPUnit\Framework\TestCase
     
     public function setUp()
     {
-        $this->zendPdf = new \Zend_Pdf();
+        $this->zendPdf = new \Zend\Pdf\PdfDocument();
         $this->engine = new Engine($this->zendPdf);
     }
     
@@ -99,7 +99,7 @@ class EngineTest extends \PHPPdf\PHPUnit\Framework\TestCase
     {
         $content = '123';
         
-        $zendPdf = $this->getMockBuilder('Zend_Pdf')
+        $zendPdf = $this->getMockBuilder('Zend\Pdf\PdfDocument')
                         ->setMethods(array('render'))
                         ->getMock();
 
@@ -147,7 +147,7 @@ class EngineTest extends \PHPPdf\PHPUnit\Framework\TestCase
      */
     public function setMetadataValues($name, $value, $shouldBeSet, $expectedValue = null)
     {
-        $zendPdf = new \Zend_Pdf();
+        $zendPdf = new \Zend\Pdf\PdfDocument();
         $engine = new Engine($zendPdf);
         
         $engine->setMetadataValue($name, $value);

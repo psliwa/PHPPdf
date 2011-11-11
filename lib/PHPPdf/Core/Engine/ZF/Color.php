@@ -8,8 +8,9 @@
 
 namespace PHPPdf\Core\Engine\ZF;
 
-use PHPPdf\Exception\InvalidResourceException,
-    PHPPdf\Core\Engine\Color as BaseColor;
+use PHPPdf\Exception\InvalidResourceException;
+use PHPPdf\Core\Engine\Color as BaseColor;
+use Zend\Pdf\Exception;
 
 /**
  * @author Piotr Śliwa <peter.pl7@gmail.com>
@@ -17,7 +18,7 @@ use PHPPdf\Exception\InvalidResourceException,
 class Color implements BaseColor
 {
     /**
-     * @var Zend_Pdf_Color
+     * @var Zend\Pdf\Color
      */
     private $zendColor;
     
@@ -25,9 +26,9 @@ class Color implements BaseColor
     {
         try 
         {
-            $this->zendColor = \Zend_Pdf_Color_Html::color($colorData);
+            $this->zendColor = \Zend\Pdf\Color\Html::color($colorData);
         }
-        catch(\Zend_Pdf_Exception $e)
+        catch(Exception $e)
         {
             InvalidResourceException::invalidColorException($colorData, $e);
         }
@@ -39,7 +40,7 @@ class Color implements BaseColor
     }
     
     /**
-     * @return Zend_Pdf_Color
+     * @return Zend\Pdf\Color
      */
     public function getWrappedColor()
     {

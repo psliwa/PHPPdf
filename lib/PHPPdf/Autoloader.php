@@ -24,7 +24,7 @@ class Autoloader
         
         \spl_autoload_register(function($name) use($basePath)
         {
-            $path = sprintf('%s%s%s', $basePath, \str_replace(array('\\', '_'), \DIRECTORY_SEPARATOR, $name), '.php');
+            $path = sprintf('%s%s%s', $basePath, \str_replace('\\', \DIRECTORY_SEPARATOR, $name), '.php');
 
             if(\file_exists($path))
             {

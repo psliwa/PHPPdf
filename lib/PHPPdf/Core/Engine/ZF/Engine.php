@@ -9,15 +9,13 @@
 namespace PHPPdf\Core\Engine\ZF;
 
 use PHPPdf\Core\UnitConverter;
-
 use PHPPdf\Exception\Exception;
-
 use PHPPdf\Util;
-
 use PHPPdf\Exception\InvalidResourceException;
-
-use PHPPdf\Core\Engine\GraphicsContext as BaseGraphicsContext,
-    PHPPdf\Core\Engine\Engine as BaseEngine;
+use PHPPdf\Core\Engine\GraphicsContext as BaseGraphicsContext;
+use PHPPdf\Core\Engine\Engine as BaseEngine;
+use Zend\Pdf\PdfDocument;
+use Zend\Pdf\Outline\AbstractOutline;
 
 /**
  * @author Piotr Śliwa <peter.pl7@gmail.com>
@@ -33,7 +31,7 @@ class Engine implements BaseEngine
     private $outlines = array();
     private $unitConverter;
     
-    public function __construct(\Zend_Pdf $zendPdf = null, UnitConverter $unitConverter = null)
+    public function __construct(PdfDocument $zendPdf = null, UnitConverter $unitConverter = null)
     {
         $this->zendPdf = $zendPdf;
         $this->unitConverter = $unitConverter;
@@ -108,13 +106,13 @@ class Engine implements BaseEngine
     }
     
     /**
-     * @return \Zend_Pdf
+     * @return PdfDocument
      */
     public function getZendPdf()
     {
         if(!$this->zendPdf)
         {
-            $this->zendPdf = new \Zend_Pdf();
+            $this->zendPdf = new PdfDocument();
         }
         
         return $this->zendPdf;
@@ -123,7 +121,7 @@ class Engine implements BaseEngine
     /**
      * @internal
      */
-    public function registerOutline($id, \Zend_Pdf_Outline $outline)
+    public function registerOutline($id, AbstractOutline $outline)
     {
         $this->outlines[$id] = $outline;
     }
@@ -155,7 +153,7 @@ class Engine implements BaseEngine
 
         try
         {
-            $pdf = \Zend_Pdf::load($file);
+            $pdf = PdfDocument::load($file);
             $engine = new self($pdf, $this->unitConverter);
             
             foreach($pdf->pages as $page)
@@ -168,7 +166,7 @@ class Engine implements BaseEngine
             
             return $engine;
         }
-        catch(\Zend_Pdf_Exception $e)
+        catch(\Zend\Pdf\Exception $e)
         {
             InvalidResourceException::invalidPdfFileException($file, $e);
         }
@@ -184,7 +182,7 @@ class Engine implements BaseEngine
                 break;
             case 'CreationDate':
             case 'ModDate':
-                $value = \Zend_Pdf::pdfDate(strtotime($value));
+                $value = PdfDocument::pdfDate(strtotime($value));
                 $this->getZendPdf()->properties[$name] = $value;
                 break;
             case 'Title':

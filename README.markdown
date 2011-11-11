@@ -33,9 +33,20 @@ Table of contents
 Installation
 ----------------
 
-Library optionally uses external libraries (DependencyInjection from Symfony2) that be able to download by command:
+Library uses external dependencies:
+
+* Symfony/Component/DependencyInjection
+* Symfony/Component/Config
+* php-markdown
+* Zend_Pdf (Zend Framework in 2.0.x version)
+* Zend_Memory (Zend Framework in 2.0.x version)
+* Zend_Cache (Zend Framework in 2.0.x version)
+
+In order to library was ready to use, you must download this dependencies. You should invoke below command from main directory of the library (git client is necessary):
 
     php vendors.php
+    
+Alternatively, you can download this dependencies manually and copy it into "lib/vendor" directory. Only Zend_Pdf, Zend_Memory and Zend_Cache are obligatory.
     
 <a name="symfony2-bundle"></a>
 Symfony2 bundle
@@ -49,7 +60,7 @@ Document parsing and creating pdf file
 
 The simplest way of library using:
 
-    //register PHPPdf and vendor (Zend_Pdf) autoloaders
+    //register PHPPdf and vendor (Zend_Pdf and other dependencies) autoloaders
     require_once 'PHPPdf/Autoloader.php';
     PHPPdf\Autoloader::register();
     PHPPdf\Autoloader::register('/path/to/library/lib/vendor');

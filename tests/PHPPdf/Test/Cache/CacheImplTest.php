@@ -54,7 +54,7 @@ class CacheImplTest extends \PHPPdf\PHPUnit\Framework\TestCase
 
     private function getCacheEngineMock()
     {
-        $mock = $this->getMock('Zend_Cache_Backend', array('clean', 'load', 'setDirectives', 'remove', 'save', 'test'));
+        $mock = $this->getMock('Zend\Cache\Backend', array('clean', 'load', 'setDirectives', 'remove', 'save', 'test'));
 
         return $mock;
     }
@@ -66,7 +66,7 @@ class CacheImplTest extends \PHPPdf\PHPUnit\Framework\TestCase
      */
     public function wrapCacheEngineExceptions($operation, array $args)
     {
-        $e = new \Zend_Exception();
+        $e = new \Zend\Cache\Exception();
         
         $this->engineMock->expects($this->once())
                          ->method($operation)

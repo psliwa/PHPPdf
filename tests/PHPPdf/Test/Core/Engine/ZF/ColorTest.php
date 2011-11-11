@@ -19,7 +19,7 @@ class ColorTest extends \PHPPdf\PHPUnit\Framework\TestCase
         
         $zendColor = $color->getWrappedColor();
         
-        $this->assertInstanceOf('Zend_Pdf_Color', $zendColor);
+        $this->assertInstanceOf('Zend\Pdf\Color', $zendColor);
         
         $this->assertEquals($color->getComponents(), $zendColor->getComponents());
     }

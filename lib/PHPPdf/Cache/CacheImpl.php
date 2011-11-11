@@ -9,6 +9,7 @@
 namespace PHPPdf\Cache;
 
 use PHPPdf\Exception\Exception;
+use Zend\Cache\Frontend\Core;
 
 /**
  * Standard implementation of Cache
@@ -24,11 +25,11 @@ class CacheImpl implements Cache
     const ENGINE_SQLITE = 'Sqlite';
     const ENGINE_XCACHE = 'Xcache';
     const ENGINE_ZEND_PLATFORM = 'ZendPlatform';
-    const ENGINE_ZEND_SERVER_DISK = 'ZendServer_Disk';
-    const ENGINE_ZEND_SERVER_SH_MEM = 'ZendServer_ShMem';
+    const ENGINE_ZEND_SERVER_DISK = 'ZendServer\Disk';
+    const ENGINE_ZEND_SERVER_SH_MEM = 'ZendServer\ShMem';
 
     /**
-     * @var Zend_Cache_Core
+     * @var Zend\Cache\Frontend\Core
      */
     private $core = null;
 
@@ -37,7 +38,7 @@ class CacheImpl implements Cache
         $defaultOptions = array('write_control' => false, 'automatic_serialization' => true);
         $options = array_merge($defaultOptions, $options);
 
-        $this->core = new \Zend_Cache_Core($options);
+        $this->core = new Core($options);
 
         $backend = $this->createCacheBackend($engine, $options);
 
@@ -48,11 +49,11 @@ class CacheImpl implements Cache
     {
         try
         {
-            $className = sprintf('\Zend_Cache_Backend_%s', $engine);
+            $className = sprintf('Zend\Cache\Backend\%s', $engine);
             $class = new \ReflectionClass($className);
             $backend = $class->newInstance($options);
 
-            if(!$backend instanceof \Zend_Cache_Backend_Interface)
+            if(!$backend instanceof \Zend\Cache\Backend)
             {
                 $this->cacheEngineDosntExistException($engine);
             }
@@ -70,7 +71,7 @@ class CacheImpl implements Cache
         throw new Exception(sprintf('Cache engine "%s" dosn\'t exist.', $engine), 1, $e);
     }
 
-    private function setBackend(\Zend_Cache_Backend $backend)
+    private function setBackend(\Zend\Cache\Backend $backend)
     {
         $this->core->setBackend($backend);
     }
@@ -98,7 +99,7 @@ class CacheImpl implements Cache
         {
             return $this->core->test($id);
         }
-        catch(\Zend_Exception $e)
+        catch(\Zend\Cache\Exception $e)
         {
             $this->wrapLowLevelException($e, __METHOD__);
         }
@@ -110,7 +111,7 @@ class CacheImpl implements Cache
         {
             return $this->core->save($data, $id);
         }
-        catch(\Zend_Exception $e)
+        catch(\Zend\Cache\Exception $e)
         {
             $this->wrapLowLevelException($e, __METHOD__);
         }
@@ -122,19 +123,19 @@ class CacheImpl implements Cache
         {
             return $this->core->remove($id);
         }
-        catch(\Zend_Exception $e)
+        catch(\Zend\Cache\Exception $e)
         {
             $this->wrapLowLevelException($e, __METHOD__);
         }
     }
 
-    public function clean($mode = \Zend_Cache::CLEANING_MODE_ALL)
+    public function clean($mode = \Zend\Cache::CLEANING_MODE_ALL)
     {
         try
         {
             return $this->core->clean($mode);
         }
-        catch(\Zend_Exception $e)
+        catch(\Zend\Cache\Exception $e)
         {
             $this->wrapLowLevelException($e, __METHOD__);
         }

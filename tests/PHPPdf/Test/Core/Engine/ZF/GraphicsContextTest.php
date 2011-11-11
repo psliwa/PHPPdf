@@ -13,7 +13,11 @@ class GraphicsContextTest extends \PHPPdf\PHPUnit\Framework\TestCase
      */
     public function clipRectangleWrapper()
     {
-        $zendPageMock = $this->getMock('\Zend_Pdf_Page', array('clipRectangle'), array(), '', false);
+        $zendPageMock = $this->getMockBuilder('\Zend\Pdf\Page')
+                             ->setMethods(array('clipRectangle'))
+                             ->disableOriginalConstructor()
+                             ->disableOriginalClone()
+                             ->getMock();
 
         $x1 = 0;
         $x2 = 100;
@@ -43,7 +47,7 @@ class GraphicsContextTest extends \PHPPdf\PHPUnit\Framework\TestCase
      */
     public function saveAndRestoreGSWrapper()
     {
-        $zendPageMock = $this->getMock('\Zend_Pdf_Page', array('saveGS', 'restoreGS'), array(), '', false);
+        $zendPageMock = $this->getMock('\Zend\Pdf\Page', array('saveGS', 'restoreGS'), array(), '', false);
 
         $zendPageMock->expects($this->at(0))
                      ->method('saveGS');
@@ -67,8 +71,14 @@ class GraphicsContextTest extends \PHPPdf\PHPUnit\Framework\TestCase
         $y1 = 0;
         $y2 = 100;
 
-        $zendPageMock = $this->getMock('\Zend_Pdf_Page', array('drawImage'), array(), '', false);
-        $zendImage = $this->getMock('\Zend_Pdf_Resource_Image', array());
+        $zendPageMock = $this->getMockBuilder('\Zend\Pdf\Page')
+                             ->setMethods(array('drawImage'))
+                             ->disableOriginalConstructor()
+                             ->getMock();
+        $zendImage = $this->getMockBuilder('Zend\Pdf\Resource\Image\AbstractImage')
+                          ->disableOriginalClone()
+                          ->getMock();
+
         $image = $this->getMockBuilder('PHPPdf\Core\Engine\ZF\Image')
                       ->setMethods(array('getWrappedImage'))
                       ->disableOriginalConstructor()
@@ -97,7 +107,7 @@ class GraphicsContextTest extends \PHPPdf\PHPUnit\Framework\TestCase
         $y1 = 0;
         $y2 = 100;
 
-        $zendPageMock = $this->getMock('\Zend_Pdf_Page', array('drawLine'), array(), '', false);
+        $zendPageMock = $this->getMock('\Zend\Pdf\Page', array('drawLine'), array(), '', false);
 
         $zendPageMock->expects($this->once())
                      ->method('drawLine')
@@ -114,8 +124,13 @@ class GraphicsContextTest extends \PHPPdf\PHPUnit\Framework\TestCase
      */
     public function setFontWrapper()
     {
-        $zendPageMock = $this->getMock('\Zend_Pdf_Page', array('setFont'), array(), '', false);
-        $zendFontMock = $this->getMock('\Zend_Pdf_Resource_Font');
+        $zendPageMock = $this->getMockBuilder('\Zend\Pdf\Page')
+                             ->setMethods(array('setFont'))
+                             ->disableOriginalConstructor()
+                             ->getMock();
+        $zendFontMock = $this->getMockBuilder('\Zend\Pdf\Resource\Font\AbstractFont')
+                             ->disableOriginalClone()
+                             ->getMock();
 
         $fontMock = $this->getMockBuilder('PHPPdf\Core\Engine\ZF\Font')
                          ->setMethods(array('getCurrentWrappedFont'))
@@ -143,8 +158,8 @@ class GraphicsContextTest extends \PHPPdf\PHPUnit\Framework\TestCase
      */
     public function setColorsWrapper($method)
     {
-        $zendPageMock = $this->getMock('\Zend_Pdf_Page', array($method), array(), '', false);
-        $zendColor = $this->getMock('\Zend_Pdf_Color');
+        $zendPageMock = $this->getMock('\Zend\Pdf\Page', array($method), array(), '', false);
+        $zendColor = $this->getMock('\Zend\Pdf\Color');
         $color = $this->getMockBuilder('PHPPdf\Core\Engine\ZF\Color')
                       ->setMethods(array('getWrappedColor', 'getComponents'))
                       ->disableOriginalConstructor()
@@ -183,7 +198,7 @@ class GraphicsContextTest extends \PHPPdf\PHPUnit\Framework\TestCase
         $y = array(0, 100, 50);
         $drawType = 1;
 
-        $zendPageMock = $this->getMock('\Zend_Pdf_Page', array('drawPolygon'), array(), '', false);
+        $zendPageMock = $this->getMock('\Zend\Pdf\Page', array('drawPolygon'), array(), '', false);
 
         $zendPageMock->expects($this->once())
                      ->method('drawPolygon')
@@ -205,7 +220,7 @@ class GraphicsContextTest extends \PHPPdf\PHPUnit\Framework\TestCase
         $text = 'some text';
         $encoding = 'utf-8';
 
-        $zendPageMock = $this->getMock('\Zend_Pdf_Page', array('drawText'), array(), '', false);
+        $zendPageMock = $this->getMock('\Zend\Pdf\Page', array('drawText'), array(), '', false);
 
         $zendPageMock->expects($this->once())
                      ->method('drawText')
@@ -229,7 +244,7 @@ class GraphicsContextTest extends \PHPPdf\PHPUnit\Framework\TestCase
         $radius = 0.5;
         $fillType = 1;
 
-        $zendPageMock = $this->getMock('\Zend_Pdf_Page', array('drawRoundedRectangle'), array(), '', false);
+        $zendPageMock = $this->getMock('\Zend\Pdf\Page', array('drawRoundedRectangle'), array(), '', false);
 
         $zendPageMock->expects($this->once())
                      ->method('drawRoundedRectangle')
@@ -248,7 +263,7 @@ class GraphicsContextTest extends \PHPPdf\PHPUnit\Framework\TestCase
     {
         $width = 2.1;
 
-        $zendPageMock = $this->getMock('\Zend_Pdf_Page', array('setLineWidth'), array(), '', false);
+        $zendPageMock = $this->getMock('\Zend\Pdf\Page', array('setLineWidth'), array(), '', false);
 
         $zendPageMock->expects($this->once())
                      ->method('setLineWidth')
@@ -269,7 +284,7 @@ class GraphicsContextTest extends \PHPPdf\PHPUnit\Framework\TestCase
      */
     public function setLineDashingPatternWrapper($pattern, $expected)
     {
-        $zendPageMock = $this->getMock('\Zend_Pdf_Page', array('setLineDashingPattern'), array(), '', false);
+        $zendPageMock = $this->getMock('\Zend\Pdf\Page', array('setLineDashingPattern'), array(), '', false);
 
         $zendPageMock->expects($this->once())
                      ->method('setLineDashingPattern')
@@ -298,13 +313,13 @@ class GraphicsContextTest extends \PHPPdf\PHPUnit\Framework\TestCase
      */
     public function cachingGraphicsState()
     {
-        $zendColor1 = $this->getMock('Zend_Pdf_Color', array('instructions', 'getComponents'));
-        $zendColor2 = $this->getMock('Zend_Pdf_Color', array('instructions', 'getComponents'));
+        $zendColor1 = $this->getMock('Zend\Pdf\Color', array('instructions', 'getComponents'));
+        $zendColor2 = $this->getMock('Zend\Pdf\Color', array('instructions', 'getComponents'));
 
         $color1 = $this->createColorMock($zendColor1);
         $color2 = $this->createColorMock($zendColor2, array(9, 10, 11));
 
-        $zendPageMock = $this->getMock('\Zend_Pdf_Page', array('setLineDashingPattern', 'setLineWidth', 'setFillColor', 'setLineColor', 'saveGS', 'restoreGS'), array(), '', false);
+        $zendPageMock = $this->getMock('\Zend\Pdf\Page', array('setLineDashingPattern', 'setLineWidth', 'setFillColor', 'setLineColor', 'saveGS', 'restoreGS'), array(), '', false);
 
         $zendPageMock->expects($this->at(0))
                      ->method('saveGS');
@@ -397,7 +412,7 @@ class GraphicsContextTest extends \PHPPdf\PHPUnit\Framework\TestCase
         $uri = 'http://google.com';
         $coords = array(0, 100, 200, 50);
 
-        $zendPageMock = $this->getMockBuilder('\Zend_Pdf_Page')
+        $zendPageMock = $this->getMockBuilder('\Zend\Pdf\Page')
                              ->setMethods(array('attachAnnotation'))
                              ->disableOriginalConstructor()
                              ->getMock();
@@ -408,7 +423,7 @@ class GraphicsContextTest extends \PHPPdf\PHPUnit\Framework\TestCase
                          $testCase->assertAnnotationLinkWithRectangle($coords, $actual);
                          
                          $action = $actual->getDestination();
-                         $testCase->assertInstanceOf('\Zend_Pdf_Action_URI', $action);
+                         $testCase->assertInstanceOf('\Zend\Pdf\Action\Uri', $action);
                          $testCase->assertEquals($uri, $action->getUri());
                      }, $this));
                              
@@ -420,7 +435,7 @@ class GraphicsContextTest extends \PHPPdf\PHPUnit\Framework\TestCase
     
     public function assertAnnotationLinkWithRectangle(array $coords, $actual)
     {
-        $this->assertInstanceOf('\Zend_Pdf_Annotation_Link', $actual);
+        $this->assertInstanceOf('\Zend\Pdf\Annotation\Link', $actual);
         
         $boundary = $actual->getResource()->Rect;
         
@@ -435,7 +450,7 @@ class GraphicsContextTest extends \PHPPdf\PHPUnit\Framework\TestCase
      */
     public function attachGoToAction()
     {
-        $zendPageMock = $this->getMockBuilder('\Zend_Pdf_Page')
+        $zendPageMock = $this->getMockBuilder('\Zend\Pdf\Page')
                              ->setMethods(array('attachAnnotation'))
                              ->disableOriginalConstructor()
                              ->getMock();
@@ -443,7 +458,7 @@ class GraphicsContextTest extends \PHPPdf\PHPUnit\Framework\TestCase
         $coords = array(0, 100, 200, 50);
         $top = 100;
         
-        $pageStub = new \Zend_Pdf_Page('a4');
+        $pageStub = new \Zend\Pdf\Page('a4');
         $gcStub = new GraphicsContext($this->getEngineMock(), $pageStub);
         
         $zendPageMock->expects($this->once())
@@ -464,7 +479,7 @@ class GraphicsContextTest extends \PHPPdf\PHPUnit\Framework\TestCase
     
     public function assertZendPageDestination($expectedTop, $expectedPage, $actualDestination)
     {
-        $this->assertInstanceOf('\Zend_Pdf_Destination_FitHorizontally', $actualDestination);
+        $this->assertInstanceOf('\Zend\Pdf\Destination\FitHorizontally', $actualDestination);
         
         $this->assertEquals($expectedTop, $actualDestination->getTopEdge());
         $this->assertTrue($actualDestination->getResource()->items[0] === $expectedPage->getPageDictionary());
@@ -477,14 +492,14 @@ class GraphicsContextTest extends \PHPPdf\PHPUnit\Framework\TestCase
      */
     public function wrapZendExceptionsFromActions($method, array $args)
     {
-        $zendPageMock = $this->getMockBuilder('\Zend_Pdf_Page')
+        $zendPageMock = $this->getMockBuilder('\Zend\Pdf\Page')
                              ->setMethods(array('attachAnnotation'))
                              ->disableOriginalConstructor()
                              ->getMock();
                              
         $zendPageMock->expects($this->any())
                      ->method('attachAnnotation')
-                     ->will($this->throwException(new \Zend_Pdf_Exception()));
+                     ->will($this->throwException($this->getMock('\Zend\Pdf\Exception\RuntimeException')));
 
         $gc = new GraphicsContext($this->getEngineMock(), $zendPageMock);
         
@@ -496,7 +511,7 @@ class GraphicsContextTest extends \PHPPdf\PHPUnit\Framework\TestCase
     {
         return array(
             array(
-                'goToAction', array(new GraphicsContext($this->getEngineMock(), new \Zend_Pdf_Page('a4')), 0, 0, 0, 0, 10),
+                'goToAction', array(new GraphicsContext($this->getEngineMock(), new \Zend\Pdf\Page('a4')), 0, 0, 0, 0, 10),
             ),
             array(
                 'uriAction', array(0, 0, 0, 0, 'invalid-uri'),
@@ -509,7 +524,7 @@ class GraphicsContextTest extends \PHPPdf\PHPUnit\Framework\TestCase
      */
     public function attachSingleBookmark()
     {
-        $pageStub = new \Zend_Pdf_Page('a4');
+        $pageStub = new \Zend\Pdf\Page('a4');
         $identifier = 'some id';
                              
         $top = 100;
@@ -536,7 +551,7 @@ class GraphicsContextTest extends \PHPPdf\PHPUnit\Framework\TestCase
         
         $target = $actualOutline->getTarget();
         
-        $this->assertInstanceOf('\Zend_Pdf_Action_GoTo', $target);
+        $this->assertInstanceOf('\Zend\Pdf\Action\GoToAction', $target);
         $destination = $target->getDestination();
         
         $this->assertZendPageDestination($expectedTop, $expectedPage, $destination);
@@ -547,7 +562,7 @@ class GraphicsContextTest extends \PHPPdf\PHPUnit\Framework\TestCase
      */
     public function attachNestedBookmarks()
     {
-        $pageStub = new \Zend_Pdf_Page('a4');
+        $pageStub = new \Zend\Pdf\Page('a4');
         
         $engine = new Engine();
         $gc = new GraphicsContext($engine, $pageStub);
@@ -577,7 +592,7 @@ class GraphicsContextTest extends \PHPPdf\PHPUnit\Framework\TestCase
      */
     public function attachStickyNote()
     {
-        $zendPageMock = $this->getMockBuilder('\Zend_Pdf_Page')
+        $zendPageMock = $this->getMockBuilder('\Zend\Pdf\Page')
                              ->setMethods(array('attachAnnotation'))
                              ->disableOriginalConstructor()
                              ->getMock();
@@ -589,7 +604,7 @@ class GraphicsContextTest extends \PHPPdf\PHPUnit\Framework\TestCase
         $zendPageMock->expects($this->once())
                      ->method('attachAnnotation')
                      ->with($this->validateByCallback(function($actual, \PHPUnit_Framework_TestCase $testCase) use($text, $coords){
-                         $testCase->assertInstanceOf('Zend_Pdf_Annotation_Text', $actual);
+                         $testCase->assertInstanceOf('Zend\Pdf\Annotation\Text', $actual);
                          $rect = $actual->getResource()->Rect;
 
                          foreach($coords as $i => $coord)
@@ -610,7 +625,7 @@ class GraphicsContextTest extends \PHPPdf\PHPUnit\Framework\TestCase
      */
     public function setAlpha($alpha, $expectCall)
     {
-        $zendPageMock = $this->getMockBuilder('\Zend_Pdf_Page')
+        $zendPageMock = $this->getMockBuilder('\Zend\Pdf\Page')
                              ->setMethods(array('setAlpha'))
                              ->disableOriginalConstructor()
                              ->getMock();
@@ -647,7 +662,7 @@ class GraphicsContextTest extends \PHPPdf\PHPUnit\Framework\TestCase
      */
     public function throwExceptionIdParentOfBookmarkDosntExist()
     {
-        $gc = new GraphicsContext(new Engine(), new \Zend_Pdf_Page('a4'));
+        $gc = new GraphicsContext(new Engine(), new \Zend\Pdf\Page('a4'));
         
         $gc->addBookmark('someId', 'some name', 100, 'unexistedParentId');
     }
