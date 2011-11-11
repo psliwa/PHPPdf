@@ -11,6 +11,11 @@ class FontTest extends \PHPPdf\PHPUnit\Framework\TestCase
 
     public function setUp()
     {
+        if(!class_exists('Zend\Pdf\PdfDocument', true))
+        {
+            $this->fail('Zend Framework 2 library is missing. You have to download dependencies, for example by using "vendors.php" file.');
+        }
+        
         $this->fontPath = TEST_RESOURCES_DIR;
 
         $this->font = new Font(array(
