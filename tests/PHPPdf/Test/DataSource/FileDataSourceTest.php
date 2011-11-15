@@ -35,7 +35,7 @@ class FileDataSourceTest extends \PHPPdf\PHPUnit\Framework\TestCase
 
         $this->assertEquals($stream->getId(), $stream->getId());
 
-        $anotherStream = new FileDataSource(TEST_RESOURCES_DIR.'/domek-min.jpg');
+        $anotherStream = new FileDataSource(TEST_RESOURCES_DIR.'/domek.png');
         $this->assertNotEquals($stream->getId(), $anotherStream->getId());
     }
 }

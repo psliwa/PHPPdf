@@ -14,7 +14,6 @@ class BackgroundTest extends \PHPPdf\PHPUnit\Framework\TestCase
     const IMAGE_WIDTH = 30;
     const IMAGE_HEIGHT = 30;
     
-    private $imagePath;
     private $objectMother;
     private $document;
 
@@ -25,7 +24,6 @@ class BackgroundTest extends \PHPPdf\PHPUnit\Framework\TestCase
 
     public function setUp()
     {
-        $this->imagePath = TEST_RESOURCES_DIR.'/domek-min.jpg';
         $this->document = $this->getMockBuilder('PHPPdf\Core\Document')
                                ->setMethods(array('convertUnit'))
                                ->getMock();

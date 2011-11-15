@@ -39,7 +39,7 @@ class EngineTest extends \PHPPdf\PHPUnit\Framework\TestCase
      */
     public function createImage()
     {
-        $image = $this->engine->createImage(TEST_RESOURCES_DIR.'/domek.jpg');
+        $image = $this->engine->createImage(TEST_RESOURCES_DIR.'/domek.png');
         
         $this->assertInstanceOf('PHPPdf\Core\Engine\ZF\Image', $image);
     }
