@@ -1,6 +1,10 @@
 CHANGELOG
 =========
 
+* 1.0.2 (2011-11-13)
+
+  * change default Zend_Pdf dependant repository
+
 * 1.0.1 (2011-11-11)
 
   * update Zend Framework components version to Zend Framework 2
