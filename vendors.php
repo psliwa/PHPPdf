@@ -12,6 +12,7 @@ function fetchGitVendors()
         array('Zend/Pdf', 'git://github.com/psliwa/zend-pdf.git', 'master'),
         array('Zend/Memory', 'git://github.com/knplabs/zend-memory.git', 'master'),
         array('Zend/Cache', 'git://github.com/knplabs/zend-cache.git', 'master'),
+        array('Imagine', 'git://github.com/avalanche123/Imagine.git', 'v0.2.6')
     );
     
     foreach ($deps as $dep) {
