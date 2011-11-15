@@ -20,7 +20,9 @@ class InvalidResourceException extends Exception
     
     public static function invalidImageException($imagePath, \Exception $previous = null)
     {
-        throw new self(sprintf('Image "%s" can\'t be initialized.', $imagePath), 0, $previous);
+        $message = 'Image "%s" can\'t be initialized.'.($previous ? ' '.$previous->getMessage() : '');
+
+        throw new self(sprintf($message, $imagePath), 0, $previous);
     }
     
     public static function unsupportetImageTypeException($imagePath)
