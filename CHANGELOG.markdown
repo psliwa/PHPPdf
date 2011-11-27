@@ -1,6 +1,12 @@
 CHANGELOG
 =========
 
+* 1.0.3 (2011-11-27)
+
+  * support for remote jpeg files
+  * [#3] fixed padding-bottom for element that has children with float attribute set on left or right
+  * new attribute "offset" for page-info and page-number tags
+
 * 1.0.2 (2011-11-13)
 
   * change default Zend_Pdf dependant repository
