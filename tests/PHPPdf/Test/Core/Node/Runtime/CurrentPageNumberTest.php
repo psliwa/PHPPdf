@@ -69,8 +69,9 @@ class CurrentPageNumberTest extends \PHPPdf\PHPUnit\Framework\TestCase
     
     /**
      * @test
+     * @dataProvider offsetProvider
      */
-    public function drawingAfterEvaluating()
+    public function drawingAfterEvaluating($offset)
     {
         $pageMock = $this->getMock('PHPPdf\Core\Node\Page', array('getContext'));
         $contextMock = $this->getMock('PHPPdf\Core\Node\PageContext', array('getPageNumber'), array(5, new DynamicPage()));
@@ -84,7 +85,9 @@ class CurrentPageNumberTest extends \PHPPdf\PHPUnit\Framework\TestCase
                     ->method('getPageNumber')
                     ->will($this->returnValue($pageNumber));
                     
-        $this->node->setAttribute('format', 'abc%s.');
+        $format = 'abc%s.';
+        $this->node->setAttribute('format', $format);
+        $this->node->setAttribute('offset', $offset);
 
         $this->node->setParent($pageMock);
         $linePart = $this->getMockBuilder('PHPPdf\Core\Node\Paragraph\LinePart')
@@ -92,7 +95,7 @@ class CurrentPageNumberTest extends \PHPPdf\PHPUnit\Framework\TestCase
                          ->disableOriginalConstructor()
                          ->getMock();
                          
-        $expectedText = 'abc'.$pageNumber.'.';
+        $expectedText = sprintf($format, $pageNumber + $offset);
         $linePart->expects($this->at(0))
                  ->method('setWords')
                  ->with($expectedText);
@@ -115,6 +118,14 @@ class CurrentPageNumberTest extends \PHPPdf\PHPUnit\Framework\TestCase
         $this->node->collectOrderedDrawingTasks(new Document(), $tasks);
         $this->assertEquals(1, count($tasks));
         $this->assertEquals($expectedText, $this->node->getText());
+    }
+    
+    public function offsetProvider()
+    {
+        return array(
+            array(0),
+            array(5),
+        );
     }
 
     /**

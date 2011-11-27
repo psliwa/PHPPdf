@@ -35,8 +35,8 @@ class PageInfo extends PageText
         $page = $this->getPage();
         $context = $page->getContext();
 
-        $numberOfPage = $context->getNumberOfPages();
-        $pageNumber = $context->getPageNumber();
+        $numberOfPage = $context->getNumberOfPages() + $this->getAttribute('offset');
+        $pageNumber = $context->getPageNumber() + $this->getAttribute('offset');
 
         return sprintf($this->getAttribute('format'), $pageNumber, $numberOfPage);
     }
