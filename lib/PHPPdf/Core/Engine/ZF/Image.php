@@ -13,7 +13,7 @@ use PHPPdf\Bridge\Zend\Pdf\Resource\Image\Tiff;
 use PHPPdf\Exception\InvalidResourceException;
 use PHPPdf\Bridge\Zend\Pdf\Resource\Image\Png;
 use PHPPdf\Core\Engine\Image as BaseImage;
-use Zend\Pdf\Resource\Image\Jpeg;
+use PHPPdf\Bridge\Zend\Pdf\Resource\Image\Jpeg;
 
 /**
  * @author Piotr Śliwa <peter.pl7@gmail.com>
