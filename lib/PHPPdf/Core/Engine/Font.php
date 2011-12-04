@@ -21,6 +21,5 @@ interface Font
     public function hasStyle($style);
     public function setStyle($style);
     
-    //TODO: first parameter should be a string
-    public function getCharsWidth(array $chars, $fontSize);
+    public function getWidthOfText($text, $fontSize);
 }

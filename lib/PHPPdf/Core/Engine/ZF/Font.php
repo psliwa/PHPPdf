@@ -9,88 +9,14 @@
 namespace PHPPdf\Core\Engine\ZF;
 
 use PHPPdf\Exception\InvalidResourceException;
-use PHPPdf\Core\Engine\Font as BaseFont;
+use PHPPdf\Core\Engine\AbstractFont;
 use Zend\Pdf\Font as ZendFont;
 
 /**
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
-class Font implements BaseFont
+class Font extends AbstractFont
 {
-    private $fontResources = array();
-    private $currentStyle = null;
-
-    public function __construct(array $fontResources)
-    {
-        $this->throwsExceptionIfFontsAreInvalid($fontResources);
-
-        $this->fontResources = $fontResources;
-        $this->setStyle(self::STYLE_NORMAL);
-    }
-
-    private function throwsExceptionIfFontsAreInvalid(array $fonts)
-    {
-        $types = array(
-            self::STYLE_NORMAL,
-            self::STYLE_BOLD,
-            self::STYLE_ITALIC,
-            self::STYLE_BOLD_ITALIC,
-        );
-
-        if(count($fonts) === 0)
-        {
-            throw new \InvalidArgumentException('Passed empty map of fonts.');
-        }
-        elseif(count(\array_diff(array_keys($fonts), $types)) > 0)
-        {
-            throw new \InvalidArgumentException('Invalid font types in map of fonts.');
-        }
-        elseif(!isset($fonts[self::STYLE_NORMAL]))
-        {
-            throw new \InvalidArgumentException('Path for normal font must by passed.');
-        }
-    }
-
-    public function setStyle($style)
-    {
-        $style = $this->convertStyleType($style);
-
-        $this->currentStyle = $this->fontStyle($style);
-    }
-
-    private function convertStyleType($style)
-    {
-        if(is_string($style))
-        {
-            $style = str_replace('-', '_', strtoupper($style));
-            $const = sprintf('%s::STYLE_%s', __CLASS__, $style);
-
-            if(defined($const))
-            {
-                $style = constant($const);
-            }
-            else
-            {
-                $style = self::STYLE_NORMAL;
-            }
-        }
-
-        return $style;
-    }
-
-    public function hasStyle($style)
-    {
-        $style = $this->convertStyleType($style);
-        return isset($this->fontResources[$style]);
-    }
-
-    private function fontStyle($style)
-    {
-        $font = !$this->hasStyle($style) ? self::STYLE_NORMAL : $style;
-
-        return $font;
-    }
-
     /**
      * @internal Public method within PHPPdf\Core\Engine\ZF namespace
      * 
@@ -144,12 +70,78 @@ class Font implements BaseFont
         return constant($const);
     }
 
-    public function getCharsWidth(array $chars, $fontSize)
+    public function getWidthOfText($text, $fontSize)
     {
+        $chars = $this->convertTextToChars($text);
+        
         $glyphs = $this->getCurrentWrappedFont()->glyphNumbersForCharacters($chars);
         $widths = $this->getCurrentWrappedFont()->widthsForGlyphs($glyphs);
         $textWidth = (array_sum($widths) / $this->getCurrentWrappedFont()->getUnitsPerEm()) * $fontSize;
 
         return $textWidth;
+    }
+    
+    private function convertTextToChars($text)
+    {
+        $length = strlen($text);
+        $chars = array();
+        $bytes = 1;
+        for($i=0; $i<$length; $i+=$bytes)
+        {
+            list($char, $bytes) = $this->ordUtf8($text, $i, $bytes);
+            if($char !== false)
+            {
+                $chars[] = $char;
+            }
+        }
+        
+        return $chars;
+    }
+    
+    /**
+     * code from http://php.net/manual/en/function.ord.php#78032
+     */
+    private function ordUtf8($text, $index = 0, $bytes = null)
+    {
+        $len = strlen($text);
+        $bytes = 0;
+
+        $char = false;
+
+        if ($index < $len)
+        {
+            $h = ord($text{$index});
+
+            if($h <= 0x7F)
+            {
+                $bytes = 1;
+                $char = $h;
+            }
+            elseif ($h < 0xC2)
+            {
+                $char = false;
+            }
+            elseif ($h <= 0xDF && $index < $len - 1)
+            {
+                $bytes = 2;
+                $char = ($h & 0x1F) <<  6 | (ord($text{$index + 1}) & 0x3F);
+            }
+            elseif($h <= 0xEF && $index < $len - 2)
+            {
+                $bytes = 3;
+                $char = ($h & 0x0F) << 12 | (ord($text{$index + 1}) & 0x3F) << 6
+                                         | (ord($text{$index + 2}) & 0x3F);
+            }
+            elseif($h <= 0xF4 && $index < $len - 3)
+            {
+                $bytes = 4;
+                $char = ($h & 0x0F) << 18 | (ord($text{$index + 1}) & 0x3F) << 12
+                                         | (ord($text{$index + 2}) & 0x3F) << 6
+                                         | (ord($text{$index + 3}) & 0x3F);
+            }
+        }
+
+
+        return array($char, $bytes);
     }
 }

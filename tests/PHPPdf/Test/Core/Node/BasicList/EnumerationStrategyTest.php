@@ -37,7 +37,6 @@ abstract class EnumerationStrategyTest extends \PHPPdf\PHPUnit\Framework\TestCas
         $encoding = 'utf-8';
         
         $expectedText = $this->getExpectedText($elementIndex, $elementPattern);
-        $charCodes = $this->convertTextToCharsCodes($expectedText);
         
         $child = $this->getMock('PHPPdf\Core\Node\Container', array('getFirstPoint', 'getMarginLeft'));
         $child->expects($this->once())
@@ -60,14 +59,14 @@ abstract class EnumerationStrategyTest extends \PHPPdf\PHPUnit\Framework\TestCas
             $positionTranslation -= $expectedWidth;
             
             $fontTypeMock->expects($this->once())
-                         ->method('getCharsWidth')
-                         ->with($charCodes, $fontSize)
+                         ->method('getWidthOfText')
+                         ->with($expectedText, $fontSize)
                          ->will($this->returnValue($expectedWidth));                       
         }
         else
         {
             $fontTypeMock->expects($this->atLeastOnce())
-                         ->method('getCharsWidth');
+                         ->method('getWidthOfText');
         }
 
         $document = $this->getMockBuilder('PHPPdf\Core\Document')
@@ -137,18 +136,6 @@ abstract class EnumerationStrategyTest extends \PHPPdf\PHPUnit\Framework\TestCas
     abstract protected function getElementPattern($index);
     
     abstract protected function setElementPattern($list, $pattern);
-
-    protected function convertTextToCharsCodes($text)
-    {
-        $chars = $this->invokeMethod($this->strategy, 'splitTextIntoChars', array($text));
-        $charCodes = array();
-        foreach($chars as $char)
-        {
-            $charCodes[] = ord($char);
-        }
-        
-        return $charCodes;
-    }
     
     protected function getListMockedMethod()
     {

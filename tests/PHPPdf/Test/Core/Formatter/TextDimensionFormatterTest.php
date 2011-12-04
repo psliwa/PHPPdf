@@ -44,18 +44,12 @@ class TextDimensionFormatterTest extends \PHPPdf\PHPUnit\Framework\TestCase
         $wordsSizes = array();
         
         foreach($expectedWords as $i => $word)
-        {
-            $chars = $word ? str_split($word) : array();
-            
-            array_walk($chars, function(&$value){
-                $value = ord($value);
-            });
-            
+        {            
             $size = rand(1, 20);
             $wordsSizes[] = $size;
             $fontMock->expects($this->at($i))
-                     ->method('getCharsWidth')
-                     ->with($chars, $fontSize)
+                     ->method('getWidthOfText')
+                     ->with($word, $fontSize)
                      ->will($this->returnValue($size));
         }
         

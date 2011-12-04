@@ -130,4 +130,22 @@ class FontTest extends \PHPPdf\PHPUnit\Framework\TestCase
         
         $wrappedFont = $font->getCurrentWrappedFont();
     }
+    
+    /**
+     * @test
+     */
+    public function getWidthOfText()
+    {
+        $font = new Font(array(
+            Font::STYLE_NORMAL => $this->fontPath.'/font-judson/normal.ttf',
+        ));
+        
+        $text = 'some text';
+        
+        $width12 = $font->getWidthOfText($text, 12);
+        $width14 = $font->getWidthOfText($text, 14);
+        
+        $this->assertTrue($width12 > 0);
+        $this->assertTrue($width14 > $width12);
+    }
 }

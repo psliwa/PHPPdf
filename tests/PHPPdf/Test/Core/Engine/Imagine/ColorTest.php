@@ -13,14 +13,12 @@ class ColorTest extends TestCase
      */
     public function getComponents($r, $g, $b)
     {
-        $colorMock = $this->getMockBuilder('Imagine\Image\Color')
-                          ->setMethods(array('getRed', 'getGreen', 'getBlue'))
-                          ->disableOriginalConstructor()
-                          ->getMock();
+        $components = array($r, $g, $b);
+        $imagineColor = new \Imagine\Image\Color($components);
                           
-        $color = new Color($colorMock);
+        $color = new Color($imagineColor);
         
-        $this->assertEquals(array($r, $g, $b), $color->getComponents());
+        $this->assertEquals($components, $color->getComponents());
     }
     
     public function colorProvider()
