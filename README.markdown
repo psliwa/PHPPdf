@@ -19,6 +19,7 @@ Table of contents
 1. [Sticky notes](#notes)
 1. [Repetitive headers and footers](#headers)
 1. [Watermarks](#watermarks)
+1. [Page numbering](#page-numbering)
 1. [Using pdf document as template](#templates)
 1. [Separate page on columns](#columns)
 1. [Breaking pages and columns](#page-break)
@@ -475,14 +476,6 @@ Repetitive headers and footers
 
 Header and footer has to have directly setted height. This height is pooled with page top and bottom margins. Workspace is page size reduced by page margins and placeholders (footer and header) height.
 
-In header and footer is special tag "page-info". It displays current page information in configurable format. This element works only with dynamic-page, not single pages. This tag has some attributes, the most important is "format".
-
-    <!-- ... -->
-        <header>
-            <page-info format="page %s from %s"></page-info>
-        </header>
-    <!-- ... -->
-
 <a name="watermarks"></a>
 Watermarks
 ----------------
@@ -501,6 +494,32 @@ Example:
                     </div>
                 </watermark>
             </placeholders>
+        </dynamic-page>
+    </pdf>
+
+<a name="page-numbering"></a>
+Page numbering
+--------------
+
+There are two tags that can be used to show page information in footer, header or watermark: page-info and page-number. This element works only with dynamic-page, not single pages. Page-info shows current page number and total page number, page-number shows only current page number.
+
+Attributes of this tags:
+
+* format - format of output string that will be used as argument of sprintf function. Default values: "%s." for page-number, "%s / %s" for page-info.
+* offset - value that will be added to current page number and total page number. Usefull if you want to count pages from diffrent value than zero. Default: 0.
+
+Example:
+
+    <pdf>
+        <dynamic-page>
+            <placeholders>
+                <header>
+                    <div height="20px">
+                        <page-info offset="1" format="page %s for %s" />
+                    </div>
+                </header>
+            </placeholders>
+            Some text
         </dynamic-page>
     </pdf>
 

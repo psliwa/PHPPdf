@@ -20,7 +20,7 @@ class ImageTest extends \PHPPdf\PHPUnit\Framework\TestCase
      */
     public function createImageObject()
     {
-        $image = new Image(TEST_RESOURCES_DIR.'/domek.jpg');
+        $image = new Image(TEST_RESOURCES_DIR.'/domek.png');
         
         $zendImage = $image->getWrappedImage();
         
@@ -56,7 +56,7 @@ class ImageTest extends \PHPPdf\PHPUnit\Framework\TestCase
                   ->with($sampleImageSize, UnitConverter::UNIT_PIXEL)
                   ->will($this->returnValue($size));
                           
-        $image = new Image(TEST_RESOURCES_DIR.'/domek.jpg', $converter);
+        $image = new Image(TEST_RESOURCES_DIR.'/domek.png', $converter);
         
         $this->assertEquals($size, $image->getOriginalWidth());        
         $this->assertEquals($size, $image->getOriginalHeight());        

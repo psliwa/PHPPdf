@@ -36,6 +36,7 @@ abstract class PageText extends Text implements Runtime
         static::addAttribute('text-align', self::ALIGN_LEFT);
         static::addAttribute('format', '%s.');
         static::addAttribute('dummy-number', 'no.');
+        static::addAttribute('offset', 0);
     }
     
     public function initialize()

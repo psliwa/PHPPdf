@@ -19,6 +19,7 @@ Spis treści
 1. [Notatki](#notes)
 1. [Powtarzalne nagłówki i stopki](#headers)
 1. [Znaki wodne](#watermarks)
+1. [Numerowanie stron](#page-numbering)
 1. [Wykorzystanie istniejącego dokumentu jako szablon](#templates)
 1. [Podział strony na kolumny](#columns)
 1. [Łamanie stron i kolumn](#page-break)
@@ -472,14 +473,6 @@ Aby dodać powtarzalny nagłówek i/bądź stopkę należy wykorzystać tag "pla
 
 Nagłówek i stopka muszą mieć bezpośrednio określoną wysokość. Wysokość ta sumuje się z marginesami górnym i dolnym, czyli rozmiar roboczy strony jest to rozmiar pomniejszony o marginesy górny i dolny oraz o wysokość stopki i nagłówka.
 
-W nagłówku i stopce można korzystać z specjalnego tagu "<page-info></page-info>" który wyświetla informacje o obecnym numerze strony oraz łącznej liczbie stron w obrębie obecnego elementu "dynamic-page" (nie łączną liczbę stron w całym dokumencie!). Element ten ma swoje atrybuty, z których najważniejszym jest format.
-
-    <!-- ciach -->
-        <header>
-            <page-info format="strona %s na %s"></page-info>
-        </header>
-    <!-- ciach -->
-
 <a name="watermarks"></a>
 Znaki wodne
 -----------
@@ -498,6 +491,32 @@ Przykład:
                     </div>
                 </watermark>
             </placeholders>
+        </dynamic-page>
+    </pdf>
+
+<a name="page-numbering"></a>
+Numerowanie stron
+--------------
+
+Istnieją dwa tagi, które można wykorzystać do pokazania informacji o stronie w obrębie obecnego elementu "dynamic-page" (nie łączną liczbę stron w całym dokumencie!) w stopce, nagłówku lub znaku wodnym: page-info oraz page-number. Page-info pokazuje obecny numer strony oraz liczbę wszystkich stron, page-number pokazuje tylko obecny number strony.
+
+Atrybuty tych tagów:
+
+* format - format wynikowego ciągu znaków który będzie wykorzystany jako argument funkcji sprintf. Domyślne wartości: "%s." dla page-number, "%s / %s" dla page-info.
+* offset - wartość, która będzie dodatan do obecnego numeru strony oraz liczby wszystkich stron. Użyteczne jeśli chcesz liczyć strony od innej wartości niż zero. Domyślnie: 0.
+
+Przykład:
+
+    <pdf>
+        <dynamic-page>
+            <placeholders>
+                <header>
+                    <div height="20px">
+                        <page-info offset="1" format="strona %s na %s" />
+                    </div>
+                </header>
+            </placeholders>
+            Jakiś tekst
         </dynamic-page>
     </pdf>
 

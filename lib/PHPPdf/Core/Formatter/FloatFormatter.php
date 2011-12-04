@@ -104,7 +104,7 @@ class FloatFormatter extends BaseFormatter
 
         if($positionCorrection && $parentBottomYCoord && !$node->getAttribute('static-size'))
         {
-            $parentTranslate = $node->getDiagonalPoint()->getY() - $parentBottomYCoord;
+            $parentTranslate = $node->getDiagonalPoint()->getY() - $parentBottomYCoord + $node->getPaddingBottom();
             $newHeight = $node->getHeight() + $parentTranslate;
             $oldHeight = isset($attributesSnapshot['height']) ? $attributesSnapshot['height'] : 0;
 

@@ -15,7 +15,7 @@ class ValidateByCallback extends \PHPUnit_Framework_Constraint
         $this->testCase = $testCase;
     }
     
-	public function evaluate($other)
+	public function evaluate($other, $description = '', $returnResult = FALSE)
 	{
 	    if($this->valid !== null)
 	    {
