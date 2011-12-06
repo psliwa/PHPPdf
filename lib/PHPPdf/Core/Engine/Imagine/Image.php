@@ -9,6 +9,7 @@
 
 namespace PHPPdf\Core\Engine\Imagine;
 
+use Imagine\Image\ImageInterface;
 use PHPPdf\Exception\InvalidResourceException;
 use Imagine\Exception\RuntimeException;
 use Imagine\Image\ImagineInterface;
@@ -27,7 +28,14 @@ class Image implements BaseImage
     
     public function __construct($imagePath, ImagineInterface $imagine)
     {
-        $this->imagePath = $imagePath;
+        if($imagePath instanceof ImageInterface)
+        {
+            $this->image = $imagePath;
+        }
+        else
+        {
+            $this->imagePath = $imagePath;
+        }
         $this->imagine = $imagine;
     }
     
