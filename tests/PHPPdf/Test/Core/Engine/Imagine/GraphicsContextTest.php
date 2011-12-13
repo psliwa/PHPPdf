@@ -272,4 +272,53 @@ class GraphicsContextTest extends TestCase
             ),
         );
     }
+    
+    /**
+     * @test
+     */
+    public function drawText()
+    {
+        $text = 'some text';
+        $fontSize = 12;
+        $color = '#000000';
+        
+        $x = 0;
+        $y = 100;
+        
+        $width = $height = 200;
+        
+        $font = $this->getMockBuilder('PHPPdf\Core\Engine\Imagine\Font')
+                     ->setMethods(array('getWrappedFont'))
+                     ->disableOriginalConstructor()
+                     ->getMock();
+                     
+        $imagineFont = $this->getMockBuilder('Imagine\Image\AbstractFont')
+                            ->disableOriginalConstructor()
+                            ->getMock();
+        
+        $font->expects($this->once())
+             ->method('getWrappedFont')
+             ->with($color, $fontSize)
+             ->will($this->returnValue($imagineFont));
+             
+        $this->image->expects($this->once())
+                    ->method('draw')
+                    ->will($this->returnValue($this->drawer));
+                    
+        $box = new Box($width, $height);
+        $this->image->expects($this->any())
+                    ->method('getSize')
+                    ->will($this->returnValue($box));
+                    
+        $expectedPosition = new Point($x, $height - $y - $fontSize);
+                    
+        $this->drawer->expects($this->once())
+                     ->method('text')
+                     ->with($text, $imagineFont, $expectedPosition);
+                     
+        $this->gc->setFont($font, $fontSize);
+        $this->gc->setLineColor($color);
+        $this->gc->drawText($text, $x, $y, 'utf-8');
+        $this->gc->commit();
+    }
 }

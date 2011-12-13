@@ -157,7 +157,15 @@ class GraphicsContext extends AbstractGraphicsContext
     
     protected function doDrawText($text, $x, $y, $encoding, $wordSpacing = 0, $fillType = self::SHAPE_DRAW_FILL)
     {
+        $font = $this->state['font'];
+        $color = $this->state['lineColor'];
+        $size = $this->state['fontSize'];
         
+        $imagineFont = $font->getWrappedFont($color, $size);
+        
+        $position = new Point($x, $this->getHeight() - $y - $size);
+        
+        $this->image->draw()->text($text, $imagineFont, $position);
     }
     
     protected function doDrawRoundedRectangle($x1, $y1, $x2, $y2, $radius, $fillType = self::SHAPE_DRAW_FILL_AND_STROKE)
@@ -229,6 +237,14 @@ class GraphicsContext extends AbstractGraphicsContext
     
     public function copy()
     {
+        $copy = clone $this;
+        $copy->image = $this->image->copy();
         
+        return $copy;
+    }
+    
+    public function render()
+    {
+        return $this->image->get('png');
     }
 }

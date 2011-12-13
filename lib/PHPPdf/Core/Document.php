@@ -110,6 +110,12 @@ class Document implements UnitConverter, Engine
         $this->engine = new ZfEngine(null, $this->unitConverter);
     }
     
+    //TODO: this is only test and temporary method
+    public function setEngine($engine)
+    {
+        $this->engine = $engine;
+    }
+    
     /**
      * @return PHPPdf\Font\Registry
      */

@@ -39,9 +39,7 @@ class Engine implements BaseEngine
     
     public function createGraphicsContext($graphicsContextSize)
     {
-        $gc = new GraphicsContext($this, $graphicsContextSize);
-        
-        return $gc;
+        return new GraphicsContext($this, $graphicsContextSize);
     }
     
     public function attachGraphicsContext(BaseGraphicsContext $gc)

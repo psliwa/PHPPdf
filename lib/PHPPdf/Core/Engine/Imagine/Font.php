@@ -32,11 +32,19 @@ class Font extends AbstractFont
     public function getWidthOfText($text, $fontSize)
     {
         $color = $this->createColor('#000000');
+
         $font = $this->imagine->font($this->fontResources[$this->currentStyle], $fontSize, $color);
         
-        $box = $font->box($text);
-        
-        return $box->getWidth();
+        try
+        {
+            $box = $font->box($text);
+            
+            return $box->getWidth();
+        }
+        catch(\InvalidArgumentException $e)
+        {
+            return 0;
+        }
     }
     
     private function createColor($data)
@@ -50,7 +58,6 @@ class Font extends AbstractFont
     public function getWrappedFont($color, $fontSize)
     {
         $color = $this->createColor($color);
-        
         return $this->imagine->font($this->fontResources[$this->currentStyle], $fontSize, $color);
     }
 }
