@@ -81,13 +81,24 @@ class GraphicsContext extends AbstractGraphicsContext
         $this->state = $state;
     }
     
-    //TODO: draw image in not original sizes
     protected function doDrawImage(BaseImage $image, $x1, $y1, $x2, $y2)
     {
-        $imagineImage = $image->getWrappedImage();
-        $drawedImageHeight = $imagineImage->getSize()->getHeight();
+        $height = $y2 - $y1;
+        $width = $x2 - $x1;
         
-        $y = $this->getHeight() - ($y1 + $drawedImageHeight);
+        $imagineImage = $image->getWrappedImage();
+        
+        $box = $imagineImage->getSize();
+        $drawedImageHeight = $box->getHeight();
+        $drawedImageWidth = $box->getWidth();
+        
+        if($height != $drawedImageHeight || $width != $drawedImageWidth)
+        {
+            $newBox = new Box($width, $height);
+            $imagineImage->resize($newBox);
+        }
+        
+        $y = $this->getHeight() - ($y1 + $height);
         $this->image->paste($imagineImage, new Point($x1, $y));
     }
     
@@ -114,7 +125,34 @@ class GraphicsContext extends AbstractGraphicsContext
     
     protected function doDrawPolygon(array $x, array $y, $type)
     {
+        $color = new ImagineColor($this->state['fillColor']);
         
+        $fill = $type > 0;
+        
+        $coords = array();
+        
+        foreach($x as $i => $coord)
+        {
+            $coords[] = new Point($coord, $this->getHeight() - $y[$i]);
+        }
+        
+        $polygons = array();
+        
+        if(in_array($type, array(self::SHAPE_DRAW_FILL, self::SHAPE_DRAW_FILL_AND_STROKE)))
+        {
+            $polygons[] = array(new ImagineColor($this->state['fillColor']), true);
+        }
+        
+        if(in_array($type, array(self::SHAPE_DRAW_FILL_AND_STROKE, self::SHAPE_DRAW_STROKE)))
+        {
+            $polygons[] = array(new ImagineColor($this->state['lineColor']), false);
+        }
+
+        foreach($polygons as $polygon)
+        {
+            list($color, $fill) = $polygon;
+            $this->image->draw()->polygon($coords, $color, $fill);
+        }
     }
     
     protected function doDrawText($text, $x, $y, $encoding, $wordSpacing = 0, $fillType = self::SHAPE_DRAW_FILL)

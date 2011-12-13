@@ -156,29 +156,120 @@ class GraphicsContextTest extends TestCase
     
     /**
      * @test
+     * @dataProvider drawImageProvider
      */
-    public function drawImageInOriginalSize()
+    public function drawImage($deltaWidth, $deltaHeight)
     {
-        
         $width = $height = 500;
         $imageWidth = $imageHeight = 100;
         
         $x1 = 0;
-        $y1 = 400;
-        $x2 = $x1 + $imageWidth;
-        $y2 = $y1 + $imageHeight;
+        $y1 = 300;
+        $x2 = $x1 + $imageWidth + $deltaWidth;
+        $y2 = $y1 + $imageHeight + $deltaHeight;
         
         $imagineImage = $this->getMock('Imagine\Image\ImageInterface');
         $this->setExpectedImageSize($imageWidth, $imageHeight, $imagineImage);
         $this->setExpectedImageSize($width, $height);
         
+        if($deltaWidth || $deltaHeight)
+        {
+            $resizeBox = new Box($imageWidth + $deltaWidth, $imageHeight + $deltaHeight);
+            $imagineImage->expects($this->once())
+                         ->method('resize')
+                         ->with($resizeBox)
+                         ->will($this->returnValue($imagineImage));
+        }
+        
         $image = new Image($imagineImage, $this->imagine);
         
         $this->image->expects($this->once())
                     ->method('paste')
-                    ->with($imagineImage, new Point($x1, $height - ($y1 + $imageHeight)));
+                    ->with($imagineImage, new Point($x1, $height - ($y1 + $imageHeight + $deltaHeight)));
         
         $this->gc->drawImage($image, $x1, $y1, $x2, $y2);
         $this->gc->commit();
+    }
+    
+    public function drawImageProvider()
+    {
+        return array(
+            array(0, 0),
+            array(20, 30),
+        );
+    }
+    
+    /**
+     * @test
+     * @dataProvider drawPolygonProvider
+     */
+    public function drawPolygon(array $x, array $y, $fillType)
+    {
+        $width = $height = 500;
+        $expectedFillColor = '#dddddd';
+        $expectedLineColor = '#cccccc';
+        
+        $this->image->expects($this->atLeastOnce())
+                    ->method('draw')
+                    ->will($this->returnValue($this->drawer));
+                    
+        $this->setExpectedImageSize($width, $height);
+        
+        $expectedCoords = array();
+        
+        foreach($y as $i => $coord)
+        {
+            $expectedCoords[] = new Point($x[$i], $height - $coord);
+        }
+        
+        $expectedFill = $fillType == GraphicsContext::SHAPE_DRAW_FILL;
+        $expectedPolygons = array();
+        
+        if($fillType > 0)
+        {
+            $expectedPolygons[] = array($expectedFillColor, true);
+        }
+        
+        if($fillType == 0 || $fillType == 2)
+        {
+            $expectedPolygons[] = array($expectedLineColor, false);
+        }
+        
+        foreach($expectedPolygons as $at => $polygon)
+        {
+            list($expectedColor, $expectedFill) = $polygon;
+            $this->drawer->expects($this->at($at))
+                         ->method('polygon')
+                         ->with($expectedCoords, new Color($expectedColor), $expectedFill)
+                         ->will($this->returnValue($this->drawer));
+        }
+        
+                     
+        $this->gc->setFillColor($expectedFillColor);
+        $this->gc->setLineColor($expectedLineColor);
+        $this->gc->drawPolygon($x, $y, $fillType);
+        
+        $this->gc->commit();
+    }
+    
+    public function drawPolygonProvider()
+    {
+        return array(
+            array(
+                array(0, 50, 50, 0),
+                array(300, 300, 100, 100),
+                GraphicsContext::SHAPE_DRAW_FILL,
+            ),
+            array(
+                array(0, 50, 50, 0),
+                array(300, 300, 100, 100),
+                GraphicsContext::SHAPE_DRAW_STROKE,
+            ),
+            array(
+                array(0, 50, 50, 0),
+                array(300, 300, 100, 100),
+                GraphicsContext::SHAPE_DRAW_FILL_AND_STROKE,
+            ),
+        );
     }
 }
