@@ -8,6 +8,8 @@
 
 namespace PHPPdf\Core\Engine\ZF;
 
+use PHPPdf\Bridge\Zend\Pdf\Page;
+
 use PHPPdf\Exception\Exception;
 use PHPPdf\Core\Engine\AbstractGraphicsContext;
 use PHPPdf\Core\Engine\GraphicsContext as BaseGraphicsContext;
@@ -267,7 +269,7 @@ class GraphicsContext extends AbstractGraphicsContext
     {
         if(!$this->page)
         {
-            $this->page = new ZendPage($this->pageSize);
+            $this->page = new Page($this->pageSize);
             $this->pageSize = null;
         }
         return $this->page;

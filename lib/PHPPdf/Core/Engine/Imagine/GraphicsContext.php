@@ -98,8 +98,13 @@ class GraphicsContext extends AbstractGraphicsContext
             $imagineImage->resize($newBox);
         }
         
-        $y = $this->getHeight() - ($y1 + $height);
+        $y = $this->convertYCoord($y1 + $height);
         $this->image->paste($imagineImage, new Point($x1, $y));
+    }
+    
+    private function convertYCoord($y)
+    {
+        return $this->getHeight() - $y;
     }
     
     protected function doDrawLine($x1, $y1, $x2, $y2)
@@ -108,9 +113,7 @@ class GraphicsContext extends AbstractGraphicsContext
         //TODO: line width
         $color = new ImagineColor($this->state['lineColor']);
         
-        $height = $this->getHeight();
-        
-        $this->image->draw()->line(new Point($x1, $height - $y1), new Point($x2, $height - $y2), $color);
+        $this->image->draw()->line(new Point($x1, $this->convertYCoord($y1)), new Point($x2, $this->convertYCoord($y2)), $color);
     }
     
     protected function doSetFillColor($colorData)
@@ -133,17 +136,17 @@ class GraphicsContext extends AbstractGraphicsContext
         
         foreach($x as $i => $coord)
         {
-            $coords[] = new Point($coord, $this->getHeight() - $y[$i]);
+            $coords[] = new Point($coord, $this->convertYCoord($y[$i]));
         }
         
         $polygons = array();
         
-        if(in_array($type, array(self::SHAPE_DRAW_FILL, self::SHAPE_DRAW_FILL_AND_STROKE)))
+        if($this->isFillShape($type))
         {
             $polygons[] = array(new ImagineColor($this->state['fillColor']), true);
         }
         
-        if(in_array($type, array(self::SHAPE_DRAW_FILL_AND_STROKE, self::SHAPE_DRAW_STROKE)))
+        if($this->isStrokeShape($type))
         {
             $polygons[] = array(new ImagineColor($this->state['lineColor']), false);
         }
@@ -155,6 +158,16 @@ class GraphicsContext extends AbstractGraphicsContext
         }
     }
     
+    private function isFillShape($type)
+    {
+        return in_array($type, array(self::SHAPE_DRAW_FILL, self::SHAPE_DRAW_FILL_AND_STROKE));
+    }
+    
+    private function isStrokeShape($type)
+    {
+        return in_array($type, array(self::SHAPE_DRAW_FILL_AND_STROKE, self::SHAPE_DRAW_STROKE));
+    }
+    
     protected function doDrawText($text, $x, $y, $encoding, $wordSpacing = 0, $fillType = self::SHAPE_DRAW_FILL)
     {
         $font = $this->state['font'];
@@ -163,14 +176,58 @@ class GraphicsContext extends AbstractGraphicsContext
         
         $imagineFont = $font->getWrappedFont($color, $size);
         
-        $position = new Point($x, $this->getHeight() - $y - $size);
+        $position = new Point($x, $this->convertYCoord($y) - $size);
         
         $this->image->draw()->text($text, $imagineFont, $position);
     }
     
     protected function doDrawRoundedRectangle($x1, $y1, $x2, $y2, $radius, $fillType = self::SHAPE_DRAW_FILL_AND_STROKE)
     {
+        $leftStartPoint = new Point($x1, $this->convertYCoord($y1 + $radius));
+        $leftEndPoint = new Point($x1, $this->convertYCoord($y2 - $radius));
+        $rightStartPoint = new Point($x2, $this->convertYCoord($y1 + $radius));
+        $rightEndPoint = new Point($x2, $this->convertYCoord($y2 - $radius));
+        $bottomStartPoint = new Point($x1 + $radius, $this->convertYCoord($y1));
+        $bottomEndPoint = new Point($x2 - $radius, $this->convertYCoord($y1));
+        $topStartPoint = new Point($x1 + $radius, $this->convertYCoord($y2));
+        $topEndPoint = new Point($x2 - $radius, $this->convertYCoord($y2));
         
+        $leftTopCircleCenter = new Point($x1 + $radius, $this->convertYCoord($y2 - $radius));
+        $rightTopCircleCenter = new Point($x2 - $radius, $this->convertYCoord($y2 - $radius));
+        $rightBottomCircleCenter = new Point($x2 - $radius, $this->convertYCoord($y1 + $radius));
+        $leftBottomCircleCenter = new Point($x1 + $radius, $this->convertYCoord($y1 + $radius));
+        
+        $circleBox = new Box($radius*2, $radius*2);
+        
+        if($this->isStrokeShape($fillType))
+        {
+            $color = new ImagineColor($this->state['lineColor']);
+            
+            
+            $this->image->draw()->line($leftStartPoint, $leftEndPoint, $color)
+                                ->line($rightStartPoint, $rightEndPoint, $color)
+                                ->line($topStartPoint, $topEndPoint, $color)
+                                ->line($bottomStartPoint, $bottomEndPoint, $color)
+                                ->arc($leftTopCircleCenter, $circleBox, -180, -90, $color)
+                                ->arc($rightTopCircleCenter, $circleBox, -90, 0, $color)
+                                ->arc($rightBottomCircleCenter, $circleBox, 0, 90, $color)
+                                ->arc($leftBottomCircleCenter, $circleBox, 90, 180, $color)
+            ;
+            
+        }
+        
+        if($this->isFillShape($fillType))
+        {
+            $color = new ImagineColor($this->state['fillColor']);
+            
+            $this->image->draw()->polygon(array($leftStartPoint, $rightStartPoint, $rightEndPoint, $leftEndPoint), $color, true)
+                                ->polygon(array($topStartPoint, $topEndPoint, $bottomEndPoint, $bottomStartPoint), $color, true)
+                                ->ellipse($leftTopCircleCenter, $circleBox, $color, true)
+                                ->ellipse($rightTopCircleCenter, $circleBox, $color, true)
+                                ->ellipse($rightBottomCircleCenter, $circleBox, $color, true)
+                                ->ellipse($leftBottomCircleCenter, $circleBox, $color, true)
+            ;
+        }
     }
     
     protected function doSetLineWidth($width)

@@ -8,7 +8,6 @@
 
 namespace PHPPdf\Core\Engine\Imagine;
 
-use Imagine\Image\Color;
 use Imagine\Image\ImagineInterface;
 use PHPPdf\Core\Engine\Engine as BaseEngine;
 use PHPPdf\Core\Engine\GraphicsContext as BaseGraphicsContext;

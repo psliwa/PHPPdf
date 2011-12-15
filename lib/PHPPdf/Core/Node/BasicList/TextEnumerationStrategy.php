@@ -71,7 +71,7 @@ abstract class TextEnumerationStrategy extends AbstractEnumerationStrategy
         {
             $gc->setFont($font, $size);
         }
-        
+
         $gc->drawText($this->enumerationText, $xCoord, $yCoord, $encoding);
         
         $gc->restoreGS();
