@@ -36,9 +36,9 @@ class AbstractFontTest extends TestCase
     public function creationWithInvalidFontTypes()
     {
         new StubFont(array(
-            Font::STYLE_BOLD => $this->fontPath.'/font-judson/bold.ttf',
-            Font::STYLE_NORMAL => $this->fontPath.'/font-judson/normal.ttf',
-            8 => $this->fontPath.'/font-judson/normal.ttf',
+            Font::STYLE_BOLD => TEST_RESOURCES_DIR.'/font-judson/bold.ttf',
+            Font::STYLE_NORMAL => TEST_RESOURCES_DIR.'/font-judson/normal.ttf',
+            8 => TEST_RESOURCES_DIR.'/font-judson/normal.ttf',
         ));
     }
 
@@ -49,7 +49,7 @@ class AbstractFontTest extends TestCase
     public function creationWithoutNormalFont()
     {
         new StubFont(array(
-            Font::STYLE_BOLD => $this->fontPath.'/font-judson/normal.ttf',
+            Font::STYLE_BOLD => TEST_RESOURCES_DIR.'/font-judson/normal.ttf',
         ));
     }
 }

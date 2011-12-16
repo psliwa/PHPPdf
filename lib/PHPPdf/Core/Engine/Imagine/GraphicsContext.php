@@ -33,6 +33,7 @@ class GraphicsContext extends AbstractGraphicsContext
         'alpha' => 1,
         'font' => null,
         'fontSize' => null,
+        'clips' => array(),
     );
     
     private $stateStack = array();
@@ -41,6 +42,8 @@ class GraphicsContext extends AbstractGraphicsContext
     
     private $image;
     private $imagine;
+    
+    private $clips = array();
     
     public function __construct(ImagineInterface $imagine, $imageOrSize)
     {
@@ -59,14 +62,49 @@ class GraphicsContext extends AbstractGraphicsContext
         }
     }
     
+    /**
+     * @return ImageInterface
+     */
+    private function getCurrentClip()
+    {
+        $stack = $this->stateStack;
+        
+        array_unshift($stack, $this->state);
+
+        $clip = null;
+        
+        foreach($stack as $state)
+        {            
+            if($clip = end($state['clips']))
+            {
+                break;
+            }
+        }
+        
+        if(!$clip)
+        {
+            $clip = array($this->image, new Point(0, 0));
+        }
+        
+        return $clip;
+    }
+    
     protected function doClipRectangle($x1, $y1, $x2, $y2)
     {
+        $width = $x2 - $x1;
+        $height = $y1 - $y2;
         
+        $image = $this->imagine->create(new Box($width, $height));
+        
+        $point = new Point($x1, $this->convertYCoord($y1));
+        
+        $this->state['clips'][] = array($image, $point);
     }
     
     protected function doSaveGS()
     {
         array_unshift($this->stateStack, $this->state);
+        $this->state['clips'] = array();
     }
     
     protected function doRestoreGS()
@@ -76,6 +114,18 @@ class GraphicsContext extends AbstractGraphicsContext
         if($state === null)
         {
             $state = self::$originalState;
+        }
+        
+        $clips = $this->state['clips'];
+        $this->state['clips'] = array();
+        
+        list($image, $point) = $this->getCurrentClip();
+        
+        foreach($clips as $clip)
+        {
+            list($clipImage, $clipPoint) = $clip;
+            
+            $image->paste($clipImage, $this->translatePoint($point, $clipPoint->getX(), $clipPoint->getY()));
         }
         
         $this->state = $state;
@@ -99,7 +149,15 @@ class GraphicsContext extends AbstractGraphicsContext
         }
         
         $y = $this->convertYCoord($y1 + $height);
-        $this->image->paste($imagineImage, new Point($x1, $y));
+        
+        list($image, $point) = $this->getCurrentClip();
+
+        $image->paste($imagineImage, $this->translatePoint($point, $x1, $y));
+    }
+    
+    private function translatePoint(Point $point, $x, $y)
+    {
+        return new Point($x - $point->getX(), $y - $point->getY());
     }
     
     private function convertYCoord($y)
@@ -113,7 +171,9 @@ class GraphicsContext extends AbstractGraphicsContext
         //TODO: line width
         $color = new ImagineColor($this->state['lineColor']);
         
-        $this->image->draw()->line(new Point($x1, $this->convertYCoord($y1)), new Point($x2, $this->convertYCoord($y2)), $color);
+        list($image, $point) = $this->getCurrentClip();
+        
+        $image->draw()->line($this->translatePoint($point, $x1, $this->convertYCoord($y1)), $this->translatePoint($point, $x2, $this->convertYCoord($y2)), $color);
     }
     
     protected function doSetFillColor($colorData)
@@ -128,6 +188,8 @@ class GraphicsContext extends AbstractGraphicsContext
     
     protected function doDrawPolygon(array $x, array $y, $type)
     {
+        list($image, $point) = $this->getCurrentClip();
+        
         $color = new ImagineColor($this->state['fillColor']);
         
         $fill = $type > 0;
@@ -136,7 +198,7 @@ class GraphicsContext extends AbstractGraphicsContext
         
         foreach($x as $i => $coord)
         {
-            $coords[] = new Point($coord, $this->convertYCoord($y[$i]));
+            $coords[] = $this->translatePoint($point, $coord, $this->convertYCoord($y[$i]));
         }
         
         $polygons = array();
@@ -150,11 +212,11 @@ class GraphicsContext extends AbstractGraphicsContext
         {
             $polygons[] = array(new ImagineColor($this->state['lineColor']), false);
         }
-
+        
         foreach($polygons as $polygon)
         {
             list($color, $fill) = $polygon;
-            $this->image->draw()->polygon($coords, $color, $fill);
+            $image->draw()->polygon($coords, $color, $fill);
         }
     }
     
@@ -176,26 +238,30 @@ class GraphicsContext extends AbstractGraphicsContext
         
         $imagineFont = $font->getWrappedFont($color, $size);
         
-        $position = new Point($x, $this->convertYCoord($y) - $size);
+        list($image, $point) = $this->getCurrentClip();
         
-        $this->image->draw()->text($text, $imagineFont, $position);
+        $position = $this->translatePoint($point, $x, $this->convertYCoord($y) - $size);
+        
+        $image->draw()->text($text, $imagineFont, $position);
     }
     
     protected function doDrawRoundedRectangle($x1, $y1, $x2, $y2, $radius, $fillType = self::SHAPE_DRAW_FILL_AND_STROKE)
     {
-        $leftStartPoint = new Point($x1, $this->convertYCoord($y1 + $radius));
-        $leftEndPoint = new Point($x1, $this->convertYCoord($y2 - $radius));
-        $rightStartPoint = new Point($x2, $this->convertYCoord($y1 + $radius));
-        $rightEndPoint = new Point($x2, $this->convertYCoord($y2 - $radius));
-        $bottomStartPoint = new Point($x1 + $radius, $this->convertYCoord($y1));
-        $bottomEndPoint = new Point($x2 - $radius, $this->convertYCoord($y1));
-        $topStartPoint = new Point($x1 + $radius, $this->convertYCoord($y2));
-        $topEndPoint = new Point($x2 - $radius, $this->convertYCoord($y2));
+        list($image, $point) = $this->getCurrentClip();
         
-        $leftTopCircleCenter = new Point($x1 + $radius, $this->convertYCoord($y2 - $radius));
-        $rightTopCircleCenter = new Point($x2 - $radius, $this->convertYCoord($y2 - $radius));
-        $rightBottomCircleCenter = new Point($x2 - $radius, $this->convertYCoord($y1 + $radius));
-        $leftBottomCircleCenter = new Point($x1 + $radius, $this->convertYCoord($y1 + $radius));
+        $leftStartPoint = $this->translatePoint($point, $x1, $this->convertYCoord($y1 + $radius));
+        $leftEndPoint = $this->translatePoint($point, $x1, $this->convertYCoord($y2 - $radius));
+        $rightStartPoint = $this->translatePoint($point, $x2, $this->convertYCoord($y1 + $radius));
+        $rightEndPoint = $this->translatePoint($point, $x2, $this->convertYCoord($y2 - $radius));
+        $bottomStartPoint = $this->translatePoint($point, $x1 + $radius, $this->convertYCoord($y1));
+        $bottomEndPoint = $this->translatePoint($point, $x2 - $radius, $this->convertYCoord($y1));
+        $topStartPoint = $this->translatePoint($point, $x1 + $radius, $this->convertYCoord($y2));
+        $topEndPoint = $this->translatePoint($point, $x2 - $radius, $this->convertYCoord($y2));
+        
+        $leftTopCircleCenter = $this->translatePoint($point, $x1 + $radius, $this->convertYCoord($y2 - $radius));
+        $rightTopCircleCenter = $this->translatePoint($point, $x2 - $radius, $this->convertYCoord($y2 - $radius));
+        $rightBottomCircleCenter = $this->translatePoint($point, $x2 - $radius, $this->convertYCoord($y1 + $radius));
+        $leftBottomCircleCenter = $this->translatePoint($point, $x1 + $radius, $this->convertYCoord($y1 + $radius));
         
         $circleBox = new Box($radius*2, $radius*2);
         
@@ -204,14 +270,14 @@ class GraphicsContext extends AbstractGraphicsContext
             $color = new ImagineColor($this->state['lineColor']);
             
             
-            $this->image->draw()->line($leftStartPoint, $leftEndPoint, $color)
-                                ->line($rightStartPoint, $rightEndPoint, $color)
-                                ->line($topStartPoint, $topEndPoint, $color)
-                                ->line($bottomStartPoint, $bottomEndPoint, $color)
-                                ->arc($leftTopCircleCenter, $circleBox, -180, -90, $color)
-                                ->arc($rightTopCircleCenter, $circleBox, -90, 0, $color)
-                                ->arc($rightBottomCircleCenter, $circleBox, 0, 90, $color)
-                                ->arc($leftBottomCircleCenter, $circleBox, 90, 180, $color)
+            $image->draw()->line($leftStartPoint, $leftEndPoint, $color)
+                  ->line($rightStartPoint, $rightEndPoint, $color)
+                  ->line($topStartPoint, $topEndPoint, $color)
+                  ->line($bottomStartPoint, $bottomEndPoint, $color)
+                  ->arc($leftTopCircleCenter, $circleBox, -180, -90, $color)
+                  ->arc($rightTopCircleCenter, $circleBox, -90, 0, $color)
+                  ->arc($rightBottomCircleCenter, $circleBox, 0, 90, $color)
+                  ->arc($leftBottomCircleCenter, $circleBox, 90, 180, $color)
             ;
             
         }
@@ -220,12 +286,12 @@ class GraphicsContext extends AbstractGraphicsContext
         {
             $color = new ImagineColor($this->state['fillColor']);
             
-            $this->image->draw()->polygon(array($leftStartPoint, $rightStartPoint, $rightEndPoint, $leftEndPoint), $color, true)
-                                ->polygon(array($topStartPoint, $topEndPoint, $bottomEndPoint, $bottomStartPoint), $color, true)
-                                ->ellipse($leftTopCircleCenter, $circleBox, $color, true)
-                                ->ellipse($rightTopCircleCenter, $circleBox, $color, true)
-                                ->ellipse($rightBottomCircleCenter, $circleBox, $color, true)
-                                ->ellipse($leftBottomCircleCenter, $circleBox, $color, true)
+            $image->draw()->polygon(array($leftStartPoint, $rightStartPoint, $rightEndPoint, $leftEndPoint), $color, true)
+                  ->polygon(array($topStartPoint, $topEndPoint, $bottomEndPoint, $bottomStartPoint), $color, true)
+                  ->ellipse($leftTopCircleCenter, $circleBox, $color, true)
+                  ->ellipse($rightTopCircleCenter, $circleBox, $color, true)
+                  ->ellipse($rightBottomCircleCenter, $circleBox, $color, true)
+                  ->ellipse($leftBottomCircleCenter, $circleBox, $color, true)
             ;
         }
     }

@@ -98,6 +98,7 @@ class GraphicsContextTest extends TestCase
         $expected['lineDashingPattern'] = $expected['lineDashingPattern'][0];
         $expected['fontSize'] = $expected['font'][1];
         $expected['font'] = $expected['font'][0];
+        $expected['clips'] = array();
         
         foreach($attributes as $name => $value)
         {
@@ -149,7 +150,7 @@ class GraphicsContextTest extends TestCase
     {
         $image = $image ? : $this->image;
         $box = new Box($width, $height);        
-        $image->expects($this->atLeastOnce())
+        $image->expects($this->any())
                     ->method('getSize')
                     ->will($this->returnValue($box));
     }
@@ -320,5 +321,42 @@ class GraphicsContextTest extends TestCase
         $this->gc->setLineColor($color);
         $this->gc->drawText($text, $x, $y, 'utf-8');
         $this->gc->commit();
+    }
+    
+    /**
+     * @test
+     */
+    public function clipRectangle()
+    {
+        $width = 100;
+        $height = 200;
+        
+        $x1 = 25;
+        $y1 = 175;
+        $x2 = 75;
+        $y2 = 25;
+        
+        $rectangleWidth = $x2 - $x1;
+        $rectangleHeight = $y1 - $y2;
+        
+        $this->setExpectedImageSize($width, $height);
+                    
+        $rectangleImage = $this->getMock('Imagine\Image\ImageInterface');
+        $this->setExpectedImageSize($rectangleWidth, $rectangleHeight, $rectangleImage);
+        $this->imagine->expects($this->once())
+                      ->method('create')
+                      ->with(new Box($rectangleWidth, $rectangleHeight))
+                      ->will($this->returnValue($rectangleImage));
+                      
+       $this->gc->saveGS();
+       $this->gc->clipRectangle($x1, $y1, $x2, $y2);
+       $this->gc->commit();
+       
+       $this->image->expects($this->once())
+                   ->method('paste')
+                   ->with($rectangleImage, new Point($x1, $height - $y1));
+       
+       $this->gc->restoreGS();
+       $this->gc->commit();
     }
 }
