@@ -29,7 +29,7 @@ class TextTest extends \PHPPdf\PHPUnit\Framework\TestCase
             'font-size' => 32,
         ));
 
-        $this->document = new Document();
+        $this->document = $this->createDocumentStub();
     }
 
     /**
@@ -184,7 +184,7 @@ class TextTest extends \PHPPdf\PHPUnit\Framework\TestCase
      */
     public function getDrawingTasksFromLineParts()
     {       
-        $documentStub = new Document();
+        $documentStub = $this->createDocumentStub();
         
         $tasks = new DrawingTaskHeap();
         

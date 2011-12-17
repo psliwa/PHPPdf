@@ -21,10 +21,12 @@ class Engine implements BaseEngine
 {
     private $imagine;
     private $graphicsContexts = array();
+    private $outputFormat;
     
-    public function __construct(ImagineInterface $imagine)
+    public function __construct(ImagineInterface $imagine, $outputFormat)
     {
         $this->imagine = $imagine;
+        $this->outputFormat = (string) $outputFormat;
     }
     
     public function createGraphicsContext($graphicsContextSize)
@@ -64,7 +66,7 @@ class Engine implements BaseEngine
         foreach($this->graphicsContexts as $gc)
         {
             $gc->commit();
-            $contents[] = $gc->render();
+            $contents[] = $gc->render($this->outputFormat);
         }
 
         return $contents;
@@ -72,11 +74,16 @@ class Engine implements BaseEngine
     
     public function loadEngine($file)
     {
-        
+        throw new \BadMethodCallException(sprintf('Method "%s" is not implemented.', __METHOD__));
     }
     
     public function setMetadataValue($name, $value)
     {
-        
+        //not supported
+    }
+    
+    public function reset()
+    {
+        $this->graphicsContexts = array();
     }
 }

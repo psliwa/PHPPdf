@@ -117,4 +117,36 @@ class FacadeBuilderTest extends \PHPPdf\PHPUnit\Framework\TestCase
             ),
         );
     }
+    
+    /**
+     * @test
+     * @dataProvider createParameterizeDocumentUsingEngineFromEngineFactoryProvider
+     */
+    public function createParameterizeDocumentUsingEngineFromEngineFactory($type, $options)
+    {
+        $engineFactory = $this->getMock('PHPPdf\Core\Engine\EngineFactory');
+        
+        $builder = FacadeBuilder::create(null, $engineFactory);
+        
+        $builder->setEngineType($type)
+                ->setEngineOptions($options);
+
+        $engine = $this->getMock('PHPPdf\Core\Engine\Engine');
+                
+        $engineFactory->expects($this->once())
+                      ->method('createEngine')
+                      ->with($type, $options)
+                      ->will($this->returnValue($engine));
+                      
+        $facade = $builder->build();
+        
+        $this->assertInstanceOf(get_class($engine), $facade->getDocument()->getEngine());
+    }
+    
+    public function createParameterizeDocumentUsingEngineFromEngineFactoryProvider()
+    {
+        return array(
+            array('type', array('some-options')),
+        );
+    }
 }

@@ -13,7 +13,7 @@ class DocumentTest extends \PHPPdf\PHPUnit\Framework\TestCase
 
     public function setUp()
     {
-        $this->document = new Document();
+        $this->document = $this->createDocumentStub();
     }
 
     /**

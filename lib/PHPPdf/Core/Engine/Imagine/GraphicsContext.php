@@ -43,8 +43,6 @@ class GraphicsContext extends AbstractGraphicsContext
     private $image;
     private $imagine;
     
-    private $clips = array();
-    
     public function __construct(ImagineInterface $imagine, $imageOrSize)
     {
         $this->state = self::$originalState;
@@ -185,10 +183,9 @@ class GraphicsContext extends AbstractGraphicsContext
         return $this->getHeight() - $y;
     }
     
+    //TODO: width of line
     protected function doDrawLine($x1, $y1, $x2, $y2)
     {
-        //TODO: throw exception if lineColor is not set
-        //TODO: line width
         $color = $this->createColor($this->state['lineColor']);
         
         list($image, $point) = $this->getCurrentClip();
@@ -213,6 +210,7 @@ class GraphicsContext extends AbstractGraphicsContext
         $this->state['lineColor'] = $colorData;
     }
     
+    //TODO: width of line
     protected function doDrawPolygon(array $x, array $y, $type)
     {
         list($image, $point) = $this->getCurrentClip();
@@ -257,6 +255,7 @@ class GraphicsContext extends AbstractGraphicsContext
         return in_array($type, array(self::SHAPE_DRAW_FILL_AND_STROKE, self::SHAPE_DRAW_STROKE));
     }
     
+    //TODO: word spacing support
     protected function doDrawText($text, $x, $y, $encoding, $wordSpacing = 0, $fillType = self::SHAPE_DRAW_FILL)
     {
         $font = $this->state['font'];
@@ -429,8 +428,8 @@ class GraphicsContext extends AbstractGraphicsContext
         return $copy;
     }
     
-    public function render()
+    public function render($format)
     {
-        return $this->image->get('png');
+        return $this->image->get($format);
     }
 }

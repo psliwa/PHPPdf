@@ -71,6 +71,7 @@ abstract class EnumerationStrategyTest extends \PHPPdf\PHPUnit\Framework\TestCas
 
         $document = $this->getMockBuilder('PHPPdf\Core\Document')
                          ->setMethods(array('getFont'))
+                         ->disableOriginalConstructor()
                          ->getMock();
         
         $listMock->expects($this->atLeastOnce())

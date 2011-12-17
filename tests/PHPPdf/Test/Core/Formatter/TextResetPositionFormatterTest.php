@@ -36,7 +36,7 @@ class TextResetPositionFormatterTest extends \PHPPdf\PHPUnit\Framework\TestCase
                   ->method('getBoundary')
                   ->will($this->returnValue($boundary));
 
-        $this->formatter->format($nodeMock, new Document());
+        $this->formatter->format($nodeMock, $this->createDocumentStub());
 
         $this->assertFalse($boundary->isClosed());
         $this->assertEquals($firstPoint, $boundary->getFirstPoint());

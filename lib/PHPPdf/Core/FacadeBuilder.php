@@ -8,6 +8,9 @@
 
 namespace PHPPdf\Core;
 
+use PHPPdf\Core\Engine\EngineFactoryImpl;
+use PHPPdf\Core\Engine\EngineFactory;
+use PHPPdf\Core\Engine\ZF\Engine;
 use PHPPdf\Core\Parser\XmlDocumentParser;
 use PHPPdf\Core\Parser\MarkdownDocumentParser;
 use PHPPdf\Core\Parser\StylesheetParser;
@@ -36,13 +39,23 @@ class FacadeBuilder
     private $markdownStylesheetFilepath = null;
     private $markdownDocumentTemplateFilepath = null;
 
-    private function __construct(Loader $configurationLoader = null)
+    private $engineFactory;
+    private $engineType = EngineFactoryImpl::TYPE_PDF;
+    private $engineOptions = array();
+
+    private function __construct(Loader $configurationLoader = null, EngineFactory $engineFactory = null)
     {
         if($configurationLoader === null)
         {
             $configurationLoader = new LoaderImpl();
         }
 
+        if($engineFactory === null)
+        {
+            $engineFactory = new EngineFactoryImpl();
+        }
+        
+        $this->engineFactory = $engineFactory;
         $this->setConfigurationLoader($configurationLoader);
     }
 
@@ -51,9 +64,9 @@ class FacadeBuilder
      * 
      * @return FacadeBuilder
      */
-    public static function create(Loader $configuration = null)
+    public static function create(Loader $configuration = null, EngineFactory $engineFactory = null)
     {
-        return new self($configuration);
+        return new self($configuration, $engineFactory);
     }
 
     public function setConfigurationLoader(Loader $configurationLoader)
@@ -81,7 +94,11 @@ class FacadeBuilder
         $stylesheetParser = new StylesheetParser();
         $stylesheetParser->setComplexAttributeFactory($this->configurationLoader->createComplexAttributeFactory());
         
-        $facade = new Facade($this->configurationLoader, $documentParser, $stylesheetParser);
+        $engine = $this->engineFactory->createEngine($this->engineType, $this->engineOptions);
+
+        $document = new Document($engine, new UnitConverterImpl());
+        
+        $facade = new Facade($this->configurationLoader, $document, $documentParser, $stylesheetParser);
         
         if($documentParser instanceof FacadeAware)
         {
@@ -196,6 +213,26 @@ class FacadeBuilder
     public function setMarkdownDocumentTemplateFilepath($filepath)
     {
         $this->markdownDocumentTemplateFilepath = $filepath;
+        
+        return $this;
+    }
+    
+    /**
+     * @return FacadeBuilder
+     */
+    public function setEngineType($type)
+    {
+        $this->engineType = $type;
+        
+        return $this;
+    }
+    
+    /**
+     * @return FacadeBuilder
+     */
+    public function setEngineOptions(array $options)
+    {
+        $this->engineOptions = $options;
         
         return $this;
     }

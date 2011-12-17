@@ -139,7 +139,7 @@ class DynamicPageTest extends \PHPPdf\PHPUnit\Framework\TestCase
              
         $dynamicPage = new DynamicPage($page);
         
-        $document = new Document();
+        $document = $this->createDocumentStub();
         
         $tasks = new DrawingTaskHeap();
         $dynamicPage->collectUnorderedDrawingTasks($document, $tasks);

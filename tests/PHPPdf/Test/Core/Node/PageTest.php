@@ -2,6 +2,8 @@
 
 namespace PHPPdf\Test\Core\Node;
 
+use PHPPdf\Core\Engine\ZF\Engine;
+
 use PHPPdf\Core\DrawingTaskHeap;
 
 use PHPPdf\Core\Node\Node;
@@ -21,7 +23,7 @@ class PageTest extends \PHPPdf\PHPUnit\Framework\TestCase
     public function setUp()
     {
         $this->page = new Page();
-        $this->document = new Document();
+        $this->document = new Document(new Engine());
     }
 
     /**
@@ -330,7 +332,7 @@ class PageTest extends \PHPPdf\PHPUnit\Framework\TestCase
         $this->page->setHeader($footer);
         $this->page->setWatermark($watermark);
 
-        $this->page->format(new \PHPPdf\Core\Document());
+        $this->page->format($this->createDocumentStub());
     }
 
     private function getPlaceholderMockWithNeverFormatMethodInvocation()

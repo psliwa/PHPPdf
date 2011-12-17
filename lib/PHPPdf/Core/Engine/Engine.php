@@ -77,4 +77,6 @@ interface Engine
      * @param mixed $value Value of metadata
      */
     public function setMetadataValue($name, $value);
+    
+    public function reset();
 }

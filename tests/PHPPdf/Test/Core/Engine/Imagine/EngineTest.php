@@ -16,7 +16,7 @@ class EngineTest extends TestCase
     public function setUp()
     {
         $this->imagine = $this->getMock('Imagine\Image\ImagineInterface');
-        $this->engine = new Engine($this->imagine);
+        $this->engine = new Engine($this->imagine, 'png');
     }
     
     /**

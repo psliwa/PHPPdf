@@ -33,7 +33,7 @@ class ListFormatterTest extends \PHPPdf\PHPUnit\Framework\TestCase
         $list->expects($this->once())
              ->method('assignEnumerationStrategyFromFactory');
              
-        $this->formatter->format($list, new Document());
+        $this->formatter->format($list, $this->createDocumentStub());
     }
     
     /**
@@ -43,7 +43,7 @@ class ListFormatterTest extends \PHPPdf\PHPUnit\Framework\TestCase
     {
         $widthOfEnumerationChar = 7;
         
-        $documentStub = new Document();
+        $documentStub = new Document($this->getMock('PHPPdf\Core\Engine\Engine'));
         
         $list = $this->getMock('PHPPdf\Core\Node\BasicList', array('getChildren', 'getEnumerationStrategy', 'getAttribute', 'assignEnumerationStrategyFromFactory'));
         

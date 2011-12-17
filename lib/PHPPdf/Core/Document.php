@@ -49,12 +49,13 @@ class Document implements UnitConverter, Engine
     
     private $unitConverter = null;
 
-    public function __construct(UnitConverter $converter = null)
+    public function __construct(Engine $engine, UnitConverter $converter = null)
     {
         if($converter)
         {
             $this->setUnitConverter($converter);
         }
+        $this->engine = $engine;
         $this->initialize();
     }
 
@@ -107,13 +108,18 @@ class Document implements UnitConverter, Engine
     public function initialize()
     {
         $this->processed = false;
-        $this->engine = new ZfEngine(null, $this->unitConverter);
+        $this->engine->reset();
     }
     
     //TODO: this is only test and temporary method
     public function setEngine($engine)
     {
         $this->engine = $engine;
+    }
+    
+    public function getEngine()
+    {
+        return $this->engine;
     }
     
     /**
@@ -325,5 +331,10 @@ class Document implements UnitConverter, Engine
     public function render()
     {
         return $this->engine->render();
+    }
+    
+    public function reset()
+    {
+        $this->initialize();
     }
 }

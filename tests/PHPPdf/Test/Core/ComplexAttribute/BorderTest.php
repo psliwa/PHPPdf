@@ -24,7 +24,7 @@ class BorderTest extends \PHPPdf\PHPUnit\Framework\TestCase
     public function setUp()
     {
         $this->border = new Border();
-        $this->document = new Document();
+        $this->document = new Document($this->getMock('PHPPdf\Core\Engine\Engine'));
     }
 
     /**
@@ -105,6 +105,7 @@ class BorderTest extends \PHPPdf\PHPUnit\Framework\TestCase
     {
         $document = $this->getMockBuilder('PHPPdf\Core\Document')
                          ->setMethods(array('convertUnit'))
+                         ->disableOriginalConstructor()
                          ->getMock();
         
         $actualSize = '12px';
@@ -255,6 +256,7 @@ class BorderTest extends \PHPPdf\PHPUnit\Framework\TestCase
         
         $document = $this->getMockBuilder('PHPPdf\Core\Document')
                          ->setMethods(array('convertUnit'))
+                         ->disableOriginalConstructor()
                          ->getMock();
                          
         //size conversion
@@ -301,6 +303,7 @@ class BorderTest extends \PHPPdf\PHPUnit\Framework\TestCase
         
         $document = $this->getMockBuilder('PHPPdf\Core\Document')
                          ->setMethods(array('convertUnit'))
+                         ->disableOriginalConstructor()
                          ->getMock();
                          
         //size conversion

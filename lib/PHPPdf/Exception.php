@@ -6,13 +6,13 @@
  * License information is in LICENSE file
  */
 
-namespace PHPPdf\Exception;
-
-use PHPPdf\Exception as ExceptionInterface;
+namespace PHPPdf;
 
 /**
+ * Exception interface - all exceptions of PHPPdf library implements that interface
+ *
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
-class Exception extends \Exception implements ExceptionInterface
+interface Exception
 {
 }

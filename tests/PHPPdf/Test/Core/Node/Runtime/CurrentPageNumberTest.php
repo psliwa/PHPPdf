@@ -32,7 +32,7 @@ class CurrentPageNumberTest extends \PHPPdf\PHPUnit\Framework\TestCase
         $this->node->setParent($mock);
 
         $tasks = new DrawingTaskHeap();
-        $this->node->collectOrderedDrawingTasks(new Document(), $tasks);
+        $this->node->collectOrderedDrawingTasks($this->createDocumentStub(), $tasks);
         $this->assertEquals(0, count($tasks));
     }
 
@@ -101,7 +101,7 @@ class CurrentPageNumberTest extends \PHPPdf\PHPUnit\Framework\TestCase
                  ->with($expectedText);
 
                  
-        $document = new Document();
+        $document = $this->createDocumentStub();
         $drawingTaskStub = new DrawingTask(function(){});
         $tasks = new DrawingTaskHeap();
 
@@ -115,7 +115,7 @@ class CurrentPageNumberTest extends \PHPPdf\PHPUnit\Framework\TestCase
         $this->node->addLinePart($linePart);
 
         $this->node->evaluate();
-        $this->node->collectOrderedDrawingTasks(new Document(), $tasks);
+        $this->node->collectOrderedDrawingTasks($this->createDocumentStub(), $tasks);
         $this->assertEquals(1, count($tasks));
         $this->assertEquals($expectedText, $this->node->getText());
     }

@@ -26,7 +26,7 @@ class ParagraphFormatterTest extends \PHPPdf\PHPUnit\Framework\TestCase
     public function setUp()
     {
         $this->formatter = new ParagraphFormatter();
-        $this->document = new Document();
+        $this->document = $this->createDocumentStub();
     }
     
     /**

@@ -26,6 +26,7 @@ class BackgroundTest extends \PHPPdf\PHPUnit\Framework\TestCase
     {
         $this->document = $this->getMockBuilder('PHPPdf\Core\Document')
                                ->setMethods(array('convertUnit'))
+                               ->disableOriginalConstructor()
                                ->getMock();
     }
 
@@ -90,6 +91,7 @@ class BackgroundTest extends \PHPPdf\PHPUnit\Framework\TestCase
     {
         $document = $this->getMockBuilder('PHPPdf\Core\Document')
                          ->setMethods(array('createImage', 'convertUnit', 'convertPercentageValue'))
+                         ->disableOriginalConstructor()
                          ->getMock();
         $document->expects($this->once())
                  ->method('createImage')

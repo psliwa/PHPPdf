@@ -16,7 +16,8 @@ class ConvertAttributesFormatterTest extends \PHPPdf\PHPUnit\Framework\TestCase
     public function setUp()
     {
         $this->formatter = new ConvertAttributesFormatter();
-        $this->document = new Document();
+
+        $this->document = $this->createDocumentStub();
     }
 
     /**

@@ -36,7 +36,7 @@ class ColumnableContainerTest extends \PHPPdf\PHPUnit\Framework\TestCase
              
         $this->column->setParent($page);
 
-        $this->column->format(new Document());
+        $this->column->format($this->createDocumentStub());
 
         $expectedWidth = 245;
         $this->assertEquals($expectedWidth, $this->column->getWidth());

@@ -22,7 +22,7 @@ class VerticalAlignFormatterTest extends \PHPPdf\PHPUnit\Framework\TestCase
     public function setUp()
     {
         $this->formatter = new VerticalAlignFormatter();
-        $this->document = new Document();
+        $this->document = $this->createDocumentStub();
     }
     
     /**

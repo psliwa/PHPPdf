@@ -38,7 +38,7 @@ class StandardPositionFormatterTest extends \PHPPdf\PHPUnit\Framework\TestCase
 
         foreach(array($node, $child) as $g)
         {
-            $this->formatter->format($g, new Document());
+            $this->formatter->format($g, $this->createDocumentStub());
         }
 
         $nodeBoundary = $node->getBoundary();

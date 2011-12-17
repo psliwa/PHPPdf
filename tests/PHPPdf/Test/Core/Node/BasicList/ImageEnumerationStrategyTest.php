@@ -92,7 +92,7 @@ class ImageEnumerationStrategyTest extends \PHPPdf\PHPUnit\Framework\TestCase
     
     private function getDocumentStub()
     {
-        return new Document();
+        return $this->createDocumentStub();
     }
     
     private function createImageMock($width, $height)

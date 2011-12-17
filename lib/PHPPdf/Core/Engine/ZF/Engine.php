@@ -192,4 +192,11 @@ class Engine implements BaseEngine
                 break;
         }
     }
+    
+    public function reset()
+    {
+        $this->graphicsContexts = array();
+        $this->outlines = array();
+        $this->zendPdf = null;
+    }
 }

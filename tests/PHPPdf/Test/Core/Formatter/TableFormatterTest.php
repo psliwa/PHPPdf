@@ -98,7 +98,7 @@ class TableFormatterTest extends \PHPPdf\PHPUnit\Framework\TestCase
               ->method('getMarginsRightOfColumns')
               ->will($this->returnValue($columnsMarginsRight));
 
-        $this->formatter->format($table, new Document());
+        $this->formatter->format($table, $this->createDocumentStub());
     }
 
     public function cellsWidthProvider()

@@ -27,7 +27,7 @@ class RowDimensionFormatterTest extends \PHPPdf\PHPUnit\Framework\TestCase
 
         $row = $this->getRowMockWithHeightAsserts($boundary, $oldHeight, $height);
 
-        $this->formatter->format($row, new Document());
+        $this->formatter->format($row, $this->createDocumentStub());
     }
 
     public function heightProvider()
@@ -116,7 +116,7 @@ class RowDimensionFormatterTest extends \PHPPdf\PHPUnit\Framework\TestCase
             ->method('getChildren')
             ->will($this->returnValue($cells));
 
-        $this->formatter->format($row, new Document());
+        $this->formatter->format($row, $this->createDocumentStub());
     }
 
     public function marginsDataProvider()

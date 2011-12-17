@@ -24,7 +24,7 @@ class TextPositionFormatterTest extends \PHPPdf\PHPUnit\Framework\TestCase
     {
         $mock = $this->getTextMock(array(50, 100), array(0, 700));
 
-        $this->formatter->format($mock, new Document());
+        $this->formatter->format($mock, $this->createDocumentStub());
     }
 
     private function getTextMock($lineSizes, $parentFirstPoint, $firstXCoord = null)

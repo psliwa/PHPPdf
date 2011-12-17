@@ -2,6 +2,8 @@
 
 namespace PHPPdf\PHPUnit\Framework;
 
+use PHPPdf\Core\Document;
+
 use PHPPdf\PHPUnit\Framework\Constraint\ValidateByCallback;
 use PHPPdf\PHPUnit\Framework\MockObject\Stub\ComposeStub;
 
@@ -59,5 +61,10 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
         }
         
         return null;
+    }
+    
+    protected function createDocumentStub()
+    {
+        return new Document($this->getMock('PHPPdf\Core\Engine\Engine'));
     }
 }

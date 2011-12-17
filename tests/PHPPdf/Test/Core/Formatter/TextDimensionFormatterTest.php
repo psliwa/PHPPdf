@@ -15,7 +15,7 @@ class TextDimensionFormatterTest extends \PHPPdf\PHPUnit\Framework\TestCase
     public function setUp()
     {
         $this->formatter = new TextDimensionFormatter();
-        $this->document = new Document();
+        $this->document = $this->createDocumentStub();
     }
     
     /**

@@ -40,6 +40,6 @@ class CellFirstPointPositionFormatterTest extends \PHPPdf\PHPUnit\Framework\Test
               ->method('getBoundary')
               ->will($this->returnValue($boundary));
 
-        $this->formatter->format($node, new Document());
+        $this->formatter->format($node, $this->createDocumentStub());
     }
 }

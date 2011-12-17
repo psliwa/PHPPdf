@@ -31,7 +31,7 @@ class PageBreakingFormatterTest extends \PHPPdf\PHPUnit\Framework\TestCase
         $this->page->add($container);
         $this->page->add($container2);
 
-        $this->formatter->format($this->page, new Document());
+        $this->formatter->format($this->page, $this->createDocumentStub());
 
         $this->assertEquals(2, count($this->page->getPages()));
     }
@@ -49,7 +49,7 @@ class PageBreakingFormatterTest extends \PHPPdf\PHPUnit\Framework\TestCase
         $this->page->add($container);
         $this->page->add($container2);
 
-        $this->formatter->format($this->page, new Document());
+        $this->formatter->format($this->page, $this->createDocumentStub());
 
         $pages = $this->page->getPages();
 
@@ -114,7 +114,7 @@ class PageBreakingFormatterTest extends \PHPPdf\PHPUnit\Framework\TestCase
 
         $this->page->add($container);
 
-        $this->formatter->format($this->page, new Document());
+        $this->formatter->format($this->page, $this->createDocumentStub());
 
         $pages = $this->page->getPages();
 
@@ -147,7 +147,7 @@ class PageBreakingFormatterTest extends \PHPPdf\PHPUnit\Framework\TestCase
             $this->page->add($this->getContainerStub(array(0, $height), array(100, $height-$heightOfNode)));
         }
 
-        $this->formatter->format($this->page, new Document());
+        $this->formatter->format($this->page, $this->createDocumentStub());
 
         $pages = $this->page->getPages();
         $this->assertEquals(5, count($pages));
@@ -182,7 +182,7 @@ class PageBreakingFormatterTest extends \PHPPdf\PHPUnit\Framework\TestCase
 
         $this->page->add($container);
 
-        $this->formatter->format($this->page, new Document());
+        $this->formatter->format($this->page, $this->createDocumentStub());
     }
 
     /**
@@ -231,7 +231,7 @@ class PageBreakingFormatterTest extends \PHPPdf\PHPUnit\Framework\TestCase
 
         $this->page->add($nextSiblingOfBrokenContainer);
 
-        $this->page->collectOrderedDrawingTasks(new Document());
+        $this->page->collectOrderedDrawingTasks($this->createDocumentStub());
 
         $this->assertEquals($brokenContainer->getDiagonalPoint()->getY(), $nextSiblingOfBrokenContainer->getFirstPoint()->getY());
     }

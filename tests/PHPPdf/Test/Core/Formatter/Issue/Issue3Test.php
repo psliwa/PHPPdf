@@ -24,7 +24,7 @@ class Issue3Test extends TestCase
     public function setUp()
     {
         $this->formatter = new FloatFormatter();
-        $this->document = new Document();
+        $this->document = $this->createDocumentStub();
         $this->objectMother = new NodeObjectMother($this);
     }
     

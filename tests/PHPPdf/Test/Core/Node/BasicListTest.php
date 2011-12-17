@@ -46,7 +46,7 @@ class BasicListTest extends \PHPPdf\PHPUnit\Framework\TestCase
         $enumerationStrategy->expects($this->once())
                             ->method('setIndex')
                             ->with(0);
-        $document = new Document();
+        $document = $this->createDocumentStub();
         
         $this->list->setEnumerationStrategy($enumerationStrategy);
 
