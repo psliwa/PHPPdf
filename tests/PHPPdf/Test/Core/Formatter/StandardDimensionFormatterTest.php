@@ -15,7 +15,7 @@ class StandardDimensionFormatterTest extends \PHPPdf\PHPUnit\Framework\TestCase
     public function setUp()
     {
         $this->formatter = new StandardDimensionFormatter();
-        $this->document = new Document();
+        $this->document = $this->createDocumentStub();
     }
 
     /**

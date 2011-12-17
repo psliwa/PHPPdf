@@ -8,6 +8,7 @@
 
 namespace PHPPdf\Core\Configuration;
 
+use PHPPdf\Core\UnitConverter;
 use PHPPdf\Cache\Cache;
 
 /**
@@ -32,10 +33,7 @@ interface Loader
      */
     public function createFontRegistry();
     
-    /**
-     * @return UnitConverter
-     */
-    public function createUnitConverter();
-    
     public function setCache(Cache $cache);
+    
+    public function setUnitConverter(UnitConverter $unitConverter);
 }

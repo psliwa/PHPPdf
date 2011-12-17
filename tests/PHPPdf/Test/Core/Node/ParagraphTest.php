@@ -86,7 +86,7 @@ class ParagraphTest extends \PHPPdf\PHPUnit\Framework\TestCase
      */
     public function formatLinesWhileGettingTasks()
     {
-        $documentStub = new Document();
+        $documentStub = $this->createDocumentStub();
         
         $expectedTasks = array();
         
@@ -112,7 +112,7 @@ class ParagraphTest extends \PHPPdf\PHPUnit\Framework\TestCase
      */
     public function getDrawingTasksFromTextObjects()
     {
-        $documentStub = new Document();
+        $documentStub = $this->createDocumentStub();
         
         $expectedTasks = array();
         

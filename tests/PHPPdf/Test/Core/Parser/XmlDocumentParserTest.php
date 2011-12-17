@@ -22,6 +22,7 @@ class XmlDocumentParserTest extends \PHPPdf\PHPUnit\Framework\TestCase
         $this->documentMock = $this->getMockBuilder('PHPPdf\Core\Document')
                                    ->disableOriginalConstructor()
                                    ->setMethods(array('setMetadataValue'))
+                                   ->disableOriginalConstructor()
                                    ->getMock();
         
         $this->complexAttributeFactoryMock = $this->getMock('PHPPdf\Core\ComplexAttribute\ComplexAttributeFactory', array('create', 'getDefinitionNames'));

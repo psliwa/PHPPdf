@@ -71,7 +71,7 @@ abstract class TextEnumerationStrategy extends AbstractEnumerationStrategy
         {
             $gc->setFont($font, $size);
         }
-        
+
         $gc->drawText($this->enumerationText, $xCoord, $yCoord, $encoding);
         
         $gc->restoreGS();
@@ -83,13 +83,7 @@ abstract class TextEnumerationStrategy extends AbstractEnumerationStrategy
     {
         if(!isset($this->widthOfTextCache[$text]))
         {
-            $charCodes = array();
-            foreach($this->splitTextIntoChars($text) as $char)
-            {
-                $charCodes[] = ord($char);
-            }
-    
-            $this->widthOfTextCache[$text] = $font->getCharsWidth($charCodes, $fontSize);
+            $this->widthOfTextCache[$text] = $font->getWidthOfText($text, $fontSize);
         }
 
         return $this->widthOfTextCache[$text];        

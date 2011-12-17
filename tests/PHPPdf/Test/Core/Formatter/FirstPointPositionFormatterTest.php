@@ -47,7 +47,7 @@ class FirstPointPositionFormatterTest extends \PHPPdf\PHPUnit\Framework\TestCase
               ->method('getMarginTop')
               ->will($this->returnValue($marginTop));
 
-        $this->formatter->format($node, new Document());
+        $this->formatter->format($node, $this->createDocumentStub());
 
         $parentFirstPoint[0] += $marginLeft;
         $parentFirstPoint[1] -= $marginTop;
@@ -94,7 +94,7 @@ class FirstPointPositionFormatterTest extends \PHPPdf\PHPUnit\Framework\TestCase
              ->method('getLineHeightRecursively')
              ->will($this->returnValue($lineHeight));
         
-        $this->formatter->format($node, new Document());
+        $this->formatter->format($node, $this->createDocumentStub());
         
         //break line only when previous sibling also has line-break attribute on
         $expectedYCoord = $lineBreakOfPreviousSibling ? ($parentFirstPoint[1] - $lineHeight) : $parentFirstPoint[1];

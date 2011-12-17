@@ -22,9 +22,8 @@ use PHPPdf\Core\Node\Node,
  * Document to generate
  * 
  * @author Piotr Śliwa <peter.pl7@gmail.com>
- * @todo Inject Engine object form outside
  */
-class Document implements UnitConverter, Engine
+class Document implements Engine
 {   
     const DRAWING_PRIORITY_BACKGROUND1 = 60;
     const DRAWING_PRIORITY_BACKGROUND2 = 50;
@@ -49,12 +48,10 @@ class Document implements UnitConverter, Engine
     
     private $unitConverter = null;
 
-    public function __construct(UnitConverter $converter = null)
+    public function __construct(Engine $engine)
     {
-        if($converter)
-        {
-            $this->setUnitConverter($converter);
-        }
+        $this->setUnitConverter($engine);
+        $this->engine = $engine;
         $this->initialize();
     }
 
@@ -107,7 +104,18 @@ class Document implements UnitConverter, Engine
     public function initialize()
     {
         $this->processed = false;
-        $this->engine = new ZfEngine(null, $this->unitConverter);
+        $this->engine->reset();
+    }
+    
+    //TODO: this is only test and temporary method
+    public function setEngine($engine)
+    {
+        $this->engine = $engine;
+    }
+    
+    public function getEngine()
+    {
+        return $this->engine;
     }
     
     /**
@@ -299,7 +307,7 @@ class Document implements UnitConverter, Engine
         {
             return $this->unitConverter->convertUnit($value);
         }
-        
+
         return $value;
     }
     
@@ -319,5 +327,10 @@ class Document implements UnitConverter, Engine
     public function render()
     {
         return $this->engine->render();
+    }
+    
+    public function reset()
+    {
+        $this->initialize();
     }
 }

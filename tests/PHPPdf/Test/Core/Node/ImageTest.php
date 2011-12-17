@@ -39,6 +39,7 @@ class ImageTest extends \PHPPdf\PHPUnit\Framework\TestCase
                               ->getMock();
         $document = $this->getMockBuilder('PHPPdf\Core\Document')
                          ->setMethods(array('createImage'))
+                         ->disableOriginalConstructor()
                          ->getMock();
 
         $document->expects($this->atLeastOnce())

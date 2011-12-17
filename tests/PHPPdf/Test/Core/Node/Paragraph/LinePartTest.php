@@ -27,7 +27,7 @@ class LinePartTest extends \PHPPdf\PHPUnit\Framework\TestCase
         $words = 'some words';
         $startPoint = Point::getInstance(100, 120);
 
-        $documentStub = new Document();
+        $documentStub = $this->createDocumentStub();
         $xTranslationInLine = 5;
         $linePartWidth = 100;
         $alpha = 0.5;

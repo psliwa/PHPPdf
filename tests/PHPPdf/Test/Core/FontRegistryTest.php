@@ -14,6 +14,7 @@ class FontRegistryTest extends \PHPPdf\PHPUnit\Framework\TestCase
     {
         $this->document = $this->getMockBuilder('PHPPdf\Core\Document')
                                ->setMethods(array('createFont'))
+                               ->disableOriginalConstructor()
                                ->getMock();
         $this->registry = new FontRegistry($this->document);
     }

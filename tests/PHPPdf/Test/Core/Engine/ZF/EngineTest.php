@@ -178,4 +178,32 @@ class EngineTest extends \PHPPdf\PHPUnit\Framework\TestCase
             array('InvalidProperty', 'value', false),
         );
     }
+    
+    /**
+     * @test
+     */
+    public function delegateConvertUnitInvocationToConverter()
+    {
+        $converter = $this->getMock('PHPPdf\Core\UnitConverter');
+        
+        $engine = new Engine(null, $converter);
+        
+        $value = 123;
+        $unit = 'abc';
+        $percentage = '100%';
+        $result = 321;
+        
+        $converter->expects($this->at(0))
+                  ->method('convertUnit')
+                  ->with($value, $unit)
+                  ->will($this->returnValue($result));
+                  
+        $converter->expects($this->at(1))
+                  ->method('convertPercentageValue')
+                  ->with($percentage, $value)
+                  ->will($this->returnValue($result));
+                  
+        $this->assertEquals($result, $engine->convertUnit($value, $unit));        
+        $this->assertEquals($result, $engine->convertPercentageValue($percentage, $value));
+    }
 }

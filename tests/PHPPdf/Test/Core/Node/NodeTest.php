@@ -379,7 +379,10 @@ class NodeTest extends \PHPPdf\PHPUnit\Framework\TestCase
     {
         $formatterName = 'someFormatter';
 
-        $documentMock = $this->getMock('PHPPdf\Core\Document', array('getFormatter'));
+        $documentMock = $this->getMockBuilder('PHPPdf\Core\Document')
+                             ->setMethods(array('getFormatter'))
+                             ->disableOriginalConstructor()
+                             ->getMock();
 
         $formatterMock = $this->getMock('PHPPdf\Core\Formatter\Formatter', array('format'));
         $formatterMock->expects($this->once())
@@ -508,6 +511,7 @@ class NodeTest extends \PHPPdf\PHPUnit\Framework\TestCase
         
         $document = $this->getMockBuilder('PHPPdf\Core\Document')
                          ->setMethods(array('getComplexAttributes'))
+                         ->disableOriginalConstructor()
                          ->getMock();
         $bag = $this->getMockBuilder('PHPPdf\Core\AttributeBag')
                     ->getMock();
@@ -563,7 +567,7 @@ class NodeTest extends \PHPPdf\PHPUnit\Framework\TestCase
         }
         
         $tasks = new DrawingTaskHeap();
-        $this->node->collectUnorderedDrawingTasks(new Document(), $tasks);
+        $this->node->collectUnorderedDrawingTasks($this->createDocumentStub(), $tasks);
         
         foreach($tasks as $task)
         {

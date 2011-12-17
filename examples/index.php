@@ -10,7 +10,8 @@ require_once __DIR__.'/get_examples.php';
 require_once __DIR__.'/../lib/PHPPdf/Autoloader.php';
 
 PHPPdf\Autoloader::register();
-PHPPdf\Autoloader::register(dirname(__FILE__).'/../lib/vendor');
+PHPPdf\Autoloader::register(__DIR__.'/../lib/vendor');
+PHPPdf\Autoloader::register(__DIR__.'/../lib/vendor/Imagine/lib');
 
 // set different way of configuration
 //$facade = PHPPdf\Core\FacadeBuilder::create(new PHPPdf\Core\Configuration\DependencyInjection\LoaderImpl())//->setCache('File', array('cache_dir' => __DIR__.'/cache/'))
@@ -52,7 +53,6 @@ $stylesheet = $stylesheetXml ? PHPPdf\DataSource\DataSource::fromString($stylesh
 $start = microtime(true);
 
 $content = $facade->render($xml, $stylesheet);
-
 
 if(isset($_GET['t']))
 {

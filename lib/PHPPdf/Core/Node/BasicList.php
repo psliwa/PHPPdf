@@ -181,7 +181,7 @@ class BasicList extends Container
         $font = $this->getRecurseAttribute('font-type');
         $fontSize = $this->getRecurseAttribute('font-size');
         
-        return $font->getCharsWidth(array(ord($type)), $fontSize);
+        return $font->getWidthOfText($type, $fontSize);
     }
     
     protected function doBreakAt($height)

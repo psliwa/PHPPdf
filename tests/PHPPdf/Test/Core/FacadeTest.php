@@ -22,7 +22,10 @@ class FacadeTest extends \PHPPdf\PHPUnit\Framework\TestCase
                                        ->setMethods(array('parse'))
                                        ->disableOriginalConstructor()
                                        ->getMock();
-        $this->facade = new Facade($this->loaderMock, $this->documentParser, $this->stylesheetParser);
+                                       
+        $document = $this->createDocumentStub();
+                                       
+        $this->facade = new Facade($this->loaderMock, $document, $this->documentParser, $this->stylesheetParser);
     }
 
     /**
@@ -43,20 +46,6 @@ class FacadeTest extends \PHPPdf\PHPUnit\Framework\TestCase
     /**
      * @test
      */
-    public function gettingAndSettingPdf()
-    {
-        $this->assertInstanceOf('PHPPdf\Core\Document', $this->facade->getDocument());
-
-        $document = new \PHPPdf\Core\Document();
-        $this->facade->setDocument($document);
-
-        $this->assertTrue($this->facade->getDocument() === $document);
-
-    }
-
-    /**
-     * @test
-     */
     public function drawingProcess()
     {
         $xml = '<pdf></pdf>';
@@ -65,6 +54,7 @@ class FacadeTest extends \PHPPdf\PHPUnit\Framework\TestCase
 
         $documentMock = $this->getMockBuilder('PHPPdf\Core\Document')
                              ->setMethods(array('draw', 'initialize', 'render', 'addFontDefinitions', 'setComplexAttributeFactory'))
+                             ->disableOriginalConstructor()
                              ->getMock();
 
         $stylesheetParserMock = $this->getMock('PHPPdf\Core\Parser\StylesheetParser', array('parse'));
@@ -117,7 +107,7 @@ class FacadeTest extends \PHPPdf\PHPUnit\Framework\TestCase
         $documentMock->expects($this->at(4))
                 ->method('initialize');
 
-        $this->facade->setDocument($documentMock);
+        $this->invokeMethod($this->facade, 'setDocument', array($documentMock));
 
         $result = $this->facade->render($xml, $stylesheet);
 
@@ -130,7 +120,7 @@ class FacadeTest extends \PHPPdf\PHPUnit\Framework\TestCase
      */
     public function dontCacheStylesheetConstraintByDefault($numberOfCacheMethodInvoking, $useCache)
     {
-        $facade = new Facade(new LoaderImpl(), $this->documentParser, $this->stylesheetParser);
+        $facade = new Facade(new LoaderImpl(), $this->createDocumentStub(), $this->documentParser, $this->stylesheetParser);
 
         $cache = $this->getMock('PHPPdf\Cache\NullCache', array('test', 'save', 'load'));
         $cache->expects($this->exactly($numberOfCacheMethodInvoking))

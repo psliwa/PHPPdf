@@ -39,8 +39,8 @@ class ContainerDimensionFormatterTest extends \PHPPdf\PHPUnit\Framework\TestCase
         {
             $composeNode->add($child);
         }
-
-        $this->formatter->format($composeNode, new Document());
+        
+        $this->formatter->format($composeNode, $this->createDocumentStub());
 
         $height = 0;
         foreach($children as $child)

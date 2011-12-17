@@ -2,7 +2,8 @@
 
 namespace PHPPdf\Test\Core\Formatter;
 
-use PHPPdf\Core\UnitConverterImpl;
+use PHPPdf\Core\PdfUnitConverter;
+
 use PHPPdf\Core\Document;
 use PHPPdf\Core\Node\Page;
 use PHPPdf\Core\Node\Container;
@@ -16,7 +17,8 @@ class ConvertAttributesFormatterTest extends \PHPPdf\PHPUnit\Framework\TestCase
     public function setUp()
     {
         $this->formatter = new ConvertAttributesFormatter();
-        $this->document = new Document();
+
+        $this->document = $this->createDocumentStub();
     }
 
     /**
@@ -25,7 +27,7 @@ class ConvertAttributesFormatterTest extends \PHPPdf\PHPUnit\Framework\TestCase
     public function percentageConvert()
     {
         $page = new Page();
-        $unitConverter = new UnitConverterImpl();
+        $unitConverter = new PdfUnitConverter();
         $node = new Container(array('width' => 200, 'height' => 100), $unitConverter);
         $child = new Container(array('width' => '70%', 'height' => '50%'), $unitConverter);
 

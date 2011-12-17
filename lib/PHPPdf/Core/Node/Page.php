@@ -53,7 +53,7 @@ class Page extends Container
 
     private $preparedTemplate = false;
 
-    public function  __construct(array $attributes = array(), UnitConverter $converter = null)
+    public function __construct(array $attributes = array(), UnitConverter $converter = null)
     {
         parent::__construct($attributes, $converter);
 
@@ -175,7 +175,7 @@ class Page extends Container
     {
         if($this->graphicsContext === null)
         {
-            $this->setGraphicsContext($document->createGraphicsContext($this->getAttribute(self::ATTR_SIZE)));
+            $this->setGraphicsContext($document->createGraphicsContext($this->getRealWidth().':'.$this->getRealHeight()));
             $this->setGraphicsContextDefaultStyle($document);
         }
     }

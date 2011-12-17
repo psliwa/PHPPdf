@@ -2,6 +2,7 @@
 
 namespace PHPPdf\Test\Core\ComplexAttribute;
 
+use PHPPdf\Core\PdfUnitConverter;
 use PHPPdf\Core\Document;
 use PHPPdf\ObjectMother\NodeObjectMother;
 use PHPPdf\Core\ComplexAttribute\Border;
@@ -24,7 +25,8 @@ class BorderTest extends \PHPPdf\PHPUnit\Framework\TestCase
     public function setUp()
     {
         $this->border = new Border();
-        $this->document = new Document();
+        $this->document = new Document($this->getMock('PHPPdf\Core\Engine\Engine'));
+        $this->document->setUnitConverter(new PdfUnitConverter());
     }
 
     /**
@@ -105,6 +107,7 @@ class BorderTest extends \PHPPdf\PHPUnit\Framework\TestCase
     {
         $document = $this->getMockBuilder('PHPPdf\Core\Document')
                          ->setMethods(array('convertUnit'))
+                         ->disableOriginalConstructor()
                          ->getMock();
         
         $actualSize = '12px';
@@ -255,6 +258,7 @@ class BorderTest extends \PHPPdf\PHPUnit\Framework\TestCase
         
         $document = $this->getMockBuilder('PHPPdf\Core\Document')
                          ->setMethods(array('convertUnit'))
+                         ->disableOriginalConstructor()
                          ->getMock();
                          
         //size conversion
@@ -301,6 +305,7 @@ class BorderTest extends \PHPPdf\PHPUnit\Framework\TestCase
         
         $document = $this->getMockBuilder('PHPPdf\Core\Document')
                          ->setMethods(array('convertUnit'))
+                         ->disableOriginalConstructor()
                          ->getMock();
                          
         //size conversion

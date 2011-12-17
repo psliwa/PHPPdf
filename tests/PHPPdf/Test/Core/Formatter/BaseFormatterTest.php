@@ -28,7 +28,7 @@ abstract class BaseFormatterTest extends \PHPPdf\PHPUnit\Framework\TestCase
      */
     public function dontThrowExceptionIfDocumentIsSet()
     {
-        $document = new \PHPPdf\Core\Document();
+        $document = $this->createDocumentStub();
         $this->formatter->setDocument($document);
 
         $this->assertTrue($document === $this->formatter->getDocument());
@@ -40,7 +40,7 @@ abstract class BaseFormatterTest extends \PHPPdf\PHPUnit\Framework\TestCase
      */
     public function unserializedFormatterHaveDocumentDetached()
     {
-        $document = new \PHPPdf\Core\Document();
+        $document = $this->createDocumentStub();
         $this->formatter->setDocument($document);
 
         $unserializedFormatter = unserialize(serialize($this->formatter));

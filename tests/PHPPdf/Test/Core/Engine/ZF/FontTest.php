@@ -29,7 +29,7 @@ class FontTest extends \PHPPdf\PHPUnit\Framework\TestCase
     /**
      * @test
      */
-    public function switchingDecorationStyle()
+    public function styleSwitching()
     {
         $font = $this->font->getCurrentWrappedFont();
 
@@ -84,39 +84,6 @@ class FontTest extends \PHPPdf\PHPUnit\Framework\TestCase
         $font = $this->font->getCurrentWrappedFont();
         $this->assertFalse($font->isBold() || $font->isItalic());
     }
-
-    /**
-     * @test
-     * @expectedException \InvalidArgumentException
-     */
-    public function creationWithEmptyArray()
-    {
-        new Font(array());
-    }
-
-    /**
-     * @test
-     * @expectedException \InvalidArgumentException
-     */
-    public function creationWithInvalidFontTypes()
-    {
-        new Font(array(
-            Font::STYLE_BOLD => $this->fontPath.'/font-judson/bold.ttf',
-            Font::STYLE_NORMAL => $this->fontPath.'/font-judson/normal.ttf',
-            8 => $this->fontPath.'/font-judson/normal.ttf',
-        ));
-    }
-
-    /**
-     * @test
-     * @expectedException \InvalidArgumentException
-     */
-    public function creationWithoutNormalFont()
-    {
-        new Font(array(
-            Font::STYLE_BOLD => $this->fontPath.'/font-judson/normal.ttf',
-        ));
-    }
     
     /**
      * @test
@@ -129,5 +96,19 @@ class FontTest extends \PHPPdf\PHPUnit\Framework\TestCase
         ));
         
         $wrappedFont = $font->getCurrentWrappedFont();
+    }
+
+    /**
+     * @test
+     */
+    public function getWidthOfText()
+    {        
+        $text = 'some text';
+        
+        $width12 = $this->font->getWidthOfText($text, 12);
+        $width14 = $this->font->getWidthOfText($text, 14);
+        
+        $this->assertTrue($width12 > 0);
+        $this->assertTrue($width14 > $width12);
     }
 }

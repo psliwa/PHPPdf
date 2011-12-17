@@ -93,7 +93,7 @@ class TableColumnFormatterTest extends \PHPPdf\PHPUnit\Framework\TestCase
               ->after('reduceColumns')
               ->will($this->returnValue($margins));
 
-        $this->formatter->format($table, new Document());
+        $this->formatter->format($table, $this->createDocumentStub());
     }
 
     public function columnsDataProvider()

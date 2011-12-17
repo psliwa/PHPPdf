@@ -36,14 +36,12 @@ class Facade
     private $useCacheForStylesheetConstraint = false;
     private $configurationLoader;
 
-    public function __construct(Loader $configurationLoader, DocumentParser $documentParser, StylesheetParser $stylesheetParser)
+    public function __construct(Loader $configurationLoader, Document $document, DocumentParser $documentParser, StylesheetParser $stylesheetParser)
     {
         $this->configurationLoader = $configurationLoader;
-        
-        $unitConverter = $this->configurationLoader->createUnitConverter();
+        $this->configurationLoader->setUnitConverter($document);
 
         $this->setCache(NullCache::getInstance());
-        $document = new Document($unitConverter);
         $documentParser->setDocument($document);
         $nodeManager = $documentParser->getNodeManager();
         if($nodeManager)
@@ -93,7 +91,7 @@ class Facade
         return $this->document;
     }
 
-    public function setDocument(Document $document)
+    private function setDocument(Document $document)
     {
         $this->document = $document;
     }
@@ -119,12 +117,6 @@ class Facade
     public function render($documentContent, $stylesheetContent = null)
     {
         $complexAttributeFactory = $this->configurationLoader->createComplexAttributeFactory();
-        
-        $unitConverter = $this->configurationLoader->createUnitConverter();
-        if($unitConverter)
-        {
-            $this->getDocument()->setUnitConverter($unitConverter);
-        }
         
         $this->getDocument()->setComplexAttributeFactory($complexAttributeFactory);
         $fontDefinitions = $this->configurationLoader->createFontRegistry();

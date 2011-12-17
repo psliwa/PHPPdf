@@ -18,6 +18,7 @@ class ImageConvertAttributesFormatterTest extends \PHPPdf\PHPUnit\Framework\Test
         $this->formatter = new ImageConvertAttributesFormatter();
         $this->document = $this->getMockBuilder('PHPPdf\Core\Document')
                                ->setMethods(array('createImage'))
+                               ->disableOriginalConstructor()
                                ->getMock();
     }
 
