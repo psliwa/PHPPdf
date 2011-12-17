@@ -20,9 +20,16 @@ class EngineFactoryImplTest extends TestCase
      */
     public function engineCreationSuccess($type, $expectedClass)
     {
-        $engine = $this->factory->createEngine($type);
-        
-        $this->assertInstanceOf($expectedClass, $engine);
+        try
+        {
+            $engine = $this->factory->createEngine($type);
+            
+            $this->assertInstanceOf($expectedClass, $engine);
+        }
+        catch(\Imagine\Exception\RuntimeException $e)
+        {
+            $this->markTestSkipped('Exception from Imagine library, propably some graphics library is not installed');
+        }
     }
     
     public function validTypeProvider()

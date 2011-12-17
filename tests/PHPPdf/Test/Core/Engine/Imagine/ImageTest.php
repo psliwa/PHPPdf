@@ -13,13 +13,27 @@ class ImageTest extends TestCase
      */
     public function createImageObject()
     {
-        $imagine = new Imagine();
-        $image = new Image(TEST_RESOURCES_DIR.'/domek.png', $imagine);
-        
-        $imagineImage = $image->getWrappedImage();
-        
-        $this->assertEquals($imagineImage->getSize()->getHeight(), $image->getOriginalHeight());
-        $this->assertEquals($imagineImage->getSize()->getWidth(), $image->getOriginalWidth());
+        try
+        {
+            $imagine = new Imagine();
+            $image = new Image(TEST_RESOURCES_DIR.'/domek.png', $imagine);
+            
+            $imagineImage = $image->getWrappedImage();
+            
+            $this->assertEquals($imagineImage->getSize()->getHeight(), $image->getOriginalHeight());
+            $this->assertEquals($imagineImage->getSize()->getWidth(), $image->getOriginalWidth());
+        }
+        catch(\Imagine\Exception\RuntimeException $e)
+        {
+            if($e->getMessage() == 'Gd not installed')
+            {
+                $this->markTestSkipped($e->getMessage());
+            }
+            else
+            {
+                throw $e;
+            }
+        }
     }
     
     /**
@@ -28,9 +42,24 @@ class ImageTest extends TestCase
      */
     public function throwExceptionOnUnexistedImage()
     {
-        $imagine = new Imagine();
-        $image = new Image('some path', $imagine);
-        
-        $image->getWrappedImage();
+        try
+        {
+            $imagine = new Imagine();
+            $image = new Image('some path', $imagine);
+            
+            $image->getWrappedImage();
+            
+        }
+        catch(\Imagine\Exception\RuntimeException $e)
+        {
+            if($e->getMessage() == 'Gd not installed')
+            {
+                $this->markTestSkipped($e->getMessage());
+            }
+            else
+            {
+                throw $e;
+            }
+        }
     }
 }
