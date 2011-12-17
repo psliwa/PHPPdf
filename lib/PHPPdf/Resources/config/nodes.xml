@@ -11,6 +11,7 @@
 	            <attribute name="font-style" value="normal" />
 	            <attribute name="margin" value="52px 52px" />
 	            <attribute name="color" value="black" />
+	            <attribute name="page-size" value="595:842" />
 	        </stylesheet>
 	        <formatters>
 	            <post class="PHPPdf\Core\Formatter\FloatFormatter" />

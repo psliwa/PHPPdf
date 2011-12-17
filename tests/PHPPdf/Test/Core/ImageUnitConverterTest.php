@@ -23,14 +23,15 @@ class ImageUnitConverterTest extends TestCase
         return array(
             array('1px', 1, null, 1),
             array('1px', 1, null, 2),
-            array(3, 3*96/ImageUnitConverter::UNITS_PER_INCH, null, 96),
+            array('3', 3*96/ImageUnitConverter::UNITS_PER_INCH, null, 96),
             array('3in', 9, null, 3),
             array('10mm', 10*300/ImageUnitConverter::MM_PER_INCH, null, 300),
             array('10cm', 10*10*400/ImageUnitConverter::MM_PER_INCH, null, 400),
             array('4pt', 4*500/72, null, 500),
             array('4pc', 12*4*600/72, null, 600),
-            array(1, 1, 'px', 1),
+            array('1', 1, 'px', 1),
             array('1cm', 500/72, 'pt', 500),
+            array(123, 123, null, 22),//integer values aren't converted
         );
     }
     

@@ -20,7 +20,12 @@ class ImageUnitConverter extends AbstractUnitConverter
     
 	public function convertUnit($value, $unit = null)
 	{
-	    if(is_numeric($value) && $unit === null)
+	    if(is_int($value))
+	    {
+	        return $value;
+	    }
+
+	    if(is_numeric($value) && is_string($value) && $unit === null)
 	    {
 	        $unit = self::UNIT_PDF;
 	    }

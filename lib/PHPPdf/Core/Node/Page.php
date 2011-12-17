@@ -175,7 +175,7 @@ class Page extends Container
     {
         if($this->graphicsContext === null)
         {
-            $this->setGraphicsContext($document->createGraphicsContext($this->getAttribute(self::ATTR_SIZE)));
+            $this->setGraphicsContext($document->createGraphicsContext($this->getRealWidth().':'.$this->getRealHeight()));
             $this->setGraphicsContextDefaultStyle($document);
         }
     }
