@@ -8,13 +8,13 @@
 
 namespace PHPPdf\Core\Configuration;
 
+use PHPPdf\Core\Parser\ColorPaletteParser;
 use PHPPdf\Core\UnitConverter;
-
-use PHPPdf\Core\Parser\FontRegistryParser,
-    PHPPdf\Core\Parser\ComplexAttributeFactoryParser,
-    PHPPdf\Core\Parser\NodeFactoryParser,
-    PHPPdf\Cache\NullCache,
-    PHPPdf\Cache\Cache;
+use PHPPdf\Core\Parser\FontRegistryParser;
+use PHPPdf\Core\Parser\ComplexAttributeFactoryParser;
+use PHPPdf\Core\Parser\NodeFactoryParser;
+use PHPPdf\Cache\NullCache;
+use PHPPdf\Cache\Cache;
 
 /**
  * Standard configuration loader.
@@ -28,16 +28,18 @@ class LoaderImpl implements Loader
     private $nodeFile = null;
     private $complexAttributeFile = null;
     private $fontFile = null;
+    private $colorFile = null;
     
     private $complexAttributeFactory;
     private $nodeFactory;
     private $fontRegistry;
+    private $colorPalette;
     
     private $unitConverter;
     
     private $cache;
     
-    public function __construct($nodeFile = null, $complexAttributeFile = null, $fontFile = null)
+    public function __construct($nodeFile = null, $complexAttributeFile = null, $fontFile = null, $colorFile = null)
     {
         if($nodeFile === null)
         {
@@ -54,9 +56,15 @@ class LoaderImpl implements Loader
             $fontFile = __DIR__.'/../../Resources/config/fonts.xml';
         }
         
+        if($colorFile === null)
+        {
+            $colorFile = __DIR__.'/../../Resources/config/colors.xml';
+        }
+        
         $this->nodeFile = $nodeFile;        
         $this->complexAttributeFile = $complexAttributeFile;        
-        $this->fontFile = $fontFile;   
+        $this->fontFile = $fontFile;
+        $this->colorFile = $colorFile;
 
         $this->setCache(NullCache::getInstance());
     }
@@ -190,4 +198,28 @@ class LoaderImpl implements Loader
 
         return $this->getFromCacheOrCallClosure($file, $doLoadFonts);
     }
+    
+    public function createColorPalette()
+    {
+        if($this->colorPalette === null)
+        {
+            $this->colorPalette = $this->loadColorPalette();
+        }        
+
+        return $this->colorPalette;
+    }
+    
+    private function loadColorPalette()
+    {
+        $file = $this->colorFile;
+
+        $doLoadColorPalette = function($content)
+        {
+            $colorPaletteParser = new ColorPaletteParser();
+            
+            return $colorPaletteParser->parse($content);
+        };
+
+        return $this->getFromCacheOrCallClosure($file, $doLoadColorPalette);
+    }    
 }

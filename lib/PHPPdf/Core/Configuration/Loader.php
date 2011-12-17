@@ -33,6 +33,11 @@ interface Loader
      */
     public function createFontRegistry();
     
+    /**
+     * @return array
+     */
+    public function createColorPalette();
+    
     public function setCache(Cache $cache);
     
     public function setUnitConverter(UnitConverter $unitConverter);

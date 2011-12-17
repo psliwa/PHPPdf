@@ -424,8 +424,11 @@ class GraphicsContext extends AbstractGraphicsContext
     
     public function copy()
     {
+        $this->commit();
+
         $copy = clone $this;
         $copy->image = $this->image->copy();
+//        $this->state = self::$originalState;
         
         return $copy;
     }

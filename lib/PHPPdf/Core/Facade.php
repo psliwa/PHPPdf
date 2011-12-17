@@ -40,6 +40,8 @@ class Facade
     {
         $this->configurationLoader = $configurationLoader;
         $this->configurationLoader->setUnitConverter($document);
+        
+        $document->addColorsToPalette($this->configurationLoader->createColorPalette());
 
         $this->setCache(NullCache::getInstance());
         $documentParser->setDocument($document);

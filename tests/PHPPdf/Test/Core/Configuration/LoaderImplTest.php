@@ -13,6 +13,7 @@ class LoaderImplTest extends \PHPPdf\PHPUnit\Framework\TestCase
         $nodeFile = $this->readAttribute($loader, 'nodeFile');
         $complexAttributeFile = $this->readAttribute($loader, 'complexAttributeFile');
         $fontFile = $this->readAttribute($loader, 'fontFile');
+        $colorFile = $this->readAttribute($loader, 'colorFile');
  
         $cache = $this->getMock('PHPPdf\Cache\NullCache', array('test', 'save'));
 
@@ -34,9 +35,10 @@ class LoaderImplTest extends \PHPPdf\PHPUnit\Framework\TestCase
     public function configFileGetterProvider()
     {
         return array(
-            array('nodeFile', 'createNodeFactory', new PHPPdf\Core\Node\NodeFactory()),
+            array('nodeFile', 'createNodeFactory', new \PHPPdf\Core\Node\NodeFactory()),
             array('complexAttributeFile', 'createComplexAttributeFactory', new \PHPPdf\Core\ComplexAttribute\ComplexAttributeFactory()),
-            array('fontFile', 'createFontRegistry', new PHPPdf\Font\Registry()),
+            array('fontFile', 'createFontRegistry', array()),
+            array('colorFile', 'createColorPalette', array()),
         );
     }
 
@@ -51,6 +53,7 @@ class LoaderImplTest extends \PHPPdf\PHPUnit\Framework\TestCase
         $nodeFile = $this->readAttribute($loader, 'nodeFile');
         $complexAttributeFile = $this->readAttribute($loader, 'complexAttributeFile');
         $fontFile = $this->readAttribute($loader, 'fontFile');
+        $colorFile = $this->readAttribute($loader, 'colorFile');
 
         $cache = $this->getMock('PHPPdf\Cache\NullCache', array('test', 'save', 'load'));
 
