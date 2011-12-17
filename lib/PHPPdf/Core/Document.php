@@ -49,12 +49,9 @@ class Document implements UnitConverter, Engine
     
     private $unitConverter = null;
 
-    public function __construct(Engine $engine, UnitConverter $converter = null)
+    public function __construct(Engine $engine)
     {
-        if($converter)
-        {
-            $this->setUnitConverter($converter);
-        }
+        $this->setUnitConverter($engine);
         $this->engine = $engine;
         $this->initialize();
     }

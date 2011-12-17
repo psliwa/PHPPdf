@@ -8,6 +8,7 @@
 
 namespace PHPPdf\Core\Engine\ZF;
 
+use PHPPdf\Core\Engine\AbstractEngine;
 use PHPPdf\Core\UnitConverter;
 use PHPPdf\Exception\Exception;
 use PHPPdf\Util;
@@ -20,7 +21,7 @@ use Zend\Pdf\Outline\AbstractOutline;
 /**
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
-class Engine implements BaseEngine
+class Engine extends AbstractEngine
 {
     private static $loadedEngines = array();
     
@@ -29,12 +30,11 @@ class Engine implements BaseEngine
     private $images = array();
     private $graphicsContexts = array();
     private $outlines = array();
-    private $unitConverter;
     
     public function __construct(PdfDocument $zendPdf = null, UnitConverter $unitConverter = null)
     {
+        parent::__construct($unitConverter);
         $this->zendPdf = $zendPdf;
-        $this->unitConverter = $unitConverter;
     }
     
     public function createGraphicsContext($graphicsContextSize)

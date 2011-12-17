@@ -8,12 +8,14 @@
 
 namespace PHPPdf\Core\Engine;
 
+use PHPPdf\Core\UnitConverter;
+
 /**
  * Engine is an Abstract Factory for objects related with graphics engine type
  * 
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
-interface Engine
+interface Engine extends UnitConverter
 {
     /**
      * Creates and returns GraphicsContext. 

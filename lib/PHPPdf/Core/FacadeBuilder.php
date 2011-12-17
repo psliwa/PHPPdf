@@ -96,7 +96,7 @@ class FacadeBuilder
         
         $engine = $this->engineFactory->createEngine($this->engineType, $this->engineOptions);
 
-        $document = new Document($engine, new UnitConverterImpl());
+        $document = new Document($engine);
         
         $facade = new Facade($this->configurationLoader, $document, $documentParser, $stylesheetParser);
         

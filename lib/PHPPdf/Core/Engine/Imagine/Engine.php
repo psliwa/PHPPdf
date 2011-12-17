@@ -8,6 +8,8 @@
 
 namespace PHPPdf\Core\Engine\Imagine;
 
+use PHPPdf\Core\Engine\AbstractEngine;
+use PHPPdf\Core\UnitConverter;
 use Imagine\Image\ImagineInterface;
 use PHPPdf\Core\Engine\Engine as BaseEngine;
 use PHPPdf\Core\Engine\GraphicsContext as BaseGraphicsContext;
@@ -17,14 +19,15 @@ use PHPPdf\Core\Engine\GraphicsContext as BaseGraphicsContext;
  * 
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
-class Engine implements BaseEngine
+class Engine extends AbstractEngine
 {
     private $imagine;
     private $graphicsContexts = array();
     private $outputFormat;
     
-    public function __construct(ImagineInterface $imagine, $outputFormat)
+    public function __construct(ImagineInterface $imagine, $outputFormat, UnitConverter $unitConverter = null)
     {
+        parent::__construct($unitConverter);
         $this->imagine = $imagine;
         $this->outputFormat = (string) $outputFormat;
     }

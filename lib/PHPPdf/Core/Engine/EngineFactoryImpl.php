@@ -1,12 +1,22 @@
 <?php
 
+/*
+ * Copyright 2011 Piotr Śliwa <peter.pl7@gmail.com>
+ *
+ * License information is in LICENSE file
+ */
+
 namespace PHPPdf\Core\Engine;
 
 use PHPPdf\Exception\DomainException;
-
 use PHPPdf\Core\Engine\Imagine\Engine as ImagineEngine;
 use PHPPdf\Core\Engine\ZF\Engine as ZendEngine;
 
+/**
+ * Engine factory implementation
+ * 
+ * @author Piotr Śliwa <peter.pl7@gmail.com>
+ */
 class EngineFactoryImpl implements EngineFactory
 {
     const TYPE_PDF = 'pdf';
