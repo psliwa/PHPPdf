@@ -8,10 +8,11 @@
 
 namespace PHPPdf\Core\Node;
 
+use PHPPdf\Core\UnitConverter;
 use PHPPdf\Core\DrawingTaskHeap;
-use PHPPdf\Core\Node\Page,
-    PHPPdf\Core\Node\PageContext,
-    PHPPdf\Core\Document;
+use PHPPdf\Core\Node\Page;
+use PHPPdf\Core\Node\PageContext;
+use PHPPdf\Core\Document;
 
 /**
  * Page being able to break
@@ -28,9 +29,9 @@ class DynamicPage extends Page
     private $nodeFormattingMap = array();
     private $numberOfPages = 0;
 
-    public function __construct(Page $prototype = null)
+    public function __construct(Page $prototype = null, UnitConverter $unitConverter = null)
     {
-        $this->setPrototypePage($prototype ? $prototype : new Page());
+        $this->setPrototypePage($prototype ? $prototype : new Page(array(), $unitConverter));
         static::initializeTypeIfNecessary();
         $this->initialize();
     }

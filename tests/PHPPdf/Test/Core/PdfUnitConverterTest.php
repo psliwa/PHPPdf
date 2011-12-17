@@ -2,10 +2,10 @@
 
 namespace PHPPdf\Test\Core;
 
-use PHPPdf\Core\UnitConverterImpl;
+use PHPPdf\Core\PdfUnitConverter;
 use PHPPdf\PHPUnit\Framework\TestCase;
 
-class UnitConverterImplTest extends TestCase
+class PdfUnitConverterTest extends TestCase
 {
     /**
      * @test
@@ -13,7 +13,7 @@ class UnitConverterImplTest extends TestCase
      */
     public function convertPercentageValue($percent, $value, $expected)
     {
-        $converter = new UnitConverterImpl();
+        $converter = new PdfUnitConverter();
         $this->assertEquals($expected, $converter->convertPercentageValue($percent, $value));
     }
     
@@ -32,7 +32,7 @@ class UnitConverterImplTest extends TestCase
      */
     public function convertUnit($value, $expected, $unit = null, $dpi = 1)
     {
-        $converter = new UnitConverterImpl($dpi);
+        $converter = new PdfUnitConverter($dpi);
         
         $this->assertEquals($expected, $converter->convertUnit($value, $unit), 'invalid unit conversion', 0.001);
     }
@@ -40,17 +40,17 @@ class UnitConverterImplTest extends TestCase
     public function unitProvider()
     {
         return array(
-            array('1px', UnitConverterImpl::UNITS_PER_INCH, null, 1),
-            array('1px', UnitConverterImpl::UNITS_PER_INCH/2, null, 2),
+            array('1px', PdfUnitConverter::UNITS_PER_INCH, null, 1),
+            array('1px', PdfUnitConverter::UNITS_PER_INCH/2, null, 2),
             array(3, 3, 12),
             array(3.2, 3.2, 12),
-            array('10cm', 10*72/UnitConverterImpl::MM_PER_INCH*10),
-            array('10mm', 10*72/UnitConverterImpl::MM_PER_INCH),
-            array('1in', UnitConverterImpl::UNITS_PER_INCH),
+            array('10cm', 10*72/PdfUnitConverter::MM_PER_INCH*10),
+            array('10mm', 10*72/PdfUnitConverter::MM_PER_INCH),
+            array('1in', PdfUnitConverter::UNITS_PER_INCH),
             array('1pt', 1),
             array('1pc', 12),
-            array(1, UnitConverterImpl::UNITS_PER_INCH, 'px', 1),
-            array('1pt', UnitConverterImpl::UNITS_PER_INCH, 'px', 1),
+            array(1, PdfUnitConverter::UNITS_PER_INCH, 'px', 1),
+            array('1pt', PdfUnitConverter::UNITS_PER_INCH, 'px', 1),
         );
     }
     
@@ -65,7 +65,7 @@ class UnitConverterImplTest extends TestCase
             $this->setExpectedException('InvalidArgumentException');
         }
         
-        $converter = new UnitConverterImpl($dpi);
+        $converter = new PdfUnitConverter($dpi);
     }
     
     public function dpiProvider()

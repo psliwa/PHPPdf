@@ -15,6 +15,11 @@ namespace PHPPdf\Core;
  */
 interface UnitConverter
 {
+    //unit of x and y axes is 1/72 inch
+    const UNITS_PER_INCH = 72;
+    const MM_PER_INCH = 25.3995;
+    
+    const UNIT_PDF = 'pu';
     const UNIT_PIXEL = 'px';
     const UNIT_CENTIMETER = 'cm';
     const UNIT_MILIMETER = 'mm';

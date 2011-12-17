@@ -8,6 +8,8 @@
 
 namespace PHPPdf\Core\Engine;
 
+use PHPPdf\Core\ImageUnitConverter;
+use PHPPdf\Core\PdfUnitConverter;
 use PHPPdf\Exception\DomainException;
 use PHPPdf\Core\Engine\Imagine\Engine as ImagineEngine;
 use PHPPdf\Core\Engine\ZF\Engine as ZendEngine;
@@ -37,7 +39,7 @@ class EngineFactoryImpl implements EngineFactory
         switch($type)
         {
             case self::TYPE_PDF:
-                return new ZendEngine();
+                return new ZendEngine(null, new PdfUnitConverter());
             case self::TYPE_IMAGE:
                 $engine = $this->getOption(self::OPTION_ENGINE, $options, self::ENGINE_GD);
                 $format = $this->getOption(self::OPTION_FORMAT, $options, self::FORMAT_JPEG);
@@ -51,7 +53,7 @@ class EngineFactoryImpl implements EngineFactory
                 
                 $imagine = new $imagineClass();
                 
-                return new ImagineEngine($imagine, $format);
+                return new ImagineEngine($imagine, $format, new ImageUnitConverter());
             default:
                 throw new DomainException(sprintf('Unknown engine type: "%s".', $type));
         }

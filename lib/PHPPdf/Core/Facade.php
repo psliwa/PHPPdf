@@ -39,6 +39,7 @@ class Facade
     public function __construct(Loader $configurationLoader, Document $document, DocumentParser $documentParser, StylesheetParser $stylesheetParser)
     {
         $this->configurationLoader = $configurationLoader;
+        $this->configurationLoader->setUnitConverter($document);
 
         $this->setCache(NullCache::getInstance());
         $documentParser->setDocument($document);
@@ -116,12 +117,6 @@ class Facade
     public function render($documentContent, $stylesheetContent = null)
     {
         $complexAttributeFactory = $this->configurationLoader->createComplexAttributeFactory();
-        
-        $unitConverter = $this->configurationLoader->createUnitConverter();
-        if($unitConverter)
-        {
-            $this->getDocument()->setUnitConverter($unitConverter);
-        }
         
         $this->getDocument()->setComplexAttributeFactory($complexAttributeFactory);
         $fontDefinitions = $this->configurationLoader->createFontRegistry();

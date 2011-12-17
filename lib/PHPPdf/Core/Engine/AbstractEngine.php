@@ -1,9 +1,20 @@
 <?php
 
+/*
+ * Copyright 2011 Piotr Śliwa <peter.pl7@gmail.com>
+ *
+ * License information is in LICENSE file
+ */
+
 namespace PHPPdf\Core\Engine;
 
 use PHPPdf\Core\UnitConverter;
 
+/**
+ * Abstract engine
+ * 
+ * @author Piotr Śliwa <peter.pl7@gmail.com>
+ */
 abstract class AbstractEngine implements Engine
 {
     protected $unitConverter;
@@ -19,8 +30,8 @@ abstract class AbstractEngine implements Engine
         {
             return $this->unitConverter->convertUnit($value, $unit);
         }
-        
-        return $value;
+
+        return (int) $value;
     }
 
     public function convertPercentageValue($percent, $value)

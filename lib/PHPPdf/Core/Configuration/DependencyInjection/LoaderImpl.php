@@ -46,9 +46,4 @@ class LoaderImpl extends BaseLoader
         
         return $this->container;
     }
-
-    public function createUnitConverter()
-    {
-        return $this->getContainer()->get('phppdf.unit_converter');
-    }
 }

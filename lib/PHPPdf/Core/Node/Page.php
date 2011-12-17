@@ -53,7 +53,7 @@ class Page extends Container
 
     private $preparedTemplate = false;
 
-    public function  __construct(array $attributes = array(), UnitConverter $converter = null)
+    public function __construct(array $attributes = array(), UnitConverter $converter = null)
     {
         parent::__construct($attributes, $converter);
 

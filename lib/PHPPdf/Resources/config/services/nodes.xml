@@ -4,8 +4,6 @@
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
 	<services>
-		<service id="phppdf.unit_converter" class="PHPPdf\Core\UnitConverterImpl"></service>
-	
 		<service id="phppdf.node_factory" class="PHPPdf\Core\Node\NodeFactory">
 			<call method="addPrototypes">
 				<argument type="collection">
@@ -57,9 +55,6 @@
 				<argument key="font-style">normal</argument>
 				<argument key="color">black</argument>
 			</argument>
-			<argument type="service" id="phppdf.unit_converter">
-				<argument type="service" id="phppdf.unit_converter" />
-			</argument>
 			<call method="setMargin">
 				<argument>52px 52px</argument>
 			</call>
@@ -74,7 +69,6 @@
 		<service id="phppdf.node.dynamic-page" class="PHPPdf\Core\Node\DynamicPage" public="false">
 			<tag name="phppdf.node" />
 			<argument type="service" id="phppdf.node.page" />
-			<argument type="service" id="phppdf.unit_converter"></argument>
 			<call method="setFormattersNames">
 				<argument>post</argument>
 				<argument type="collection">
@@ -87,9 +81,6 @@
 		<service id="phppdf.node.div" class="PHPPdf\Core\Node\Container" public="false">
 			<tag name="phppdf.node" />
 			<argument type="collection"></argument>
-			<argument type="service" id="phppdf.unit_converter">
-				<argument type="service" id="phppdf.unit_converter" />
-			</argument>
 			<call method="setFormattersNames">
 				<argument>pre</argument>
 				<argument type="collection">
@@ -114,9 +105,6 @@
 			<tag name="phppdf.node" />
 			<argument type="collection">
 				<argument key="line-break" type="constant">true</argument>
-			</argument>
-			<argument type="service" id="phppdf.unit_converter">
-				<argument type="service" id="phppdf.unit_converter" />
 			</argument>
 			<call method="setFormattersNames">
 				<argument>pre</argument>
@@ -143,9 +131,6 @@
 			<tag name="phppdf.node" />
 			<argument type="collection">
 				<argument key="margin-left">12px</argument>
-			</argument>
-			<argument type="service" id="phppdf.unit_converter">
-				<argument type="service" id="phppdf.unit_converter" />
 			</argument>
 			<call method="setFormattersNames">
 				<argument>pre</argument>
@@ -175,9 +160,6 @@
 				<argument key="margin-left">12px</argument>
 				<argument key="type">decimal</argument>
 			</argument>
-			<argument type="service" id="phppdf.unit_converter">
-				<argument type="service" id="phppdf.unit_converter" />
-			</argument>
 			<call method="setFormattersNames">
 				<argument>pre</argument>
 				<argument type="collection">
@@ -205,9 +187,6 @@
 			<argument type="collection">
 				<argument key="margin-left">10px</argument>
 			</argument>
-			<argument type="service" id="phppdf.unit_converter">
-				<argument type="service" id="phppdf.unit_converter" />
-			</argument>
 			<call method="setFormattersNames">
 				<argument>pre</argument>
 				<argument type="collection">
@@ -232,9 +211,6 @@
 			<argument type="collection">
 				<argument key="padding">12px 0</argument>
 			</argument>
-			<argument type="service" id="phppdf.unit_converter">
-				<argument type="service" id="phppdf.unit_converter" />
-			</argument>
 			<call method="setFormattersNames">
 				<argument>pre</argument>
 				<argument type="collection">
@@ -258,9 +234,6 @@
 		<service id="phppdf.node.paragraph" class="PHPPdf\Core\Node\Paragraph" public="false">
 			<tag name="phppdf.node" />
 			<argument type="collection"></argument>
-			<argument type="service" id="phppdf.unit_converter">
-				<argument type="service" id="phppdf.unit_converter" />
-			</argument>
 			<call method="setFormattersNames">
 				<argument>pre</argument>
 				<argument type="collection">
@@ -284,9 +257,6 @@
 			<tag name="phppdf.node" />
 			<argument></argument>
 			<argument type="collection"></argument>
-			<argument type="service" id="phppdf.unit_converter">
-				<argument type="service" id="phppdf.unit_converter" />
-			</argument>
 			<call method="setFormattersNames">
 				<argument>pre</argument>
 				<argument type="collection">
@@ -301,9 +271,6 @@
 			<argument type="collection">
 				<argument key="text-decoration">underline</argument>
 				<argument key="color">blue</argument>
-			</argument>
-			<argument type="service" id="phppdf.unit_converter">
-				<argument type="service" id="phppdf.unit_converter" />
 			</argument>
 			<call method="setFormattersNames">
 				<argument>pre</argument>
@@ -320,9 +287,6 @@
 				<argument key="font-size">18px</argument>
 				<argument key="font-style">bold</argument>
 				<argument key="margin">12px 0</argument>
-			</argument>
-			<argument type="service" id="phppdf.unit_converter">
-				<argument type="service" id="phppdf.unit_converter" />
 			</argument>
 			<call method="setFormattersNames">
 				<argument>pre</argument>
@@ -350,9 +314,6 @@
 				<argument key="font-style">bold</argument>
 				<argument key="margin">12px 0</argument>
 			</argument>
-			<argument type="service" id="phppdf.unit_converter">
-				<argument type="service" id="phppdf.unit_converter" />
-			</argument>
 			<call method="setFormattersNames">
 				<argument>pre</argument>
 				<argument type="collection">
@@ -379,9 +340,6 @@
 				<argument key="font-style">bold</argument>
 				<argument key="margin">12px 0</argument>
 			</argument>
-			<argument type="service" id="phppdf.unit_converter">
-				<argument type="service" id="phppdf.unit_converter" />
-			</argument>
 			<call method="setFormattersNames">
 				<argument>pre</argument>
 				<argument type="collection">
@@ -406,9 +364,6 @@
 			<argument type="collection">
 				<argument key="font-size">12px</argument>
 			</argument>
-			<argument type="service" id="phppdf.unit_converter">
-				<argument type="service" id="phppdf.unit_converter" />
-			</argument>
 			<call method="setFormattersNames">
 				<argument>pre</argument>
 				<argument type="collection">
@@ -432,9 +387,6 @@
 		<service id="phppdf.node.page-info" class="PHPPdf\Core\Node\Runtime\PageInfo" public="false">
 			<tag name="phppdf.node" />
 			<argument type="collection"></argument>
-			<argument type="service" id="phppdf.unit_converter">
-				<argument type="service" id="phppdf.unit_converter" />
-			</argument>
 			<call method="setFormattersNames">
 				<argument>pre</argument>
 				<argument type="collection">
@@ -446,9 +398,6 @@
 		<service id="phppdf.node.page-number" class="PHPPdf\Core\Node\Runtime\CurrentPageNumber" public="false">
 			<tag name="phppdf.node" />
 			<argument type="collection"></argument>
-			<argument type="service" id="phppdf.unit_converter">
-				<argument type="service" id="phppdf.unit_converter" />
-			</argument>
 			<call method="setFormattersNames">
 				<argument>pre</argument>
 				<argument type="collection">
@@ -460,9 +409,6 @@
 		<service id="phppdf.node.table" class="PHPPdf\Core\Node\Table" public="false">
 			<tag name="phppdf.node" />
 			<argument type="collection"></argument>
-			<argument type="service" id="phppdf.unit_converter">
-				<argument type="service" id="phppdf.unit_converter" />
-			</argument>
 			<call method="setFormattersNames">
 				<argument>pre</argument>
 				<argument type="collection">
@@ -487,9 +433,6 @@
 			<argument type="collection">
 				<argument key="height">5px</argument>
 			</argument>
-			<argument type="service" id="phppdf.unit_converter">
-				<argument type="service" id="phppdf.unit_converter" />
-			</argument>
 			<call method="setFormattersNames">
 				<argument>pre</argument>
 				<argument type="collection">
@@ -511,9 +454,6 @@
 		<service id="phppdf.node.td" class="PHPPdf\Core\Node\Table\Cell" public="false">
 			<tag name="phppdf.node" />
 			<argument type="collection"></argument>
-			<argument type="service" id="phppdf.unit_converter">
-				<argument type="service" id="phppdf.unit_converter" />
-			</argument>
 			<call method="mergeComplexAttributes">
 				<argument>border</argument>
 				<argument type="collection">
@@ -545,9 +485,6 @@
 			<argument type="collection">
 				<argument key="margin">1</argument>
 			</argument>
-			<argument type="service" id="phppdf.unit_converter">
-				<argument type="service" id="phppdf.unit_converter" />
-			</argument>
 			<call method="setFormattersNames">
 				<argument>pre</argument>
 				<argument type="collection">
@@ -563,9 +500,6 @@
 			<argument type="collection">
 				<argument key="height">0.5</argument>
 				<argument key="margin">12px 0</argument>
-			</argument>
-			<argument type="service" id="phppdf.unit_converter">
-				<argument type="service" id="phppdf.unit_converter" />
 			</argument>
 			<call method="mergeComplexAttributes">
 				<argument>background</argument>
@@ -599,9 +533,6 @@
 			<argument type="collection">
 				<argument key="font-style">bold</argument>
 			</argument>
-			<argument type="service" id="phppdf.unit_converter">
-				<argument type="service" id="phppdf.unit_converter" />
-			</argument>
 			<call method="setFormattersNames">
 				<argument>pre</argument>
 				<argument type="collection">
@@ -616,9 +547,6 @@
 			<argument type="collection">
 				<argument key="font-style">italic</argument>
 			</argument>
-			<argument type="service" id="phppdf.unit_converter">
-				<argument type="service" id="phppdf.unit_converter" />
-			</argument>
 			<call method="setFormattersNames">
 				<argument>pre</argument>
 				<argument type="collection">
@@ -632,9 +560,6 @@
 			<argument type="collection">
 				<argument key="break">true</argument>
 				<argument key="height">0.01</argument>
-			</argument>
-			<argument type="service" id="phppdf.unit_converter">
-				<argument type="service" id="phppdf.unit_converter" />
 			</argument>
 			<call method="setFormattersNames">
 				<argument>pre</argument>
@@ -657,9 +582,6 @@
 		<service id="phppdf.node.column-layout" class="PHPPdf\Core\Node\ColumnableContainer"  public="false">
 			<tag name="phppdf.node" />
 			<argument type="collection"></argument>
-			<argument type="service" id="phppdf.unit_converter">
-				<argument type="service" id="phppdf.unit_converter" />
-			</argument>
 			<call method="setFormattersNames">
 				<argument>pre</argument>
 				<argument type="collection">

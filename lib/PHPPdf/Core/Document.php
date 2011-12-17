@@ -22,9 +22,8 @@ use PHPPdf\Core\Node\Node,
  * Document to generate
  * 
  * @author Piotr Śliwa <peter.pl7@gmail.com>
- * @todo Inject Engine object form outside
  */
-class Document implements UnitConverter, Engine
+class Document implements Engine
 {   
     const DRAWING_PRIORITY_BACKGROUND1 = 60;
     const DRAWING_PRIORITY_BACKGROUND2 = 50;
@@ -308,7 +307,7 @@ class Document implements UnitConverter, Engine
         {
             return $this->unitConverter->convertUnit($value);
         }
-        
+
         return $value;
     }
     

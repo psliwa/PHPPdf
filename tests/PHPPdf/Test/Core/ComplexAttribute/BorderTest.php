@@ -2,7 +2,7 @@
 
 namespace PHPPdf\Test\Core\ComplexAttribute;
 
-use PHPPdf\Core\UnitConverterImpl;
+use PHPPdf\Core\PdfUnitConverter;
 use PHPPdf\Core\Document;
 use PHPPdf\ObjectMother\NodeObjectMother;
 use PHPPdf\Core\ComplexAttribute\Border;
@@ -26,7 +26,7 @@ class BorderTest extends \PHPPdf\PHPUnit\Framework\TestCase
     {
         $this->border = new Border();
         $this->document = new Document($this->getMock('PHPPdf\Core\Engine\Engine'));
-        $this->document->setUnitConverter(new UnitConverterImpl());
+        $this->document->setUnitConverter(new PdfUnitConverter());
     }
 
     /**
