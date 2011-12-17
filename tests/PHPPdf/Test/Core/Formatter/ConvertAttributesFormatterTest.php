@@ -111,4 +111,30 @@ class ConvertAttributesFormatterTest extends \PHPPdf\PHPUnit\Framework\TestCase
             array('45deg', pi()/4),
         );
     }
+    
+    /**
+     * @test
+     */
+    public function convertColor()
+    {
+        $color = 'color';
+        $result = '#000000';
+        
+        $node = new Container();
+        $node->setAttribute('color', $color);
+        
+        $document = $this->getMockBuilder('PHPPdf\Core\Document')
+                         ->setMethods(array('getColorFromPalette'))
+                         ->disableOriginalConstructor()
+                         ->getMock();
+                         
+        $document->expects($this->once())
+                 ->method('getColorFromPalette')
+                 ->with($color)
+                 ->will($this->returnValue($result));
+                 
+        $this->formatter->format($node, $document);
+        
+        $this->assertEquals($result, $node->getAttribute('color'));
+    }
 }

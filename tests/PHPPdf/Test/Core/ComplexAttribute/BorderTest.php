@@ -2,6 +2,8 @@
 
 namespace PHPPdf\Test\Core\ComplexAttribute;
 
+use PHPPdf\Core\Node\Container;
+
 use PHPPdf\Core\PdfUnitConverter;
 use PHPPdf\Core\Document;
 use PHPPdf\ObjectMother\NodeObjectMother;
@@ -350,5 +352,39 @@ class BorderTest extends \PHPPdf\PHPUnit\Framework\TestCase
             array(Border::TYPE_ALL, false),
             array(Border::TYPE_LEFT, false),
         );
+    }
+    
+    /**
+     * @test
+     */
+    public function convertColorViaDocumentColorPalette()
+    {
+        $color = 'color';
+        $expectedColor = '#123123';
+        
+        $border = new Border($color);
+        
+        $gcMock = $this->getMock('PHPPdf\Core\Engine\GraphicsContext');
+        
+        $document = $this->getMockBuilder('PHPPdf\Core\Document')
+                         ->setMethods(array('getColorFromPalette'))
+                         ->disableOriginalConstructor()
+                         ->getMock();
+                         
+        $document->expects($this->once())
+                 ->method('getColorFromPalette')
+                 ->with($color)
+                 ->will($this->returnValue($expectedColor));
+        
+        foreach(array('setLineColor', 'setFillColor') as $method)
+        {
+            $gcMock->expects($this->once())
+                   ->method($method)
+                   ->with($expectedColor);
+        }
+        
+        $nodeMock = $this->objectMother->getNodeMock(0, 0, 100, 100, $gcMock);
+        
+        $border->enhance($nodeMock, $document);
     }
 }

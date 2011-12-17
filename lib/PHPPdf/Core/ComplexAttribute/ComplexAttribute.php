@@ -63,7 +63,7 @@ abstract class ComplexAttribute
 
     public function enhance(Node $node, Document $document)
     {
-        $color = $this->getColor();
+        $color = $document->getColorFromPalette($this->getColor());
         $alpha = $node->getAlpha();
         
         $graphicsContext = $node->getGraphicsContext();

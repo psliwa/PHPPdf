@@ -47,11 +47,14 @@ class Document implements Engine
     private $formatters = array();
     
     private $unitConverter = null;
+    
+    private $colorPalette = null;
 
     public function __construct(Engine $engine)
     {
         $this->setUnitConverter($engine);
         $this->engine = $engine;
+        $this->colorPalette = new ColorPalette();
         $this->initialize();
     }
 
@@ -333,4 +336,24 @@ class Document implements Engine
     {
         $this->initialize();
     }
+
+    public function setColorPalette(ColorPalette $colorPalette)
+    {
+        $this->colorPalette = $colorPalette;
+    }
+    
+	public function addColorsToPalette(array $colors)
+	{
+		$this->colorPalette->merge($colors);
+	}
+	
+	public function getColorFromPalette($color)
+	{
+	    if($this->colorPalette)
+	    {
+    	    return $this->colorPalette->get($color);
+	    }
+	    
+	    return $color;
+	}
 }

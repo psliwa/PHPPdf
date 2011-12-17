@@ -222,4 +222,26 @@ class DocumentTest extends \PHPPdf\PHPUnit\Framework\TestCase
         $this->assertEquals($expectedUnit, $this->document->convertUnit($actualUnit));
         $this->assertEquals($expectedPercent, $this->document->convertPercentageValue($actualPercent, $width));
     }
+    
+    /**
+     * @test
+     */
+    public function getColorFromPalette()
+    {
+        $palette = $this->getMockBuilder('PHPPdf\Core\ColorPalette')
+                        ->setMethods(array('get'))
+                        ->getMock();
+                        
+        $this->document->setColorPalette($palette);
+        
+        $color = 'color';
+        $result = 'result';
+        
+        $palette->expects($this->once())
+                ->method('get')
+                ->with($color)
+                ->will($this->returnValue($result));
+                
+        $this->assertEquals($result, $this->document->getColorFromPalette($color));
+    }
 }

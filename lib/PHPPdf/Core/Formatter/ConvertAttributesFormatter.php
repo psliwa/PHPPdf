@@ -25,6 +25,7 @@ class ConvertAttributesFormatter extends BaseFormatter
         $this->convertPercentageDimensions($node);
         $this->convertAutoMargins($node);
         $this->convertDegreesToRadians($node);
+        $this->convertColor($node, $document);
     }
 
     protected function convertPercentageDimensions(Node $node)
@@ -77,6 +78,16 @@ class ConvertAttributesFormatter extends BaseFormatter
             $degrees = (float) $rotate;
             $radians = deg2rad($degrees);
             $node->setAttribute('rotate', $radians);
+        }
+    }
+    
+    protected function convertColor(Node $node, Document $document)
+    {
+        $color = $node->getAttribute('color');
+        
+        if($color)
+        {
+            $node->setAttribute('color', $document->getColorFromPalette($color));
         }
     }
 }
