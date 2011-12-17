@@ -47,9 +47,14 @@ class Font extends AbstractFont
         }
     }
     
-    private function createColor($data)
+    private function createColor($color)
     {
-        return new ImagineColor($data);
+        if(!$color instanceof ImagineColor)
+        {
+            $color = new ImagineColor($color);
+        }
+
+        return $color;
     }
     
     /**

@@ -276,8 +276,9 @@ class GraphicsContextTest extends TestCase
     
     /**
      * @test
+     * @dataProvider alphaProvider
      */
-    public function drawText()
+    public function drawText($alpha, $expectedImagineAlpha)
     {
         $text = 'some text';
         $fontSize = 12;
@@ -299,7 +300,7 @@ class GraphicsContextTest extends TestCase
         
         $font->expects($this->once())
              ->method('getWrappedFont')
-             ->with($color, $fontSize)
+             ->with(new Color($color, $expectedImagineAlpha), $fontSize)
              ->will($this->returnValue($imagineFont));
              
         $this->image->expects($this->once())
@@ -317,10 +318,19 @@ class GraphicsContextTest extends TestCase
                      ->method('text')
                      ->with($text, $imagineFont, $expectedPosition);
                      
+        $this->gc->setAlpha($alpha);
         $this->gc->setFont($font, $fontSize);
         $this->gc->setLineColor($color);
         $this->gc->drawText($text, $x, $y, 'utf-8');
         $this->gc->commit();
+    }
+    
+    public function alphaProvider()
+    {
+        return array(
+            array(1, 0),
+            array(0.2, 80),
+        );
     }
     
     /**

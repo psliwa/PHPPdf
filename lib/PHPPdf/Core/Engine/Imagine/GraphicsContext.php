@@ -83,7 +83,7 @@ class GraphicsContext extends AbstractGraphicsContext
         
         if(!$clip)
         {
-            $clip = array($this->image, new Point(0, 0));
+            $clip = array($this->image, new Point(0, 0), 0);
         }
         
         return $clip;
@@ -98,7 +98,7 @@ class GraphicsContext extends AbstractGraphicsContext
         
         $point = new Point($x1, $this->convertYCoord($y1));
         
-        $this->state['clips'][] = array($image, $point);
+        $this->state['clips'][] = array($image, $point, 0, null);
     }
     
     protected function doSaveGS()
@@ -123,12 +123,32 @@ class GraphicsContext extends AbstractGraphicsContext
         
         foreach($clips as $clip)
         {
-            list($clipImage, $clipPoint) = $clip;
+            list($clipImage, $clipPoint, $angle, $p) = $clip;
+            
+            if($angle != 0)
+            {
+                $clipImage->rotate($angle);
+                $clipPoint = $p;
+            }
             
             $image->paste($clipImage, $this->translatePoint($point, $clipPoint->getX(), $clipPoint->getY()));
         }
         
         $this->state = $state;
+    }
+    
+    private function rotatePoint($angle, Point $p, Point $o)
+    {
+        $pXp = $p->getX() - $o->getX();
+        $pYp = $p->getY() - $o->getY();
+        
+        $oXp = $pXp * cos($angle) - $pYp * sin($angle);
+        $oYp = $pXp * sin($angle) - $pYp * cos($angle);
+        
+        $oXp += $o->getX();
+        $oYp += $o->getY();
+        
+        return new Point($oXp, $oYp);
     }
     
     protected function doDrawImage(BaseImage $image, $x1, $y1, $x2, $y2)
@@ -169,11 +189,18 @@ class GraphicsContext extends AbstractGraphicsContext
     {
         //TODO: throw exception if lineColor is not set
         //TODO: line width
-        $color = new ImagineColor($this->state['lineColor']);
+        $color = $this->createColor($this->state['lineColor']);
         
         list($image, $point) = $this->getCurrentClip();
         
         $image->draw()->line($this->translatePoint($point, $x1, $this->convertYCoord($y1)), $this->translatePoint($point, $x2, $this->convertYCoord($y2)), $color);
+    }
+    
+    private function createColor($color)
+    {
+        $alpha = (int) (100 - $this->state['alpha'] * 100);
+        
+        return new ImagineColor($color, $alpha);
     }
     
     protected function doSetFillColor($colorData)
@@ -190,7 +217,7 @@ class GraphicsContext extends AbstractGraphicsContext
     {
         list($image, $point) = $this->getCurrentClip();
         
-        $color = new ImagineColor($this->state['fillColor']);
+        $color = $this->createColor($this->state['fillColor']);
         
         $fill = $type > 0;
         
@@ -205,12 +232,12 @@ class GraphicsContext extends AbstractGraphicsContext
         
         if($this->isFillShape($type))
         {
-            $polygons[] = array(new ImagineColor($this->state['fillColor']), true);
+            $polygons[] = array($this->createColor($this->state['fillColor']), true);
         }
         
         if($this->isStrokeShape($type))
         {
-            $polygons[] = array(new ImagineColor($this->state['lineColor']), false);
+            $polygons[] = array($this->createColor($this->state['lineColor']), false);
         }
         
         foreach($polygons as $polygon)
@@ -235,7 +262,7 @@ class GraphicsContext extends AbstractGraphicsContext
         $font = $this->state['font'];
         $color = $this->state['lineColor'];
         $size = $this->state['fontSize'];
-        
+        $color = $this->createColor($color);
         $imagineFont = $font->getWrappedFont($color, $size);
         
         list($image, $point) = $this->getCurrentClip();
@@ -267,7 +294,7 @@ class GraphicsContext extends AbstractGraphicsContext
         
         if($this->isStrokeShape($fillType))
         {
-            $color = new ImagineColor($this->state['lineColor']);
+            $color = $this->createColor($this->state['lineColor']);
             
             
             $image->draw()->line($leftStartPoint, $leftEndPoint, $color)
@@ -284,7 +311,7 @@ class GraphicsContext extends AbstractGraphicsContext
         
         if($this->isFillShape($fillType))
         {
-            $color = new ImagineColor($this->state['fillColor']);
+            $color = $this->createColor($this->state['fillColor']);
             
             $image->draw()->polygon(array($leftStartPoint, $rightStartPoint, $rightEndPoint, $leftEndPoint), $color, true)
                   ->polygon(array($topStartPoint, $topEndPoint, $bottomEndPoint, $bottomStartPoint), $color, true)
@@ -326,10 +353,46 @@ class GraphicsContext extends AbstractGraphicsContext
         $this->state['alpha'] = $alpha;
     }
     
-    //TODO: obsługa rotate przy saveGS i restoreGS
     protected function doRotate($x, $y, $angle)
     {
+        list($currentImage, $point) = $this->getCurrentClip();
+        $size = $currentImage->getSize();
+        $y = $size->getHeight() - $y;
         
+        $pointsToRotate = array(
+            new Point(0, 0),
+            new Point($size->getWidth(), 0),
+            new Point($size->getWidth(), $size->getHeight()),
+            new Point(0, $size->getHeight()),
+        );
+        
+        $xs = array();
+        $ys = array();
+        
+        $rotatePoint = new Point($x, $y);
+        
+        foreach($pointsToRotate as $pointToRotate)
+        {
+            $rotatedPoint = $this->rotatePoint($angle, $pointToRotate, $rotatePoint);
+            $xs[] = $rotatedPoint->getX();
+            $ys[] = $rotatedPoint->getY();
+        }
+        
+        $firstPoint = new Point(min($xs), min($ys));
+        $diagonalPoint = new Point(max($xs), max($ys));
+        $middlePoint = new Point(($diagonalPoint->getX() - $firstPoint->getX())/2, ($diagonalPoint->getY() - $firstPoint->getY())/2);
+        
+        $width = $diagonalPoint->getX() - $firstPoint->getX();
+        $height = $diagonalPoint->getY() - $firstPoint->getY();
+
+        $image = $this->imagine->create($size);
+              
+        $angleInDegrees = rad2deg($angle);
+
+        $clipPoint = new Point(0, 0);
+        $rotatePoint = new Point(-$middlePoint->getX() + $x, -$middlePoint->getY() + $y);
+                       
+        $this->state['clips'][] = array($image, $clipPoint, $angleInDegrees, $rotatePoint);
     }
     
     public function getWidth()
