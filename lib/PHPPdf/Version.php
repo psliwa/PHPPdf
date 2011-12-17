@@ -15,7 +15,7 @@ namespace PHPPdf;
  */
 final class Version
 {
-    const VERSION = '1.0.3';
+    const VERSION = '1.1.0-DEV';
 
     private function __construct()
     {

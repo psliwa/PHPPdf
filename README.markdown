@@ -1,3 +1,8 @@
+Information
+===========
+
+This is development branch, thus it **is not stable**, latest **stable** branch is 1.0.x.
+
 Documentation
 =============
 
