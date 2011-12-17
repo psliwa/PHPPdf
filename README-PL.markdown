@@ -1,3 +1,8 @@
+Informacja
+===========
+
+To jest gałąź rozwojowa, tak więc **nie jest stabilna**, ostatnia **stablina** gałąź to 1.0.x.
+
 Dokumentacja
 ============
 
@@ -26,6 +31,7 @@ Spis treści
 1. [Metadane](#metadata)
 1. [Konfiguracja](#configuration)
 1. [Markdown - wsparcie](#markdown)
+1. [Silnik do generowania obrazków] (#image-generation)
 1. [Znane ograniczenia](#limitations)
 1. [TODO - czyli plany](#todo)
 1. [Wymagania techniczne](#requirements)
@@ -626,6 +632,20 @@ Domyślnie w dokumencie jest użyta czcionka helvetica. Jeśli chcesz użyć zna
 Wewnętrznie MarkdownDocumentParser konwertuje dokument markdown do html'a (poprzez bibliotekę [PHP markdown](https://github.com/wolfie/php-markdown)), następnie konwertuje html'a do xml'a i wreszcie xml'a do dokumentu pdf.
 
 Miej na uwadze to, że jeśli w dokumencie markdown użyjesz surowego html'a, który nie będzie kompatibilny ze składnią xml wspieraną przez PHPPdf (np. nieistniejący atrybut lub nazwa tagu), dokument się nie sparsuje - zostanie wyrzucony wyjątek. Nie wszystkie tagi użyte w implementacji markdown są poprawnie wspierane przez PHPPdf, np. tagi "pre" oraz "code". Obecnie tag "pre" jest aliasem "div", a tag "code" jest aliasem do "span".
+
+<a name="image-generation"></a>
+Image generation engine
+-----------------------
+
+PHPPdf może również generować obrazki (jpg lub png) zamiast plików pdf. Aby to osiągnąć, musisz skonfigurować obiekt FacadeBuilder, przykład:
+
+    $facade = PHPPdf\Core\FacadeBuilder::create()
+                                       ->setEngineType('image')
+                                       ->build();
+
+    //metoda render zwraca tablicę źródeł obrazków, jeden obrazek to jedna strona dokumentu pdf
+    $images = $facade->render(...);
+
 
 <a name="limitations"></a>
 Znane ograniczenia

@@ -31,6 +31,7 @@ Table of contents
 1. [Metadata](#metadata)
 1. [Configuration](#configuration)
 1. [Markdown support](#markdown)
+1. [Image generation engine] (#image-generation)
 1. [Known limitations](#limitations)
 1. [TODO - plans](#todo)
 1. [Technical requirements](#requirements)
@@ -634,6 +635,19 @@ By default, in markdown pdf document, helvetica font is used. If you want to use
 Internally MarkdownDocumentParser converts markdown document to html (via [PHP markdown](https://github.com/wolfie/php-markdown) library), then converts html to xml, and at least xml to pdf document.
 
 Be aware of that, if you use in markdown document raw html that will be incompatible with xml syntax of PHPPdf (for example unexisted attribute or tag), document won't be parsed - exception will be thrown. Not all tags used in markdown implementation are propertly supported by PHPPdf, for example "pre" and "code" tags. Now "pre" tag is alias for "div", and "code" tag is alias for "span", be aware of that.
+
+<a name="image-generation"></a>
+Image generation engine
+-----------------------
+
+PHPPdf is able to generate image (jpg or png) files insted of pdf. To achieve that, you must configure FacadeBuilder, example:
+
+    $facade = PHPPdf\Core\FacadeBuilder::create()
+                                       ->setEngineType('image')
+                                       ->build();
+
+    //render method returns array of images' sources, one pdf page is generated to single image file 
+    $images = $facade->render(...);
 
 <a name="limitations"></a>
 Known limitations
