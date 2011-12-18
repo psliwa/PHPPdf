@@ -48,6 +48,7 @@ Library uses external dependencies:
 * Zend_Pdf (Zend Framework in 2.0.x version)
 * Zend_Memory (Zend Framework in 2.0.x version)
 * Zend_Cache (Zend Framework in 2.0.x version)
+* Imagine
 
 In order to library was ready to use, you must download this dependencies. You should invoke below command from main directory of the library (git client is necessary):
 
@@ -71,6 +72,9 @@ The simplest way of library using:
     require_once 'PHPPdf/Autoloader.php';
     PHPPdf\Autoloader::register();
     PHPPdf\Autoloader::register('/path/to/library/lib/vendor');
+    
+    //if you want to generate graphic files
+    PHPPdf\Autoloader::register('sciezka/do/biblioteki/lib/vendor/Imagine/lib');
 
     $facade = new PHPPdf\Core\Facade(new PHPPdf\Core\Configuration\Loader());
 
@@ -648,6 +652,16 @@ PHPPdf is able to generate image (jpg or png) files insted of pdf. To achieve th
 
     //render method returns array of images' sources, one pdf page is generated to single image file 
     $images = $facade->render(...);
+    
+By default Gd library is used to render a image. You can use Imagick that offers better quality, so it is recommended if you have opportiunity to install Imagick on your server. To switch graphics library, you should configure FacadeBuilder object using setEngineOptions method:
+
+    $builder = ...;
+    $builder->setEngineOptions(array(
+        'engine' => 'imagick',
+        'format' => 'png',
+    ));
+    
+Supported graphics libraries: gd (default), imagick, gmagick. PHPPdf uses [Imagine][2] library as interface for graphic files generation.
 
 <a name="limitations"></a>
 Known limitations
@@ -678,3 +692,4 @@ Technical requirements
 Library works on php 5.3+
 
 [1]: https://github.com/psliwa/PdfBundle
+[2]: https://github.com/avalanche123/Imagine

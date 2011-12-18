@@ -3,7 +3,6 @@
 <pdf>
     <dynamic-page>
     	<div>
-			<img src="dir:/zend.jpg" width="300px" height="300px" />
 	    	<p>Position: outside</p>
 	    	<ul position="outside">
 	    		<li>Some text</li>

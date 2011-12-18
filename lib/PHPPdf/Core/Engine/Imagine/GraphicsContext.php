@@ -21,6 +21,8 @@ use Imagine\Image\Color as ImagineColor;
 /**
  * Graphics context for Imagine
  * 
+ * * TODO: lineDashingPattern for doDrawPolygon
+ * 
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
 class GraphicsContext extends AbstractGraphicsContext

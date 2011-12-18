@@ -47,6 +47,7 @@ Biblioteka posiada zależności do zewnętrznych bibliotek:
 * Zend_Pdf (Zend Framework w wersji 2.0.x)
 * Zend_Memory (Zend Framework w wersji 2.0.x)
 * Zend_Cache (Zend Framework w wersji 2.0.x)
+* Imagine
 
 Aby biblioteka była gotowa do użytku, trzeba pobrać te zależności. Należy wywołać z wysokości głównego katalogu biblioteki polecenie (należy mieć zainstalowanego klienta git):
 
@@ -70,6 +71,9 @@ Najprostrzy sposób wykorzystania biblioteki:
     require_once 'PHPPdf/Autoloader.php';
     PHPPdf\Autoloader::register();
     PHPPdf\Autoloader::register('sciezka/do/biblioteki/lib/vendor');
+    
+    //jeśli chcesz generować pliki graficzne
+    PHPPdf\Autoloader::register('sciezka/do/biblioteki/lib/vendor/Imagine/lib');
 
     $facade = new PHPPdf\Core\Facade(new PHPPdf\Core\Configuration\Loader());
 
@@ -646,6 +650,15 @@ PHPPdf może również generować obrazki (jpg lub png) zamiast plików pdf. Aby
     //metoda render zwraca tablicę źródeł obrazków, jeden obrazek to jedna strona dokumentu pdf
     $images = $facade->render(...);
 
+Domyślną biblioteką generującą obrazki jest Gd, możesz używać biblioteki Imagick, która oferuje lepszą jakość, więc jest rekomendowana jeśli masz możliwość zainstalowania Imagick na swoim serwerze. Aby ustawić bibliotekę która ma być wykorzystana, należy skonfigurować obiekt FacadeBuilder za pomocą metody setEngineOptions:
+
+    $builder = ...;
+    $builder->setEngineOptions(array(
+        'engine' => 'imagick',
+        'format' => 'png',
+    ));
+
+Wspierane biblioteki graficzne: gd (domyślnie), imagick, gmagick. PHPPdf wykorzystuje bibliotekę [Imagine][2] jako interfejs do generowania plików graficznych.
 
 <a name="limitations"></a>
 Znane ograniczenia
@@ -676,3 +689,4 @@ Wymagania techniczne
 Biblioteka działa pod php 5.3+.
 
 [1]: https://github.com/psliwa/PdfBundle
+[2]: https://github.com/avalanche123/Imagine
