@@ -51,6 +51,7 @@ class PdfUnitConverterTest extends TestCase
             array('1pc', 12),
             array(1, PdfUnitConverter::UNITS_PER_INCH, 'px', 1),
             array('1pt', PdfUnitConverter::UNITS_PER_INCH, 'px', 1),
+            array('22%', '22%', null, 123),
         );
     }
     

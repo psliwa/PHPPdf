@@ -191,6 +191,7 @@ class Background extends ComplexAttribute
     {
         $width = $converter->convertUnit($this->imageWidth);
         $height = $converter->convertUnit($this->imageHeight);
+
         if(!$width && !$height)
         {
             return array($image->getOriginalWidth(), $image->getOriginalHeight());

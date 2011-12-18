@@ -34,7 +34,16 @@ class ImageUnitConverter extends AbstractUnitConverter
             $unit = $unit ? : strtolower(substr($value, -2, 2));
 	    }
 	    
-	    return (int) round($this->doConvertUnit($value, $unit));		
+	    $value = $this->doConvertUnit($value, $unit);
+	    
+	    if(is_numeric($value))
+	    {
+    	    return (int) round($value);		
+	    }
+	    else
+	    {
+	        return $value;
+	    }
 	}
     
 	protected function convertInUnit($value)
