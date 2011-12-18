@@ -14,10 +14,8 @@ class ImageUnitConverterTest extends TestCase
     public function convertUnit($value, $expected, $unit = null, $dpi = 1)
     {
         $converter = new ImageUnitConverter($dpi);
-        
-        $expected = is_numeric($expected) ? $this->toInt($expected) : $expected;
-        
-        $this->assertEquals($expected, $converter->convertUnit($value, $unit), 'invalid unit conversion');
+               
+        $this->assertEquals($expected, $converter->convertUnit($value, $unit), 'invalid unit conversion', 0.0001);
     }
 
     public function unitProvider()
@@ -36,10 +34,5 @@ class ImageUnitConverterTest extends TestCase
             array(123, 123, null, 22),//integer values aren't converted
             array('22%', '22%', null, 123),//percentage values aren't converted
         );
-    }
-    
-    private function toInt($value)
-    {
-        return (int) round($value);
     }
 }

@@ -38,7 +38,7 @@ class ImageUnitConverter extends AbstractUnitConverter
 	    
 	    if(is_numeric($value))
 	    {
-    	    return (int) round($value);		
+    	    return (float) $value;		
 	    }
 	    else
 	    {
