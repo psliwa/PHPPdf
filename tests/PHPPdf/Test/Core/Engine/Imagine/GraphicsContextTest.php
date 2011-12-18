@@ -320,7 +320,7 @@ class GraphicsContextTest extends TestCase
                      
         $this->gc->setAlpha($alpha);
         $this->gc->setFont($font, $fontSize);
-        $this->gc->setLineColor($color);
+        $this->gc->setFillColor($color);
         $this->gc->drawText($text, $x, $y, 'utf-8');
         $this->gc->commit();
     }

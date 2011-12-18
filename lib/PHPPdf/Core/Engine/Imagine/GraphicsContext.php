@@ -261,7 +261,7 @@ class GraphicsContext extends AbstractGraphicsContext
     protected function doDrawText($text, $x, $y, $encoding, $wordSpacing = 0, $fillType = self::SHAPE_DRAW_FILL)
     {
         $font = $this->state['font'];
-        $color = $this->state['lineColor'];
+        $color = $this->state['fillColor'];
         $size = $this->state['fontSize'];
         $color = $this->createColor($color);
         $imagineFont = $font->getWrappedFont($color, $size);
