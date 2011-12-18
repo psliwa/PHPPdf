@@ -229,7 +229,7 @@ class Page extends Container
         if($this->graphicsContext)
         {
             $graphicsContext = $this->getGraphicsContext();
-            $clonedGraphicsContext = clone $graphicsContext;
+            $clonedGraphicsContext = $graphicsContext->copy();
             $copy->graphicsContext = $clonedGraphicsContext;
         }
 

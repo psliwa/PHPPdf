@@ -428,7 +428,6 @@ class GraphicsContext extends AbstractGraphicsContext
 
         $copy = clone $this;
         $copy->image = $this->image->copy();
-//        $this->state = self::$originalState;
         
         return $copy;
     }
