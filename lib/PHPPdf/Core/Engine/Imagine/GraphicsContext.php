@@ -8,7 +8,7 @@
 
 namespace PHPPdf\Core\Engine\Imagine;
 
-use Imagine\Image\Point;
+use PHPPdf\Bridge\Imagine\Image\Point;
 use Imagine\Image\Box;
 use Imagine\Image\ImageInterface;
 use Imagine\Image\ImagineInterface;
@@ -21,8 +21,6 @@ use Imagine\Image\Color as ImagineColor;
 /**
  * Graphics context for Imagine
  * 
- * TODO: lineDashingPattern
- * 
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
 class GraphicsContext extends AbstractGraphicsContext
@@ -31,7 +29,7 @@ class GraphicsContext extends AbstractGraphicsContext
         'fillColor' => null,
         'lineColor' => null,
         'lineWidth' => null,
-        'lineDashingPattern' => null,
+        'lineDashingPattern' => self::DASHING_PATTERN_SOLID,
         'alpha' => 1,
         'font' => null,
         'fontSize' => null,
@@ -192,7 +190,55 @@ class GraphicsContext extends AbstractGraphicsContext
         
         list($image, $point) = $this->getCurrentClip();
         
-        $image->draw()->line($this->translatePoint($point, $x1, $this->convertYCoord($y1)), $this->translatePoint($point, $x2, $this->convertYCoord($y2)), $color);
+        $lineStyle = $this->state['lineDashingPattern'];
+
+        if($lineStyle === self::DASHING_PATTERN_SOLID)
+        {
+            $image->draw()->line($this->translatePoint($point, $x1, $this->convertYCoord($y1)), $this->translatePoint($point, $x2, $this->convertYCoord($y2)), $color);
+        }
+        else
+        {
+            $y1 = $this->convertYCoord($y1);
+            $y2 = $this->convertYCoord($y2);
+            
+            $pattern = $lineStyle === self::DASHING_PATTERN_DOTTED ? array(1, 2) : (array) $lineStyle;
+            
+            $on = false;            
+            $patternLength = count($pattern);
+            $currentX = min($x1, $x2);  
+
+            if($currentX !== $x1)
+            {
+                $x2 = $x1;
+                $x1 = $currentX;
+                
+                $tmp = $y1;
+                $y1 = $y2;
+                $y2 = $tmp;
+            }
+            
+            for($i=1; $currentX < $x2; $i++)
+            {
+                $length = $pattern[$i % $patternLength];
+                $nextX = $currentX + $length;
+
+                if($on)
+                {
+                    $nextY = $this->linear($nextX, $x1, $y1, $x2, $y2);
+                    $currentY = $this->linear($currentX, $x1, $y1, $x2, $y2);
+                    $image->draw()->line($this->translatePoint($point, $currentX, $currentY), $this->translatePoint($point, $nextX, $nextY), $color);
+                }
+                
+                $currentX = $nextX;                
+                $on = !$on;
+            }
+        }
+    }
+    
+    private function linear($x, $x1, $y1, $x2, $y2)
+    {
+        // y = (y2 - y1)(x - x1)/(x2 - x1) + y1
+        return ($y2 - $y1)*($x - $x1)/($x2 - $x1) + $y1;;
     }
     
     private function createColor($color)

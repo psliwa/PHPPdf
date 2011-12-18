@@ -3,15 +3,10 @@
 namespace PHPPdf\Test\Core\Engine\Imagine;
 
 use PHPPdf\Core\Engine\Imagine\Image;
-
 use Imagine\Image\Color;
-
-use Imagine\Image\Point;
-
+use PHPPdf\Bridge\Imagine\Image\Point;
 use Imagine\Image\Box;
-
 use PHPPdf\Core\Engine\Imagine\GraphicsContext;
-
 use PHPPdf\PHPUnit\Framework\TestCase;
 
 class GraphicsContextTest extends TestCase

@@ -102,7 +102,7 @@ class Border extends ComplexAttribute
 
     protected function doEnhance($graphicsContext, Node $node, Document $document)
     {
-        $graphicsContext->setLineDashingPattern($this->style);
+        $graphicsContext->setLineDashingPattern($this->convertStyle($this->style, $document));
         $size = $document->convertUnit($this->size);
         $graphicsContext->setLineWidth($size);
         $boundary = $node->getBoundary();
@@ -139,6 +139,19 @@ class Border extends ComplexAttribute
                 }
             }
         }
+    }
+    
+    private function convertStyle($style, UnitConverter $unitConverter)
+    {
+        if(is_array($style))
+        {
+            foreach($style as $i => $value)
+            {
+                $style[$i] = $unitConverter->convertUnit($value);
+            }
+        }
+        
+        return $style;
     }
 
     private function getPointsWithPositionCorrection(UnitConverter $converter, Boundary $boundary)
