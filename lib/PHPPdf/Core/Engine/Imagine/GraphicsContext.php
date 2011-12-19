@@ -187,60 +187,84 @@ class GraphicsContext extends AbstractGraphicsContext
     
     //TODO: width of line
     protected function doDrawLine($x1, $y1, $x2, $y2)
-    {
-        $color = $this->createColor($this->state['lineColor']);
-        
-        list($image, $point) = $this->getCurrentClip();
-        
+    {        
         $lineStyle = $this->state['lineDashingPattern'];
 
         if($lineStyle === self::DASHING_PATTERN_SOLID)
         {
-            $image->draw()->line($this->translatePoint($point, $x1, $this->convertYCoord($y1)), $this->translatePoint($point, $x2, $this->convertYCoord($y2)), $color);
+            list($image, $point) = $this->getCurrentClip();
+            $image->draw()->line($this->translatePoint($point, $x1, $this->convertYCoord($y1)), $this->translatePoint($point, $x2, $this->convertYCoord($y2)), $this->createColor($this->state['lineColor']));
         }
         else
         {
-            $y1 = $this->convertYCoord($y1);
-            $y2 = $this->convertYCoord($y2);
-            
-            $pattern = $lineStyle === self::DASHING_PATTERN_DOTTED ? array(1, 2) : (array) $lineStyle;
-            
-            $on = false;            
-            $patternLength = count($pattern);
-            $currentX = min($x1, $x2);  
-
-            if($currentX !== $x1)
-            {
-                $x2 = $x1;
-                $x1 = $currentX;
-                
-                $tmp = $y1;
-                $y1 = $y2;
-                $y2 = $tmp;
-            }
-            
-            for($i=1; $currentX < $x2; $i++)
-            {
-                $length = $pattern[$i % $patternLength];
-                $nextX = $currentX + $length;
-
-                if($on)
-                {
-                    $nextY = $this->linear($nextX, $x1, $y1, $x2, $y2);
-                    $currentY = $this->linear($currentX, $x1, $y1, $x2, $y2);
-                    $image->draw()->line($this->translatePoint($point, $currentX, $currentY), $this->translatePoint($point, $nextX, $nextY), $color);
-                }
-                
-                $currentX = $nextX;                
-                $on = !$on;
-            }
+            $this->doDrawDottedLine($x1, $y1, $x2, $y2);
         }
     }
     
-    private function linear($x, $x1, $y1, $x2, $y2)
+    private function doDrawDottedLine($x1, $y1, $x2, $y2)
+    {
+        list($image, $point) = $this->getCurrentClip();
+        
+        $lineStyle = $this->state['lineDashingPattern'];
+        $color = $this->createColor($this->state['lineColor']);
+        
+        $y1 = $this->convertYCoord($y1);
+        $y2 = $this->convertYCoord($y2);
+        
+        $rotated = false;
+        
+        if($x1 == $x2)
+        {
+            //rotate coordinate system by 90 deegres
+            $tmp1 = $y1;
+            $y1 = $x1;
+            $tmp2 = $y2;
+            $y2 = $x2;
+            $x2 = $tmp2;
+            $x1 = $tmp1;
+            
+            $rotated = true;
+        }
+        
+        $pattern = $lineStyle === self::DASHING_PATTERN_DOTTED ? array(1, 2) : (array) $lineStyle;
+        
+        $on = false;            
+        $patternLength = count($pattern);
+        $currentX = min($x1, $x2);  
+
+        if($currentX !== $x1)
+        {
+            $x2 = $x1;
+            $x1 = $currentX;
+            
+            $tmp = $y1;
+            $y1 = $y2;
+            $y2 = $tmp;
+        }
+        
+        $factor = ($y2 - $y1)/($x2 - $x1);
+        
+        for($i=1; $currentX < $x2; $i++)
+        {
+            $length = $pattern[$i % $patternLength];
+            $nextX = $currentX + $length;
+
+            if($on)
+            {
+                $nextY = $this->linear($nextX, $x1, $y1, $factor);
+                $currentY = $this->linear($currentX, $x1, $y1, $factor);
+                $image->draw()->line($this->translatePoint($point, $rotated ? $currentY : $currentX, $rotated ? $currentX : $currentY), $this->translatePoint($point, $rotated ? $nextY : $nextX, $rotated ? $nextX : $nextY), $color);
+            }
+            
+            $currentX = $nextX;                
+            $on = !$on;
+        }
+    }
+    
+    private function linear($x, $x1, $y1, $factor)
     {
         // y = (y2 - y1)(x - x1)/(x2 - x1) + y1
-        return ($y2 - $y1)*($x - $x1)/($x2 - $x1) + $y1;;
+        return $factor*($x - $x1) + $y1;;
     }
     
     private function createColor($color)
