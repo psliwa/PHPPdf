@@ -553,7 +553,7 @@ class XmlDocumentParser extends XmlParser implements DocumentParser
             $text = ltrim($text);
         }
 
-        if($text)
+        if($text !== '')
         {
             $this->isPreviousText = true;
             $parentNode = $this->getLastElementFromStack();

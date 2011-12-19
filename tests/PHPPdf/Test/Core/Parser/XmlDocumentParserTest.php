@@ -829,6 +829,25 @@ XML;
     /**
      * @test
      */
+    public function zeroStrindIsNotTreatedAsEmptyString()
+    {
+        $xml = <<<XML
+<pdf>0</pdf>
+XML;
+        $textNode = new Text();
+        $paragraphNode = new Paragraph();
+        
+        $nodeFactoryMock = $this->getNodeFactoryMock(array(array('paragraph', $paragraphNode), array('text', $textNode)));
+        
+        $this->parser->setNodeFactory($nodeFactoryMock);
+        
+        $pages = $this->parser->parse($xml);
+        $this->assertEquals('0', $textNode->getText());
+    }
+    
+    /**
+     * @test
+     */
     public function recognizeBehaviourAttribute()
     {
         $xml = <<<XML
@@ -1043,6 +1062,5 @@ XML;
         $this->parser->addListener($listener);
         
         $this->parser->parse($xml);
-    }
-        
+    } 
 }
