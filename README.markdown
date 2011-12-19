@@ -653,7 +653,7 @@ PHPPdf is able to generate image (jpg or png) files insted of pdf. To achieve th
     //render method returns array of images' sources, one pdf page is generated to single image file 
     $images = $facade->render(...);
     
-By default Gd library is used to render a image. You can use Imagick that offers better quality, so it is recommended if you have opportiunity to install Imagick on your server. To switch graphics library, you should configure FacadeBuilder object using setEngineOptions method:
+By default Gd library is used to render a image. You can use Imagick that offers better quality, so it is recommended if you have opportiunity to install Imagick on your server. To switch graphic library, you should configure FacadeBuilder object using setEngineOptions method:
 
     $builder = ...;
     $builder->setEngineOptions(array(
@@ -661,7 +661,7 @@ By default Gd library is used to render a image. You can use Imagick that offers
         'format' => 'png',
     ));
     
-Supported graphics libraries: gd (default), imagick, gmagick. PHPPdf uses [Imagine][2] library as interface for graphic files generation.
+Supported graphic libraries: gd (default), imagick, gmagick. PHPPdf uses [Imagine][2] library as interface for graphic files generation.
 
 <a name="limitations"></a>
 Known limitations
