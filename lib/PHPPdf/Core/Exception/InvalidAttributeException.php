@@ -8,12 +8,12 @@
 
 namespace PHPPdf\Core\Exception;
 
-use PHPPdf\Exception\Exception;
+use PHPPdf\Exception\InvalidArgumentException;
 
 /**
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
-class InvalidAttributeException extends Exception
+class InvalidAttributeException extends InvalidArgumentException
 {
     private $attributeName;
     

@@ -495,7 +495,7 @@ class GraphicsContextTest extends \PHPPdf\PHPUnit\Framework\TestCase
     
     /**
      * @test
-     * @expectedException PHPPdf\Exception\Exception
+     * @expectedException PHPPdf\Exception\RuntimeException
      * @dataProvider wrapZendExceptionsFromActionsProvider
      */
     public function wrapZendExceptionsFromActions($method, array $args)
@@ -666,7 +666,7 @@ class GraphicsContextTest extends \PHPPdf\PHPUnit\Framework\TestCase
     }
     
     /**
-     * @expectedException PHPPdf\Exception\Exception
+     * @expectedException PHPPdf\Exception\RuntimeException
      */
     public function throwExceptionIdParentOfBookmarkDosntExist()
     {

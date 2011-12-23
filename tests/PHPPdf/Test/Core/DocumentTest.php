@@ -64,7 +64,7 @@ class DocumentTest extends \PHPPdf\PHPUnit\Framework\TestCase
 
     /**
      * @test
-     * @expectedException \LogicException
+     * @expectedException PHPPdf\Exception\LogicException
      */
     public function throwExceptionWhenDocumentIsDrawTwiceWithoutReset()
     {
@@ -80,7 +80,7 @@ class DocumentTest extends \PHPPdf\PHPUnit\Framework\TestCase
 
     /**
      * @test
-     * @expectedException \PHPPdf\Core\Exception\DrawingException
+     * @expectedException PHPPdf\Core\Exception\DrawingException
      */
     public function drawingArgumentMustBeAnArrayOfPages()
     {
@@ -141,7 +141,7 @@ class DocumentTest extends \PHPPdf\PHPUnit\Framework\TestCase
 
     /**
      * @test
-     * @expectedException \InvalidArgumentException
+     * @expectedException PHPPdf\Exception\InvalidArgumentException
      */
     public function failureOfComplexAttributeCreation()
     {
@@ -177,7 +177,7 @@ class DocumentTest extends \PHPPdf\PHPUnit\Framework\TestCase
 
     /**
      * @test
-     * @expectedException PHPPdf\Exception\Exception
+     * @expectedException PHPPdf\Exception\RuntimeException
      * @dataProvider invalidClassNamesProvider
      */
     public function throwExceptionIfPassInvalidFormatterClassName($className)

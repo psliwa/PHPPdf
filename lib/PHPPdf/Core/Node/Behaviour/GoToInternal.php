@@ -8,10 +8,10 @@
 
 namespace PHPPdf\Core\Node\Behaviour;
 
+use PHPPdf\Exception\RuntimeException;
 use PHPPdf\Exception\Exception;
-
-use PHPPdf\Core\Node\Node,
-    PHPPdf\Core\Engine\GraphicsContext;
+use PHPPdf\Core\Node\Node;
+use PHPPdf\Core\Engine\GraphicsContext;
 
 /**
  * @author Piotr Śliwa <peter.pl7@gmail.com>
@@ -31,7 +31,7 @@ class GoToInternal extends Behaviour
         
         if(!$destinationNode)
         {
-            throw new Exception('Destination of GoToInternal dosn\'t exist.');
+            throw new RuntimeException('Destination of GoToInternal dosn\'t exist.');
         }
 
         $firstPoint = $node->getFirstPoint();

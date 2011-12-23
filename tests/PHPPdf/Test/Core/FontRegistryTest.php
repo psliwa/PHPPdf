@@ -49,7 +49,7 @@ class FontRegistryTest extends \PHPPdf\PHPUnit\Framework\TestCase
 
     /**
      * @test
-     * @expectedException PHPPdf\Exception\Exception
+     * @expectedException PHPPdf\Exception\InvalidArgumentException
      */
     public function throwExceptionIfFontDosntExist()
     {

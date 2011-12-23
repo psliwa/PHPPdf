@@ -8,6 +8,8 @@
 
 namespace PHPPdf;
 
+use PHPPdf\Exception\BadMethodCallException;
+
 /**
  * Current version of this library
  *
@@ -19,6 +21,6 @@ final class Version
 
     private function __construct()
     {
-        throw new \BadMethodCallException(sprintf('Object of "%s" class can not be created.', __CLASS__));
+        throw new BadMethodCallException(sprintf('Object of "%s" class can not be created.', __CLASS__));
     }
 }

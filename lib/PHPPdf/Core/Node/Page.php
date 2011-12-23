@@ -8,14 +8,15 @@
 
 namespace PHPPdf\Core\Node;
 
+use PHPPdf\Exception\LogicException;
+use PHPPdf\Exception\InvalidArgumentException;
 use PHPPdf\Core\DrawingTaskHeap;
-
-use PHPPdf\Core\Document,
-    PHPPdf\Core\DrawingTask,
-    PHPPdf\Core\UnitConverter,
-    PHPPdf\Core\Engine\GraphicsContext,
-    PHPPdf\Core\Point,
-    PHPPdf\Core\Formatter\Formatter;
+use PHPPdf\Core\Document;
+use PHPPdf\Core\DrawingTask;
+use PHPPdf\Core\UnitConverter;
+use PHPPdf\Core\Engine\GraphicsContext;
+use PHPPdf\Core\Point;
+use PHPPdf\Core\Formatter\Formatter;
 
 /**
  * Single pdf page
@@ -125,7 +126,7 @@ class Page extends Container
 
         if(count($sizes) < 2)
         {
-            throw new \InvalidArgumentException(sprintf('page-size attribute should be in "width:height" format, "%s" given.', $pageSize));
+            throw new InvalidArgumentException(sprintf('page-size attribute should be in "width:height" format, "%s" given.', $pageSize));
         }
 
         list($width, $height) = $sizes;
@@ -218,7 +219,7 @@ class Page extends Container
 
     public function breakAt($height)
     {
-        throw new \LogicException('Page can\'t be broken.');
+        throw new LogicException('Page can\'t be broken.');
     }
 
     public function copy()
@@ -367,7 +368,7 @@ class Page extends Container
 
         if($height === null || !is_numeric($height))
         {
-            throw new \InvalidArgumentException('Height of header and footer must be set.');
+            throw new InvalidArgumentException('Height of header and footer must be set.');
         }
     }
 
@@ -469,7 +470,7 @@ class Page extends Container
     {
         if($this->context === null)
         {
-            throw new \LogicException('PageContext has not been set.');
+            throw new LogicException('PageContext has not been set.');
         }
 
         return $this->context;

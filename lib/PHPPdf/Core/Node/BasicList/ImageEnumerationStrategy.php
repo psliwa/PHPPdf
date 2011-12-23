@@ -8,10 +8,11 @@
 
 namespace PHPPdf\Core\Node\BasicList;
 
+use PHPPdf\Exception\LogicException;
 use PHPPdf\Core\UnitConverter;
 use PHPPdf\Core\Document;
-use PHPPdf\Core\Node\BasicList,
-    PHPPdf\Core\Engine\GraphicsContext;
+use PHPPdf\Core\Node\BasicList;
+use PHPPdf\Core\Engine\GraphicsContext;
 
 /**
  * This enumeration strategy uses image as enumeration element 
@@ -53,7 +54,7 @@ class ImageEnumerationStrategy extends AbstractEnumerationStrategy
         
         if(!$image)
         {
-            throw new \LogicException('Image enumeration type requires not empty attribute "image" of BasicList.');
+            throw new LogicException('Image enumeration type requires not empty attribute "image" of BasicList.');
         }
         
         return $image;

@@ -8,11 +8,11 @@
 
 namespace PHPPdf\Core\Exception;
 
-use PHPPdf\Exception\Exception;
+use PHPPdf\Exception\RuntimeException;
 
 /**
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
-class DrawingException extends Exception
+class DrawingException extends RuntimeException
 {
 }

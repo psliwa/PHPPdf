@@ -8,6 +8,8 @@
 
 namespace PHPPdf\Core\Engine\ZF;
 
+use PHPPdf\Exception\RuntimeException;
+
 use PHPPdf\Core\Engine\AbstractEngine;
 use PHPPdf\Core\UnitConverter;
 use PHPPdf\Exception\Exception;
@@ -131,7 +133,7 @@ class Engine extends AbstractEngine
     {
         if(!isset($this->outlines[$id]))
         {
-            throw new Exception(sprintf('Bookmark with id "%s" dosn\'t exist.', $id));
+            throw new RuntimeException(sprintf('Bookmark with id "%s" dosn\'t exist.', $id));
         }
         
         return $this->outlines[$id];

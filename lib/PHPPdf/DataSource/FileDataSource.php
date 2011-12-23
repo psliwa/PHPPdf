@@ -8,6 +8,8 @@
 
 namespace PHPPdf\DataSource;
 
+use PHPPdf\Exception\InvalidArgumentException;
+
 /**
  * File data source class
  * 
@@ -21,7 +23,7 @@ class FileDataSource extends DataSource
     {
         if(!is_readable($filePath))
         {
-            throw new \InvalidArgumentException(sprintf('File "%s" dosn\'t exist or is unreadable.', $filePath));
+            throw new InvalidArgumentException(sprintf('File "%s" dosn\'t exist or is unreadable.', $filePath));
         }
 
         $this->filePath = (string) $filePath;

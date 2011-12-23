@@ -8,6 +8,8 @@
 
 namespace PHPPdf\Core\Node\Behaviour;
 
+use PHPPdf\Exception\RuntimeException;
+
 use PHPPdf\Exception\Exception,
     PHPPdf\Core\Node\Manager;
 
@@ -47,7 +49,7 @@ class Factory
             case 'note':
                 return new StickyNote($mainArg);
             default:
-                throw new Exception(sprintf('Behaviour "%s" dosn\'t exist.', $name));
+                throw new RuntimeException(sprintf('Behaviour "%s" dosn\'t exist.', $name));
         }
     }
 

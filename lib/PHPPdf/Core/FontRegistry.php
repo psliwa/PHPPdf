@@ -8,6 +8,8 @@
 
 namespace PHPPdf\Core;
 
+use PHPPdf\Exception\InvalidArgumentException;
+
 /**
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
@@ -41,7 +43,7 @@ class FontRegistry implements \Countable
             return $this->fonts[$name];
         }
 
-        throw new \PHPPdf\Exception\Exception(sprintf('Font "%s" is not registered.', $name));
+        throw new InvalidArgumentException(sprintf('Font "%s" is not registered.', $name));
     }
 
     public function has($name)

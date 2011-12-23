@@ -8,6 +8,9 @@
 
 namespace PHPPdf\Core;
 
+use PHPPdf\Exception\BadMethodCallException;
+use PHPPdf\Exception\OutOfBoundsException;
+
 /**
  * Point object
  *
@@ -138,17 +141,17 @@ final class Point implements \ArrayAccess
             case 1:
                 return $this->y;
             default:
-                throw new \OutOfBoundsException(sprintf('Point implementation of ArrayAccess interface accept only "0" and "1" key, "%s" given.', $offset));
+                throw new OutOfBoundsException(sprintf('Point implementation of ArrayAccess interface accept only "0" and "1" key, "%s" given.', $offset));
         }
     }
 
     public function offsetSet($offset, $value)
     {
-        throw new \BadMethodCallException(sprintf('%s class is inmutable.', __CLASS__));
+        throw new BadMethodCallException(sprintf('%s class is inmutable.', __CLASS__));
     }
 
     public function offsetUnset($offset)
     {
-        throw new \BadMethodCallException(sprintf('%s class is inmutable.', __CLASS__));
+        throw new BadMethodCallException(sprintf('%s class is inmutable.', __CLASS__));
     }
 }

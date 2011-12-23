@@ -8,7 +8,7 @@
 
 namespace PHPPdf\InputStream;
 
-use PHPPdf\Exception\Exception;
+use PHPPdf\Exception\RuntimeException;
 
 /**
  * Adapter for fopen family functions
@@ -25,7 +25,7 @@ class FopenInputStream implements InputStream
         
         if($this->fp === false)
         {
-            throw new Exception(sprintf('File "%s" can\'t be opened in mode "%s".', $filepath, $mode));
+            throw new RuntimeException(sprintf('File "%s" can\'t be opened in mode "%s".', $filepath, $mode));
         }
     }
 

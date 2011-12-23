@@ -8,19 +8,21 @@
 
 namespace PHPPdf\Core\Node;
 
+use PHPPdf\Exception\OutOfBoundsException;
+use PHPPdf\Exception\InvalidArgumentException;
+use PHPPdf\Exception\LogicException;
 use PHPPdf\Core\AttributeBag;
-
 use PHPPdf\Core\DrawingTaskHeap;
 use PHPPdf\Core\UnitConverter;
-use PHPPdf\Core\Document,
-    PHPPdf\Util,
-    PHPPdf\Core\Node\Container,
-    PHPPdf\Core\Boundary,
-    PHPPdf\Core\DrawingTask,
-    PHPPdf\Core\Formatter\Formatter,
-    PHPPdf\Core\Node\Behaviour\Behaviour,
-    PHPPdf\Core\Exception\InvalidAttributeException,
-    PHPPdf\Core\Point;
+use PHPPdf\Core\Document;
+use PHPPdf\Util;
+use PHPPdf\Core\Node\Container;
+use PHPPdf\Core\Boundary;
+use PHPPdf\Core\DrawingTask;
+use PHPPdf\Core\Formatter\Formatter;
+use PHPPdf\Core\Node\Behaviour\Behaviour;
+use PHPPdf\Core\Exception\InvalidAttributeException;
+use PHPPdf\Core\Point;
 
 /**
  * Base node class
@@ -426,7 +428,7 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
 
         if(!$page)
         {
-            throw new \LogicException(sprintf('Node "%s" is not attach to any page.', get_class($this)));
+            throw new LogicException(sprintf('Node "%s" is not attach to any page.', get_class($this)));
         }
 
         return $page;
@@ -715,7 +717,7 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
 
         if($count === 0)
         {
-            throw new \InvalidArgumentException('Attribute values doesn\'t pass.');
+            throw new InvalidArgumentException('Attribute values doesn\'t pass.');
         }
 
         $repeat = \ceil(4 / $count);
@@ -1485,7 +1487,7 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
         
         if(!isset($children[$index]))
         {
-            throw new \OutOfBoundsException(sprintf('Child "%s" dosn\'t exist.', $index));
+            throw new OutOfBoundsException(sprintf('Child "%s" dosn\'t exist.', $index));
         }
 
         return $children[$index];
@@ -1601,7 +1603,7 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
      */
     public function setPlaceholder($name, Node $placeholder)
     {
-        throw new \InvalidArgumentException(sprintf('Placeholder "%s" is not supported by class "%s".', $name, get_class($this)));
+        throw new InvalidArgumentException(sprintf('Placeholder "%s" is not supported by class "%s".', $name, get_class($this)));
     }
 
     protected function getDataForSerialize()

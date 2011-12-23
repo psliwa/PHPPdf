@@ -8,6 +8,8 @@
 
 namespace PHPPdf\Core\ComplexAttribute;
 
+use PHPPdf\Exception\InvalidArgumentException;
+
 use PHPPdf\Core\Node\Node,
     PHPPdf\Core\Node\Page,
     PHPPdf\Core\Engine\GraphicsContext,
@@ -133,7 +135,7 @@ abstract class ComplexAttribute
 
         if(!defined($const))
         {
-            throw new \InvalidArgumentException(sprintf('Invalid value for "%s" property, "%s" given.', strtolower($majorName), $miniorName));
+            throw new InvalidArgumentException(sprintf('Invalid value for "%s" property, "%s" given.', strtolower($majorName), $miniorName));
         }
 
         return constant($const);

@@ -8,9 +8,10 @@
 
 namespace PHPPdf\Core\Node;
 
-use PHPPdf\Core\Node\Table\Cell,
-    PHPPdf\Core\Node\Node,
-    PHPPdf\Core\Node\Table\Row;
+use PHPPdf\Exception\InvalidArgumentException;
+use PHPPdf\Core\Node\Table\Cell;
+use PHPPdf\Core\Node\Node;
+use PHPPdf\Core\Node\Table\Row;
 
 /**
  * Table element
@@ -47,7 +48,7 @@ class Table extends Container implements Listener
     {
         if(!$node instanceof Row)
         {
-            throw new \InvalidArgumentException(sprintf('Invalid child node type, expected PHPPdf\Core\Node\Table\Row, %s given.', get_class($node)));
+            throw new InvalidArgumentException(sprintf('Invalid child node type, expected PHPPdf\Core\Node\Table\Row, %s given.', get_class($node)));
         }
 
         foreach($node->getChildren() as $cell)

@@ -8,6 +8,10 @@
 
 namespace PHPPdf\Core\Engine\ZF;
 
+use PHPPdf\Exception\RuntimeException;
+
+use PHPPdf\Exception\InvalidArgumentException;
+
 use PHPPdf\Bridge\Zend\Pdf\Page;
 
 use PHPPdf\Exception\Exception;
@@ -141,7 +145,7 @@ class GraphicsContext extends AbstractGraphicsContext
         
         if(!$colorData instanceof BaseColor)
         {
-            throw new Exception('Wrong color value, expected string or object of PHPPdf\Core\Engine\Color class.');
+            throw new InvalidArgumentException('Wrong color value, expected string or object of PHPPdf\Core\Engine\Color class.');
         }
         
         return $colorData;
@@ -177,7 +181,7 @@ class GraphicsContext extends AbstractGraphicsContext
         }
         catch(\Zend\Pdf\Exception $e)
         {
-            throw new Exception($e->getMessage(), $e->getCode(), $e);
+            throw new RuntimeException($e->getMessage(), $e->getCode(), $e);
         }
     }
     
@@ -291,7 +295,7 @@ class GraphicsContext extends AbstractGraphicsContext
             case self::SHAPE_DRAW_FILL_AND_STROKE:
                 return ZendPage::SHAPE_DRAW_FILL_AND_STROKE;
             default:
-                throw new \InvalidArgumentException(sprintf('Invalid filling type "%s".', $fillType));
+                throw new InvalidArgumentException(sprintf('Invalid filling type "%s".', $fillType));
         }
     }
     
@@ -332,7 +336,7 @@ class GraphicsContext extends AbstractGraphicsContext
         }
         catch(\Zend\Pdf\Exception $e)
         {
-            throw new Exception(sprintf('Error wile adding uri action with uri="%s"', $uri), 0, $e);
+            throw new RuntimeException(sprintf('Error wile adding uri action with uri="%s"', $uri), 0, $e);
         }
     }
     
@@ -348,7 +352,7 @@ class GraphicsContext extends AbstractGraphicsContext
         }
         catch(\Zend\Pdf\Exception $e)
         {
-            throw new Exception('Error while adding goTo action', 0, $e);
+            throw new RuntimeException('Error while adding goTo action', 0, $e);
         }        
     }
     
@@ -383,7 +387,7 @@ class GraphicsContext extends AbstractGraphicsContext
         }
         catch(\Zend\Pdf\Exception $e)
         {
-            throw new Exception('Error while bookmark adding', 0, $e);
+            throw new RuntimeException('Error while bookmark adding', 0, $e);
         }
     }
 
@@ -403,7 +407,7 @@ class GraphicsContext extends AbstractGraphicsContext
         }
         catch(\Zend\Pdf\Exception $e)
         {
-            throw new Exception('Error while bookmark adding', 0, $e);
+            throw new RuntimeException('Error while bookmark adding', 0, $e);
         }
     }
     

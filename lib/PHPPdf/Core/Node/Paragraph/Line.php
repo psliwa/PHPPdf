@@ -8,12 +8,10 @@
 
 namespace PHPPdf\Core\Node\Paragraph;
 
+use PHPPdf\Exception\InvalidArgumentException;
 use PHPPdf\Core\Node\Node;
-
 use PHPPdf\Core\Node\Paragraph;
-
 use PHPPdf\Core\Point;
-
 use PHPPdf\Core\Document;
 
 /**
@@ -90,7 +88,7 @@ class Line
             case Node::ALIGN_CENTER:
                 return ($this->getRealWidth() - $this->getTotalWidth())/2;
             default:
-                throw new \InvalidArgumentException(sprintf('Unsupported align type "%s".', $align));
+                throw new InvalidArgumentException(sprintf('Unsupported align type "%s".', $align));
         }
     }
     

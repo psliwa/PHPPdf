@@ -8,6 +8,8 @@
 
 namespace PHPPdf\Core\ComplexAttribute;
 
+use PHPPdf\Exception\InvalidArgumentException;
+
 use PHPPdf\Core\ComplexAttribute\Exception\DefinitionNotFoundException;
 
 /**
@@ -152,7 +154,7 @@ class ComplexAttributeFactory implements \Serializable
         
         if($parameters)
         {
-            throw new \InvalidArgumentException(sprintf('Unexpected parameters (%s) passed to "%s" complex attribute.', implode(', ', array_keys($parameters)), $name));
+            throw new InvalidArgumentException(sprintf('Unexpected parameters (%s) passed to "%s" complex attribute.', implode(', ', array_keys($parameters)), $name));
         }        
         
         $class = $this->getClass($name);
@@ -164,7 +166,7 @@ class ComplexAttributeFactory implements \Serializable
         $acceptableNames = $this->getAcceptableParameterNames($parameter);
         if(!$this->existsAtLeastOneKey($acceptableNames, $values) && !$parameter->isOptional())
         {
-            throw new \InvalidArgumentException(sprintf('Parameter "%s" is required for "%s" complexAttribute.', $parameter->getName(), $complexAttributeName));
+            throw new InvalidArgumentException(sprintf('Parameter "%s" is required for "%s" complexAttribute.', $parameter->getName(), $complexAttributeName));
         }
 
         foreach($acceptableNames as $name)

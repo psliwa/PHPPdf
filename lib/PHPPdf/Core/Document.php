@@ -8,15 +8,18 @@
 
 namespace PHPPdf\Core;
 
-use PHPPdf\Core\Node\Node,
-    PHPPdf\Core\Engine\ZF\Engine as ZfEngine,
-    PHPPdf\Core\Formatter as Formatters,
-    PHPPdf\Core\Node\Page,
-    PHPPdf\Core\Node\PageCollection,
-    PHPPdf\Core\ComplexAttribute\ComplexAttributeFactory,
-    PHPPdf\Core\Exception\DrawingException,
-    PHPPdf\Core\Engine\Engine,
-    PHPPdf\Core\Engine\GraphicsContext;
+use PHPPdf\Exception\RuntimeException;
+use PHPPdf\Exception\LogicException;
+use PHPPdf\Exception\InvalidArgumentException;
+use PHPPdf\Core\Node\Node;
+use PHPPdf\Core\Engine\ZF\Engine as ZfEngine;
+use PHPPdf\Core\Formatter as Formatters;
+use PHPPdf\Core\Node\Page;
+use PHPPdf\Core\Node\PageCollection;
+use PHPPdf\Core\ComplexAttribute\ComplexAttributeFactory;
+use PHPPdf\Core\Exception\DrawingException;
+use PHPPdf\Core\Engine\Engine;
+use PHPPdf\Core\Engine\GraphicsContext;
 
 /**
  * Document to generate
@@ -73,7 +76,7 @@ class Document implements Engine
             {
                 if(!isset($parameters['name']))
                 {
-                    throw new \InvalidArgumentException('"name" attribute is required.');
+                    throw new InvalidArgumentException('"name" attribute is required.');
                 }
 
                 $name = $parameters['name'];
@@ -150,7 +153,7 @@ class Document implements Engine
     {
         if($this->isProcessed())
         {
-            throw new \LogicException(sprintf('Pdf has alredy been drawed.'));
+            throw new LogicException(sprintf('Pdf has alredy been drawed.'));
         }
 
         $this->processed = true;
@@ -176,7 +179,7 @@ class Document implements Engine
         }
         else
         {
-            throw new \InvalidArgumentException(sprintf('Argument of draw method must be an array of pages or PageCollection object, "%s" given.', get_class($pages)));
+            throw new InvalidArgumentException(sprintf('Argument of draw method must be an array of pages or PageCollection object, "%s" given.', get_class($pages)));
         }
 
         $pageCollection->format($this);
@@ -226,14 +229,14 @@ class Document implements Engine
 
             if(!$formatter instanceof Formatters\Formatter)
             {
-                throw new \PHPPdf\Exception\Exception(sprintf('Class "%s" dosn\'t implement PHPPdf\Formatrer\Formatter interface.', $className));
+                throw new RuntimeException(sprintf('Class "%s" dosn\'t implement PHPPdf\Formatrer\Formatter interface.', $className));
             }
 
             return $formatter;
         }
         catch(\ReflectionException $e)
         {
-            throw new \PHPPdf\Exception\Exception(sprintf('Class "%s" dosn\'t exist or haven\'t default constructor.', $className), 0, $e);
+            throw new RuntimeException(sprintf('Class "%s" dosn\'t exist or haven\'t default constructor.', $className), 0, $e);
         }
     }
     

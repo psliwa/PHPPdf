@@ -8,8 +8,9 @@
 
 namespace PHPPdf\Core\Node\Behaviour;
 
-use PHPPdf\Core\Engine\GraphicsContext,
-    PHPPdf\Core\Node\Node;
+use PHPPdf\Exception\InvalidArgumentException;
+use PHPPdf\Core\Engine\GraphicsContext;
+use PHPPdf\Core\Node\Node;
 
 /**
  * @author Piotr Śliwa <peter.pl7@gmail.com>
@@ -32,7 +33,7 @@ class Bookmark extends Behaviour
         {
             if(!in_array($optionName, array_keys($this->options)))
             {
-                throw new \InvalidArgumentException(sprintf('Option "%s" is not supported by "%s" class.', $optionName, get_class($this)));
+                throw new InvalidArgumentException(sprintf('Option "%s" is not supported by "%s" class.', $optionName, get_class($this)));
             }
             
             $this->options[$optionName] = $value;

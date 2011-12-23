@@ -8,6 +8,8 @@
 
 namespace PHPPdf\Core;
 
+use PHPPdf\Exception\InvalidArgumentException;
+
 /**
  * Unit converter
  * 
@@ -35,7 +37,7 @@ abstract class AbstractUnitConverter implements UnitConverter
                 return $this->convertPdfUnit($value);
             case self::UNIT_EM:
             case self::UNIT_EX:
-                throw new \InvalidArgumentException(sprintf('"%s" unit is not supported.', $unit));
+                throw new InvalidArgumentException(sprintf('"%s" unit is not supported.', $unit));
             default:
                 return $value;
         }

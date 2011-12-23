@@ -8,6 +8,11 @@
 
 namespace PHPPdf\Core;
 
+use PHPPdf\Exception\OutOfBoundsException;
+use PHPPdf\Exception\BadFunctionCallException;
+use PHPPdf\Exception\InvalidArgumentException;
+use PHPPdf\Exception\LogicException;
+
 /**
  * Set of ordered points whom determine boundary and shape of node element.
  *
@@ -31,7 +36,7 @@ class Boundary implements \Countable, \Iterator, \ArrayAccess, \Serializable
     {
         if($this->closed)
         {
-            throw new \LogicException('Boundary has been already closed.');
+            throw new LogicException('Boundary has been already closed.');
         }
 
         $numberOfArgs = func_num_args();
@@ -46,7 +51,7 @@ class Boundary implements \Countable, \Iterator, \ArrayAccess, \Serializable
         }
         else
         {
-            throw new \InvalidArgumentException('Passed argument(s) should be coordinations or Point object.');
+            throw new InvalidArgumentException('Passed argument(s) should be coordinations or Point object.');
         }
 
         $oldNumberOfPoints = $this->numberOfPoints;
@@ -75,7 +80,7 @@ class Boundary implements \Countable, \Iterator, \ArrayAccess, \Serializable
     {
         if($this->numberOfPoints <= 2)
         {
-            throw new \BadMethodCallException('Boundary must have at last three points.');
+            throw new LogicException('Boundary must have at last three points.');
         }
 
         $this->points[$this->numberOfPoints] = $this->getFirstPoint();
@@ -318,7 +323,7 @@ class Boundary implements \Countable, \Iterator, \ArrayAccess, \Serializable
     {
         if(!$this->offsetExists($offset))
         {
-            throw new \OutOfBoundsException(sprintf('Point of index "%s" dosn\'t exist. Index should be in range 0-%d.', $offset, $this->numberOfPoints - 1));
+            throw new OutOfBoundsException(sprintf('Point of index "%s" dosn\'t exist. Index should be in range 0-%d.', $offset, $this->numberOfPoints - 1));
         }
 
         return $this->points[$offset];
@@ -326,12 +331,12 @@ class Boundary implements \Countable, \Iterator, \ArrayAccess, \Serializable
 
     public function offsetSet($offset, $value)
     {
-        throw new \BadFunctionCallException('You can not set point directly.');
+        throw new BadFunctionCallException('You can not set point directly.');
     }
 
     public function offsetUnset($offset)
     {
-        throw new \BadFunctionCallException('You can not unset point directly.');
+        throw new BadFunctionCallException('You can not unset point directly.');
     }
 
     public function __clone()

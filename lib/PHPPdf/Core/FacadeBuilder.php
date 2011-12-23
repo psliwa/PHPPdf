@@ -8,6 +8,7 @@
 
 namespace PHPPdf\Core;
 
+use PHPPdf\Exception\InvalidArgumentException;
 use PHPPdf\Core\Engine\EngineFactoryImpl;
 use PHPPdf\Core\Engine\EngineFactory;
 use PHPPdf\Core\Engine\ZF\Engine;
@@ -181,7 +182,7 @@ class FacadeBuilder
         $parserTypes = array(self::PARSER_XML, self::PARSER_MARKDOWN);
         if(!in_array($type, $parserTypes))
         {
-            throw new \InvalidArgumentException(sprintf('Unknown parser type "%s", expected one of: %s.', $type, implode(', ', $parserTypes)));
+            throw new InvalidArgumentException(sprintf('Unknown parser type "%s", expected one of: %s.', $type, implode(', ', $parserTypes)));
         }
 
         $this->documentParserType = $type;

@@ -70,7 +70,7 @@ class GoToInternalTest extends \PHPPdf\PHPUnit\Framework\TestCase
     
     /**
      * @test
-     * @expectedException PHPPdf\Exception\Exception
+     * @expectedException PHPPdf\Exception\RuntimeException
      */
     public function throwExceptionIfDestinationIsEmpty()
     {

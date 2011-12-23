@@ -8,6 +8,8 @@
 
 namespace PHPPdf\Core\Engine\ZF;
 
+use PHPPdf\Exception\InvalidArgumentException;
+
 use PHPPdf\Exception\InvalidResourceException;
 use PHPPdf\Core\Engine\AbstractFont;
 use Zend\Pdf\Font as ZendFont;
@@ -64,7 +66,7 @@ class Font extends AbstractFont
 
         if(!defined($const))
         {
-            throw new \InvalidArgumentException(sprintf('Unrecognized font name: "%s".".', $name));
+            throw new InvalidArgumentException(sprintf('Unrecognized font name: "%s".".', $name));
         }
 
         return constant($const);

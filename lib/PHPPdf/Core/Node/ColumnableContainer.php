@@ -8,6 +8,7 @@
 
 namespace PHPPdf\Core\Node;
 
+use PHPPdf\Exception\InvalidArgumentException;
 use PHPPdf\Util;
 use PHPPdf\Core\Document;
 
@@ -33,7 +34,7 @@ class ColumnableContainer extends Container
 
         if($count < 2)
         {
-            throw new \InvalidArgumentException(sprintf('Number of columns should be integer greater than 1, %d given.', $count));
+            throw new InvalidArgumentException(sprintf('Number of columns should be integer greater than 1, %d given.', $count));
         }
 
         $this->setAttributeDirectly('number-of-columns', $count);

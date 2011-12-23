@@ -8,13 +8,14 @@
 
 namespace PHPPdf\Core\ComplexAttribute;
 
-use PHPPdf\Core\Node\Page,
-    PHPPdf\Core\UnitConverter,
-    PHPPdf\Core\Document,
-    PHPPdf\Core\Engine\GraphicsContext,
-    PHPPdf\Exception\Exception,
-    PHPPdf\Util,
-    PHPPdf\Core\Node\Node;
+use PHPPdf\Exception\InvalidArgumentException;
+
+use PHPPdf\Core\Node\Page;
+use PHPPdf\Core\UnitConverter;
+use PHPPdf\Core\Document;
+use PHPPdf\Core\Engine\GraphicsContext;
+use PHPPdf\Util;
+use PHPPdf\Core\Node\Node;
 
 /**
  * Enhance node by drawing background
@@ -58,13 +59,13 @@ class Background extends ComplexAttribute
         $allowedXPositions = array(self::POSITION_LEFT, self::POSITION_CENTER, self::POSITION_RIGHT);
         if(!in_array($positionX, $allowedXPositions))
         {
-            throw new Exception(sprintf('Invalid x position "%s" for background, allowed values: %s.', $positionX, implode(', ', $allowedXPositions)));
+            throw new InvalidArgumentException(sprintf('Invalid x position "%s" for background, allowed values: %s.', $positionX, implode(', ', $allowedXPositions)));
         }
 
         $allowedYPositions = array(self::POSITION_TOP, self::POSITION_CENTER, self::POSITION_BOTTOM);
         if(!in_array($positionY, $allowedYPositions))
         {
-            throw new Exception(sprintf('Invalid y position "%s" for background, allowed values: %s.', $positionY, implode(', ', $allowedYPositions)));
+            throw new InvalidArgumentException(sprintf('Invalid y position "%s" for background, allowed values: %s.', $positionY, implode(', ', $allowedYPositions)));
         }
 
         $this->positionX = $positionX;

@@ -8,6 +8,8 @@
 
 namespace PHPPdf\Core\Engine;
 
+use PHPPdf\Exception\InvalidArgumentException;
+
 /**
  * Abstract font
  * 
@@ -37,15 +39,15 @@ abstract class AbstractFont implements Font
 
         if(count($fonts) === 0)
         {
-            throw new \InvalidArgumentException('Passed empty map of fonts.');
+            throw new InvalidArgumentException('Passed empty map of fonts.');
         }
         elseif(count(\array_diff(array_keys($fonts), $types)) > 0)
         {
-            throw new \InvalidArgumentException('Invalid font types in map of fonts.');
+            throw new InvalidArgumentException('Invalid font types in map of fonts.');
         }
         elseif(!isset($fonts[self::STYLE_NORMAL]))
         {
-            throw new \InvalidArgumentException('Path for normal font must by passed.');
+            throw new InvalidArgumentException('Path for normal font must by passed.');
         }
     }
     

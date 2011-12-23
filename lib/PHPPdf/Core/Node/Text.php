@@ -8,15 +8,15 @@
 
 namespace PHPPdf\Core\Node;
 
+use PHPPdf\Exception\InvalidArgumentException;
 use PHPPdf\Core\DrawingTaskHeap;
-
-use PHPPdf\Core\Node\Node,
-    PHPPdf\Core\UnitConverter,
-    PHPPdf\Core\Node\Paragraph\LinePart,
-    PHPPdf\Core\Formatter\Formatter,
-    PHPPdf\Core\Document,
-    PHPPdf\Core\Point,
-    PHPPdf\Core\DrawingTask;
+use PHPPdf\Core\Node\Node;
+use PHPPdf\Core\UnitConverter;
+use PHPPdf\Core\Node\Paragraph\LinePart;
+use PHPPdf\Core\Formatter\Formatter;
+use PHPPdf\Core\Document;
+use PHPPdf\Core\Point;
+use PHPPdf\Core\DrawingTask;
 
 /**
  * Text node
@@ -143,7 +143,7 @@ class Text extends Node
     {
         if(count($words) != count($sizes))
         {
-            throw new \InvalidArgumentException(sprintf('Words and sizes of words arrays have to have the same length.'));
+            throw new InvalidArgumentException(sprintf('Words and sizes of words arrays have to have the same length.'));
         }
 
         $this->words = $words;

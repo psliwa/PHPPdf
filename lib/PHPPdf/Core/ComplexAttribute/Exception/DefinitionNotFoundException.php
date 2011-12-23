@@ -8,9 +8,11 @@
 
 namespace PHPPdf\Core\ComplexAttribute\Exception;
 
+use PHPPdf\Exception as ExceptionInterface;
+
 /**
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
-class DefinitionNotFoundException extends \Exception
+class DefinitionNotFoundException extends \Exception implements ExceptionInterface
 {
 }

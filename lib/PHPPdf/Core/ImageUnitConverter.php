@@ -1,7 +1,22 @@
 <?php
 
+/*
+ * Copyright 2011 Piotr Śliwa <peter.pl7@gmail.com>
+ *
+ * License information is in LICENSE file
+ */
+
 namespace PHPPdf\Core;
 
+use PHPPdf\Exception\InvalidArgumentException;
+
+/**
+ * Unit converter
+ * 
+ * Base unit of this converter is pixel
+ *
+ * @author Piotr Śliwa <peter.pl7@gmail.com>
+ */
 class ImageUnitConverter extends AbstractUnitConverter
 {
     private $pixelPerUnits;
@@ -11,7 +26,7 @@ class ImageUnitConverter extends AbstractUnitConverter
     {
         if(!is_int($dpi) || $dpi < 1)
         {
-            throw new \InvalidArgumentException(sprintf('Dpi must be positive integer, "%s" given.', $dpi));
+            throw new InvalidArgumentException(sprintf('Dpi must be positive integer, "%s" given.', $dpi));
         }
 
         $this->dpi = $dpi;

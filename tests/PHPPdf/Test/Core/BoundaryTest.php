@@ -31,7 +31,7 @@ class BoundaryTest extends \PHPPdf\PHPUnit\Framework\TestCase
 
     /**
      * @test
-     * @expectedException \BadMethodCallException
+     * @expectedException PHPPdf\Exception\LogicException
      */
     public function invalidCreation()
     {
@@ -41,7 +41,7 @@ class BoundaryTest extends \PHPPdf\PHPUnit\Framework\TestCase
 
     /**
      * @test
-     * @expectedException \LogicException
+     * @expectedException PHPPdf\Exception\LogicException
      */
     public function invalidStateException()
     {
@@ -163,7 +163,7 @@ class BoundaryTest extends \PHPPdf\PHPUnit\Framework\TestCase
 
     /**
      * @test
-     * @expectedException \OutOfBoundsException
+     * @expectedException PHPPdf\Exception\OutOfBoundsException
      */
     public function arrayAccessInvalidIndex()
     {
@@ -175,7 +175,7 @@ class BoundaryTest extends \PHPPdf\PHPUnit\Framework\TestCase
 
     /**
      * @test
-     * @expectedException \BadFunctionCallException
+     * @expectedException PHPPdf\Exception\BadFunctionCallException
      */
     public function arrayAccessInvalidOperation()
     {

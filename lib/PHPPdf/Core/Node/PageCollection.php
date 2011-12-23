@@ -8,10 +8,11 @@
 
 namespace PHPPdf\Core\Node;
 
+use PHPPdf\Exception\LogicException;
 use PHPPdf\Core\DrawingTaskHeap;
-use PHPPdf\Core\Document,
-    PHPPdf\Core\Node\Container,
-    PHPPdf\Core\Formatter\Formatter;
+use PHPPdf\Core\Document;
+use PHPPdf\Core\Node\Container;
+use PHPPdf\Core\Formatter\Formatter;
 
 /**
  * Collection of the pages
@@ -32,7 +33,7 @@ class PageCollection extends Container
 
     public function breakAt($height)
     {
-        throw new \LogicException('PageCollection can\'t be broken.');
+        throw new LogicException('PageCollection can\'t be broken.');
     }
     
     public function getGraphicsContext()

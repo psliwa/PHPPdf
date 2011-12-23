@@ -8,6 +8,8 @@
 
 namespace PHPPdf\Core;
 
+use PHPPdf\Exception\InvalidArgumentException;
+
 /**
  * Unit converter
  * 
@@ -22,7 +24,7 @@ class PdfUnitConverter extends AbstractUnitConverter
     {
         if(!is_int($dpi) || $dpi < 1)
         {
-            throw new \InvalidArgumentException(sprintf('Dpi must be positive integer, "%s" given.', $dpi));
+            throw new InvalidArgumentException(sprintf('Dpi must be positive integer, "%s" given.', $dpi));
         }
 
         $this->dpi = $dpi;

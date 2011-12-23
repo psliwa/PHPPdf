@@ -8,6 +8,8 @@
 
 namespace PHPPdf;
 
+use PHPPdf\Exception\BadMethodCallException;
+
 /**
  * Class with generic util functions
  *
@@ -17,7 +19,7 @@ final class Util
 {
     private function __construct()
     {
-        throw new \BadMethodCallException(sprintf('Object of "%s" class can not be created.', __CLASS__));
+        throw new BadMethodCallException(sprintf('Object of "%s" class can not be created.', __CLASS__));
     }
     
     public static function convertBooleanValue($value)
