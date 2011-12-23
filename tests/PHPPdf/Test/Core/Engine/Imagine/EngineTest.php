@@ -132,4 +132,39 @@ class EngineTest extends TestCase
             $this->engine->attachGraphicsContext($gc);
         }
     }
+    
+    /**
+     * @test
+     */
+    public function loadEngineSuccess()
+    {
+        $path = 'some.png';
+        
+        $image = $this->getMock('Imagine\Image\ImageInterface');
+        
+        $this->imagine->expects($this->once())
+                      ->method('open')
+                      ->with($path)
+                      ->will($this->returnValue($image));
+        
+        $engine = $this->engine->loadEngine($path);
+        
+        $this->assertEquals(1, count($engine->getAttachedGraphicsContexts()));
+    }
+    
+    /**
+     * @test
+     * @expectedException PHPPdf\Exception\InvalidResourceException
+     */
+    public function loadEngineFailure()
+    {
+        $path = 'some.png';
+        
+        $this->imagine->expects($this->once())
+                      ->method('open')
+                      ->with($path)
+                      ->will($this->throwException(new \Imagine\Exception\RuntimeException()));
+
+       $this->engine->loadEngine($path);
+    }
 }

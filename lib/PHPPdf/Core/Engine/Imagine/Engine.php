@@ -8,6 +8,7 @@
 
 namespace PHPPdf\Core\Engine\Imagine;
 
+use PHPPdf\Exception\InvalidResourceException;
 use PHPPdf\Core\Engine\AbstractEngine;
 use PHPPdf\Core\UnitConverter;
 use Imagine\Image\ImagineInterface;
@@ -77,9 +78,24 @@ class Engine extends AbstractEngine
     
     public function loadEngine($file)
     {
-        throw new \BadMethodCallException(sprintf('Method "%s" is not implemented.', __METHOD__));
+        try
+        {
+            $image = $this->imagine->open($file);
+            
+            $gc = new GraphicsContext($this->imagine, $image);
+            
+            $engine = new self($this->imagine, $this->outputFormat, $this->unitConverter);
+            
+            $engine->attachGraphicsContext($gc);
+            
+            return $engine;
+        }
+        catch(\Imagine\Exception\RuntimeException $e)
+        {
+            InvalidResourceException::invalidImageException($file, $e);
+        }
     }
-    
+
     public function setMetadataValue($name, $value)
     {
         //not supported

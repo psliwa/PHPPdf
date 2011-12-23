@@ -22,6 +22,8 @@ use Imagine\Image\Color as ImagineColor;
  * Graphics context for Imagine
  * 
  * * TODO: lineDashingPattern for doDrawPolygon
+ * * TODO: support for lineWidth
+ * * TODO: word spacing support - text justify
  * 
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
