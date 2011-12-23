@@ -146,7 +146,7 @@ class Engine extends AbstractEngine
         
         if(!is_readable($file))
         {
-            InvalidResourceException::fileDosntExistException($file);
+            throw InvalidResourceException::fileDosntExistException($file);
         }
 
         try
@@ -166,7 +166,7 @@ class Engine extends AbstractEngine
         }
         catch(\Zend\Pdf\Exception $e)
         {
-            InvalidResourceException::invalidPdfFileException($file, $e);
+            throw InvalidResourceException::invalidPdfFileException($file, $e);
         }
     }
     

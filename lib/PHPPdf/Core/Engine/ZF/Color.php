@@ -30,7 +30,7 @@ class Color implements BaseColor
         }
         catch(Exception $e)
         {
-            InvalidResourceException::invalidColorException($colorData, $e);
+            throw InvalidResourceException::invalidColorException($colorData, $e);
         }
     }
     

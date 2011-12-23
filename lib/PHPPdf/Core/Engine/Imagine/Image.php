@@ -57,7 +57,7 @@ class Image implements BaseImage
             }
             catch(\Imagine\Exception\Exception $e)
             {
-                InvalidResourceException::invalidImageException($this->imagePath, $e);
+                throw InvalidResourceException::invalidImageException($this->imagePath, $e);
             }
         }
         

@@ -49,7 +49,7 @@ class Font extends AbstractFont
         }
         catch(\Zend\Pdf\Exception $e)
         {
-            InvalidResourceException::invalidFontException($this->fontResources[$style], $e);
+            throw InvalidResourceException::invalidFontException($this->fontResources[$style], $e);
         }
     }
     

@@ -20,7 +20,7 @@ class CacheImplTest extends \PHPPdf\PHPUnit\Framework\TestCase
 
     /**
      * @test
-     * @expectedException \PHPPdf\Exception\Exception
+     * @expectedException \PHPPdf\Exception\RuntimeException
      */
     public function throwExceptionIfPassedCacheEngineIsUnavailable()
     {
@@ -66,7 +66,7 @@ class CacheImplTest extends \PHPPdf\PHPUnit\Framework\TestCase
 
     /**
      * @test
-     * @expectedException \PHPPdf\Exception\Exception
+     * @expectedException \PHPPdf\Exception\RuntimeException
      * @dataProvider provideCacheOperations
      */
     public function wrapCacheEngineExceptions($operation, array $args)

@@ -40,7 +40,7 @@ class Image implements BaseImage
         
         if(!$this->pathExists($path) || ($data = @getimagesize($path)) === false)
         {
-            InvalidResourceException::invalidImageException($path);
+            throw InvalidResourceException::invalidImageException($path);
         }
         
         $this->type = $data[2];
@@ -68,12 +68,12 @@ class Image implements BaseImage
             }
             else
             {
-                InvalidResourceException::unsupportetImageTypeException($path);
+                throw InvalidResourceException::unsupportetImageTypeException($path);
             }
         }
         catch(\Zend\Pdf\Exception $e)
         {
-            InvalidResourceException::invalidImageException($path, $e);
+            throw InvalidResourceException::invalidImageException($path, $e);
         }
     }
     

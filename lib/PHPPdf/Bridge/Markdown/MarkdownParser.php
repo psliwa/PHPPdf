@@ -2,6 +2,7 @@
 
 namespace PHPPdf\Bridge\Markdown;
 
+use PHPPdf\Exception\RuntimeException;
 use PHPPdf\Parser\Parser;
 
 class MarkdownParser implements Parser
@@ -17,7 +18,7 @@ class MarkdownParser implements Parser
             }
             else
             {
-                throw new \Exception('PHP Markdown library not found. Maybe you should call "> php vendors.php" command from root dir of PHPPdf library to download dependencies?');
+                throw new RuntimeException('PHP Markdown library not found. Maybe you should call "> php vendors.php" command from root dir of PHPPdf library to download dependencies?');
             }
         }
     }

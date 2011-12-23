@@ -8,7 +8,7 @@
 
 namespace PHPPdf\Cache;
 
-use PHPPdf\Exception\Exception;
+use PHPPdf\Exception\RuntimeException;
 use Zend\Cache\Frontend\Core;
 
 /**
@@ -68,7 +68,7 @@ class CacheImpl implements Cache
 
     private function cacheEngineDosntExistException($engine, \Exception $e = null)
     {
-        throw new Exception(sprintf('Cache engine "%s" dosn\'t exist.', $engine), 1, $e);
+        throw new RuntimeException(sprintf('Cache engine "%s" dosn\'t exist.', $engine), 1, $e);
     }
 
     private function setBackend(\Zend\Cache\Backend $backend)
@@ -90,7 +90,7 @@ class CacheImpl implements Cache
 
     private function wrapLowLevelException(\Exception $e, $methodName)
     {
-        throw new Exception(sprintf('Error while invoking "%s".', $methodName), 0, $e);
+        throw new RuntimeException(sprintf('Error while invoking "%s".', $methodName), 0, $e);
     }
 
     public function test($id)

@@ -92,7 +92,7 @@ class Engine extends AbstractEngine
         }
         catch(\Imagine\Exception\RuntimeException $e)
         {
-            InvalidResourceException::invalidImageException($file, $e);
+            throw InvalidResourceException::invalidImageException($file, $e);
         }
     }
 
