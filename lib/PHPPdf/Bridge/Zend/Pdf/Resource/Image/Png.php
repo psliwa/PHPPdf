@@ -312,7 +312,7 @@ class Png extends BasePng
                 return new FopenInputStream($imageFileName, 'rb');
             }
         }
-        catch(\PHPPdf\Exception\Exception $e)
+        catch(\PHPPdf\Exception $e)
         {
             return false;
         }

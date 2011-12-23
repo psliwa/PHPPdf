@@ -9,9 +9,7 @@
 namespace PHPPdf\Core\Node\Behaviour;
 
 use PHPPdf\Exception\RuntimeException;
-
-use PHPPdf\Exception\Exception,
-    PHPPdf\Core\Node\Manager;
+use PHPPdf\Core\Node\Manager;
 
 /**
  * @author Piotr Śliwa <peter.pl7@gmail.com>

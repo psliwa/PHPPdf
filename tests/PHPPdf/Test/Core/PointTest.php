@@ -48,7 +48,7 @@ class PointTest extends \PHPPdf\PHPUnit\Framework\TestCase
 
     /**
      * @test
-     * @expectedException \OutOfBoundsException
+     * @expectedException PHPPdf\Exception\OutOfBoundsException
      */
     public function throwExceptionIfArrayAccessIsBadCall()
     {
@@ -58,7 +58,7 @@ class PointTest extends \PHPPdf\PHPUnit\Framework\TestCase
 
     /**
      * @test
-     * @expectedException \BadMethodCallException
+     * @expectedException PHPPdf\Exception\BadMethodCallException
      */
     public function throwExceptionIfArrayAccessSetMethodIsInvoked()
     {

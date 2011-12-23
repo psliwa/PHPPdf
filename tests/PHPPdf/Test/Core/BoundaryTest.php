@@ -175,7 +175,7 @@ class BoundaryTest extends \PHPPdf\PHPUnit\Framework\TestCase
 
     /**
      * @test
-     * @expectedException PHPPdf\Exception\BadFunctionCallException
+     * @expectedException PHPPdf\Exception\BadMethodCallException
      */
     public function arrayAccessInvalidOperation()
     {

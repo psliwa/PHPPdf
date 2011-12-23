@@ -9,7 +9,6 @@
 namespace PHPPdf\Core\Node\Behaviour;
 
 use PHPPdf\Exception\RuntimeException;
-use PHPPdf\Exception\Exception;
 use PHPPdf\Core\Node\Node;
 use PHPPdf\Core\Engine\GraphicsContext;
 

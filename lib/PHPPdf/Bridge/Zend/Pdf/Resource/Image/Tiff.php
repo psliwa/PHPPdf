@@ -9,7 +9,6 @@
 namespace PHPPdf\Bridge\Zend\Pdf\Resource\Image;
 
 use PHPPdf\InputStream\InputStream;
-use PHPPdf\Exception\Exception;
 use PHPPdf\InputStream\StringInputStream;
 use PHPPdf\InputStream\FopenInputStream;
 use Zend\Pdf\Resource\Image\Tiff as BaseTiff;
@@ -316,7 +315,7 @@ class Tiff extends BaseTiff
                 return new FopenInputStream($imageFileName, 'rb');
             }
         }
-        catch(Exception $e)
+        catch(\PHPPdf\Exception $e)
         {
             return false;
         }

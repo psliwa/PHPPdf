@@ -11,7 +11,7 @@ namespace PHPPdf\Exception;
 /**
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
-class InvalidResourceException extends Exception
+class InvalidResourceException extends InvalidArgumentException
 {
     public static function invalidColorException($color, \Exception $previous = null)
     {

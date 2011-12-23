@@ -9,7 +9,7 @@
 namespace PHPPdf\Core;
 
 use PHPPdf\Exception\OutOfBoundsException;
-use PHPPdf\Exception\BadFunctionCallException;
+use PHPPdf\Exception\BadMethodCallException;
 use PHPPdf\Exception\InvalidArgumentException;
 use PHPPdf\Exception\LogicException;
 
@@ -331,12 +331,12 @@ class Boundary implements \Countable, \Iterator, \ArrayAccess, \Serializable
 
     public function offsetSet($offset, $value)
     {
-        throw new BadFunctionCallException('You can not set point directly.');
+        throw new BadMethodCallException('You can not set point directly.');
     }
 
     public function offsetUnset($offset)
     {
-        throw new BadFunctionCallException('You can not unset point directly.');
+        throw new BadMethodCallException('You can not unset point directly.');
     }
 
     public function __clone()

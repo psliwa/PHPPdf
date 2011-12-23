@@ -9,12 +9,8 @@
 namespace PHPPdf\Core\Engine\ZF;
 
 use PHPPdf\Exception\RuntimeException;
-
 use PHPPdf\Exception\InvalidArgumentException;
-
 use PHPPdf\Bridge\Zend\Pdf\Page;
-
-use PHPPdf\Exception\Exception;
 use PHPPdf\Core\Engine\AbstractGraphicsContext;
 use PHPPdf\Core\Engine\GraphicsContext as BaseGraphicsContext;
 use PHPPdf\Core\Engine\Color as BaseColor;

@@ -12,7 +12,6 @@ use PHPPdf\Exception\RuntimeException;
 
 use PHPPdf\Core\Engine\AbstractEngine;
 use PHPPdf\Core\UnitConverter;
-use PHPPdf\Exception\Exception;
 use PHPPdf\Util;
 use PHPPdf\Exception\InvalidResourceException;
 use PHPPdf\Core\Engine\GraphicsContext as BaseGraphicsContext;
