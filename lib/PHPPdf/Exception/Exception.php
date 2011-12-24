@@ -6,7 +6,7 @@
  * License information is in LICENSE file
  */
 
-namespace PHPPdf;
+namespace PHPPdf\Exception;
 
 /**
  * Exception interface - all exceptions of PHPPdf library implements that interface
