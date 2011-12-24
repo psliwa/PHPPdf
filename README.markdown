@@ -317,8 +317,8 @@ Complex attributes can be set by notation "attributeName.attributeProperty" or "
     - use-real-dimension: attribute only used by page (or dynamic-page). True for filling also margins, false in otherwise.
     - image-width: custom width of background image, percentage values are allowed
     - image-height: custom height of background image, percentage values are allowed
-    - position-x: horizontal position for image of background, allowed values: left, center, right (default: left)
-    - position-y: vertical position for image of background, allowed values: top, center, bottom (default: top)
+    - position-x: horizontal position for image of background, allowed values: left, center, right or numeric value (default: left)
+    - position-y: vertical position for image of background, allowed values: top, center, bottom or numeric value (default: top)
 
 It is possible to add several complex attributes in the same type (for instance 3 different borders). You can achieve that by using "stylesheet" tag instead of short notation.
 

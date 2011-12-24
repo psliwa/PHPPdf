@@ -87,10 +87,17 @@ class BackgroundTest extends \PHPPdf\PHPUnit\Framework\TestCase
         return $image;
     }
     
-    private function createDocumentMock($imagePath, $image)
+    private function createDocumentMock($imagePath, $image, $mockUnitConverterInterface = true)
     {
+        $methods = array('createImage');
+        
+        if($mockUnitConverterInterface)
+        {
+            $methods = array_merge($methods, array('convertUnit', 'convertPercentageValue'));
+        }
+        
         $document = $this->getMockBuilder('PHPPdf\Core\Document')
-                         ->setMethods(array('createImage', 'convertUnit', 'convertPercentageValue'))
+                         ->setMethods($methods)
                          ->disableOriginalConstructor()
                          ->getMock();
         $document->expects($this->once())
@@ -396,24 +403,23 @@ class BackgroundTest extends \PHPPdf\PHPUnit\Framework\TestCase
      * @test
      * @dataProvider positionProvider
      */
-    public function drawImageAsBackgroundInProperPosition($positionX, $positionY, $expectedPositionX, $expectedPositionY)
+    public function drawImageAsBackgroundInProperPosition($nodeXCoord, $positionX, $positionY, $expectedPositionX, $expectedPositionY)
     {
         $imagePath = 'image/path';
 
         $image = $this->createImageMock(self::IMAGE_WIDTH, self::IMAGE_HEIGHT);        
-        $document = $this->createDocumentMock($imagePath, $image);
+        $document = $this->createDocumentMock($imagePath, $image, false);
         
         $complexAttribute = new Background(null, $imagePath, Background::REPEAT_NONE, null, false, null, null, $positionX, $positionY);
         
         $gcMock = $this->getMockBuilder('PHPPdf\Core\Engine\GraphicsContext')
         			   ->getMock();
 
-        $x = 0;
         $y = self::IMAGE_HEIGHT*2;
         $nodeWidth = 100;
         $nodeHeight = $y;
         			   
-        $nodeMock = $this->getNodeMock($x, $y, $nodeWidth, $nodeHeight, $gcMock);
+        $nodeMock = $this->getNodeMock($nodeXCoord, $y, $nodeWidth, $nodeHeight, $gcMock);
         
         $gcMock->expects($this->once())
                ->method('drawImage')
@@ -425,11 +431,31 @@ class BackgroundTest extends \PHPPdf\PHPUnit\Framework\TestCase
     public function positionProvider()
     {
         return array(
-            array(Background::POSITION_LEFT, Background::POSITION_TOP, 0, 2*self::IMAGE_HEIGHT),
-            array(Background::POSITION_RIGHT, Background::POSITION_TOP, 100 - self::IMAGE_WIDTH, 2*self::IMAGE_HEIGHT),
-            array(Background::POSITION_CENTER, Background::POSITION_TOP, 50 - self::IMAGE_WIDTH/2, 2*self::IMAGE_HEIGHT),
-            array(Background::POSITION_LEFT, Background::POSITION_BOTTOM, 0, self::IMAGE_HEIGHT),
-            array(Background::POSITION_LEFT, Background::POSITION_CENTER, 0, 2*3/4*self::IMAGE_HEIGHT),
+            array(10, Background::POSITION_LEFT, Background::POSITION_TOP, 10, 2*self::IMAGE_HEIGHT),
+            array(20, Background::POSITION_RIGHT, Background::POSITION_TOP, 20 + 100 - self::IMAGE_WIDTH, 2*self::IMAGE_HEIGHT),
+            array(10, Background::POSITION_CENTER, Background::POSITION_TOP, 10 + 50 - self::IMAGE_WIDTH/2, 2*self::IMAGE_HEIGHT),
+            array(15, Background::POSITION_LEFT, Background::POSITION_BOTTOM, 15, self::IMAGE_HEIGHT),
+            array(13, Background::POSITION_LEFT, Background::POSITION_CENTER, 13, 2*3/4*self::IMAGE_HEIGHT),
+            array(12, 40, 50, 12 + 40, self::IMAGE_HEIGHT*2 - 50),
+            array(12, '40px', '50%', 12 + 40, self::IMAGE_HEIGHT*2 - 50),
+        );
+    }
+    
+    /**
+     * @test
+     * @dataProvider invalidPositionProvider
+     * @expectedException PHPPdf\Exception\InvalidArgumentException
+     */
+    public function throwExceptionOnInvalidBackgroundPosition($positionX, $positionY)
+    {
+        new Background(null, 'path', Background::REPEAT_NONE, null, false, null, null, $positionX, $positionY);
+    }
+    
+    public function invalidPositionProvider()
+    {
+        return array(
+            array('a10', 10),
+            array(10, 'a10'),
         );
     }
 }

@@ -57,19 +57,31 @@ class Background extends ComplexAttribute
     private function setPosition($positionX, $positionY)
     {
         $allowedXPositions = array(self::POSITION_LEFT, self::POSITION_CENTER, self::POSITION_RIGHT);
-        if(!in_array($positionX, $allowedXPositions))
+        if(!in_array($positionX, $allowedXPositions) && !$this->isNumeric($positionX))
         {
-            throw new InvalidArgumentException(sprintf('Invalid x position "%s" for background, allowed values: %s.', $positionX, implode(', ', $allowedXPositions)));
+            throw new InvalidArgumentException(sprintf('Invalid x position "%s" for background, allowed values: %s or numeric value.', $positionX, implode(', ', $allowedXPositions)));
         }
 
         $allowedYPositions = array(self::POSITION_TOP, self::POSITION_CENTER, self::POSITION_BOTTOM);
-        if(!in_array($positionY, $allowedYPositions))
+        if(!in_array($positionY, $allowedYPositions) && !$this->isNumeric($positionY))
         {
-            throw new InvalidArgumentException(sprintf('Invalid y position "%s" for background, allowed values: %s.', $positionY, implode(', ', $allowedYPositions)));
+            throw new InvalidArgumentException(sprintf('Invalid y position "%s" for background, allowed values: %s or numeric value.', $positionY, implode(', ', $allowedYPositions)));
         }
 
         $this->positionX = $positionX;
         $this->positionY = $positionY;
+    }
+    
+    private function isNumeric($value)
+    {
+        if(is_numeric($value))
+        {
+            return true;
+        }
+        
+        $numericValue = (string) (double) $value;
+        
+        return $numericValue === substr($value, 0, strlen($numericValue));
     }
 
     private function setRepeat($repeat)
@@ -137,8 +149,8 @@ class Background extends ComplexAttribute
             $repeatX = $this->repeat & self::REPEAT_X;
             $repeatY = $this->repeat & self::REPEAT_Y;
 
-            $currentX = $this->getXCoord($node, $width, $x);
-            $currentY = $y = $this->getYCoord($node, $height, $y);
+            $currentX = $this->getXCoord($node, $width, $x, $document);
+            $currentY = $y = $this->getYCoord($node, $height, $y, $document);
 
             do
             {
@@ -158,7 +170,7 @@ class Background extends ComplexAttribute
         }
     }
     
-    private function getXCoord(Node $node, $width, $x)
+    private function getXCoord(Node $node, $width, $x, UnitConverter $converter)
     {
         switch($this->positionX)
         {
@@ -168,12 +180,14 @@ class Background extends ComplexAttribute
             case self::POSITION_CENTER:
                 $realWidth = $node->getDiagonalPoint()->getX() - $node->getFirstPoint()->getX();
                 return ($x + $realWidth/2) - $width/2;
-            default:
+            case self::POSITION_LEFT:
                 return $x;
+            default:
+                return $x + $converter->convertUnit($converter->convertPercentageValue($this->positionX, $node->getWidth()));
         }
     }
     
-    private function getYCoord(Node $node, $height, $y)
+    private function getYCoord(Node $node, $height, $y, UnitConverter $converter)
     {
         switch($this->positionY)
         {
@@ -183,8 +197,10 @@ class Background extends ComplexAttribute
             case self::POSITION_CENTER:
                 $realHeight = $node->getFirstPoint()->getY() - $node->getDiagonalPoint()->getY();
                 return ($y - $realHeight/2) + $height/2;
-            default:
+            case self::POSITION_TOP:
                 return $y;
+            default:
+                return $y - $converter->convertUnit($converter->convertPercentageValue($this->positionY, $node->getHeight()));
         }
     }
     

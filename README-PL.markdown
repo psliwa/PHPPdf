@@ -316,8 +316,8 @@ Atrybuty złożone mogą zostać ustawione za pomocą notacji "nazwaAtrybutu.naz
     - use-real-dimension: atrybut wykorzystany jak narazie dla tagu page (lub dynamic-page). True jeśli zapełniać marginesy, false w przeciwnym wypadku.
     - image-width: szerokość obrazka tła, może być wartością procentową
     - image-height: wysokość obrazka tła, może być wartością procentową
-    - position-x: horyzontalna pozycja obrazka tła, dozwolone wartości: left, center, right (domyślnie: left)
-    - position-y: wertykalna pozycja obrazka tła, dozwolone wartości: top, center, bottom (domyślnie: top)
+    - position-x: horyzontalna pozycja obrazka tła, dozwolone wartości: left, center, right lub wartość liczbowa (domyślnie: left)
+    - position-y: wertykalna pozycja obrazka tła, dozwolone wartości: top, center, bottom lub wartość liczbowa (domyślnie: top)
 
 Można dodawać kilka upiększeń tego samego typu (np. 3 różne obramowania) używając tagu "stylesheet" zamiast krótkiej notacji ("border.color"):
 
