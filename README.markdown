@@ -658,10 +658,13 @@ By default Gd library is used to render a image. You can use Imagick that offers
     $builder = ...;
     $builder->setEngineOptions(array(
         'engine' => 'imagick',
-        'format' => 'png',
+        'format' => 'png',//png, jpeg or wbmp
+        'quality' => 60,//int from 0 to 100
     ));
     
 Supported graphic libraries: gd (default), imagick, gmagick. PHPPdf uses [Imagine][2] library as interface for graphic files generation.
+
+
 
 <a name="limitations"></a>
 Known limitations

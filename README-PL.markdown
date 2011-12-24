@@ -655,7 +655,8 @@ Domyślną biblioteką generującą obrazki jest Gd, możesz używać biblioteki
     $builder = ...;
     $builder->setEngineOptions(array(
         'engine' => 'imagick',
-        'format' => 'png',
+        'format' => 'png',//png, jpeg lub wbmp
+        'quality' => 60,//liczba całkowita od 0 do 100
     ));
 
 Wspierane biblioteki graficzne: gd (domyślnie), imagick, gmagick. PHPPdf wykorzystuje bibliotekę [Imagine][2] jako interfejs do generowania plików graficznych.
