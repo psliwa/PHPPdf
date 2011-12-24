@@ -23,16 +23,18 @@ class EngineFactoryImpl implements EngineFactory
 {
     const TYPE_PDF = 'pdf';
     const TYPE_IMAGE = 'image';
-    
+
     const OPTION_ENGINE = 'engine';
     const OPTION_FORMAT = 'format';
-    
+    const OPTION_QUALITY = 'quality';
+
     const ENGINE_GD = 'Gd';
     const ENGINE_IMAGICK = 'Imagick';
     const ENGINE_GMAGICK = 'Gmagick';
     
     const FORMAT_PNG = 'png';
     const FORMAT_JPEG = 'jpeg';
+    const FORMAT_WBMP = 'wbmp';
 
     public function createEngine($type, array $options = array())
     {
@@ -53,7 +55,14 @@ class EngineFactoryImpl implements EngineFactory
                 
                 $imagine = new $imagineClass();
                 
-                return new ImagineEngine($imagine, $format, new ImageUnitConverter());
+                $renderOptions = array();
+                
+                if(isset($options[self::OPTION_QUALITY]))
+                {
+                    $renderOptions[self::OPTION_QUALITY] = $options[self::OPTION_QUALITY];
+                }
+
+                return new ImagineEngine($imagine, $format, new ImageUnitConverter(), $renderOptions);
             default:
                 throw new DomainException(sprintf('Unknown engine type: "%s".', $type));
         }

@@ -25,12 +25,14 @@ class Engine extends AbstractEngine
     private $imagine;
     private $graphicsContexts = array();
     private $outputFormat;
+    private $renderOptions;
     
-    public function __construct(ImagineInterface $imagine, $outputFormat, UnitConverter $unitConverter = null)
+    public function __construct(ImagineInterface $imagine, $outputFormat, UnitConverter $unitConverter = null, array $renderOptions = array())
     {
         parent::__construct($unitConverter);
         $this->imagine = $imagine;
         $this->outputFormat = (string) $outputFormat;
+        $this->renderOptions = $renderOptions;
     }
     
     public function createGraphicsContext($graphicsContextSize)
@@ -65,7 +67,7 @@ class Engine extends AbstractEngine
         foreach($this->graphicsContexts as $gc)
         {
             $gc->commit();
-            $contents[] = $gc->render($this->outputFormat);
+            $contents[] = $gc->render($this->outputFormat, $this->renderOptions);
         }
 
         return $contents;

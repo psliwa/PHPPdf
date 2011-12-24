@@ -506,8 +506,8 @@ class GraphicsContext extends AbstractGraphicsContext
         return $copy;
     }
     
-    public function render($format)
+    public function render($format, array $options = array())
     {
-        return $this->image->get($format);
+        return $this->image->get($format, $options);
     }
 }
