@@ -43,12 +43,12 @@ interface GraphicsContext
     public function setFont(Font $font, $size);
 
     /**
-     * @param string|PHPPdf\Core\Engine\Color String representing color or color object
+     * @param string String representing color
      */
     public function setFillColor($color);
 
     /**
-     * @param string|PHPPdf\Core\Engine\Color String representing color or color object
+     * @param string String representing color
      */
     public function setLineColor($color);
     

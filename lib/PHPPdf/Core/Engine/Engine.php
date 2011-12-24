@@ -28,13 +28,6 @@ interface Engine extends UnitConverter
     public function createGraphicsContext($graphicsContextSize);
     
     /**
-     * Creates and returns Color object depends on color data
-     * 
-     * @return Color
-     */
-    public function createColor($data);
-    
-    /**
      * Creates and returns Image object depends on image data
      * 
      * @return Image

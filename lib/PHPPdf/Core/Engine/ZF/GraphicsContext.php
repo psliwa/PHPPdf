@@ -13,7 +13,6 @@ use PHPPdf\Exception\InvalidArgumentException;
 use PHPPdf\Bridge\Zend\Pdf\Page;
 use PHPPdf\Core\Engine\AbstractGraphicsContext;
 use PHPPdf\Core\Engine\GraphicsContext as BaseGraphicsContext;
-use PHPPdf\Core\Engine\Color as BaseColor;
 use PHPPdf\Core\Engine\Font as BaseFont;
 use PHPPdf\Core\Engine\Image as BaseImage;
 use Zend\Pdf\Page as ZendPage;
@@ -22,6 +21,7 @@ use Zend\Pdf\InternalType\StringObject;
 use Zend\Pdf\InternalType\ArrayObject;
 use Zend\Pdf\Font as ZendFont;
 use Zend\Pdf\Resource\Font\AbstractFont as ZendResourceFont;
+use Zend\Pdf\Color\Html as ZendColor;
 
 /**
  * @author Piotr Śliwa <peter.pl7@gmail.com>
@@ -127,7 +127,7 @@ class GraphicsContext extends AbstractGraphicsContext
         $color = $this->getColor($colorData);
         if(!$this->state['fillColor'] || $color->getComponents() !== $this->state['fillColor']->getComponents())
         {
-            $this->getPage()->setFillColor($color->getWrappedColor());
+            $this->getPage()->setFillColor($color);
             $this->state['fillColor'] = $color;
         }
     }
@@ -136,12 +136,12 @@ class GraphicsContext extends AbstractGraphicsContext
     {
         if(is_string($colorData))
         {
-            return $this->engine->createColor($colorData);
+            return ZendColor::color($colorData);
         }
         
-        if(!$colorData instanceof BaseColor)
+        if(!$colorData instanceof ZendColor)
         {
-            throw new InvalidArgumentException('Wrong color value, expected string or object of PHPPdf\Core\Engine\Color class.');
+            throw new InvalidArgumentException('Wrong color value, expected string or object of Zend\Pdf\Color\Html class.');
         }
         
         return $colorData;
@@ -152,7 +152,7 @@ class GraphicsContext extends AbstractGraphicsContext
         $color = $this->getColor($colorData);
         if(!$this->state['lineColor'] || $color->getComponents() !== $this->state['lineColor']->getComponents())
         {
-            $this->getPage()->setLineColor($color->getWrappedColor());
+            $this->getPage()->setLineColor($color);
             $this->state['lineColor'] = $color;
         }
     }

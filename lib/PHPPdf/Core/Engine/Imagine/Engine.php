@@ -37,12 +37,7 @@ class Engine extends AbstractEngine
     {
         return new GraphicsContext($this->imagine, $graphicsContextSize);
     }
-    
-    public function createColor($data)
-    {
-        return new Color($color);
-    }
-    
+
     public function createImage($imageData)
     {
         return new Image($imageData, $this->imagine);

@@ -19,8 +19,7 @@ class LinePartTest extends \PHPPdf\PHPUnit\Framework\TestCase
     public function drawLinePartUsingTextNodeAttributes($fontSize, $lineHeightOfText, $textDecoration, $expectedLineDecorationYCoord, $wordSpacing)
     {
         $encodingStub = 'utf-16';
-        $colorStub = $this->getMockBuilder('PHPPdf\Core\Engine\Color')
-                          ->getMock();
+        $colorStub = '#654321';
         $fontStub = $this->getMockBuilder('PHPPdf\Core\Engine\Font')
                          ->disableOriginalConstructor()
                          ->getMock();

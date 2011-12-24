@@ -29,7 +29,7 @@ abstract class EnumerationStrategyTest extends \PHPPdf\PHPUnit\Framework\TestCas
         $fontTypeMock = $this->getMockBuilder('PHPPdf\Core\Engine\Font')
                              ->getMock();
 
-        $colorStub = $this->getMock('PHPPdf\Core\Engine\Color');
+        $colorStub = '#123456';
         
         $this->setElementPattern($listMock, $elementPattern);
         

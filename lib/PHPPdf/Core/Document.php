@@ -254,12 +254,7 @@ class Document implements Engine
     {
         return $this->engine->getAttachedGraphicsContexts();
     }
-    
-    public function createColor($color)
-    {
-        return $this->engine->createColor($color);
-    }
-    
+
     public function createImage($path)
     {
         return $this->engine->createImage($path);

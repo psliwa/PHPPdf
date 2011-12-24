@@ -55,21 +55,6 @@ class Engine extends AbstractEngine
     }
     
     /**
-     * @return Color
-     */
-    public function createColor($data)
-    {
-        $data = (string) $data;
-
-        if(!isset($this->colors[$data]))
-        {
-            $this->colors[$data] = new Color($data);
-        }
-        
-        return $this->colors[$data];
-    }
-    
-    /**
      * @return Image
      */
     public function createImage($data)

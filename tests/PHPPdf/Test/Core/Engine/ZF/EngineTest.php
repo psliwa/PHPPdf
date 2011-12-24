@@ -25,18 +25,6 @@ class EngineTest extends \PHPPdf\PHPUnit\Framework\TestCase
     /**
      * @test
      */
-    public function createColor()
-    {
-        $color = $this->engine->createColor('#000000');
-        
-        $this->assertInstanceOf('PHPPdf\Core\Engine\ZF\Color', $color);
-        
-        $this->assertEquals(array(0), $color->getComponents());
-    }
-    
-    /**
-     * @test
-     */
     public function createImage()
     {
         $image = $this->engine->createImage(TEST_RESOURCES_DIR.'/domek.png');
