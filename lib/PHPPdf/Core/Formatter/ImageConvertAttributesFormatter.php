@@ -37,7 +37,7 @@ class ImageConvertAttributesFormatter extends ConvertAttributesFormatter
 
             $originalWidth = $source->getOriginalWidth();
             $originalHeight = $source->getOriginalHeight();
-            $originalRatio = $originalWidth/$originalHeight;
+            $originalRatio = $originalHeight ? $originalWidth/$originalHeight : 0;
 
             if(!$width && !$height)
             {
