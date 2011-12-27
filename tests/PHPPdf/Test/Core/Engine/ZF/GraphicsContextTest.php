@@ -2,6 +2,8 @@
 
 namespace PHPPdf\Test\Core\Engine\ZF;
 
+use PHPPdf\Core\Engine\EmptyImage;
+
 use PHPPdf\Core\Engine\ZF\Engine;
 
 use PHPPdf\Core\Engine\ZF\GraphicsContext;
@@ -668,5 +670,27 @@ class GraphicsContextTest extends \PHPPdf\PHPUnit\Framework\TestCase
         $gc = new GraphicsContext(new Engine(), new \Zend\Pdf\Page('a4'));
         
         $gc->addBookmark('someId', 'some name', 100, 'unexistedParentId');
+    }
+    
+    /**
+     * @test
+     */
+    public function ignoreEmptyImage()
+    {
+        $zendPageMock = $this->getMockBuilder('\Zend\Pdf\Page')
+                             ->setMethods(array('drawImage'))
+                             ->disableOriginalConstructor()
+                             ->disableOriginalClone()
+                             ->getMock();
+        
+        $image = EmptyImage::getInstance();
+        
+        $zendPageMock->expects($this->never())
+                      ->method('drawImage');
+        
+        $gc = new GraphicsContext(new Engine(), $zendPageMock);
+                      
+        $gc->drawImage($image, 50, 50, 100, 10);
+        $gc->commit();
     }
 }

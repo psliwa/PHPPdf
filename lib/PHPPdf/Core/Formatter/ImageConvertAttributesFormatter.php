@@ -33,8 +33,7 @@ class ImageConvertAttributesFormatter extends ConvertAttributesFormatter
         {
             $width = $node->getWidth();
             $height = $node->getHeight();
-            $src = $node->getAttribute('src');
-            $source = $document->createImage($src);
+            $source = $node->createSource($document);
 
             $originalWidth = $source->getOriginalWidth();
             $originalHeight = $source->getOriginalHeight();

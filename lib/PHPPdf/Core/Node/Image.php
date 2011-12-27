@@ -8,6 +8,12 @@
 
 namespace PHPPdf\Core\Node;
 
+use PHPPdf\Exception\InvalidResourceException;
+
+use PHPPdf\Core\Engine\EmptyImage;
+
+use PHPPdf\Core\Engine\Engine;
+
 use PHPPdf\Core\DrawingTaskHeap;
 
 use PHPPdf\Core\Document,
@@ -26,11 +32,25 @@ class Image extends Node
         parent::setDefaultAttributes();
         
         static::addAttribute('src');
+        static::addAttribute('ignore-error', false);
+    }
+    
+    protected static function initializeType()
+    {
+        static::setAttributeSetters(array('ignore-error' => 'setIgnoreError'));
+        
+        parent::initializeType();
+    }
+    
+    public function setIgnoreError($flag)
+    {
+        $flag = $this->filterBooleanValue($flag);
+        $this->setAttributeDirectly('ignore-error', $flag);
     }
     
     protected function doDraw(Document $document, DrawingTaskHeap $tasks)
     {
-        $sourceImage = $document->createImage($this->getAttribute('src'));
+        $sourceImage = $this->createSource($document);
         $callback = function($node, $sourceImage)
         {
             $gc = $node->getGraphicsContext();
@@ -64,6 +84,23 @@ class Image extends Node
         $drawingTask = new DrawingTask($callback, array($this, $sourceImage));
 
         $tasks->insert($drawingTask);
+    }
+    
+    public function createSource(Engine $engine)
+    {
+        try
+        {
+            return $engine->createImage($this->getAttribute('src'));
+        }
+        catch(InvalidResourceException $e)
+        {
+            if($this->getAttribute('ignore-error'))
+            {
+                return EmptyImage::getInstance();
+            }
+            
+            throw $e;
+        }
     }
 
     protected function beforeFormat(Document $document)

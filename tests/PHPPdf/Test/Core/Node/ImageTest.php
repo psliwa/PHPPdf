@@ -2,6 +2,8 @@
 
 namespace PHPPdf\Test\Core\Node;
 
+use PHPPdf\Exception\InvalidResourceException;
+
 use PHPPdf\Core\DrawingTaskHeap;
 
 use PHPPdf\Core\Document;
@@ -91,6 +93,69 @@ class ImageTest extends \PHPPdf\PHPUnit\Framework\TestCase
         return array(
             array(100, 0, 0),
             array(100, 5, 6),
+        );
+    }
+    
+    /**
+     * @test
+     * @dataProvider handleImageExceptionWhenIgnoreErrorAttributeIsOnProvider
+     */
+    public function handleImageExceptionWhenIgnoreErrorAttributeIsOn($ignoreError, $invalidSrc)
+    {
+        $src = 'src';
+        $this->image->setAttribute('ignore-error', $ignoreError);
+        $this->image->setAttribute('src', $src);
+        
+        $engine = $this->getMock('PHPPdf\Core\Engine\Engine');
+                         
+        $mocker = $engine->expects($this->once())
+                         ->method('createImage')
+                         ->with($src);
+                           
+        if($invalidSrc)
+        {
+            $mocker->will($this->throwException(new InvalidResourceException()));
+        }
+        else
+        {
+            $engineImage = $this->getMock('PHPPdf\Core\Engine\Image');
+            $mocker->will($this->returnValue($engineImage));
+        }
+
+        try
+        {
+            $actualSource = $this->image->createSource($engine);
+            
+            if(!$ignoreError && $invalidSrc)
+            {
+                $this->fail('error shouldn\'t be ignored');
+            }
+            
+            if($invalidSrc)
+            {
+                $this->assertInstanceOf('PHPPdf\Core\Engine\EmptyImage', $actualSource);
+            }
+            else
+            {
+                $this->assertEquals($engineImage, $actualSource);
+            }
+        }
+        catch(InvalidResourceException $e)
+        {
+            if($ignoreError)
+            {
+                $this->fail('error should be ignored');
+            }
+        }
+    }
+    
+    public function handleImageExceptionWhenIgnoreErrorAttributeIsOnProvider()
+    {
+        return array(
+            array(false, true),
+            array(false, false),
+            array(true, true),
+            array(true, false),
         );
     }
 }

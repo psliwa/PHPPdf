@@ -293,6 +293,7 @@ Atrybuty
 * alpha - możliwe wartości: od 0 do 1. Przeźroczystość elementu i jego dzieci.
 * line-break - złamanie linii (true lub false), domyślnie ustawione na true tylko dla tagu "br"
 * style - to samo co w html'u, ten atrybut służy do ustawiania wartości innym atrybutom, np.: style="width: 100px; height: 200px; margin: 20px 0;". Każdy atrybut musi być zakonczony średnikiem (";"), nawet ostatni.
+* ignore-error (dla tagu img) - ignorować błąd ładowania pliku, czy wyrzucać wyjątek? Domyślnie false, czyli jest wyrzucany wyjątek.
 
 <a name="complex-attributes"></a>
 Atrybuty złożone

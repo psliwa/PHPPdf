@@ -2,6 +2,8 @@
 
 namespace PHPPdf\Test\Core\Engine\Imagine;
 
+use PHPPdf\Core\Engine\EmptyImage;
+
 use PHPPdf\Core\Engine\Imagine\Image;
 use Imagine\Image\Color;
 use PHPPdf\Bridge\Imagine\Image\Point;
@@ -363,5 +365,19 @@ class GraphicsContextTest extends TestCase
        
        $this->gc->restoreGS();
        $this->gc->commit();
+    }
+    
+    /**
+     * @test
+     */
+    public function ignoreEmptyImage()
+    {
+        $image = EmptyImage::getInstance();
+        
+        $this->imagine->expects($this->never())
+                      ->method('paste');
+                      
+        $this->gc->drawImage($image, 50, 50, 100, 10);
+        $this->gc->commit();
     }
 }

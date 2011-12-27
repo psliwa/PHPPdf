@@ -56,7 +56,10 @@ abstract class AbstractGraphicsContext implements GraphicsContext
     
     public function drawImage(Image $image, $x1, $y1, $x2, $y2)
     {
-        $this->addToQueue('doDrawImage', func_get_args());
+        if(!$image instanceof EmptyImage)
+        {
+            $this->addToQueue('doDrawImage', func_get_args());
+        }
     }
     
     abstract protected function doDrawImage(Image $image, $x1, $y1, $x2, $y2);
