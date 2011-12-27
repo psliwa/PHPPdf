@@ -71,6 +71,22 @@ class EngineTest extends TestCase
     
     /**
      * @test
+     * @expectedException PHPPdf\Exception\InvalidResourceException
+     */
+    public function wrapExceptionOnImageCreationFailure()
+    {
+        $path = 'path';
+        
+        $this->imagine->expects($this->once())
+                      ->method('open')
+                      ->with($path)
+                      ->will($this->throwException(new \Imagine\Exception\InvalidArgumentException()));
+                      
+        $this->engine->createImage($path);
+    }
+    
+    /**
+     * @test
      */
     public function createFont()
     {

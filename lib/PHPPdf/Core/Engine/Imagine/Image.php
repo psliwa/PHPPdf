@@ -28,15 +28,27 @@ class Image implements BaseImage
     
     public function __construct($imagePath, ImagineInterface $imagine)
     {
+        $this->imagine = $imagine;
         if($imagePath instanceof ImageInterface)
         {
             $this->image = $imagePath;
         }
         else
         {
-            $this->imagePath = $imagePath;
+            $this->image = $this->createImage($imagePath);
         }
-        $this->imagine = $imagine;
+    }
+    
+    private function createImage($path)
+    {
+        try
+        {
+            return $this->imagine->open($path);
+        }
+        catch(\Imagine\Exception\Exception $e)
+        {
+            throw InvalidResourceException::invalidImageException($path, $e);
+        }
     }
     
     public function getOriginalWidth()
@@ -49,18 +61,6 @@ class Image implements BaseImage
      */
     public function getWrappedImage()
     {
-        if($this->image === null)
-        {
-            try
-            {
-                $this->image = $this->imagine->open($this->imagePath);
-            }
-            catch(\Imagine\Exception\Exception $e)
-            {
-                throw InvalidResourceException::invalidImageException($this->imagePath, $e);
-            }
-        }
-        
         return $this->image;
     }
     
