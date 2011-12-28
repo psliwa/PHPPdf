@@ -16,9 +16,7 @@ class ElasticPageFormatterTest extends TestCase
     public function setUp()
     {
         $this->formatter = new ElasticPageFormatter();
-        $this->document = $this->getMockBuilder('PHPPdf\Core\Document')
-                               ->disableOriginalConstructor()
-                               ->getMock();
+        $this->document = $this->createDocumentStub();
                                
         $this->nodeObjectMother = new NodeObjectMother($this);
     }
