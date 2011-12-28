@@ -67,7 +67,7 @@ There is [Symfony2 bundle][1] integrates this library with Symfony2 framework.
 FAQ
 ----------------
 
-1. Diacritical marks are not displayed, what I should do?
+**Diacritical marks are not displayed, what I should do?**
 
 You should set font that supports encoding that you use, and set this encoding as "encoding" attribute for "page" and/or "dynamic-page" tags. PHPPdf provides some free fonts that supports utf-8 encoding, for example DejaVuSans. "Font" example shows how to change font type by stylesheet.
 You can add custom fonts, in order that you should prepare xml config file and configure Facade object as shown below:
@@ -96,7 +96,7 @@ You can add custom fonts, in order that you should prepare xml config file and c
 
 More datails you can find in [Configuration](#configuration) section.
 
-2. Generating of simple pdf file with png image takes a lot of time and memory, what I should do?
+**Generating of simple pdf file with png image takes a lot of time and memory, what I should do?**
 
 PHPPdf uses Zend_Pdf library that poorly supports png files without compression. You should to compress png files. 
 

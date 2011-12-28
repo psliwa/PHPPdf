@@ -66,7 +66,7 @@ Tutaj znajduje się [Symfony2 bundle][1] integrujący tą bibliotekę z Symfony2
 FAQ
 ----------------
 
-1. Mam krzaki zamiast polskich znaków, co zrobić?
+**Mam krzaki zamiast polskich znaków, co zrobić?**
 
 Należy ustawić czcionkę, która wspiera kodowanie utf-8 z zakresu polskich znaków. PHPPdf ma dołączonych kilka takich czcionek, np. DejaVuSans, czy Kurier. W przykładzie "font" jest pokazane w jaki sposób ustawić rodzaj czcionki z wysokości szablonu stylów.
 Możesz dodać dowolne czcionki, aby to osiągnąć powinieneś przygotować plik konfiguracyjny w formacie xml oraz skonfigurować obiekt Facade, tak jak w poniższym przykładzie:
@@ -90,7 +90,7 @@ Możesz dodać dowolne czcionki, aby to osiągnąć powinieneś przygotować pli
 Więcej szczegółów możesz znaleść w rozdziale [Konfiguracja](#configuration).
 
 
-2. Bardzo długo trwa generowanie prostego dokumentu z obrazkiem w formacie png, co zrobić?
+**Bardzo długo trwa generowanie prostego dokumentu z obrazkiem w formacie png, co zrobić?**
 
 PHPPdf wykorzystuje bibliotekę Zend_Pdf, która słabo sobie radzi w parsowaniu plików png bez kompresji. Skompresuj pliki png.
 
