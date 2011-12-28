@@ -294,6 +294,7 @@ Atrybuty
 * line-break - złamanie linii (true lub false), domyślnie ustawione na true tylko dla tagu "br"
 * style - to samo co w html'u, ten atrybut służy do ustawiania wartości innym atrybutom, np.: style="width: 100px; height: 200px; margin: 20px 0;". Każdy atrybut musi być zakonczony średnikiem (";"), nawet ostatni.
 * ignore-error (dla tagu img) - ignorować błąd ładowania pliku, czy wyrzucać wyjątek? Domyślnie false, czyli jest wyrzucany wyjątek.
+* keep-ratio (dla tagu img) - utrzymuje proporcje obrazka wycinając fragment obrazka, nawet gdy zadane rozmiary nie są w proporcjach oryginalnego obrazka. Domyślnie false.
 
 <a name="complex-attributes"></a>
 Atrybuty złożone

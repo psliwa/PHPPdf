@@ -11,8 +11,8 @@ namespace PHPPdf\Core\Formatter;
 use PHPPdf\Core\Node\Image;
 use PHPPdf\Core\Node\Node;
 use PHPPdf\Core\Engine\Image as EngineImage;
-use PHPPdf\Util,
-    PHPPdf\Core\Document;
+use PHPPdf\Util;
+use PHPPdf\Core\Document;
 
 /**
  * @author Piotr Śliwa <peter.pl7@gmail.com>

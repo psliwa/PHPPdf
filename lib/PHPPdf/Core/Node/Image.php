@@ -33,11 +33,13 @@ class Image extends Node
         
         static::addAttribute('src');
         static::addAttribute('ignore-error', false);
+        static::addAttribute('keep-ratio', false);
     }
     
     protected static function initializeType()
     {
         static::setAttributeSetters(array('ignore-error' => 'setIgnoreError'));
+        static::setAttributeSetters(array('keep-ratio' => 'setKeepRatio'));
         
         parent::initializeType();
     }
@@ -46,6 +48,12 @@ class Image extends Node
     {
         $flag = $this->filterBooleanValue($flag);
         $this->setAttributeDirectly('ignore-error', $flag);
+    }
+
+    public function setKeepRatio($flag)
+    {
+        $flag = $this->filterBooleanValue($flag);
+        $this->setAttributeDirectly('keep-ratio', $flag);
     }
     
     protected function doDraw(Document $document, DrawingTaskHeap $tasks)
@@ -57,10 +65,11 @@ class Image extends Node
             
             $alpha = $node->getAlpha();
             $isAlphaSet = $alpha != 1 && $alpha !== null;
+            $keepRatio = $node->getAttribute('keep-ratio');
             
             $rotationNode = $node->getAncestorWithRotation();
         
-            if($isAlphaSet || $rotationNode)
+            if($isAlphaSet || $rotationNode || $keepRatio)
             {
                 $gc->saveGS();
                 $gc->setAlpha($alpha);
@@ -71,11 +80,35 @@ class Image extends Node
                 $middlePoint = $rotationNode->getMiddlePoint();
                 $gc->rotate($middlePoint->getX(), $middlePoint->getY(), $rotationNode->getRotate());
             }
-
-            list($x, $y) = $node->getStartDrawingPoint();
-            $gc->drawImage($sourceImage, $x, $y-$node->getHeight(), $x+$node->getWidth(), $y);
             
-            if($isAlphaSet || $rotationNode)
+            $height = $originalHeight = $node->getHeight();
+            $width = $originalWidth = $node->getWidth();
+            
+            list($x, $y) = $node->getStartDrawingPoint();
+            
+            if($keepRatio)
+            {
+                $gc->clipRectangle($x, $y, $x+$originalWidth, $y-$originalHeight);
+                
+                $sourceRatio = $sourceImage->getOriginalHeight() / $sourceImage->getOriginalWidth();
+                
+                if($sourceRatio > 1)
+                {
+                    $height = $width * $sourceRatio;
+                    
+                    $y += ($height - $originalHeight)/2;
+                }
+                else
+                {
+                    $width = $height / $sourceRatio;
+                    
+                    $x -= ($width - $originalWidth)/2;
+                }
+            }
+            
+            $gc->drawImage($sourceImage, $x, $y-$height, $x+$width, $y);
+            
+            if($isAlphaSet || $rotationNode || $keepRatio)
             {
                 $gc->restoreGS();
             }

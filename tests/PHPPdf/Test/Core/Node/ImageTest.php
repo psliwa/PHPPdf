@@ -11,6 +11,11 @@ use PHPPdf\Core\Node\Image;
 
 class ImageTest extends \PHPPdf\PHPUnit\Framework\TestCase
 {
+    const IMAGE_WIDTH = 100;
+    const IMAGE_HEIGHT = 100;
+    const IMAGE_X_COORD = 0;
+    const IMAGE_Y_COORD = 100;
+    
     private $image;
 
     public function setUp()
@@ -21,24 +26,32 @@ class ImageTest extends \PHPPdf\PHPUnit\Framework\TestCase
         ));
 
         $boundary = $this->image->getBoundary();
-        $boundary->setNext(0, 100)
-                 ->setNext(100, 100)
-                 ->setNext(100, 0)
-                 ->setNext(0, 0)
+        $boundary->setNext(self::IMAGE_X_COORD, self::IMAGE_Y_COORD)
+                 ->setNext(self::IMAGE_WIDTH, self::IMAGE_Y_COORD)
+                 ->setNext(self::IMAGE_WIDTH, self::IMAGE_Y_COORD - self::IMAGE_HEIGHT)
+                 ->setNext(self::IMAGE_X_COORD, self::IMAGE_Y_COORD - self::IMAGE_HEIGHT)
                  ->close();
     }
     
     /**
      * @test
+     * @dataProvider drawImageInExpectedPositionProvider
      */
-    public function drawing()
+    public function drawImageInExpectedPosition($keepRatio, $sourceWidth = self::IMAGE_WIDTH, $sourceHeight = self::IMAGE_HEIGHT)
     {
         $imagePath = 'some/path';
         
         $this->image->setAttribute('src', $imagePath);
+        $this->image->setAttribute('keep-ratio', $keepRatio);
         
-        $imageResource = $this->getMockBuilder('PHPPdf\Core\Engine\Image')
-                              ->getMock();
+        $imageResource = $this->getMock('PHPPdf\Core\Engine\Image');
+        $imageResource->expects($this->any())
+                      ->method('getOriginalWidth')
+                      ->will($this->returnValue($sourceWidth));
+        $imageResource->expects($this->any())
+                      ->method('getOriginalHeight')
+                      ->will($this->returnValue($sourceHeight));
+        
         $document = $this->getMockBuilder('PHPPdf\Core\Document')
                          ->setMethods(array('createImage'))
                          ->disableOriginalConstructor()
@@ -54,9 +67,38 @@ class ImageTest extends \PHPPdf\PHPUnit\Framework\TestCase
         $gcMock = $this->getMockBuilder('PHPPdf\Core\Engine\GraphicsContext')
         			   ->getMock();
 
-        $gcMock->expects($this->once())
-               ->method('drawImage')
-               ->with($imageResource, 0, 100-$this->image->getHeight(), 0 + $this->image->getWidth(), 100);
+        $expectedXCoord = self::IMAGE_X_COORD;
+        $expectedYCoord = self::IMAGE_Y_COORD;
+        $expectedWidth = self::IMAGE_WIDTH;
+        $expectedHeight = self::IMAGE_HEIGHT;
+        
+        $drawExpectation = $gcMock->expects($this->once())
+                                  ->method('drawImage');
+        
+        if($keepRatio)
+        {
+            $sourceRatio = $sourceHeight / $sourceWidth;
+            
+            $gcMock->expects($this->once())
+                   ->method('clipRectangle')
+                   ->id('clipRectangleInvocation')
+                   ->with($expectedXCoord, $expectedYCoord, $expectedXCoord + $expectedWidth, $expectedYCoord - $expectedHeight);
+
+            $drawExpectation->after('clipRectangleInvocation');
+
+            if($sourceRatio > 1)
+            {
+                $expectedHeight = $expectedWidth * $sourceRatio;
+                $expectedYCoord += ($expectedHeight - self::IMAGE_HEIGHT)/2;
+            }
+            else
+            {
+                $expectedWidth = $expectedHeight/$sourceRatio;
+                $expectedXCoord -= ($expectedWidth - self::IMAGE_WIDTH)/2;
+            }
+        }
+        			   
+        $drawExpectation->with($imageResource, $expectedXCoord, $expectedYCoord-$expectedHeight, $expectedXCoord + $expectedWidth, $expectedYCoord);
 
         $pageMock->expects($this->once())
                  ->method('getGraphicsContext')
@@ -71,6 +113,15 @@ class ImageTest extends \PHPPdf\PHPUnit\Framework\TestCase
         {
             $task->invoke();
         }
+    }
+    
+    public function drawImageInExpectedPositionProvider()
+    {
+        return array(
+            array(false),
+            array(true, 200, 100),
+            array(true, 100, 200),
+        );
     }
     
     /**
