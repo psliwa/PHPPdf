@@ -18,6 +18,19 @@
 	            <post class="PHPPdf\Core\Formatter\ColumnBreakingFormatter" />
 	        </formatters>
 	    </node>
+	    <node name="elastic-page" class="PHPPdf\Core\Node\Page">
+	        <stylesheet>
+	            <attribute name="font-type" value="helvetica" />
+	            <attribute name="font-size" value="12px" />
+	            <attribute name="font-style" value="normal" />
+	            <attribute name="color" value="black" />
+	            <attribute name="page-size" value="595:842" />
+	        </stylesheet>
+	        <formatters>
+	            <post class="PHPPdf\Core\Formatter\FloatFormatter" />
+	            <post class="PHPPdf\Core\Formatter\ElasticPageFormatter" />
+	        </formatters>
+	    </node>
 	    <node name="dynamic-page" class="PHPPdf\Core\Node\DynamicPage">
 	        <formatters>
 	            <post class="PHPPdf\Core\Formatter\FloatFormatter" />

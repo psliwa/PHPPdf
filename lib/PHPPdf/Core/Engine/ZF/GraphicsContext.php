@@ -56,7 +56,8 @@ class GraphicsContext extends AbstractGraphicsContext
      */
     private $page;
     
-    private $pageSize;
+    private $width;
+    private $height;
     
     private $methodInvocationsQueue = array();
 
@@ -69,7 +70,7 @@ class GraphicsContext extends AbstractGraphicsContext
         }
         else
         {
-            $this->pageSize = $pageOrPageSize;
+            list($this->width, $this->height) = explode(':', $pageOrPageSize);
         }
     }
 
@@ -269,8 +270,8 @@ class GraphicsContext extends AbstractGraphicsContext
     {
         if(!$this->page)
         {
-            $this->page = new Page($this->pageSize);
-            $this->pageSize = null;
+            $this->page = new Page($this->width.':'.$this->height);
+            $this->width = $this->height = null;
         }
         return $this->page;
     }

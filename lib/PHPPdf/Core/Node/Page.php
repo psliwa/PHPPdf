@@ -585,4 +585,9 @@ class Page extends Container
 
         parent::flush();
     }
+    
+    public function removeGraphicsContext()
+    {
+        $this->graphicsContext = null;
+    }
 }
