@@ -292,7 +292,8 @@ Library supports primary HTML tags: div, p, table, tr, td, b, strong, span, a, h
 In addition there are not standard tags:
 
 * dynamic-page - auto breakable page
-* page - single page
+* page - single page with fixed size
+* elastic-page - single page that accommodates its height to its children as same as another tags (for example "div"). Header, footer, watermark, template-document attribute do not work with this tag. Useful especially in graphic files generation (image engine).
 * page-break, column-break, break - breaks page or column, this tag must be direct child of "dynamic-page" or "column-layout"!
 * column-layout - separate workspace on columns, additional attributes: number-of-columns, margin-between-columns, equals-columns
 

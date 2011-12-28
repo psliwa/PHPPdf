@@ -286,7 +286,8 @@ Biblioteka obsługuje podstawowe tagi zaczerpnięte z języka HTML: div, p, tabl
 Ponadto obsługiwane są niestandardowe tagi:
 
 * dynamic-page - strona, która się dynamicznie dzieli gdy zostaje przepełniona
-* page - pojedyncza strona
+* page - pojedyncza strona z ustalonym rozmiarem
+* elastic-page - pojedyncza strona, która dostosowuje swoją wysokość w zależności od elementów podrzędnych (podobnie jak pozostałe tagi). Dla tego tagu nie działają: nagłówek, stopka, watermark oraz atrybut template-document. Tag przydatny zwłaszcza gdy generujemy pliki graficzne (silnik image).
 * page-break, column-break, break - złamanie strony lub kolumny, jest to element podrzędny dynamic-page lub column-layout, czyli musi być bezpośrednim dzieckiem tego elemntu! Te trzy tagi są aliasami.
 * column-layout - podział obszaru roboczego na kolumny, dodatkowe atrybuty: number-of-columns oraz margin-between-columns
 
