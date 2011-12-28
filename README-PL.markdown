@@ -11,6 +11,7 @@ Spis treści
 
 1. [Instalacja](#installation)
 1. [Symfony2 bundle](#symfony2-bundle)
+1. [FAQ](#faq)
 1. [Parsowanie dokumentu i tworzenie pdf'a](#parsing)
 1. [Podstawowa struktura dokumentu](#structure)
 1. [Dziedziczenie](#inheritance)
@@ -60,6 +61,38 @@ Symfony2 bundle
 ----------------
 
 Tutaj znajduje się [Symfony2 bundle][1] integrujący tą bibliotekę z Symfony2.
+
+<a name="faq"></a>
+FAQ
+----------------
+
+1. Mam krzaki zamiast polskich znaków, co zrobić?
+
+Należy ustawić czcionkę, która wspiera kodowanie utf-8 z zakresu polskich znaków. PHPPdf ma dołączonych kilka takich czcionek, np. DejaVuSans, czy Kurier. W przykładzie "font" jest pokazane w jaki sposób ustawić rodzaj czcionki z wysokości szablonu stylów.
+Możesz dodać dowolne czcionki, aby to osiągnąć powinieneś przygotować plik konfiguracyjny w formacie xml oraz skonfigurować obiekt Facade, tak jak w poniższym przykładzie:
+
+    //kod xml
+    <fonts>   
+        <font name="DejaVuSans">
+       	    <normal src="%resources%/fonts/DejaVuSans/normal.ttf" /><!-- "%resources%" zostanie zastąpione ścieżką do katalogu PHPPdf/Resources -->
+            <bold src="%resources%/fonts/DejaVuSans/bold.ttf" />
+            <italic src="%resources%/fonts/DejaVuSans/oblique.ttf" />
+            <bold-italic src="%resources%/fonts/DejaVuSans/bold+oblique.ttf" />
+        </font>
+    </fonts>
+    
+    //kod php
+    $loader = new PHPPdf\Core\Configuration\LoaderImpl();
+    $loader->setFontFile(/* path to fonts configuration file */);
+    $builder = PHPPdf\Core\FacadeBuilder::create($loader);
+    $facade = $builder->build();
+    
+Więcej szczegółów możesz znaleść w rozdziale [Konfiguracja](#configuration).
+
+
+2. Bardzo długo trwa generowanie prostego dokumentu z obrazkiem w formacie png, co zrobić?
+
+PHPPdf wykorzystuje bibliotekę Zend_Pdf, która słabo sobie radzi w parsowaniu plików png bez kompresji. Skompresuj pliki png.
 
 <a name="parsing"></a>
 Parsowanie dokumentu i tworzenie pdf'a.
@@ -595,18 +628,25 @@ Przykład:
 Konfiguracja
 -------------
 
-Biblioteka ma 3 podstawowe pliki konfiguracyjne, które pozwalają na dostosowanie biblioteki do swoich potrzeb oraz do jej rozszerzenia.
+Biblioteka ma 4 podstawowe pliki konfiguracyjne, które pozwalają na dostosowanie biblioteki do swoich potrzeb oraz do jej rozszerzenia.
 
 * complex-attributes.xml - przypisywanie klas upiększeń (atrybutów złożonych) pod nazwy logiczne, które identyfikują dany typ atrybutu złożonego w obrębie całej biblioteki
 * nodes.xml - definiowanie tagów dostępnych w dokumencie xml wraz z domyślnymi stylami oraz obiektami formatującymi
 * fonts.xml - definowanie czcionek i przypisywanie ich do nazw logicznych, które identyfikują daną czcionkę w obrębie całej biblioteki
+* colors.xml - definiowanie domyślnej palety kolorów
 
 Aby zmienić domyślne pliki konfiguracyjne należy przekazać do konstruktora fasady odpowiednio skonfigurowany obiekt ładujący konfigurację.
 
-    $loader = new PHPPdf\Core\Configuration\LoaderImpl('/sciezka/do/pliku/nodes.xml', '/sciezka/do/pliku/complex-attributes.xml', '/sciezka/do/pliku/fonts.xml');
+    $loader = new PHPPdf\Core\Configuration\LoaderImpl('/sciezka/do/pliku/nodes.xml', '/sciezka/do/pliku/complex-attributes.xml', '/sciezka/do/pliku/fonts.xml', '/sciezka/do/pliku/colors.xml');
+    $facade = new PHPPdf\Core\Facade($loader);
+    
+Jeśli chcesz zmienić tylko jeden plik konfiguracyjny, powinieneś użyć jednej z metod LoaderImpl::set*:
+
+    $loader = new PHPPdf\Core\Configuration\LoaderImpl();
+    $loader->setFontFile('/sciezka/do/pliku/fonts.xml');//dostępne metody: setFontFile, setNodeFile, setComplexAttributeFile, setColorFile
     $facade = new PHPPdf\Core\Facade($loader);
 
-Można wykorzystać budowniczego fasady, który jak narazie ma opcje do ustawiania cache.
+Można wykorzystać budowniczego fasady, który dodatkowo ma opcję do ustawiania cache, silnika renderującego oraz parsera dokumentów.
     
     $builder = PHPPdf\Core\FacadeBuilder::create(/* można przekazać obiekt loadera konfiguracji */)
                                         ->setCache('File', array('cache_dir' => './cache'))

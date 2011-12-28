@@ -11,6 +11,7 @@ Table of contents
 
 1. [Installation](#installation)
 1. [Symfony2 bundle](#symfony2-bundle)
+1. [FAQ](#faq)
 1. [Document parsing and createing pdf file](#parsing)
 1. [Basic document structure](#structure)
 1. [Inheritance](#inheritance)
@@ -61,6 +62,43 @@ Symfony2 bundle
 ----------------
 
 There is [Symfony2 bundle][1] integrates this library with Symfony2 framework.
+
+<a name="faq"></a>
+FAQ
+----------------
+
+1. Diacritical marks are not displayed, what I should do?
+
+You should set font that supports encoding that you use, and set this encoding as "encoding" attribute for "page" and/or "dynamic-page" tags. PHPPdf provides some free fonts that supports utf-8 encoding, for example DejaVuSans. "Font" example shows how to change font type by stylesheet.
+You can add custom fonts, in order that you should prepare xml config file and configure Facade object as shown below:
+
+    //xml config file code
+    <fonts>   
+        <font name="DejaVuSans">
+       	    <normal src="%resources%/fonts/DejaVuSans/normal.ttf" /><!-- "%resources%" will be replaced by path to PHPPdf/Resources directory -->
+            <bold src="%resources%/fonts/DejaVuSans/bold.ttf" />
+            <italic src="%resources%/fonts/DejaVuSans/oblique.ttf" />
+            <bold-italic src="%resources%/fonts/DejaVuSans/bold+oblique.ttf" />
+        </font>
+    </fonts>
+    
+    //php code
+    $loader = new PHPPdf\Core\Configuration\LoaderImpl();
+    $loader->setFontFile(/* path to fonts configuration file */);
+    $builder = PHPPdf\Core\FacadeBuilder::create($loader);
+    $facade = $builder->build();
+    
+    //xml document code
+    <pdf>
+        <dynamic-page encoding="UTF-8" font-type="DejaVuSans">
+        </dynamic-page>
+    </pdf>
+
+More datails you can find in [Configuration](#configuration) section.
+
+2. Generating of simple pdf file with png image takes a lot of time and memory, what I should do?
+
+PHPPdf uses Zend_Pdf library that poorly supports png files without compression. You should to compress png files. 
 
 <a name="parsing"></a>
 Document parsing and creating pdf file
@@ -598,18 +636,25 @@ Example:
 Configuration
 ----------------
 
-Library has three primary config files that allow you to adopt library to specyfic needs and to extending.
+Library has four primary config files that allow you to adopt library to specyfic needs and to extending.
 
 * complex-attributes.xml - declarations of complex attributes classes to logical names that identify attribute in whole library.
 * nodes.xml - definitions of allowed tags in xml document with default attributes and formatting objects.
 * fonts.xml - definitions of fonts and assigning them to logical names that identify font in whole library.
+* colors.xml - palette of colors definitions
 
 In order to change default config files, you must pass to Facade constructor configured Loader object:
 
-    $loader = new PHPPdf\Core\Configuration\LoaderImpl('/path/to/file/nodes.xml', '/path/to/file/enhancements.xml', '/path/to/file/fonts.xml');
+    $loader = new PHPPdf\Core\Configuration\LoaderImpl('/path/to/file/nodes.xml', '/path/to/file/enhancements.xml', '/path/to/file/fonts.xml', , '/path/to/file/colors.xml');
+    $facade = new PHPPdf\Core\Facade($loader);
+    
+If you want to change only one config file, you should use LoaderImpl::set* method:
+
+    $loader = new PHPPdf\Core\Configuration\LoaderImpl();
+    $loader->setFontFile('/path/to/file/fonts.xml');//there are setFontFile, setNodeFile, setComplexAttributeFile and setColorFile methods
     $facade = new PHPPdf\Core\Facade($loader);
 
-FacadeBuilder can be uset to build and configure Facade. Nowaday builder has only cache setting responsibilites:
+FacadeBuilder can be uset to build and configure Facade. FacadeBuilder is able to configure cache, rendering engine and document parser. 
     
     $builder = PHPPdf\Core\FacadeBuilder::create(/* you can pass specyfic configuration loader object */)
                                         ->setCache('File', array('cache_dir' => './cache'))

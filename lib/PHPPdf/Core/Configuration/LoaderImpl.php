@@ -69,7 +69,27 @@ class LoaderImpl implements Loader
         $this->setCache(NullCache::getInstance());
     }
     
-    public function setUnitConverter(UnitConverter $unitConverter)
+    public function setNodeFile($nodeFile)
+	{
+		$this->nodeFile = $nodeFile;
+	}
+
+	public function setComplexAttributeFile($complexAttributeFile)
+	{
+		$this->complexAttributeFile = $complexAttributeFile;
+	}
+
+	public function setFontFile($fontFile)
+	{
+		$this->fontFile = $fontFile;
+	}
+
+	public function setColorFile($colorFile)
+	{
+		$this->colorFile = $colorFile;
+	}
+
+	public function setUnitConverter(UnitConverter $unitConverter)
     {
         $this->unitConverter = $unitConverter;
     }
