@@ -38,10 +38,10 @@ class ElasticPageFormatter extends BaseFormatter
         
         $lastNodeYCoord = $lastChild ? ($lastChild->getDiagonalPoint()->getY() - $lastChild->getMarginBottom()) : $node->getRealHeight();
         
-        $height = $node->getRealHeight() - $lastNodeYCoord;
+        $height = $node->getRealHeight() - $lastNodeYCoord + $node->getMarginBottom();
         $translate = $node->getRealHeight() - $height;
         
-        $node->setHeight($height);
+        $node->setPageSize($node->getRealWidth(), $height);
         
         foreach($node->getChildren() as $child)
         {

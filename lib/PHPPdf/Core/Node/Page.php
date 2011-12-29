@@ -120,25 +120,47 @@ class Page extends Container
         $this->setWatermark(new Container(array('height' => 0)));
     }
 
-    public function setPageSize($pageSize)
+    public function setPageSize($param1, $param2 = null)
     {
-        $sizes = explode(':', $pageSize);
-
-        if(count($sizes) < 2)
+        if($param2 === null)
         {
-            throw new InvalidArgumentException(sprintf('page-size attribute should be in "width:height" format, "%s" given.', $pageSize));
+            $sizes = explode(':', $param1);
+    
+            if(count($sizes) < 2)
+            {
+                throw new InvalidArgumentException(sprintf('page-size attribute should be in "width:height" format, "%s" given.', $param1));
+            }
+    
+            list($width, $height) = $sizes;
+        }
+        else
+        {
+            $width = $param1;
+            $height = $param2;
         }
 
-        list($width, $height) = $sizes;
+        $width = $this->convertUnit($width);
+        $height = $this->convertUnit($height);
+        $this->setAttributeDirectly('width', $width);
+        $this->setAttributeDirectly('height', $height);
 
-        $this->setWidth($width);
-        $this->setHeight($height);
-
-        $this->setAttributeDirectly('page-size', $pageSize);
+        $this->setAttributeDirectly('page-size', $width.':'.$height);
         
         $this->initializeBoundary();
 
         return $this;
+    }
+    
+    public function setWidth($width)
+    {
+        parent::setWidth($width);
+    }
+    
+    public function setHeight($height)
+    {
+        parent::setHeight($height);
+        
+        $this->initializeBoundary();
     }
 
     protected function doDraw(Document $document, DrawingTaskHeap $tasks)

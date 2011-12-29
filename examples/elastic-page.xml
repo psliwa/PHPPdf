@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pdf SYSTEM "%resources%/dtd/doctype.dtd">
+<pdf>
+	<elastic-page margin="20px" width="200px">
+		<p>Height of this page is automatically accomodated to height of its children.</p>
+	</elastic-page>
+	<page height="200px" width="200px" margin="20px">
+		<p>Page with fixed size</p>
+	</page>
+</pdf>
