@@ -18,6 +18,7 @@ Spis treści
 1. [Podstawowa struktura dokumentu](#structure)
 1. [Dziedziczenie](#inheritance)
 1. [Struktura stylów](#stylesheet)
+1. [Paleta kolorów](#color-palette)
 1. [Standardowe tagi](#tags)
 1. [Atrybut](#attributes)
 1. [Atrybuty złożone](#complex-attributes)
@@ -279,6 +280,47 @@ Długi sposób:
             </div>
         </h2>
     </stylesheet>
+
+<a name="color-palette"></a>
+Palety kolorów
+----------------
+
+Można definiować również paletę kolorów, czyli mapę nazw logicznych na konkretne kolory. Paleta kolorów daje możliwość tworzenia nowych lub nadpisywania domyślnych nazwanych kolorów. Domyślnie PHPPdf obsługuje nazwane kolory wg standardu W3C (np. "black" = "#000000"). Paleta kolorów może mieć zastosowanie do zachowania zasady DRY, gdyż informacje o kolorach użytych w dokumentach chcemy przechowywać tylko w jednym miejscu. Można też generować dany dokument używając kilku palet.
+
+Przykład:
+
+    <!-- plik colors.xml -->
+    <colors>
+        <color name="header-color" hex="#333333" />
+        <color name="line-color" hex="#eeeeee" />
+    </colors>
+    
+    <!-- plik stylesheet.xml -->
+    <h2 color="header-color" />
+    <hr background-color="line-color" />
+    <table>
+        <td border-color="line-color" />
+    </table>
+    
+    <!-- plik document.xml -->
+    <pdf>
+        <page>
+            <h2>Nagłówek</h2>
+            <hr />
+            <table>
+                <tr>
+                    <td>Dane</td>
+                    <td>Dane</td>
+                </tr>
+            </table>
+        </page>
+    </pdf>
+    
+    //kod php
+    use PHPPdf\DataSource\DataSource;
+    $facade = ...;
+    
+    $content = $facade->render(DataSource::fromFile(__DIR__.'/document.xml'), DataSource::fromFile(__DIR__.'/stylesheet.xml'), DataSource::fromFile(__DIR__.'/colors.xml'));
 
 <a name="tags"></a>
 Standardowe tagi
