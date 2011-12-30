@@ -8,18 +8,20 @@
 
 namespace PHPPdf\Core;
 
+use PHPPdf\Core\Parser\ColorPaletteParser;
+use PHPPdf\Parser\Parser;
 use PHPPdf\Core\Parser\StylesheetConstraint;
 use PHPPdf\Core\Parser\CachingStylesheetConstraint;
 use PHPPdf\Core\Parser\DocumentParser;
 use PHPPdf\Core\Configuration\Loader;
 use PHPPdf\Core\Node\TextTransformator;
-use PHPPdf\Core\Parser\StylesheetParser,
-    PHPPdf\Core\Parser\ComplexAttributeFactoryParser,
-    PHPPdf\Core\Parser\FontRegistryParser,
-    PHPPdf\Cache\Cache,
-    PHPPdf\Cache\NullCache,
-    PHPPdf\DataSource\DataSource,
-    PHPPdf\Core\Parser\NodeFactoryParser;
+use PHPPdf\Core\Parser\StylesheetParser;
+use PHPPdf\Core\Parser\ComplexAttributeFactoryParser;
+use PHPPdf\Core\Parser\FontRegistryParser;
+use PHPPdf\Cache\Cache;
+use PHPPdf\Cache\NullCache;
+use PHPPdf\DataSource\DataSource;
+use PHPPdf\Core\Parser\NodeFactoryParser;
 
 /**
  * Simple facade whom encapsulate logical complexity of this library
@@ -35,14 +37,13 @@ class Facade
     private $loaded = false;
     private $useCacheForStylesheetConstraint = false;
     private $configurationLoader;
+    private $colorPaletteParser;
 
     public function __construct(Loader $configurationLoader, Document $document, DocumentParser $documentParser, StylesheetParser $stylesheetParser)
     {
         $this->configurationLoader = $configurationLoader;
         $this->configurationLoader->setUnitConverter($document);
         
-        $document->addColorsToPalette((array) $this->configurationLoader->createColorPalette());
-
         $this->setCache(NullCache::getInstance());
         $documentParser->setDocument($document);
         $nodeManager = $documentParser->getNodeManager();
@@ -82,8 +83,23 @@ class Facade
     {
         $this->stylesheetParser = $stylesheetParser;
     }
+    
+    public function setColorPaletteParser(Parser $colorPaletteParser)
+	{
+		$this->colorPaletteParser = $colorPaletteParser;
+	}
+	
+	protected function getColorPaletteParser()
+	{
+	    if(!$this->colorPaletteParser)
+	    {
+	        $this->colorPaletteParser = new ColorPaletteParser();
+	    }
+	    
+	    return $this->colorPaletteParser;
+	}
 
-    /**
+	/**
      * Returns pdf document object
      * 
      * @return PHPPdf\Core\Document
@@ -116,8 +132,17 @@ class Facade
      * 
      * @return string Content of pdf document
      */
-    public function render($documentContent, $stylesheetContent = null)
+    public function render($documentContent, $stylesheetContent = null, $colorPaletteContent = null)
     {
+        $colorPalette = new ColorPalette((array) $this->configurationLoader->createColorPalette());
+        
+        if($colorPaletteContent)
+        {
+            $colorPalette->merge($this->parseColorPalette($colorPaletteContent));
+        }
+        
+        $this->document->setColorPalette($colorPalette);
+        
         $complexAttributeFactory = $this->configurationLoader->createComplexAttributeFactory();
         
         $this->getDocument()->setComplexAttributeFactory($complexAttributeFactory);
@@ -138,6 +163,28 @@ class Facade
         return $this->doRender($pageCollection);
     }
     
+    private function parseColorPalette($colorPaletteContent)
+    {        
+        if(!$colorPaletteContent instanceof DataSource)
+        {
+            $colorPaletteContent = DataSource::fromString($colorPaletteContent);
+        }
+        
+        $id = $colorPaletteContent->getId();
+        
+        if($this->cache->test($id))
+        {
+            $colors = (array) $this->cache->load($id);
+        }
+        else
+        {
+            $colors = (array) $this->getColorPaletteParser()->parse($colorPaletteContent->read());
+            $this->cache->save($colors, $id);
+        }
+
+        return $colors;
+    }
+
     private function doRender($pageCollection)
     {
         $this->getDocument()->draw($pageCollection);

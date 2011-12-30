@@ -2,9 +2,10 @@
 
 namespace PHPPdf\Test\Core;
 
+use PHPPdf\Core\ColorPalette;
 use PHPPdf\Core\Configuration\LoaderImpl;
-use PHPPdf\Core\Facade,
-    PHPPdf\Core\FacadeConfiguration;
+use PHPPdf\Core\Facade;
+use PHPPdf\Core\FacadeConfiguration;
 
 class FacadeTest extends \PHPPdf\PHPUnit\Framework\TestCase
 {
@@ -50,16 +51,24 @@ class FacadeTest extends \PHPPdf\PHPUnit\Framework\TestCase
     {
         $xml = '<pdf></pdf>';
         $stylesheet = '<stylesheet></stylesheet>';
+        $colorPaletteContent = '<colors></colors>';
+        $colorPalette = array('color' => '#abcabc');
         $content = 'pdf content';
 
         $documentMock = $this->getMockBuilder('PHPPdf\Core\Document')
-                             ->setMethods(array('draw', 'initialize', 'render', 'addFontDefinitions', 'setComplexAttributeFactory'))
+                             ->setMethods(array('draw', 'initialize', 'render', 'addFontDefinitions', 'setComplexAttributeFactory', 'setColorPalette'))
                              ->disableOriginalConstructor()
                              ->getMock();
 
         $stylesheetParserMock = $this->getMock('PHPPdf\Core\Parser\StylesheetParser', array('parse'));
         $constraintMock = $this->getMock('PHPPdf\Core\Parser\StylesheetConstraint');
         $pageCollectionMock = $this->getMock('PHPPdf\Core\Node\PageCollection', array());
+        
+        $colorPaletteParserMock = $this->getMock('PHPPdf\Parser\Parser');
+        $colorPaletteParserMock->expects($this->once())
+                               ->method('parse')
+                               ->will($this->returnValue($colorPalette));
+        $this->facade->setColorPaletteParser($colorPaletteParserMock);
         
         $nodeFactoryMock = $this->getMock('PHPPdf\Core\Node\NodeFactory');
         $complexAttributeFactoryMock = $this->getMock('PHPPdf\Core\ComplexAttribute\ComplexAttributeFactory');
@@ -74,6 +83,10 @@ class FacadeTest extends \PHPPdf\PHPUnit\Framework\TestCase
         $this->loaderMock->expects($this->atLeastOnce())
                          ->method('createFontRegistry')
                          ->will($this->returnValue($fontDefinitionsStub));
+                         
+        $documentMock->expects($this->once())
+                     ->method('setColorPalette')
+                     ->with(new ColorPalette($colorPalette));
                          
         $documentMock->expects($this->once())
                      ->method('addFontDefinitions')
@@ -98,18 +111,18 @@ class FacadeTest extends \PHPPdf\PHPUnit\Framework\TestCase
                                ->with($this->equalTo($stylesheet))
                                ->will($this->returnValue($constraintMock));
 
-        $documentMock->expects($this->at(2))
+        $documentMock->expects($this->at(3))
                 ->method('draw')
                 ->with($this->equalTo($pageCollectionMock));
-        $documentMock->expects($this->at(3))
+        $documentMock->expects($this->at(4))
                 ->method('render')
                 ->will($this->returnValue($content));
-        $documentMock->expects($this->at(4))
+        $documentMock->expects($this->at(5))
                 ->method('initialize');
 
         $this->invokeMethod($this->facade, 'setDocument', array($documentMock));
 
-        $result = $this->facade->render($xml, $stylesheet);
+        $result = $this->facade->render($xml, $stylesheet, $colorPaletteContent);
 
         $this->assertEquals($content, $result);
     }
