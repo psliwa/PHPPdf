@@ -2,9 +2,10 @@
 
 namespace PHPPdf\Test\Core\Parser;
 
-use PHPPdf\Core\Parser\CachingStylesheetConstraint,
-    PHPPdf\Core\Parser\BagContainer,
-    PHPPdf\Cache\NullCache;
+use PHPPdf\Core\Parser\StylesheetConstraint;
+use PHPPdf\Core\Parser\CachingStylesheetConstraint;
+use PHPPdf\Core\Parser\BagContainer;
+use PHPPdf\Cache\NullCache;
 
 class CachingStylesheetConstraintTest extends \PHPPdf\PHPUnit\Framework\TestCase
 {
@@ -74,5 +75,48 @@ class CachingStylesheetConstraintTest extends \PHPPdf\PHPUnit\Framework\TestCase
         $sc->find($query);
 
         $this->assertFalse($sc->isResultMapModified());
+    }
+    
+    /**
+     * @test
+     */
+    public function mergeConstraints()
+    {
+        $tag = 'tag';
+        $class = 'someClass';
+        $query = 'tag.someClass';
+        
+        $firstAttributes = array('attribute1' => 'value1', 'attribute2' => 'value2');
+        $firstBag = new BagContainer($firstAttributes);
+        
+        $secondAttributes = array('attribute3' => 'value3', 'attribute2' => 'value2x');
+        $secondBag = new BagContainer($secondAttributes);
+        
+        $firstStylesheetConstraint = new CachingStylesheetConstraint();        
+        $firstConstraint = $this->createStylesheetConstraint($firstAttributes, $tag, $class);
+        $firstStylesheetConstraint->addConstraint($tag, $firstConstraint);
+        $this->writeAttribute($firstStylesheetConstraint, 'resultMap', array($query => $firstBag));
+
+        $secondStylesheetConstraint = new CachingStylesheetConstraint();        
+        $secondConstraint = $this->createStylesheetConstraint($secondAttributes, $tag, $class);        
+        $secondStylesheetConstraint->addConstraint($tag, $secondConstraint);
+        $this->writeAttribute($secondStylesheetConstraint, 'resultMap', array($query => $secondBag));
+        
+        $constraint = CachingStylesheetConstraint::merge(array($firstStylesheetConstraint, $secondStylesheetConstraint));
+        
+        $expectedAttributes = array_merge($firstAttributes, $secondAttributes);
+        $expectedResultMap = array($query => new BagContainer($expectedAttributes));
+        
+        $this->assertEquals($expectedResultMap, $this->readAttribute($constraint, 'resultMap'));
+        $this->assertEquals(array($firstConstraint, $secondConstraint), $constraint->getConstraints());
+    }
+    
+    private function createStylesheetConstraint($attibutes, $tag, $class)
+    {
+        $constraint = new StylesheetConstraint($attibutes);
+        $constraint->setTag($tag);
+        $constraint->addClass($class);
+        
+        return $constraint;
     }
 }

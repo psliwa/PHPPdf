@@ -8,6 +8,7 @@
 
 namespace PHPPdf\Core;
 
+use PHPPdf\Exception\InvalidArgumentException;
 use PHPPdf\Core\Parser\ColorPaletteParser;
 use PHPPdf\Parser\Parser;
 use PHPPdf\Core\Parser\StylesheetConstraint;
@@ -130,9 +131,15 @@ class Facade
     /**
      * Convert text document to pdf document
      * 
+     * @param string|DataSource $documentContent Source document content
+     * @param DataSource[]|string[]|DataSource|string $stylesheetContents Stylesheet source(s)
+     * @param string|DataSource $colorPaletteContent Palette of colors source
+     * 
      * @return string Content of pdf document
+     * 
+     * @throws PHPPdf\Exception\Exception
      */
-    public function render($documentContent, $stylesheetContent = null, $colorPaletteContent = null)
+    public function render($documentContent, $stylesheetContents = array(), $colorPaletteContent = null)
     {
         $colorPalette = new ColorPalette((array) $this->configurationLoader->createColorPalette());
         
@@ -151,7 +158,7 @@ class Facade
         $this->getDocumentParser()->setComplexAttributeFactory($complexAttributeFactory);
         $this->getDocumentParser()->setNodeFactory($this->configurationLoader->createNodeFactory());
 
-        $stylesheetConstraint = $this->retrieveStylesheetConstraint($stylesheetContent);
+        $stylesheetConstraint = $this->retrieveStylesheetConstraint($stylesheetContents);
 
         $relativePathToResources = str_replace('\\', '/', realpath(__DIR__.'/../Resources'));
         $documentContent = str_replace('%resources%', $relativePathToResources, $documentContent);
@@ -197,28 +204,54 @@ class Facade
         return $content;
     }
 
-    public function retrieveStylesheetConstraint($stylesheetXml)
+    public function retrieveStylesheetConstraint($stylesheetContents)
     {
-       $stylesheetConstraint = null;
-
-        if($stylesheetXml)
+        if($stylesheetContents === null)
         {
-            if(!$stylesheetXml instanceof DataSource)
+            return null;
+        }
+        elseif(is_string($stylesheetContents))
+        {
+            $stylesheetContents = array(DataSource::fromString($stylesheetContents));
+        }
+        elseif($stylesheetContents instanceof DataSource)
+        {
+            $stylesheetContents = array($stylesheetContents);
+        }
+        elseif(!is_array($stylesheetContents))
+        {
+            throw new InvalidArgumentException('$stylesheetContents must be an array, null or DataSource object.');
+        }
+        
+        $constraints = array();
+        
+        foreach($stylesheetContents as $stylesheetContent)
+        {
+            if(!$stylesheetContent instanceof DataSource)
             {
-                $stylesheetXml = DataSource::fromString($stylesheetXml);
+                $stylesheetContent = DataSource::fromString($stylesheetContent);
             }
 
             if(!$this->useCacheForStylesheetConstraint)
             {
-                $stylesheetConstraint = $this->parseStylesheet($stylesheetXml);
+                $constraints[] = $this->parseStylesheet($stylesheetContent);
             }
             else
             {
-                $stylesheetConstraint = $this->loadStylesheetConstraintFromCache($stylesheetXml);
+                $constraints[] = $this->loadStylesheetConstraintFromCache($stylesheetContent);
             }
         }
+        
+        if(!$constraints)
+        {
+            return null;
+        }
+        elseif(count($constraints) === 1)
+        {
+            return current($constraints);
+        }
 
-        return $stylesheetConstraint;
+        return $constraints[0]->merge($constraints);
     }
 
     /**

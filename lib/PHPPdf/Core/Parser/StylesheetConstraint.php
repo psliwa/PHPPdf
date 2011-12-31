@@ -227,4 +227,20 @@ class StylesheetConstraint extends BagContainer implements \Countable
             $this->addConstraint($constraint->tag, $constraint);
         }
     }
+    
+    public static function merge(array $containers)
+    {
+        $internalConstraints = array();
+        foreach($containers as $constraint)
+        {
+            $internalConstraints = array_merge($internalConstraints, $constraint->constraints);
+        }
+        
+        $constraint = parent::merge($containers);
+        
+        $constraint->constraints = $internalConstraints;
+        
+        return $constraint;
+        
+    }
 }

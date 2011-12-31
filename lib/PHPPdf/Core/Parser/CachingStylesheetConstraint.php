@@ -90,4 +90,32 @@ class CachingStylesheetConstraint extends StylesheetConstraint
     {
         return $this->cacheId;
     }
+    
+    public static function merge(array $containers)
+    {
+        $resultContainer = parent::merge($containers);
+        
+        $resultMap = array();
+        foreach($containers as $container)
+        {
+            foreach($container->resultMap as $tag => $bag)
+            {
+                if(!isset($resultMap[$tag]))
+                {
+                    $resultMap[$tag] = array();
+                }
+                
+                $resultMap[$tag][] = $bag;
+            }
+        }
+        
+        foreach($resultMap as $tag => $bags)
+        {
+            $resultMap[$tag] = BagContainer::merge($bags);
+        }
+        
+        $resultContainer->resultMap = $resultMap;
+
+        return $resultContainer;
+    }
 }

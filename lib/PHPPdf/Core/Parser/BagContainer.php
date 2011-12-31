@@ -135,7 +135,7 @@ class BagContainer implements \Serializable
             $attributeBags[] = $container->getAttributeBag();
         }
 
-        $container = new BagContainer();
+        $container = new static();
         $container->attributeBag = AttributeBag::merge($attributeBags);
         $container->weight = $weight;
         
