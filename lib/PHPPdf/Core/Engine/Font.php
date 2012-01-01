@@ -20,6 +20,7 @@ interface Font
     
     public function hasStyle($style);
     public function setStyle($style);
+    public function getCurrentStyle();
     
     public function getWidthOfText($text, $fontSize);
 }

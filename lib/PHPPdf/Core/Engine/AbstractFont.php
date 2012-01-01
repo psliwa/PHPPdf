@@ -57,6 +57,11 @@ abstract class AbstractFont implements Font
 
         $this->currentStyle = $this->fontStyle($style);
     }
+    
+    public function getCurrentStyle()
+    {
+        return $this->currentStyle;
+    }
 
     private function convertStyleType($style)
     {

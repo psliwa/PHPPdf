@@ -36,6 +36,7 @@ class GraphicsContext extends AbstractGraphicsContext
         'lineDashingPattern' => self::DASHING_PATTERN_SOLID,
         'alpha' => 1,
         'font' => null,
+        'fontStyle' => null,
         'fontSize' => null,
         'clips' => array(),
     );
@@ -338,6 +339,7 @@ class GraphicsContext extends AbstractGraphicsContext
         $color = $this->state['fillColor'];
         $size = $this->state['fontSize'];
         $color = $this->createColor($color);
+        $font->setStyle($this->state['fontStyle']);
         $imagineFont = $font->getWrappedFont($color, $size);
         
         list($image, $point) = $this->getCurrentClip();
@@ -482,13 +484,14 @@ class GraphicsContext extends AbstractGraphicsContext
     
     public function setFont(BaseFont $font, $size)
     {
-        $this->addToQueue('doSetFont', func_get_args());
+        $this->addToQueue('doSetFont', array($font, $size, $font->getCurrentStyle()));
     }
     
-    protected function doSetFont(BaseFont $font, $size)
+    protected function doSetFont(BaseFont $font, $size, $style)
     {
         $this->state['font'] = $font;
         $this->state['fontSize'] = $size;
+        $this->state['fontStyle'] = $style;
     }
     
     public function addBookmark($identifier, $name, $top, $ancestorsIdentifier = null)

@@ -2,6 +2,8 @@
 
 namespace PHPPdf\Test\Core\Engine\Imagine;
 
+use PHPPdf\Core\Engine\Imagine\Font;
+
 use PHPPdf\Core\Engine\EmptyImage;
 
 use PHPPdf\Core\Engine\Imagine\Image;
@@ -95,6 +97,7 @@ class GraphicsContextTest extends TestCase
         $expected['lineDashingPattern'] = $expected['lineDashingPattern'][0];
         $expected['fontSize'] = $expected['font'][1];
         $expected['font'] = $expected['font'][0];
+        $expected['fontStyle'] = null;
         $expected['clips'] = array();
         
         foreach($attributes as $name => $value)
@@ -328,6 +331,56 @@ class GraphicsContextTest extends TestCase
             array(1, 0),
             array(0.2, 80),
         );
+    }
+    
+    /**
+     * @test
+     */
+    public function setFont()
+    {
+        $normalFont = $this->getMockBuilder('Imagine\Image\AbstractFont')
+                           ->disableOriginalConstructor()
+                           ->getMock();
+                           
+        $boldFont = clone $normalFont;
+                           
+        $this->imagine->expects($this->at(0))
+                      ->method('font')
+                      ->with('normal', $this->anything(), $this->anything())
+                      ->will($this->returnValue($normalFont));
+
+        $this->imagine->expects($this->at(1))
+                      ->method('font')
+                      ->with('bold', $this->anything(), $this->anything())
+                      ->will($this->returnValue($boldFont));
+        
+        $font = new Font(array(
+            Font::STYLE_NORMAL => 'normal',
+            Font::STYLE_BOLD => 'bold',
+        ), $this->imagine);
+        
+        $this->drawer->expects($this->at(0))
+                     ->method('text')
+                     ->with($this->anything(), $normalFont, $this->anything());
+        $this->drawer->expects($this->at(1))
+                     ->method('text')
+                     ->with($this->anything(), $boldFont, $this->anything());
+        $this->image->expects($this->any())
+                    ->method('getSize')
+                    ->will($this->returnValue(new Box(500, 500)));
+        $this->image->expects($this->any())
+                    ->method('draw')
+                    ->will($this->returnValue($this->drawer));
+                     
+        $font->setStyle(Font::STYLE_NORMAL);
+        $this->gc->setFillColor('#000000');
+        $this->gc->setFont($font, 12);
+        $this->gc->drawText('abc', 100, 100, 'utf-8');
+        $font->setStyle(Font::STYLE_BOLD);
+        $this->gc->setFont($font, 12);
+        $this->gc->drawText('abc', 100, 100, 'utf-8');
+        
+        $this->gc->commit();
     }
     
     /**
