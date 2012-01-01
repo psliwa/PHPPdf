@@ -13,6 +13,21 @@ PHPPdf\Autoloader::register();
 PHPPdf\Autoloader::register(__DIR__.'/../lib/vendor');
 PHPPdf\Autoloader::register(__DIR__.'/../lib/vendor/Imagine/lib');
 
+if(!isset($_GET['name']))
+{
+    echo 'Available examples:<br />';
+    $examples = get_examples();
+    echo '<ul>';
+    foreach($examples as $example)
+    {
+        echo '<li>'.$example.' (<a href="?name='.$example.'">pdf</a> or <a href="?name='.$example.'&engine=image">image</a>)';
+    }
+    echo '</ul>';
+    exit();
+}
+
+$engine = isset($_GET['engine']) ? $_GET['engine'] : 'pdf';
+
 // set different way of configuration
 //$facade = PHPPdf\Core\FacadeBuilder::create(new PHPPdf\Core\Configuration\DependencyInjection\LoaderImpl())//->setCache('File', array('cache_dir' => __DIR__.'/cache/'))
 $facade = PHPPdf\Core\FacadeBuilder::create()
@@ -21,20 +36,13 @@ $facade = PHPPdf\Core\FacadeBuilder::create()
 //                                               ->setUseCacheForStylesheetConstraint(false)
 //                                               ->setUseCacheForStylesheetConstraint(true)
 //->setDocumentParserType(PHPPdf\Parser\FacadeBuilder::PARSER_MARKDOWN)
+                                               ->setEngineType($engine)
+                                               ->setEngineOptions(array(
+                                                   'format' => 'jpg',
+                                                   'quality' => 70,
+                                                   'engine' => 'imagick',
+                                               ))
                                                ->build();
-
-if(!isset($_GET['name']))
-{
-    echo 'Pass example name by "name" parameter.<br />';
-    
-    echo 'Available examples:<br />';
-    $examples = get_examples();
-    foreach($examples as $example)
-    {
-        echo '<a href="?name='.$example.'">'.$example.'</a><br />';
-    }
-    exit();
-}
 
 $name = basename($_GET['name']);
 
@@ -61,6 +69,18 @@ if(isset($_GET['t']))
 }
 else
 {
-    header('Content-Type: application/pdf');
-    echo $content;
+    if($engine == 'pdf')
+    {
+        header('Content-Type: application/pdf');
+        echo $content;
+    }
+    else
+    {
+        foreach($content as $data)
+        {
+            $data = base64_encode($data);
+        
+            echo '<img src="data:image/jpeg;base64,'.$data.'" />';
+        }
+    }
 }

@@ -5,6 +5,11 @@ Informacja
 
 To jest gałąź rozwojowa, tak więc **nie jest stabilna**, ostatnia **stablina** gałąź to 1.0.x.
 
+Przykłady
+=========
+
+Przykłady dokumentów znajdują się w katalogu "examples". Plik "index.php" jest webowym interfejsem do otwierania przykładów, "cli.php" zaś jest interfejsem konsolowym. W webowym interfejsie przykłady są dostępne w formie dokumentu pdf oraz plików graficznych (wymagany Imagick).
+
 Dokumentacja
 ============
 

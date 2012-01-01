@@ -5,6 +5,11 @@ Information
 
 This is development branch, thus it **is not stable**, latest **stable** branch is 1.0.x.
 
+Examples
+=========
+
+Sample documents are in "examples" directory. "index.php" file is web interface to browse examples, "cli.php" is console interface. Via web interface documents in pdf and jpeg formats are available (Imagick required for jpeg format).
+
 Documentation
 =============
 
