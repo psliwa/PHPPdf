@@ -16,6 +16,7 @@ Dokumentacja
 Spis treści
 -----------------
 
+1. [Wstęp](#intro)
 1. [Instalacja](#installation)
 1. [Symfony2 bundle](#symfony2-bundle)
 1. [FAQ](#faq)
@@ -45,6 +46,13 @@ Spis treści
 1. [TODO - czyli plany](#todo)
 1. [Wymagania techniczne](#requirements)
 
+<a name="intro"></a>
+Wprowadzenie
+----------
+
+PHPPdf jest biblioteką, która zamienia dokument xml w dokument pdf lub też pliki graficzne. Dokument źródłowy xml jest podobny do html'a, ale jest sporo różnic w nazwach i właściwościach atrybutów, właściwości tagów, jest wiele niestandardowych tagów, nie wszystkie tagi z HTML'a są wspierane, arkusz styli jest opisywany w dokumencie xml, a nie css. Założeniem tej biblioteki nie jest transformacja HTML -> PDF / JPEG / PNG, a XML -> PDF / JPEG / PNG. Nazwy tagów i niektóre nazwy atrybutów są takie same jak w HTML'u, aby zmniejszyć krzywą uczenia się tej biblioteki.
+
+<a name="installation"></a>
 Instalacja
 ----------
 
