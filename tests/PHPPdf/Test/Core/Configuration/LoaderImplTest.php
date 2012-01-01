@@ -37,7 +37,7 @@ class LoaderImplTest extends \PHPPdf\PHPUnit\Framework\TestCase
         return array(
             array('nodeFile', 'createNodeFactory', new \PHPPdf\Core\Node\NodeFactory()),
             array('complexAttributeFile', 'createComplexAttributeFactory', new \PHPPdf\Core\ComplexAttribute\ComplexAttributeFactory()),
-            array('fontFile', 'createFontRegistry', array()),
+            array('fontFiles', 'createFontRegistry', array()),
             array('colorFile', 'createColorPalette', array()),
         );
     }
@@ -52,12 +52,12 @@ class LoaderImplTest extends \PHPPdf\PHPUnit\Framework\TestCase
         
         $nodeFile = $this->readAttribute($loader, 'nodeFile');
         $complexAttributeFile = $this->readAttribute($loader, 'complexAttributeFile');
-        $fontFile = $this->readAttribute($loader, 'fontFile');
+        $fontFiles = $this->readAttribute($loader, 'fontFiles');
         $colorFile = $this->readAttribute($loader, 'colorFile');
 
         $cache = $this->getMock('PHPPdf\Cache\NullCache', array('test', 'save', 'load'));
 
-        $cacheId = $this->invokeMethod($loader, 'getCacheId', array($$file));
+        $cacheId = $this->invokeMethod($loader, 'getCacheId', array(is_array($$file) ? current($$file) : $$file));
 
         $cache->expects($this->once())
               ->method('test')

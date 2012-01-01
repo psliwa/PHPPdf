@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fonts>   
+    <font name="DejaVuSans">
+    	<normal src="%resources%/fonts/DejaVuSans/normal.ttf" />
+    	<bold src="%resources%/fonts/DejaVuSans/bold.ttf" />
+    	<italic src="%resources%/fonts/DejaVuSans/oblique.ttf" />
+    	<bold-italic src="%resources%/fonts/DejaVuSans/bold+oblique.ttf" />
+    </font>
+    
+    <font name="DejaVuSansCondensed">
+    	<normal src="%resources%/fonts/DejaVuSansCondensed/normal.ttf" />
+    	<bold src="%resources%/fonts/DejaVuSansCondensed/bold.ttf" />
+    	<italic src="%resources%/fonts/DejaVuSansCondensed/oblique.ttf" />
+    	<bold-italic src="%resources%/fonts/DejaVuSansCondensed/bold+oblique.ttf" />
+    </font>
+    <font name="DejaVuSansMono">
+    	<normal src="%resources%/fonts/DejaVuSansMono/normal.ttf" />
+    	<bold src="%resources%/fonts/DejaVuSansMono/bold.ttf" />
+    	<italic src="%resources%/fonts/DejaVuSansMono/oblique.ttf" />
+    	<bold-italic src="%resources%/fonts/DejaVuSansMono/bold+oblique.ttf" />
+    </font>
+    <font name="DejaVuSerif">
+    	<normal src="%resources%/fonts/DejaVuSerif/normal.ttf" />
+    	<bold src="%resources%/fonts/DejaVuSerif/bold.ttf" />
+    	<italic src="%resources%/fonts/DejaVuSerif/italic.ttf" />
+    	<bold-italic src="%resources%/fonts/DejaVuSerif/bold+italic.ttf" />
+    </font>
+    <font name="judson">
+    	<normal src="%resources%/fonts/judson/normal.ttf" />
+    	<bold src="%resources%/fonts/judson/bold.ttf" />
+    	<italic src="%resources%/fonts/judson/italic.ttf" />
+    </font>
+
+    <font name="FreeUniversal">
+    	<normal src="%resources%/fonts/FreeUniversal/normal.ttf" />
+    	<bold src="%resources%/fonts/FreeUniversal/bold.ttf" />
+    	<italic src="%resources%/fonts/FreeUniversal/italic.ttf" />
+    	<bold-italic src="%resources%/fonts/FreeUniversal/bold+italic.ttf" />
+    </font>
+    <font name="UniversElse">
+    	<normal src="%resources%/fonts/UniversElse/normal.ttf" />
+    	<bold src="%resources%/fonts/UniversElse/bold.ttf" />
+    	<italic src="%resources%/fonts/UniversElse/italic.ttf" />
+    </font>
+    <font name="Kurier">
+    	<normal src="%resources%/fonts/Kurier/normal.ttf" />
+    	<bold src="%resources%/fonts/Kurier/bold.ttf" />
+    	<italic src="%resources%/fonts/Kurier/italic.ttf" />
+    	<bold-italic src="%resources%/fonts/Kurier/bold+italic.ttf" />
+    </font>
+
+    <font name="courier">
+    	<normal src="%resources%/fonts/DejaVuSans/normal.ttf" />
+    	<bold src="%resources%/fonts/DejaVuSans/bold.ttf" />
+    	<italic src="%resources%/fonts/DejaVuSans/oblique.ttf" />
+    	<bold-italic src="%resources%/fonts/DejaVuSans/bold+oblique.ttf" />
+    </font>
+
+    <font name="times-roman">
+    	<normal src="%resources%/fonts/DejaVuSans/normal.ttf" />
+    	<bold src="%resources%/fonts/DejaVuSans/bold.ttf" />
+    	<italic src="%resources%/fonts/DejaVuSans/oblique.ttf" />
+    	<bold-italic src="%resources%/fonts/DejaVuSans/bold+oblique.ttf" />
+    </font>
+    
+    <font name="helvetica">
+    	<normal src="%resources%/fonts/DejaVuSans/normal.ttf" />
+    	<bold src="%resources%/fonts/DejaVuSans/bold.ttf" />
+    	<italic src="%resources%/fonts/DejaVuSans/oblique.ttf" />
+    	<bold-italic src="%resources%/fonts/DejaVuSans/bold+oblique.ttf" />
+    </font>
+
+    <font name="zapf-dingbats">
+    	<normal src="%resources%/fonts/DejaVuSans/normal.ttf" />
+    	<bold src="%resources%/fonts/DejaVuSans/bold.ttf" />
+    	<italic src="%resources%/fonts/DejaVuSans/oblique.ttf" />
+    	<bold-italic src="%resources%/fonts/DejaVuSans/bold+oblique.ttf" />
+    </font>
+
+    <font name="symbol">
+    	<normal src="%resources%/fonts/DejaVuSans/normal.ttf" />
+    	<bold src="%resources%/fonts/DejaVuSans/bold.ttf" />
+    	<italic src="%resources%/fonts/DejaVuSans/oblique.ttf" />
+    	<bold-italic src="%resources%/fonts/DejaVuSans/bold+oblique.ttf" />
+    </font>
+</fonts>

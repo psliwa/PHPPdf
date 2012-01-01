@@ -39,6 +39,7 @@ class Facade
     private $useCacheForStylesheetConstraint = false;
     private $configurationLoader;
     private $colorPaletteParser;
+    private $engineType = 'pdf';
 
     public function __construct(Loader $configurationLoader, Document $document, DocumentParser $documentParser, StylesheetParser $stylesheetParser)
     {
@@ -56,8 +57,13 @@ class Facade
         $this->setStylesheetParser($stylesheetParser);
         $this->setDocument($document);
     }
+    
+    public function setEngineType($engineType)
+	{
+		$this->engineType = $engineType;
+	}
 
-    public function setCache(Cache $cache)
+	public function setCache(Cache $cache)
     {
         $this->cache = $cache;
     }
@@ -153,7 +159,7 @@ class Facade
         $complexAttributeFactory = $this->configurationLoader->createComplexAttributeFactory();
         
         $this->getDocument()->setComplexAttributeFactory($complexAttributeFactory);
-        $fontDefinitions = $this->configurationLoader->createFontRegistry();
+        $fontDefinitions = $this->configurationLoader->createFontRegistry($this->engineType);
         $this->getDocument()->addFontDefinitions($fontDefinitions);
         $this->getDocumentParser()->setComplexAttributeFactory($complexAttributeFactory);
         $this->getDocumentParser()->setNodeFactory($this->configurationLoader->createNodeFactory());

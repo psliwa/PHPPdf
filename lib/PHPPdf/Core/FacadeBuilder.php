@@ -100,6 +100,7 @@ class FacadeBuilder
         $document = new Document($engine);
         
         $facade = new Facade($this->configurationLoader, $document, $documentParser, $stylesheetParser);
+        $facade->setEngineType($this->engineType);
         
         if($documentParser instanceof FacadeAware)
         {

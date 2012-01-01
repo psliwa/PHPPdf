@@ -8,6 +8,8 @@
 
 namespace PHPPdf\Core\Configuration;
 
+use PHPPdf\Exception\InvalidArgumentException;
+use PHPPdf\Core\Engine\EngineFactory;
 use PHPPdf\Core\Parser\ColorPaletteParser;
 use PHPPdf\Core\UnitConverter;
 use PHPPdf\Core\Parser\FontRegistryParser;
@@ -27,19 +29,19 @@ class LoaderImpl implements Loader
 {
     private $nodeFile = null;
     private $complexAttributeFile = null;
-    private $fontFile = null;
+    private $fontFiles = null;
     private $colorFile = null;
     
     private $complexAttributeFactory;
     private $nodeFactory;
-    private $fontRegistry;
+    private $fontRegistries = array();
     private $colorPalette;
     
     private $unitConverter;
     
     private $cache;
     
-    public function __construct($nodeFile = null, $complexAttributeFile = null, $fontFile = null, $colorFile = null)
+    public function __construct($nodeFile = null, $complexAttributeFile = null, $fontFiles = null, $colorFile = null)
     {
         if($nodeFile === null)
         {
@@ -51,9 +53,12 @@ class LoaderImpl implements Loader
             $complexAttributeFile = __DIR__.'/../../Resources/config/complex-attributes.xml';
         }
         
-        if($fontFile === null)
+        if(!$fontFiles)
         {
-            $fontFile = __DIR__.'/../../Resources/config/fonts.xml';
+            $fontFiles = array(
+                'pdf' => __DIR__.'/../../Resources/config/fonts.xml',
+                'image' => __DIR__.'/../../Resources/config/fonts-image.xml',
+            );
         }
         
         if($colorFile === null)
@@ -63,7 +68,7 @@ class LoaderImpl implements Loader
         
         $this->nodeFile = $nodeFile;        
         $this->complexAttributeFile = $complexAttributeFile;        
-        $this->fontFile = $fontFile;
+        $this->setFontFile($fontFiles);
         $this->colorFile = $colorFile;
 
         $this->setCache(NullCache::getInstance());
@@ -81,7 +86,15 @@ class LoaderImpl implements Loader
 
 	public function setFontFile($fontFile)
 	{
-		$this->fontFile = $fontFile;
+    	if(is_string($fontFile))
+        {
+            $fontFile = array(
+                'pdf' => $fontFile,
+                'image' => $fontFile,
+            );
+        }
+	    
+		$this->fontFiles = $fontFile;
 	}
 
 	public function setColorFile($colorFile)
@@ -109,14 +122,14 @@ class LoaderImpl implements Loader
         return $this->complexAttributeFactory;
     }
 
-	public function createFontRegistry()
+	public function createFontRegistry($engine = 'pdf')
     {
-        if($this->fontRegistry === null)
+        if(!isset($this->fontRegistries[$engine]))
         {
-            $this->fontRegistry = $this->loadFonts();
+            $this->fontRegistries[$engine] = $this->loadFonts($engine);
         }        
 
-        return $this->fontRegistry;
+        return $this->fontRegistries[$engine];
         
     }
 
@@ -204,9 +217,14 @@ class LoaderImpl implements Loader
         return $this->getFromCacheOrCallClosure($file, $doLoadComplexAttributes);
     }
 
-    protected function loadFonts()
+    protected function loadFonts($engine)
     {
-        $file = $this->fontFile;
+        if(!isset($this->fontFiles[$engine]))
+        {
+            throw new InvalidArgumentException(sprintf('Font file for engine "%s" is not defined.', $engine));
+        }
+        
+        $file = $this->fontFiles[$engine];
 
         $doLoadFonts = function($content)
         {
