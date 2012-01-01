@@ -1,6 +1,20 @@
 CHANGELOG
 =========
 
+* 1.1.0 (2012-01-01)
+
+  * image generation engine
+  * improve border and background roundings
+  * support for palette of colors
+  * refactoring exception hierarchy classes
+  * numeric value support for background-position-x and background-position-y
+  * ignore-error attribute for img tag
+  * keep-ratio attribute for img tag
+  * elastic-page tag
+  * improve width and height attributes for page and dynamic-page tags
+  * Facade::render method accepts array as second argument - support for number of stylesheets
+  * remove dependency to Symfony components, remove Symfony DI configuration loader
+
 * 1.0.3 (2011-11-27)
 
   * support for remote jpeg files
