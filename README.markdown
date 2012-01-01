@@ -51,8 +51,6 @@ Installation
 
 Library uses external dependencies:
 
-* Symfony/Component/DependencyInjection
-* Symfony/Component/Config
 * php-markdown
 * Zend_Pdf (Zend Framework in 2.0.x version)
 * Zend_Memory (Zend Framework in 2.0.x version)

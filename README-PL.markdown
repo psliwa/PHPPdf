@@ -50,8 +50,6 @@ Instalacja
 
 Biblioteka posiada zależności do zewnętrznych bibliotek: 
 
-* Symfony/Component/DependencyInjection
-* Symfony/Component/Config
 * php-markdown
 * Zend_Pdf (Zend Framework w wersji 2.0.x)
 * Zend_Memory (Zend Framework w wersji 2.0.x)
