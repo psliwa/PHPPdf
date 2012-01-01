@@ -401,14 +401,14 @@ Complex attributes can be set by notation "attributeName.attributeProperty" or "
     - style: posible values: solid (solid line), dotted (predefined dotted line) or any definition in the form of integers separated by space
     - type: which edges will be shown - default "top+bottom+left+right" (all edges). "none" value is possible (it disable border)
     - size: border size
-    - radius: corner rounding in radians (attention: if this parameter is set, type paramete will be ignored, rounded border always will be full - this will be fixed in future)
+    - radius: corner rounding in units of length (attention: if this parameter is set, type paramete will be ignored, rounded border always will be full - this will be fixed in future)
     - position: border translation relative to original position. Positive values extends border, negative values decrases border. Owing to manipulation of this parameter, you can obtain complex pattern as border if you add another borders with different styles and positions. 
 
 * background:
     - color: background color
     - image: background image
     - repeat: way of image repeating (none|x|y|all)
-    - radius: rounding background corners (for now only works with color background)
+    - radius: rounding background corners in units of length (for now only works with color background)
     - use-real-dimension: attribute only used by page (or dynamic-page). True for filling also margins, false in otherwise.
     - image-width: custom width of background image, percentage values are allowed
     - image-height: custom height of background image, percentage values are allowed

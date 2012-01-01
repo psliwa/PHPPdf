@@ -396,14 +396,14 @@ Atrybuty złożone mogą zostać ustawione za pomocą notacji "nazwaAtrybutu.naz
     - style: styl obramowania, możliwe wartości: solid (linia ciągła), dotted (predefiniowana linia przerywana) lub własna definicja w postaci ciągu liczb oddzielonych spacjami
     - type: które krawędzie mają mieć obramowanie - domyślnie "top+bottom+left+right", czyli każda krawędź. Możliwa wartość none (wyłączenie obramowania)
     - size: rozmiar obramowania
-    - radius: zaokrąglenie rogów w radianach (uwaga: przy ustawionym tym parametrze ignorowany jest parametr typu - zawsze obramowanie z zaokrąglonymi rogami jest pełne)
+    - radius: zaokrąglenie rogów w jednostkach długości (uwaga: przy ustawionym tym parametrze ignorowany jest parametr typu - zawsze obramowanie z zaokrąglonymi rogami jest pełne)
     - position: przesunięcie obramowania względem orginalnego położenia. Wartości dodatnie rozszerzają obramowanie, wartości ujemnie zwężają. Dzięki manipulacji tym parametrem i dodaniu kilku obramowań, można uzyskać złożone i skomplikowane obramowania.
 
 * background:
     - color: kolor tła
     - image: obrazek tła
     - repeat: sposób powtarzania obrazka (none|x|y|all)
-    - radius: zaokrąglanie rogów tła w radianach (w chwili obecnej działa tylko dla koloru, nie obrazka)
+    - radius: zaokrąglanie rogów tła w jednostkach długości (w chwili obecnej działa tylko dla koloru, nie obrazka)
     - use-real-dimension: atrybut wykorzystany jak narazie dla tagu page (lub dynamic-page). True jeśli zapełniać marginesy, false w przeciwnym wypadku.
     - image-width: szerokość obrazka tła, może być wartością procentową
     - image-height: wysokość obrazka tła, może być wartością procentową
