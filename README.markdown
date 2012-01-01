@@ -710,8 +710,6 @@ FacadeBuilder can be uset to build and configure Facade. FacadeBuilder is able t
 
     $facade = $builder->build();
 
-There are two implementation of configuration loaders, standard and using DependencyInjection component from Symfony2. Second implementation is more flexible in configuration, but is less efficently. Default loader dosn't use DI container.
-
 <a name="markdown"></a>
 Markdown support
 ----------------

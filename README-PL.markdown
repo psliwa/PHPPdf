@@ -702,8 +702,6 @@ Można wykorzystać budowniczego fasady, który dodatkowo ma opcję do ustawiani
 
     $facade = $builder->build();
 
-Są dwie implementacje loaderów konfiguracji, zwykła oraz korzystająca z komponentu DependencyInjection z Symfony2. Druga implementacja daje większą elastyczność w konfigurowaniu biblioteki. Domyślnie używany jest loader, który nie korzysta z DI.
-
 <a name="markdown"></a>
 Markdown - wsparcie
 ----------------
