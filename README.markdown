@@ -68,7 +68,7 @@ In order to library was ready to use, you must download this dependencies. You s
 
     php vendors.php
     
-Alternatively, you can download this dependencies manually and copy it into "lib/vendor" directory. Only Zend_Pdf, Zend_Memory and Zend_Cache are obligatory.
+Alternatively, you can download this dependencies manually and copy it into "lib/vendor" directory. By default vendors.php file **will download whole ZF2 repository**, but remember **only Zend_Pdf, Zend_Memory and Zend_Cache are obligatory**. You can **remove other packages** and files.
     
 <a name="symfony2-bundle"></a>
 Symfony2 bundle
@@ -122,7 +122,7 @@ The simplest way of library using:
     //register PHPPdf and vendor (Zend_Pdf and other dependencies) autoloaders
     require_once 'PHPPdf/Autoloader.php';
     PHPPdf\Autoloader::register();
-    PHPPdf\Autoloader::register('/path/to/library/lib/vendor');
+    PHPPdf\Autoloader::register('/path/to/library/lib/vendor/Zend/library');
     
     //if you want to generate graphic files
     PHPPdf\Autoloader::register('sciezka/do/biblioteki/lib/vendor/Imagine/lib');
