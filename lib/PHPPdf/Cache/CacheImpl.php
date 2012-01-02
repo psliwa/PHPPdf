@@ -8,8 +8,9 @@
 
 namespace PHPPdf\Cache;
 
+use Zend\Cache\StorageFactory;
+use Zend\Cache\Storage\Adapter;
 use PHPPdf\Exception\RuntimeException;
-use Zend\Cache\Frontend\Core;
 
 /**
  * Standard implementation of Cache
@@ -20,69 +21,79 @@ class CacheImpl implements Cache
 {
     const ENGINE_FILE = 'File';
     const ENGINE_APC = 'Apc';
-    const ENGINE_BLACK_HOLE = 'BlackHole';
     const ENGINE_MEMCACHED = 'Memcached';
-    const ENGINE_SQLITE = 'Sqlite';
-    const ENGINE_XCACHE = 'Xcache';
-    const ENGINE_ZEND_PLATFORM = 'ZendPlatform';
-    const ENGINE_ZEND_SERVER_DISK = 'ZendServer\Disk';
-    const ENGINE_ZEND_SERVER_SH_MEM = 'ZendServer\ShMem';
-
+    const ENGINE_FILESYSTEM = 'Filesystem';
+    
     /**
-     * @var Zend\Cache\Frontend\Core
+     * @var Zend\Cache\Storage\Adapter
      */
-    private $core = null;
+    private $adapter;
+    
+    private $automaticSerialization = true;
 
     public function __construct($engine = self::ENGINE_FILE, array $options = array())
     {
-        $defaultOptions = array('write_control' => false, 'automatic_serialization' => true);
-        $options = array_merge($defaultOptions, $options);
-
-        $this->core = new Core($options);
-
-        $backend = $this->createCacheBackend($engine, $options);
-
-        $this->setBackend($backend);
+        if(!$engine instanceof Adapter)
+        {
+            $engine = $this->createAdapter($engine);
+        }
+        
+        $this->adapter = $engine;
+        
+        if(isset($options['automatic_serialization']))
+        {
+            $this->automaticSerialization = $options['automatic_serialization'];
+            unset($options['automatic_serialization']);
+        }
+        
+        $this->adapter->setOptions($options);
     }
-
-    private function createCacheBackend($engine, array $options)
+    
+    private function createAdapter($name)
     {
-        try
-        {
-            $className = sprintf('Zend\Cache\Backend\%s', $engine);
-            $class = new \ReflectionClass($className);
-            $backend = $class->newInstance($options);
+        $name = ucfirst(strtolower($name));
 
-            if(!$backend instanceof \Zend\Cache\Backend)
-            {
-                $this->cacheEngineDosntExistException($engine);
-            }
-
-            return $backend;
-        }
-        catch(\ReflectionException $e)
+        if($name === self::ENGINE_FILE)
         {
-            $this->cacheEngineDosntExistException($engine, $e);
+            $name = self::ENGINE_FILESYSTEM;
         }
+        
+        $const = 'PHPPdf\Cache\CacheImpl::ENGINE_'.strtoupper($name);
+        if(!defined($const))
+        {
+            throw $this->cacheEngineDosntExistException($name);
+        }
+        
+        $name = constant($const);
+        
+        return StorageFactory::adapterFactory($name);
     }
 
     private function cacheEngineDosntExistException($engine, \Exception $e = null)
     {
-        throw new RuntimeException(sprintf('Cache engine "%s" dosn\'t exist.', $engine), 1, $e);
-    }
-
-    private function setBackend(\Zend\Cache\Backend $backend)
-    {
-        $this->core->setBackend($backend);
+        return new RuntimeException(sprintf('Cache engine "%s" dosn\'t exist.', $engine), 1, $e);
     }
 
     public function load($id)
     {
         try
         {
-            return $this->core->load($id);
+            $data = $this->adapter->getItem($id);
+            
+            if($this->automaticSerialization)
+            {
+                $data = @unserialize($data);
+                
+                if($data === false)
+                {
+                    $this->remove($id);
+                    throw new RuntimeException(sprintf('Invalid data under "%s" key. Cache has been remove.', $id));
+                }
+            }
+            
+            return $data;
         }
-        catch(\Exception $e)
+        catch(\Zend\Cache\Exception $e)
         {
             $this->wrapLowLevelException($e, __METHOD__);
         }
@@ -97,7 +108,7 @@ class CacheImpl implements Cache
     {
         try
         {
-            return $this->core->test($id);
+            return $this->adapter->hasItem($id);
         }
         catch(\Zend\Cache\Exception $e)
         {
@@ -105,11 +116,22 @@ class CacheImpl implements Cache
         }
     }
 
-    public function save($data, $id = null)
+    /**
+     * @TODO change params order
+     * 
+     * @param mixed $data Data to save in cache. Attention: false value is not supported!
+     * @param string $id Identifier of cache
+     */
+    public function save($data, $id)
     {
         try
         {
-            return $this->core->save($data, $id);
+            if($this->automaticSerialization)
+            {
+                $data = serialize($data);
+            }
+            
+            return $this->adapter->setItem($id, $data);
         }
         catch(\Zend\Cache\Exception $e)
         {
@@ -121,7 +143,7 @@ class CacheImpl implements Cache
     {
         try
         {
-            return $this->core->remove($id);
+            return $this->adapter->removeItem($id);
         }
         catch(\Zend\Cache\Exception $e)
         {
@@ -129,11 +151,11 @@ class CacheImpl implements Cache
         }
     }
 
-    public function clean($mode = \Zend\Cache::CLEANING_MODE_ALL)
+    public function clean($mode = \Zend\Cache\Storage\Adapter::MATCH_ALL)
     {
         try
         {
-            return $this->core->clean($mode);
+            return $this->adapter->clear($mode);
         }
         catch(\Zend\Cache\Exception $e)
         {

@@ -61,7 +61,7 @@ Aby biblioteka była gotowa do użytku, trzeba pobrać te zależności. Należy 
 
     php vendors.php
     
-Alternatywnie zależności można umieścić ręcznie w katalogu "lib/vendor", konieczne do działania są tylko zależności Zend_Pdf, Zend_Memory oraz Zend_Cache.
+Alternatywnie zależności można umieścić ręcznie w katalogu "lib/vendor". Domyślnie plik vendors.php **pobierze całą bibliotekę ZF2**, pamietaj że **konieczne do działania są tylko paczki Zend_Pdf, Zend_Memory oraz Zend_Cache**. **Resztę paczek i plików ZF2 możesz usunąć**.
     
 <a name="symfony2-bundle"></a>
 Symfony2 bundle
@@ -110,7 +110,7 @@ Najprostrzy sposób wykorzystania biblioteki:
     //zarejestrowanie autoloadera PHPPdf oraz vendor (Zend_Pdf i inne zależności)
     require_once 'PHPPdf/Autoloader.php';
     PHPPdf\Autoloader::register();
-    PHPPdf\Autoloader::register('sciezka/do/biblioteki/lib/vendor');
+    PHPPdf\Autoloader::register('sciezka/do/biblioteki/lib/vendor/Zend/library');
     
     //jeśli chcesz generować pliki graficzne
     PHPPdf\Autoloader::register('sciezka/do/biblioteki/lib/vendor/Imagine/lib');
