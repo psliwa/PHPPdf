@@ -363,7 +363,7 @@ class GraphicsContext extends AbstractGraphicsContext
 
         foreach($words as $word)
         {
-            if($word)
+            if($word !== '')
             {
                 $box = $font->box($word);
                 $image->draw()->text($word, $font, $point);
