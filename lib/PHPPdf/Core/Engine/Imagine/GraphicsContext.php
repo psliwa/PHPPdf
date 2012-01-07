@@ -17,13 +17,13 @@ use PHPPdf\Core\Engine\GraphicsContext as BaseGraphicsContext;
 use PHPPdf\Core\Engine\Image as BaseImage;
 use PHPPdf\Core\Engine\Font as BaseFont;
 use Imagine\Image\Color as ImagineColor;
+use Imagine\Image\FontInterface as ImagineFont;
 
 /**
  * Graphics context for Imagine
  * 
  * * TODO: lineDashingPattern for doDrawPolygon
  * * TODO: support for lineWidth
- * * TODO: word spacing support - text justify
  * 
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
@@ -332,7 +332,6 @@ class GraphicsContext extends AbstractGraphicsContext
         return in_array($type, array(self::SHAPE_DRAW_FILL_AND_STROKE, self::SHAPE_DRAW_STROKE));
     }
     
-    //TODO: word spacing support
     protected function doDrawText($text, $x, $y, $encoding, $wordSpacing = 0, $fillType = self::SHAPE_DRAW_FILL)
     {
         $font = $this->state['font'];
@@ -346,7 +345,36 @@ class GraphicsContext extends AbstractGraphicsContext
         
         $position = $this->translatePoint($point, $x, $this->convertYCoord($y) - $size);
         
-        $image->draw()->text($text, $imagineFont, $position);
+        if($wordSpacing === 0)
+        {
+            $image->draw()->text($text, $imagineFont, $position);
+        }
+        else
+        {
+            $this->richDrawText($text, $image, $wordSpacing, $imagineFont, $position);
+        }
+    }
+    
+    private function richDrawText($text, ImageInterface $image, $wordSpacing, ImagineFont $font, Point $point)
+    {
+        $words = preg_split('/\s+/', $text);
+        
+        $wordSpacing = $wordSpacing + $this->getWidthOfSpaceChar($font);
+
+        foreach($words as $word)
+        {
+            if($word)
+            {
+                $box = $font->box($word);
+                $image->draw()->text($word, $font, $point);
+                $point = new Point($point->getX() + $box->getWidth() + $wordSpacing, $point->getY());
+            }
+        }
+    }
+    
+    private function getWidthOfSpaceChar(ImagineFont $font)
+    {
+        return $font->box(' ')->getWidth();
     }
     
     protected function doDrawRoundedRectangle($x1, $y1, $x2, $y2, $radius, $fillType = self::SHAPE_DRAW_FILL_AND_STROKE)

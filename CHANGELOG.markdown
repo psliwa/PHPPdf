@@ -1,6 +1,10 @@
 CHANGELOG
 =========
 
+* 1.1.1 (2012-01-07)
+
+  * accommodate PHPPdf\Cache\CacheImpl class to new api of Zend\Cache component
+
 * 1.1.0 (2012-01-01)
 
   * image generation engine
