@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <stylesheet>
 
-    <any font-size="11px">
+    <any font-size="11px" font-type="DejaVuSans">
     </any>
     
     <p margin="0" padding="0">

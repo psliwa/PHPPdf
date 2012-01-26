@@ -26,7 +26,11 @@ use PHPPdf\Core\Formatter\Formatter;
 class Page extends Container
 {
     const ATTR_SIZE = 'page-size';
+
     const SIZE_A4 = '595:842';
+    const SIZE_A4_LANDSCAPE = '842:595';
+    const SIZE_LETTER = '612:792';
+    const SIZE_LETTER_LANDSCAPE = '792:612';
 
     private $graphicsContext;
 
@@ -124,14 +128,7 @@ class Page extends Container
     {
         if($param2 === null)
         {
-            $sizes = explode(':', $param1);
-    
-            if(count($sizes) < 2)
-            {
-                throw new InvalidArgumentException(sprintf('page-size attribute should be in "width:height" format, "%s" given.', $param1));
-            }
-    
-            list($width, $height) = $sizes;
+            list($width, $height) = $this->getPageDimensions($param1);
         }
         else
         {
@@ -149,6 +146,25 @@ class Page extends Container
         $this->initializeBoundary();
 
         return $this;
+    }
+    
+    private function getPageDimensions($pageSize)
+    {
+        $const = 'PHPPdf\Core\Node\Page::SIZE_'.strtoupper(str_replace(array('-', ' '), '_', $pageSize));
+        
+        if(defined($const))
+        {
+            $pageSize = constant($const);
+        }
+        
+        $sizes = explode(':', $pageSize);
+
+        if(count($sizes) < 2)
+        {
+            throw new InvalidArgumentException(sprintf('page-size attribute should be in "width:height" format, "%s" given.', $pageSize));
+        }
+
+        return $sizes;
     }
     
     public function setWidth($width)
