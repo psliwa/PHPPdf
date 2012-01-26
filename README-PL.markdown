@@ -108,6 +108,16 @@ Więcej szczegółów możesz znaleść w rozdziale [Konfiguracja](#configuratio
 
 PHPPdf wykorzystuje bibliotekę Zend_Pdf, która słabo sobie radzi w parsowaniu plików png bez kompresji. Skompresuj pliki png.
 
+**Jak mogę zmienić rozmiar/orientację strony?**
+
+Do ustawiania rozmiarów strony służy atrybut "page-size" tagów page oraz dynamic-page. Wartość tego atrybutu ma składnię "szerokość:wysokość". Dozwolone są również predefiniowane wartości: a4, a4-landscape, letter oraz letter-landscape.
+
+Przykład:
+
+    <page page-size="100:50">text</page>
+    <page page-size="a4">text</page>
+    <page page-size="letter-landscape">text</page>
+
 <a name="parsing"></a>
 Parsowanie dokumentu i tworzenie pdf'a.
 ---------------------------------------
@@ -776,7 +786,6 @@ TODO - czyli plany
 
 * automatycznie generowany spis treści
 * poprawa działania tabelek, definiowanie nagłówków i stopek dla tabeli
-* silnik do generowania plików graficznych
 * obsługa prosych wykresów słupkowych i kołowych
 
 <a name="requirements"></a>
