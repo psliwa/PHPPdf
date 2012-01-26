@@ -390,6 +390,33 @@ class PageTest extends \PHPPdf\PHPUnit\Framework\TestCase
     
     /**
      * @test
+     * @dataProvider humanReadablePageSizeProvider
+     */
+    public function allowHumanReadablePageSizeAttribute($pageSize, $expectedSize)
+    {
+        $this->page->setAttribute('page-size', $pageSize);
+        
+        list($expectedWidth, $expectedHeight) = explode(':', $expectedSize);
+        
+        $this->assertEquals($expectedWidth, $this->page->getWidth());
+        $this->assertEquals($expectedHeight, $this->page->getHeight());
+    }
+    
+    public function humanReadablePageSizeProvider()
+    {
+        return array(
+            array('a4', Page::SIZE_A4),
+            array('A4', Page::SIZE_A4),
+            array('a4-landscape', Page::SIZE_A4_LANDSCAPE),
+            array('a4_landscape', Page::SIZE_A4_LANDSCAPE),
+            array('LETTER-landscape', Page::SIZE_LETTER_LANDSCAPE),
+            array('LETTER landscape', Page::SIZE_LETTER_LANDSCAPE),
+            array('letter', Page::SIZE_LETTER),
+        );
+    }
+    
+    /**
+     * @test
      */
     public function watermarkShouldBeInTheMiddleOfPage()
     {
