@@ -106,6 +106,16 @@ More datails you can find in [Configuration](#configuration) section.
 
 PHPPdf uses Zend_Pdf library that poorly supports png files without compression. You should to compress png files. 
 
+**How can I change page size/orientation?**
+
+To set page dimension you should use "page-size" attribute of page or dynamic-page tags. Value of this attribute has "width:height" syntax. There are predefined, standard values: a4, a4-landscape, letter and letter-landscape.
+
+Example:
+
+    <page page-size="100:50">text</page>
+    <page page-size="a4">text</page>
+    <page page-size="letter-landscape">text</page>
+
 <a name="parsing"></a>
 Document parsing and creating pdf file
 ----------------
@@ -778,7 +788,6 @@ TODO - plans
 
 * automatic generating table of contents
 * improve table, header and footer for table, rowspan. Fix calculation of cell's min height when colspan is used.
-* engine for image file generating
 * support for simple bar and pie charts
 
 <a name="requirements"></a>
