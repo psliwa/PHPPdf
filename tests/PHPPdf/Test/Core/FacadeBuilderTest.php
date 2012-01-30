@@ -149,4 +149,26 @@ class FacadeBuilderTest extends \PHPPdf\PHPUnit\Framework\TestCase
             array('type', array('some-options')),
         );
     }
+    
+    /**
+     * @test
+     */
+    public function addStringFilter()
+    {
+        $filter = $this->getMock('PHPPdf\Util\StringFilter');
+        
+        $this->builder->addStringFilter($filter);
+        
+        $facade = $this->builder->build();
+        
+        $document = $facade->getDocument();
+        
+        $builderStringFilters = $this->readAttribute($this->builder, 'stringFilters');
+        $documentStringFilters = $this->readAttribute($document, 'stringFilters');
+        $facadeStringFilters = $this->readAttribute($facade, 'stringFilters');
+        
+        $this->assertEquals(2, count($builderStringFilters));
+        $this->assertEquals($builderStringFilters, $documentStringFilters);
+        $this->assertEquals($builderStringFilters, $facadeStringFilters);
+    }
 }

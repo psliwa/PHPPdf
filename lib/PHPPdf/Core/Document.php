@@ -8,6 +8,8 @@
 
 namespace PHPPdf\Core;
 
+use PHPPdf\Util\AbstractStringFilterContainer;
+use PHPPdf\Util\StringFilter;
 use PHPPdf\Exception\RuntimeException;
 use PHPPdf\Exception\LogicException;
 use PHPPdf\Exception\InvalidArgumentException;
@@ -26,7 +28,7 @@ use PHPPdf\Core\Engine\GraphicsContext;
  * 
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
-class Document implements Engine
+class Document extends AbstractStringFilterContainer implements Engine
 {   
     const DRAWING_PRIORITY_BACKGROUND1 = 60;
     const DRAWING_PRIORITY_BACKGROUND2 = 50;
@@ -264,10 +266,9 @@ class Document implements Engine
     {
         foreach($data as $name => $value)
         {
-            if(strpos($value, '/') !== false)
+            foreach($this->stringFilters as $filter)
             {
-                $value = str_replace('%resources%', __DIR__.'/../Resources', $value);
-                $data[$name] = $value;
+                $data[$name] = $filter->filter($value);
             }
         }
         
