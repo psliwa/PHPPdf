@@ -8,6 +8,8 @@
 
 namespace PHPPdf\Core;
 
+use PHPPdf\Util\AbstractStringFilterContainer;
+use PHPPdf\Util\StringFilter;
 use PHPPdf\Exception\InvalidArgumentException;
 use PHPPdf\Core\Parser\ColorPaletteParser;
 use PHPPdf\Parser\Parser;
@@ -29,7 +31,7 @@ use PHPPdf\Core\Parser\NodeFactoryParser;
  *
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
-class Facade
+class Facade extends AbstractStringFilterContainer
 {
     private $documentParser;
     private $stylesheetParser;
@@ -166,8 +168,10 @@ class Facade
 
         $stylesheetConstraint = $this->retrieveStylesheetConstraint($stylesheetContents);
 
-        $relativePathToResources = str_replace('\\', '/', realpath(__DIR__.'/../Resources'));
-        $documentContent = str_replace('%resources%', $relativePathToResources, $documentContent);
+        foreach($this->stringFilters as $filter)
+        {
+            $documentContent = $filter->filter($documentContent);
+        }
 
         $pageCollection = $this->getDocumentParser()->parse($documentContent, $stylesheetConstraint);
         $this->updateStylesheetConstraintCacheIfNecessary($stylesheetConstraint);

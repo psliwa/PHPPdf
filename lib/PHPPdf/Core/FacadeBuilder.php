@@ -8,6 +8,9 @@
 
 namespace PHPPdf\Core;
 
+use PHPPdf\Util\AbstractStringFilterContainer;
+use PHPPdf\Util\StringFilter;
+use PHPPdf\Util\ResourcePathStringFilter;
 use PHPPdf\Exception\InvalidArgumentException;
 use PHPPdf\Core\Engine\EngineFactoryImpl;
 use PHPPdf\Core\Engine\EngineFactory;
@@ -26,7 +29,7 @@ use PHPPdf\Cache\CacheImpl;
  *
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
-class FacadeBuilder
+class FacadeBuilder extends AbstractStringFilterContainer
 {
     const PARSER_XML = 'xml';
     const PARSER_MARKDOWN = 'markdown';
@@ -46,6 +49,8 @@ class FacadeBuilder
 
     private function __construct(Loader $configurationLoader = null, EngineFactory $engineFactory = null)
     {
+        $this->stringFilters[] = new ResourcePathStringFilter();
+
         if($configurationLoader === null)
         {
             $configurationLoader = new LoaderImpl();
@@ -58,6 +63,26 @@ class FacadeBuilder
         
         $this->engineFactory = $engineFactory;
         $this->setConfigurationLoader($configurationLoader);
+    }
+    
+    /**
+     * @return FacadeBuilder
+     */    
+    public function addStringFilter(StringFilter $filter)
+    {
+        parent::addStringFilter($filter);
+        
+        return $this;
+    }
+    
+    /**
+     * @return FacadeBuilder
+     */ 
+    public function setStringFilters(array $filters)
+    {
+        parent::setStringFilters($filters);
+        
+        return $this;
     }
 
     /**
@@ -98,8 +123,10 @@ class FacadeBuilder
         $engine = $this->engineFactory->createEngine($this->engineType, $this->engineOptions);
 
         $document = new Document($engine);
+        $this->addStringFiltersTo($document);
         
         $facade = new Facade($this->configurationLoader, $document, $documentParser, $stylesheetParser);
+        $this->addStringFiltersTo($facade);
         $facade->setEngineType($this->engineType);
         
         if($documentParser instanceof FacadeAware)
@@ -121,6 +148,11 @@ class FacadeBuilder
         }
 
         return $facade;
+    }
+    
+    private function addStringFiltersTo($obj)
+    {
+        $obj->setStringFilters($this->stringFilters);
     }
     
     /**
