@@ -268,8 +268,10 @@ class Document extends AbstractStringFilterContainer implements Engine
         {
             foreach($this->stringFilters as $filter)
             {
-                $data[$name] = $filter->filter($value);
+                $value = $filter->filter($value);
             }
+
+			$data[$name] = $value;
         }
         
         return $this->engine->createFont($data);
