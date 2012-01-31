@@ -10,10 +10,12 @@ use PHPPdf\Core\Document,
 class DocumentTest extends \PHPPdf\PHPUnit\Framework\TestCase
 {
     private $document;
+    private $engine;
 
     public function setUp()
     {
-        $this->document = $this->createDocumentStub();
+        $this->engine = $this->getMock('PHPPdf\Core\Engine\Engine');
+        $this->document = new Document($this->engine);
     }
 
     /**
@@ -243,5 +245,48 @@ class DocumentTest extends \PHPPdf\PHPUnit\Framework\TestCase
                 ->will($this->returnValue($result));
                 
         $this->assertEquals($result, $this->document->getColorFromPalette($color));
+    }
+    
+    /**
+     * @test
+     * @dataProvider createFontProvider
+     */
+    public function filterFontsPathsOnFontCreation($value, array $filterValues)
+    {
+        $previousValue = $value;
+        $filters = array();
+        foreach($filterValues as $filterValue)
+        {
+            $filter = $this->getMock('PHPPdf\Util\StringFilter');
+            $filter->expects($this->once())
+                   ->method('filter')
+                   ->with($previousValue)
+                   ->will($this->returnValue($filterValue));
+            $previousValue = $filterValue;
+            $filters[] = $filter;
+        }
+
+        $this->document->setStringFilters($filters);   
+
+        $fontDefinition = array('normal' => $value);
+        $font = $this->getMock('PHPPdf\Core\Engine\Font');
+        
+        $this->engine->expects($this->once())
+                     ->method('createFont')
+                     ->with(array('normal' => $previousValue))
+                     ->will($this->returnValue($font));
+
+        $this->assertEquals($font, $this->document->createFont($fontDefinition));
+    }
+    
+    public function createFontProvider()
+    {
+        return array(
+            array('some font', array(
+                'another font',
+                'some another font',
+            )),
+            array('some font', array()),
+        );
     }
 }
