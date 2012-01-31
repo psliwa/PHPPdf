@@ -108,27 +108,20 @@ abstract class XmlParser implements Parser
      */
     protected function read(\XMLReader $reader)
     {
-        global $php_errormsg;
-        
-        $originalErrorMsg = $php_errormsg;
-        $php_errormsg = null;
-        
-        $trackErrors = ini_get('track_errors');
-        ini_set('track_errors', '1');
+        libxml_clear_errors();
         
         $status = @$reader->read();
-        ini_set('track_errors', $trackErrors);
 
-        if($php_errormsg)
+        $error = libxml_get_last_error();
+        if($error)
         {
-            $errorMsg = $php_errormsg;
-            $php_errormsg = $originalErrorMsg;
-            throw new Exceptions\ParseException($errorMsg);
+            libxml_clear_errors();
+            throw new Exceptions\ParseException(sprintf('Xml parsing error "%s" in file "%s" on line %s on column %s', $error->message, $error->file, $error->line, $error->column));
         }
-        
+
         return $status;
     }
-    
+
     protected function createReader($content)
     {
         $reader = new \XMLReader();
