@@ -59,8 +59,6 @@ class GraphicsContext extends AbstractGraphicsContext
     private $width;
     private $height;
     
-    private $methodInvocationsQueue = array();
-
     public function __construct(Engine $engine, $pageOrPageSize)
     {
         $this->engine = $engine;
@@ -258,14 +256,6 @@ class GraphicsContext extends AbstractGraphicsContext
         return $font->getFontType() === ZendFont::TYPE_STANDARD;
     }
 
-    public function __clone()
-    {
-        if($this->page)
-        {
-            $this->page = clone $this->getPage();
-        }
-    }
-
     public function getPage()
     {
         if(!$this->page)
@@ -430,7 +420,6 @@ class GraphicsContext extends AbstractGraphicsContext
     
     public function copy()
     {
-        $this->commit();
         $gc = clone $this;
         if($this->page)
         {
