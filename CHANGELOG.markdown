@@ -1,6 +1,11 @@
 CHANGELOG
 =========
 
+* 1.1.2 (2012-02-01)
+
+  * improve xml parsing error messages
+  * [#7] fixed leaking pdf output file size - it was large
+
 * 1.1.1 (2012-01-07)
 
   * accommodate PHPPdf\Cache\CacheImpl class to new api of Zend\Cache component
