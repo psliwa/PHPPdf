@@ -76,19 +76,27 @@ class Table extends Container implements Listener
 
         $isWidthRelative = strpos($width, '%') !== false;
 
-        $widthPerColumn = $width / $colspan;
-        
-        if($isWidthRelative)
-        {
-            $widthPerColumn .= '%';
-        }
-
+        $currentWidth = 0;
         for($i=0; $i<$colspan; $i++)
         {
             $realColumnNumber = $columnNumber + $i;
-            if(!isset($this->widthsOfColumns[$realColumnNumber]) || $widthPerColumn > $this->widthsOfColumns[$realColumnNumber])
+            $currentWidth += isset($this->widthsOfColumns[$realColumnNumber]) ? $this->widthsOfColumns[$realColumnNumber] : 0;
+        }
+        
+        $diff = ($width - $currentWidth)/$colspan;
+        
+        if($isWidthRelative)
+        {
+            $diff .= '%';
+        }
+
+        if($diff >= 0)
+        {
+            for($i=0; $i<$colspan; $i++)
             {
-                $this->widthsOfColumns[$realColumnNumber] = $widthPerColumn;
+                $realColumnNumber = $columnNumber + $i;
+                
+                $this->widthsOfColumns[$realColumnNumber] = isset($this->widthsOfColumns[$realColumnNumber]) ? ($this->widthsOfColumns[$realColumnNumber] + $diff) : $diff;
             }
         }
     }

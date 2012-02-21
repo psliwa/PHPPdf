@@ -150,10 +150,12 @@ class TableTest extends \PHPPdf\PHPUnit\Framework\TestCase
      * @test
      * @dataProvider cellsInRowsWidthsAndColspansProvider
      */
-    public function setColumnsWidthsWhenTableHasBeenNotifiedByCell(array $cellsWidthsByColumn, array $colspans)
+    public function setColumnsWidthsWhenTableHasBeenNotifiedByCell(array $cellsWidthsByColumn, array $colspans, array $expectedColumnWidths)
     {
         $cells = array();
-        $columnsWidths = array_fill(0, count($cellsWidthsByColumn), 0);
+
+        $rows = array();
+        
         foreach($cellsWidthsByColumn as $columnNumber => $cellsWidths)
         {
             foreach($cellsWidths as $rowNumber => $width)
@@ -172,23 +174,20 @@ class TableTest extends \PHPPdf\PHPUnit\Framework\TestCase
                      ->method('getColspan')
                      ->will($this->returnValue($colspan));
 
+                $rows[$rowNumber][] = $cell;
                 $cells[] = $cell;
-
-                $widthPerColumn = $width / $colspan;
-                for($i=0; $i < $colspan; $i++)
-                {
-                    $realColumnNumber = $columnNumber + $i;
-                    $columnsWidths[$realColumnNumber] = max($widthPerColumn, $columnsWidths[$realColumnNumber]);
-                }
             }
         }
 
-        foreach($cells as $cell)
+        foreach($rows as $cells)
         {
-            $this->table->attributeChanged($cell, 'width', null);
+            foreach($cells as $cell)
+            {
+                $this->table->attributeChanged($cell, 'width', null);
+            }
         }
 
-        $this->assertEquals($columnsWidths, $this->table->getWidthsOfColumns());
+        $this->assertEquals($expectedColumnWidths, $this->table->getWidthsOfColumns());
     }
 
     public function cellsInRowsWidthsAndColspansProvider()
@@ -203,6 +202,7 @@ class TableTest extends \PHPPdf\PHPUnit\Framework\TestCase
                     array(1, 1, 1),
                     array(1, 1, 1),
                 ),
+                array(200, 50),
             ),
             array(
                 array(
@@ -213,6 +213,7 @@ class TableTest extends \PHPPdf\PHPUnit\Framework\TestCase
                     array(1, 1, 2),
                     array(1, 1),
                 ),
+                array(125, 75),
             ),
         );
     }
