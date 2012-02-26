@@ -27,6 +27,7 @@ class EngineFactoryImpl implements EngineFactory
     const OPTION_ENGINE = 'engine';
     const OPTION_FORMAT = 'format';
     const OPTION_QUALITY = 'quality';
+    const OPTION_DPI = 'dpi';
 
     const ENGINE_GD = 'Gd';
     const ENGINE_IMAGICK = 'Imagick';
@@ -38,10 +39,12 @@ class EngineFactoryImpl implements EngineFactory
 
     public function createEngine($type, array $options = array())
     {
+        $dpi = isset($options[self::OPTION_DPI]) ? $options[self::OPTION_DPI] : 96;
+        
         switch($type)
         {
             case self::TYPE_PDF:
-                return new ZendEngine(null, new PdfUnitConverter());
+                return new ZendEngine(null, new PdfUnitConverter($dpi));
             case self::TYPE_IMAGE:
                 $engine = $this->getOption(self::OPTION_ENGINE, $options, self::ENGINE_GD);
                 $format = $this->getOption(self::OPTION_FORMAT, $options, self::FORMAT_JPEG);
@@ -62,7 +65,7 @@ class EngineFactoryImpl implements EngineFactory
                     $renderOptions[self::OPTION_QUALITY] = $options[self::OPTION_QUALITY];
                 }
 
-                return new ImagineEngine($imagine, $format, new ImageUnitConverter(), $renderOptions);
+                return new ImagineEngine($imagine, $format, new ImageUnitConverter($dpi), $renderOptions);
             default:
                 throw new DomainException(sprintf('Unknown engine type: "%s".', $type));
         }
