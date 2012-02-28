@@ -66,14 +66,9 @@ class ImageUnitConverter extends AbstractUnitConverter
 		return $value * $this->dpi;		
 	}
 
-	protected function convertPdfUnit($value)
-	{
-		return $value * $this->pixelPerUnits;		
-	}
-
 	protected function convertPtUnit($value)
 	{
-		return $value * $this->dpi / 72;		
+		return $value * $this->dpi / 72;
 	}
 
 	protected function convertPxUnit($value)

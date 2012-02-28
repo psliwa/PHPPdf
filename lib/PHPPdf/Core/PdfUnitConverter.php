@@ -56,17 +56,11 @@ class PdfUnitConverter extends AbstractUnitConverter
        
     protected function convertPtUnit($value)
     {
-        $value = (float) $value;
-        return $value * self::UNITS_PER_INCH/72;
+        return (float) $value;
     }
     
     protected function convertMmUnit($value)
     {
         return $this->convertInUnit($value)/self::MM_PER_INCH;
-    }
-    
-    protected function convertPdfUnit($value)
-    {
-        return $value;
     }
 }
