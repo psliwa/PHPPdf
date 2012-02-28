@@ -19,12 +19,15 @@ interface UnitConverter
     const UNITS_PER_INCH = 72;
     const MM_PER_INCH = 25.3995;
     
+    //the same as point (pt)
     const UNIT_PDF = 'pu';
+    //the same as pdf unit (pu)
+    const UNIT_POINT = 'pt';
+
     const UNIT_PIXEL = 'px';
     const UNIT_CENTIMETER = 'cm';
     const UNIT_MILIMETER = 'mm';
     const UNIT_INCH = 'in';
-    const UNIT_POINT = 'pt';
     const UNIT_PICA = 'pc';
     const UNIT_EM = 'em';
     const UNIT_EX = 'ex';

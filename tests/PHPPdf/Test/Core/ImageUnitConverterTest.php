@@ -28,6 +28,7 @@ class ImageUnitConverterTest extends TestCase
             array('10mm', 10*300/ImageUnitConverter::MM_PER_INCH, null, 300),
             array('10cm', 10*10*400/ImageUnitConverter::MM_PER_INCH, null, 400),
             array('4pt', 4*500/72, null, 500),
+            array('4', 4*500/72, null, 500),
             array('4pc', 12*4*600/72, null, 600),
             array('1', 1, 'px', 1),
             array('1cm', 500/72, 'pt', 500),
