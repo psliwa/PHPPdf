@@ -21,7 +21,7 @@ abstract class EnumerationStrategyTest extends \PHPPdf\PHPUnit\Framework\TestCas
      * @test
      * @dataProvider integerProvider
      */
-    public function drawEnumerationInValidPosition($elementIndex, Point $point, $position, $childMarginLeft, $elementPattern)
+    public function drawEnumerationOnValidPosition($elementIndex, Point $point, $position, $childMarginLeft, $elementPattern, $paddingTop = 0)
     {
         $listMock = $this->getMockBuilder('PHPPdf\Core\Node\BasicList')
                          ->setMethods(array_merge($this->getListMockedMethod(), array('getChild', 'getAttribute', 'getEncoding', 'getFontSizeRecursively', 'getRecurseAttribute', 'getFontType', 'getFont')))
@@ -38,13 +38,16 @@ abstract class EnumerationStrategyTest extends \PHPPdf\PHPUnit\Framework\TestCas
         
         $expectedText = $this->getExpectedText($elementIndex, $elementPattern);
         
-        $child = $this->getMock('PHPPdf\Core\Node\Container', array('getFirstPoint', 'getMarginLeft'));
+        $child = $this->getMock('PHPPdf\Core\Node\Container', array('getFirstPoint', 'getMarginLeft', 'getPaddingTop'));
         $child->expects($this->once())
               ->method('getFirstPoint')
               ->will($this->returnValue($point));
         $child->expects($this->once())
               ->method('getMarginLeft')
               ->will($this->returnValue($childMarginLeft));
+        $child->expects($this->once())
+              ->method('getPaddingTop')
+              ->will($this->returnValue($paddingTop));
               
         $listMock->expects($this->once())
                        ->method('getChild')
@@ -98,7 +101,8 @@ abstract class EnumerationStrategyTest extends \PHPPdf\PHPUnit\Framework\TestCas
                        ->getMock();
 
         $expectedXCoord = $point->getX() + $positionTranslation - $childMarginLeft;
-        $expectedYCoord = $point->getY() - $fontSize;
+        //padding-top has influence also on position of enumeration symbol
+        $expectedYCoord = $point->getY() - $fontSize - $paddingTop;
         
         $i = 0;
         $gc->expects($this->at($i++))
@@ -128,7 +132,8 @@ abstract class EnumerationStrategyTest extends \PHPPdf\PHPUnit\Framework\TestCas
     {
         return array(
             array(5, Point::getInstance(10, 30), BasicList::POSITION_OUTSIDE, 20, $this->getElementPattern(0)),
-            array(12, Point::getInstance(100, 300), BasicList::POSITION_INSIDE, 40, $this->getElementPattern(1))
+            array(12, Point::getInstance(100, 300), BasicList::POSITION_INSIDE, 40, $this->getElementPattern(1)),
+            array(12, Point::getInstance(100, 300), BasicList::POSITION_INSIDE, 40, $this->getElementPattern(1), 5)
         );
     }
     
