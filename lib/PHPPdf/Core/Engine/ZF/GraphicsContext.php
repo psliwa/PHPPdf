@@ -22,6 +22,7 @@ use Zend\Pdf\InternalType\ArrayObject;
 use Zend\Pdf\Font as ZendFont;
 use Zend\Pdf\Resource\Font\AbstractFont as ZendResourceFont;
 use Zend\Pdf\Color\Html as ZendColor;
+use Zend\Barcode\Object as Barcode;
 
 /**
  * @author Piotr Śliwa <peter.pl7@gmail.com>
@@ -416,6 +417,35 @@ class GraphicsContext extends AbstractGraphicsContext
     protected function doRotate($x, $y, $angle)
     {
         $this->getPage()->rotate($x, $y, $angle);
+    }
+    
+    protected function doDrawBarcode($x, $y, Barcode $barcode)
+    {
+        $renderer = new \Zend\Barcode\Renderer\Pdf();
+        
+        $page = $this->getIndexOfPage();
+        
+        $renderer->setResource($this->engine->getZendPdf(), $page);
+        $renderer->setOptions(array(
+            'topOffset' => $this->getHeight() - $y,
+            'leftOffset' => $x,
+        ));
+        
+        $renderer->setBarcode($barcode);
+        $renderer->draw();
+    }
+    
+    private function getIndexOfPage()
+    {
+        foreach($this->engine->getAttachedGraphicsContexts() as $index => $gc)
+        {
+            if($gc === $this)
+            {
+                return $index;
+            }
+        }
+        
+        return null;
     }
     
     public function copy()

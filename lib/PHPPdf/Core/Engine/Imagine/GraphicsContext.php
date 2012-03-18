@@ -18,6 +18,7 @@ use PHPPdf\Core\Engine\Image as BaseImage;
 use PHPPdf\Core\Engine\Font as BaseFont;
 use Imagine\Image\Color as ImagineColor;
 use Imagine\Image\FontInterface as ImagineFont;
+use Zend\Barcode\Object as Barcode;
 
 /**
  * Graphics context for Imagine
@@ -46,6 +47,10 @@ class GraphicsContext extends AbstractGraphicsContext
     private $state = array();
     
     private $image;
+    
+    /**
+     * @var ImagineInterface
+     */
     private $imagine;
     
     public function __construct(ImagineInterface $imagine, $imageOrSize)
@@ -527,6 +532,26 @@ class GraphicsContext extends AbstractGraphicsContext
         //not supported
     }
     
+    protected function doDrawBarcode($x, $y, Barcode $barcode)
+    {
+        $renderer = new \Zend\Barcode\Renderer\Image(array());
+        $imageResource = imagecreate($barcode->getWidth(true) + 1, $barcode->getHeight(true) + 1);
+        
+        $renderer->setResource($imageResource);
+        $renderer->setBarcode($barcode);
+        $renderer->draw();
+        
+        ob_start();
+        imagepng($imageResource);
+        $image = ob_get_clean();
+        @imagedestroy($image);
+        
+        $image = $this->imagine->load($image);
+        $image = $image->resize(new Box($image->getSize()->getWidth()/2, $image->getSize()->getHeight()/2));
+        list($currentImage, $point) = $this->getCurrentClip();
+        $currentImage->paste($image, $this->translatePoint($point, $x, $this->convertYCoord($y)));
+    }
+
     public function copy()
     {
         $this->commit();

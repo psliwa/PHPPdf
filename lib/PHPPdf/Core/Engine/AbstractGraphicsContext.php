@@ -8,6 +8,8 @@
 
 namespace PHPPdf\Core\Engine;
 
+use Zend\Barcode\Object as Barcode;
+
 /**
  * Base class for GraphicsContext classes.
  * 
@@ -154,4 +156,11 @@ abstract class AbstractGraphicsContext implements GraphicsContext
     }
     
     abstract protected function doRotate($x, $y, $angle);
+    
+    public function drawBarcode($x, $y, Barcode $barcode)
+    {
+        $this->addToQueue('doDrawBarcode', array($x, $y, $barcode));
+    }
+    
+    abstract protected function doDrawBarcode($x, $y, Barcode $barcode);
 }

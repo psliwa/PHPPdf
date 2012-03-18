@@ -8,6 +8,8 @@
 
 namespace PHPPdf\Core\Node;
 
+use PHPPdf\Core\ComplexAttribute\ComplexAttribute;
+
 use PHPPdf\Exception\OutOfBoundsException;
 use PHPPdf\Exception\InvalidArgumentException;
 use PHPPdf\Exception\LogicException;
@@ -64,7 +66,7 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
 
     private $boundary = null;
 
-    private $complexAttributeBag = null;
+    protected $complexAttributeBag = null;
     private $formattersNames = array();
     
     private $behaviours = array();
@@ -1061,7 +1063,7 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
     {
         try
         {
-            $this->preDraw($document, $tasks);            
+            $this->preDraw($document, $tasks);
             $this->doDraw($document, $tasks);
             $this->postDraw($document, $tasks);
         }
@@ -1102,11 +1104,16 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
         $complexAttributes = $document->getComplexAttributes($this->complexAttributeBag);
         foreach($complexAttributes as $complexAttribute)
         {
-            $callback = array($complexAttribute, 'enhance');
-            $args = array($this, $document);
-            $priority = $complexAttribute->getPriority() + $this->getPriority();
-            $tasks->insert(new DrawingTask($callback, $args, $priority));
+            $this->insertComplexAttributeTask($complexAttribute, $tasks, $document);
         }
+    }
+    
+    protected function insertComplexAttributeTask(ComplexAttribute $complexAttribute, DrawingTaskHeap $tasks, Document $document)
+    {
+        $callback = array($complexAttribute, 'enhance');
+        $args = array($this, $document);
+        $priority = $complexAttribute->getPriority() + $this->getPriority();
+        $tasks->insert(new DrawingTask($callback, $args, $priority));
     }
 
     public function getPriority()
