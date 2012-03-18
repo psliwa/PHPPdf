@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pdf SYSTEM "%resources%/dtd/doctype.dtd">
+<pdf>
+    <dynamic-page font-type="DejaVuSans">
+    
+    	<h3>Code128 barcode:</h3>
+    	<barcode type="code128" code="PHPPdf" />
+    	
+    	<h3>Ean5 barcode</h3>
+    	<barcode type="ean5" code="12345" />
+    	
+    	<h3>Border, rotation, floating etc. are supported by barcode:</h3>
+    	<barcode type="code128" code="PHPPdf" margin-left="10px" rotate="-90deg" background-color="#eeeeee" float="right" bar-height="100px" bar-thin-width="3px" bar-thick-width="6px" />
+    	<div float="right">some floating text:</div>
+    
+    </dynamic-page>
+</pdf>

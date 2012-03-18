@@ -73,12 +73,8 @@ class ConvertAttributesFormatter extends BaseFormatter
     {
         $rotate = $node->getAttribute('rotate');
         
-        if($rotate !== null && strpos($rotate, 'deg') !== false)
-        {
-            $degrees = (float) $rotate;
-            $radians = deg2rad($degrees);
-            $node->setAttribute('rotate', $radians);
-        }
+        $radians = Util::convertAngleValue($rotate);
+        $node->setAttribute('rotate', $radians);
     }
     
     protected function convertColor(Node $node, Document $document)

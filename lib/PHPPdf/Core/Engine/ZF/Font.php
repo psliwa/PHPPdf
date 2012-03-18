@@ -19,6 +19,8 @@ use Zend\Pdf\Font as ZendFont;
  */
 class Font extends AbstractFont
 {
+    private $fonts = array();
+    
     /**
      * @internal Public method within PHPPdf\Core\Engine\ZF namespace
      * 
@@ -33,21 +35,21 @@ class Font extends AbstractFont
     {
         try
         {
-            if(is_string($this->fontResources[$style]))
+            if(!isset($this->fonts[$style]))
             {
                 $data = $this->fontResources[$style];
                 if($this->isNamedFont($data))
                 {
                     $name = $this->retrieveFontName($data);
-                    $this->fontResources[$style] = ZendFont::fontWithName($name);
+                    $this->fonts[$style] = ZendFont::fontWithName($name);
                 }
                 else 
                 {
-                    $this->fontResources[$style] = ZendFont::fontWithPath($data);
+                    $this->fonts[$style] = ZendFont::fontWithPath($data);
                 }
             }
             
-            return $this->fontResources[$style];
+            return $this->fonts[$style];
         }
         catch(\Zend\Pdf\Exception $e)
         {
@@ -145,5 +147,10 @@ class Font extends AbstractFont
 
 
         return array($char, $bytes);
+    }
+    
+    public function getCurrentResourceIdentifier()
+    {
+        return isset($this->fontResources[$this->currentStyle]) ? $this->fontResources[$this->currentStyle] : $this->fontResources[self::STYLE_NORMAL];
     }
 }

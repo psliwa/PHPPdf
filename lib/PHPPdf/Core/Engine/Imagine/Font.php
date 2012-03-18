@@ -65,4 +65,9 @@ class Font extends AbstractFont
         $color = $this->createColor($color);
         return $this->imagine->font($this->fontResources[$this->currentStyle], $fontSize, $color);
     }
+    
+    public function getCurrentResourceIdentifier()
+    {
+        return $this->fontResources[$this->currentStyle];
+    }
 }

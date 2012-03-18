@@ -22,5 +22,6 @@ interface Font
     public function setStyle($style);
     public function getCurrentStyle();
     
+    public function getCurrentResourceIdentifier();    
     public function getWidthOfText($text, $fontSize);
 }

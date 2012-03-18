@@ -10,4 +10,9 @@ class Font extends AbstractFont
     {
         return 0;
     }
+    
+    public function getCurrentResourceIdentifier()
+    {
+        return 'abc';
+    }
 }

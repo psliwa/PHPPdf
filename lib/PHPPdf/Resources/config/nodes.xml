@@ -10,7 +10,7 @@
 	            <attribute name="font-size" value="12px" />
 	            <attribute name="font-style" value="normal" />
 	            <attribute name="margin" value="52px 52px" />
-	            <attribute name="color" value="black" />
+	            <attribute name="color" value="#000000" />
 	            <attribute name="page-size" value="595:842" />
 	        </stylesheet>
 	        <formatters>
@@ -23,7 +23,7 @@
 	            <attribute name="font-type" value="helvetica" />
 	            <attribute name="font-size" value="12px" />
 	            <attribute name="font-style" value="normal" />
-	            <attribute name="color" value="black" />
+	            <attribute name="color" value="#000000" />
 	            <attribute name="page-size" value="595:842" />
 	        </stylesheet>
 	        <formatters>
@@ -46,6 +46,16 @@
 	            <pre class="PHPPdf\Core\Formatter\FirstPointPositionFormatter" />
 
 	            <post class="PHPPdf\Core\Formatter\ContainerDimensionFormatter" />
+	            <post class="PHPPdf\Core\Formatter\StandardPositionFormatter" />
+	            <post class="PHPPdf\Core\Formatter\FloatFormatter" />
+	            <post class="PHPPdf\Core\Formatter\VerticalAlignFormatter" />
+	        </formatters>
+	    </node>
+	    <node name="barcode" class="PHPPdf\Core\Node\Barcode">
+	        <formatters>
+	            <pre class="PHPPdf\Core\Formatter\ConvertAttributesFormatter" />
+	            <pre class="PHPPdf\Core\Formatter\FirstPointPositionFormatter" />
+
 	            <post class="PHPPdf\Core\Formatter\StandardPositionFormatter" />
 	            <post class="PHPPdf\Core\Formatter\FloatFormatter" />
 	            <post class="PHPPdf\Core\Formatter\VerticalAlignFormatter" />
@@ -259,7 +269,7 @@
 	    </node>
 	    <node name="td" class="PHPPdf\Core\Node\Table\Cell">
 	        <stylesheet>
-	            <complex-attribute name="border" color="black" size="1px" />
+	            <complex-attribute name="border" color="#000000" size="1px" />
 	        </stylesheet>
 	        <formatters>
 	            <pre class="PHPPdf\Core\Formatter\ConvertAttributesFormatter" />
@@ -285,7 +295,7 @@
 	        <stylesheet>
 	            <attribute name="height" value="1px" />
 	            <attribute name="margin" value="12px 0" />
-	            <complex-attribute name="background" color="black" />
+	            <complex-attribute name="background" color="#000000" />
 	        </stylesheet>
 	        <formatters>
 	            <pre class="PHPPdf\Core\Formatter\ConvertAttributesFormatter" />
@@ -300,7 +310,7 @@
 	    <node name="a" class="PHPPdf\Core\Node\Text">
 	    	<stylesheet>
 	    		<attribute name="text-decoration" value="underline" />
-	    		<attribute name="color" value="blue" />
+	    		<attribute name="color" value="#0000ff" />
 	    	</stylesheet>
 	        <formatters>
 	            <pre class="PHPPdf\Core\Formatter\ConvertAttributesFormatter" />

@@ -29,6 +29,24 @@ final class Util
         return isset($knownValues[$value]) ? $knownValues[$value] : (boolean) $value;
     }
     
+    /**
+     * Converts angle value to radians. 
+     * 
+     * When value is "deg" suffixed, it means value is in degrees.
+     * 
+     * @return float|null angle in radians or null
+     */
+    public static function convertAngleValue($value)
+    {
+        if($value !== null && strpos($value, 'deg') !== false)
+        {
+            $value = (float) $value;
+            $value = deg2rad($value);
+        }
+        
+        return $value !== null ? ((float) $value) : null;
+    }
+    
     public static function calculateDependantSizes($width, $height, $ratio)
     {
         if(!$width && $height)
