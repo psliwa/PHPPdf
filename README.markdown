@@ -62,7 +62,7 @@ In order to library was ready to use, you must download this dependencies. You s
 
     php vendors.php
     
-Alternatively, you can download this dependencies manually and copy it into "lib/vendor" directory. By default vendors.php file **will download whole ZF2 repository**, but remember **only Zend_Pdf, Zend_Memory and Zend_Cache are obligatory**. You can **remove other packages** and files.
+Alternatively, you can download this dependencies manually and copy it into "lib/vendor" directory. By default vendors.php file **will download whole ZF2 repository**, but remember **only Zend_Pdf, Zend_Memory and Zend_Cache are obligatory**. To barcodes support **Zend_Barcode** is required. You can **remove other packages** and files.
     
 <a name="symfony2-bundle"></a>
 Symfony2 bundle
