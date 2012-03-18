@@ -22,6 +22,7 @@ Spis treści
 1. [Atrybut](#attributes)
 1. [Atrybuty złożone](#complex-attributes)
 1. [Jednostki](#units)
+1. [Kody kreskowe] (#barcodes)
 1. [Hiperlinki](#hyperlinks)
 1. [Zakładki](#bookmarks)
 1. [Notatki](#notes)
@@ -348,6 +349,7 @@ Ponadto obsługiwane są niestandardowe tagi:
 * elastic-page - pojedyncza strona, która dostosowuje swoją wysokość w zależności od elementów podrzędnych (podobnie jak pozostałe tagi). Dla tego tagu nie działają: nagłówek, stopka, watermark oraz atrybut template-document. Tag przydatny zwłaszcza gdy generujemy pliki graficzne (silnik image).
 * page-break, column-break, break - złamanie strony lub kolumny, jest to element podrzędny dynamic-page lub column-layout, czyli musi być bezpośrednim dzieckiem tego elemntu! Te trzy tagi są aliasami.
 * column-layout - podział obszaru roboczego na kolumny, dodatkowe atrybuty: number-of-columns oraz margin-between-columns
+* barcode - kod kreskowy
 
 Istnieją tagi, które służą jedynie do określania wartości atrybutów, zbioru atrybutów lub zbioru elementów:
 
@@ -439,6 +441,35 @@ Obsługiwane jednostki dla numerycznych atrybutów: in (cal), cm (centymetr), mm
 Obecnie nieobslugiwane jednostki: em, ex
 
 Gdy jednostka zostanie pominięta (na przykład: font-size="10"), to jednostką jest punkt (pt). 1pt = 1/72 cala
+
+<a name="barcodes"></a>
+Kody kreskowe
+----------------
+
+Kody kreskowe są obsługiwane za pomocą tagu &lt;barcode&gt;. PHPPdf do generowania kodów korzysta z biblioteki Zend\Barcode. 
+
+Przykład:
+
+    <pdf>
+        <dynamic-page>
+            <barcode type="code128" code="PHPPdf" />
+        </dynamic-page>
+    </pdf>
+
+Tag &lt;barcode&gt; obsługuje większość standardowych atrybutów oraz ma szereg innych atrybutów:
+
+* type - typ kodu kreskowego, dozwolone wartości: code128, code25, code25interlayed, code39, ean13, ean2, ean5, ean8, identcode, itf14, leitcode, planet, postnet, royalmail, upca, upce
+* draw-code - odpowiednik opcji drawCode z Zend\Barcode
+* bar-height - odpowiednik opcji barheight z Zend\Barcode
+* with-checksum - odpowiednik opcji withChecksum z Zend\Barcode
+* with-checksum-in-text - odpowienik opcji withChecksumInText z Zend\Barcode
+* bar-thin-width - odpowiednik opcji barThinWidth z Zend\Barcode
+* bar-thick-width - odpowiednik opcji barThickWidth z Zend\Barcode
+* rotate - odpowiednik opcji orientation z Zend\Barcode
+
+Opis poszczególnych opcji oraz wartości domyślne można znaleźć w [dokumentacji Zend\Barcode][3]
+
+Do wyświetlania tekstowego kodów kreskowych nie można użyć wbudowanych czcionek pdf: courier, times-roman oraz helvetica. Zostanie to niebawem poprawione.
 
 <a name="hyperlinks"></a>
 Hiperlinki
@@ -789,3 +820,4 @@ Biblioteka działa pod php 5.3+.
 
 [1]: https://github.com/psliwa/PdfBundle
 [2]: https://github.com/avalanche123/Imagine
+[3]: http://framework.zend.com/manual/en/zend.barcode.objects.html
