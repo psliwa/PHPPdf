@@ -836,3 +836,4 @@ Library works on php 5.3+
 
 [1]: https://github.com/psliwa/PdfBundle
 [2]: https://github.com/avalanche123/Imagine
+[3]: http://framework.zend.com/manual/en/zend.barcode.objects.html
