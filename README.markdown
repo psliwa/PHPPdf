@@ -30,6 +30,7 @@ Table of contents
 1. [Attributes](#attributes)
 1. [Complex attributes](#complex-attributes)
 1. [Units](#units)
+1. [Barcodes](#barcodes)
 1. [Hyperlinks](#hyperlinks)
 1. [Bookmarks](#bookmarks)
 1. [Sticky notes](#notes)
@@ -452,6 +453,35 @@ Supported units for numerical attributes: in (inch), cm (centimeter), mm (milime
 Currently unsupported units: em and ex
 
 When unit has been skipped (for example: font-size="10"), then unit is point (pt). 1pt = 1/72 inch
+
+<a name="barcodes"></a>
+Barcodes
+----------------
+
+Barcodes are supported by &lt;barcode&gt; tag. PHPPdf uses Zend\Barcode library in order to generate barcodes.
+
+Example:
+
+    <pdf>
+        <dynamic-page>
+            <barcode type="code128" code="PHPPdf" />
+        </dynamic-page>
+    </pdf>
+
+&lt;barcode&gt; tag supports the most of standard attributes and has some other attributes:
+
+* type - typ of barcode, supported values: code128, code25, code25interlayed, code39, ean13, ean2, ean5, ean8, identcode, itf14, leitcode, planet, postnet, royalmail, upca, upce
+* draw-code - equivalent of drawCode option from Zend\Barcode
+* bar-height - equivalent of barHeight option from Zend\Barcode
+* with-checksum - equivalent of withChecksum option from Zend\Barcode
+* with-checksum-in-text - equivalent of withChecksumInText option from Zend\Barcode
+* bar-thin-width - equivalent of barThinWidth option from Zend\Barcode
+* bar-thick-width - equivalent of barThickWidth option from Zend\Barcode
+* rotate - equivalent of orientation option from Zend\Barcode
+
+Description of this options and default values you can find in [Zend\Barcode documentation][3]
+
+In order to render textual barcode can't be used embeded pdf font: courier, times-roman and helvetica. It will be soon fixed.
 
 <a name="hyperlinks"></a>
 Hyperlinks
