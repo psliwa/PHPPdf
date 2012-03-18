@@ -69,7 +69,7 @@ Aby biblioteka była gotowa do użytku, trzeba pobrać te zależności. Należy 
 
     php vendors.php
     
-Alternatywnie zależności można umieścić ręcznie w katalogu "lib/vendor". Domyślnie plik vendors.php **pobierze całą bibliotekę ZF2**, pamietaj że **konieczne do działania są tylko paczki Zend_Pdf, Zend_Memory oraz Zend_Cache**. **Resztę paczek i plików ZF2 możesz usunąć**.
+Alternatywnie zależności można umieścić ręcznie w katalogu "lib/vendor". Domyślnie plik vendors.php **pobierze całą bibliotekę ZF2**, pamietaj że **konieczne do działania są tylko paczki Zend_Pdf, Zend_Memory oraz Zend_Cache**. Do obsługi kodów kreskowych wymagane jest **Zend_Barcode**. **Resztę paczek i plików ZF2 możesz usunąć**.
     
 <a name="symfony2-bundle"></a>
 Symfony2 bundle
