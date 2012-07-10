@@ -1,0 +1,21 @@
+{
+    "name": "psliwa/PHPPdf",
+    "description": "Pdf and graphic files generator library for PHP.",
+    "keywords": ["PDF", "PHPPdf"],
+    "type": "package",
+    "license": "",
+    "authors": [
+        {
+            "name":     "Piotr Śliwa",
+            "homepage": "http://ohey.pl",
+            "email":    ""
+        }     
+    ],
+    "require": {
+        "zendframework/zend-pdf":  ">=2.0",
+        "zendframework/zend-memory":  ">=2.0",
+        "zendframework/zend-cache":  ">=2.0",
+        "imagine/Imagine": "master"
+    },
+    "target-dir" : "Ps"
+}
