@@ -9,7 +9,7 @@
 namespace PHPPdf\Cache;
 
 use Zend\Cache\StorageFactory;
-use Zend\Cache\Storage\Adapter;
+use Zend\Cache\Storage\StorageInterface;
 use PHPPdf\Exception\RuntimeException;
 
 /**
@@ -33,7 +33,7 @@ class CacheImpl implements Cache
 
     public function __construct($engine = self::ENGINE_FILE, array $options = array())
     {
-        if(!$engine instanceof Adapter)
+        if(!$engine instanceof StorageInterface)
         {
             $engine = $this->createAdapter($engine);
         }
@@ -93,7 +93,7 @@ class CacheImpl implements Cache
             
             return $data;
         }
-        catch(\Zend\Cache\Exception $e)
+        catch(\Zend\Cache\Exception\ExceptionInterface $e)
         {
             $this->wrapLowLevelException($e, __METHOD__);
         }
@@ -110,7 +110,7 @@ class CacheImpl implements Cache
         {
             return $this->adapter->hasItem($id);
         }
-        catch(\Zend\Cache\Exception $e)
+        catch(\Zend\Cache\Exception\ExceptionInterface $e)
         {
             $this->wrapLowLevelException($e, __METHOD__);
         }
@@ -133,7 +133,7 @@ class CacheImpl implements Cache
             
             return $this->adapter->setItem($id, $data);
         }
-        catch(\Zend\Cache\Exception $e)
+        catch(\Zend\Cache\Exception\ExceptionInterface $e)
         {
             $this->wrapLowLevelException($e, __METHOD__);
         }
@@ -145,19 +145,7 @@ class CacheImpl implements Cache
         {
             return $this->adapter->removeItem($id);
         }
-        catch(\Zend\Cache\Exception $e)
-        {
-            $this->wrapLowLevelException($e, __METHOD__);
-        }
-    }
-
-    public function clean($mode = \Zend\Cache\Storage\Adapter::MATCH_ALL)
-    {
-        try
-        {
-            return $this->adapter->clear($mode);
-        }
-        catch(\Zend\Cache\Exception $e)
+        catch(\Zend\Cache\Exception\ExceptionInterface $e)
         {
             $this->wrapLowLevelException($e, __METHOD__);
         }

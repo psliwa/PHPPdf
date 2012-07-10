@@ -41,14 +41,6 @@ interface Cache
     public function test($id);
     
     /**
-     * Clean cache in passed mode
-     *
-     * @param string $mode Clean mode
-     * @param boolean True on success, otherwise false
-     */
-    public function clean($mode);
-    
-    /**
      * Remove cache stored under passed id
      *
      * @param string $id Cache id

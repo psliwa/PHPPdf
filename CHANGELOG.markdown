@@ -1,6 +1,14 @@
 CHANGELOG
 =========
 
+* 1.1.3-dev
+
+  * fix compatibility with ZF2beta5 api
+  * [#8] fixed specifing of width of table columns when one of cell has colspan
+  * parameterized dpi value
+  * padding-top on li element has influence on position of enumeration symbol
+  * barcode support
+
 * 1.1.2 (2012-02-01)
 
   * improve xml parsing error messages

@@ -8,7 +8,7 @@
 
 namespace PHPPdf\Core\Engine;
 
-use Zend\Barcode\Object;
+use Zend\Barcode\Object\ObjectInterface;
 
 /**
  * Interface of graphics context.
@@ -76,7 +76,7 @@ interface GraphicsContext
     
     public function rotate($x, $y, $angle);
     
-    public function drawBarcode($x, $y, Object $barcode);
+    public function drawBarcode($x, $y, ObjectInterface $barcode);
     
     public function copy();
 }

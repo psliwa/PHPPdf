@@ -57,13 +57,12 @@ class CacheImplTest extends \PHPPdf\PHPUnit\Framework\TestCase
             array('save', 'setItem', array('value', 'id'), true, array('id', serialize('value')), null, array('automatic_serialization' => true)),
             array('save', 'setItem', array('value', 'id'), true, array('id', serialize('value')), null),
             array('remove', 'removeItem', array('id'), true),
-            array('clean', 'clear', array(\Zend\Cache\Storage\Adapter::MATCH_ALL), true),
         );
     }
 
     private function getCacheEngineMock()
     {
-        $mock = $this->getMock('Zend\Cache\Storage\Adapter');
+        $mock = $this->getMock('Zend\Cache\Storage\StorageInterface');
 
         return $mock;
     }

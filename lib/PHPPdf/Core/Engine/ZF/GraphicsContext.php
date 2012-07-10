@@ -22,7 +22,7 @@ use Zend\Pdf\InternalType\ArrayObject;
 use Zend\Pdf\Font as ZendFont;
 use Zend\Pdf\Resource\Font\AbstractFont as ZendResourceFont;
 use Zend\Pdf\Color\Html as ZendColor;
-use Zend\Barcode\Object as Barcode;
+use Zend\Barcode\Object\ObjectInterface as Barcode;
 
 /**
  * @author Piotr Śliwa <peter.pl7@gmail.com>
@@ -175,7 +175,7 @@ class GraphicsContext extends AbstractGraphicsContext
                 $this->richDrawText($text, $x, $y, $encoding, $wordSpacing, $fillType);
             }
         }
-        catch(\Zend\Pdf\Exception $e)
+        catch(\Zend\Pdf\Exception\ExceptionInterface $e)
         {
             throw new RuntimeException($e->getMessage(), $e->getCode(), $e);
         }
@@ -322,7 +322,7 @@ class GraphicsContext extends AbstractGraphicsContext
             
             $this->getPage()->attachAnnotation($annotation);
         }
-        catch(\Zend\Pdf\Exception $e)
+        catch(\Zend\Pdf\Exception\ExceptionInterface $e)
         {
             throw new RuntimeException(sprintf('Error wile adding uri action with uri="%s"', $uri), 0, $e);
         }
@@ -338,7 +338,7 @@ class GraphicsContext extends AbstractGraphicsContext
             
             $this->getPage()->attachAnnotation($annotation);
         }
-        catch(\Zend\Pdf\Exception $e)
+        catch(\Zend\Pdf\Exception\ExceptionInterface $e)
         {
             throw new RuntimeException('Error while adding goTo action', 0, $e);
         }        
@@ -373,7 +373,7 @@ class GraphicsContext extends AbstractGraphicsContext
             
             $this->addToQueue('doAddBookmark', array($identifier, $outline, $parentIdentifier));
         }
-        catch(\Zend\Pdf\Exception $e)
+        catch(\Zend\Pdf\Exception\ExceptionInterface $e)
         {
             throw new RuntimeException('Error while bookmark adding', 0, $e);
         }
@@ -393,7 +393,7 @@ class GraphicsContext extends AbstractGraphicsContext
                 $this->engine->getZendPdf()->outlines[] = $outline;
             }
         }
-        catch(\Zend\Pdf\Exception $e)
+        catch(\Zend\Pdf\Exception\ExceptionInterface $e)
         {
             throw new RuntimeException('Error while bookmark adding', 0, $e);
         }

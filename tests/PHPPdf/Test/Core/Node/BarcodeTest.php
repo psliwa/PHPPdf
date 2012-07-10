@@ -53,7 +53,7 @@ class BarcodeTest extends TestCase
         $this->gc->expects($this->once())
                  ->method('drawBarcode')
                  ->with($x, $y, $this->validateByCallback(function($barcode, TestCase $test) use($barcodeText, $drawText, $barcodeType, $fontPath, $fontSize, $color, $barHeight, $withChecksum, $orientation, $barThinWidth, $barThickWidth, $factor){
-                     $test->assertInstanceOf('Zend\Barcode\Object', $barcode);
+                     $test->assertInstanceOf('Zend\Barcode\Object\ObjectInterface', $barcode);
                      $test->assertTrue(stripos(get_class($barcode), $barcodeType) !== false);
                      $test->assertEquals($barcodeText, $barcode->getText());
                      $test->assertEquals($fontPath, $barcode->getFont());
