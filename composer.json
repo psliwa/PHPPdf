@@ -13,12 +13,12 @@
     ],
     "require": {
         "zendframework/zendframework":  ">=2.0.0-beta5",
-		"imagine/Imagine": ">=v0.2.6"
+        "imagine/Imagine": ">=v0.2.6"
     },
     "suggest": {
         "zendframework/zendframework": "Used components: Zend_Pdf, Zend_Memory, Zend_Cache, Zend_Stdlib, Zend_ServiceManager, Zend_EventManager, Zend_Barcode"
     },
-	"autoload": {
-		"psr-0": { "PHPPdf": "lib/", "Imagine": "lib/" }
-	}
+    "autoload": {
+        "psr-0": { "PHPPdf": "lib/", "Imagine": "lib/" }
+    }
 }
