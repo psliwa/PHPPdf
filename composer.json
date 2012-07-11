@@ -2,8 +2,8 @@
     "name": "psliwa/php-pdf",
     "description": "Pdf and graphic files generator library for PHP.",
     "keywords": ["PDF", "PHPPdf"],
-    "type": "package",
-    "license": "",
+    "type": "library",
+    "license": "MIT",
     "authors": [
         {
             "name":     "Piotr Śliwa",
@@ -12,10 +12,13 @@
         }     
     ],
     "require": {
-        "zendframework/zend-pdf":  ">=2.0",
-        "zendframework/zend-memory":  ">=2.0",
-        "zendframework/zend-cache":  ">=2.0",
-        "imagine/Imagine": "master"
+        "zendframework/zendframework":  ">=2.0.0-dev",
+		"imagine/Imagine": ">=v0.2.6"
     },
-    "target-dir" : "Ps"
+    "suggest": {
+        "zendframework/zendframework": "Used components: Zend_Pdf, Zend_Memory, Zend_Cache, Zend_Stdlib, Zend_ServiceManager, Zend_EventManager, Zend_Barcode"
+    },
+	"autoload": {
+		"psr-0": { "PHPPdf": "lib/", "Imagine": "lib/" }
+	}
 }
