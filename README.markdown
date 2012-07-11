@@ -58,6 +58,8 @@ PHPPdf is library that transforms xml document to pdf document or graphic files.
 Installation
 ----------------
 
+PHPPdf is available in packagist.org, so you can use composer to download this library and all dependencies. PHPPdf requires "minimum-stability" equals to dev. If you do not want to use composer, below are instructions how to manually install this library with all dependencies.
+
 Library uses external dependencies:
 
 * php-markdown
