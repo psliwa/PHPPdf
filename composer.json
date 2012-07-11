@@ -12,7 +12,7 @@
         }     
     ],
     "require": {
-        "zendframework/zendframework":  ">=2.0.0-dev",
+        "zendframework/zendframework":  ">=2.0.0-beta5",
 		"imagine/Imagine": ">=v0.2.6"
     },
     "suggest": {
