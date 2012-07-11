@@ -1,7 +1,7 @@
 CHANGELOG
 =========
 
-* 1.1.3-dev
+* 1.1.3 (2012-07-11)
 
   * fix compatibility with ZF2beta5 api
   * [#8] fixed specifing of width of table columns when one of cell has colspan
