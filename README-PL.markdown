@@ -50,6 +50,8 @@ PHPPdf jest biblioteką, która zamienia dokument xml w dokument pdf lub też pl
 Instalacja
 ----------
 
+PHPPdf jest dostępne na packagist.org, więc możesz użyć narzędzia composer aby ściągnąć tą bibliotekę ze wszystkimi zależnościami. PHPPdf wymaga aby opcja "minimum-stability" była ustawiona na dev. Jeśli nie chcesz używać narzędzia composer, poniżej znajdziesz instrukcje jak ręcznie zainstalować tą bibliotekę wraz ze wszystkimi zależnościami.
+
 Biblioteka posiada zależności do zewnętrznych bibliotek: 
 
 * php-markdown
