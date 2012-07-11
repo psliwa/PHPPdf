@@ -56,13 +56,17 @@ Library uses external dependencies:
 * Zend_Pdf (Zend Framework in 2.0.x version)
 * Zend_Memory (Zend Framework in 2.0.x version)
 * Zend_Cache (Zend Framework in 2.0.x version)
+* Zend_Stdlib (Zend Framework in 2.0.x version)
+* Zend_EventManager (Zend Framework in 2.0.x version)
+* Zend_ServiceManager (Zend Framework in 2.0.x version)
+* Zend_Barcode (Zend Framework in 2.0.x version)
 * Imagine
 
 In order to library was ready to use, you must download this dependencies. You should invoke below command from main directory of the library (git client is necessary):
 
     php vendors.php
     
-Alternatively, you can download this dependencies manually and copy it into "lib/vendor" directory. By default vendors.php file **will download whole ZF2 repository**, but remember **only Zend_Pdf, Zend_Memory and Zend_Cache are obligatory**. To barcodes support **Zend_Barcode** is required. You can **remove other packages** and files.
+Alternatively, you can download this dependencies manually and copy it into "lib/vendor" directory. By default vendors.php file **will download whole ZF2 repository**, but remember **only Zend_Pdf, Zend_Memory, Zend_Cache, Zend_Stdlib, Zend_ServiceManager and Zend_EventManager are obligatory**. To barcodes support **Zend_Barcode** is required. You can **remove other packages** and files.
     
 <a name="symfony2-bundle"></a>
 Symfony2 bundle

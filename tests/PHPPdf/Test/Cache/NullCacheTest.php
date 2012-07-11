@@ -29,7 +29,6 @@ class NullCacheTest extends \PHPPdf\PHPUnit\Framework\TestCase
             array('load', array('id'), false),
             array('test', array('id'), false),
             array('save', array('id', 'value'), true),
-            array('clean', array('all'), true),
             array('remove', array('id'), true),
         );
     }

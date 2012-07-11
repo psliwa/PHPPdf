@@ -8,7 +8,7 @@
 
 namespace PHPPdf\Core\Engine;
 
-use Zend\Barcode\Object as Barcode;
+use Zend\Barcode\Object\ObjectInterface as Barcode;
 
 /**
  * Base class for GraphicsContext classes.

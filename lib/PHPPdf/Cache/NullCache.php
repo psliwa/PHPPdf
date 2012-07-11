@@ -39,9 +39,4 @@ class NullCache implements Cache
     {
         return true;
     }
-
-    public function clean($mode)
-    {
-        return true;
-    }
 }

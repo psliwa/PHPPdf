@@ -21,6 +21,6 @@ function fetchGitVendors()
             system(sprintf('git clone %s %s', $url, $installDir));
         }
     
-        system(sprintf('cd %s && git fetch origin && git reset --hard %s', $installDir, $rev));
+        system(sprintf('cd %s && git fetch origin && git reset --hard %s && git pull origin %s', $installDir, $rev, $rev));
     }
 }
