@@ -11,6 +11,9 @@
             "email":    ""
         }     
     ],
+    "autoload": {
+        "psr-0": { "PHPPdf": "Ps/lib/" }
+    },
     "require": {
         "zendframework/zendframework":  ">=2.0.0-beta5",
         "imagine/Imagine": ">=v0.2.6"
