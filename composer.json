@@ -12,13 +12,23 @@
         }     
     ],
     "require": {
-        "zendframework/zendframework":  ">=2.0.0-beta5",
-		"imagine/Imagine": ">=v0.2.6"
+        "zendframework/zend-cache":  ">=2.0.0-rc2",
+        "zendframework/zend-eventmanager":  ">=2.0.0-rc2",
+        "zendframework/zend-servicemanager":  ">=2.0.0-rc2",
+        "zendframework/zend-barcode":  ">=2.0.0-rc2",
+        "imagine/Imagine": ">=v0.2.6"
     },
-    "suggest": {
-        "zendframework/zendframework": "Used components: Zend_Pdf, Zend_Memory, Zend_Cache, Zend_Stdlib, Zend_ServiceManager, Zend_EventManager, Zend_Barcode"
+    "autoload": {
+        "psr-0": { "PHPPdf": "lib/", "Imagine": "lib/" }
     },
-	"autoload": {
-		"psr-0": { "PHPPdf": "lib/", "Imagine": "lib/" }
-	}
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "http://packages.zendframework.com/"
+        },
+        {
+            "type": "composer",
+            "url": "http://packagist.org/"
+        }
+    ]
 }

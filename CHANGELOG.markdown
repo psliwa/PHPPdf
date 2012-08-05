@@ -1,6 +1,10 @@
 CHANGELOG
 =========
 
+* 1.1.4 (2012-08-05)
+
+  * fix compatibility with ZF2rc2
+
 * 1.1.3 (2012-07-11)
 
   * fix compatibility with ZF2beta5 api

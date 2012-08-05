@@ -55,7 +55,7 @@ PHPPdf jest dostępne na packagist.org, więc możesz użyć narzędzia composer
 Biblioteka posiada zależności do zewnętrznych bibliotek: 
 
 * php-markdown
-* Zend_Pdf (Zend Framework w wersji 2.0.x)
+* ZendPdf
 * Zend_Memory (Zend Framework w wersji 2.0.x)
 * Zend_Cache (Zend Framework w wersji 2.0.x)
 * Zend_Stdlib (Zend Framework w wersji 2.0.x)
@@ -68,7 +68,7 @@ Aby biblioteka była gotowa do użytku, trzeba pobrać te zależności. Należy 
 
     php vendors.php
     
-Alternatywnie zależności można umieścić ręcznie w katalogu "lib/vendor". Domyślnie plik vendors.php **pobierze całą bibliotekę ZF2**, pamietaj że **konieczne do działania są tylko paczki Zend_Pdf, Zend_Memory, Zend_Cache, Zend_Stdlib, Zend_EventManager oraz Zend_ServiceManager**. Do obsługi kodów kreskowych wymagane jest **Zend_Barcode**. **Resztę paczek i plików ZF2 możesz usunąć**.
+Alternatywnie zależności można umieścić ręcznie w katalogu "lib/vendor". Domyślnie plik vendors.php **pobierze całą bibliotekę ZF2**, pamietaj że **konieczne do działania są tylko paczki ZendPdf, Zend_Memory, Zend_Cache, Zend_Stdlib, Zend_EventManager oraz Zend_ServiceManager**. Do obsługi kodów kreskowych wymagane jest **Zend_Barcode**. **Resztę paczek i plików ZF2 możesz usunąć**.
     
 <a name="symfony2-bundle"></a>
 Symfony2 bundle

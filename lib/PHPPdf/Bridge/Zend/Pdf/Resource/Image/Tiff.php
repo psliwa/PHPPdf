@@ -11,10 +11,10 @@ namespace PHPPdf\Bridge\Zend\Pdf\Resource\Image;
 use PHPPdf\InputStream\InputStream;
 use PHPPdf\InputStream\StringInputStream;
 use PHPPdf\InputStream\FopenInputStream;
-use Zend\Pdf\Resource\Image\Tiff as BaseTiff;
-use Zend\Pdf\Exception;
-use Zend\Pdf;
-use Zend\Pdf\InternalType;
+use ZendPdf\Resource\Image\Tiff as BaseTiff;
+use ZendPdf\Exception;
+use ZendPdf;
+use ZendPdf\InternalType;
 
 /**
  * Content loading type has been changed, remote files are supported.
@@ -260,7 +260,7 @@ class Tiff extends BaseTiff
 
         $this->close();
 
-        \Zend\Pdf\Resource\Image::__construct();
+        \ZendPdf\Resource\Image::__construct();
 
         $imageDictionary = $this->_resource->dictionary;
         if(!isset($this->_width) || !isset($this->_width)) {

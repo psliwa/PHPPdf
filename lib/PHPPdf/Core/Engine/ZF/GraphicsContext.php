@@ -15,13 +15,13 @@ use PHPPdf\Core\Engine\AbstractGraphicsContext;
 use PHPPdf\Core\Engine\GraphicsContext as BaseGraphicsContext;
 use PHPPdf\Core\Engine\Font as BaseFont;
 use PHPPdf\Core\Engine\Image as BaseImage;
-use Zend\Pdf\Page as ZendPage;
-use Zend\Pdf\InternalType\NumericObject;
-use Zend\Pdf\InternalType\StringObject;
-use Zend\Pdf\InternalType\ArrayObject;
-use Zend\Pdf\Font as ZendFont;
-use Zend\Pdf\Resource\Font\AbstractFont as ZendResourceFont;
-use Zend\Pdf\Color\Html as ZendColor;
+use ZendPdf\Page as ZendPage;
+use ZendPdf\InternalType\NumericObject;
+use ZendPdf\InternalType\StringObject;
+use ZendPdf\InternalType\ArrayObject;
+use ZendPdf\Font as ZendFont;
+use ZendPdf\Resource\Font\AbstractFont as ZendResourceFont;
+use ZendPdf\Color\Html as ZendColor;
 use Zend\Barcode\Object\ObjectInterface as Barcode;
 
 /**
@@ -53,7 +53,7 @@ class GraphicsContext extends AbstractGraphicsContext
     private $engine = null;
 
     /**
-     * @var Zend\Pdf\Page
+     * @var ZendPdf\Page
      */
     private $page;
     
@@ -141,7 +141,7 @@ class GraphicsContext extends AbstractGraphicsContext
         
         if(!$colorData instanceof ZendColor)
         {
-            throw new InvalidArgumentException('Wrong color value, expected string or object of Zend\Pdf\Color\Html class.');
+            throw new InvalidArgumentException('Wrong color value, expected string or object of ZendPdf\Color\Html class.');
         }
         
         return $colorData;
@@ -175,7 +175,7 @@ class GraphicsContext extends AbstractGraphicsContext
                 $this->richDrawText($text, $x, $y, $encoding, $wordSpacing, $fillType);
             }
         }
-        catch(\Zend\Pdf\Exception\ExceptionInterface $e)
+        catch(\ZendPdf\Exception\ExceptionInterface $e)
         {
             throw new RuntimeException($e->getMessage(), $e->getCode(), $e);
         }
@@ -185,7 +185,7 @@ class GraphicsContext extends AbstractGraphicsContext
     {
         if($this->getPage()->getFont() === null) 
         {
-            throw new \Zend\Pdf\Exception\LogicException('Font has not been set');
+            throw new \ZendPdf\Exception\LogicException('Font has not been set');
         }
   
         if($fillType == self::SHAPE_DRAW_FILL)
@@ -316,13 +316,13 @@ class GraphicsContext extends AbstractGraphicsContext
     {
         try
         {
-            $uriAction = \Zend\Pdf\Action\Uri::create($uri);
+            $uriAction = \ZendPdf\Action\Uri::create($uri);
             
             $annotation = $this->createAnnotationLink($x1, $y1, $x2, $y2, $uriAction);
             
             $this->getPage()->attachAnnotation($annotation);
         }
-        catch(\Zend\Pdf\Exception\ExceptionInterface $e)
+        catch(\ZendPdf\Exception\ExceptionInterface $e)
         {
             throw new RuntimeException(sprintf('Error wile adding uri action with uri="%s"', $uri), 0, $e);
         }
@@ -332,13 +332,13 @@ class GraphicsContext extends AbstractGraphicsContext
     {
         try
         {
-            $destination = \Zend\Pdf\Destination\FitHorizontally::create($gc->getPage(), $top);   
+            $destination = \ZendPdf\Destination\FitHorizontally::create($gc->getPage(), $top);   
             
             $annotation = $this->createAnnotationLink($x1, $y1, $x2, $y2, $destination);
             
             $this->getPage()->attachAnnotation($annotation);
         }
-        catch(\Zend\Pdf\Exception\ExceptionInterface $e)
+        catch(\ZendPdf\Exception\ExceptionInterface $e)
         {
             throw new RuntimeException('Error while adding goTo action', 0, $e);
         }        
@@ -346,7 +346,7 @@ class GraphicsContext extends AbstractGraphicsContext
     
     private function createAnnotationLink($x1, $y1, $x2, $y2, $target)
     {
-        $annotation = \Zend\Pdf\Annotation\Link::create($x1, $y1, $x2, $y2, $target);
+        $annotation = \ZendPdf\Annotation\Link::create($x1, $y1, $x2, $y2, $target);
         $annotationDictionary = $annotation->getResource();
         
         $border = new ArrayObject();
@@ -364,22 +364,22 @@ class GraphicsContext extends AbstractGraphicsContext
     {
         try
         {   
-            $destination = \Zend\Pdf\Destination\FitHorizontally::create($this->getPage(), $top);
-            $action = \Zend\Pdf\Action\GoToAction::create($destination);
+            $destination = \ZendPdf\Destination\FitHorizontally::create($this->getPage(), $top);
+            $action = \ZendPdf\Action\GoToAction::create($destination);
             
-            $outline = \Zend\Pdf\Outline\AbstractOutline::create($name, $action);
+            $outline = \ZendPdf\Outline\AbstractOutline::create($name, $action);
             
             $this->engine->registerOutline($identifier, $outline);     
             
             $this->addToQueue('doAddBookmark', array($identifier, $outline, $parentIdentifier));
         }
-        catch(\Zend\Pdf\Exception\ExceptionInterface $e)
+        catch(\ZendPdf\Exception\ExceptionInterface $e)
         {
             throw new RuntimeException('Error while bookmark adding', 0, $e);
         }
     }
 
-    protected function doAddBookmark($identifier, \Zend\Pdf\Outline\AbstractOutline $outline, $parentIdentifier = null)
+    protected function doAddBookmark($identifier, \ZendPdf\Outline\AbstractOutline $outline, $parentIdentifier = null)
     {
         try
         {            
@@ -393,7 +393,7 @@ class GraphicsContext extends AbstractGraphicsContext
                 $this->engine->getZendPdf()->outlines[] = $outline;
             }
         }
-        catch(\Zend\Pdf\Exception\ExceptionInterface $e)
+        catch(\ZendPdf\Exception\ExceptionInterface $e)
         {
             throw new RuntimeException('Error while bookmark adding', 0, $e);
         }
@@ -401,7 +401,7 @@ class GraphicsContext extends AbstractGraphicsContext
     
     protected function doAttachStickyNote($x1, $y1, $x2, $y2, $text)
     {
-        $annotation = \Zend\Pdf\Annotation\Text::create($x1, $y1, $x2, $y2, $text);
+        $annotation = \ZendPdf\Annotation\Text::create($x1, $y1, $x2, $y2, $text);
         $this->getPage()->attachAnnotation($annotation);
     }
     

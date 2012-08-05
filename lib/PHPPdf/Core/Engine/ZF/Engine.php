@@ -16,8 +16,8 @@ use PHPPdf\Util;
 use PHPPdf\Exception\InvalidResourceException;
 use PHPPdf\Core\Engine\GraphicsContext as BaseGraphicsContext;
 use PHPPdf\Core\Engine\Engine as BaseEngine;
-use Zend\Pdf\PdfDocument;
-use Zend\Pdf\Outline\AbstractOutline;
+use ZendPdf\PdfDocument;
+use ZendPdf\Outline\AbstractOutline;
 
 /**
  * @author Piotr Śliwa <peter.pl7@gmail.com>
@@ -150,7 +150,7 @@ class Engine extends AbstractEngine
             
             return $engine;
         }
-        catch(\Zend\Pdf\Exception $e)
+        catch(\ZendPdf\Exception $e)
         {
             throw InvalidResourceException::invalidPdfFileException($file, $e);
         }

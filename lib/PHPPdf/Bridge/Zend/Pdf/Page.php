@@ -8,11 +8,11 @@
 
 namespace PHPPdf\Bridge\Zend\Pdf;
 
-use Zend\Pdf\Page as ZendPage;
-use Zend\Pdf\InternalType;
+use ZendPdf\Page as ZendPage;
+use ZendPdf\InternalType;
 
 /**
- * Modified Zend\Pdf\Page class
+ * Modified ZendPdf\Page class
  * 
  * Roundings are circles of radius = $radius in contrast to Zend_Pdf.
  */

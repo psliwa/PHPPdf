@@ -4,13 +4,14 @@ error_reporting(E_ALL | E_NOTICE);
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 
-set_time_limit(240);
+set_time_limit(0);
 
 require_once __DIR__.'/get_examples.php';
 require_once __DIR__.'/../lib/PHPPdf/Autoloader.php';
 
 PHPPdf\Autoloader::register();
 PHPPdf\Autoloader::register(__DIR__.'/../lib/vendor/Zend/library');
+PHPPdf\Autoloader::register(__DIR__.'/../lib/vendor/ZendPdf/library');
 PHPPdf\Autoloader::register(__DIR__.'/../lib/vendor/Imagine/lib');
 
 if(!isset($_GET['name']))
