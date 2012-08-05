@@ -52,6 +52,19 @@ Installation
 
 PHPPdf is available in packagist.org, so you can use composer to download this library and all dependencies. PHPPdf requires "minimum-stability" equals to dev. If you do not want to use composer, below are instructions how to manually install this library with all dependencies.
 
+PHPPdf uses zendframework packages, so if you want use composer, you must add zendframework composer repository to your composer.json file.
+
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "http://packages.zendframework.com/"
+        },
+        {
+            "type": "composer",
+            "url": "http://packagist.org/"
+        }
+    ]
+
 Library uses external dependencies:
 
 * php-markdown
