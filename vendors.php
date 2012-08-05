@@ -8,6 +8,7 @@ function fetchGitVendors()
     $deps = array(
         array('Markdown', 'git://github.com/wolfie/php-markdown.git', 'd464071334'),
         array('Zend', 'git://github.com/zendframework/zf2.git', 'master'),
+        array('ZendPdf', 'git://github.com/zendframework/ZendPdf.git', 'master'),
         array('Imagine', 'git://github.com/avalanche123/Imagine.git', 'v0.2.6')
     );
     

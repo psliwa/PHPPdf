@@ -10,10 +10,10 @@ namespace PHPPdf\Bridge\Zend\Pdf\Resource\Image;
 
 use PHPPdf\InputStream\FopenInputStream;
 use PHPPdf\InputStream\StringInputStream;
-use Zend\Pdf\Resource\Image\AbstractImage;
-use Zend\Pdf\Resource\Image\Jpeg as BaseJpeg;
-use Zend\Pdf\InternalType;
-use Zend\Pdf\Exception;
+use ZendPdf\Resource\Image\AbstractImage;
+use ZendPdf\Resource\Image\Jpeg as BaseJpeg;
+use ZendPdf\InternalType;
+use ZendPdf\Exception;
 
 /**
  * Content loading type has been changed, remote files are supported.

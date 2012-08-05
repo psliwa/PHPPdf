@@ -9,7 +9,7 @@ class ImageTest extends \PHPPdf\PHPUnit\Framework\TestCase
 {
     protected function setUp()
     {
-        if(!class_exists('Zend\Pdf\PdfDocument', true))
+        if(!class_exists('ZendPdf\PdfDocument', true))
         {
             $this->fail('Zend Framework 2 library is missing. You have to download dependencies, for example by using "vendors.php" file.');
         }

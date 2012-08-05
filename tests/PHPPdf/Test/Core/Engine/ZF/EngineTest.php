@@ -13,12 +13,12 @@ class EngineTest extends \PHPPdf\PHPUnit\Framework\TestCase
     
     public function setUp()
     {
-        if(!class_exists('Zend\Pdf\PdfDocument', true))
+        if(!class_exists('ZendPdf\PdfDocument', true))
         {
             $this->fail('Zend Framework 2 library is missing. You have to download dependencies, for example by using "vendors.php" file.');
         }
         
-        $this->zendPdf = new \Zend\Pdf\PdfDocument();
+        $this->zendPdf = new \ZendPdf\PdfDocument();
         $this->engine = new Engine($this->zendPdf);
     }
     
@@ -92,7 +92,7 @@ class EngineTest extends \PHPPdf\PHPUnit\Framework\TestCase
     {
         $content = '123';
         
-        $zendPdf = $this->getMockBuilder('Zend\Pdf\PdfDocument')
+        $zendPdf = $this->getMockBuilder('ZendPdf\PdfDocument')
                         ->setMethods(array('render'))
                         ->getMock();
 
@@ -140,7 +140,7 @@ class EngineTest extends \PHPPdf\PHPUnit\Framework\TestCase
      */
     public function setMetadataValues($name, $value, $shouldBeSet, $expectedValue = null)
     {
-        $zendPdf = new \Zend\Pdf\PdfDocument();
+        $zendPdf = new \ZendPdf\PdfDocument();
         $engine = new Engine($zendPdf);
         
         $engine->setMetadataValue($name, $value);

@@ -62,7 +62,7 @@ PHPPdf is available in packagist.org, so you can use composer to download this l
 Library uses external dependencies:
 
 * php-markdown
-* Zend_Pdf (Zend Framework in 2.0.x version)
+* ZendPdf
 * Zend_Memory (Zend Framework in 2.0.x version)
 * Zend_Cache (Zend Framework in 2.0.x version)
 * Zend_Stdlib (Zend Framework in 2.0.x version)
@@ -75,7 +75,7 @@ In order to library was ready to use, you must download this dependencies. You s
 
     php vendors.php
     
-Alternatively, you can download this dependencies manually and copy it into "lib/vendor" directory. By default vendors.php file **will download whole ZF2 repository**, but remember **only Zend_Pdf, Zend_Memory, Zend_Cache, Zend_Stdlib, Zend_ServiceManager and Zend_EventManager are obligatory**. To barcodes support **Zend_Barcode** is required. You can **remove other packages** and files.
+Alternatively, you can download this dependencies manually and copy it into "lib/vendor" directory. By default vendors.php file **will download whole ZF2 repository**, but remember **only ZendPdf, Zend_Memory, Zend_Cache, Zend_Stdlib, Zend_ServiceManager and Zend_EventManager are obligatory**. To barcodes support **Zend_Barcode** is required. You can **remove other packages** and files.
     
 <a name="symfony2-bundle"></a>
 Symfony2 bundle

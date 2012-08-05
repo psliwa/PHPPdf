@@ -71,7 +71,7 @@ class Image implements BaseImage
                 throw InvalidResourceException::unsupportetImageTypeException($path);
             }
         }
-        catch(\Zend\Pdf\Exception $e)
+        catch(\ZendPdf\Exception $e)
         {
             throw InvalidResourceException::invalidImageException($path, $e);
         }
@@ -110,7 +110,7 @@ class Image implements BaseImage
     /**
      * @internal Public method within PHPPdf\Core\Engine\ZF namespace
      * 
-     * @return Zend\Pdf\Resource\Image
+     * @return ZendPdf\Resource\Image
      */
     public function getWrappedImage()
     {

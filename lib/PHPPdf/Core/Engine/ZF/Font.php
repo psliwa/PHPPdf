@@ -12,7 +12,7 @@ use PHPPdf\Exception\InvalidArgumentException;
 
 use PHPPdf\Exception\InvalidResourceException;
 use PHPPdf\Core\Engine\AbstractFont;
-use Zend\Pdf\Font as ZendFont;
+use ZendPdf\Font as ZendFont;
 
 /**
  * @author Piotr Śliwa <peter.pl7@gmail.com>
@@ -24,7 +24,7 @@ class Font extends AbstractFont
     /**
      * @internal Public method within PHPPdf\Core\Engine\ZF namespace
      * 
-     * @return Zend\Pdf\Resource\Font
+     * @return ZendPdf\Resource\Font
      */
     public function getCurrentWrappedFont()
     {
@@ -51,7 +51,7 @@ class Font extends AbstractFont
             
             return $this->fonts[$style];
         }
-        catch(\Zend\Pdf\Exception\ExceptionInterface $e)
+        catch(\ZendPdf\Exception\ExceptionInterface $e)
         {
             throw InvalidResourceException::invalidFontException($this->fontResources[$style], $e);
         }
@@ -64,7 +64,7 @@ class Font extends AbstractFont
     
     private static function retrieveFontName($name)
     {
-        $const = sprintf('Zend\Pdf\Font::FONT_%s', str_replace('-', '_', strtoupper($name)));
+        $const = sprintf('ZendPdf\Font::FONT_%s', str_replace('-', '_', strtoupper($name)));
 
         if(!defined($const))
         {
