@@ -12,10 +12,8 @@
         }     
     ],
     "require": {
-        "zendframework/zendpdf":  ">=2.0.0-rc2",
+        "zendframework/zendpdf":  "*",
         "zendframework/zend-cache":  ">=2.0.0-rc2",
-        "zendframework/zend-eventmanager":  ">=2.0.0-rc2",
-        "zendframework/zend-servicemanager":  ">=2.0.0-rc2",
         "zendframework/zend-barcode":  ">=2.0.0-rc2",
         "imagine/Imagine": ">=v0.2.6"
     },
