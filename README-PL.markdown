@@ -831,6 +831,7 @@ Poniżej przedstawiam listę ograniczeń obecnej wersji biblioteki:
 * obramowanie nie zmienia rozmiaru elementu tak jak to jest w HTML - zabieg celowy, raczej nie planuję jego zmiany
 * pliki png (zwłaszcza bez kompresji) są nieefektywne, powinny być używane pliki png z wysoką kompresją (poziom kompresji 6 lub większy) lub pliki jpeg
 * nie wszystkie tagi są poprawnie wspierane, np. tag "pre" obecnie jest aliasem do tagu "div", a tag "code" jest aliasem do tagu "span"
+* zagnieżdżanie linearnych tagów (text, span, code, page-info, page-number, a, b, i, em) jest jest prawidłowo wspierane. Jeśli jeden linearny tag zawiera inny, tylko tekst wewnątrz tych tagów jest połączony, style są wzięte z najbardziej zewnętrznego linearnego tagu.
 
 <a name="todo"></a>
 TODO - czyli plany
