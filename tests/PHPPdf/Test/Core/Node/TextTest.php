@@ -63,14 +63,15 @@ class TextTest extends \PHPPdf\PHPUnit\Framework\TestCase
     /**
      * @test
      */
-    public function mergingTextByAddingChildren()
+    public function mergeChildTextsAfterPreFormat()
     {
         $anotherText = 'inny tekst';
         $text = new Text($anotherText);
 
         $oldText = $this->text->getText();
 
-        $this->text->add($text);
+        $this->text->add($text);        
+        $this->text->preFormat($this->document);
 
         $this->assertEquals($oldText.$anotherText, $this->text->getText());
     }

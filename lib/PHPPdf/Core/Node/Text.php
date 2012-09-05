@@ -33,6 +33,8 @@ class Text extends Node
     private $pointsOfWordsLines = array();
     
     protected $lineParts = array();
+    
+    private $childTexts = array();
 
     public function __construct($text = '', array $attributes = array(), UnitConverter $converter = null)
     {
@@ -61,6 +63,18 @@ class Text extends Node
         }
         
         $this->text = (string) $text;
+    }
+    
+    protected function beforeFormat(Document $document)
+    {
+        foreach($this->childTexts as $text)
+        {
+            $text->beforeFormat($document);
+            
+            $this->text .= $text->getText();
+        }
+        
+        $this->childTexts = array();
     }
 
     public function getText()
@@ -135,8 +149,7 @@ class Text extends Node
         {
             return;
         }
-
-        $this->setText($this->getText().$node->getText());
+        $this->childTexts[] = $node;
     }
     
     public function setWordsSizes(array $words, array $sizes)

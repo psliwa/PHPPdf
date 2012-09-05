@@ -823,6 +823,11 @@ XML;
         
         $pages = $this->parser->parse($xml);
         
+        foreach(array($text1Node, $text2Node) as $textNode)
+        {
+            $textNode->preFormat($this->documentMock);
+        }
+
         $this->assertEquals('another text', $text2Node->getText());
         $this->assertEquals('Some text ', $text1Node->getText());
     }
