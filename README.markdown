@@ -832,6 +832,7 @@ Below is list of known limitations of library current version:
 * border doesn't change dimensions of the element (in HTML do)
 * png files (expecially without compression) are inefficient, png files with high compression (compression level 6 or higher) or jpeg files should be used instead
 * not all tags are propertly supported, for example "pre" tag is alias to "div" and "code" tag is alias for "span"
+* nesting of linear tags (text, span, code, page-info, page-number, a, b, i, em) is not properly supported. If one linear tag contains another, only text within this tags is merged, styles are taken from the most external linear tag.
 
 <a name="todo"></a>
 TODO - plans
