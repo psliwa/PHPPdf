@@ -1,6 +1,11 @@
 CHANGELOG
 =========
 
+* 1.1.5 (2012-09-23)
+
+  * [#15] fix nesting of linear tags
+  * fix composer.json file
+
 * 1.1.4 (2012-08-05)
 
   * fix compatibility with ZF2rc2
