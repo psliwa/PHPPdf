@@ -12,7 +12,7 @@
         }     
     ],
     "require": {
-        "zendframework/zendpdf":  "*",
+        "zendframework/zendpdf":  ">=2.0.0-rc2",
         "zendframework/zend-cache":  ">=2.0.0-rc2",
         "zendframework/zend-barcode":  ">=2.0.0-rc2",
 		"zendframework/zend-memory": ">=2.0.0-rc2",
