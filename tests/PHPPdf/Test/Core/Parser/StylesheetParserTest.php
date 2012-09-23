@@ -18,15 +18,22 @@ class StylesheetParserTest extends \PHPPdf\PHPUnit\Framework\TestCase
 
     /**
      * @test
+     * @dataProvider emptyXmlProvider
      */
-    public function parseEmptyXml()
+    public function parseEmptyXml($xml)
     {
-        $xml = '<stylesheet></stylesheet>';
-
         $constraintContainer = $this->parser->parse($xml);
         $this->assertTrue($constraintContainer instanceof StylesheetConstraint);
         $this->assertEquals(0, count($constraintContainer));
         $this->assertEquals(array(), $constraintContainer->getAll());
+    }
+    
+    public function emptyXmlProvider()
+    {
+        return array(
+            array('<stylesheet></stylesheet>'),
+            array('     <stylesheet></stylesheet>'),
+        );
     }
 
     /**

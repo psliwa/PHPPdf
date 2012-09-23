@@ -125,7 +125,8 @@ abstract class XmlParser implements Parser
     protected function createReader($content)
     {
         $reader = new \XMLReader();
-        
+        $content = ltrim($content);
+
         if($this->isXmlDocument($content))
         {
             $reader->XML($content, null, LIBXML_NOBLANKS | LIBXML_DTDLOAD);

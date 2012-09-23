@@ -112,6 +112,7 @@ class XmlDocumentParserTest extends \PHPPdf\PHPUnit\Framework\TestCase
 
         return array(
             array($xml),
+            array('      '.$xml),
             array($reader),
         );
     }
