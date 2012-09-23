@@ -15,6 +15,8 @@
         "zendframework/zendpdf":  "*",
         "zendframework/zend-cache":  ">=2.0.0-rc2",
         "zendframework/zend-barcode":  ">=2.0.0-rc2",
+		"zendframework/zend-memory": ">=2.0.0-rc2",
+		"zendframework/zend-validator": ">=2.0.0-rc2",
         "imagine/Imagine": ">=v0.2.6"
     },
     "autoload": {
