@@ -30,6 +30,7 @@ Table of contents
 1. [Complex attributes](#complex-attributes)
 1. [Units](#units)
 1. [Barcodes](#barcodes)
+1. [Charts](#charts)
 1. [Hyperlinks](#hyperlinks)
 1. [Bookmarks](#bookmarks)
 1. [Sticky notes](#notes)
@@ -382,6 +383,9 @@ In addition there are not standard tags:
 * elastic-page - single page that accommodates its height to its children as same as another tags (for example "div"). Header, footer, watermark, template-document attribute do not work with this tag. Useful especially in graphic files generation (image engine).
 * page-break, column-break, break - breaks page or column, this tag must be direct child of "dynamic-page" or "column-layout"!
 * column-layout - separate workspace on columns, additional attributes: number-of-columns, margin-between-columns, equals-columns
+* barcode - more information in <a href="#barcodes">barcode</a> chapter
+* circle - element that border and backgroud are in circle shape. Additional attributes: radius (it overwrites width and height attributes)
+* pie-chart - element that can be used to draw simple pie chart (more information in <a href="#charts">charts</a> chapter.
 
 There are tags that only are bags for attributes, set of tags etc:
 
@@ -502,6 +506,27 @@ Example:
 Description of this options and default values you can find in [Zend\Barcode documentation][3]
 
 In order to render textual barcode can't be used embeded pdf font: courier, times-roman and helvetica. It will be soon fixed.
+
+
+<a name="charts"></a>
+Charts
+----------------
+
+PHPPdf supports drawing simple charts. For now there is only support for simple pie chart.
+
+Example:
+
+    <pdf>
+        <dynamic-page>
+            <pie-chart radius="200px" chart-values="10|20|30|40" chart-colors="black|red|green|blue"></pie-chart>
+        </dynamic-page>
+    </pdf>
+    
+pie-chart tag has three extra attributes:
+
+* radius - radius of the chart
+* chart-values - values of the chart, they must not be summing to 100. Each value should be separated by "|" char
+* chart-colors - colors of each value. Each color should be separated by "|" char
 
 <a name="hyperlinks"></a>
 Hyperlinks

@@ -8,6 +8,8 @@
 
 namespace PHPPdf\Core\ComplexAttribute;
 
+use Zend\Code\Generator\DocBlockGenerator;
+
 use PHPPdf\Core\Node\Page,
     PHPPdf\Core\Node\Node,
     PHPPdf\Core\Boundary,
@@ -102,11 +104,23 @@ class Border extends ComplexAttribute
 
     protected function doEnhance($graphicsContext, Node $node, Document $document)
     {
+        if($node->getShape() === Node::SHAPE_RECTANGLE)
+        {
+            $this->drawRectangleBorder($graphicsContext, $node, $document);
+        }
+        elseif($node->getShape() === Node::SHAPE_ELLIPSE)
+        {
+            $this->drawCircleBorder($graphicsContext, $node, $document);
+        }
+    }
+    
+    private function drawRectangleBorder(GraphicsContext $graphicsContext, Node $node, Document $document)
+    {
         $graphicsContext->setLineDashingPattern($this->convertStyle($this->style, $document));
         $size = $document->convertUnit($this->size);
         $graphicsContext->setLineWidth($size);
-        $boundary = $node->getBoundary();
-
+        $boundary = $node->getBoundary();        
+    
         $points = $this->getPointsWithPositionCorrection($document, $boundary);
 
         if($this->getRadius() !== null)
@@ -210,6 +224,12 @@ class Border extends ComplexAttribute
         }
 
         return array($x1, $y1, $x2, $y2);
+    }
+    
+    private function drawCircleBorder(GraphicsContext $gc, Node $node, Document $document)
+    {
+        $point = $node->getMiddlePoint();
+        $this->drawCircle($gc, $node->getAttribute('radius'), $point->getX(), $point->getY(), GraphicsContext::SHAPE_DRAW_STROKE);
     }
 
     public function getPriority()

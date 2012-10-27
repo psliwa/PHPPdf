@@ -458,4 +458,16 @@ class GraphicsContext extends AbstractGraphicsContext
         
         return $gc;
     }
+    
+    protected function doDrawEllipse($x, $y, $width, $height, $fillType)
+    {
+        $this->page->drawEllipse($x - $width/2, $y - $height/2, $x + $width/2, $y + $height/2, $this->translateFillType($fillType));
+    }
+    
+    protected function doDrawArc($x, $y, $width, $height, $start, $end, $fillType)
+    {
+        $start = deg2rad($start + 180);
+        $end = deg2rad($end + 180);
+        $this->page->drawCircle($x, $y, $width/2, $start, $end, $this->translateFillType($fillType));
+    }
 }

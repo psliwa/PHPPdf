@@ -123,6 +123,12 @@ abstract class ComplexAttribute
 
         $gc->drawPolygon($x, $y, $drawType);
     }
+    
+    protected function drawCircle(GraphicsContext $gc, $radius, $x, $y, $drawType)
+    {
+        $size = $radius*2;
+        $gc->drawEllipse($x, $y, $size, $size, $drawType);
+    }
 
     protected function drawRoundedBoundary(GraphicsContext $gc, $x1, $y1, $x2, $y2, $fillType)
     {

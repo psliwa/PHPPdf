@@ -117,6 +117,18 @@ class Background extends ComplexAttribute
 
     protected function doEnhance($graphicsContext, Node $node, Document $document)
     {
+        if($node->getShape() === Node::SHAPE_RECTANGLE)
+        {
+            $this->drawRectangleBackground($graphicsContext, $node, $document);
+        }
+        elseif($node->getShape() === Node::SHAPE_ELLIPSE)
+        {
+            $this->drawCircleBackground($graphicsContext, $node, $document);
+        }
+    }
+    
+    private function drawRectangleBackground(GraphicsContext $graphicsContext, Node $node, Document $document)
+    {
         if($this->getColor() !== null)
         {
             $boundary = $this->getBoundary($node);
@@ -279,5 +291,11 @@ class Background extends ComplexAttribute
         }
         
         return $node->getHeight();
+    }
+    
+    private function drawCircleBackground(GraphicsContext $gc, Node $node, Document $document)
+    {
+        $point = $node->getMiddlePoint();
+        $this->drawCircle($gc, $node->getAttribute('radius'), $point->getX(), $point->getY(), GraphicsContext::SHAPE_DRAW_FILL);
     }
 }

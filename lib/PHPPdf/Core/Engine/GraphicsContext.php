@@ -60,6 +60,10 @@ interface GraphicsContext
 
     public function drawRoundedRectangle($x1, $y1, $x2, $y2, $radius, $fillType = null);
     
+    public function drawEllipse($x, $y, $width, $height, $fillType = self::SHAPE_DRAW_FILL);
+    
+    public function drawArc($x, $y, $width, $height, $start, $end, $fillType = self::SHAPE_DRAW_FILL);
+    
     public function setLineWidth($width);
 
     public function setLineDashingPattern($pattern);
@@ -77,6 +81,6 @@ interface GraphicsContext
     public function rotate($x, $y, $angle);
     
     public function drawBarcode($x, $y, ObjectInterface $barcode);
-    
+       
     public function copy();
 }

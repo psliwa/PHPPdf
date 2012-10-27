@@ -107,7 +107,7 @@ class CurrentPageNumberTest extends \PHPPdf\PHPUnit\Framework\TestCase
 
         $linePart->expects($this->at(1))
                  ->method('collectOrderedDrawingTasks')
-                 ->with($document, $this->isInstanceOf('PHPPdf\Core\DrawingTaskHeap'))
+                 ->with($this->isInstanceOf('PHPPdf\Core\Document'), $this->isInstanceOf('PHPPdf\Core\DrawingTaskHeap'))
                  ->will($this->returnCallback(function() use($tasks, $drawingTaskStub){
                      $tasks->insert($drawingTaskStub);
                  }));
@@ -115,6 +115,7 @@ class CurrentPageNumberTest extends \PHPPdf\PHPUnit\Framework\TestCase
         $this->node->addLinePart($linePart);
 
         $this->node->evaluate();
+
         $this->node->collectOrderedDrawingTasks($this->createDocumentStub(), $tasks);
         $this->assertEquals(1, count($tasks));
         $this->assertEquals($expectedText, $this->node->getText());
