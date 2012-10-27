@@ -46,7 +46,7 @@ class EngineFactoryImpl implements EngineFactory
             case self::TYPE_PDF:
                 return new ZendEngine(null, new PdfUnitConverter($dpi));
             case self::TYPE_IMAGE:
-                $engine = $this->getOption(self::OPTION_ENGINE, $options, self::ENGINE_GD);
+                $engine = ucfirst($this->getOption(self::OPTION_ENGINE, $options, self::ENGINE_GD));
                 $format = $this->getOption(self::OPTION_FORMAT, $options, self::FORMAT_JPEG);
 
                 $imagineClass = sprintf('Imagine\%s\Imagine', $engine);   
