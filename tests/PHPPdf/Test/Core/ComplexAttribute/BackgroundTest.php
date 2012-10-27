@@ -2,6 +2,7 @@
 
 namespace PHPPdf\Test\Core\ComplexAttribute;
 
+use PHPPdf\Core\Node\Circle;
 use PHPPdf\Core\Engine\GraphicsContext;
 use PHPPdf\ObjectMother\NodeObjectMother;
 use PHPPdf\Core\Document;
@@ -9,13 +10,12 @@ use PHPPdf\Core\ComplexAttribute\Background,
     PHPPdf\Core\Node\Page,
     PHPPdf\Core\Point;
 
-class BackgroundTest extends \PHPPdf\PHPUnit\Framework\TestCase
+class BackgroundTest extends ComplexAttributeTest
 {
     const IMAGE_WIDTH = 30;
     const IMAGE_HEIGHT = 30;
     
     private $objectMother;
-    private $document;
 
     public function init()
     {
@@ -457,5 +457,18 @@ class BackgroundTest extends \PHPPdf\PHPUnit\Framework\TestCase
             array('a10', 10),
             array(10, 'a10'),
         );
+    }
+    
+    /**
+     * @test
+     */
+    public function drawCircleBackground()
+    {
+        $color = '#ffffff';
+        $radius = 100;
+        $centerPoint = Point::getInstance(100, 100);
+        $background = new Background('#ffffff');
+        
+        $this->assertDrawCircle($background, $color, $radius, $centerPoint, GraphicsContext::SHAPE_DRAW_FILL);       
     }
 }

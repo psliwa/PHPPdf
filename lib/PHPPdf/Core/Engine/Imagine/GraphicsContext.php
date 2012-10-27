@@ -566,4 +566,43 @@ class GraphicsContext extends AbstractGraphicsContext
     {
         return $this->image->get($format, $options);
     }
+    
+    protected function doDrawEllipse($x, $y, $width, $height, $fillType)
+    {
+        list($image, $point) = $this->getCurrentClip();
+        
+        $point = $this->translatePoint($point, $x, $this->convertYCoord($y));
+        $box = new Box($width, $height);
+        
+        if($fillType === self::SHAPE_DRAW_FILL || $fillType === self::SHAPE_DRAW_FILL_AND_STROKE)
+        {        
+            $color = $this->createColor($this->state['fillColor']);
+            $image->draw()->ellipse($point, $box, $color, true);          
+        }
+        
+        if($fillType === self::SHAPE_DRAW_STROKE || $fillType === self::SHAPE_DRAW_FILL_AND_STROKE)
+        {        
+            $color = $this->createColor($this->state['lineColor']);
+            $image->draw()->ellipse($point, $box, $color, false);            
+        }
+    }
+    
+    protected function doDrawArc($x, $y, $width, $height, $start, $end, $fillType)
+    {
+        list($image, $point) = $this->getCurrentClip();
+
+        $point = $this->translatePoint($point, $x, $this->convertYCoord($y));
+        $color = $this->createColor($this->state['fillColor']);
+        $box = new Box($width, $height);
+        
+        if($fillType === self::SHAPE_DRAW_FILL || $fillType === self::SHAPE_DRAW_FILL_AND_STROKE)
+        {
+            $image->draw()->pieSlice($point, $box, $start, $end, $color, true);
+        }
+        
+        if($fillType === self::SHAPE_DRAW_STROKE || $fillType === self::SHAPE_DRAW_FILL_AND_STROKE)
+        {
+            $image->draw()->pieSlice($point, $box, $start, $end, $color, false);
+        }
+    }
 }

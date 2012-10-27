@@ -50,6 +50,9 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
     const TEXT_DECORATION_OVERLINE = 'overline';
     const ROTATE_DIAGONALLY = 'diagonally';
     const ROTATE_OPPOSITE_DIAGONALLY = '-diagonally';
+    
+    const SHAPE_RECTANGLE = 'rectangle';
+    const SHAPE_ELLIPSE = 'ellipse';
 
     private static $attributeSetters = array();
     private static $attributeGetters = array();
@@ -1711,5 +1714,10 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
         }
 
         $this->removeAll();
+    }
+    
+    public function getShape()
+    {
+        return self::SHAPE_RECTANGLE;
     }
 }

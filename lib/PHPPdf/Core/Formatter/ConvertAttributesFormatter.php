@@ -85,5 +85,15 @@ class ConvertAttributesFormatter extends BaseFormatter
         {
             $node->setAttribute('color', $document->getColorFromPalette($color));
         }
+        
+        if($node->hasAttribute('chart-colors'))
+        {
+            $colors = $node->getAttribute('chart-colors');
+            foreach($colors as $key => $color)
+            {
+                $colors[$key] = $document->getColorFromPalette($color);
+            }
+            $node->setAttribute('chart-colors', $colors);
+        }
     }
 }

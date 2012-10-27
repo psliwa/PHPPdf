@@ -163,4 +163,18 @@ abstract class AbstractGraphicsContext implements GraphicsContext
     }
     
     abstract protected function doDrawBarcode($x, $y, Barcode $barcode);
+    
+    public function drawEllipse($x, $y, $width, $height, $fillType = self::SHAPE_DRAW_FILL)
+    {
+        $this->addToQueue('doDrawEllipse', array($x, $y, $width, $height, $fillType));
+    }
+    
+    abstract protected function doDrawEllipse($x, $y, $width, $height, $fillType);
+    
+    public function drawArc($x, $y, $width, $height, $start, $end, $fillType = self::SHAPE_DRAW_FILL)
+    {
+        $this->addToQueue('doDrawArc', array($x, $y, $width, $height, $start, $end, $fillType));
+    }
+    
+    abstract protected function doDrawArc($x, $y, $width, $height, $start, $end, $fillType);
 }

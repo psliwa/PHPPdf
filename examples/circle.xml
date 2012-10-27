@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pdf SYSTEM "%resources%/dtd/doctype.dtd">
+<pdf>
+	<page>
+		<h1>Circles and nested circles</h1>
+		<circle radius="100px" background-color="red" border-color="black" vertical-align="middle" float="left">
+			<p text-align="center">Circle with border and background</p>
+		</circle>
+		
+		<circle radius="100px" background-color="black" border-color="black" vertical-align="middle" float="left">
+			<circle radius="75px" background-color="black" margin="auto">
+				<circle radius="50px"  background-color="white" margin="auto">
+					<circle radius="25px"  background-color="black" margin="auto"></circle>
+				</circle>
+			</circle>
+		</circle>
+
+		<h1>Simple pie chart</h1>
+		<pie-chart radius="200px" chart-values="10|20|30|40" chart-colors="black|red|green|blue"></pie-chart>
+	</page>
+</pdf>

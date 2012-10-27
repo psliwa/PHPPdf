@@ -23,6 +23,7 @@ Spis treści
 1. [Atrybuty złożone](#complex-attributes)
 1. [Jednostki](#units)
 1. [Kody kreskowe] (#barcodes)
+1. [Wykresy] (#charts)
 1. [Hiperlinki](#hyperlinks)
 1. [Zakładki](#bookmarks)
 1. [Notatki](#notes)
@@ -370,7 +371,10 @@ Ponadto obsługiwane są niestandardowe tagi:
 * elastic-page - pojedyncza strona, która dostosowuje swoją wysokość w zależności od elementów podrzędnych (podobnie jak pozostałe tagi). Dla tego tagu nie działają: nagłówek, stopka, watermark oraz atrybut template-document. Tag przydatny zwłaszcza gdy generujemy pliki graficzne (silnik image).
 * page-break, column-break, break - złamanie strony lub kolumny, jest to element podrzędny dynamic-page lub column-layout, czyli musi być bezpośrednim dzieckiem tego elemntu! Te trzy tagi są aliasami.
 * column-layout - podział obszaru roboczego na kolumny, dodatkowe atrybuty: number-of-columns oraz margin-between-columns
-* barcode - kod kreskowy
+* barcode - kod kreskowy, więcej informacji w rozdziale <a href="#barcodes">kody kreskowe</a>
+* circle - element którego obramowanie oraz tło jest w kształcie koła. Dodatkowe atrybuty: radius (nadpisuje szerokość oraz wysokość)
+* pie-chart - element który może być wykorzystany do narysowania prostego wykresu kołowego (więcej informacji w rozdziale <a href="#charts">wykresy</a>)
+
 
 Istnieją tagi, które służą jedynie do określania wartości atrybutów, zbioru atrybutów lub zbioru elementów:
 
@@ -491,6 +495,26 @@ Tag &lt;barcode&gt; obsługuje większość standardowych atrybutów oraz ma sze
 Opis poszczególnych opcji oraz wartości domyślne można znaleźć w [dokumentacji Zend\Barcode][3]
 
 Do wyświetlania tekstowego kodów kreskowych nie można użyć wbudowanych czcionek pdf: courier, times-roman oraz helvetica. Zostanie to niebawem poprawione.
+
+<a name="charts"></a>
+Charts
+----------------
+
+PHPPdf wspiera rysowanie prostych wykresów. Obecnie jest obsługiwany tylko prosty wykres kołowy.
+
+Przykład:
+
+    <pdf>
+        <dynamic-page>
+            <pie-chart radius="200px" chart-values="10|20|30|40" chart-colors="black|red|green|blue"></pie-chart>
+        </dynamic-page>
+    </pdf>
+    
+Tag pie-chart ma trzy dodatkowe atrybuty:
+
+* radius - promien wykresu
+* chart-values - wartości wykresu, nie muszą się sumować do 100. Każda wartość powinna być oddzielona znakiem "|"
+* chart-colors - kolory wszystkich wartości. Każdy kolor powinnien być oddzielony znakiem "|"
 
 <a name="hyperlinks"></a>
 Hiperlinki

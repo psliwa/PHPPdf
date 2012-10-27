@@ -13,11 +13,10 @@ use PHPPdf\Core\Node\Page;
 use PHPPdf\Core\Point;
 use PHPPdf\Core\Engine\GraphicsContext;
 
-class BorderTest extends \PHPPdf\PHPUnit\Framework\TestCase
+class BorderTest extends ComplexAttributeTest
 {
     private $border;
     private $objectMother;
-    private $document;
 
     public function init()
     {
@@ -386,5 +385,18 @@ class BorderTest extends \PHPPdf\PHPUnit\Framework\TestCase
         $nodeMock = $this->objectMother->getNodeMock(0, 0, 100, 100, $gcMock);
         
         $border->enhance($nodeMock, $document);
+    }
+    
+    /**
+     * @test
+     */
+    public function drawCircleBorder()
+    {
+        $color = '#ffffff';
+        $radius = 100;
+        $centerPoint = Point::getInstance(100, 100);
+        $background = new Border('#ffffff');
+        
+        $this->assertDrawCircle($background, $color, $radius, $centerPoint, GraphicsContext::SHAPE_DRAW_STROKE);       
     }
 }
