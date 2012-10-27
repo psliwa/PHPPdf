@@ -60,7 +60,7 @@ class VerticalAlignFormatter extends BaseFormatter
     
     private function getMinimumYCoordOfChildren(Node $node)
     {
-        $minYCoord = $node->getFirstPoint()->getY();
+        $minYCoord = $node->getFirstPoint()->getY() - $node->getPaddingTop();
 
         foreach($node->getChildren() as $child)
         {
@@ -72,7 +72,7 @@ class VerticalAlignFormatter extends BaseFormatter
     
     private function getVerticalTranslation(Node $node, $minYCoord, $verticalAlign)
     {
-        $difference = $minYCoord - $node->getDiagonalPoint()->getY();
+        $difference = $minYCoord - ($node->getDiagonalPoint()->getY() + $node->getPaddingBottom());
         
         if($verticalAlign == Node::VERTICAL_ALIGN_MIDDLE)
         {
