@@ -100,6 +100,6 @@ class PieChart extends Circle
             }
         };
         
-        $tasks->insert(new DrawingTask($callback, array($this, $document)));
+        $tasks->insert(new DrawingTask($callback, array($this, $document), /* between background and border */45));
     }
 }
