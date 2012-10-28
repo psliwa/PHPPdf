@@ -228,6 +228,8 @@ class Border extends ComplexAttribute
     
     private function drawCircleBorder(GraphicsContext $gc, Node $node, Document $document)
     {
+        $size = $document->convertUnit($this->size);
+        $gc->setLineWidth($size);
         $point = $node->getMiddlePoint();
         $this->drawCircle($gc, $node->getAttribute('radius'), $point->getX(), $point->getY(), GraphicsContext::SHAPE_DRAW_STROKE);
     }
