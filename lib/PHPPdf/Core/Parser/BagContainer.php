@@ -131,7 +131,7 @@ class BagContainer implements \Serializable
         $weight = 0;
         foreach($containers as $container)
         {
-            $weight += $container->getWeight();
+            $weight = max($weight, $container->getWeight());
             $attributeBags[] = $container->getAttributeBag();
         }
 
