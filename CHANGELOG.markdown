@@ -1,6 +1,13 @@
 CHANGELOG
 =========
 
+* 1.1.6 (2012-10-28)
+
+  * "circle" tag support
+  * simple pie chart support
+  * fix stylesheet selectors
+  * fix minor bugs
+
 * 1.1.5 (2012-09-23)
 
   * [#15] fix nesting of linear tags
