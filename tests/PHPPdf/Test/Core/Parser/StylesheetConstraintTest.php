@@ -219,4 +219,22 @@ class StylesheetConstraintTest extends \PHPPdf\PHPUnit\Framework\TestCase
         
         $this->assertEquals($expectedAttributes, $actualAttributes);
     }
+    
+    /**
+     * @test
+     * 
+     * Number of matching children constraints should not affect on weight on parent constraint
+     */
+    public function weightOfConstraintIsMaxWeightOfChildrenMatchingConstraints()
+    {
+        $constraint1 = $this->createContainer(array());
+        $constraint2 = $this->createContainer(array());
+        
+        $this->constraint->addConstraint('tag1', $constraint1);
+        $this->constraint->addConstraint('tag1', $constraint2);
+        
+        $constraint = $this->constraint->find(array(array('tag' => 'tag1')));
+        
+        $this->assertEquals(1, $constraint->getWeight());
+    }
 }
