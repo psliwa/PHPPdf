@@ -170,11 +170,20 @@ class Page extends Container
     public function setWidth($width)
     {
         parent::setWidth($width);
+        
+        $height = $this->getAttributeDirectly('height');
+        $width = $this->getAttributeDirectly('width');
+        $this->setPageSize($width, $height);
     }
     
     public function setHeight($height)
     {
         parent::setHeight($height);
+        
+        $width = $this->getAttributeDirectly('width');
+        $height = $this->getAttributeDirectly('height');
+        
+        $this->setPageSize($width, $height);
         
         $this->initializeBoundary();
     }

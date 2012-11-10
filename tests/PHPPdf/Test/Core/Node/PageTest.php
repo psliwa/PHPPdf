@@ -513,4 +513,22 @@ class PageTest extends \PHPPdf\PHPUnit\Framework\TestCase
             array(6),
         );
     }
+    
+    /**
+     * @test
+     */
+    public function setsPageSizeOnWidthOrHeightAttributeSet()
+    {
+        list($width, $height) = explode(':', $this->page->getAttribute('page-size'));
+        
+        $newWidth = 123;
+        $this->page->setWidth($newWidth);
+        
+        $this->assertEquals($newWidth.':'.$height, $this->page->getAttribute('page-size'));
+        
+        $newHeight = 321;
+        $this->page->setHeight($newHeight);
+        
+        $this->assertEquals($newWidth.':'.$newHeight, $this->page->getAttribute('page-size'));
+    }
 }
