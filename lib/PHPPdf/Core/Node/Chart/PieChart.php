@@ -75,6 +75,7 @@ class PieChart extends Circle
             $colors = $node->getAttribute('chart-colors');
             
             $totalValues = array_sum($values);
+            arsort($values);
             
             if($totalValues > 0)
             {             
@@ -89,6 +90,8 @@ class PieChart extends Circle
                     $color = $colors[$i];
                     $relativeValue = $value/$totalValues;
                     $end = $start + 360*$relativeValue;
+                    
+                    if($start == $end) continue;
                     
                     $gc->saveGS();
                     $gc->setFillColor($color);
