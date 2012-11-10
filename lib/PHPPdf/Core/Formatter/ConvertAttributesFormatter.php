@@ -29,9 +29,9 @@ class ConvertAttributesFormatter extends BaseFormatter
     }
 
     protected function convertPercentageDimensions(Node $node)
-    {       
-        $node->convertScalarAttribute('width');
-        $node->convertScalarAttribute('height');
+    {
+        $node->convertScalarAttribute('width', $node->getParent() ? $node->getParent()->getWidthWithoutPaddings() : null);
+        $node->convertScalarAttribute('height', $node->getParent() ? $node->getParent()->getHeightWithoutPaddings() : null);
     }
 
     protected function convertAutoMargins(Node $node)
