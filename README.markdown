@@ -8,7 +8,8 @@ This is development branch, thus it **is not stable**, latest **stable** branch 
 Examples
 =========
 
-Sample documents are in "examples" directory. "index.php" file is web interface to browse examples, "cli.php" is console interface. Via web interface documents in pdf and jpeg formats are available (Imagick is required for jpeg format).
+Sample documents are in the "examples" directory. "index.php" file is the web interface to browse examples, "cli.php" is a console interface.
+Via the web interface, the documents are available in pdf and jpeg format (the jpeg format requires Imagick).
 
 Documentation
 =============
@@ -20,7 +21,7 @@ Table of contents
 1. [Installation](#installation)
 1. [Symfony2 bundle](#symfony2-bundle)
 1. [FAQ](#faq)
-1. [Document parsing and createing pdf file](#parsing)
+1. [Document parsing and creating pdf file](#parsing)
 1. [Basic document structure](#structure)
 1. [Inheritance](#inheritance)
 1. [Stylesheet structure](#stylesheet)
@@ -37,7 +38,7 @@ Table of contents
 1. [Repetitive headers and footers](#headers)
 1. [Watermarks](#watermarks)
 1. [Page numbering](#page-numbering)
-1. [Using pdf document as template](#templates)
+1. [Using the pdf document as a template](#templates)
 1. [Separate page on columns](#columns)
 1. [Breaking pages and columns](#page-break)
 1. [Metadata](#metadata)
@@ -50,32 +51,41 @@ Table of contents
 
 <a name="intro"></a>
 Introduction
-----------
+------------
 
-PHPPdf is library that transforms xml document to pdf document or graphic files. Xml source document is similar to html, but there are a lots of differences in names and properties of attributes, properties of tags, there are a lot of not standard tags, not all tags from html are supported, stylesheet is described in xml document, not in css. Assumption of this library is not HTML -> PDF / JPEG / PNG, but XML -> PDF / JPEG / PNG transformation. Some tags and attributes are as same as in HTML in order to decreasing learning curve of this library.
+PHPPdf is library that transforms an XML document to a PDF document or graphics files.
+The XML source document is similar to HTML, but there are lots of differences in names and properties of attributes, properties of tags, and there are a lot of not standard tags,
+not all tags from html are supported, stylesheet is described in an xml document, not in css.
+
+Assumption of this library is not HTML -> PDF / JPEG / PNG, but XML -> PDF / JPEG / PNG transformation.
+Some tags and attributes are the same as in HTML in order decrease the learning curve of this library.
 
 <a name="installation"></a>
 Installation
-----------------
+------------
 
-PHPPdf is available in packagist.org, so you can use composer to download this library and all dependencies. PHPPdf requires "minimum-stability" equals to dev.
+PHPPdf is available at packagist.org, so you can use composer to download this library and all dependencies.
 
-PHPPdf uses zendframework packages, so if you want to use composer, you must add zendframework composer repository to your composer.json file.
+Please configure the "minimum-stability" in your composer.json file, and set it to dev.
+```
+"minimum-stability": "dev"
+```.
 
+PHPPdf uses the Zend Framework packages, so if you want to use composer,
+you must add the Zend Framework composer repository to your composer.json file.
+
+```js
     "repositories": [
         {
             "type": "composer",
             "url": "http://packages.zendframework.com/"
-        },
-        {
-            "type": "composer",
-            "url": "http://packagist.org/"
         }
     ]
+```
 
-If you do not want to use composer, below are instructions how to manually install this library with all dependencies.
+If you do not want to use composer, follow the instructions below to manually install this library with all the dependencies.
 
-Library uses external dependencies:
+This library uses the following external dependencies:
 
 * php-markdown
 * ZendPdf
@@ -87,28 +97,40 @@ Library uses external dependencies:
 * Zend_Barcode (Zend Framework in 2.0.x version)
 * Imagine
 
-In order to library was ready to use, you must download this dependencies. You should invoke below command from main directory of the library (git client is necessary):
+In order to use the library, you must download all these dependencies.
+
+Execute the following command from the main directory of the library (make sure you have Git installed):
+
+```bash
 
     php vendors.php
-    
-Alternatively, you can download this dependencies manually and copy it into "lib/vendor" directory. By default vendors.php file **will download whole ZF2 repository**, but remember **only ZendPdf, Zend_Memory, Zend_Cache, Zend_Stdlib, Zend_ServiceManager and Zend_EventManager are obligatory**. To barcodes support **Zend_Barcode** is required. You can **remove other packages** and files.
+ 
+```
+ 
+Alternatively, you can download the dependencies manually and copy them into the "lib/vendor" directory.
+
+By default the vendors.php file **will download the entire ZF2 repository**, but remember that **only ZendPdf, Zend_Memory, Zend_Cache, Zend_Stdlib, Zend_ServiceManager and Zend_EventManager are required**.
+To enable barcodes support, **Zend_Barcode** must also be installed. The other packages and files can be removed.
     
 <a name="symfony2-bundle"></a>
 Symfony2 bundle
 ----------------
 
-There is [Symfony2 bundle][1] integrates this library with Symfony2 framework.
+There is a [Symfony2 bundle][1] which integrates this library with the Symfony2 framework.
 
 <a name="faq"></a>
 FAQ
-----------------
+---
 
-**Diacritical marks are not displayed, what I should do?**
+**Diacritical marks are not displayed, what should I do?**
 
-You should set font that supports encoding that you use, and set this encoding as "encoding" attribute for "page" and/or "dynamic-page" tags. PHPPdf provides some free fonts that supports utf-8 encoding, for example DejaVuSans. "Font" example shows how to change font type by stylesheet.
-You can add custom fonts, in order that you should prepare xml config file and configure Facade object as shown below:
+You should set a font that supports the encoding that you are using, and set this encoding as "encoding" attribute for "page" and/or "dynamic-page" tags.
+PHPPdf provides some free fonts that support utf-8 encoding, for example, DejaVuSans. The "Font" example shows how to change the font type by using a stylesheet.
 
-    //xml config file code
+You can also add custom fonts, in order that you should prepare xml config file and configure Facade object as shown below:
+
+```xml
+    <!-- xml config file code -->
     <fonts>   
         <font name="DejaVuSans">
        	    <normal src="%resources%/fonts/DejaVuSans/normal.ttf" /><!-- "%resources%" will be replaced by path to PHPPdf/Resources directory -->
@@ -117,42 +139,54 @@ You can add custom fonts, in order that you should prepare xml config file and c
             <bold-italic src="%resources%/fonts/DejaVuSans/bold+oblique.ttf" />
         </font>
     </fonts>
+```
     
+```php
     //php code
     $loader = new PHPPdf\Core\Configuration\LoaderImpl();
     $loader->setFontFile(/* path to fonts configuration file */);
     $builder = PHPPdf\Core\FacadeBuilder::create($loader);
     $facade = $builder->build();
-    
+```
+
+```xml    
     //xml document code
     <pdf>
         <dynamic-page encoding="UTF-8" font-type="DejaVuSans">
         </dynamic-page>
     </pdf>
+```
 
-More datails you can find in [Configuration](#configuration) section.
+You can find more datails in the [Configuration](#configuration) section.
 
-**Generating of simple pdf file with png image takes a lot of time and memory, what I should do?**
+**Generating of a simple pdf file with png images takes a lot of time and memory, what should I do?**
 
-PHPPdf uses Zend_Pdf library that poorly supports png files without compression. You should to compress png files. 
+PHPPdf uses the Zend_Pdf library that poorly supports png files without compression. You should compress the png files. 
 
-**How can I change page size/orientation?**
+**How can I change the page size/orientation?**
 
-To set page dimension you should use "page-size" attribute of page or dynamic-page tags. Value of this attribute has "width:height" syntax. There are predefined, standard values: a4, a4-landscape, letter and letter-landscape.
+To set the page dimensions you use the "page-size" attribute of the page or dynamic-page tags.
+
+The value syntax of this attribute is "width:height".
+
+There are however standard predefined values: a4, a4-landscape, letter and letter-landscape.
 
 Example:
 
+```xml
     <page page-size="100:50">text</page>
     <page page-size="a4">text</page>
     <page page-size="letter-landscape">text</page>
+```
 
 <a name="parsing"></a>
-Document parsing and creating pdf file
-----------------
+Document parsing and creating a pdf file
+----------------------------------------
 
-The simplest way of library using:
+The simplest way of using the library is:
 
-    //register PHPPdf and vendor (Zend_Pdf and other dependencies) autoloaders
+```php
+    //register the PHPPdf and vendor (Zend_Pdf and other dependencies) autoloaders
     require_once 'PHPPdf/Autoloader.php';
     PHPPdf\Autoloader::register();
     PHPPdf\Autoloader::register('/path/to/library/lib/vendor/Zend/library');
@@ -167,13 +201,18 @@ The simplest way of library using:
 
     header('Content-Type: application/pdf');
     echo $content;
+```    
 
 <a name="structure"></a>
 Basic document structure
-----------------
+------------------------
 
-Library bases on XML format similar to HTML but this format isn't HTML - some tags are diffrent, interpretation of some attributes is not as same as in HTML and CSS standards, way of attributes adding is also diffrent. The simplest document has following structure:
+The library bases pages on an XML format similar to HTML, but this format isn't HTML - some tags are diffrent, interpretation of some attributes is not the as same as in the HTML and CSS standards,
+adding attributes is also different.
 
+A simple document has following structure:
+
+```xml
     <pdf>
         <dynamic-page>
             <h1>Header</h1>
@@ -187,13 +226,30 @@ Library bases on XML format similar to HTML but this format isn't HTML - some ta
             </table>
         </dynamic-page>
     </pdf>
+```
 
-Adding DOCTYPE declaration is strongly recommended in order to replace html entities on values:
+Adding a DOCTYPE declaration is strongly recommended in order to replace html entities on values:
 
+```xml
     <!DOCTYPE pdf SYSTEM "%resources%/dtd/doctype.dtd">
+```
 
-Root of document has to be "pdf". "dynamic-page" tag is auto breakable page. "page" tag is an alternative, represents only single, no breakable page. Way of attribute setting is different than in HTML. In order to set background and border you have to use complex attributes, where first part of attribute name is complex attribute type, second part is property of this attribute. Complex attribute parts are separate by dot ("."). Other way to setting complex attributes is using "complex-attribute" tag. Example:
+The root name of a document must be "pdf".
+The "dynamic-page" tag is an auto breakable page.
+The "page" tag is an alternative, and represents only a single, no breakable page.
 
+**The way of attribute setting is different than in HTML.**
+
+In order to set a background and border you need to use complex attributes,
+where first part of attribute name is a complex attribute type, and the second part is the property of this attribute.
+
+Complex attribute parts are separated by a dot (".").
+
+An another way of setting complex attributes is by using the "complex-attribute" tag.
+
+Example:
+
+```
     <pdf>
         <dynamic-page>
             <div color="red" border.color="black" background.color="pink">
@@ -201,9 +257,11 @@ Root of document has to be "pdf". "dynamic-page" tag is auto breakable page. "pa
             </div>
         </dynamic-page>
     </pdf>
+```
     
 Alternative syntax ("stylesheet" tag):
 
+```xml
     <pdf>
         <dynamic-page>
             <div>
@@ -216,17 +274,28 @@ Alternative syntax ("stylesheet" tag):
             </div>
         </dynamic-page>
     </pdf>
+```
 
-Attributes can by setted as XML attributes directly after tag name or by means of mentioned "stylesheet" tag. HTML "style" attribute dosn't exist.
+Attributes can by set as XML attributes, directly after a tag name or by using the mentioned "stylesheet" tag.
+The HTML "style" attribute does not exist the PHPPdf XML dialect.
 
-Library is very strict in respect of corectness of tags and attributes. If unexisted tag or attribute is used, document won't parse - suitable exception will be thrown.
+The library is very strict in respecting the corectness of tags and attributes.
+If an unexisted tag or attribute is detected, the document parser will stop and throw an exception.
 
 <a name="inheritance"></a>
 Inheritance
-----------------
+-----------
 
-"id" attribute has entirely different mean than in HTML. "name" attribute is alias to "id". Id must by unique in whole document, otherwise parsing error occurs. Id attribute is used to identify tags in inheritance. Example:
+The "id" attribute has an different usage than in HTML.
+The id attribute is used to identify tags when using inheritance.
 
+The "name" attribute can also be used as an alias to "id".
+
+An id must by unique throughout the document, otherwise a parsing error is thrown.
+
+Example:
+
+```xml
     <pdf>
         <dynamic-page>
             <div id="layer-1" color="red" font-type="judson" font-size="16px">
@@ -240,18 +309,20 @@ Inheritance
             </div>
         </dynamic-page>
     </pdf>
+```    
 
-Second layer inherits all attributes (simple and complex), also these from external stylesheet.
+The Second layer inherits all attributes (simple and complex), and also those from external stylesheets.
 
 Priorites in attributes setting:
 
-1. Stylesheet tag directly in element tag
-2. Attributes directly after tag name (XML attributes)
-3. Attributes from external stylesheet
-4. Inherited attributes from another tag
+1. Stylesheet tag directly in an element tag
+2. Attributes directly after a tag name (XML attributes)
+3. Attributes from external stylesheets
+4. Inherited attributes from a parent tag
 
 Example:
 
+```xml
     <pdf>
         <page>
             <div id="1" color="#cccccc" height="100px" text-align="right">
@@ -263,8 +334,9 @@ Example:
             </div>
         </page>
     </pdf>
+```
 
-Second "div" will have following attributes:
+The second "div" will now have the following attributes:
 
 - text-align: right
 - color: #aaaaaa
@@ -272,12 +344,15 @@ Second "div" will have following attributes:
 
 <a name="stylesheet"></a>
 Stylesheet structure
-----------------
+--------------------
 
-Stylesheets have to be in external file, stylesheet short and long declarations of attributes are supported. Syntax of stylesheet:
+Stylesheets are defined in external files, stylesheet short and long declarations of attributes are supported.
+
+Syntax of the stylesheet:
 
 Short style:
 
+```xml
     <stylesheet>
         <!-- style attributes are embeded as xml attributes, class attribute has the same meaning as in HTML/CSS -->
         <div class="class" font-size="12px" color="gray" background.color="yellow">
@@ -298,9 +373,11 @@ Short style:
             </div>
         </h2>
     </stylesheet>
+```
 
 Long style:
 
+```xml
     <stylesheet>
         <div class="class">
             <!-- simple and complex attributes are nested in "div.class" selector path -->
@@ -329,15 +406,23 @@ Long style:
             </div>
         </h2>
     </stylesheet>
+```
 
 <a name="color-palette"></a>
-Palette of colors
-----------------
+Color Palletes
+--------------
 
-PHPPdf supports palette of colors - map of logical names to real colors. Palette of colors gives opportunity to create new or overwrite defaults named colors. By default, PHPPdf supports named colors from W3C standard (for example "black" = "#000000"). You can use palette to keep DRY principle, because information about used colors will be keeped only in one place. You can also generate one document with different palettes.
+PHPPdf supports color palettes, - mapping of logical names to real colors.
+
+Color palettes gives you the opportunity to create or overwrite default named colors.
+By default, PHPPdf supports named colors from the W3C standard (for example "black" = "#000000").
+
+You can use a palette for the DRY principle, because information about used colors will be kept in one place.
+And you can also generate one document with different palettes.
 
 Example:
 
+```xml
     <!-- colors.xml file -->
     <colors>
         <color name="header-color" hex="#333333" />
@@ -364,19 +449,24 @@ Example:
             </table>
         </page>
     </pdf>
+```
     
+```php
     //php code
     use PHPPdf\DataSource\DataSource;
+    
     $facade = ...;
     
     $content = $facade->render(DataSource::fromFile(__DIR__.'/document.xml'), DataSource::fromFile(__DIR__.'/stylesheet.xml'), DataSource::fromFile(__DIR__.'/colors.xml'));
+```
 
 <a name="tags"></a>
 Standard tags
-----------------
+-------------
 
-Library supports primary HTML tags: div, p, table, tr, td, b, strong, span, a, h1, h2, h3, h4, h5, img, br, ul, li
-In addition there are not standard tags:
+The library supports primary HTML tags: ```div, p, table, tr, td, b, strong, span, a, h1, h2, h3, h4, h5, img, br, ul, li```
+
+In addition there are also not standard tags:
 
 * dynamic-page - auto breakable page
 * page - single page with fixed size
@@ -387,18 +477,18 @@ In addition there are not standard tags:
 * circle - element that border and backgroud are in circle shape. Additional attributes: radius (it overwrites width and height attributes)
 * pie-chart - element that can be used to draw simple pie chart (more information in <a href="#charts">charts</a> chapter.
 
-There are tags that only are bags for attributes, set of tags etc:
+There are tags that are only bags for attributes, a set of tags etc:
 
 * stylesheet - stylesheet for parent
 * attribute - simple attribute declaration, direct child of "stylesheet" tag. Required attributes of this element: name - attribute name, value - attribute value
 * complex-attribute - complex attribute declaration, direct child of "stylesheet" tag. Required attributes of this element: name - complex attribute name
 * placeholders - defines placeholders for parent tag. Children tags of placeholder are specyfic for every parent tag.
 * metadata - defines metadata of pdf document, direct child of document root
-* behaviours - defines behaviours for parent tag. Supported behaviours: href, ref, bookmark, note (action as same as for attributes with as same as name)
+* behaviours - defines behaviours for a parent tag. Supported behaviours: href, ref, bookmark, note (action as same as for attributes with as same as name)
 
 <a name="attributes"></a>
 Attributes
-----------------
+----------
 
 * width and height: rigidly sets height and width, supported units are described in separate [section](#units). Relative values in percent are supported. 
 * margin (margin-top, margin-bottom, margin-left, margin-right): margin similar to margin from HTML/CSS. Margins of simblings are pooled. For side margins possible is "auto" value, it works similar as in HTML/CSS.
@@ -428,9 +518,11 @@ Attributes
 
 <a name="complex-attributes"></a>
 Complex attributes
-----------------
+------------------
 
-Complex attributes can be set by notation "attributeName.attributeProperty" or "attributeName-attributeProperty" (for example: border.color="black" or border-color="black").
+Complex attributes can be set by notation "attributeName.attributeProperty" or "attributeName-attributeProperty"
+
+For example: ```border.color="black"``` or ```border-color="black"```
 
 * border:
     - color: border color
@@ -451,8 +543,11 @@ Complex attributes can be set by notation "attributeName.attributeProperty" or "
     - position-x: horizontal position for image of background, allowed values: left, center, right or numeric value (default: left)
     - position-y: vertical position for image of background, allowed values: top, center, bottom or numeric value (default: top)
 
-It is possible to add several complex attributes in the same type (for instance 3 different borders). You can achieve that by using "stylesheet" tag instead of short notation.
+It is possible to add several complex attributes in the same type (for instance 3 different borders).
 
+You can achieve that by using the "stylesheet" tag instead of the short notation.
+
+```xml
     <pdf>
         <dynamic-page>
             <div>
@@ -465,34 +560,52 @@ It is possible to add several complex attributes in the same type (for instance 
             </div>
         </dynamic-page>
     </pdf>
+```
 
-In this example second border has "borderLeftAndRight" indentifie, if this border had not id, attributes from second border would be merged with attributes from first border. Default identifier "id" is as same as "name" attribute. "id" attributes for complex attributes hasn't nothing to attribute "id" of tags (using in inheritance). It is possible to create complex borders as same as in previous example (outerBorderLeftAndRight).
+In this example, the second border has a "borderLeftAndRight" indentifie, if this border had no id, the attributes from second border would be merged with the attributes from first border.
+
+Remeber the default identifier "id" is as same as the "name" attribute.
+The "id" attributes for complex attributes has nothing to do with the "id" attribute of tags (used in inheritance).
+
+It is possible to create complex borders the same as in the previous example (outerBorderLeftAndRight).
 
 <a name="units"></a>
 Units
-----------------
+-----
 
-Supported units for numerical attributes: in (inch), cm (centimeter), mm (milimeter), pt (point), pc (pica), px (pixel), % (percent - only for width and height).
+Supported units for numerical attributes:
 
-Currently unsupported units: em and ex
+* in (inches)
+* cm (centimeters)
+* mm (milimeters)
+* pt (points)
+* pc (pica)*
+* px (pixels)
+* * % (percent - only for width and height).
 
-When unit has been skipped (for example: font-size="10"), then unit is point (pt). 1pt = 1/72 inch
+Currently unsupported units are: em and ex
+
+When the unit is missing (for example: font-size="10"), then the default unit is points (pt). 1pt = 1/72 inch
 
 <a name="barcodes"></a>
 Barcodes
-----------------
+--------
 
-Barcodes are supported by &lt;barcode&gt; tag. PHPPdf uses Zend\Barcode library in order to generate barcodes.
+Barcodes are supported by the ```<barcode>``` tag.
+
+PHPPdf uses the Zend\Barcode library in order to generate barcodes.
 
 Example:
 
+```xml
     <pdf>
         <dynamic-page>
             <barcode type="code128" code="PHPPdf" />
         </dynamic-page>
     </pdf>
+```    
 
-&lt;barcode&gt; tag supports the most of standard attributes and has some other attributes:
+```<barcode>``` tag supports the most of standard attributes and has some other attributes:
 
 * type - typ of barcode, supported values: code128, code25, code25interlayed, code39, ean13, ean2, ean5, ean8, identcode, itf14, leitcode, planet, postnet, royalmail, upca, upce
 * draw-code - equivalent of drawCode option from Zend\Barcode
@@ -503,39 +616,46 @@ Example:
 * bar-thick-width - equivalent of barThickWidth option from Zend\Barcode
 * rotate - equivalent of orientation option from Zend\Barcode
 
-Description of this options and default values you can find in [Zend\Barcode documentation][3]
+You can find the description of these options and there default values in the [Zend\Barcode documentation][3].
 
-In order to render textual barcode can't be used embeded pdf font: courier, times-roman and helvetica. It will be soon fixed.
-
+In order to render textual barcodes, you can't use to following embeded pdf fonts: courier, times-roman and helvetica.
+This will soon be fixed.
 
 <a name="charts"></a>
 Charts
-----------------
+------
 
-PHPPdf supports drawing simple charts. For now there is only support for simple pie chart.
+PHPPdf supports drawing simple charts.
+
+For now there is only support for s simple pie chart.
 
 Example:
 
+```xml
     <pdf>
         <dynamic-page>
             <pie-chart radius="200px" chart-values="10|20|30|40" chart-colors="black|red|green|blue"></pie-chart>
         </dynamic-page>
     </pdf>
+```
     
-pie-chart tag has three extra attributes:
+The ```<pie-chart>``` tag has three extra attributes:
 
 * radius - radius of the chart
-* chart-values - values of the chart, they must not be summing to 100. Each value should be separated by "|" char
-* chart-colors - colors of each value. Each color should be separated by "|" char
+* chart-values - values of the chart, together they must be summing to 100. Each value must be separated by "|".
+* chart-colors - colors of each value. Each color must be separated by "|".
 
 <a name="hyperlinks"></a>
 Hyperlinks
-----------------
+----------
 
-Library supports external and internal hyperlinks. External hyperlink links to urls, internal links to another tag inside pdf.
+The library supports external and internal hyperlinks.
+
+External hyperlinks link to url's, while internal links link to other tags inside the pdf document.
 
 Example:
 
+```xml
     <pdf>
         <dynamic-page>
             <a href="http://google.com">go to google.com</a>
@@ -546,17 +666,24 @@ Example:
             <p id="some-id">Yep, this is another tag! ;)</p>
         </dynamic-page>
     </pdf>
+```
 
-Every element has "href" and "ref" attribute, even div. You can't nest elements inner "a" tag. If you want to use img element as link, you should use href (external link) or ref (internal link) attribute directly in img tag.
+Every element has a "href" and "ref" attribute, even div.
+You can't nest elements inside an "a" tag.
+
+If you want to use img elements as a link, you should use the href (external link) or ref (internal link) attribute directly in img tag.
 
 <a name="bookmarks"></a>
 Bookmarks
-----------------
+---------
 
-Preferred way of bookmarks creation is "behaviours" tag. This way dosn't restrict structure of the document, owner of a parent bookmark dosn't have to be a parent of a child bookmark's owner.
+The preferred way of creating bookmarks is by using the "behaviours" tag.
+
+This doesn't restrict the structure of the document, the owner of a parent bookmark doesn't have to be a parent of a child's bookmark owner.
 
 Example:
 
+```xml
     <pdf>
 	    <dynamic-page>
 		    <div>
@@ -585,12 +712,16 @@ Example:
 		    </div>
 		</dynamic-page>
     </pdf>
+```
 
+A shortcut for the "bookmark" behaviour is the "bookmark" attribute,
+if you assign some value to this attribute, bookmarks that refers to this tag will be automatically created.
 
-Shortcut for "bookmark" behaviour is "bookmark" attribute, if you assign some value to this attribute, bookmark that refers to this tag will be automatically created. Bookmark of parent tag is also parent of children's bookmarks.
+The bookmark of a parent tag is also the parent of a children's bookmarks.
 
 Example:
 
+```xml
     <pdf>
 	    <dynamic-page>
 		    <div bookmark="parent bookmark">
@@ -607,8 +738,9 @@ Example:
 		    </div>
 		</dynamic-page>
     </pdf>
+```
 
-Above structures (both examples) will create this bookmarks structure:
+The above structures (both examples) will create this bookmarks structure:
 
 * parent bookmark
     - children bookmark
@@ -617,20 +749,25 @@ Above structures (both examples) will create this bookmarks structure:
 
 <a name="notes"></a>
 Sticky notes
-----------------
+------------
 
-Sticky note can be created by "note" attribute.
+Sticky notes can be created by using the "note" attribute.
 
 Example:
 
+```xml
     <pdf>
         <dynamic-page>
             <div note="note text"></div>
         </dynamic-page>
     </pdf>
+```
     
-Xml parser normalizes values of attributes, wich results ignoring new line chars. If you want to add note with new line chars, you should use syntax:
+The XML parser normalizes values of attributes, wich results ignoring new line characters.
 
+If you want to add a note with new line characters, you should use this syntax:
+
+```xml
     <pdf>
         <dynamic-page>
             <div>
@@ -640,14 +777,19 @@ Xml parser normalizes values of attributes, wich results ignoring new line chars
             </div>
         </dynamic-page>
     </pdf>
+```
 
 
 <a name="headers"></a>
 Repetitive headers and footers
-----------------
+------------------------------
 
-"placeholders" can be used in order to adding repetitive header or/and footer. Some elemnts has special "placeholders": page has header and footer, table also has header and footer (TODO: not implemented yet) etc.
+"placeholders" can be used in for adding a repetitive header or/and footer.
 
+Some elemnts have special "placeholders": page has header and footer,
+table also has header and footer (TODO: not implemented yet) etc.
+
+```xml
     <pdf>
         <dynamic-page>
             <placeholders>
@@ -664,22 +806,31 @@ Repetitive headers and footers
             </placeholders>
         </dynamic-page>
     </pdf>
+```
 
-Header and footer has to have directly setted height. This height is pooled with page top and bottom margins. Workspace is page size reduced by page margins and placeholders (footer and header) height.
+Header and footer need to have a height attribute set.
+This height is pooled with page top and bottom margins.
+
+Workspace is the page size reduced by page margins and placeholders (footer and header) height.
 
 <a name="watermarks"></a>
 Watermarks
-----------------
+----------
 
-Page has "watermark" placeholder. As watermark may be set block and container elements, for instance: div, p, h1 (no span, plain text or img). If you want to use image as watermark, you should wrap tag img into div tag.
+Page can have a "watermark" placeholder.
+
+The watermark may be set on block's and container elements, for instance: div, p, h1 (no span, plain text or img).
+
+If you want to use an image as a watermark, you should wrap the img tag in a div.
 
 Example:
 
+```xml
     <pdf>
         <dynamic-page>
             <placeholders>
                 <watermark>
-                    <!-- as rotate can you use absolute values (45deg - in degrees, 0.123 - in radians) or relative values ("diagonally" and "-diagonally" - angle between diagonal and base side of the page) -->
+                    <!-- rotate can have absolute values (45deg - in degrees, 0.123 - in radians) or relative values ("diagonally" and "-diagonally" - angle between diagonal and base side of the page) -->
                     <div rotate="diagonally" alpha="0.1">
                         <img src="path/to/image.png" />
                     </div>
@@ -687,20 +838,25 @@ Example:
             </placeholders>
         </dynamic-page>
     </pdf>
+```
 
 <a name="page-numbering"></a>
 Page numbering
 --------------
 
-There are two tags that can be used to show page information in footer, header or watermark: page-info and page-number. This element works only with dynamic-page, not single pages. Page-info shows current page number and total page number, page-number shows only current page number.
+There are two tags that can be used to show page information in a footer, header or watermark: page-info and page-number.
+
+This element only works with dynamic-page, not single pages.
+Page-info shows the current and total page number, page-number shows only the current page number.
 
 Attributes of this tags:
 
 * format - format of output string that will be used as argument of sprintf function. Default values: "%s." for page-number, "%s / %s" for page-info.
-* offset - value that will be added to current page number and total page number. Usefull if you want to count pages from diffrent value than zero. Default: 0.
+* offset - value that will be added to current page number and total page number. Usefull if you want to count pages from a diffrent value than zero. Default: 0.
 
 Example:
 
+```xml
     <pdf>
         <dynamic-page>
             <placeholders>
@@ -713,27 +869,36 @@ Example:
             Some text
         </dynamic-page>
     </pdf>
+```
 
 <a name="templates"></a>
-Using pdf document as template
-------------------------------
+Using a pdf document as a template
+----------------------------------
 
-"page" and "dynamic-page" tags have "document-template" attribute, that is able to use external pdf document as template. For "page" tag page's template will be first page of external document. For "dynamic-page" tag template for each page will be corresponding page of external document.
+The "page" and "dynamic-page" tags can have a "document-template" attribute,
+that allows you to use an external pdf document as a template.
+
+For the "page" tag, the page's template will be the first page of an external document.
+
+For the "dynamic-page" tag, the template for each page will be the corresponding page of an external document.
 
 Example:
 
+```xml
     <pdf>
         <dynamic-page document-template="path/to/file.pdf">
             <div>Some content</div>
         </dynamic-page>
     </pdf>
+```
 
 <a name="columns"></a>
 Separate page on columns
-----------------
+-------------------------
 
 Page can be separated on columns:
 
+```xml
     <pdf>
         <dynamic-page>
             <column-layout>
@@ -742,49 +907,65 @@ Page can be separated on columns:
             </column-layout>
         </dynamic-page>
     </pdf>
+```
 
-Above XML describes several pages of pdf document with green rectangles separated on two columns. "column-layout" tag has three additional parameters: number-of-columns, margin-between-columns and equals-columns. Default values for this attributes are 2, 10 and false respectlivy. If equals-columns attribute is set, columns will have more or less equals height.
+The above XML describes several pages of the pdf document, with green rectangles separated on two columns.
+
+The "column-layout" tag has three additional parameters: number-of-columns, margin-between-columns and equals-columns.
+
+Default values for this attributes are 2, 10 and false respectlivy.
+If the equals-columns attribute is set, columns will have more or less equals height.
 
 <a name="page-break"></a>
 Breaking pages and columns
-----------------
+--------------------------
 
-Page and column may by manually broken by one of tags: page-break, column-break, break. All those tags are the same. Those tags have to be direct children of breaking element (dynamic-page or column-layout).
+Page and column may by manually broken using one of these tags: page-break, column-break, break.
 
-If you want to avoid automatic page or column break on certain tag, you should set off "breakable" attribute of this tag. 
+All these tags are the same. These tags need to be direct children of the breaking element (dynamic-page or column-layout).
+
+If you want to avoid automatic page or column break on certain tags, you should set the "breakable" attribute of this tag to "off.
 
 Example:
 
+```xml
     <pdf>
         <dynamic-page>
             <div breakable="false">this div won't be automatically broken</div>
         </dynamic-page>
     </pdf>
+```
 
 <a name="metadata"></a>
 Metadata
 --------
 
-Metadata can be added by attributes of document's root. Supported metadata: Creator, Keywords, Subject, Author, Title, ModDate, CreationDate and Trapped. Names of this attributes are case sensitive.
+Metadata can be added by attributes at the document's root.
+
+Supported metadata is: Creator, Keywords, Subject, Author, Title, ModDate, CreationDate and Trapped.
+
+** These attribute names are case sensitive. **
 
 Example:
 
+```xml
     <pdf Author="Piotr Sliwa" Title="Test document">
         <!-- some other elements -->
     </pdf>
+```
 
 <a name="configuration"></a>
 Configuration
-----------------
+-------------
 
-Library has four primary config files that allow you to adopt library to specyfic needs and to extending.
+The library has four primary config files that allow you to adopt the library for specyfic needs and extending.
 
 * complex-attributes.xml - declarations of complex attributes classes to logical names that identify attribute in whole library.
 * nodes.xml - definitions of allowed tags in xml document with default attributes and formatting objects.
 * fonts.xml - definitions of fonts and assigning them to logical names that identify font in whole library.
 * colors.xml - palette of colors definitions
 
-In order to change default config files, you must pass to Facade constructor configured Loader object:
+In order to change default the config files, you must pass to Facade constructor configured Loader object:
 
     $loader = new PHPPdf\Core\Configuration\LoaderImpl('/path/to/file/nodes.xml', '/path/to/file/enhancements.xml', '/path/to/file/fonts.xml', , '/path/to/file/colors.xml');
     $facade = new PHPPdf\Core\Facade($loader);
