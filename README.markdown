@@ -786,7 +786,7 @@ Repetitive headers and footers
 
 "placeholders" can be used in for adding a repetitive header or/and footer.
 
-Some elemnts have special "placeholders": page has header and footer,
+Some elements have special "placeholders": page has header and footer,
 table also has header and footer (TODO: not implemented yet) etc.
 
 ```xml
@@ -967,22 +967,28 @@ The library has four primary config files that allow you to adopt the library fo
 
 In order to change default the config files, you must pass to Facade constructor configured Loader object:
 
+```php
     $loader = new PHPPdf\Core\Configuration\LoaderImpl('/path/to/file/nodes.xml', '/path/to/file/enhancements.xml', '/path/to/file/fonts.xml', , '/path/to/file/colors.xml');
     $facade = new PHPPdf\Core\Facade($loader);
+```
     
 If you want to change only one config file, you should use LoaderImpl::set* method:
 
+```php
     $loader = new PHPPdf\Core\Configuration\LoaderImpl();
     $loader->setFontFile('/path/to/file/fonts.xml');//there are setFontFile, setNodeFile, setComplexAttributeFile and setColorFile methods
     $facade = new PHPPdf\Core\Facade($loader);
+```
 
 FacadeBuilder can be uset to build and configure Facade. FacadeBuilder is able to configure cache, rendering engine and document parser. 
     
+```php
     $builder = PHPPdf\Core\FacadeBuilder::create(/* you can pass specyfic configuration loader object */)
                                         ->setCache('File', array('cache_dir' => './cache'))
                                         ->setUseCacheForStylesheetConstraint(true); //stylesheets will be also use cache
 
     $facade = $builder->build();
+```
 
 <a name="markdown"></a>
 Markdown support
@@ -992,66 +998,84 @@ Library supports basic (official) markdown syntax. To convert markdown document 
 
 Example:
 
+```php
     $facade = PHPPdf\Core\FacadeBuilder::create()
                                        ->setDocumentParserType(PHPPdf\Core\FacadeBuilder::PARSER_MARKDOWN)
                                        ->setMarkdownStylesheetFilepath(/** optionaly path to stylesheet in xml format */)
                                        ->build();
-                                         
-By default, in markdown pdf document, helvetica font is used. If you want to use utf-8 characters or customize pdf document, you should provide your own stylesheet by FacadeBuilder::setMarkdownStylesheetFilepath method. Stylesheet structure has been described in [stylesheet](#stylesheet) chapter. By default stylesheet is empty, if you want to set another font type, stylesheet should looks like:
+```
 
+By default, in markdown pdf document, helvetica font is used.
+If you want to use utf-8 characters or customize a pdf document, you should provide your own stylesheet by using the FacadeBuilder::setMarkdownStylesheetFilepath method.
+
+The stylesheet structure has been described in the [stylesheet](#stylesheet) chapter.
+By default the stylesheet is empty, if you want to set another font type, the stylesheet should look like this:
+
+```xml
     <stylesheet>
         <any font-type="DejaVuSans" />
     </stylesheet>
+```
 
-Internally MarkdownDocumentParser converts markdown document to html (via [PHP markdown](https://github.com/wolfie/php-markdown) library), then converts html to xml, and at least xml to pdf document.
+Internally the MarkdownDocumentParser converts a markdown document to html (via the [PHP markdown](https://github.com/wolfie/php-markdown) library), then converts html to xml, and at last xml to a pdf document.
 
-Be aware of that, if you use in markdown document raw html that will be incompatible with xml syntax of PHPPdf (for example unexisted attribute or tag), document won't be parsed - exception will be thrown. Not all tags used in markdown implementation are propertly supported by PHPPdf, for example "pre" and "code" tags. Now "pre" tag is alias for "div", and "code" tag is alias for "span", be aware of that.
+Be aware of that, if you in a markdown document use raw html that will be incompatible with the xml syntax of PHPPdf (for example unexistend attributes or tags), the parser will throw an exception then.
+
+	Not all tags used in the markdown implementation are propertly supported by PHPPdf, for example "pre" and "code" tags.
+	For now "pre" tag is an alias for "div", and "code" tag is an alias for "span", be aware of that.
 
 <a name="image-generation"></a>
 Image generation engine
 -----------------------
 
-PHPPdf is able to generate image (jpg or png) files insted of pdf. To achieve that, you must configure FacadeBuilder, example:
+PHPPdf is able to generate image (jpg or png) files insted of a pdf document.
+To achieve that, you must configure the FacadeBuilder, example:
 
+```php
     $facade = PHPPdf\Core\FacadeBuilder::create()
                                        ->setEngineType('image')
                                        ->build();
 
     //render method returns array of images' sources, one pdf page is generated to single image file 
     $images = $facade->render(...);
+```
     
-By default Gd library is used to render a image. You can use Imagick that offers better quality, so it is recommended if you have opportiunity to install Imagick on your server. To switch graphic library, you should configure FacadeBuilder object using setEngineOptions method:
+By default the GD library is used to render an image.
 
+But you can also use Imagick, which offers a better quality, so it is recommended that if you have the opportiunity to install Imagick on your server.
+To switch the graphic library, you must configure the FacadeBuilder object using the setEngineOptions method:
+
+```php
     $builder = ...;
     $builder->setEngineOptions(array(
         'engine' => 'imagick',
         'format' => 'png',//png, jpeg or wbmp
         'quality' => 60,//int from 0 to 100
     ));
+```
     
-Supported graphic libraries: gd (default), imagick, gmagick. PHPPdf uses [Imagine][2] library as interface for graphic files generation.
-
+Supported graphic libraries are: GD (default), imagick, gmagick. PHPPdf uses the [Imagine][2] library as an interface for graphics file generation.
 
 
 <a name="limitations"></a>
 Known limitations
 ----------------
 
-Below is list of known limitations of library current version:
+Below is a list of known limitations of the current version of the library:
 
-* there no way to inject image into text with floating - will be introduced in next releases
-* partial support for float attribute within table element (float might works improperly within table)
+* there no way to inject an image into a text with floating - will be introduced in the next releases
+* partial support for float attribute within table element (floats might work improperly within a table)
 * vertical-align attribute works improperly if in element with this attribute set, are more than one element
-* border doesn't change dimensions of the element (in HTML do)
-* png files (expecially without compression) are inefficient, png files with high compression (compression level 6 or higher) or jpeg files should be used instead
-* not all tags are propertly supported, for example "pre" tag is alias to "div" and "code" tag is alias for "span"
-* nesting of linear tags (text, span, code, page-info, page-number, a, b, i, em) is not properly supported. If one linear tag contains another, only text within this tags is merged, styles are taken from the most external linear tag.
+* border doesn't change dimensions of the element (while in HTML they do)
+* png files (expecially without compression) are inefficient. png files with high compression (compression level 6 or higher) or jpeg should be used instead
+* not all tags are propertly supported, for example the "pre" tag is an alias to "div" and the "code" tag is an alias for "span"
+* nesting of linear tags (text, span, code, page-info, page-number, a, b, i, em) is not properly supported. If one linear tag contains another, only text within this tags is merged, styles are taken from the most outher linear tag.
 
 <a name="todo"></a>
 TODO - plans
 ----------------
 
-* automatic generating table of contents
+* automatic generating of "table of contents"
 * improve table, header and footer for table, rowspan. Fix calculation of cell's min height when colspan is used.
 * support for simple bar and pie charts
 
@@ -1059,7 +1083,7 @@ TODO - plans
 Technical requirements
 ----------------
 
-Library works on php 5.3+
+This library works with php 5.3 and up.
 
 [1]: https://github.com/psliwa/PdfBundle
 [2]: https://github.com/avalanche123/Imagine
