@@ -34,8 +34,8 @@ class BasicList extends Container
     const TYPE_UPPER_ALPHA = 'upper-alpha';
     const TYPE_IMAGE = 'image';
     
-    const POSITION_INSIDE = 'inside';
-    const POSITION_OUTSIDE = 'outside';
+    const LIST_POSITION_INSIDE = 'inside';
+    const LIST_POSITION_OUTSIDE = 'outside';
     
     private $enumerationStrategy;
     private $omitEnumerationOfFirstElement = false;
@@ -46,7 +46,7 @@ class BasicList extends Container
         
         static::addAttribute('type', self::TYPE_CIRCLE);
         static::addAttribute('image');
-        static::addAttribute('position', self::POSITION_INSIDE);
+        static::addAttribute('list-position', self::LIST_POSITION_INSIDE);
     }
     
     protected static function initializeType()

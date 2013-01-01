@@ -110,7 +110,7 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
     {
         //TODO refactoring
         $attributeWithGetters = array('width', 'height', 'margin-left', 'margin-right', 'margin-top', 'margin-bottom', 'padding-left', 'padding-right', 'padding-top', 'padding-bottom', 'font-type', 'font-size', 'float', 'breakable');
-        $attributeWithSetters = array('width', 'height', 'margin-left', 'margin-right', 'margin-top', 'margin-bottom', 'font-type', 'float', 'static-size', 'font-size', 'margin', 'padding', 'break', 'breakable', 'dump', 'padding-left', 'padding-right', 'padding-top', 'padding-bottom', 'min-width', 'line-height', 'line-break', 'left', 'top');
+        $attributeWithSetters = array('width', 'height', 'margin-left', 'margin-right', 'margin-top', 'margin-bottom', 'font-type', 'float', 'static-size', 'font-size', 'margin', 'padding', 'break', 'breakable', 'dump', 'padding-left', 'padding-right', 'padding-top', 'padding-bottom', 'min-width', 'line-height', 'line-break', 'left', 'top', 'position');
 
         $predicateGetters = array('breakable');
         
@@ -818,6 +818,18 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
     {
         $top = $this->convertUnit($top);
         $this->setAttributeDirectly('top', $top);
+    }
+    
+    protected function setPosition($position)
+    {
+        $positions = array(self::POSITION_ABSOLUTE, self::POSITION_RELATIVE, self::POSITION_STATIC);
+        
+        if(!in_array($position, $positions))
+        {
+            throw new InvalidArgumentException('Unsupported position value: "%s", expected: %s', $position, implode(', ', $positions));
+        }
+        
+        $this->setAttributeDirectly('position', $position);
     }
     
     public function getEncoding()

@@ -4,7 +4,7 @@
     <dynamic-page>
     	<div>
 	    	<p>Position: outside</p>
-	    	<ul position="outside">
+	    	<ul list-position="outside">
 	    		<li>Some text</li>
 	    		<li>some another text</li>
 	    	</ul>
@@ -47,7 +47,7 @@
 	    	</ol>
 	    	
 	    	<p>Ordered list</p>
-	    	<ol type="decimal-leading-zero" position="outside">
+	    	<ol type="decimal-leading-zero" list-position="outside">
 	    		<li>Some text</li>
 	    		<li>some another text</li>
 	    	</ol>

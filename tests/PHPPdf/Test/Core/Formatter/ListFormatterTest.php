@@ -24,8 +24,8 @@ class ListFormatterTest extends \PHPPdf\PHPUnit\Framework\TestCase
         
         $list->expects($this->once())
              ->method('getAttribute')
-             ->with('position')
-             ->will($this->returnValue(BasicList::POSITION_OUTSIDE));
+             ->with('list-position')
+             ->will($this->returnValue(BasicList::LIST_POSITION_OUTSIDE));
 
         $list->expects($this->never())
              ->method('getChildren');
@@ -57,8 +57,8 @@ class ListFormatterTest extends \PHPPdf\PHPUnit\Framework\TestCase
             
         $list->expects($this->at(0))
              ->method('getAttribute')
-             ->with('position')
-             ->will($this->returnValue(BasicList::POSITION_INSIDE));
+             ->with('list-position')
+             ->will($this->returnValue(BasicList::LIST_POSITION_INSIDE));
              
         $list->expects($this->once())
              ->id('assign')

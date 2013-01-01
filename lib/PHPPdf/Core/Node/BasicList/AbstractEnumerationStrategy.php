@@ -42,9 +42,11 @@ abstract class AbstractEnumerationStrategy implements EnumerationStrategy
         $child = $list->getChild($this->index);
         
         $point = $child->getFirstPoint();        
-        
+        $positionTranslation = $list->getPositionTranslation();
+
         list($xTranslation, $yTranslation) = $this->getEnumerationElementTranslations($document, $list);
         
+        $point = $point->translate($positionTranslation->getX(), $positionTranslation->getY());
         $xCoord = $point->getX() - $child->getMarginLeft() + $xTranslation;
         $subchild = current($child->getChildren());
         $yCoord = $point->getY() - $yTranslation - ($subchild ? $subchild->getPaddingTop() : 0) - $child->getPaddingTop();

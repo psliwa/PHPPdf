@@ -16,11 +16,11 @@ class ListFormatter extends BaseFormatter
 {
     public function format(Node $node, Document $document)
     {
-        $position = $node->getAttribute('position');
+        $position = $node->getAttribute('list-position');
         
         $node->assignEnumerationStrategyFromFactory();
         
-        if($position === BasicList::POSITION_INSIDE)
+        if($position === BasicList::LIST_POSITION_INSIDE)
         {
             $widthOfEnumerationChar = $node->getEnumerationStrategy()->getWidthOfTheBiggestPosibleEnumerationElement($document, $node);
             

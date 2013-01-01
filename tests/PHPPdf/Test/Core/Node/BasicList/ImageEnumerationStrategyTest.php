@@ -48,7 +48,7 @@ class ImageEnumerationStrategyTest extends \PHPPdf\PHPUnit\Framework\TestCase
                  
         $listMock->expects($this->atLeastOnce())
                  ->method('getAttribute')
-                 ->with('position')
+                 ->with('list-position')
                  ->will($this->returnValue($position));
                  
         $listMock->expects($this->atLeastOnce())
@@ -70,7 +70,7 @@ class ImageEnumerationStrategyTest extends \PHPPdf\PHPUnit\Framework\TestCase
                  ->will($this->returnValue($child));
               
         $xTranslation = 0;
-        if($position === BasicList::POSITION_OUTSIDE)
+        if($position === BasicList::LIST_POSITION_OUTSIDE)
         {
             $xTranslation = $imageWidth;
         }
@@ -115,7 +115,7 @@ class ImageEnumerationStrategyTest extends \PHPPdf\PHPUnit\Framework\TestCase
     public function enumerationProvider()
     {
         return array(
-            array(Point::getInstance(50, 200), BasicList::POSITION_INSIDE, 20, 10),
+            array(Point::getInstance(50, 200), BasicList::LIST_POSITION_INSIDE, 20, 10),
         );
     }
     

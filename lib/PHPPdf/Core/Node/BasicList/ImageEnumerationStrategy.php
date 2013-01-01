@@ -40,7 +40,7 @@ class ImageEnumerationStrategy extends AbstractEnumerationStrategy
         
         $xTranslation = 0;
         
-        if($list->getAttribute('position') === BasicList::POSITION_OUTSIDE)
+        if($list->getAttribute('list-position') === BasicList::LIST_POSITION_OUTSIDE)
         {
             $xTranslation = -$this->imageWidth;
         }

@@ -13,7 +13,7 @@
 		<p font-size="14.5px" line-height="24px"></p>
 		<li font-size="14.5px" line-height="24px"></li>
 		<div font-size="14.5px" line-height="24px"></div>
-		<ul position="inside" type="circle" margin-left="27px">
+		<ul list-position="inside" type="circle" margin-left="27px">
 			<li margin-top="3px" margin-bottom="3px" />
 			<ul margin-left="0" />
 		</ul>

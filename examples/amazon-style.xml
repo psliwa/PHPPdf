@@ -21,7 +21,7 @@
 
 			<h3 text-align="center" width="100%" font-style="bold"></h3>
 		</div>
-		<ul position="inside" margin-left="6.5px">
+		<ul list-position="inside" margin-left="6.5px">
 		</ul>
 		
 		<div class="half" width="50%"></div>

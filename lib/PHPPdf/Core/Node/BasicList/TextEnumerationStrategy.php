@@ -34,7 +34,7 @@ abstract class TextEnumerationStrategy extends AbstractEnumerationStrategy
         
         $xTranslation = 0;
         
-        if($list->getAttribute('position') == BasicList::POSITION_OUTSIDE)
+        if($list->getAttribute('list-position') == BasicList::LIST_POSITION_OUTSIDE)
         {
             $widthOfEnumerationText = $this->getWidthOfText($enumerationText, $font, $fontSize);
             $xTranslation -= $widthOfEnumerationText;

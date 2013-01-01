@@ -39,7 +39,7 @@ abstract class EnumerationStrategyTest extends \PHPPdf\PHPUnit\Framework\TestCas
         $expectedText = $this->getExpectedText($elementIndex, $elementPattern);
         
         $child = $this->getMock('PHPPdf\Core\Node\Container', array('getFirstPoint', 'getMarginLeft', 'getPaddingTop'));
-        $child->expects($this->once())
+        $child->expects($this->atLeastOnce())
               ->method('getFirstPoint')
               ->will($this->returnValue($point));
         $child->expects($this->once())
@@ -56,7 +56,7 @@ abstract class EnumerationStrategyTest extends \PHPPdf\PHPUnit\Framework\TestCas
 
         $positionTranslation = 0;
 
-        if($position == BasicList::POSITION_OUTSIDE)
+        if($position == BasicList::LIST_POSITION_OUTSIDE)
         {
             $expectedWidth = rand(3, 7);
             $positionTranslation -= $expectedWidth;
@@ -79,7 +79,7 @@ abstract class EnumerationStrategyTest extends \PHPPdf\PHPUnit\Framework\TestCas
         
         $listMock->expects($this->atLeastOnce())
                        ->method('getAttribute')
-                       ->with('position')
+                       ->with('list-position')
                        ->will($this->returnValue($position));
         $listMock->expects($this->atLeastOnce())
                        ->method('getFontSizeRecursively')
@@ -131,9 +131,9 @@ abstract class EnumerationStrategyTest extends \PHPPdf\PHPUnit\Framework\TestCas
     public function integerProvider()
     {
         return array(
-            array(5, Point::getInstance(10, 30), BasicList::POSITION_OUTSIDE, 20, $this->getElementPattern(0)),
-            array(12, Point::getInstance(100, 300), BasicList::POSITION_INSIDE, 40, $this->getElementPattern(1)),
-            array(12, Point::getInstance(100, 300), BasicList::POSITION_INSIDE, 40, $this->getElementPattern(1), 5)
+            array(5, Point::getInstance(10, 30), BasicList::LIST_POSITION_OUTSIDE, 20, $this->getElementPattern(0)),
+            array(12, Point::getInstance(100, 300), BasicList::LIST_POSITION_INSIDE, 40, $this->getElementPattern(1)),
+            array(12, Point::getInstance(100, 300), BasicList::LIST_POSITION_INSIDE, 40, $this->getElementPattern(1), 5)
         );
     }
     

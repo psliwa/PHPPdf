@@ -150,9 +150,10 @@ class Background extends ComplexAttribute
 
         if($image !== null)
         {
-            list($x, $y) = $this->getFirstPoint($node)->toArray();
-            list($endX, $endY) = $this->getDiagonalPoint($node)->toArray();
-                    
+            $positionTranslation = $node->getPositionTranslation();
+            list($x, $y) = $this->getFirstPoint($node)->translate($positionTranslation->getX(), $positionTranslation->getY())->toArray();
+            list($endX, $endY) = $this->getDiagonalPoint($node)->translate($positionTranslation->getX(), $positionTranslation->getY())->toArray();
+
             list($width, $height) = $this->getImageDimension($document, $image, $node);
 
             $graphicsContext->saveGS();
