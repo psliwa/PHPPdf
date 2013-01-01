@@ -1,6 +1,14 @@
 CHANGELOG
 =========
 
+* (current master) ???
+
+  * fix bugs in pie-chart tag
+  * fix set page width and height directly
+  * fix converting percentage dimensions (width and height) of element, that parent has paddings set
+  * add position attribute
+  * rename "position" to "list-position" attribute of "ul" and "ol" tags - break backward compatibility!
+
 * 1.1.6 (2012-10-28)
 
   * "circle" tag support
