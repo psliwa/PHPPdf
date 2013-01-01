@@ -110,7 +110,7 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
     {
         //TODO refactoring
         $attributeWithGetters = array('width', 'height', 'margin-left', 'margin-right', 'margin-top', 'margin-bottom', 'padding-left', 'padding-right', 'padding-top', 'padding-bottom', 'font-type', 'font-size', 'float', 'breakable');
-        $attributeWithSetters = array('width', 'height', 'margin-left', 'margin-right', 'margin-top', 'margin-bottom', 'font-type', 'float', 'static-size', 'font-size', 'margin', 'padding', 'break', 'breakable', 'dump', 'padding-left', 'padding-right', 'padding-top', 'padding-bottom', 'min-width', 'line-height', 'line-break', 'left', 'right', 'bottom', 'top');
+        $attributeWithSetters = array('width', 'height', 'margin-left', 'margin-right', 'margin-top', 'margin-bottom', 'font-type', 'float', 'static-size', 'font-size', 'margin', 'padding', 'break', 'breakable', 'dump', 'padding-left', 'padding-right', 'padding-top', 'padding-bottom', 'min-width', 'line-height', 'line-break', 'left', 'top');
 
         $predicateGetters = array('breakable');
         
@@ -814,22 +814,10 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
         $this->setAttributeDirectly('left', $left);
     }
     
-    protected function setRight($right)
-    {
-        $right = $this->convertUnit($right);
-        $this->setAttributeDirectly('right', $right);
-    }
-    
     protected function setTop($top)
     {
         $top = $this->convertUnit($top);
         $this->setAttributeDirectly('top', $top);
-    }
-    
-    protected function setBottom($bottom)
-    {
-        $bottom = $this->convertUnit($bottom);
-        $this->setAttributeDirectly('bottom', $bottom);
     }
     
     public function getEncoding()
