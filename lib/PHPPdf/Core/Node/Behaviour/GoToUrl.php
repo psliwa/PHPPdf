@@ -25,8 +25,8 @@ class GoToUrl extends Behaviour
     
     protected function doAttach(GraphicsContext $gc, Node $node)
     {
-        $firstPoint = $node->getFirstPoint();
-        $diagonalPoint = $node->getDiagonalPoint();
+        $firstPoint = self::getFirstPointOf($node);
+        $diagonalPoint = self::getDiagonalPointOf($node);
 
         $gc->uriAction($firstPoint->getX(), $firstPoint->getY(), $diagonalPoint->getX(), $diagonalPoint->getY(), $this->uri);
     }

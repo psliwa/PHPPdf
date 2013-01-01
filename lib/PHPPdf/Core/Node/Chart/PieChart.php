@@ -67,9 +67,8 @@ class PieChart extends Circle
     {
         parent::doDraw($document, $tasks);
         
-        $callback = function(PieChart $node, Document $document){
+        $callback = function(PieChart $node, Document $document, Point $point){
             $gc = $node->getGraphicsContext();
-            $point = $node->getMiddlePoint();
             
             $values = $node->getAttribute('chart-values');
             $colors = $node->getAttribute('chart-colors');
@@ -103,6 +102,7 @@ class PieChart extends Circle
             }
         };
         
-        $tasks->insert(new DrawingTask($callback, array($this, $document), /* between background and border */45));
+        $translation = $this->getPositionTranslation();
+        $tasks->insert(new DrawingTask($callback, array($this, $document, $this->getMiddlePoint()->translate($translation->getX(), $translation->getY())), /* between background and border */45));
     }
 }

@@ -75,7 +75,7 @@ class LinePart implements Drawable
     
     public function collectOrderedDrawingTasks(Document $document, DrawingTaskHeap $tasks)
     {
-        $tasks->insert(new DrawingTask(function(Text $text, $point, $words, $width, $document, $linePartWordSpacing) {
+        $tasks->insert(new DrawingTask(function(Text $text, $point, $words, $width, $document, $linePartWordSpacing, Point $translation) {
             $gc = $text->getGraphicsContext();
             $gc->saveGS();
             $fontSize = $text->getFontSizeRecursively();
@@ -104,6 +104,11 @@ class LinePart implements Drawable
                 $gc->rotate($middlePoint->getX(), $middlePoint->getY(), $rotationNode->getRotate());
             }
  
+            if(!$translation->isZero())
+            {
+                $point = $point->translate($translation->getX(), $translation->getY());
+            }
+            
             $yCoord = $point->getY() - $fontSize;
             $wordSpacing = 0;
             
@@ -148,7 +153,7 @@ class LinePart implements Drawable
             }
 
             $gc->restoreGS();
-        }, array($this->text, $this->getFirstPoint(), $this->words, $this->width, $document, $this->wordSpacing)));
+        }, array($this->text, $this->getFirstPoint(), $this->words, $this->width, $document, $this->wordSpacing, $this->text->getPositionTranslation())));
     }
     
     public function collectUnorderedDrawingTasks(Document $document, DrawingTaskHeap $tasks)

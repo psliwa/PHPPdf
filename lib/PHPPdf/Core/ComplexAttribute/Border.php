@@ -119,8 +119,8 @@ class Border extends ComplexAttribute
         $graphicsContext->setLineDashingPattern($this->convertStyle($this->style, $document));
         $size = $document->convertUnit($this->size);
         $graphicsContext->setLineWidth($size);
-        $boundary = $node->getBoundary();        
-    
+        $boundary = $this->getTranslationAwareBoundary($node, $node->getBoundary());        
+
         $points = $this->getPointsWithPositionCorrection($document, $boundary);
 
         if($this->getRadius() !== null)
@@ -231,6 +231,14 @@ class Border extends ComplexAttribute
         $size = $document->convertUnit($this->size);
         $gc->setLineWidth($size);
         $point = $node->getMiddlePoint();
+        
+        $translation = $node->getPositionTranslation();
+        
+        if(!$translation->isZero())
+        {
+            $point = $point->translate($translation->getX(), $translation->getY());
+        }
+        
         $this->drawCircle($gc, $node->getAttribute('radius'), $point->getX(), $point->getY(), GraphicsContext::SHAPE_DRAW_STROKE);
     }
 

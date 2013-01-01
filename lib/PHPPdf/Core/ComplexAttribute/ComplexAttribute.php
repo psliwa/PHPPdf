@@ -8,6 +8,8 @@
 
 namespace PHPPdf\Core\ComplexAttribute;
 
+use PHPPdf\Core\Boundary;
+
 use PHPPdf\Exception\InvalidArgumentException;
 
 use PHPPdf\Core\Node\Node,
@@ -150,5 +152,18 @@ abstract class ComplexAttribute
     public function isEmpty()
     {
         return false;
+    }
+    
+    protected function getTranslationAwareBoundary(Node $node, Boundary $boundary)
+    {
+        $positionTranslation = $node->getPositionTranslation();
+
+        if($positionTranslation && ($positionTranslation->getX() != 0 || $positionTranslation->getY() != 0))
+        {
+            $boundary = clone $boundary;
+            $boundary->translate($positionTranslation->getX(), $positionTranslation->getY());
+        }
+        
+        return $boundary;
     }
 }

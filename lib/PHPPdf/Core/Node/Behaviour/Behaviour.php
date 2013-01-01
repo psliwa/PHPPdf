@@ -8,6 +8,7 @@
 
 namespace PHPPdf\Core\Node\Behaviour;
 
+use PHPPdf\Core\Point;
 use PHPPdf\Core\Node\Node,
     PHPPdf\Core\Engine\GraphicsContext;
 
@@ -27,6 +28,23 @@ abstract class Behaviour
     }
     
     abstract protected function doAttach(GraphicsContext $gc, Node $node);
+    
+    protected static function getFirstPointOf(Node $node)
+    {
+        return self::getTranslatedPointOf($node, $node->getFirstPoint());
+    }
+    
+    protected static function getDiagonalPointOf(Node $node)
+    {
+        return self::getTranslatedPointOf($node, $node->getDiagonalPoint());
+    }
+    
+    private static function getTranslatedPointOf(Node $node, Point $point)
+    {
+        $translation = $node->getPositionTranslation();
+        
+        return $point->translate($translation->getX(), $translation->getY());
+    }
 
     public function isPassive()
     {

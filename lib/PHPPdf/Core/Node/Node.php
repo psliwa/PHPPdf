@@ -9,7 +9,6 @@
 namespace PHPPdf\Core\Node;
 
 use PHPPdf\Core\ComplexAttribute\ComplexAttribute;
-
 use PHPPdf\Exception\OutOfBoundsException;
 use PHPPdf\Exception\InvalidArgumentException;
 use PHPPdf\Exception\LogicException;
@@ -50,6 +49,9 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
     const TEXT_DECORATION_OVERLINE = 'overline';
     const ROTATE_DIAGONALLY = 'diagonally';
     const ROTATE_OPPOSITE_DIAGONALLY = '-diagonally';
+    const POSITION_STATIC = 'static';
+    const POSITION_RELATIVE = 'relative';
+    const POSITION_ABSOLUTE = 'absolute';
     
     const SHAPE_RECTANGLE = 'rectangle';
     const SHAPE_ELLIPSE = 'ellipse';
@@ -78,6 +80,9 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
     private $ancestorWithFontSize = null;
     
     private $unitConverter = null;
+    
+    private $closestAncestorWithPosition = null;
+    private $positionTranslation = null;
 
     public function __construct(array $attributes = array(), UnitConverter $converter = null)
     {
@@ -105,7 +110,7 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
     {
         //TODO refactoring
         $attributeWithGetters = array('width', 'height', 'margin-left', 'margin-right', 'margin-top', 'margin-bottom', 'padding-left', 'padding-right', 'padding-top', 'padding-bottom', 'font-type', 'font-size', 'float', 'breakable');
-        $attributeWithSetters = array('width', 'height', 'margin-left', 'margin-right', 'margin-top', 'margin-bottom', 'font-type', 'float', 'static-size', 'font-size', 'margin', 'padding', 'break', 'breakable', 'dump', 'padding-left', 'padding-right', 'padding-top', 'padding-bottom', 'min-width', 'line-height', 'line-break');
+        $attributeWithSetters = array('width', 'height', 'margin-left', 'margin-right', 'margin-top', 'margin-bottom', 'font-type', 'float', 'static-size', 'font-size', 'margin', 'padding', 'break', 'breakable', 'dump', 'padding-left', 'padding-right', 'padding-top', 'padding-bottom', 'min-width', 'line-height', 'line-break', 'left', 'right', 'bottom', 'top');
 
         $predicateGetters = array('breakable');
         
@@ -207,6 +212,12 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
         static::addAttribute('rotate', null);
         
         static::addAttribute('line-break', false);
+        
+        static::addAttribute('position', self::POSITION_STATIC);
+        static::addAttribute('left', null);
+        static::addAttribute('top', null);
+        static::addAttribute('right', null);
+        static::addAttribute('bottom', null);
     }
 
     public function setUnitConverter(UnitConverter $unitConverter)
@@ -797,6 +808,30 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
         return $this->getAttributeDirectly('padding-right');
     }
     
+    protected function setLeft($left)
+    {
+        $left = $this->convertUnit($left);
+        $this->setAttributeDirectly('left', $left);
+    }
+    
+    protected function setRight($right)
+    {
+        $right = $this->convertUnit($right);
+        $this->setAttributeDirectly('right', $right);
+    }
+    
+    protected function setTop($top)
+    {
+        $top = $this->convertUnit($top);
+        $this->setAttributeDirectly('top', $top);
+    }
+    
+    protected function setBottom($bottom)
+    {
+        $bottom = $this->convertUnit($bottom);
+        $this->setAttributeDirectly('bottom', $bottom);
+    }
+    
     public function getEncoding()
     {
         return $this->getPage()->getAttributeDirectly('encoding');
@@ -1266,6 +1301,10 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
         $copy->boundary = null;
         $copy->complexAttributeBag = clone $this->complexAttributeBag;
         $copy->drawingTasks = array();
+        $copy->positionTranslation = null;
+        $copy->ancestorWithFontSize = null;
+        $copy->ancestorWithRotation = null;
+        $copy->closestAncestorWithPosition = null;
 
         return $copy;
     }
@@ -1699,6 +1738,113 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
         return $this->ancestorWithFontSize;
     }
     
+    public function getClosestAncestorWithPosition()
+    {
+        if($this->closestAncestorWithPosition === null)
+        {
+            if($this->parent)
+            {
+                $position = $this->parent->getAttribute('position');
+                $position = $position ? : self::POSITION_STATIC;
+                $this->closestAncestorWithPosition = $position === self::POSITION_STATIC ? $this->parent->getClosestAncestorWithPosition() : $this->parent;
+            }
+            else 
+            {
+                $this->closestAncestorWithPosition = false;
+            }
+        }
+        
+        return $this->closestAncestorWithPosition;
+    }
+    
+    /**
+     * @return Point
+     */
+    public function getPositionTranslation()
+    {
+        if($this->positionTranslation === null)
+        {
+            $this->positionTranslation = $this->calculatePositionTranslation();
+        }
+        
+        return $this->positionTranslation;
+    }
+    
+    private function calculatePositionTranslation()
+    {
+        $ancestor = $this->getClosestAncestorWithPosition();
+        $position = $this->getAttributeDirectly('position');
+        
+        $position = $position ? : self::POSITION_STATIC;
+
+        if($position === self::POSITION_STATIC && !$ancestor)
+        {
+            return Point::getInstance(0, 0);
+        }
+        
+        if($position === self::POSITION_RELATIVE && $ancestor)
+        {
+            if($ancestor)
+            {
+                $ancestorTranslation = $ancestor->getPositionTranslation();
+                return $this->translatePointByPosition($ancestorTranslation);
+            }
+            else
+            {
+                return Point::getInstance($this->getAttributeDirectly('left'), $this->getAttributeDirectly('top'));
+            }
+        }
+        elseif($position === self::POSITION_STATIC)
+        {
+            return $ancestor->getPositionTranslation();
+        }
+        else
+        {
+            if($ancestor)
+            {
+                $ancestorTranslation = $ancestor->getPositionTranslation();
+
+                $top = $this->boundary->getFirstPoint()->getY() - $ancestor->getFirstPoint()->getY() + $this->getAttributeDirectly('top') + $ancestorTranslation->getY();
+                $left = $ancestor->getFirstPoint()->getX() - $this->boundary->getFirstPoint()->getX() + $this->getAttributeDirectly('left') + $ancestorTranslation->getX();
+
+                return Point::getInstance($left, $top);
+            }
+            else
+            {
+                $firstPoint = $this->getFirstPoint();
+                $page = $this->getPage();
+                
+                $originalLeft = $this->getAttributeDirectly('left');
+                $originalTop = $this->getAttributeDirectly('top');
+
+                $left = $originalLeft === null ? 0 : -$firstPoint->getX() + $originalLeft;
+                $top = $originalTop === null ? 0 : $firstPoint->getY() - $page->getRealHeight() + $originalTop;
+
+                return Point::getInstance($left, $top);
+            }
+        }
+    }
+    
+    private function translatePointByPosition(Point $point)
+    {
+        return $point->translate($this->getAttributeDirectly('left'), $this->getAttributeDirectly('top'));
+    }
+    
+    public function getTranslationAwareBoundary()
+    {
+        $translation = $this->getPositionTranslation();
+        
+        $boundary = $this->boundary;
+        
+        if($translation->getX() != 0 || $translation->getY() != 0)
+        {
+            $boundary = clone $boundary;
+            $boundary->translate($translation->getX(), $translation->getY());
+        }
+        
+        return $boundary;
+    }
+    
     /**
      * Free references to other object, after this method invocation
      * Node is in invalid state!
@@ -1707,6 +1853,7 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
     {
         $this->ancestorWithFontSize = null;
         $this->ancestorWithRotation = null;
+        $this->closestAncestorWithPosition = null;
 
         foreach($this->getChildren() as $child)
         {

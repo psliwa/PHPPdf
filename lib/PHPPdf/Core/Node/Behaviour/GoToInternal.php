@@ -33,9 +33,11 @@ class GoToInternal extends Behaviour
             throw new RuntimeException('Destination of GoToInternal dosn\'t exist.');
         }
 
-        $firstPoint = $node->getFirstPoint();
-        $diagonalPoint = $node->getDiagonalPoint();
+        $firstPoint = self::getFirstPointOf($node);
+        $diagonalPoint = self::getDiagonalPointOf($node);
         
-        $gc->goToAction($destinationNode->getGraphicsContext(), $firstPoint->getX(), $firstPoint->getY(), $diagonalPoint->getX(), $diagonalPoint->getY(), $destinationNode->getFirstPoint()->getY());
+        $destinationNodeFirstPoint = self::getFirstPointOf($destinationNode);
+        
+        $gc->goToAction($destinationNode->getGraphicsContext(), $firstPoint->getX(), $firstPoint->getY(), $diagonalPoint->getX(), $diagonalPoint->getY(), $destinationNodeFirstPoint->getY());
     }
 }

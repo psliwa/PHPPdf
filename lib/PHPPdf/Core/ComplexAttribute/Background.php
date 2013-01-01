@@ -264,13 +264,10 @@ class Background extends ComplexAttribute
     }
     
     private function getBoundary(Node $node)
-    {
-        if($this->useRealDimension)
-        {
-            return $node->getRealBoundary();
-        }
+    {        
+        $boundary = $this->useRealDimension ? $node->getRealBoundary() : $node->getBoundary();
         
-        return $node->getBoundary();
+        return $this->getTranslationAwareBoundary($node, $boundary);
     }
     
     private function getWidth(Node $node)
@@ -296,6 +293,14 @@ class Background extends ComplexAttribute
     private function drawCircleBackground(GraphicsContext $gc, Node $node, Document $document)
     {
         $point = $node->getMiddlePoint();
+        
+        $translation = $node->getPositionTranslation();
+        
+        if(!$translation->isZero())
+        {
+            $point = $point->translate($translation->getX(), $translation->getY());
+        }
+        
         $this->drawCircle($gc, $node->getAttribute('radius'), $point->getX(), $point->getY(), GraphicsContext::SHAPE_DRAW_FILL);
     }
 }

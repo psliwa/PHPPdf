@@ -18,6 +18,8 @@ use PHPPdf\Core\Node\Page,
 
 class NodeTest extends \PHPPdf\PHPUnit\Framework\TestCase
 {
+    const PAGE_HEIGHT = 100;
+    
     private $node;
     private $objectMother;
 
@@ -662,5 +664,94 @@ class NodeTest extends \PHPPdf\PHPUnit\Framework\TestCase
         
         $this->assertEquals($expected, $this->node->getAttribute('line-height'));
         $this->assertEquals($expected, $this->node->getAttribute('padding-left'));
+    }
+    
+    /**
+     * @test
+     * @dataProvider positionProvider
+     */
+    public function getsClosestAncestorWithPosition($position, $expectedFalse)
+    {
+        $grandparent = new Container();
+        $parent = new Container();
+        $grandparent->add($parent);
+        
+        $parent->add($this->node);
+        
+        $grandparent->setAttribute('position', $position);
+        
+        $actualAncestor = $this->node->getClosestAncestorWithPosition();
+        
+        if($expectedFalse)
+        {
+            $this->assertFalse($actualAncestor);
+        }
+        else
+        {
+            $this->assertEquals($grandparent, $actualAncestor);
+        }
+    }
+    
+    public function positionProvider()
+    {
+        return array(
+            array(
+                Node::POSITION_STATIC, true,
+            ),
+            array(
+                Node::POSITION_ABSOLUTE, false,
+            ),
+            array(
+                Node::POSITION_RELATIVE, false,
+            ),
+        );
+    }
+    
+    /**
+     * @test
+     * @dataProvider getsPositionTranslationProvider
+     */
+    public function getsPositionTranslation($position, $positionPoint, $firstPoint, $parentPosition, $parentPositionTranslation, $parentFirstPoint, $expectedPositionTranslation)
+    {
+        $this->node->setAttribute('position', $position);
+        $this->node->setAttribute('left', $positionPoint[0]);
+        $this->node->setAttribute('top', $positionPoint[1]);
+        
+        $boundary = $this->objectMother->getBoundaryStub($firstPoint[0], $firstPoint[1], 100, 100);
+        $this->writeAttribute($this->node, 'boundary', $boundary);
+        
+        $parent = $this->getMockBuilder('PHPPdf\Core\Node\Container')
+                       ->setMethods(array('getPositionTranslation'))
+                       ->getMock();
+        $parent->setAttribute('position', $parentPosition);
+        $parent->expects($this->any())
+               ->method('getPositionTranslation')
+               ->will($this->returnValue(Point::getInstance($parentPositionTranslation[0], $parentPositionTranslation[1])));
+               
+        $parentBoundary = $this->objectMother->getBoundaryStub($parentFirstPoint[0], $parentFirstPoint[1], 100, 100);
+        $this->writeAttribute($parent, 'boundary', $parentBoundary);
+
+        $this->node->setParent($parent);
+        
+        $page = new Page();
+        $page->setHeight(self::PAGE_HEIGHT);
+        $parent->setParent($page);
+        
+        $expectedPositionTranslation = Point::getInstance($expectedPositionTranslation[0], $expectedPositionTranslation[1]);
+        
+        $this->assertEquals($expectedPositionTranslation, $this->node->getPositionTranslation());
+    }
+    
+    public function getsPositionTranslationProvider()
+    {
+        return array(
+            array(Node::POSITION_STATIC, array(0, 0), array(0, 0), Node::POSITION_STATIC, array(0, 0), array(0, 0), array(0, 0)),
+            array(Node::POSITION_STATIC, array(0, 0), array(0, 0), Node::POSITION_ABSOLUTE, array(10, 20), array(0, 0), array(10, 20)),
+            array(Node::POSITION_STATIC, array(0, 0), array(0, 0), Node::POSITION_RELATIVE, array(10, 20), array(0, 0), array(10, 20)),
+            array(Node::POSITION_ABSOLUTE, array(11, 12), array(50, 60), Node::POSITION_STATIC, array(0, 0), array(0, 0), array(-39, -28)),
+            array(Node::POSITION_ABSOLUTE, array(11, 12), array(50, 60), Node::POSITION_ABSOLUTE, array(10, 20), array(50, 60), array(21, 32)),
+            array(Node::POSITION_ABSOLUTE, array(11, 12), array(50, 60), Node::POSITION_RELATIVE, array(null, null), array(40, 70), array(1, 2)),
+            array(Node::POSITION_ABSOLUTE, array(11, 12), array(50, 60), Node::POSITION_STATIC, array(0, 0), array(0, self::PAGE_HEIGHT), array(-39, -28)),
+        );
     }
 }

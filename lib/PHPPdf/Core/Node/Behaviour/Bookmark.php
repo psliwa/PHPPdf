@@ -43,7 +43,8 @@ class Bookmark extends Behaviour
     protected function doAttach(GraphicsContext $gc, Node $node)
     {
         $parentBookmarkIdentifier = $this->getParentBookmarkIdentifier($node);
-        $gc->addBookmark($this->getUniqueId(), $this->name, $node->getFirstPoint()->getY(), $parentBookmarkIdentifier);
+        $firstPoint = self::getFirstPointOf($node);
+        $gc->addBookmark($this->getUniqueId(), $this->name, $firstPoint->getY(), $parentBookmarkIdentifier);
         $this->setPassive(true);
     }
     

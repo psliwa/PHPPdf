@@ -20,6 +20,8 @@ use PHPPdf\Exception\OutOfBoundsException;
  */
 final class Point implements \ArrayAccess
 {
+    private static $zero;
+    
     private $x;
     private $y;
 
@@ -36,7 +38,22 @@ final class Point implements \ArrayAccess
      */
     public static function getInstance($x, $y)
     {
+        if($x === 0 && $y === 0)
+        {
+            if(self::$zero === null)
+            {
+                self::$zero = new self(0, 0);
+            }
+            
+            return self::$zero;
+        }
+
         return new self($x, $y);
+    }
+    
+    public function isZero()
+    {
+        return $this === self::$zero;
     }
 
     public function getX()

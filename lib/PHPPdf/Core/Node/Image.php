@@ -59,7 +59,7 @@ class Image extends Node
     protected function doDraw(Document $document, DrawingTaskHeap $tasks)
     {
         $sourceImage = $this->createSource($document);
-        $callback = function($node, $sourceImage)
+        $callback = function(Node $node, $sourceImage)
         {
             $gc = $node->getGraphicsContext();
             
@@ -68,6 +68,7 @@ class Image extends Node
             $keepRatio = $node->getAttribute('keep-ratio');
             
             $rotationNode = $node->getAncestorWithRotation();
+            $translation = $node->getPositionTranslation();
         
             if($isAlphaSet || $rotationNode || $keepRatio)
             {
@@ -77,7 +78,7 @@ class Image extends Node
             
             if($rotationNode)
             {
-                $middlePoint = $rotationNode->getMiddlePoint();
+                $middlePoint = $rotationNode->getMiddlePoint()->translate($translation->getX(), $translation->getY());
                 $gc->rotate($middlePoint->getX(), $middlePoint->getY(), $rotationNode->getRotate());
             }
             
@@ -85,6 +86,9 @@ class Image extends Node
             $width = $originalWidth = $node->getWidth();
             
             list($x, $y) = $node->getStartDrawingPoint();
+            
+            $x += $translation->getX();
+            $y -= $translation->getY();
             
             if($keepRatio)
             {
