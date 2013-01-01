@@ -421,6 +421,8 @@ Atrybuty
 * style - to samo co w html'u, ten atrybut służy do ustawiania wartości innym atrybutom, np.: style="width: 100px; height: 200px; margin: 20px 0;". Każdy atrybut musi być zakonczony średnikiem (";"), nawet ostatni.
 * ignore-error (dla tagu img) - ignorować błąd ładowania pliku, czy wyrzucać wyjątek? Domyślnie false, czyli jest wyrzucany wyjątek.
 * keep-ratio (dla tagu img) - utrzymuje proporcje obrazka wycinając fragment obrazka, nawet gdy zadane rozmiary nie są w proporcjach oryginalnego obrazka. Domyślnie false.
+* position - to samo co w htmlu. Dozwolone wartości: static (domyślnie), relative, absolute
+* left oraz right - to samo co w htmlu, działa z position relative lub absolute. Atrybuty right oraz bottom nie są wspierane.
 
 <a name="complex-attributes"></a>
 Atrybuty złożone

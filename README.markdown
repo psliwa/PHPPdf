@@ -514,7 +514,9 @@ Attributes
 * line-break - line break (true or false), by default set on true only for "br" tag
 * style - as same as in html, this attribute can be used to set another attributes, for example: style="width: 100px; height: 200px; margin: 20px 0;". Every attribute must be finished by ";" char, even the last.
 * ignore-error (only for img tag) - ignore file loading error or throw exception? False by default, that means exception will be thrown.
-* keep-ratio (only for img tag) - keeps ratio by cutting fragment of image even if ratio of setted dimension is not the same as ratio of original source image. False by default. 
+* keep-ratio (only for img tag) - keeps ratio by cutting fragment of image even if ratio of setted dimension is not the same as ratio of original source image. False by default.
+* position - the same as in html. Allowed values: static (default), relative, absolute
+* left and right - the same as in html, works with position relative or absolute. Right and bottom is not supported. 
 
 <a name="complex-attributes"></a>
 Complex attributes
