@@ -3,6 +3,10 @@ CHANGELOG
 
 * (current master) ???
 
+  * (nothing)
+
+* 1.2.0 (2013-01-02)
+
   * fix bugs in pie-chart tag
   * fix set page width and height directly
   * fix converting percentage dimensions (width and height) of element, that parent has paddings set
