@@ -8,6 +8,7 @@ CHANGELOG
   * fix converting percentage dimensions (width and height) of element, that parent has paddings set
   * add position attribute
   * rename "position" to "list-position" attribute of "ul" and "ol" tags - break backward compatibility!
+  * composer.json: move zend-barcode, zend-validator and Imagine to "suggest" section
 
 * 1.1.6 (2012-10-28)
 
