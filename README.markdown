@@ -67,9 +67,10 @@ Installation
 PHPPdf is available at packagist.org, so you can use composer to download this library and all dependencies.
 
 Please configure the "minimum-stability" in your composer.json file, and set it to dev.
+
 ```
 "minimum-stability": "dev"
-```.
+```
 
 PHPPdf uses the Zend Framework packages, so if you want to use composer,
 you must add the Zend Framework composer repository to your composer.json file.
