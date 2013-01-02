@@ -60,8 +60,13 @@ Instalacja
 
 PHPPdf jest dostępne na packagist.org, więc możesz użyć narzędzia composer aby ściągnąć tą bibliotekę ze wszystkimi zależnościami. PHPPdf wymaga aby opcja "minimum-stability" była ustawiona na dev.
 
+```
+"minimum-stability": "dev"
+```
+
 PHPPdf korzysta z pakietów zendframework, więc jeśli chcesz korzystać z biblioteki composer, musisz dodać repozytorium zendframework do swojego pliku composer.json.
 
+```js
     "repositories": [
         {
             "type": "composer",
@@ -72,6 +77,7 @@ PHPPdf korzysta z pakietów zendframework, więc jeśli chcesz korzystać z bibl
             "url": "http://packagist.org/"
         }
     ]
+```
 
 Jeśli nie chcesz używać narzędzia composer, poniżej znajdziesz instrukcje jak ręcznie zainstalować tą bibliotekę wraz ze wszystkimi zależnościami.
 
@@ -89,8 +95,10 @@ Biblioteka posiada zależności do zewnętrznych bibliotek:
 
 Aby biblioteka była gotowa do użytku, trzeba pobrać te zależności. Należy wywołać z wysokości głównego katalogu biblioteki polecenie (należy mieć zainstalowanego klienta git):
 
+```bash
     php vendors.php
-    
+```
+
 Alternatywnie zależności można umieścić ręcznie w katalogu "lib/vendor". Domyślnie plik vendors.php **pobierze całą bibliotekę ZF2**, pamietaj że **konieczne do działania są tylko paczki ZendPdf, Zend_Memory, Zend_Cache, Zend_Stdlib, Zend_EventManager oraz Zend_ServiceManager**. Do obsługi kodów kreskowych wymagane jest **Zend_Barcode**. **Resztę paczek i plików ZF2 możesz usunąć**.
     
 <a name="symfony2-bundle"></a>
@@ -108,6 +116,7 @@ FAQ
 Należy ustawić czcionkę, która wspiera kodowanie utf-8 z zakresu polskich znaków. PHPPdf ma dołączonych kilka takich czcionek, np. DejaVuSans, czy Kurier. W przykładzie "font" jest pokazane w jaki sposób ustawić rodzaj czcionki z wysokości szablonu stylów.
 Możesz dodać dowolne czcionki, aby to osiągnąć powinieneś przygotować plik konfiguracyjny w formacie xml oraz skonfigurować obiekt Facade, tak jak w poniższym przykładzie:
 
+```xml
     //kod xml
     <fonts>   
         <font name="DejaVuSans">
@@ -117,13 +126,16 @@ Możesz dodać dowolne czcionki, aby to osiągnąć powinieneś przygotować pli
             <bold-italic src="%resources%/fonts/DejaVuSans/bold+oblique.ttf" />
         </font>
     </fonts>
-    
+```
+
+```php    
     //kod php
     $loader = new PHPPdf\Core\Configuration\LoaderImpl();
     $loader->setFontFile(/* path to fonts configuration file */);
     $builder = PHPPdf\Core\FacadeBuilder::create($loader);
     $facade = $builder->build();
-    
+```
+
 Więcej szczegółów możesz znaleść w rozdziale [Konfiguracja](#configuration).
 
 
@@ -137,9 +149,11 @@ Do ustawiania rozmiarów strony służy atrybut "page-size" tagów page oraz dyn
 
 Przykład:
 
+```xml
     <page page-size="100:50">text</page>
     <page page-size="a4">text</page>
     <page page-size="letter-landscape">text</page>
+```
 
 <a name="parsing"></a>
 Parsowanie dokumentu i tworzenie pdf'a.
@@ -147,6 +161,7 @@ Parsowanie dokumentu i tworzenie pdf'a.
 
 Najprostrzy sposób wykorzystania biblioteki:
 
+```php
     //zarejestrowanie autoloadera PHPPdf oraz vendor (Zend_Pdf i inne zależności)
     require_once 'PHPPdf/Autoloader.php';
     PHPPdf\Autoloader::register();
@@ -162,6 +177,7 @@ Najprostrzy sposób wykorzystania biblioteki:
 
     header('Content-Type: application/pdf');
     echo $content;
+```
 
 <a name="structure"></a>
 Podstawowa struktura dokumentu.
@@ -169,6 +185,7 @@ Podstawowa struktura dokumentu.
 
 Biblioteka bazuje na formacie XML przypominającym HTML, ale w żadnym wypadku nie jest to HTML - niektóre tagi się różnią, interpretacja niektórych atrybutów jest inna niż w standardzie HTML i CSS, sposób dodawania atrybutów również jest inny. Najprostrzy dokument ma następującą strukturę:
 
+```xml
     <pdf>
         <dynamic-page>
             <h1>Nagłówek</h1>
@@ -182,13 +199,17 @@ Biblioteka bazuje na formacie XML przypominającym HTML, ale w żadnym wypadku n
             </table>
         </dynamic-page>
     </pdf>
+```
     
 Zalecane jest dodawanie następującej deklaracji DOCTYPE do dokumentów, pozwala ona na zaminę encji na wartości:
 
+```xml
     <!DOCTYPE pdf SYSTEM "%resources%/dtd/doctype.dtd">
+```
 
 Korzeń dokumentu musi się nazywać "pdf". Element "dynamic-page" jest stroną, która się dynamicznie dzieli gdy zostanie przepełniona. Alternatywą jest tag "page", czyli pojedyńcza niepodzielna strona. Są różnice w nadawaniu atrybutom wartości w stosunku do HTML. Aby nadać obramowanie i tło warstwie należy posłużyć się atrybutem złożonym "border" oraz "background", atrybuty te mają swoje własne właściwości, np. kolor, rozmiar, zaokrąglenie. Alternatywną składnią do ustawiania atrybutów oraz atrybutów złożonych (complex-attribute) jest element "stylesheet". Przykład:
 
+```xml
     <pdf>
         <dynamic-page>
             <div color="red" border.color="black" background.color="pink">
@@ -196,9 +217,11 @@ Korzeń dokumentu musi się nazywać "pdf". Element "dynamic-page" jest stroną,
             </div>
         </dynamic-page>
     </pdf>
+```
     
 Alternatywna składnia (element stylesheet):
 
+```xml
     <pdf>
         <dynamic-page>
             <div>
@@ -211,6 +234,7 @@ Alternatywna składnia (element stylesheet):
             </div>
         </dynamic-page>
     </pdf>
+```
 
 Atrybuty można nadawać za pomocą atrybutów XML bezpośrednio po nazwie tagu lub też za pomocą wspomnianego tagu "stylesheet". Nie istnieje atrybut "style" znany z HTML'a.
 
@@ -222,6 +246,7 @@ Dziedziczenie
 
 Atrybut "id" ma całkowicie inne znaczenie niż w HTML'u. Atrybut "name" jest aliasem do "id". Id musi być unikalne w obrębie dokumentu, w przeciwnym wypadku wystąpi błąd parsowania. Służy on m. in. do identyfikowania elementów przy dziedziczeniu. Przykład:
 
+```xml
     <pdf>
         <dynamic-page>
             <div id="warstwa-1" color="red" font-type="judson" font-size="16px">
@@ -235,6 +260,7 @@ Atrybut "id" ma całkowicie inne znaczenie niż w HTML'u. Atrybut "name" jest al
             </div>
         </dynamic-page>
     </pdf>
+```
 
 Druga warstwa dziedziczy wszstkie atrybuty proste i złożone po pierwszej, nawet te które zostały nadane z zewnętrznego arkuszu stylów.
 
@@ -247,6 +273,7 @@ Priorytety nadawania wartości atrybutom:
 
 Przykład:
 
+```xml
     <pdf>
         <page>
             <div id="1" color="#cccccc" height="100px" text-align="right">
@@ -258,6 +285,7 @@ Przykład:
             </div>
         </page>
     </pdf>
+```
 
 Drugi "div" będzie miał następujące atrybuty:
 
@@ -273,6 +301,7 @@ Arkusze stylów muszą się znajdować w osobnym pliku, krótki (jako atrybut xm
 
 Krótki sposób:
 
+```xml
     <stylesheet>
         <!-- style są wbudowane w tag jako atrybuty xml, atrybut "class" ma takie samo znaczenie co w HTML/CSS -->
         <div class="class" font-size="12px" color="gray" background.color="yellow">
@@ -293,9 +322,11 @@ Krótki sposób:
             </div>
         </h2>
     </stylesheet>
+```
 
 Długi sposób:
 
+```xml
     <stylesheet>
         <div class="klasa">
             <!-- atrybuty proste i złożone zagnieżdzone w ścieżce selektora div.klasa -->
@@ -324,6 +355,7 @@ Długi sposób:
             </div>
         </h2>
     </stylesheet>
+```
 
 <a name="color-palette"></a>
 Palety kolorów
@@ -333,6 +365,7 @@ Można definiować również paletę kolorów, czyli mapę nazw logicznych na ko
 
 Przykład:
 
+```xml
     <!-- plik colors.xml -->
     <colors>
         <color name="header-color" hex="#333333" />
@@ -359,12 +392,15 @@ Przykład:
             </table>
         </page>
     </pdf>
+```
     
+```php
     //kod php
     use PHPPdf\DataSource\DataSource;
     $facade = ...;
     
     $content = $facade->render(DataSource::fromFile(__DIR__.'/document.xml'), DataSource::fromFile(__DIR__.'/stylesheet.xml'), DataSource::fromFile(__DIR__.'/colors.xml'));
+```
 
 <a name="tags"></a>
 Standardowe tagi
@@ -451,6 +487,7 @@ Atrybuty złożone mogą zostać ustawione za pomocą notacji "nazwaAtrybutu.naz
 
 Można dodawać kilka upiększeń tego samego typu (np. 3 różne obramowania) używając tagu "stylesheet" zamiast krótkiej notacji ("border.color"):
 
+```xml
     <pdf>
         <dynamic-page>
             <div>
@@ -463,6 +500,7 @@ Można dodawać kilka upiększeń tego samego typu (np. 3 różne obramowania) u
             </div>
         </dynamic-page>
     </pdf>
+```
 
 W tym przykładzie drugie obramowanie ma identyfikator "borderLeftAndRight", jakby go nie było to atrybuty drugiego obramowania zostały by złączone z atrybutami z pierwszego obramowania. Domyślny identyfikator "id" jest równy atrybutowi "name". Identyfikatory "id" dla atrybutów złożonych (complex-attributes) nie mają nic wspólnego z atrybutami "id" dla elementów (nodeów). Można tworzyć obramowania złożone manipulując pozycją, tak jak w powyższym przykładzie (outerBorderLeftAndRight).
 
@@ -484,11 +522,13 @@ Kody kreskowe są obsługiwane za pomocą tagu &lt;barcode&gt;. PHPPdf do genero
 
 Przykład:
 
+```xml
     <pdf>
         <dynamic-page>
             <barcode type="code128" code="PHPPdf" />
         </dynamic-page>
     </pdf>
+```
 
 Tag &lt;barcode&gt; obsługuje większość standardowych atrybutów oraz ma szereg innych atrybutów:
 
@@ -513,11 +553,13 @@ PHPPdf wspiera rysowanie prostych wykresów. Obecnie jest obsługiwany tylko pro
 
 Przykład:
 
+```xml
     <pdf>
         <dynamic-page>
             <pie-chart radius="200px" chart-values="10|20|30|40" chart-colors="black|red|green|blue"></pie-chart>
         </dynamic-page>
     </pdf>
+```
     
 Tag pie-chart ma trzy dodatkowe atrybuty:
 
@@ -533,6 +575,7 @@ Biblioteka wspiera wewnętrzne oraz zewnętrzne hiperłącza. Zewnętrzne hiper�
 
 Przykład:
 
+```xml
     <pdf>
         <dynamic-page>
             <a href="http://google.com">idź do google.com</a>
@@ -543,6 +586,7 @@ Przykład:
             <p id="some-id">Tak, to jest inny tag! ;)</p>
         </dynamic-page>
     </pdf>
+```
 
 Każdy element ma attrybuty "href" oraz "ref", nawet div. Nie możesz zagnieżdżać elementów wewnątrz tagu "a". Jeśli chcesz użyć np. img jako linka, powinieneś wykorzystać do tego atrybut "href" (zewnętrzny link) lub "ref" (wewnętrzny link) bezpośrednio w tagu "img".
 
@@ -554,6 +598,7 @@ Preferowany sposób tworzenia zakładek jest tag "behaviours". Ten sposób nie o
 
 Przykład:
 
+```xml
     <pdf>
 	    <dynamic-page>
 		    <div>
@@ -582,11 +627,13 @@ Przykład:
 		    </div>
 		</dynamic-page>
     </pdf>
+```
 
 Skrótem dla tagu "behaviours" jest atrybut "bookmark", jeśli przypiszesz mu jakąś wartość to zostanie utworzona zakładka, która linkuje do tego tagu. Zakładka tagu rodzica jest również rodzicem zakładek dzieci tego tagu.
 
 Przykład:
 
+```xml
     <pdf>
 	    <dynamic-page>
 		    <div bookmark="bookmark rodzica">
@@ -603,6 +650,7 @@ Przykład:
 		    </div>
 		</dynamic-page>
     </pdf>
+```
 
 Powyższe struktury (obydwa przykłady) utworzą poniższą strukturę zakładek:
 
@@ -619,14 +667,17 @@ Notatka może zostać dodana poprzez atrybut "note".
 
 Przykład:
 
+```xml
     <pdf>
         <dynamic-page>
             <div note="treść notatki"></div>
         </dynamic-page>
     </pdf>
+```
 
 Parser xml normalizuje wartości atrybutów, czego skutkiem jest ignorowanie znaków nowej linii. Jeśli chcesz dodać notatkę, w której znaki nowej lini są ważne, możesz skorzystać ze składni:
 
+```xml
     <pdf>
         <dynamic-page>
             <div>
@@ -636,6 +687,7 @@ Parser xml normalizuje wartości atrybutów, czego skutkiem jest ignorowanie zna
             </div>
         </dynamic-page>
     </pdf>
+```
 
 <a name="headers"></a>
 Powtarzalne nagłówki i stopki
@@ -643,6 +695,7 @@ Powtarzalne nagłówki i stopki
 
 Aby dodać powtarzalny nagłówek i/bądź stopkę należy wykorzystać tag "placeholders". Niektóre elementy mają specjalne "sloty": strona ma nagłówek i stopkę, tabela może mieć nagłówek (TODO: jeszcze nie zaimplementowane) itp.
 
+```xml
     <pdf>
         <dynamic-page>
             <placeholders>
@@ -659,6 +712,7 @@ Aby dodać powtarzalny nagłówek i/bądź stopkę należy wykorzystać tag "pla
             </placeholders>
         </dynamic-page>
     </pdf>
+```
 
 Nagłówek i stopka muszą mieć bezpośrednio określoną wysokość. Wysokość ta sumuje się z marginesami górnym i dolnym, czyli rozmiar roboczy strony jest to rozmiar pomniejszony o marginesy górny i dolny oraz o wysokość stopki i nagłówka.
 
@@ -670,6 +724,7 @@ Strona ma placeholder o nazwie "watermark". Jako znak wodny można użyć elemen
 
 Przykład:
 
+```xml
     <pdf>
         <dynamic-page>
             <placeholders>
@@ -682,6 +737,7 @@ Przykład:
             </placeholders>
         </dynamic-page>
     </pdf>
+```
 
 <a name="page-numbering"></a>
 Numerowanie stron
@@ -696,6 +752,7 @@ Atrybuty tych tagów:
 
 Przykład:
 
+```xml
     <pdf>
         <dynamic-page>
             <placeholders>
@@ -708,6 +765,7 @@ Przykład:
             Jakiś tekst
         </dynamic-page>
     </pdf>
+```
 
 <a name="templates"></a>
 Wykorzystanie istniejącego dokumentu jako szablon
@@ -717,11 +775,13 @@ Tag "page" oraz "dynamic-page" posiadają atrybut "document-template", który po
 
 Przykład:
 
+```xml
     <pdf>
         <dynamic-page document-template="sciezka/do/pliku.pdf">
             <div>Jakaś treść</div>
         </dynamic-page>
     </pdf>
+```
 
 <a name="columns"></a>
 Podział strony na kolumny.
@@ -729,6 +789,7 @@ Podział strony na kolumny.
 
 Strona może być podzielona na kolumny.
 
+```xml
     <pdf>
         <dynamic-page>
             <column-layout>
@@ -737,6 +798,7 @@ Strona może być podzielona na kolumny.
             </column-layout>
         </dynamic-page>
     </pdf>
+```
 
 Powyższy xml określa kilka stron dokumentu pdf z zielonymi prostokątami podzielonymi na 2 kolumny. Tag "column-layout" ma dwa dodatkowe atrybuty: number-of-columns oraz margin-between-columns. Domyślna wartość tych atrybutów to odpowiednio 2 oraz 10.
 
@@ -750,11 +812,13 @@ Jeśli chcesz uniknąć automatycznego łamania strony lub kolumny dla szczegól
 
 Przykład:
 
+```xml
     <pdf>
         <dynamic-page>
             <div breakable="false">ten div nie będzie automatycznie łamany</div>
         </dynamic-page>
     </pdf>
+```
 
 <a name="metadata"></a>
 Metadane
@@ -764,9 +828,11 @@ Metadane mogą zostać dodane za pomocą atrybutów korzenia dokumentu. Metadane
 
 Przykład:
 
+```xml
     <pdf Author="Piotr Śliwa" Title="Dokument testowy">
         <!-- jakieś inne elementy -->
     </pdf>
+```
 
 <a name="configuration"></a>
 Konfiguracja
@@ -781,22 +847,28 @@ Biblioteka ma 4 podstawowe pliki konfiguracyjne, które pozwalają na dostosowan
 
 Aby zmienić domyślne pliki konfiguracyjne należy przekazać do konstruktora fasady odpowiednio skonfigurowany obiekt ładujący konfigurację.
 
+```php
     $loader = new PHPPdf\Core\Configuration\LoaderImpl('/sciezka/do/pliku/nodes.xml', '/sciezka/do/pliku/complex-attributes.xml', '/sciezka/do/pliku/fonts.xml', '/sciezka/do/pliku/colors.xml');
     $facade = new PHPPdf\Core\Facade($loader);
+```
     
 Jeśli chcesz zmienić tylko jeden plik konfiguracyjny, powinieneś użyć jednej z metod LoaderImpl::set*:
 
+```php
     $loader = new PHPPdf\Core\Configuration\LoaderImpl();
     $loader->setFontFile('/sciezka/do/pliku/fonts.xml');//dostępne metody: setFontFile, setNodeFile, setComplexAttributeFile, setColorFile
     $facade = new PHPPdf\Core\Facade($loader);
+```
 
 Można wykorzystać budowniczego fasady, który dodatkowo ma opcję do ustawiania cache, silnika renderującego oraz parsera dokumentów.
     
+```php
     $builder = PHPPdf\Core\FacadeBuilder::create(/* można przekazać obiekt loadera konfiguracji */)
                                         ->setCache('File', array('cache_dir' => './cache'))
                                         ->setUseCacheForStylesheetConstraint(true); //szablony stylów również będą korzystały z cache
 
     $facade = $builder->build();
+```
 
 <a name="markdown"></a>
 Markdown - wsparcie
@@ -806,16 +878,20 @@ Biblioteka wspiera podstawową (oficjalną) składnię markdown. Aby skonwertowa
 
 Przykład:
 
+```php
     $facade = PHPPdf\Core\FacadeBuilder::create()
                                          ->setDocumentParserType(PHPPdf\Core\FacadeBuilder::PARSER_MARKDOWN)
                                          ->setMarkdownStylesheetFilepath(/** opcjonalna ścieżka do pliku z arkuszem stylów o składni xml */)
                                          ->build();
+```
 
 Domyślnie w dokumencie jest użyta czcionka helvetica. Jeśli chcesz użyć znaków utf-8 lub dostosować wynikowy dokument pdf, powinieneś dostarczyć swój własny arkusz stylów poprzez metodę FacadeBuilder::setMarkdownStylesheetFilepath. Struktura arkuszy stylów została opisana w jednym z poprzednich [rozdziałów](#stylesheet). Domyślnie arkusz stylów jest pusty, jeśli chcesz ustawić inną czcionkę, arkusz stylów powinien wyglądać:
 
+```xml
     <stylesheet>
         <any font-type="DejaVuSans" />
     </stylesheet>
+```
 
 Wewnętrznie MarkdownDocumentParser konwertuje dokument markdown do html'a (poprzez bibliotekę [PHP markdown](https://github.com/wolfie/php-markdown)), następnie konwertuje html'a do xml'a i wreszcie xml'a do dokumentu pdf.
 
@@ -827,21 +903,25 @@ Image generation engine
 
 PHPPdf może również generować obrazki (jpg lub png) zamiast plików pdf. Aby to osiągnąć, musisz skonfigurować obiekt FacadeBuilder, przykład:
 
+```php
     $facade = PHPPdf\Core\FacadeBuilder::create()
                                        ->setEngineType('image')
                                        ->build();
 
     //metoda render zwraca tablicę źródeł obrazków, jeden obrazek to jedna strona dokumentu pdf
     $images = $facade->render(...);
+```
 
 Domyślną biblioteką generującą obrazki jest Gd, możesz używać biblioteki Imagick, która oferuje lepszą jakość, więc jest rekomendowana jeśli masz możliwość zainstalowania Imagick na swoim serwerze. Aby ustawić bibliotekę która ma być wykorzystana, należy skonfigurować obiekt FacadeBuilder za pomocą metody setEngineOptions:
 
+```php
     $builder = ...;
     $builder->setEngineOptions(array(
         'engine' => 'imagick',
         'format' => 'png',//png, jpeg lub wbmp
         'quality' => 60,//liczba całkowita od 0 do 100
     ));
+```
 
 Wspierane biblioteki graficzne: gd (domyślnie), imagick, gmagick. PHPPdf wykorzystuje bibliotekę [Imagine][2] jako interfejs do generowania plików graficznych.
 
