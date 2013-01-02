@@ -14,10 +14,12 @@
     "require": {
         "zendframework/zendpdf":  ">=2.0.0-rc2",
         "zendframework/zend-cache":  ">=2.0.0-rc2",
-        "zendframework/zend-barcode":  ">=2.0.0-rc2",
-        "zendframework/zend-memory": ">=2.0.0-rc2",
-        "zendframework/zend-validator": ">=2.0.0-rc2",
-        "imagine/Imagine": ">=v0.2.6"
+        "zendframework/zend-memory": ">=2.0.0-rc2"
+    },
+    "suggest": {
+    	"zendframework/zend-barcode":  "If you want to use barcodes",
+    	"zendframework/zend-validator": "If you want to use barcodes (required by zend-barcode)",
+    	"imagine/Imagine": "If you want to use image generating (required version: >=v0.2.6)"
     },
     "autoload": {
         "psr-0": { "PHPPdf": "lib/", "Imagine": "lib/" }
