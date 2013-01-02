@@ -1,10 +1,3 @@
-Informacje
-===========
-
-[![Build Status](https://secure.travis-ci.org/psliwa/PHPPdf.png?branch=master)](http://travis-ci.org/psliwa/PHPPdf)
-
-To jest gałąź rozwojowa, tak więc **nie jest stabilna**, ostatnia **stablina** gałąź to 1.1.x.
-
 Przykłady
 =========
 

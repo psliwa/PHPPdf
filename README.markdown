@@ -1,10 +1,3 @@
-Information
-===========
-
-[![Build Status](https://secure.travis-ci.org/psliwa/PHPPdf.png?branch=master)](http://travis-ci.org/psliwa/PHPPdf)
-
-This is development branch, thus it **is not stable**, latest **stable** branch is 1.1.x.
-
 Examples
 =========
 
