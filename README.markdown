@@ -65,18 +65,6 @@ Please configure the "minimum-stability" in your composer.json file, and set it 
 "minimum-stability": "dev"
 ```
 
-PHPPdf uses the Zend Framework packages, so if you want to use composer,
-you must add the Zend Framework composer repository to your composer.json file.
-
-```js
-    "repositories": [
-        {
-            "type": "composer",
-            "url": "http://packages.zendframework.com/"
-        }
-    ]
-```
-
 If you do not want to use composer, follow the instructions below to manually install this library with all the dependencies.
 
 This library uses the following external dependencies:
