@@ -23,15 +23,5 @@
     },
     "autoload": {
         "psr-0": { "PHPPdf": "lib/", "Imagine": "lib/" }
-    },
-    "repositories": [
-        {
-            "type": "composer",
-            "url": "http://packages.zendframework.com/"
-        },
-        {
-            "type": "composer",
-            "url": "http://packagist.org/"
-        }
-    ]
+    }
 }

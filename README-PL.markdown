@@ -64,21 +64,6 @@ PHPPdf jest dostępne na packagist.org, więc możesz użyć narzędzia composer
 "minimum-stability": "dev"
 ```
 
-PHPPdf korzysta z pakietów zendframework, więc jeśli chcesz korzystać z biblioteki composer, musisz dodać repozytorium zendframework do swojego pliku composer.json.
-
-```js
-    "repositories": [
-        {
-            "type": "composer",
-            "url": "http://packages.zendframework.com/"
-        },
-        {
-            "type": "composer",
-            "url": "http://packagist.org/"
-        }
-    ]
-```
-
 Jeśli nie chcesz używać narzędzia composer, poniżej znajdziesz instrukcje jak ręcznie zainstalować tą bibliotekę wraz ze wszystkimi zależnościami.
 
 Biblioteka posiada zależności do zewnętrznych bibliotek: 
