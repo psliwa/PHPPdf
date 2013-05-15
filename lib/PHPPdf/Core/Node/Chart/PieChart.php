@@ -89,7 +89,7 @@ class PieChart extends Circle
 
                     $color = $colors[$i];
                     $relativeValue = $value/$totalValues;
-                    $end = $start + 360*$relativeValue;
+                    $end = $start + 359.999999*$relativeValue;
                     
                     if($start == $end) continue;
                     
