@@ -74,7 +74,7 @@ class EngineTest extends \PHPPdf\PHPUnit\Framework\TestCase
     {
         $size = '1:1';
         
-        $gc = $this->engine->createGraphicsContext($size);
+        $gc = $this->engine->createGraphicsContext($size, 'utf-8');
         
         $this->assertInstanceOf('PHPPdf\Core\Engine\ZF\GraphicsContext', $gc);
         
@@ -114,7 +114,7 @@ class EngineTest extends \PHPPdf\PHPUnit\Framework\TestCase
         
         $engine = new Engine();
         
-        $loadedEngine = $engine->loadEngine($file);
+        $loadedEngine = $engine->loadEngine($file, 'utf-8');
         
         $this->assertFalse($loadedEngine === $engine);
         $this->assertInstanceOf('PHPPdf\Core\Engine\ZF\Engine', $loadedEngine);
@@ -131,7 +131,7 @@ class EngineTest extends \PHPPdf\PHPUnit\Framework\TestCase
         
         $engine = new Engine();
         
-        $engine->loadEngine($file);
+        $engine->loadEngine($file, 'utf-8');
     }
     
     /**

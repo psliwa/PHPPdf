@@ -242,9 +242,9 @@ class Document extends AbstractStringFilterContainer implements Engine
         }
     }
     
-    public function createGraphicsContext($size)
+    public function createGraphicsContext($size, $encoding)
     {
-        return $this->engine->createGraphicsContext($size);
+        return $this->engine->createGraphicsContext($size, $encoding);
     }
     
     public function attachGraphicsContext(GraphicsContext $gc)
@@ -277,9 +277,9 @@ class Document extends AbstractStringFilterContainer implements Engine
         return $this->engine->createFont($data);
     }
     
-    public function loadEngine($file)
+    public function loadEngine($file, $encoding)
     {
-        return $this->engine->loadEngine($file);
+        return $this->engine->loadEngine($file, $encoding);
     }
     
     public function setMetadataValue($name, $value)

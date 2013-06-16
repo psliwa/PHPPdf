@@ -38,9 +38,9 @@ class Engine extends AbstractEngine
         $this->zendPdf = $zendPdf;
     }
     
-    public function createGraphicsContext($graphicsContextSize)
+    public function createGraphicsContext($graphicsContextSize, $encoding)
     {
-        return new GraphicsContext($this, $graphicsContextSize);
+        return new GraphicsContext($this, $graphicsContextSize, $encoding);
     }
     
     public function attachGraphicsContext(BaseGraphicsContext $gc)
@@ -123,7 +123,7 @@ class Engine extends AbstractEngine
         return $this->outlines[$id];
     }
     
-    public function loadEngine($file)
+    public function loadEngine($file, $encoding)
     {
         if(isset(self::$loadedEngines[$file]))
         {
@@ -142,7 +142,7 @@ class Engine extends AbstractEngine
             
             foreach($pdf->pages as $page)
             {
-                $gc = new GraphicsContext($engine, $page);
+                $gc = new GraphicsContext($engine, $page, $encoding);
                 $engine->attachGraphicsContext($gc);
             }
             

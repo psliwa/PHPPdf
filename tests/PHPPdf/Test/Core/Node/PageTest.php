@@ -477,7 +477,7 @@ class PageTest extends \PHPPdf\PHPUnit\Framework\TestCase
                          
         $document->expects($this->once())
                  ->method('loadEngine')
-                 ->with($fileOfSourcePage)
+                 ->with($fileOfSourcePage, 'utf-8')
                  ->will($this->returnValue($engine));
                  
         $engine->expects($this->once())

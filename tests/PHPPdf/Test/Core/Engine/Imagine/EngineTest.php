@@ -41,7 +41,7 @@ class EngineTest extends TestCase
               ->method('getSize')
               ->will($this->returnValue($box));
                       
-        $gc = $this->engine->createGraphicsContext($size);
+        $gc = $this->engine->createGraphicsContext($size, 'utf-8');
         
         $this->assertInstanceOf('PHPPdf\Core\Engine\Imagine\GraphicsContext', $gc);
         
@@ -163,7 +163,7 @@ class EngineTest extends TestCase
                       ->with($path)
                       ->will($this->returnValue($image));
         
-        $engine = $this->engine->loadEngine($path);
+        $engine = $this->engine->loadEngine($path, 'utf-8');
         
         $this->assertEquals(1, count($engine->getAttachedGraphicsContexts()));
     }
@@ -181,6 +181,6 @@ class EngineTest extends TestCase
                       ->with($path)
                       ->will($this->throwException(new \Imagine\Exception\RuntimeException()));
 
-       $this->engine->loadEngine($path);
+       $this->engine->loadEngine($path, 'utf-8');
     }
 }

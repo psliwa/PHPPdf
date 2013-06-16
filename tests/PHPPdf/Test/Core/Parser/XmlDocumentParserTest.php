@@ -854,12 +854,13 @@ XML;
     
     /**
      * @test
+     * @dataProvider recogniceBahaviourAttributeProvider
      */
-    public function recognizeBehaviourAttribute()
+    public function recognizeBehaviourAttribute($behaviourValue)
     {
         $xml = <<<XML
 <pdf>
-	<tag behaviour="arg" />
+	<tag behaviour="$behaviourValue" />
 </pdf>
 XML;
 
@@ -875,7 +876,7 @@ XML;
                          ->will($this->returnValue(array('behaviour')));
         $behavoiurFactory->expects($this->once())
                          ->method('create')
-                         ->with('behaviour', 'arg')
+                         ->with('behaviour', $behaviourValue)
                          ->will($this->returnValue($behaviour));
         
         $node = $this->getNodeMock(array(), 'PHPPdf\Core\Node\Container', array('addBehaviour'));
@@ -888,6 +889,15 @@ XML;
         $this->parser->setNodeFactory($nodeFactoryMock);
         
         $this->parser->parse($xml);
+    }
+    
+    public function recogniceBahaviourAttributeProvider()
+    {
+        return array(
+            array('arg'),
+            //utf-8 chars are valid parsed in xml attributes?
+            array('ąęść'),
+        );
     }
     
 

@@ -28,7 +28,7 @@ class Bookmark extends Behaviour
     public function __construct($name, array $options = array())
     {
         $this->name = (string) $name;
-        
+
         foreach($options as $optionName => $value)
         {
             if(!in_array($optionName, array_keys($this->options)))

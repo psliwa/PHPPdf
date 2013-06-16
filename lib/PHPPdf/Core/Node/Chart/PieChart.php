@@ -9,7 +9,7 @@
 namespace PHPPdf\Core\Node\Chart;
 
 use PHPPdf\Core\Engine\GraphicsContext;
-
+use PHPPdf\Core\Point;
 use PHPPdf\Exception\InvalidArgumentException;
 use PHPPdf\Core\Node\Circle;
 use PHPPdf\Core\Document;

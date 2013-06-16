@@ -223,7 +223,7 @@ class Page extends Container
     {
         if($this->graphicsContext === null)
         {
-            $this->setGraphicsContext($document->createGraphicsContext($this->getRealWidth().':'.$this->getRealHeight()));
+            $this->setGraphicsContext($document->createGraphicsContext($this->getRealWidth().':'.$this->getRealHeight(), $this->getEncoding()));
             $this->setGraphicsContextDefaultStyle($document);
         }
     }
@@ -598,7 +598,7 @@ class Page extends Container
         
         if($fileOfSourcePage)
         {
-            $engine = $document->loadEngine($fileOfSourcePage);
+            $engine = $document->loadEngine($fileOfSourcePage, $this->getEncoding());
             
             $graphicsContexts = $engine->getAttachedGraphicsContexts();
             
