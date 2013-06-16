@@ -35,7 +35,7 @@ class Engine extends AbstractEngine
         $this->renderOptions = $renderOptions;
     }
     
-    public function createGraphicsContext($graphicsContextSize)
+    public function createGraphicsContext($graphicsContextSize, $encoding)
     {
         return new GraphicsContext($this->imagine, $graphicsContextSize);
     }
@@ -73,7 +73,7 @@ class Engine extends AbstractEngine
         return $contents;
     }
     
-    public function loadEngine($file)
+    public function loadEngine($file, $encoding)
     {
         try
         {

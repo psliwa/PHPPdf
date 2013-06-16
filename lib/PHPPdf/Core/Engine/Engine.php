@@ -25,7 +25,7 @@ interface Engine extends UnitConverter
      * 
      * @return GraphicsContext
      */
-    public function createGraphicsContext($graphicsContextSize);
+    public function createGraphicsContext($graphicsContextSize, $encoding);
     
     /**
      * Creates and returns Image object depends on image data
@@ -63,7 +63,7 @@ interface Engine extends UnitConverter
      * 
      * @return Engine
      */
-    public function loadEngine($file);
+    public function loadEngine($file, $encoding);
     
     /**
      * Sets single metadata value for document

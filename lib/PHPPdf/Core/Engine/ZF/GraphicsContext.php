@@ -59,8 +59,9 @@ class GraphicsContext extends AbstractGraphicsContext
     
     private $width;
     private $height;
+    private $encoding;
     
-    public function __construct(Engine $engine, $pageOrPageSize)
+    public function __construct(Engine $engine, $pageOrPageSize, $encoding)
     {
         $this->engine = $engine;
         if($pageOrPageSize instanceof ZendPage)
@@ -71,6 +72,8 @@ class GraphicsContext extends AbstractGraphicsContext
         {
             list($this->width, $this->height) = explode(':', $pageOrPageSize);
         }
+        
+        $this->encoding = (string) $encoding;
     }
 
     public function getWidth()
@@ -366,6 +369,9 @@ class GraphicsContext extends AbstractGraphicsContext
         {   
             $destination = \ZendPdf\Destination\FitHorizontally::create($this->getPage(), $top);
             $action = \ZendPdf\Action\GoToAction::create($destination);
+            
+            //convert from input encoding to UTF-16
+            $name = iconv($this->encoding, 'UTF-16', $name);
             
             $outline = \ZendPdf\Outline\AbstractOutline::create($name, $action);
             

@@ -10,6 +10,8 @@ use PHPPdf\Core\Engine\ZF\GraphicsContext;
 
 class GraphicsContextTest extends \PHPPdf\PHPUnit\Framework\TestCase
 {   
+    const ENCODING = 'utf-8';
+    
     protected function setUp()
     {
         if(!class_exists('ZendPdf\PdfDocument', true))
@@ -38,10 +40,15 @@ class GraphicsContextTest extends \PHPPdf\PHPUnit\Framework\TestCase
                      ->method('clipRectangle')
                      ->with($x1, $y1, $x2, $y2);
 
-        $gc = new GraphicsContext($this->getEngineMock(), $zendPageMock);
+        $gc = $this->createGc($this->getEngineMock(), $zendPageMock);
 
         $gc->clipRectangle($x1, $y1, $x2, $y2);
         $gc->commit();
+    }
+    
+    private function createGc($engine, $page)
+    {
+        return new GraphicsContext($engine, $page, self::ENCODING);
     }
     
     private function getEngineMock(array $methods = array())
@@ -64,7 +71,7 @@ class GraphicsContextTest extends \PHPPdf\PHPUnit\Framework\TestCase
         $zendPageMock->expects($this->at(1))
                      ->method('restoreGS');
 
-        $gc = new GraphicsContext($this->getEngineMock(), $zendPageMock);
+        $gc = $this->createGc($this->getEngineMock(), $zendPageMock);
 
         $gc->saveGS();
         $gc->restoreGS();
@@ -101,7 +108,7 @@ class GraphicsContextTest extends \PHPPdf\PHPUnit\Framework\TestCase
                      ->method('drawImage')
                      ->with($zendImage, $x1, $y1, $x2, $y2);
 
-        $gc = new GraphicsContext($this->getEngineMock(), $zendPageMock);
+        $gc = $this->createGc($this->getEngineMock(), $zendPageMock);
 
         $gc->drawImage($image, $x1, $y1, $x2, $y2);
         $gc->commit();
@@ -123,7 +130,7 @@ class GraphicsContextTest extends \PHPPdf\PHPUnit\Framework\TestCase
                      ->method('drawLine')
                      ->with($x1, $y1, $x2, $y2);
 
-        $gc = new GraphicsContext($this->getEngineMock(), $zendPageMock);
+        $gc = $this->createGc($this->getEngineMock(), $zendPageMock);
 
         $gc->drawLine($x1, $y1, $x2, $y2);
         $gc->commit();
@@ -156,7 +163,7 @@ class GraphicsContextTest extends \PHPPdf\PHPUnit\Framework\TestCase
                      ->method('setFont')
                      ->with($zendFontMock, $size);
 
-        $gc = new GraphicsContext($this->getEngineMock(), $zendPageMock);
+        $gc = $this->createGc($this->getEngineMock(), $zendPageMock);
 
         $gc->setFont($fontMock, $size);
         $gc->commit();
@@ -180,7 +187,7 @@ class GraphicsContextTest extends \PHPPdf\PHPUnit\Framework\TestCase
                      ->method($method)
                      ->with($zendColor);
 
-        $gc = new GraphicsContext($this->getEngineMock(), $zendPageMock);
+        $gc = $this->createGc($this->getEngineMock(), $zendPageMock);
 
         $gc->$method($color);
 
@@ -212,7 +219,7 @@ class GraphicsContextTest extends \PHPPdf\PHPUnit\Framework\TestCase
                      ->method('drawPolygon')
                      ->with($x, $y, $drawType);
 
-        $gc = new GraphicsContext($this->getEngineMock(), $zendPageMock);
+        $gc = $this->createGc($this->getEngineMock(), $zendPageMock);
 
         $gc->drawPolygon($x, $y, $drawType);
         $gc->commit();
@@ -234,7 +241,7 @@ class GraphicsContextTest extends \PHPPdf\PHPUnit\Framework\TestCase
                      ->method('drawText')
                      ->with($text, $x, $y, $encoding);
 
-        $gc = new GraphicsContext($this->getEngineMock(), $zendPageMock);
+        $gc = $this->createGc($this->getEngineMock(), $zendPageMock);
 
         $gc->drawText($text, $x, $y, $encoding);
         $gc->commit();
@@ -258,7 +265,7 @@ class GraphicsContextTest extends \PHPPdf\PHPUnit\Framework\TestCase
                      ->method('drawRoundedRectangle')
                      ->with($x1, $y1, $x2, $y2, $radius, $fillType);
 
-        $gc = new GraphicsContext($this->getEngineMock(), $zendPageMock);
+        $gc = $this->createGc($this->getEngineMock(), $zendPageMock);
 
         $gc->drawRoundedRectangle($x1, $y1, $x2, $y2, $radius, $fillType);
         $gc->commit();
@@ -277,7 +284,7 @@ class GraphicsContextTest extends \PHPPdf\PHPUnit\Framework\TestCase
                      ->method('setLineWidth')
                      ->with($width);
 
-        $gc = new GraphicsContext($this->getEngineMock(), $zendPageMock);
+        $gc = $this->createGc($this->getEngineMock(), $zendPageMock);
 
         $gc->setLineWidth($width);
 
@@ -298,7 +305,7 @@ class GraphicsContextTest extends \PHPPdf\PHPUnit\Framework\TestCase
                      ->method('setLineDashingPattern')
                      ->with($expected);
 
-        $gc = new GraphicsContext($this->getEngineMock(), $zendPageMock);
+        $gc = $this->createGc($this->getEngineMock(), $zendPageMock);
 
         $gc->setLineDashingPattern($pattern);
 
@@ -356,7 +363,7 @@ class GraphicsContextTest extends \PHPPdf\PHPUnit\Framework\TestCase
                      ->method('setLineColor');
 
 
-        $gc = new GraphicsContext($this->getEngineMock(), $zendPageMock);
+        $gc = $this->createGc($this->getEngineMock(), $zendPageMock);
 
         $gc->saveGS();
         //second loop pass do not change internal gc state
@@ -432,7 +439,7 @@ class GraphicsContextTest extends \PHPPdf\PHPUnit\Framework\TestCase
                          $testCase->assertEquals($uri, $action->getUri());
                      }, $this));
                              
-        $gc = new GraphicsContext($this->getEngineMock(), $zendPageMock);
+        $gc = $this->createGc($this->getEngineMock(), $zendPageMock);
         
         $gc->uriAction($coords[0], $coords[1], $coords[2], $coords[3], $uri);
         $gc->commit();
@@ -464,7 +471,7 @@ class GraphicsContextTest extends \PHPPdf\PHPUnit\Framework\TestCase
         $top = 100;
         
         $pageStub = new \ZendPdf\Page('a4');
-        $gcStub = new GraphicsContext($this->getEngineMock(), $pageStub);
+        $gcStub = $this->createGc($this->getEngineMock(), $pageStub);
         
         $zendPageMock->expects($this->once())
                      ->method('attachAnnotation')
@@ -476,7 +483,7 @@ class GraphicsContextTest extends \PHPPdf\PHPUnit\Framework\TestCase
 
                      }, $this));
                      
-        $gc = new GraphicsContext($this->getEngineMock(), $zendPageMock);
+        $gc = $this->createGc($this->getEngineMock(), $zendPageMock);
         
         $gc->goToAction($gcStub, $coords[0], $coords[1], $coords[2], $coords[3], $top);
         $gc->commit();
@@ -506,7 +513,7 @@ class GraphicsContextTest extends \PHPPdf\PHPUnit\Framework\TestCase
                      ->method('attachAnnotation')
                      ->will($this->throwException($this->getMock('\ZendPdf\Exception\RuntimeException')));
 
-        $gc = new GraphicsContext($this->getEngineMock(), $zendPageMock);
+        $gc = $this->createGc($this->getEngineMock(), $zendPageMock);
         
         call_user_func_array(array($gc, $method), $args);
         $gc->commit();
@@ -516,7 +523,7 @@ class GraphicsContextTest extends \PHPPdf\PHPUnit\Framework\TestCase
     {
         return array(
             array(
-                'goToAction', array(new GraphicsContext($this->getEngineMock(), new \ZendPdf\Page('a4')), 0, 0, 0, 0, 10),
+                'goToAction', array($this->createGc($this->getEngineMock(), new \ZendPdf\Page('a4')), 0, 0, 0, 0, 10),
             ),
             array(
                 'uriAction', array(0, 0, 0, 0, 'invalid-uri'),
@@ -536,7 +543,7 @@ class GraphicsContextTest extends \PHPPdf\PHPUnit\Framework\TestCase
         $bookmarkName = 'some name';
                             
         $engine = new Engine();
-        $gc = new GraphicsContext($engine, $pageStub);
+        $gc = $this->createGc($engine, $pageStub);
         
         $gc->addBookmark($identifier, $bookmarkName, $top);
         $gc->commit();
@@ -552,7 +559,7 @@ class GraphicsContextTest extends \PHPPdf\PHPUnit\Framework\TestCase
     
     private function assertOutline($expectedName, $expectedPage, $expectedTop, $actualOutline)
     {
-        $this->assertEquals($expectedName, $actualOutline->getTitle());
+        $this->assertEquals(iconv(self::ENCODING, 'UTF-16', $expectedName), $actualOutline->getTitle());
         
         $target = $actualOutline->getTarget();
         
@@ -570,7 +577,7 @@ class GraphicsContextTest extends \PHPPdf\PHPUnit\Framework\TestCase
         $pageStub = new \ZendPdf\Page('a4');
         
         $engine = new Engine();
-        $gc = new GraphicsContext($engine, $pageStub);
+        $gc = $this->createGc($engine, $pageStub);
         
         //child bookmark can be added before parent
         $gc->addBookmark(2, '2', 10, 1);
@@ -601,7 +608,7 @@ class GraphicsContextTest extends \PHPPdf\PHPUnit\Framework\TestCase
                              ->setMethods(array('attachAnnotation'))
                              ->disableOriginalConstructor()
                              ->getMock();
-        $gc = new GraphicsContext(new Engine(), $zendPageMock);
+        $gc = $this->createGc(new Engine(), $zendPageMock);
         
         $coords = array(1, 2, 3, 4);
         $text = 'text';
@@ -635,7 +642,7 @@ class GraphicsContextTest extends \PHPPdf\PHPUnit\Framework\TestCase
                              ->disableOriginalConstructor()
                              ->getMock();
                              
-        $gc = new GraphicsContext(new Engine(), $zendPageMock);
+        $gc = $this->createGc(new Engine(), $zendPageMock);
         
         if($expectCall)
         {
@@ -667,7 +674,7 @@ class GraphicsContextTest extends \PHPPdf\PHPUnit\Framework\TestCase
      */
     public function throwExceptionIdParentOfBookmarkDosntExist()
     {
-        $gc = new GraphicsContext(new Engine(), new \ZendPdf\Page('a4'));
+        $gc = $this->createGc(new Engine(), new \ZendPdf\Page('a4'));
         
         $gc->addBookmark('someId', 'some name', 100, 'unexistedParentId');
     }
@@ -688,7 +695,7 @@ class GraphicsContextTest extends \PHPPdf\PHPUnit\Framework\TestCase
         $zendPageMock->expects($this->never())
                       ->method('drawImage');
         
-        $gc = new GraphicsContext(new Engine(), $zendPageMock);
+        $gc = $this->createGc(new Engine(), $zendPageMock);
                       
         $gc->drawImage($image, 50, 50, 100, 10);
         $gc->commit();
