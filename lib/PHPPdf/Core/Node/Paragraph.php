@@ -68,7 +68,7 @@ class Paragraph extends Container
         
         parent::add($text);
 
-        $text->setText(preg_replace('/\s+/', ' ', $text->getText()));
+        $text->setText(preg_replace('/[ \t]+/', ' ', $text->getText()));
 
         if(!$previousText || $this->startsWithWhiteChars($text) && $this->endsWithWhiteChars($previousText))
         {
