@@ -22,7 +22,7 @@ class TextDimensionFormatter extends BaseFormatter
 {
     public function format(Nodes\Node $node, Document $document)
     {
-        $words = preg_split('/\s+/', $node->getText());
+        $words = preg_split('/[ \t]+/', $node->getText());
         $node->setText('');
 
         for($i=0, $lastIndex = count($words) - 1; $i < $lastIndex; $i++)
