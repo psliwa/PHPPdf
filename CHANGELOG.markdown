@@ -4,6 +4,12 @@ CHANGELOG
 * (current master) ???
 
   * (nothing)
+  
+* 1.2.1 (???)
+  
+  * [#26] fix utf-8 support for bookmarks
+  * fix bugs in pie chart
+  * [#10] fix support for some utf-8 chars
 
 * 1.2.0 (2013-01-02)
 
