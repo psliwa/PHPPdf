@@ -5,7 +5,7 @@ CHANGELOG
 
   * (nothing)
   
-* 1.2.1 (???)
+* 1.2.1 (2013-08-29)
   
   * [#26] fix utf-8 support for bookmarks
   * fix bugs in pie chart
