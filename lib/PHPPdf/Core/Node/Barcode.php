@@ -24,7 +24,7 @@ class Barcode extends Node
 {
     const TYPE_CODE128 = 'code128';
     const TYPE_CODE25 = 'code25';
-    const TYPE_CODE25INTERLEAYED = 'code25interlayed';
+    const TYPE_CODE25INTERLEAVED = 'code25interleaved';
     const TYPE_CODE39 = 'code39';
     const TYPE_EAN13 = 'ean13';
     const TYPE_EAN2 = 'ean2';
