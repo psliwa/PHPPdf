@@ -598,7 +598,7 @@ Example:
 
 ```<barcode>``` tag supports the most of standard attributes and has some other attributes:
 
-* type - typ of barcode, supported values: code128, code25, code25interlayed, code39, ean13, ean2, ean5, ean8, identcode, itf14, leitcode, planet, postnet, royalmail, upca, upce
+* type - typ of barcode, supported values: code128, code25, code25interleaved, code39, ean13, ean2, ean5, ean8, identcode, itf14, leitcode, planet, postnet, royalmail, upca, upce
 * draw-code - equivalent of drawCode option from Zend\Barcode
 * bar-height - equivalent of barHeight option from Zend\Barcode
 * with-checksum - equivalent of withChecksum option from Zend\Barcode
