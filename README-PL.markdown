@@ -510,7 +510,7 @@ Przykład:
 
 Tag &lt;barcode&gt; obsługuje większość standardowych atrybutów oraz ma szereg innych atrybutów:
 
-* type - typ kodu kreskowego, dozwolone wartości: code128, code25, code25interlayed, code39, ean13, ean2, ean5, ean8, identcode, itf14, leitcode, planet, postnet, royalmail, upca, upce
+* type - typ kodu kreskowego, dozwolone wartości: code128, code25, code25interleaved, code39, ean13, ean2, ean5, ean8, identcode, itf14, leitcode, planet, postnet, royalmail, upca, upce
 * draw-code - odpowiednik opcji drawCode z Zend\Barcode
 * bar-height - odpowiednik opcji barheight z Zend\Barcode
 * with-checksum - odpowiednik opcji withChecksum z Zend\Barcode
