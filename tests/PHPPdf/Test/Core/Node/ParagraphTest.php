@@ -2,6 +2,8 @@
 
 namespace PHPPdf\Test\Core\Node;
 
+use PHPPdf\Core\Node\Page;
+
 use PHPPdf\Core\Node\Container;
 
 use PHPPdf\Core\Node\Node;
@@ -141,6 +143,30 @@ class ParagraphTest extends \PHPPdf\PHPUnit\Framework\TestCase
         $this->paragraph->collectOrderedDrawingTasks($documentStub, $tasks);
         
         $this->assertEquals(count($expectedTasks), count($tasks));
+    }
+    
+    /**
+     * @test
+     * @dataProvider propagateParagraphWidthToParentExceptPageProvider
+     */
+    public function propagateParagraphWidthToParentExceptPage($isParentPage, $parentSize, $paragraphSize, $expectsParentWidt)
+    {
+        $parent = $isParentPage ? new Page() : new Container();
+        $parent->setWidth($parentSize);
+        $parent->setWidth($parentSize);
+        
+        $this->paragraph->setParent($parent);
+        $this->paragraph->setWidth($paragraphSize);
+        
+        $this->assertEquals($expectsParentWidt, $parent->getWidth());
+    }
+    
+    public function propagateParagraphWidthToParentExceptPageProvider()
+    {
+        return array(
+            array(false, 100, 200, 200),
+            array(true, 100, 200, 100),
+        );
     }
     
     /**

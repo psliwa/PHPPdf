@@ -32,6 +32,7 @@ class Paragraph extends Container
     {
         if($this->getParent())
         {
+            //paragraph hasn't his own width, his width is equal to parent's one
             return $this->getParent()->getWidth();
         }
         
@@ -40,9 +41,12 @@ class Paragraph extends Container
     
     public function setWidth($width)
     {
-        if($this->getParent())
+        $parent = $this->getParent();
+        
+        //paragraph hasn't his own width, his width is equal to parent's one
+        if($parent && !$parent instanceof Page)
         {
-            $this->getParent()->setWidth($width);
+            $parent->setWidth($width);
         }
         return $this;
     }
