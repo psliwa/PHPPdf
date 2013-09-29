@@ -149,16 +149,15 @@ class ParagraphTest extends \PHPPdf\PHPUnit\Framework\TestCase
      * @test
      * @dataProvider propagateParagraphWidthToParentExceptPageProvider
      */
-    public function propagateParagraphWidthToParentExceptPage($isParentPage, $parentSize, $paragraphSize, $expectsParentWidt)
+    public function propagateParagraphWidthToParentExceptPage($isParentPage, $parentWidth, $paragraphWidth, $expectsParentWidth)
     {
         $parent = $isParentPage ? new Page() : new Container();
-        $parent->setWidth($parentSize);
-        $parent->setWidth($parentSize);
+        $parent->setWidth($parentWidth);
         
         $this->paragraph->setParent($parent);
-        $this->paragraph->setWidth($paragraphSize);
+        $this->paragraph->setWidth($paragraphWidth);
         
-        $this->assertEquals($expectsParentWidt, $parent->getWidth());
+        $this->assertEquals($expectsParentWidth, $parent->getWidth());
     }
     
     public function propagateParagraphWidthToParentExceptPageProvider()
