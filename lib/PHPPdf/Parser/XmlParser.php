@@ -8,6 +8,8 @@
 
 namespace PHPPdf\Parser;
 
+use PHPPdf\Parser\Exception\ParseException;
+
 use PHPPdf\Parser\Exception as Exceptions;
 
 /**
@@ -133,7 +135,12 @@ abstract class XmlParser implements Parser
         }
         else
         {
-            $reader->open($content, null, LIBXML_NOBLANKS | LIBXML_DTDLOAD);
+            $success = @$reader->open($content, null, LIBXML_NOBLANKS | LIBXML_DTDLOAD);
+            
+            if(!$success)
+            {
+                throw new ParseException(sprintf('File "%s" doesn\'t exist or is unreadable', $content));
+            }
         }
 
         $reader->setParserProperty(\XMLReader::SUBST_ENTITIES, true);
