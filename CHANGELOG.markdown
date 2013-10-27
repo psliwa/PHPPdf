@@ -1,9 +1,10 @@
 CHANGELOG
 =========
 
-* (current master) ???
+* 1.2.2 (2013-10-27)
 
-  * (nothing)
+  * fix page width when paragraph is direct child
+  * fix handling errors in xml parsers: exception is thrown when file not exist or is unreadable
   
 * 1.2.1 (2013-08-29)
   
