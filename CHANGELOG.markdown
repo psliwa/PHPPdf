@@ -1,10 +1,6 @@
 CHANGELOG
 =========
 
-* (current master) ???
-
-  * (nothing)
-
 * 1.2.2 (2013-10-27)
 
   * fix page width when paragraph is direct child
