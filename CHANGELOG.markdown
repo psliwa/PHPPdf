@@ -12,6 +12,17 @@ CHANGELOG
   * fix bugs in pie chart
   * [#10] fix support for some utf-8 chars
 
+* 1.2.2 (2013-10-27)
+
+  * fix page width when paragraph is direct child
+  * fix handling errors in xml parsers: exception is thrown when file not exist or is unreadable
+  
+* 1.2.1 (2013-08-29)
+  
+  * [#26] fix utf-8 support for bookmarks
+  * fix bugs in pie chart
+  * [#10] fix support for some utf-8 chars
+
 * 1.2.0 (2013-01-02)
 
   * fix bugs in pie-chart tag

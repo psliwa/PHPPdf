@@ -35,7 +35,7 @@
     	<normal src="%resources%/fonts/FreeUniversal/normal.ttf" />
     	<bold src="%resources%/fonts/FreeUniversal/bold.ttf" />
     	<italic src="%resources%/fonts/FreeUniversal/italic.ttf" />
-    	<bold-italic src="%resources%/fonts/FreeUniversal/bold+italic.ttf" />
+    	<bold-italic src="%resources%/fonts/FreeUniversal/bold-italic.ttf" />
     </font>
     <font name="UniversElse">
     	<normal src="%resources%/fonts/UniversElse/normal.ttf" />
