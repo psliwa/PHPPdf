@@ -8,6 +8,7 @@
 
 namespace PHPPdf\Core\Formatter;
 
+use PHPPdf\Core\Engine\Font;
 use PHPPdf\Core\Formatter\BaseFormatter,
     PHPPdf\Core\Node as Nodes,
     PHPPdf\Core\Document,
@@ -22,24 +23,97 @@ class TextDimensionFormatter extends BaseFormatter
 {
     public function format(Nodes\Node $node, Document $document)
     {
-        $words = preg_split('/[ \t]+/', $node->getText());
+        $maxPossibleWordLength = self::getMaxPossibleWordLength($node);
+        $wordCandidates = self::createWordCandidates($node->getText());
+        
         $node->setText('');
 
-        for($i=0, $lastIndex = count($words) - 1; $i < $lastIndex; $i++)
-        {
-            $words[$i] .= ' ';
-        }
-
         $wordsSizes = array();
+        $words = array();
         
         $font = $node->getFont($document);
         $fontSize = $node->getFontSizeRecursively();
+        $encoding = $node->getEncoding();
         
-        foreach($words as $word)
+        foreach($wordCandidates as $wordCandidate)
         {
-            $wordsSizes[] = $font->getWidthOfText($word, $fontSize);
+            self::processWordCandidate($wordCandidate, $maxPossibleWordLength, $font, $fontSize, $encoding, $words, $wordsSizes);
+        }
+
+        $node->setWordsSizes($words, $wordsSizes);
+    }
+    
+    private static function createWordCandidates($text)
+    {
+        $wordCandidates = preg_split('/[ \t]+/', $text);
+        
+        for($i=0, $lastIndex = count($wordCandidates) - 1; $i < $lastIndex; $i++)
+        {
+            $wordCandidates[$i] .= ' ';
         }
         
-        $node->setWordsSizes($words, $wordsSizes);
+        return $wordCandidates;
+    }
+    
+    private static function processWordCandidate($wordCandidate, $maxPossibleWordWidth, Font $font, $fontSize, $encoding, array &$words, array &$wordSizes)
+    {
+        $wordCandidateWidth = $font->getWidthOfText($wordCandidate, $fontSize);
+        
+        if($wordCandidateWidth > $maxPossibleWordWidth)
+        {
+            self::buildWordsNoGreaterThanGivenWidth($wordCandidate, $maxPossibleWordWidth, $font, $fontSize, $encoding, $words, $wordSizes);
+        }
+        else
+        {
+            $words[] = $wordCandidate;
+            $wordSizes[] = $wordCandidateWidth;
+        }
+    }
+    
+    private static function buildWordsNoGreaterThanGivenWidth($wordCandidate, $maxPossibleWordWidth, Font $font, $fontSize, $encoding, array &$words, array &$wordSizes)
+    {
+        $wordLength = mb_strlen($wordCandidate, $encoding);
+
+        $buildingWord = '';
+        $buildingWordWidth = 0;
+        
+        for($i=0; $i<$wordLength; $i++)
+        {
+            $char = mb_substr($wordCandidate, $i, 1, $encoding);
+            $charSize = $font->getWidthOfText($char, $fontSize);
+            
+            $nextBuildingWordWidth = $buildingWordWidth + $charSize;
+            
+            if($nextBuildingWordWidth > $maxPossibleWordWidth)
+            {
+                $words[] = $buildingWord;
+                $wordSizes[] = $buildingWordWidth;
+                
+                $buildingWord = $char;
+                $buildingWordWidth = $charSize;
+            }
+            else
+            {
+                $buildingWord .= $char;
+                $buildingWordWidth += $charSize;
+            }
+        }
+
+        //remaning word
+        $words[] = $buildingWord;
+        $wordSizes[] = $buildingWordWidth;
+    }
+    
+    private static function getMaxPossibleWordLength(Nodes\Node $node)
+    {
+    	for($currentNode=$node; ;$currentNode = $currentNode->getParent())
+    	{
+    	    if($currentNode->getWidth())
+    	    {
+    	        return $currentNode->getWidth();
+    	    }
+    	}
+    	
+    	return 0;
     }
 }

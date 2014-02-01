@@ -75,8 +75,11 @@ class ParagraphFormatterTest extends \PHPPdf\PHPUnit\Framework\TestCase
                     ),                    
                 ),
                 array(
+                    //expected position for 1st text
                     array(
+                        //first point
                         array(2, 200),
+                        //diagonal point
                         array(24, 200 - $lineHeightFor15),
                     ),
                     array(

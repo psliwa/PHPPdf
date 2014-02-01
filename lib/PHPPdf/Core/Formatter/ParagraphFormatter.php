@@ -28,7 +28,7 @@ class ParagraphFormatter extends BaseFormatter
         $this->setTextBoundaries($node->getChildren());           
     }
     
-	private function designateLinesOfWords($node)
+	private function designateLinesOfWords(Node $node)
 	{
     	$currentPoint = $node->getFirstPoint();
     	
@@ -39,7 +39,7 @@ class ParagraphFormatter extends BaseFormatter
     	foreach($node->getChildren() as $textNode)
     	{
     	    $words = $textNode->getWords();
-    	    $wordsSizes = $textNode->getWordsSizes();    	               
+    	    $wordsSizes = $textNode->getWordsSizes();
     
     	    $currentWordLine = array();
     	    $currentWidthOfLine = 0;
