@@ -265,6 +265,12 @@
 	            <pre class="PHPPdf\Core\Formatter\TextDimensionFormatter" />
 	        </formatters>
 	    </node>
+	    <node name="page-total" class="PHPPdf\Core\Node\Runtime\PageTotal">
+	        <formatters>
+	            <pre class="PHPPdf\Core\Formatter\ConvertAttributesFormatter" />
+	            <pre class="PHPPdf\Core\Formatter\TextDimensionFormatter" />
+	        </formatters>
+	    </node>
 	    <node name="table" class="PHPPdf\Core\Node\Table">
 	        <formatters>
 	            <pre class="PHPPdf\Core\Formatter\ConvertAttributesFormatter" />

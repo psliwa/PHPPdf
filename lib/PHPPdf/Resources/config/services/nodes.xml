@@ -28,6 +28,7 @@
 					<argument key="h6" type="service" id="phppdf.node.h4" />
 					<argument key="page-info" type="service" id="phppdf.node.page-info" />
 					<argument key="page-number" type="service" id="phppdf.node.page-number" />
+					<argument key="page-total" type="service" id="phppdf.node.page-total" />
 					<argument key="table" type="service" id="phppdf.node.table" />
 					<argument key="tr" type="service" id="phppdf.node.tr" />
 					<argument key="td" type="service" id="phppdf.node.td" />
@@ -396,6 +397,17 @@
 			</call>
 		</service>
 		<service id="phppdf.node.page-number" class="PHPPdf\Core\Node\Runtime\CurrentPageNumber" public="false">
+			<tag name="phppdf.node" />
+			<argument type="collection"></argument>
+			<call method="setFormattersNames">
+				<argument>pre</argument>
+				<argument type="collection">
+					<argument>PHPPdf\Core\Formatter\ConvertAttributesFormatter</argument>
+					<argument>PHPPdf\Core\Formatter\TextDimensionFormatter</argument>
+				</argument>
+			</call>
+		</service>
+		<service id="phppdf.node.page-total" class="PHPPdf\Core\Node\Runtime\PageTotal" public="false">
 			<tag name="phppdf.node" />
 			<argument type="collection"></argument>
 			<call method="setFormattersNames">
