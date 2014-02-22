@@ -44,7 +44,18 @@ class DynamicPageTest extends \PHPPdf\PHPUnit\Framework\TestCase
         $this->page->createNextPage();
         $this->assertEquals(1, count($this->page->getPages()));
     }
-    
+
+    /**
+     * @test
+     */
+    public function createNextPage_prototypeHasDocumentTemplate_clearDocumentTemplateAttributeForNewPage()
+    {
+        $this->page->setAttribute('document-template', 'abc');
+        $nextPage = $this->page->createNextPage();
+
+        $this->assertNull($nextPage->getAttribute('document-template'));
+    }
+
     /**
      * @test
      */

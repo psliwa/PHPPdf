@@ -48,7 +48,8 @@ class DynamicPage extends Page
 
     public function getBoundary()
     {
-        return $this->getCurrentPage()->getBoundary();
+        return $this->getPrototypePage()->getBoundary();
+//        return $this->getCurrentPage()->getBoundary();
     }
 
     public function getCurrentPage($createIfNotExists = true)
@@ -80,6 +81,10 @@ class DynamicPage extends Page
     public function createNextPage()
     {
         $this->currentPage = $this->prototype->copy();
+
+        //clear eventual document template, because prototype page has already applied eventual document-template
+        $this->currentPage->setAttribute('document-template', null);
+
         $this->currentPage->setContext(new PageContext($this->currentPageNumber++, $this));
         $this->pages[] = $this->currentPage;
         $this->pagesHistory[] = $this->currentPage;
@@ -218,19 +223,19 @@ class DynamicPage extends Page
     {
         return $this->getPrototypePage()->getFirstPoint();
     }
-    
+
     protected function getDataForSerialize()
     {
         $data = parent::getDataForSerialize();
         $data['prototype'] = $this->prototype;
-        
+
         return $data;
     }
-    
+
     protected function setDataFromUnserialize(array $data)
     {
         parent::setDataFromUnserialize($data);
-        
+
         $this->prototype = $data['prototype'];
     }
 
@@ -240,13 +245,13 @@ class DynamicPage extends Page
         {
             $page->flush();
         }
-        
-        $this->pages = array();        
+
+        $this->pages = array();
         $this->currentPage = null;
 
         parent::flush();
     }
-    
+
     public function collectUnorderedDrawingTasks(Document $document, DrawingTaskHeap $tasks)
     {
         foreach($this->getPages() as $page)
@@ -254,7 +259,7 @@ class DynamicPage extends Page
             $page->collectUnorderedDrawingTasks($document, $tasks);
         }
     }
-    
+
     public function collectPostDrawingTasks(Document $document, DrawingTaskHeap $tasks)
     {
         foreach($this->pagesHistory as $page)
