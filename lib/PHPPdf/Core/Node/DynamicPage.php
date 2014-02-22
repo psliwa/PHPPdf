@@ -49,7 +49,6 @@ class DynamicPage extends Page
     public function getBoundary()
     {
         return $this->getPrototypePage()->getBoundary();
-//        return $this->getCurrentPage()->getBoundary();
     }
 
     public function getCurrentPage($createIfNotExists = true)
