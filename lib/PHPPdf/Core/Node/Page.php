@@ -228,7 +228,7 @@ class Page extends Container
         }
     }
     
-    private function setGraphicsContext(GraphicsContext $gc)
+    protected function setGraphicsContext(GraphicsContext $gc)
     {
         $this->graphicsContext = $gc;
     }
