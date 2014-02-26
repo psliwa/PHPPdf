@@ -843,7 +843,7 @@ Attributes of this tags:
 * format - format of output string that will be used as argument of sprintf function. Default values: "%s." for page-number, "%s / %s" for page-info.
 * offset - value that will be added to current page number and total page number. Usefull if you want to count pages from a diffrent value than zero. Default: 0.
 
-Example:
+Example 1 - regular use of page-info node:
 
 ```xml
     <pdf>
@@ -852,6 +852,38 @@ Example:
                 <header>
                     <div height="20px">
                         <page-info offset="1" format="page %s for %s" />
+                    </div>
+                </header>
+            </placeholders>
+            Some text
+        </dynamic-page>
+    </pdf>
+```
+
+Example 2 - display page number with page-info node:
+```xml
+    <pdf>
+        <dynamic-page>
+            <placeholders>
+                <header>
+                    <div height="20px">
+                        <page-info offset="1" format="page %1$s" />
+                    </div>
+                </header>
+            </placeholders>
+            Some text
+        </dynamic-page>
+    </pdf>
+```
+
+Example 3 - display page total with page-info node:
+```xml
+    <pdf>
+        <dynamic-page>
+            <placeholders>
+                <header>
+                    <div height="20px">
+                        <page-info offset="1" format="%2$s pages" />
                     </div>
                 </header>
             </placeholders>
