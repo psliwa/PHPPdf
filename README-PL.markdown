@@ -741,7 +741,18 @@ Przykład:
             <placeholders>
                 <header>
                     <div height="20px">
+                        <page-info format="strona %s na %s" />
+
+                        <!-- gdy chcemy numerować np. od 2 -->
                         <page-info offset="1" format="strona %s na %s" />
+
+                        <!-- gdy chcemy wyświetlić tylko numer strony -->
+                        <page-info format="%1$s." />
+                        <!-- lub -->
+                        <page-number />
+
+                        <!-- gdy chcemy wyświetlić całkowitą liczbę stron -->
+                        <page-info format="%2$s stron" />
                     </div>
                 </header>
             </placeholders>
