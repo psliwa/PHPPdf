@@ -851,7 +851,7 @@ Example:
             <placeholders>
                 <header>
                     <div height="20px">
-                        <page-info offset="1" format="page %s for %s" />
+                        <page-info format="page %s for %s" />
 
                         <!-- when we would like to number from 2 -->
                         <page-info offset="1" format="page %s for %s" />
