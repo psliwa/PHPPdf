@@ -83,7 +83,7 @@ class LinePart implements Drawable
             $font = $text->getFont($document);
             $gc->setFont($font, $fontSize);
             $color = $text->getRecurseAttribute('color');
-            
+
             if($color)
             {
                 $gc->setFillColor($color);
@@ -153,7 +153,7 @@ class LinePart implements Drawable
             }
 
             $gc->restoreGS();
-        }, array($this->text, $this->getFirstPoint(), $this->words, $this->width, $document, $this->wordSpacing, $this->text->getPositionTranslation())));
+        }, array($this->text, $this->getFirstPoint(), $this->words, $this->getWidth(), $document, $this->wordSpacing, $this->text->getPositionTranslation())));
     }
     
     public function collectUnorderedDrawingTasks(Document $document, DrawingTaskHeap $tasks)

@@ -4,6 +4,8 @@ namespace PHPPdf\Test\Core\Node\Paragraph;
 
 use PHPPdf\Core\DrawingTaskHeap;
 
+use PHPPdf\Core\Node\Paragraph\Line;
+use PHPPdf\Core\Node\Paragraph;
 use PHPPdf\Core\Node\Text;
 use PHPPdf\Core\Node\Node;
 use PHPPdf\Core\Document;
@@ -12,97 +14,35 @@ use PHPPdf\Core\Node\Paragraph\LinePart;
 
 class LinePartTest extends \PHPPdf\PHPUnit\Framework\TestCase
 {
+    const ENCODING = 'utf-16';
+    const COLOR = '#654321';
+    const WORDS = 'some words';
+    const X_TRANSLATION = 5;
+    const WIDTH = 100;
+    const ALPHA = 0.5;
+    const LINE_HEIGHT = 18;
+
     /**
      * @test
      * @dataProvider drawingDataProvider
      */
     public function drawLinePartUsingTextNodeAttributes($fontSize, $lineHeightOfText, $textDecoration, $expectedLineDecorationYCoord, $wordSpacing)
     {
-        $encodingStub = 'utf-16';
-        $colorStub = '#654321';
-        $fontStub = $this->getMockBuilder('PHPPdf\Core\Engine\Font')
-                         ->disableOriginalConstructor()
-                         ->getMock();
-        $words = 'some words';
+        $fontStub = $this->createFontStub();
         $startPoint = Point::getInstance(100, 120);
 
         $documentStub = $this->createDocumentStub();
-        $xTranslationInLine = 5;
-        $linePartWidth = 100;
-        $alpha = 0.5;
-        
-        $heightOfLine = 18;        
-        
-        $text = $this->getMockBuilder('PHPPdf\Core\Node\Text')
-                     ->setMethods(array('getFont', 'getAttribute', 'getRecurseAttribute', 'getGraphicsContext', 'getEncoding', 'getFontSize', 'getTextDecorationRecursively', 'getAlpha', 'getAncestorWithRotation'))
-                     ->getMock();
-                         
-        $text->expects($this->atLeastOnce())
-             ->method('getFont')
-             ->with($documentStub)
-             ->will($this->returnValue($fontStub));
-             
-        $text->expects($this->atLeastOnce())
-             ->method('getAlpha')
-             ->will($this->returnValue($alpha));
-             
-        $text->expects($this->atLeastOnce())
-             ->method('getFontSize')
-             ->will($this->returnValue($fontSize));
-             
-        $text->expects($this->atLeastOnce())
-             ->method('getRecurseAttribute')
-             ->with('color')
-             ->will($this->returnValue($colorStub));
-             
-        $text->expects($this->atLeastOnce())
-             ->method('getAttribute')
-             ->with('line-height')
-             ->will($this->returnValue($lineHeightOfText));
-             
-        $text->expects($this->atLeastOnce())
-             ->method('getEncoding')
-             ->will($this->returnValue($encodingStub));
-             
-        $text->expects($this->atLeastOnce())
-             ->method('getTextDecorationRecursively')
-             ->will($this->returnValue($textDecoration));
-        $text->expects($this->atLeastOnce())
-             ->method('getAncestorWithRotation')
-             ->will($this->returnValue(null));
-             
-        $gc = $this->getMockBuilder('PHPPdf\Core\Engine\GraphicsContext')
-        		   ->getMock();
 
-	    $expectedXCoord = $startPoint->getX() + $xTranslationInLine;
-	    $expectedYCoord = $startPoint->getY() - $fontSize - ($heightOfLine - $lineHeightOfText);
-	    
-	    $expectedWordSpacing = 0;
-	    if($wordSpacing !== null)
-	    {
-            $expectedWordSpacing = $wordSpacing;
-	    }
+        $linePartWidthGross = self::WIDTH +  ($this->getWordsCount() - 1)*$wordSpacing;
 
-        $gc->expects($this->once())
-           ->method('drawText')
-           ->with($words, $expectedXCoord, $expectedYCoord, $encodingStub, $expectedWordSpacing);
+	    $expectedXCoord = $startPoint->getX() + self::X_TRANSLATION;
+	    $expectedYCoord = $startPoint->getY() - $fontSize - (self::LINE_HEIGHT - $lineHeightOfText);
 	    
-           
-        $gc->expects($this->once())
-           ->method('setFont')
-           ->with($fontStub, $fontSize);
-           
-        $gc->expects($this->once())
-           ->method('setFillColor')
-           ->with($colorStub);
-        $gc->expects($this->once())
-           ->method('setAlpha')
-           ->with($alpha);
-           
-        $gc->expects($this->once())
-           ->method('saveGs');
-        $gc->expects($this->once())
-           ->method('restoreGS');
+	    $expectedWordSpacing = $wordSpacing !== null ? $wordSpacing : 0;
+
+        $gc = $this->getMock('PHPPdf\Core\Engine\GraphicsContext');
+
+        $this->expectDrawText($gc, Point::getInstance($expectedXCoord, $expectedYCoord), $fontStub, $fontSize, $expectedWordSpacing);
            
         if($expectedLineDecorationYCoord === false)
         {
@@ -112,39 +52,23 @@ class LinePartTest extends \PHPPdf\PHPUnit\Framework\TestCase
         else
         {
             $expectedYCoord = $expectedYCoord + $expectedLineDecorationYCoord;
-            $gc->expects($this->once())
-               ->method('setLineColor')
-               ->id('color')
-               ->with($colorStub);
-               
-            $gc->expects($this->once())
-               ->method('setLineWidth')
-               ->id('line')
-               ->with(0.5);
-
-            $gc->expects($this->once())
-               ->after('color')
-               ->method('drawLine')
-               ->with($expectedXCoord, $expectedYCoord, $expectedXCoord + $linePartWidth, $expectedYCoord);
+            $this->expectDrawLine($gc, self::COLOR,
+                Point::getInstance($expectedXCoord, $expectedYCoord),
+                Point::getInstance($expectedXCoord + $linePartWidthGross, $expectedYCoord)
+            );
         }
 
-        $text->expects($this->atLeastOnce())
-             ->method('getGraphicsContext')
-             ->will($this->returnValue($gc));
-             
-        $line = $this->getMockBuilder('PHPPdf\Core\Node\Paragraph\Line')
-                     ->setMethods(array('getFirstPoint', 'getHeight'))
-                     ->disableOriginalConstructor()
-                     ->getMock();
-        $line->expects($this->atLeastOnce())
-             ->method('getFirstPoint')
-             ->will($this->returnValue($startPoint));
-             
-        $line->expects($this->atLeastOnce())
-             ->method('getHeight')
-             ->will($this->returnValue($heightOfLine));
+        $text = $this->createTextStub($fontStub, $gc, array(
+            'alpha' => self::ALPHA,
+            'font-size' => $fontSize,
+            'color' => self::COLOR,
+            'line-height' => $lineHeightOfText,
+            'text-decoration' => $textDecoration,
+        ));
+
+        $line = $this->createLineStub($startPoint, self::LINE_HEIGHT);
         
-        $linePart = new LinePart($words, $linePartWidth, $xTranslationInLine, $text);
+        $linePart = new LinePart(self::WORDS, self::WIDTH, self::X_TRANSLATION, $text);
         $linePart->setWordSpacing($wordSpacing);
         $linePart->setLine($line);
         
@@ -155,6 +79,69 @@ class LinePartTest extends \PHPPdf\PHPUnit\Framework\TestCase
         {
             $task->invoke();
         }
+    }
+
+    private function createTextStub($font, $gc, array $attributes)
+    {
+        $text = new LinePartTest_Text('', $attributes);
+        $text->setFont($font);
+        $text->setEncoding(self::ENCODING);
+        $text->setGraphicsContext($gc);
+
+        return $text;
+    }
+
+    private function createLineStub(Point $firstPoint, $height)
+    {
+        return new LinePartTest_Line($firstPoint, $height);
+    }
+
+    private function getWordsCount()
+    {
+        return count(explode(' ', self::WORDS));
+    }
+
+    private function expectDrawText($gc, Point $startPoint, $font, $fontSize, $wordSpacing)
+    {
+
+        $gc->expects($this->once())
+            ->method('drawText')
+            ->with(self::WORDS, $startPoint->getX(), $startPoint->getY(), self::ENCODING, $wordSpacing);
+
+
+        $gc->expects($this->once())
+            ->method('setFont')
+            ->with($font, $fontSize);
+
+        $gc->expects($this->once())
+            ->method('setFillColor')
+            ->with(self::COLOR);
+        $gc->expects($this->once())
+            ->method('setAlpha')
+            ->with(self::ALPHA);
+
+        $gc->expects($this->once())
+            ->method('saveGs');
+        $gc->expects($this->once())
+            ->method('restoreGS');
+    }
+
+    private function expectDrawLine($gc, $color, Point $startPoint, Point $endPoint)
+    {
+        $gc->expects($this->once())
+            ->method('setLineColor')
+            ->id('color')
+            ->with($color);
+
+        $gc->expects($this->once())
+            ->method('setLineWidth')
+            ->id('line')
+            ->with(0.5);
+
+        $gc->expects($this->once())
+            ->after('color')
+            ->method('drawLine')
+            ->with($startPoint->getX(), $startPoint->getY(), $endPoint->getX(), $endPoint->getY());
     }
     
     public function drawingDataProvider()
@@ -242,7 +229,72 @@ class LinePartTest extends \PHPPdf\PHPUnit\Framework\TestCase
         $wordSpacing = 5;
         $linePart->setWordSpacing($wordSpacing);
         
-        $expectedWidth = $width + ($linePart->getNumberOfWords()-1)*5;
+        $expectedWidth = $width + ($linePart->getNumberOfWords()-1)*$wordSpacing;
         $this->assertEquals($expectedWidth, $linePart->getWidth());
+    }
+
+    /**
+     * @return mixed
+     */
+    private function createFontStub()
+    {
+        return $this->getMockBuilder('PHPPdf\Core\Engine\Font')
+            ->disableOriginalConstructor()
+            ->getMock();
+    }
+}
+
+class LinePartTest_Line extends Line
+{
+    private $height;
+
+    public function __construct(Point $firstPoint, $height)
+    {
+        $paragraph = new Paragraph();
+        $paragraph->getBoundary()->setNext($firstPoint);
+        parent::__construct($paragraph, 0, 0);
+        $this->height = $height;
+    }
+
+    public function getHeight()
+    {
+        return $this->height;
+    }
+}
+
+class LinePartTest_Text extends Text
+{
+    private $font;
+    private $encoding;
+    private $graphicsContext;
+
+    public function setFont($font)
+    {
+        $this->font = $font;
+    }
+
+    public function getFont()
+    {
+        return $this->font;
+    }
+
+    public function setEncoding($encoding)
+    {
+        $this->encoding = $encoding;
+    }
+
+    public function getEncoding()
+    {
+        return $this->encoding;
+    }
+
+    public function setGraphicsContext($graphicsContext)
+    {
+        $this->graphicsContext = $graphicsContext;
+    }
+
+    public function getGraphicsContext()
+    {
+        return $this->graphicsContext;
     }
 }

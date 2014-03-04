@@ -3,7 +3,8 @@ CHANGELOG
 
 * 1.2.3-DEV (???)
 
-  * [#37] break words longer than ancestor width 
+  * [#37] break words longer than ancestor width
+  * [#44] fix text-decoration attribute when text is justified
 
 * 1.2.2 (2013-10-27)
 
