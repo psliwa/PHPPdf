@@ -396,7 +396,7 @@ Long style:
 ```
 
 <a name="color-palette"></a>
-Color Palletes
+Palette of colors
 --------------
 
 PHPPdf supports color palettes, - mapping of logical names to real colors.
