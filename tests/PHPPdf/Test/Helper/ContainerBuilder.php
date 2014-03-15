@@ -7,6 +7,7 @@ class ContainerBuilder
 {
     private $attributes = array();
     private $parentBuilder;
+    private $childBuilders = array();
     private $parentContainer;
 
     /**
@@ -63,6 +64,17 @@ class ContainerBuilder
         return $this->parentBuilder;
     }
 
+    /**
+     * @return ContainerBuilder
+     */
+    public function child()
+    {
+        $builder = new self($this);
+        $this->childBuilders[] = $builder;
+
+        return $builder;
+    }
+
     public function getContainer()
     {
         $container = new Container($this->attributes);
@@ -70,6 +82,11 @@ class ContainerBuilder
         if($this->parentContainer)
         {
             $this->parentContainer->getContainer()->add($container);
+        }
+
+        foreach($this->childBuilders as $childBuilder)
+        {
+            $container->add($childBuilder->getContainer());
         }
 
         return $container;
