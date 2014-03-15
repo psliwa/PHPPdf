@@ -1,9 +1,14 @@
 CHANGELOG
 =========
 
-* 1.2.3-DEV (???)
+* 1.2.4-DEV (???)
+
+  * (nothing)
+
+* 1.2.3 (2014-03-15)
 
   * [#37] break words longer than ancestor width
+  * [#41] fix placeholders support when document-template is used
   * [#44] fix text-decoration attribute when text is justified
 
 * 1.2.2 (2013-10-27)
