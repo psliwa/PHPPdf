@@ -30,9 +30,9 @@ class TextDimensionFormatterTest extends \PHPPdf\PHPUnit\Framework\TestCase
      * @test
      * @dataProvider textProvider
      */
-    public function calculateSizeOfEachWord($text, $expectedWords, $expectedSizes)
+    public function textParentHasWidth_calculateWordsSize($text, $expectedWords, $expectedSizes)
     {
-        $textMock = $this->createText($text);
+        $textMock = $this->createText($text, self::TEXT_WIDTH);
                  
         $this->formatter->format($textMock, $this->document);
         
@@ -41,16 +41,36 @@ class TextDimensionFormatterTest extends \PHPPdf\PHPUnit\Framework\TestCase
         $this->assertEquals($expectedWords, $textMock->getWords());
         $this->assertEquals($expectedSizes, $textMock->getWordsSizes());
     }
-    
-    private function createText($text)
+
+    /**
+     * @test
+     * @dataProvider textProvider
+     */
+    public function textParentHaxMaxWidth_calculateWordsSize($text, $expectedWords, $expectedSizes)
     {
-        $page = new Page(array('page-size' => self::TEXT_WIDTH.':100'));
+        $textMock = $this->createText($text, null, self::TEXT_WIDTH);
+
+        $this->formatter->format($textMock, $this->document);
+
+        $this->verifyMockObjects();
+
+        $this->assertEquals($expectedWords, $textMock->getWords());
+        $this->assertEquals($expectedSizes, $textMock->getWordsSizes());
+    }
+    
+    private function createText($text, $parentWidth = null, $parentMaxWidth = null)
+    {
+        $page = new Page();
+        $container = new Container(array(
+            'width' => $parentWidth,
+            'max-width' => $parentMaxWidth,
+        ));
         
         $textNode = new TextDimensionFormatterTest_Text($text, new TextDimensionFormatterTest_Font());
         $textNode->setFontSize(self::FONT_SIZE);
-        $textNode->setWidth(self::TEXT_WIDTH);
-        
-        $page->add($textNode);
+
+        $container->add($textNode);
+        $page->add($container);
         
         return $textNode;
     }

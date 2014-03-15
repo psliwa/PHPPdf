@@ -8,6 +8,7 @@
 
 namespace PHPPdf\Core\Node;
 
+use PHPPdf\Core\Exception\InvalidAttributeException;
 use PHPPdf\Exception\LogicException;
 use PHPPdf\Exception\InvalidArgumentException;
 use PHPPdf\Core\DrawingTaskHeap;
@@ -311,6 +312,26 @@ class Page extends Container
         $horizontalMargins = $this->getMarginLeft() + $this->getMarginRight();
 
         return (parent::getWidth() - $horizontalMargins);
+    }
+
+    public function getMaxHeight()
+    {
+        return $this->getHeight();
+    }
+
+    public function getMaxWidth()
+    {
+        return $this->getWidth();
+    }
+
+    public function setMaxHeight($height)
+    {
+        throw new InvalidAttributeException('max-height');
+    }
+
+    public function setMaxWidth($width)
+    {
+        throw new InvalidAttributeException('max-width');
     }
 
     /**

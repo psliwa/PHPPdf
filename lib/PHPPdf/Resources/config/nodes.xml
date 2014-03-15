@@ -311,6 +311,8 @@
 	        </stylesheet>
 	        <formatters>
 	            <pre class="PHPPdf\Core\Formatter\ImageConvertAttributesFormatter" />
+	            <pre class="PHPPdf\Core\Formatter\StandardDimensionFormatter" />
+	            <pre class="PHPPdf\Core\Formatter\ImageRatioFormatter" />
 	            <pre class="PHPPdf\Core\Formatter\FirstPointPositionFormatter" />
 	            <post class="PHPPdf\Core\Formatter\StandardPositionFormatter" />
 	        </formatters>

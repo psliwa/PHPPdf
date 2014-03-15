@@ -477,7 +477,8 @@ There are tags that are only bags for attributes, a set of tags etc:
 Attributes
 ----------
 
-* width and height: rigidly sets height and width, supported units are described in separate [section](#units). Relative values in percent are supported. 
+* width and height: rigidly sets height and width, supported units are described in separate [section](#units). Relative values in percent are supported.
+* max-width, max-height: sets max sizes of elements
 * margin (margin-top, margin-bottom, margin-left, margin-right): margin similar to margin from HTML/CSS. Margins of simblings are pooled. For side margins possible is "auto" value, it works similar as in HTML/CSS.
 * padding (padding-top, padding-bottom, padding-left, padding-right): works similiar as in HTML/CSS
 * font-type - font name must occurs in fonts.xml config file, otherwise exception will be thrown

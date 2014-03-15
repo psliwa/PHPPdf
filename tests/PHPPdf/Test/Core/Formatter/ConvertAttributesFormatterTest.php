@@ -29,7 +29,7 @@ class ConvertAttributesFormatterTest extends \PHPPdf\PHPUnit\Framework\TestCase
         $page = new Page();
         $unitConverter = new PdfUnitConverter();
         $node = new Container(array('width' => 200, 'height' => 100), $unitConverter);
-        $child = new Container(array('width' => '70%', 'height' => '50%'), $unitConverter);
+        $child = new Container(array('width' => '70%', 'max-width' => '50%', 'max-height' => '70%', 'height' => '50%'), $unitConverter);
 
         $node->add($child);
         $page->add($node);
@@ -41,6 +41,8 @@ class ConvertAttributesFormatterTest extends \PHPPdf\PHPUnit\Framework\TestCase
 
         $this->assertEquals(200*0.7, $child->getWidth());
         $this->assertEquals(100*0.5, $child->getHeight());
+        $this->assertEquals(200*0.5, $child->getMaxWidth());
+        $this->assertEquals(100*0.7, $child->getMaxHeight());
     }
 
     /**

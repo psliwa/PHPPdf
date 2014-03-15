@@ -416,6 +416,7 @@ Atrybuty
 ---------
 
 * width oraz height: ustawienie wysokości i szerokości na sztywno, wspierane jednostki miary są opisane w osobnym [rozdziale](#units). Jest możliwe użycie wartości relatywnych wyrażonych w procentach
+* max-width oraz max-height: ustawia maksymalną szerokość i wysokość
 * margin (margin-top, margin-bottom, margin-left, margin-right): margines podobny jak w HTML/CSS z taką różnicą, że marginesy sąsiadów się sumują. Dla marginesów bocznym możliwa jest wartość "auto" - działa podobnie jak w HTML/CSS
 * padding (padding-top, padding-bottom, padding-left, padding-right): dopełnienie wewnętrzne - tak jak w HTML/CSS
 * font-type - typ czcionki. Nazwa czcionki musi występować w pliku konfiguracyjnym fonts.xml, w przeciwnym wypadku zostanie wyrzucony wyjątek

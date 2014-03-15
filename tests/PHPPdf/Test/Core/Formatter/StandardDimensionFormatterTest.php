@@ -105,4 +105,23 @@ class StandardDimensionFormatterTest extends \PHPPdf\PHPUnit\Framework\TestCase
             ->height(90 + 2*10)
             ->widthAsTheSameAsParentsWithoutPaddings();
     }
+
+    /**
+     * @test
+     */
+    public function givenMaxDimension_nodeCantExceedMaxDimension()
+    {
+        $node = NodeBuilder::create()
+            ->attr('width', 200)
+            ->attr('height', 200)
+            ->attr('max-width', 150)
+            ->attr('max-height', 120)
+            ->getNode();
+
+        $this->formatter->format($node, $this->document);
+
+        NodeAssert::create($node)
+            ->width(150)
+            ->height(120);
+    }
 }

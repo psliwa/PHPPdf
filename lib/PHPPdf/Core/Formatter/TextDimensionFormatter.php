@@ -108,9 +108,17 @@ class TextDimensionFormatter extends BaseFormatter
     {
     	for($currentNode=$node; ;$currentNode = $currentNode->getParent())
     	{
-    	    if($currentNode->getWidth())
+            $maxWidth = $currentNode->getMaxWidth();
+            if($maxWidth)
+            {
+                return $maxWidth;
+            }
+
+            $width = $currentNode->getWidth();
+
+    	    if($width)
     	    {
-    	        return $currentNode->getWidth();
+    	        return $width;
     	    }
     	}
     	

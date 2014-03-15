@@ -22,6 +22,8 @@ class StandardDimensionFormatter extends BaseFormatter
     public function format(Node $node, Document $document)
     {
         $parent = $node->getParent();
+        $maxWidth = $node->getRecurseAttribute('max-width') ?: \PHP_INT_MAX;
+        $maxHeight = $node->getRecurseAttribute('max-height') ?: \PHP_INT_MAX;
 
         if($node->getWidth() === null && !$node->isInline() && $node->getFloat() === Node::FLOAT_NONE)
         {
@@ -30,7 +32,7 @@ class StandardDimensionFormatter extends BaseFormatter
             $marginLeft = $node->getMarginLeft();
             $marginRight = $node->getMarginRight();
 
-            $node->setWidth($parentWidth - ($marginLeft + $marginRight));
+            $node->setWidth(min($parentWidth - ($marginLeft + $marginRight), $maxWidth));
             $node->setRelativeWidth('100%');
         }
         elseif($node->isInline())
@@ -59,7 +61,7 @@ class StandardDimensionFormatter extends BaseFormatter
             $prefferedWidth = $parentWidth;
         }
 
-        $node->setWidth($prefferedWidth);
-        $node->setHeight($node->getRealHeight() + $paddingTop + $paddingBottom);
+        $node->setWidth(min($prefferedWidth, $maxWidth));
+        $node->setHeight(min($node->getRealHeight() + $paddingTop + $paddingBottom, $maxHeight));
     }
 }

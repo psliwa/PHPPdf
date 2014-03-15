@@ -1,6 +1,10 @@
 CHANGELOG
 =========
 
+* 1.3.0-DEV (???)
+
+  * [#47] support for max-height and max-width attributes
+
 * 1.2.4-DEV (???)
 
   * (nothing)

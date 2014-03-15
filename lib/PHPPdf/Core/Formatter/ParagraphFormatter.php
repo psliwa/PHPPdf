@@ -112,16 +112,16 @@ class ParagraphFormatter extends BaseFormatter
     
     private function getMaxXCoord(Node $node)
     {
-        for($parent=$node->getParent(); $parent && !$parent->getWidth(); $parent=$parent->getParent())
+        for($parent=$node->getParent(); $parent && !$parent->getWidth() && !$parent->getMaxWidth(); $parent=$parent->getParent())
         {
         }
         
-        if(!$node->getWidth() && $parent && $parent->getWidth())
+        if(!$node->getWidth() && $parent && ($parent->getWidth() || $parent->getMaxWidth()))
         {
             $node = $parent;
         }
 
-        return $node->getFirstPoint()->getX() + $node->getWidth() - $node->getPaddingRight();
+        return $node->getFirstPoint()->getX() + ($node->getWidth() ?: $node->getMaxWidth()) - $node->getPaddingRight();
     }
     
     private function setTextBoundaries(array $textNodes)

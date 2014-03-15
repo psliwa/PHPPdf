@@ -109,8 +109,8 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
     protected static function initializeType()
     {
         //TODO refactoring
-        $attributeWithGetters = array('width', 'height', 'margin-left', 'margin-right', 'margin-top', 'margin-bottom', 'padding-left', 'padding-right', 'padding-top', 'padding-bottom', 'font-type', 'font-size', 'float', 'breakable');
-        $attributeWithSetters = array('width', 'height', 'margin-left', 'margin-right', 'margin-top', 'margin-bottom', 'font-type', 'float', 'static-size', 'font-size', 'margin', 'padding', 'break', 'breakable', 'dump', 'padding-left', 'padding-right', 'padding-top', 'padding-bottom', 'min-width', 'line-height', 'line-break', 'left', 'top', 'position');
+        $attributeWithGetters = array('width', 'height', 'max-width', 'max-height', 'margin-left', 'margin-right', 'margin-top', 'margin-bottom', 'padding-left', 'padding-right', 'padding-top', 'padding-bottom', 'font-type', 'font-size', 'float', 'breakable');
+        $attributeWithSetters = array('width', 'height', 'max-width', 'max-height', 'margin-left', 'margin-right', 'margin-top', 'margin-bottom', 'font-type', 'float', 'static-size', 'font-size', 'margin', 'padding', 'break', 'breakable', 'dump', 'padding-left', 'padding-right', 'padding-top', 'padding-bottom', 'min-width', 'line-height', 'line-break', 'left', 'top', 'position');
 
         $predicateGetters = array('breakable');
         
@@ -172,6 +172,8 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
     {
         static::addAttribute('width', null);
         static::addAttribute('height', null);
+        static::addAttribute('max-width', null);
+        static::addAttribute('max-height', null);
 
         static::addAttribute('min-width', 0);
 
@@ -647,6 +649,26 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
     public function getHeight()
     {
         return $this->getAttributeDirectly('height');
+    }
+
+    public function getMaxWidth()
+    {
+        return $this->getAttributeDirectly('max-width');
+    }
+
+    public function getMaxHeight()
+    {
+        return $this->getAttributeDirectly('max-height');
+    }
+
+    public function setMaxWidth($width)
+    {
+        $this->setAttributeDirectly('max-width', $this->convertUnit($width));
+    }
+
+    public function setMaxHeight($height)
+    {
+        $this->setAttributeDirectly('max-height', $this->convertUnit($height));
     }
 
     public function setMarginTop($margin)
