@@ -5,3 +5,5 @@
 .settings
 TODO
 PHPPdf.iml
+examples/advisio*
+examples/test*
