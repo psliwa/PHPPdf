@@ -3,22 +3,25 @@
 
 namespace PHPPdf\Test\Helper;
 
-class ContainerBuilder
+use PHPPdf\Core\Node\Node;
+
+class NodeBuilder
 {
     private $attributes = array();
     private $parentBuilder;
     private $childBuilders = array();
     private $parentContainer;
+    private $class = 'PHPPdf\Test\Helper\Container';
 
     /**
-     * @return ContainerBuilder
+     * @return NodeBuilder
      */
     public static function create()
     {
         return new self();
     }
 
-    private function __construct(ContainerBuilder $parentBuilder = null)
+    private function __construct(NodeBuilder $parentBuilder = null)
     {
         $this->parentBuilder = $parentBuilder;
     }
@@ -27,7 +30,7 @@ class ContainerBuilder
      * @param $name
      * @param $value
      *
-     * @return ContainerBuilder
+     * @return NodeBuilder
      */
     public function attr($name, $value)
     {
@@ -36,9 +39,20 @@ class ContainerBuilder
     }
 
     /**
+     * @param $class
+     *
+     * @return NodeBuilder
+     */
+    public function nodeClass($class)
+    {
+        $this->class = $class;
+        return $this;
+    }
+
+    /**
      * @param array $attrs
      *
-     * @return ContainerBuilder
+     * @return NodeBuilder
      */
     public function attrs(array $attrs)
     {
@@ -47,7 +61,7 @@ class ContainerBuilder
     }
 
     /**
-     * @return ContainerBuilder
+     * @return NodeBuilder
      */
     public function parent()
     {
@@ -57,7 +71,7 @@ class ContainerBuilder
     }
 
     /**
-     * @return ContainerBuilder
+     * @return NodeBuilder
      */
     public function end()
     {
@@ -65,7 +79,7 @@ class ContainerBuilder
     }
 
     /**
-     * @return ContainerBuilder
+     * @return NodeBuilder
      */
     public function child()
     {
@@ -75,18 +89,22 @@ class ContainerBuilder
         return $builder;
     }
 
-    public function getContainer()
+    /**
+     * @return Node
+     */
+    public function getNode()
     {
-        $container = new Container($this->attributes);
+        $class = $this->class;
+        $container = new $class($this->attributes);
 
         if($this->parentContainer)
         {
-            $this->parentContainer->getContainer()->add($container);
+            $this->parentContainer->getNode()->add($container);
         }
 
         foreach($this->childBuilders as $childBuilder)
         {
-            $container->add($childBuilder->getContainer());
+            $container->add($childBuilder->getNode());
         }
 
         return $container;

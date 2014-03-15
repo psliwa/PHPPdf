@@ -3,7 +3,7 @@
 namespace PHPPdf\Test\Core\Formatter;
 
 use PHPPdf\Core\Formatter\StandardDimensionFormatter;
-use PHPPdf\Test\Helper\ContainerBuilder;
+use PHPPdf\Test\Helper\NodeBuilder;
 use PHPPdf\Test\Helper\NodeAssert;
 
 class StandardDimensionFormatterTest extends \PHPPdf\PHPUnit\Framework\TestCase
@@ -22,10 +22,10 @@ class StandardDimensionFormatterTest extends \PHPPdf\PHPUnit\Framework\TestCase
      */
     public function givenExplictDimension_useGivenDimension()
     {
-        $node = ContainerBuilder::create()
+        $node = NodeBuilder::create()
             ->attr('width', 120)
             ->attr('height', 140)
-            ->getContainer();
+            ->getNode();
 
         $this->formatter->format($node, $this->document);
 
@@ -39,10 +39,10 @@ class StandardDimensionFormatterTest extends \PHPPdf\PHPUnit\Framework\TestCase
      */
     public function givenNullWidthAndFloat_setZeroAsWidth()
     {
-        $node = ContainerBuilder::create()
+        $node = NodeBuilder::create()
             ->attr('width', null)
             ->attr('float', 'left')
-            ->getContainer();
+            ->getNode();
 
         $this->formatter->format($node, $this->document);
 
@@ -56,13 +56,13 @@ class StandardDimensionFormatterTest extends \PHPPdf\PHPUnit\Framework\TestCase
      */
     public function givenRealDimensionAndPaddings_useRealDimensionAndPaddingsToCalsulateDimension($realWidth, $realHeight, array $paddings)
     {
-        $node = ContainerBuilder::create()
+        $node = NodeBuilder::create()
             ->attr('width', rand(1, 200))
             ->attr('height', rand(1, 200))
             ->attr('real-width', $realWidth)
             ->attr('real-height', $realHeight)
             ->attrs($paddings)
-            ->getContainer();
+            ->getNode();
 
         $this->formatter->format($node, $this->document);
 
@@ -88,7 +88,7 @@ class StandardDimensionFormatterTest extends \PHPPdf\PHPUnit\Framework\TestCase
      */
     public function givenNodeAndParentWithDimensions_nodeWidthCantExceedParentWidth()
     {
-        $node = ContainerBuilder::create()
+        $node = NodeBuilder::create()
             ->attr('width', 90)
             ->attr('height', 90)
             ->attr('padding', 10)
@@ -97,7 +97,7 @@ class StandardDimensionFormatterTest extends \PHPPdf\PHPUnit\Framework\TestCase
                 ->attr('height', 100)
                 ->attr('padding', 2)
             ->end()
-            ->getContainer();
+            ->getNode();
 
         $this->formatter->format($node, $this->document);
 
