@@ -148,7 +148,7 @@ class Image extends Node
     
             if(is_string($src))
             {
-                $source = $document->createImage($src);
+                $source = $this->createSource($document);
             }
             else
             {

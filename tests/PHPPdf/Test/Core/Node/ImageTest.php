@@ -15,6 +15,7 @@ class ImageTest extends \PHPPdf\PHPUnit\Framework\TestCase
     const IMAGE_HEIGHT = 100;
     const IMAGE_X_COORD = 0;
     const IMAGE_Y_COORD = 100;
+    const IMAGE_PATH = 'image/path';
     
     private $image;
 
@@ -39,9 +40,7 @@ class ImageTest extends \PHPPdf\PHPUnit\Framework\TestCase
      */
     public function drawImageInExpectedPosition($keepRatio, $sourceWidth = self::IMAGE_WIDTH, $sourceHeight = self::IMAGE_HEIGHT)
     {
-        $imagePath = 'some/path';
-        
-        $this->image->setAttribute('src', $imagePath);
+        $this->image->setAttribute('src', self::IMAGE_PATH);
         $this->image->setAttribute('keep-ratio', $keepRatio);
         
         $imageResource = $this->getMock('PHPPdf\Core\Engine\Image');
@@ -59,7 +58,7 @@ class ImageTest extends \PHPPdf\PHPUnit\Framework\TestCase
 
         $document->expects($this->atLeastOnce())
                  ->method('createImage')
-                 ->with($imagePath)
+                 ->with(self::IMAGE_PATH)
                  ->will($this->returnValue($imageResource));
                  
         $pageMock = $this->getMock('PHPPdf\Core\Node\Page', array('getGraphicsContext'));      
@@ -153,24 +152,18 @@ class ImageTest extends \PHPPdf\PHPUnit\Framework\TestCase
      */
     public function handleImageExceptionWhenIgnoreErrorAttributeIsOn($ignoreError, $invalidSrc)
     {
-        $src = 'src';
-        $this->image->setAttribute('ignore-error', $ignoreError);
-        $this->image->setAttribute('src', $src);
+        $this->givenImageWithIgnoreError($ignoreError);
         
         $engine = $this->getMock('PHPPdf\Core\Engine\Engine');
-                         
-        $mocker = $engine->expects($this->once())
-                         ->method('createImage')
-                         ->with($src);
-                           
+        $engineImage = $this->getMock('PHPPdf\Core\Engine\Image');
+
         if($invalidSrc)
         {
-            $mocker->will($this->throwException(new InvalidResourceException()));
+            $this->expectsEngineCreateImageFailure($engine);
         }
         else
         {
-            $engineImage = $this->getMock('PHPPdf\Core\Engine\Image');
-            $mocker->will($this->returnValue($engineImage));
+            $this->expectsEngineCreateImageSuccess($engine, $engineImage);
         }
 
         try
@@ -199,7 +192,7 @@ class ImageTest extends \PHPPdf\PHPUnit\Framework\TestCase
             }
         }
     }
-    
+
     public function handleImageExceptionWhenIgnoreErrorAttributeIsOnProvider()
     {
         return array(
@@ -208,5 +201,71 @@ class ImageTest extends \PHPPdf\PHPUnit\Framework\TestCase
             array(true, true),
             array(true, false),
         );
+    }
+
+    protected function givenImageWithIgnoreError($ignoreError = true)
+    {
+        $this->image->setAttribute('ignore-error', $ignoreError);
+        $this->image->setAttribute('src', self::IMAGE_PATH);
+    }
+
+    protected function expectsEngineCreateImageFailure($engine)
+    {
+        $engine->expects($this->once())
+            ->method('createImage')
+            ->with(self::IMAGE_PATH)
+            ->will($this->throwException(new InvalidResourceException()));
+    }
+
+    protected function expectsEngineCreateImageSuccess($engine, $engineImage)
+    {
+        $engine->expects($this->once())
+            ->method('createImage')
+            ->with(self::IMAGE_PATH)
+            ->will($this->returnValue($engineImage));
+    }
+
+    /**
+     * @test
+     */
+    public function turnOnIgnoreErrorAttribute_errorOccursOnPreFormat_ignoreError()
+    {
+        $this->givenImageWithIgnoreError();
+        $this->clearImageSize();
+
+        $document = $this->createDocumentMock();
+        $this->expectsEngineCreateImageFailure($document);
+
+        $this->image->preFormat($document);
+    }
+
+    /**
+     * @test
+     * @expectedException PHPPdf\Exception\InvalidResourceException
+     */
+    public function turnOffIgnoreErrorAttribute_errorOccursOnPreFormat_throwException()
+    {
+        $this->givenImageWithIgnoreError(false);
+        $this->clearImageSize();
+
+        $document = $this->createDocumentMock();
+        $this->expectsEngineCreateImageFailure($document);
+
+        $this->image->preFormat($document);
+    }
+
+    protected function createDocumentMock()
+    {
+        $document = $this->getMockBuilder('PHPPdf\Core\Document')
+            ->setMethods(array('createImage'))
+            ->disableOriginalConstructor()
+            ->getMock();
+        return $document;
+    }
+
+    protected function clearImageSize()
+    {
+        $this->image->setWidth(null);
+        $this->image->setHeight(null);
     }
 }
