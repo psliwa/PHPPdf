@@ -199,6 +199,6 @@ class Image extends Node
     {
         $src = $this->getAttribute('src');
 
-        return is_string($src) ? $document->createImage($src) : $src;
+        return is_string($src) ? $this->createSource($document) : $src;
     }
 }
