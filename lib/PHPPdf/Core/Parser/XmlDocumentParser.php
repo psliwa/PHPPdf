@@ -46,8 +46,10 @@ class XmlDocumentParser extends XmlParser implements DocumentParser
     private $ignoredTags = array('attribute', 'enhancement', 'complex-attribute');
     private $tagStack = array();
     private $innerParser = null;
-    private $inPlaceholder = false;
-    private $inBehaviour = false;
+    /**
+     * @var DocumentParsingContext
+     */
+    private $context;
     private $endTag = self::ROOT_TAG;
     private $behaviourFactory = null;
     private $nodeManager = null;
@@ -92,7 +94,7 @@ class XmlDocumentParser extends XmlParser implements DocumentParser
         $this->setStylesheetConstraint($stylesheetConstraint);
         $this->isPreviousText = false;
         $this->currentParagraph = null;
-        $this->inBehaviour = $this->inPlaceholder = false;
+        $this->context = new DocumentParsingContext();
         $this->tagStack = array();
         $this->prototypes = array();
         $this->clearStack();
@@ -240,21 +242,21 @@ class XmlDocumentParser extends XmlParser implements DocumentParser
         $tag = $reader->name;
         $parentNode = $this->getLastElementFromStack();
 
-        if($this->inPlaceholder)
+        if($this->context->isInPlaceholder())
         {
             $this->parsePlaceholder($reader, $parentNode);
         }
-        elseif($this->inBehaviour)
+        elseif($this->context->isInBehaviour())
         {
             $this->parseBehaviour($reader, $parentNode);
         }
         elseif($tag === self::PLACEHOLDERS_TAG)
         {
-            $this->inPlaceholder = true;
+            $this->context->enterPlaceholder();
         }
         elseif($tag === self::BEHAVIOURS_TAG)
         {
-            $this->inBehaviour = true;
+            $this->context->enterBehaviour();
         }
         elseif($tag === self::STYLESHEET_TAG)
         {
@@ -399,7 +401,7 @@ class XmlDocumentParser extends XmlParser implements DocumentParser
     {
         foreach($this->listeners as $listener)
         {
-            $listener->onStartParseNode($this->document, $this->getFirstElementFromStack(), $node);
+            $listener->onStartParseNode($this->document, $this->getFirstElementFromStack(), $node, $this->context);
         }
     }
 
@@ -489,15 +491,15 @@ class XmlDocumentParser extends XmlParser implements DocumentParser
     {
         if($reader->name === self::PLACEHOLDERS_TAG)
         {
-            $this->inPlaceholder = false;
+            $this->context->exitPlaceholder();
             $node = $this->getLastElementFromStack();
             $this->fireOnEndParsePlaceholders($node);
         }
-        elseif($this->inBehaviour && $reader->name === self::BEHAVIOURS_TAG)
+        elseif($this->context->isInBehaviour() && $reader->name === self::BEHAVIOURS_TAG)
         {
-            $this->inBehaviour = false;
+            $this->context->exitBehaviour();
         }
-        elseif(!$this->inBehaviour)
+        elseif(!$this->context->isInBehaviour())
         {
             $node = $this->getLastElementFromStack();
 
@@ -526,7 +528,7 @@ class XmlDocumentParser extends XmlParser implements DocumentParser
     {
         foreach($this->listeners as $listener)
         {
-            $listener->onEndParsePlaceholders($this->document, $this->getFirstElementFromStack(), $node);
+            $listener->onEndParsePlaceholders($this->document, $this->getFirstElementFromStack(), $node, $this->context);
         }
     }
     
@@ -534,7 +536,7 @@ class XmlDocumentParser extends XmlParser implements DocumentParser
     {
         foreach($this->listeners as $listener)
         {
-            $listener->onEndParseNode($this->document, $this->getFirstElementFromStack(), $node);
+            $listener->onEndParseNode($this->document, $this->getFirstElementFromStack(), $node, $this->context);
         }
     }
 
