@@ -7,7 +7,7 @@ CHANGELOG
 
 * 1.2.4-DEV (???)
 
-  * (nothing)
+  * [#52] fix document-template support
 
 * 1.2.3 (2014-03-15)
 

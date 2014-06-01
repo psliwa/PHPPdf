@@ -208,6 +208,7 @@ class DynamicPage extends Page
         if($gc)
         {
             $this->setPageSize($gc->getWidth().':'.$gc->getHeight());
+            $this->getPrototypePage()->setPageSize($gc->getWidth().':'.$gc->getHeight());
             $this->getPrototypePage()->setGraphicsContext($gc);
         }
 

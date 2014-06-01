@@ -2,7 +2,7 @@
 <!ENTITY apos '"'>
 <!ENTITY amp "&#38;">
 <!ENTITY percent "&#37;">
-<!ENTITY nbsp " ">
+<!ENTITY nbsp "&#160;">
 <!ENTITY lt "<">
 <!ENTITY gt ">">
 <!ENTITY iexcl "¡">

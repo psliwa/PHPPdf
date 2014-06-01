@@ -469,7 +469,7 @@ There are tags that are only bags for attributes, a set of tags etc:
 * stylesheet - stylesheet for parent
 * attribute - simple attribute declaration, direct child of "stylesheet" tag. Required attributes of this element: name - attribute name, value - attribute value
 * complex-attribute - complex attribute declaration, direct child of "stylesheet" tag. Required attributes of this element: name - complex attribute name
-* placeholders - defines placeholders for parent tag. Children tags of placeholder are specyfic for every parent tag.
+* placeholders - defines placeholders for parent tag. Children tags of placeholder are specyfic for every parent tag. **It should be first tag in parent**
 * metadata - defines metadata of pdf document, direct child of document root
 * behaviours - defines behaviours for a parent tag. Supported behaviours: href, ref, bookmark, note (action as same as for attributes with as same as name)
 

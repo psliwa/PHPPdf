@@ -407,7 +407,7 @@ Istnieją tagi, które służą jedynie do określania wartości atrybutów, zbi
 * stylesheet - style dla elementu nadrzędnego
 * attribute - atrybut, bezpośredni element podrzędny dla "stylesheet". Wymagane atrybute tego elementu: name - nazwa atrybutu, value - wartość atrybutu
 * complex-attribute - atrybut złożony, bezpośredni element podrzędny dla "stylesheet". Wymagany atrybut tego elementu: name - nazwa.
-* placeholders - definiuje wartości "slotów" dla elementu podrzędnego. Elementy podrzędne "placeholders" są specyficzne dla tagu nadrzędnego.
+* placeholders - definiuje wartości "slotów" dla elementu podrzędnego. Elementy podrzędne "placeholders" są specyficzne dla tagu nadrzędnego. Ten tag powinien być pierwszym tagiem w rodzicu. 
 * metadata - definiuje dane meta dla dokumentu pdf, bezpośredni element podrzędny korzenia dokumentu
 * behaviours - definiuje zachowania dla elementu nadrzędnego. Obsługiwane zachowania: ref, href, bookmark, note (działanie takie samo jak dla atrybutów o tych samych nazwach)
 

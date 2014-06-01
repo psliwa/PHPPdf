@@ -12,6 +12,7 @@ use PHPPdf\Core\DrawingTaskHeap;
 
 use PHPPdf\Core\Document;
 use PHPPdf\Core\Parser\DocumentParserListener;
+use PHPPdf\Core\Parser\DocumentParsingContext;
 use PHPPdf\Core\Parser\Exception\DuplicatedIdException;
 
 /**
@@ -26,6 +27,8 @@ class Manager implements DocumentParserListener
     
     private $managedNodes = array();
     private $behavioursTasks;
+
+    private $preFormatInvoked = array();
     
     public function __construct()
     {
@@ -76,16 +79,20 @@ class Manager implements DocumentParserListener
         $this->nodes = array();
     }
     
-    public function onEndParsePlaceholders(Document $document, PageCollection $root, Node $node)
+    public function onEndParsePlaceholders(Document $document, PageCollection $root, Node $node, DocumentParsingContext $context)
     {
         if($this->isPage($node))
         {
-            $node->preFormat($document);
+            $this->invokePreFormatIfItHasntInvokedYet($document, $node);
         }
     }
     
-    public function onStartParseNode(Document $document, PageCollection $root, Node $node)
+    public function onStartParseNode(Document $document, PageCollection $root, Node $node, DocumentParsingContext $context)
     {
+        if(!$this->isPage($node) && $this->isPage($node->getParent()))
+        {
+            $this->invokePreFormatIfItHasntInvokedYet($document, $node->getParent());
+        }
     }
     
     private function isPage($node)
@@ -93,7 +100,7 @@ class Manager implements DocumentParserListener
         return $node instanceof \PHPPdf\Core\Node\Page;
     }
     
-    public function onEndParseNode(Document $document, PageCollection $root, Node $node)
+    public function onEndParseNode(Document $document, PageCollection $root, Node $node, DocumentParsingContext $context)
     {
         if(!$this->isPage($node) && $this->isPage($node->getParent()))
         {
@@ -174,5 +181,19 @@ class Manager implements DocumentParserListener
     {
         $document->invokeTasks($this->behavioursTasks);
         $this->behavioursTasks = new DrawingTaskHeap();
+    }
+
+    private function invokePreFormatIfItHasntInvokedYet(Document $document, Node $node)
+    {
+        if(!$this->preFormatHasBeenInvoked($node))
+        {
+            $this->preFormatInvoked[spl_object_hash($node)] = true;
+            $node->preFormat($document);
+        }
+    }
+
+    private function preFormatHasBeenInvoked(Node $node)
+    {
+        return isset($this->preFormatInvoked[spl_object_hash($node)]);
     }
 }
