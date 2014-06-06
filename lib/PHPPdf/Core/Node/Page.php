@@ -27,10 +27,16 @@ class Page extends Container
 {
     const ATTR_SIZE = 'page-size';
 
+    const SIZE_A5 = '410:595';
+    const SIZE_A5_LANDSCAPE = '595:410';
     const SIZE_A4 = '595:842';
     const SIZE_A4_LANDSCAPE = '842:595';
+    const SIZE_A3 = '842:1191';
+    const SIZE_A3_LANDSCAPE = '1191:842';
     const SIZE_LETTER = '612:792';
     const SIZE_LETTER_LANDSCAPE = '792:612';
+    const SIZE_LEGAL = '612:1008';
+    const SIZE_LEGAL_LANDSCAPE = '1008:612';
 
     private $graphicsContext;
 
