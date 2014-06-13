@@ -156,7 +156,7 @@ To set the page dimensions you use the "page-size" attribute of the page or dyna
 
 The value syntax of this attribute is "width:height".
 
-There are however standard predefined values: a4, a4-landscape, letter and letter-landscape.
+There are however standard predefined values: a5, a5-landscape, a4, a4-landscape, a3, a3-landscape, legal, legal-landscape, letter and letter-landscape.
 
 Example:
 

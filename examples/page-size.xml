@@ -1,0 +1,12 @@
+<pdf>
+    <page page-size="a5">A5 page</page>
+    <page page-size="a4">A4 page</page>
+    <page page-size="a3">A3 page</page>
+    <page page-size="letter">letter page</page>
+    <page page-size="legal">legal page</page>
+    <page page-size="a5 landscape">A5 page</page>
+    <page page-size="a4 landscape">A4 page</page>
+    <page page-size="a3 landscape">A3 page</page>
+    <page page-size="letter landscape">letter page</page>
+    <page page-size="legal landscape">legal page</page>
+</pdf>

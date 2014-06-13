@@ -412,6 +412,17 @@ class PageTest extends \PHPPdf\PHPUnit\Framework\TestCase
             array('LETTER-landscape', Page::SIZE_LETTER_LANDSCAPE),
             array('LETTER landscape', Page::SIZE_LETTER_LANDSCAPE),
             array('letter', Page::SIZE_LETTER),
+            array('a5', Page::SIZE_A5),
+            array('A5', Page::SIZE_A5),
+            array('a5-landscape', Page::SIZE_A5_LANDSCAPE),
+            array('a5_landscape', Page::SIZE_A5_LANDSCAPE),
+            array('a3', Page::SIZE_A3),
+            array('A3', Page::SIZE_A3),
+            array('a3-landscape', Page::SIZE_A3_LANDSCAPE),
+            array('a3_landscape', Page::SIZE_A3_LANDSCAPE),
+            array('legal', Page::SIZE_LEGAL),
+            array('LEGAL landscape', Page::SIZE_LEGAL_LANDSCAPE),
+            array('LEGAL-landscape', Page::SIZE_LEGAL_LANDSCAPE),
         );
     }
     
