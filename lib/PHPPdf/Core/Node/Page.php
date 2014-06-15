@@ -77,6 +77,29 @@ class Page extends Container
     const SIZE_B0 = '2835:4008';
     const SIZE_B0_LANDSCAPE = '4008:2835';
 
+    const SIZE_C10 = '79:113';
+    const SIZE_C10_LANDSCAPE = '113:79';
+    const SIZE_C9 = '113:161';
+    const SIZE_C9_LANDSCAPE = '161:113';
+    const SIZE_C8 = '161:230';
+    const SIZE_C8_LANDSCAPE = '230:161';
+    const SIZE_C7 = '230:323';
+    const SIZE_C7_LANDSCAPE = '323:230';
+    const SIZE_C6 = '323:459';
+    const SIZE_C6_LANDSCAPE = '459:323';
+    const SIZE_C5 = '459:649';
+    const SIZE_C5_LANDSCAPE = '649:459';
+    const SIZE_C4 = '649:918';
+    const SIZE_C4_LANDSCAPE = '918:649';
+    const SIZE_C3 = '918:1298';
+    const SIZE_C3_LANDSCAPE = '1298:918';
+    const SIZE_C2 = '1298:1837';
+    const SIZE_C2_LANDSCAPE = '1837:1298';
+    const SIZE_C1 = '1837:2599';
+    const SIZE_C1_LANDSCAPE = '2599:1837';
+    const SIZE_C0 = '2599:3677';
+    const SIZE_C0_LANDSCAPE = '3677:2599';
+
     const SIZE_LETTER = '612:792';
     const SIZE_LETTER_LANDSCAPE = '792:612';
     const SIZE_LEGAL = '612:1008';

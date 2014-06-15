@@ -159,6 +159,7 @@ The value syntax of this attribute is "width:height".
 There are however standard predefined values:
   * A format: from 4A0 to A10
   * B format: from B0 to B10
+  * C format: from C0 to C10
   * US sizes: legal and letter
 All formats are supported in portrait and lanscape.
 
