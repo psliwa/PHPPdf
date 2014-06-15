@@ -79,7 +79,7 @@
 
 		<h2>4A0 and 2A0 - The DIN 476 Oversize Formats</h2>
 		<p>The paper sizes bigger than A0, 4A0 and 2A0, aren't formally defined by ISO 216 but are commonly used for oversized paper. The origin of these formats is in the German DIN 476 standard, that was the original base document from which ISO 216 was derived.</p>
-		
+
 		<h2>A Series Paper Size Tolerances</h2>
 		<p>ISO 216 specifies tolerances for the production of A series paper sizes as follows:
 			<ul>
@@ -99,9 +99,100 @@
 			</ul>
 		Note: For reference the last item is there because the root 2 aspect ratio doesn't always give a whole number.
 		</p>
-		
+
 		<p>
 			Source: <a href="http://www.papersizes.org/a-paper-sizes.htm">papersizes.org</a>.
+		</p>
+	</page>
+	<page page-size="b4">
+		<h1>B format</h1>
+
+		<p>
+			The dimensions of the <b>B</b> series paper sizes, as defined by the ISO 216 standard, are given in the table in both millimetres and inches.
+		</p>
+
+		<table>
+			<tr>
+				<td>Size</td>
+				<td>Width x Height (mm)</td>
+				<td>Width x Height (in)</td>
+			</tr>
+			<tr>
+				<td>B0</td>
+				<td>1000 x 1414 mm</td>
+				<td>39.4 x 55.7 in</td>
+			</tr>
+			<tr>
+				<td>B1</td>
+				<td>707 x 1000 mm</td>
+				<td>27.8 x 39.4 in</td>
+			</tr>
+			<tr>
+				<td>B2</td>
+				<td>500 x 707 mm</td>
+				<td>19.7 x 27.8 in</td>
+			</tr>
+			<tr>
+				<td>B3</td>
+				<td>353 x 500 mm</td>
+				<td>13.9 x 19.7 in</td>
+			</tr>
+			<tr>
+				<td>B4</td>
+				<td>250 x 353 mm</td>
+				<td>9.8 x 13.9 in</td>
+			</tr>
+			<tr>
+				<td>B5</td>
+				<td>176 x 250 mm</td>
+				<td>6.9 x 9.8 in</td>
+			</tr>
+			<tr>
+				<td>B6</td>
+				<td>125 x 176 mm</td>
+				<td>4.9 x 6.9 in</td>
+			</tr>
+			<tr>
+				<td>B7</td>
+				<td>88 x 125 mm</td>
+				<td>3.5 x 4.9 in</td>
+			</tr>
+			<tr>
+				<td>B8</td>
+				<td>62 x 88 mm</td>
+				<td>2.4 x 3.5 in</td>
+			</tr>
+			<tr>
+				<td>B9</td>
+				<td>44 x 62 mm</td>
+				<td>1.7 x 2.4 in</td>
+			</tr>
+			<tr>
+				<td>B10</td>
+				<td>31 x 44 mm</td>
+				<td>1.2 x 1.7 in</td>
+			</tr>
+		</table>
+
+		<h2>B Series Paper Size Tolerances</h2>
+		<p>ISO 216 specifies tolerances for the production of B series paper sizes in the same way as for A series paper sizes, the specific details of which are as follows:
+			<ul>
+				<li>±1.5 mm (0.06 in) for dimensions up to 150 mm (5.9 in)</li>
+				<li>±2 mm (0.08 in) for lengths in the range 150 to 600 mm (5.9 to 23.6 in)</li>
+				<li>±3 mm (0.12 in) for any dimension above 600 mm (23.6 in)</li>
+			</ul>
+		</p>
+
+		<h2>B Series Paper Sizes Definition</h2>
+		<p>
+			The B series paper sizes are defined in ISO 216 in the following way.<br/>
+			The B series paper sizes were created in order to provide paper sizes that weren't covered by the A series, but also use an aspect ratio of 1:root2. B sizes are defined as size B(n) being the geometric mean of size A(n) and size A(n-1). The Geometric Means of 2 numbers being the square root of the product of the two numbers.<br/>
+This system gives a useful property for enlarging and reducing documents in that the enlargement from A(n) to B(n) is the same as that from B(n) to A(n-1).<br/>
+As with the A series paper sizes, the standard lengths and widths are rounded to the nearest millimetre.
+		</p>
+
+		<p>
+			Source: <a href="http://www.papersizes.org/b-paper-sizes.htm">papersizes.org</a>.
 		</p>
 	</page>
 	<page page-size="letter">letter page</page>

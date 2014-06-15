@@ -53,6 +53,30 @@ class Page extends Container
     const SIZE_2A0_LANDSCAPE = '4768:3370';
     const SIZE_4A0 = '4768:6741';
     const SIZE_4A0_LANDSCAPE = '6741:4768';
+
+    const SIZE_B10 = '88:125';
+    const SIZE_B10_LANDSCAPE = '125:88';
+    const SIZE_B9 = '125:176';
+    const SIZE_B9_LANDSCAPE = '176:125';
+    const SIZE_B8 = '176:249';
+    const SIZE_B8_LANDSCAPE = '249:176';
+    const SIZE_B7 = '249:354';
+    const SIZE_B7_LANDSCAPE = '354:249';
+    const SIZE_B6 = '354:499';
+    const SIZE_B6_LANDSCAPE = '499:354';
+    const SIZE_B5 = '499:709';
+    const SIZE_B5_LANDSCAPE = '709:499';
+    const SIZE_B4 = '709:1001';
+    const SIZE_B4_LANDSCAPE = '1001:709';
+    const SIZE_B3 = '1001:1417';
+    const SIZE_B3_LANDSCAPE = '1417:1001';
+    const SIZE_B2 = '1417:2004';
+    const SIZE_B2_LANDSCAPE = '2004:1417';
+    const SIZE_B1 = '2004:2835';
+    const SIZE_B1_LANDSCAPE = '2835:2004';
+    const SIZE_B0 = '2835:4008';
+    const SIZE_B0_LANDSCAPE = '4008:2835';
+
     const SIZE_LETTER = '612:792';
     const SIZE_LETTER_LANDSCAPE = '792:612';
     const SIZE_LEGAL = '612:1008';
@@ -69,7 +93,7 @@ class Page extends Container
      * @var Node
      */
     private $header;
-    
+
     /**
      * @var Node
      */
@@ -95,7 +119,7 @@ class Page extends Container
     protected static function setDefaultAttributes()
     {
         parent::setDefaultAttributes();
-        
+
         static::addAttribute(self::ATTR_SIZE);
         static::addAttribute('page-size', self::SIZE_A4);
         static::addAttribute('encoding', 'utf-8');
@@ -105,11 +129,11 @@ class Page extends Container
         static::addAttribute('alpha', 1);
         static::addAttribute('document-template');
     }
-    
+
     public function initialize()
     {
         parent::initialize();
-        
+
         $this->setAttribute('page-size', self::SIZE_A4);
     }
 
@@ -118,24 +142,24 @@ class Page extends Container
         parent::initializeType();
         static::setAttributeSetters(array('page-size' => 'setPageSize'));
     }
-    
+
     private function initializeBoundary()
     {
         $width = $this->getRealWidth();
         $height = $this->getRealHeight();
-        
+
         $boundary = $this->getBoundary();
         if($boundary->isClosed())
         {
             $boundary->reset();
         }
-        
+
         $boundary->setNext(0, $height)
                  ->setNext($width, $height)
                  ->setNext($width, 0)
                  ->setNext(0, 0)
                  ->close();
-                 
+
         foreach(array('margin-top', 'margin-bottom', 'margin-left', 'margin-right') as $name)
         {
             $value = $this->getAttribute($name);
@@ -168,21 +192,21 @@ class Page extends Container
         $this->setAttributeDirectly('height', $height);
 
         $this->setAttributeDirectly('page-size', $width.':'.$height);
-        
+
         $this->initializeBoundary();
 
         return $this;
     }
-    
+
     private function getPageDimensions($pageSize)
     {
         $const = 'PHPPdf\Core\Node\Page::SIZE_'.strtoupper(str_replace(array('-', ' '), '_', $pageSize));
-        
+
         if(defined($const))
         {
             $pageSize = constant($const);
         }
-        
+
         $sizes = explode(':', $pageSize);
 
         if(count($sizes) < 2)
@@ -192,25 +216,25 @@ class Page extends Container
 
         return $sizes;
     }
-    
+
     public function setWidth($width)
     {
         parent::setWidth($width);
-        
+
         $height = $this->getAttributeDirectly('height');
         $width = $this->getAttributeDirectly('width');
         $this->setPageSize($width, $height);
     }
-    
+
     public function setHeight($height)
     {
         parent::setHeight($height);
-        
+
         $width = $this->getAttributeDirectly('width');
         $height = $this->getAttributeDirectly('height');
-        
+
         $this->setPageSize($width, $height);
-        
+
         $this->initializeBoundary();
     }
 
@@ -219,7 +243,7 @@ class Page extends Container
         $this->prepareGraphicsContext($document);
 
         $document->attachGraphicsContext($this->getGraphicsContext());
-       
+
         if(!$this->preparedTemplate)
         {
             foreach($this->getTemplateDrawingTasksAndFormatPlaceholders($document) as $task)
@@ -227,7 +251,7 @@ class Page extends Container
                 $tasks->insert($task);
             }
         }
-        
+
         parent::doDraw($document, $tasks);
     }
 
@@ -239,7 +263,7 @@ class Page extends Container
             $node->collectOrderedDrawingTasks($document, $tasks);
         }
     }
-    
+
     private function prepareGraphicsContext(Document $document)
     {
         $this->assignGraphicsContextIfIsNull($document);
@@ -253,12 +277,12 @@ class Page extends Container
             $this->setGraphicsContextDefaultStyle($document);
         }
     }
-    
+
     protected function setGraphicsContext(GraphicsContext $gc)
     {
         $this->graphicsContext = $gc;
     }
-    
+
     /**
      * @return GraphicsContext
      */
@@ -299,7 +323,7 @@ class Page extends Container
     {
         $boundary = clone $this->getBoundary();
         $copy = parent::copy();
-        
+
         if($this->graphicsContext)
         {
             $graphicsContext = $this->getGraphicsContext();
@@ -354,7 +378,7 @@ class Page extends Container
     {
         return parent::getWidth();
     }
-    
+
     public function getRealBoundary()
     {
         $boundary = clone $this->getBoundary();
@@ -363,7 +387,7 @@ class Page extends Container
         $boundary->pointTranslate(2, $this->getMarginRight(), $this->getMarginBottom());
         $boundary->pointTranslate(3, -$this->getMarginLeft(), $this->getMarginBottom());
         $boundary->pointTranslate(4, -$this->getMarginLeft(), -$this->getMarginTop());
-        
+
         return $boundary;
     }
 
@@ -376,7 +400,7 @@ class Page extends Container
         $this->translateMargin($name, $diff);
 
         $this->setAttributeDirectly($name, $value);
-        
+
         return $this;
     }
 
@@ -449,7 +473,7 @@ class Page extends Container
     {
         $this->throwExceptionIfHeightIsntSet($header);
         $header->setAttribute('static-size', true);
-        
+
         $header->setParent($this);
 
         $boundary = $this->getBoundary();
@@ -466,14 +490,14 @@ class Page extends Container
 
         $this->header = $header;
     }
-    
+
     public function setWatermark(Container $watermark)
     {
         $watermark->setParent($this);
         $watermark->setAttribute('vertical-align', self::VERTICAL_ALIGN_MIDDLE);
         $watermark->setHeight($this->getHeight());
         $watermark->setWidth($this->getWidth());
-        
+
         $watermark->setBoundary(clone $this->getBoundary());
 
         $this->watermark = $watermark;
@@ -488,7 +512,7 @@ class Page extends Container
     {
         return $this->footer;
     }
-    
+
     protected function getWatermark()
     {
         return $this->watermark;
@@ -497,18 +521,18 @@ class Page extends Container
     public function prepareTemplate(Document $document)
     {
         $this->prepareGraphicsContext($document);
-        
+
         $tasks = $this->getTemplateDrawingTasksAndFormatPlaceholders($document);
 
         $document->invokeTasks($tasks);
 
         $this->preparedTemplate = true;
     }
-    
+
     private function getTemplateDrawingTasksAndFormatPlaceholders(Document $document)
     {
         $this->formatConvertAttributes($document);
-        
+
         $this->getHeader()->format($document);
         $this->getFooter()->format($document);
         $this->getWatermark()->format($document);
@@ -519,14 +543,14 @@ class Page extends Container
         $this->footer->collectOrderedDrawingTasks($document, $tasks);
         $this->header->collectOrderedDrawingTasks($document, $tasks);
         $this->watermark->collectOrderedDrawingTasks($document, $tasks);
-        
+
         $this->footer->removeAll();
         $this->header->removeAll();
         $this->watermark->removeAll();
-        
+
         return $tasks;
     }
-    
+
     protected function preDraw(Document $document, DrawingTaskHeap $tasks)
     {
     }
@@ -598,38 +622,38 @@ class Page extends Container
         parent::unserialize($serialized);
         $this->initializePlaceholders();
     }
-    
+
     public function setGraphicsContextFromSourceDocumentIfNecessary(Document $document)
     {
         $gc = $this->getGraphicsContextFromSourceDocument($document);
-        
+
         if($gc !== null)
         {
             $gc = $gc->copy();
-            
+
             $this->setGraphicsContext($gc);
             $this->setPageSize($gc->getWidth().':'.$gc->getHeight());
             $this->setGraphicsContextDefaultStyle($document);
         }
     }
-    
+
     protected function beforeFormat(Document $document)
     {
         $this->setGraphicsContextFromSourceDocumentIfNecessary($document);
     }
-    
+
     protected function getGraphicsContextFromSourceDocument(Document $document)
     {
         $fileOfSourcePage = $this->getAttribute('document-template');
-        
+
         if($fileOfSourcePage)
         {
             $engine = $document->loadEngine($fileOfSourcePage, $this->getEncoding());
-            
+
             $graphicsContexts = $engine->getAttachedGraphicsContexts();
-            
+
             $count = count($graphicsContexts);
-            
+
             if($count == 0)
             {
                 return null;
@@ -637,13 +661,13 @@ class Page extends Container
 
             $pageContext = $this->context;
             $index = ($pageContext ? ($pageContext->getPageNumber()-1) : 0) % $count;
-            
+
             return $graphicsContexts[$index];
         }
-        
+
         return null;
     }
-    
+
     public function flush()
     {
         $placeholders = array('footer', 'header', 'watermark');
@@ -658,7 +682,7 @@ class Page extends Container
 
         parent::flush();
     }
-    
+
     public function removeGraphicsContext()
     {
         $this->graphicsContext = null;
