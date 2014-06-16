@@ -161,6 +161,7 @@ There are however standard predefined values:
   * B format: from B0 to B10
   * C format: from C0 to C10
   * US sizes: legal and letter
+
 All formats are supported in portrait and lanscape.
 
 Example:
