@@ -9,3 +9,7 @@ before_script:
   - php vendors.php
 
 script: phpunit --configuration tests/phpunit.xml
+
+matrix:
+  allow_failures:
+    - php: hhvm
