@@ -64,40 +64,23 @@ Installation
 
 PHPPdf is available at packagist.org, so you can use composer to download this library and all dependencies.
 
-Please configure the "minimum-stability" in your composer.json file, and set it to dev.
+*(add to require section in your composer.json file)*
 
-```
-"minimum-stability": "dev"
-```
+``
+    "psliwa/php-pdf": "*"
+``
 
-If you do not want to use composer, follow the instructions below to manually install this library with all the dependencies.
+You should choose last stable version (or wildcard of stable version), wildcard char ("*") is only an example.
 
-This library uses the following external dependencies:
+If you want to use as features as barcodes or image generation, you should add extra dependencies:
 
-* php-markdown
-* ZendPdf
-* Zend_Memory (Zend Framework in 2.0.x version)
-* Zend_Cache (Zend Framework in 2.0.x version)
-* Zend_Stdlib (Zend Framework in 2.0.x version)
-* Zend_EventManager (Zend Framework in 2.0.x version)
-* Zend_ServiceManager (Zend Framework in 2.0.x version)
-* Zend_Barcode (Zend Framework in 2.0.x version)
-* Imagine
+``
 
-In order to use the library, you must download all these dependencies.
+    "zendframework/zend-barcode": ">=2.0.0,<2.4",
+    "zendframework/zend-validator": ">=2.0.0,<2.4",
+    "imagine/Imagine": ">=0.2.0,<0.6.0"
 
-Execute the following command from the main directory of the library (make sure you have Git installed):
-
-```bash
-
-    php vendors.php
- 
-```
- 
-Alternatively, you can download the dependencies manually and copy them into the "lib/vendor" directory.
-
-By default the vendors.php file **will download the entire ZF2 repository**, but remember that **only ZendPdf, Zend_Memory, Zend_Cache, Zend_Stdlib, Zend_ServiceManager and Zend_EventManager are required**.
-To enable barcodes support, **Zend_Barcode** must also be installed. The other packages and files can be removed.
+``
     
 <a name="symfony2-bundle"></a>
 Symfony2 bundle

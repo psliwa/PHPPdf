@@ -1,9 +1,13 @@
-/lib/vendor/
 .buildpath
 .project
 .idea
 .settings
 TODO
-PHPPdf.iml
+*.iml
 examples/advisio*
 examples/test*
+examples/cache
+composer.lock
+vendor
+Vagrantfile
+.vagrant
