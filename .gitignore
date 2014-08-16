@@ -11,3 +11,4 @@ composer.lock
 vendor
 Vagrantfile
 .vagrant
+!lib/vendor
