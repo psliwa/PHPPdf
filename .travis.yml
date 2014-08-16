@@ -8,7 +8,7 @@ php:
   - hhvm
 
 before_script:
-  - url -s http://getcomposer.org/installer | php
+  - curl -s http://getcomposer.org/installer | php
   - php composer.phar --dev install
 
 script: phpunit --configuration tests/phpunit.xml
