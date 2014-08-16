@@ -273,7 +273,7 @@ class LinePartTest_Text extends Text
         $this->font = $font;
     }
 
-    public function getFont()
+    public function getFont(Document $document)
     {
         return $this->font;
     }

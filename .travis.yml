@@ -4,6 +4,7 @@ php:
   - 5.3
 
 before_script:
-  - php vendors.php
+  - url -s http://getcomposer.org/installer | php
+  - php composer.phar --dev install
 
 script: phpunit --configuration tests/phpunit.xml

@@ -4,6 +4,7 @@ CHANGELOG
 * 1.2.4-DEV (???)
 
   * [#52] fix document-template support
+  * [#64] fix dependencies versions in composer.json
 
 * 1.2.3 (2014-03-15)
 

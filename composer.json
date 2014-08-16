@@ -12,9 +12,14 @@
         }     
     ],
     "require": {
-        "zendframework/zendpdf":  ">=2.0.0-rc2",
-        "zendframework/zend-cache":  ">=2.0.0-rc2",
-        "zendframework/zend-memory": ">=2.0.0-rc2"
+        "zendframework/zendpdf":  ">=2.0.0,<2.4",
+        "zendframework/zend-cache":  ">=2.0.0,<2.4",
+        "zendframework/zend-memory": ">=2.0.0,<2.4"
+    },
+    "require-dev": {
+        "zendframework/zend-barcode": ">=2.0.0,<2.4",
+        "zendframework/zend-validator": ">=2.0.0,<2.4",
+        "imagine/Imagine": ">=0.2.0,<0.6.0"
     },
     "suggest": {
     	"zendframework/zend-barcode":  "If you want to use barcodes",
