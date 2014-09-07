@@ -7,7 +7,7 @@ use PHPPdf\Core\Engine\Imagine\Font;
 use PHPPdf\Core\Engine\EmptyImage;
 
 use PHPPdf\Core\Engine\Imagine\Image;
-use Imagine\Image\Palette\Color\RGB as Color;
+use Imagine\Image\Palette\Color\RGB as ColorPalette;
 use PHPPdf\Bridge\Imagine\Image\Point;
 use Imagine\Image\Box;
 use PHPPdf\Core\Engine\Imagine\GraphicsContext;
@@ -27,6 +27,15 @@ class GraphicsContextTest extends TestCase
         $this->image = $this->getMock('Imagine\Image\ImageInterface');
         $this->imagine = $this->getMock('Imagine\Image\ImagineInterface');
         $this->gc = new GraphicsContext($this->imagine, $this->image);
+    }
+    
+    /**
+     * Create Imagine Color Interface
+     */
+    private function createColor($color, $alpha)
+    {
+        $palette = new ColorPalette();
+        return $palette->color($color);
     }
     
     /**
@@ -140,7 +149,7 @@ class GraphicsContextTest extends TestCase
                     
         $this->drawer->expects($this->once())
                      ->method('line')
-                     ->with(new Point($x1, $height - $y1), new Point($x2, $height - $y2), new Color($color))
+                     ->with(new Point($x1, $height - $y1), new Point($x2, $height - $y2), $this->createColor($color))
                      ->will($this->returnValue($this->drawer));
         
         $this->gc->drawLine($x1, $y1, $x2, $y2);
@@ -242,7 +251,7 @@ class GraphicsContextTest extends TestCase
             list($expectedColor, $expectedFill) = $polygon;
             $this->drawer->expects($this->at($at))
                          ->method('polygon')
-                         ->with($expectedCoords, new Color($expectedColor), $expectedFill)
+                         ->with($expectedCoords, $this->createColor($expectedColor), $expectedFill)
                          ->will($this->returnValue($this->drawer));
         }
         
@@ -301,7 +310,7 @@ class GraphicsContextTest extends TestCase
         
         $font->expects($this->once())
              ->method('getWrappedFont')
-             ->with(new Color($color, $expectedImagineAlpha), $fontSize)
+             ->with($this->createColor($color, $expectedImagineAlpha), $fontSize)
              ->will($this->returnValue($imagineFont));
              
         $this->image->expects($this->once())
