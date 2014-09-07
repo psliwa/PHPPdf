@@ -32,7 +32,7 @@ class GraphicsContextTest extends TestCase
     /**
      * Create Imagine Color Interface
      */
-    private function createColor($color, $alpha)
+    private function createColor($color)
     {
         $palette = new ColorPalette();
         return $palette->color($color);
