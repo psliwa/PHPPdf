@@ -13,6 +13,7 @@ use Imagine\Image\Box;
 use PHPPdf\Core\Engine\Imagine\GraphicsContext;
 use PHPPdf\PHPUnit\Framework\TestCase;
 
+
 class GraphicsContextTest extends TestCase
 {
     private $image;
