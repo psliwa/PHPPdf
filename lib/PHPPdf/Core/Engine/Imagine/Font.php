@@ -10,7 +10,7 @@ namespace PHPPdf\Core\Engine\Imagine;
 
 use Imagine\Image\ImagineInterface;
 use PHPPdf\Core\Engine\AbstractFont;
-use Imagine\Image\Color as ImagineColor;
+use Imagine\Image\Palette\Color\RGB as ImagineColor;
 
 /**
  * @author Piotr Śliwa <peter.pl7@gmail.com>
