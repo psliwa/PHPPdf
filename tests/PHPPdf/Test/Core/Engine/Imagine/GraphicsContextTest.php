@@ -7,7 +7,7 @@ use PHPPdf\Core\Engine\Imagine\Font;
 use PHPPdf\Core\Engine\EmptyImage;
 
 use PHPPdf\Core\Engine\Imagine\Image;
-use Imagine\Image\Palette\Color\RGB as ColorPalette;
+use Imagine\Image\Palette\RGB as ColorPalette;
 use PHPPdf\Bridge\Imagine\Image\Point;
 use Imagine\Image\Box;
 use PHPPdf\Core\Engine\Imagine\GraphicsContext;
