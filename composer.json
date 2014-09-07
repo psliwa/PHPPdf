@@ -19,7 +19,7 @@
     "require-dev": {
         "zendframework/zend-barcode": ">=2.0.0,<2.4",
         "zendframework/zend-validator": ">=2.0.0,<2.4",
-        "imagine/Imagine": ">=0.2.0,<0.6.0"
+        "imagine/Imagine": ">=0.2.0,<=0.6.1"
     },
     "suggest": {
     	"zendframework/zend-barcode":  "If you want to use barcodes",
