@@ -282,7 +282,7 @@ class GraphicsContext extends AbstractGraphicsContext
         $alpha = (int) (100 - $this->state['alpha'] * 100);
         
         $palette = new ImagineColorPalette();
-        return $palette->color($color, $alpha);
+        return $palette->color($color); //, $alpha
     }
     
     protected function doSetFillColor($colorData)
