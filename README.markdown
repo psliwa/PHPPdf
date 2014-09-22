@@ -66,21 +66,21 @@ PHPPdf is available at packagist.org, so you can use composer to download this l
 
 *(add to require section in your composer.json file)*
 
-``
+```json
     "psliwa/php-pdf": "*"
-``
+```
 
 You should choose last stable version (or wildcard of stable version), wildcard char ("*") is only an example.
 
 If you want to use as features as barcodes or image generation, you should add extra dependencies:
 
-``
+```json
 
     "zendframework/zend-barcode": ">=2.0.0,<2.4",
     "zendframework/zend-validator": ">=2.0.0,<2.4",
     "imagine/Imagine": ">=0.2.0,<0.6.0"
 
-``
+```
     
 <a name="symfony2-bundle"></a>
 Symfony2 bundle
@@ -100,31 +100,31 @@ PHPPdf provides some free fonts that support utf-8 encoding, for example, DejaVu
 You can also add custom fonts, in order that you should prepare xml config file and configure Facade object as shown below:
 
 ```xml
-    <!-- xml config file code -->
-    <fonts>   
-        <font name="DejaVuSans">
-       	    <normal src="%resources%/fonts/DejaVuSans/normal.ttf" /><!-- "%resources%" will be replaced by path to PHPPdf/Resources directory -->
-            <bold src="%resources%/fonts/DejaVuSans/bold.ttf" />
-            <italic src="%resources%/fonts/DejaVuSans/oblique.ttf" />
-            <bold-italic src="%resources%/fonts/DejaVuSans/bold+oblique.ttf" />
-        </font>
-    </fonts>
+<!-- xml config file code -->
+<fonts>   
+    <font name="DejaVuSans">
+   	    <normal src="%resources%/fonts/DejaVuSans/normal.ttf" /><!-- "%resources%" will be replaced by path to PHPPdf/Resources directory -->
+        <bold src="%resources%/fonts/DejaVuSans/bold.ttf" />
+        <italic src="%resources%/fonts/DejaVuSans/oblique.ttf" />
+        <bold-italic src="%resources%/fonts/DejaVuSans/bold+oblique.ttf" />
+    </font>
+</fonts>
 ```
     
 ```php
-    //php code
-    $loader = new PHPPdf\Core\Configuration\LoaderImpl();
-    $loader->setFontFile(/* path to fonts configuration file */);
-    $builder = PHPPdf\Core\FacadeBuilder::create($loader);
-    $facade = $builder->build();
+//php code
+$loader = new PHPPdf\Core\Configuration\LoaderImpl();
+$loader->setFontFile(/* path to fonts configuration file */);
+$builder = PHPPdf\Core\FacadeBuilder::create($loader);
+$facade = $builder->build();
 ```
 
 ```xml    
-    //xml document code
-    <pdf>
-        <dynamic-page encoding="UTF-8" font-type="DejaVuSans">
-        </dynamic-page>
-    </pdf>
+<!-- xml document code -->
+<pdf>
+    <dynamic-page encoding="UTF-8" font-type="DejaVuSans">
+    </dynamic-page>
+</pdf>
 ```
 
 You can find more datails in the [Configuration](#configuration) section.
@@ -150,9 +150,9 @@ All formats are supported in portrait and lanscape.
 Example:
 
 ```xml
-    <page page-size="100:50">text</page>
-    <page page-size="a4">text</page>
-    <page page-size="letter-landscape">text</page>
+<page page-size="100:50">text</page>
+<page page-size="a4">text</page>
+<page page-size="letter-landscape">text</page>
 ```
 
 <a name="parsing"></a>
@@ -162,21 +162,21 @@ Document parsing and creating a pdf file
 The simplest way of using the library is:
 
 ```php
-    //register the PHPPdf and vendor (Zend_Pdf and other dependencies) autoloaders
-    require_once 'PHPPdf/Autoloader.php';
-    PHPPdf\Autoloader::register();
-    PHPPdf\Autoloader::register('/path/to/library/lib/vendor/Zend/library');
-    
-    //if you want to generate graphic files
-    PHPPdf\Autoloader::register('sciezka/do/biblioteki/lib/vendor/Imagine/lib');
+//register the PHPPdf and vendor (Zend_Pdf and other dependencies) autoloaders
+require_once 'PHPPdf/Autoloader.php';
+PHPPdf\Autoloader::register();
+PHPPdf\Autoloader::register('/path/to/library/lib/vendor/Zend/library');
 
-    $facade = new PHPPdf\Core\Facade(new PHPPdf\Core\Configuration\Loader());
+//if you want to generate graphic files
+PHPPdf\Autoloader::register('sciezka/do/biblioteki/lib/vendor/Imagine/lib');
 
-    //$documentXml and $stylesheetXml are strings contains XML documents, $stylesheetXml is optional
-    $content = $facade->render($documentXml, $stylesheetXml);
+$facade = new PHPPdf\Core\Facade(new PHPPdf\Core\Configuration\Loader());
 
-    header('Content-Type: application/pdf');
-    echo $content;
+//$documentXml and $stylesheetXml are strings contains XML documents, $stylesheetXml is optional
+$content = $facade->render($documentXml, $stylesheetXml);
+
+header('Content-Type: application/pdf');
+echo $content;
 ```    
 
 <a name="structure"></a>
@@ -189,19 +189,19 @@ adding attributes is also different.
 A simple document has following structure:
 
 ```xml
-    <pdf>
-        <dynamic-page>
-            <h1>Header</h1>
-            <p>paragraph</p>
-            <div color="red">Layer</div>
-            <table>
-                <tr>
-                    <td>Column</td>
-                    <td>Column</td>
-                </tr>
-            </table>
-        </dynamic-page>
-    </pdf>
+<pdf>
+    <dynamic-page>
+        <h1>Header</h1>
+        <p>paragraph</p>
+        <div color="red">Layer</div>
+        <table>
+            <tr>
+                <td>Column</td>
+                <td>Column</td>
+            </tr>
+        </table>
+    </dynamic-page>
+</pdf>
 ```
 
 Adding a DOCTYPE declaration is strongly recommended in order to replace html entities on values:
@@ -225,31 +225,31 @@ An another way of setting complex attributes is by using the "complex-attribute"
 
 Example:
 
-```
-    <pdf>
-        <dynamic-page>
-            <div color="red" border.color="black" background.color="pink">
-                This text is red on pink backgroun into black border
-            </div>
-        </dynamic-page>
-    </pdf>
+```xml
+<pdf>
+    <dynamic-page>
+        <div color="red" border.color="black" background.color="pink">
+            This text is red on pink backgroun into black border
+        </div>
+    </dynamic-page>
+</pdf>
 ```
     
 Alternative syntax ("stylesheet" tag):
 
 ```xml
-    <pdf>
-        <dynamic-page>
-            <div>
-                <stylesheet>
-                    <attribute color="red" />
-                    <complex-attribute name="border" color="black" />
-                    <complex-attribute name="background" color="pink" />
-                </stylesheet>
-                This text is red on pink backgroun into black border
-            </div>
-        </dynamic-page>
-    </pdf>
+<pdf>
+    <dynamic-page>
+        <div>
+            <stylesheet>
+                <attribute color="red" />
+                <complex-attribute name="border" color="black" />
+                <complex-attribute name="background" color="pink" />
+            </stylesheet>
+            This text is red on pink backgroun into black border
+        </div>
+    </dynamic-page>
+</pdf>
 ```
 
 Attributes can by set as XML attributes, directly after a tag name or by using the mentioned "stylesheet" tag.
@@ -272,19 +272,19 @@ An id must by unique throughout the document, otherwise a parsing error is throw
 Example:
 
 ```xml
-    <pdf>
-        <dynamic-page>
-            <div id="layer-1" color="red" font-type="judson" font-size="16px">
-                <stylesheet>
-                    <complex-attribute name="border" color="green" />
-                </stylesheet>
-                Layer 1
-            </div>
-            <div extends="layer-1">
-                Layer 2 inherits style (type, simple and complex attributes) from layer 1)
-            </div>
-        </dynamic-page>
-    </pdf>
+<pdf>
+    <dynamic-page>
+        <div id="layer-1" color="red" font-type="judson" font-size="16px">
+            <stylesheet>
+                <complex-attribute name="border" color="green" />
+            </stylesheet>
+            Layer 1
+        </div>
+        <div extends="layer-1">
+            Layer 2 inherits style (type, simple and complex attributes) from layer 1)
+        </div>
+    </dynamic-page>
+</pdf>
 ```    
 
 The Second layer inherits all attributes (simple and complex), and also those from external stylesheets.
@@ -299,17 +299,17 @@ Priorites in attributes setting:
 Example:
 
 ```xml
-    <pdf>
-        <page>
-            <div id="1" color="#cccccc" height="100px" text-align="right">
-            </div>
-            <div extends="1" color="#aaaaaa" height="150px">
-                <stylesheet>
-                    <attribute name="height" value="200px" />
-                </stylesheet>
-            </div>
-        </page>
-    </pdf>
+<pdf>
+    <page>
+        <div id="1" color="#cccccc" height="100px" text-align="right">
+        </div>
+        <div extends="1" color="#aaaaaa" height="150px">
+            <stylesheet>
+                <attribute name="height" value="200px" />
+            </stylesheet>
+        </div>
+    </page>
+</pdf>
 ```
 
 The second "div" will now have the following attributes:
@@ -329,59 +329,59 @@ Syntax of the stylesheet:
 Short style:
 
 ```xml
-    <stylesheet>
-        <!-- style attributes are embeded as xml attributes, class attribute has the same meaning as in HTML/CSS -->
-        <div class="class" font-size="12px" color="gray" background.color="yellow">
-            <!-- nested element, equivalent CSS selector syntax: "div.class p" -->
-            <p margin="10px 15px">
-            </p>
+<stylesheet>
+    <!-- style attributes are embeded as xml attributes, class attribute has the same meaning as in HTML/CSS -->
+    <div class="class" font-size="12px" color="gray" background.color="yellow">
+        <!-- nested element, equivalent CSS selector syntax: "div.class p" -->
+        <p margin="10px 15px">
+        </p>
+    </div>
+
+    <!-- equivalent CSS selector syntax: ".another-class", "any" tag is wildcard (mean any tag) -->
+    <any class="another-class" text-align="right">
+    </any>
+
+    <h2 class="header">
+        <span font-size="9px">
+        </span>
+        
+        <div font-style="bold">
         </div>
-
-        <!-- equivalent CSS selector syntax: ".another-class", "any" tag is wildcard (mean any tag) -->
-        <any class="another-class" text-align="right">
-        </any>
-
-        <h2 class="header">
-            <span font-size="9px">
-            </span>
-            
-            <div font-style="bold">
-            </div>
-        </h2>
-    </stylesheet>
+    </h2>
+</stylesheet>
 ```
 
 Long style:
 
 ```xml
-    <stylesheet>
-        <div class="class">
-            <!-- simple and complex attributes are nested in "div.class" selector path -->
-            <attribute name="font-size" value="12px" />
-            <attribute name="color" value="grey" />
-            <!-- equivalent of background.color attribute -->
-            <complex-attribute name="background" color="yellow" />
+<stylesheet>
+    <div class="class">
+        <!-- simple and complex attributes are nested in "div.class" selector path -->
+        <attribute name="font-size" value="12px" />
+        <attribute name="color" value="grey" />
+        <!-- equivalent of background.color attribute -->
+        <complex-attribute name="background" color="yellow" />
 
-            <!-- another nested element, equivalent CSS selector syntax: "div.class p" -->
-            <p>
-                <attribute name="margin" value="10px 15px" />
-            </p>
+        <!-- another nested element, equivalent CSS selector syntax: "div.class p" -->
+        <p>
+            <attribute name="margin" value="10px 15px" />
+        </p>
+    </div>
+
+    <!-- equivalent CSS selector syntax: ".another-class", "any" tag is wildcard (mean any tag) -->
+    <any class="another-class">
+        <attribute name="text-align" value="right" />
+    </any>
+
+    <h2 class="header">
+        <span>
+            <attribute name="font-size" value="9px" />
+        </span>
+        <div>
+            <attribute name="font-style" value="bold" />
         </div>
-
-        <!-- equivalent CSS selector syntax: ".another-class", "any" tag is wildcard (mean any tag) -->
-        <any class="another-class">
-            <attribute name="text-align" value="right" />
-        </any>
-
-        <h2 class="header">
-            <span>
-                <attribute name="font-size" value="9px" />
-            </span>
-            <div>
-                <attribute name="font-style" value="bold" />
-            </div>
-        </h2>
-    </stylesheet>
+    </h2>
+</stylesheet>
 ```
 
 <a name="color-palette"></a>
@@ -399,32 +399,32 @@ And you can also generate one document with different palettes.
 Example:
 
 ```xml
-    <!-- colors.xml file -->
-    <colors>
-        <color name="header-color" hex="#333333" />
-        <color name="line-color" hex="#eeeeee" />
-    </colors>
-    
-    <!-- stylesheet.xml file -->
-    <h2 color="header-color" />
-    <hr background-color="line-color" />
-    <table>
-        <td border-color="line-color" />
-    </table>
-    
-    <!-- document.xml file -->
-    <pdf>
-        <page>
-            <h2>Header</h2>
-            <hr />
-            <table>
-                <tr>
-                    <td>Data</td>
-                    <td>Data</td>
-                </tr>
-            </table>
-        </page>
-    </pdf>
+<!-- colors.xml file -->
+<colors>
+    <color name="header-color" hex="#333333" />
+    <color name="line-color" hex="#eeeeee" />
+</colors>
+
+<!-- stylesheet.xml file -->
+<h2 color="header-color" />
+<hr background-color="line-color" />
+<table>
+    <td border-color="line-color" />
+</table>
+
+<!-- document.xml file -->
+<pdf>
+    <page>
+        <h2>Header</h2>
+        <hr />
+        <table>
+            <tr>
+                <td>Data</td>
+                <td>Data</td>
+            </tr>
+        </table>
+    </page>
+</pdf>
 ```
     
 ```php
@@ -433,7 +433,11 @@ Example:
     
     $facade = ...;
     
-    $content = $facade->render(DataSource::fromFile(__DIR__.'/document.xml'), DataSource::fromFile(__DIR__.'/stylesheet.xml'), DataSource::fromFile(__DIR__.'/colors.xml'));
+    $content = $facade->render(
+        DataSource::fromFile(__DIR__.'/document.xml'),
+        DataSource::fromFile(__DIR__.'/stylesheet.xml'),
+        DataSource::fromFile(__DIR__.'/colors.xml')
+    );
 ```
 
 <a name="tags"></a>
@@ -527,18 +531,18 @@ It is possible to add several complex attributes in the same type (for instance 
 You can achieve that by using the "stylesheet" tag instead of the short notation.
 
 ```xml
-    <pdf>
-        <dynamic-page>
-            <div>
-                <stylesheet>
-                    <!-- Top and bootom edges are red, side edges are yellow-gray --> 
-                    <complex-attribute name="border" color="red" type="top+bottom" />
-                    <complex-attribute id="borderLeftAndRight" name="border" color="yellow" type="left+right" size="4px" />
-                    <complex-attribute id="outerBorderLeftAndRight" name="border" color="gray" type="left+right" size="2px" position="1px" />
-                </stylesheet>
-            </div>
-        </dynamic-page>
-    </pdf>
+<pdf>
+    <dynamic-page>
+        <div>
+            <stylesheet>
+                <!-- Top and bootom edges are red, side edges are yellow-gray --> 
+                <complex-attribute name="border" color="red" type="top+bottom" />
+                <complex-attribute id="borderLeftAndRight" name="border" color="yellow" type="left+right" size="4px" />
+                <complex-attribute id="outerBorderLeftAndRight" name="border" color="gray" type="left+right" size="2px" position="1px" />
+            </stylesheet>
+        </div>
+    </dynamic-page>
+</pdf>
 ```
 
 In this example, the second border has a "borderLeftAndRight" indentifie, if this border had no id, the attributes from second border would be merged with the attributes from first border.
@@ -577,11 +581,11 @@ PHPPdf uses the Zend\Barcode library in order to generate barcodes.
 Example:
 
 ```xml
-    <pdf>
-        <dynamic-page>
-            <barcode type="code128" code="PHPPdf" />
-        </dynamic-page>
-    </pdf>
+<pdf>
+    <dynamic-page>
+        <barcode type="code128" code="PHPPdf" />
+    </dynamic-page>
+</pdf>
 ```    
 
 ```<barcode>``` tag supports the most of standard attributes and has some other attributes:
@@ -611,11 +615,11 @@ For now there is only support for s simple pie chart.
 Example:
 
 ```xml
-    <pdf>
-        <dynamic-page>
-            <pie-chart radius="200px" chart-values="10|20|30|40" chart-colors="black|red|green|blue"></pie-chart>
-        </dynamic-page>
-    </pdf>
+<pdf>
+    <dynamic-page>
+        <pie-chart radius="200px" chart-values="10|20|30|40" chart-colors="black|red|green|blue"></pie-chart>
+    </dynamic-page>
+</pdf>
 ```
     
 The ```<pie-chart>``` tag has three extra attributes:
@@ -635,16 +639,16 @@ External hyperlinks link to url's, while internal links link to other tags insid
 Example:
 
 ```xml
-    <pdf>
-        <dynamic-page>
-            <a href="http://google.com">go to google.com</a>
-            <br />
-            <a ref="some-id">go to another tag</a>
-            <a href="#some-id">go to another tag</a> <!-- anchor style ref -->
-            <page-break />
-            <p id="some-id">Yep, this is another tag! ;)</p>
-        </dynamic-page>
-    </pdf>
+<pdf>
+    <dynamic-page>
+        <a href="http://google.com">go to google.com</a>
+        <br />
+        <a ref="some-id">go to another tag</a>
+        <a href="#some-id">go to another tag</a> <!-- anchor style ref -->
+        <page-break />
+        <p id="some-id">Yep, this is another tag! ;)</p>
+    </dynamic-page>
+</pdf>
 ```
 
 Every element has a "href" and "ref" attribute, even div.
@@ -663,34 +667,34 @@ This doesn't restrict the structure of the document, the owner of a parent bookm
 Example:
 
 ```xml
-    <pdf>
-	    <dynamic-page>
-		    <div>
-		        <behaviours>
-		            <bookmark id="1">parent bookmark</bookmark>
-		        </behaviours>
-		        Some content
-		    </div>
-		    <div>
-		        <behaviours>
-		            <bookmark parentId="1">children bookmark</bookmark>
-		        </behaviours>
-		        Some another content
-		    </div>
-		    <div>
-		        <behaviours>
-		            <bookmark parentId="1">another children bookmark</bookmark>
-		        </behaviours>
-		        Some another content
-		    </div>
-		    <div>
-		        <behaviours>
-		            <bookmark>another parent bookmark</bookmark>
-		        </behaviours>
-		       Some content
-		    </div>
-		</dynamic-page>
-    </pdf>
+<pdf>
+    <dynamic-page>
+	    <div>
+	        <behaviours>
+	            <bookmark id="1">parent bookmark</bookmark>
+	        </behaviours>
+	        Some content
+	    </div>
+	    <div>
+	        <behaviours>
+	            <bookmark parentId="1">children bookmark</bookmark>
+	        </behaviours>
+	        Some another content
+	    </div>
+	    <div>
+	        <behaviours>
+	            <bookmark parentId="1">another children bookmark</bookmark>
+	        </behaviours>
+	        Some another content
+	    </div>
+	    <div>
+	        <behaviours>
+	            <bookmark>another parent bookmark</bookmark>
+	        </behaviours>
+	       Some content
+	    </div>
+	</dynamic-page>
+</pdf>
 ```
 
 A shortcut for the "bookmark" behaviour is the "bookmark" attribute,
@@ -701,22 +705,22 @@ The bookmark of a parent tag is also the parent of a children's bookmarks.
 Example:
 
 ```xml
-    <pdf>
-	    <dynamic-page>
-		    <div bookmark="parent bookmark">
-		        Some content
-		        <div bookmark="children bookmark">
-		            Some another content
-		        </div>
-		        <div bookmark="another children bookmark">
-		            Some another content
-		        </div>
-		    </div>
-		    <div bookmark="another parent bookmark">
-		       Some content
-		    </div>
-		</dynamic-page>
-    </pdf>
+<pdf>
+    <dynamic-page>
+	    <div bookmark="parent bookmark">
+	        Some content
+	        <div bookmark="children bookmark">
+	            Some another content
+	        </div>
+	        <div bookmark="another children bookmark">
+	            Some another content
+	        </div>
+	    </div>
+	    <div bookmark="another parent bookmark">
+	       Some content
+	    </div>
+	</dynamic-page>
+</pdf>
 ```
 
 The above structures (both examples) will create this bookmarks structure:
@@ -735,11 +739,11 @@ Sticky notes can be created by using the "note" attribute.
 Example:
 
 ```xml
-    <pdf>
-        <dynamic-page>
-            <div note="note text"></div>
-        </dynamic-page>
-    </pdf>
+<pdf>
+    <dynamic-page>
+        <div note="note text"></div>
+    </dynamic-page>
+</pdf>
 ```
     
 The XML parser normalizes values of attributes, wich results ignoring new line characters.
@@ -747,15 +751,15 @@ The XML parser normalizes values of attributes, wich results ignoring new line c
 If you want to add a note with new line characters, you should use this syntax:
 
 ```xml
-    <pdf>
-        <dynamic-page>
-            <div>
-                <behaviours>
-                    <note>note text</note>
-                </behaviours>
-            </div>
-        </dynamic-page>
-    </pdf>
+<pdf>
+    <dynamic-page>
+        <div>
+            <behaviours>
+                <note>note text</note>
+            </behaviours>
+        </div>
+    </dynamic-page>
+</pdf>
 ```
 
 
@@ -769,22 +773,22 @@ Some elements have special "placeholders": page has header and footer,
 table also has header and footer (TODO: not implemented yet) etc.
 
 ```xml
-    <pdf>
-        <dynamic-page>
-            <placeholders>
-                <header>
-                    <div height="50px" width="100%">
-                        Header
-                    </div>
-                </header>
-                <footer>
-                    <div height="50px" width="100%">
-                        Footer
-                    </div>
-                </footer>
-            </placeholders>
-        </dynamic-page>
-    </pdf>
+<pdf>
+    <dynamic-page>
+        <placeholders>
+            <header>
+                <div height="50px" width="100%">
+                    Header
+                </div>
+            </header>
+            <footer>
+                <div height="50px" width="100%">
+                    Footer
+                </div>
+            </footer>
+        </placeholders>
+    </dynamic-page>
+</pdf>
 ```
 
 Header and footer need to have a height attribute set.
@@ -805,18 +809,18 @@ If you want to use an image as a watermark, you should wrap the img tag in a div
 Example:
 
 ```xml
-    <pdf>
-        <dynamic-page>
-            <placeholders>
-                <watermark>
-                    <!-- rotate can have absolute values (45deg - in degrees, 0.123 - in radians) or relative values ("diagonally" and "-diagonally" - angle between diagonal and base side of the page) -->
-                    <div rotate="diagonally" alpha="0.1">
-                        <img src="path/to/image.png" />
-                    </div>
-                </watermark>
-            </placeholders>
-        </dynamic-page>
-    </pdf>
+<pdf>
+    <dynamic-page>
+        <placeholders>
+            <watermark>
+                <!-- rotate can have absolute values (45deg - in degrees, 0.123 - in radians) or relative values ("diagonally" and "-diagonally" - angle between diagonal and base side of the page) -->
+                <div rotate="diagonally" alpha="0.1">
+                    <img src="path/to/image.png" />
+                </div>
+            </watermark>
+        </placeholders>
+    </dynamic-page>
+</pdf>
 ```
 
 <a name="page-numbering"></a>
@@ -836,29 +840,29 @@ Attributes of this tags:
 Example:
 
 ```xml
-    <pdf>
-        <dynamic-page>
-            <placeholders>
-                <header>
-                    <div height="20px">
-                        <page-info format="page %s for %s" />
+<pdf>
+    <dynamic-page>
+        <placeholders>
+            <header>
+                <div height="20px">
+                    <page-info format="page %s for %s" />
 
-                        <!-- when we would like to number from 2 -->
-                        <page-info offset="1" format="page %s for %s" />
+                    <!-- when we would like to number from 2 -->
+                    <page-info offset="1" format="page %s for %s" />
 
-                        <!-- when we would like to display only current page number -->
-                        <page-info format="%1$s." />
-                        <!-- or -->
-                        <page-number />
+                    <!-- when we would like to display only current page number -->
+                    <page-info format="%1$s." />
+                    <!-- or -->
+                    <page-number />
 
-                        <!-- when we would like to display only total pages number -->
-                        <page-info format="%2$s pages" />
-                    </div>
-                </header>
-            </placeholders>
-            Some text
-        </dynamic-page>
-    </pdf>
+                    <!-- when we would like to display only total pages number -->
+                    <page-info format="%2$s pages" />
+                </div>
+            </header>
+        </placeholders>
+        Some text
+    </dynamic-page>
+</pdf>
 ```
 
 <a name="templates"></a>
@@ -875,11 +879,11 @@ For the "dynamic-page" tag, the template for each page will be the corresponding
 Example:
 
 ```xml
-    <pdf>
-        <dynamic-page document-template="path/to/file.pdf">
-            <div>Some content</div>
-        </dynamic-page>
-    </pdf>
+<pdf>
+    <dynamic-page document-template="path/to/file.pdf">
+        <div>Some content</div>
+    </dynamic-page>
+</pdf>
 ```
 
 <a name="columns"></a>
@@ -889,14 +893,14 @@ Separate page on columns
 Page can be separated on columns:
 
 ```xml
-    <pdf>
-        <dynamic-page>
-            <column-layout>
-                <div width="100%" height="2500px" background.color="green">
-                </div>
-            </column-layout>
-        </dynamic-page>
-    </pdf>
+<pdf>
+    <dynamic-page>
+        <column-layout>
+            <div width="100%" height="2500px" background.color="green">
+            </div>
+        </column-layout>
+    </dynamic-page>
+</pdf>
 ```
 
 The above XML describes several pages of the pdf document, with green rectangles separated on two columns.
@@ -919,11 +923,11 @@ If you want to avoid automatic page or column break on certain tags, you should 
 Example:
 
 ```xml
-    <pdf>
-        <dynamic-page>
-            <div breakable="false">this div won't be automatically broken</div>
-        </dynamic-page>
-    </pdf>
+<pdf>
+    <dynamic-page>
+        <div breakable="false">this div won't be automatically broken</div>
+    </dynamic-page>
+</pdf>
 ```
 
 <a name="metadata"></a>
@@ -939,9 +943,9 @@ Supported metadata is: Creator, Keywords, Subject, Author, Title, ModDate, Creat
 Example:
 
 ```xml
-    <pdf Author="Piotr Sliwa" Title="Test document">
-        <!-- some other elements -->
-    </pdf>
+<pdf Author="Piotr Sliwa" Title="Test document">
+    <!-- some other elements -->
+</pdf>
 ```
 
 <a name="configuration"></a>
@@ -958,26 +962,33 @@ The library has four primary config files that allow you to adopt the library fo
 In order to change default the config files, you must pass to Facade constructor configured Loader object:
 
 ```php
-    $loader = new PHPPdf\Core\Configuration\LoaderImpl('/path/to/file/nodes.xml', '/path/to/file/enhancements.xml', '/path/to/file/fonts.xml', , '/path/to/file/colors.xml');
-    $facade = new PHPPdf\Core\Facade($loader);
+$loader = new PHPPdf\Core\Configuration\LoaderImpl(
+    '/path/to/file/nodes.xml',
+    '/path/to/file/enhancements.xml',
+    '/path/to/file/fonts.xml', 
+    '/path/to/file/colors.xml'
+);
+
+$facade = new PHPPdf\Core\Facade($loader);
 ```
     
 If you want to change only one config file, you should use LoaderImpl::set* method:
 
 ```php
-    $loader = new PHPPdf\Core\Configuration\LoaderImpl();
-    $loader->setFontFile('/path/to/file/fonts.xml');//there are setFontFile, setNodeFile, setComplexAttributeFile and setColorFile methods
-    $facade = new PHPPdf\Core\Facade($loader);
+$loader = new PHPPdf\Core\Configuration\LoaderImpl();
+$loader->setFontFile(
+'/path/to/file/fonts.xml'); //there are setFontFile, setNodeFile, setComplexAttributeFile and setColorFile methods
+$facade = new PHPPdf\Core\Facade($loader);
 ```
 
 FacadeBuilder can be uset to build and configure Facade. FacadeBuilder is able to configure cache, rendering engine and document parser. 
     
 ```php
-    $builder = PHPPdf\Core\FacadeBuilder::create(/* you can pass specyfic configuration loader object */)
+$builder = PHPPdf\Core\FacadeBuilder::create(/* you can pass specyfic configuration loader object */)
                                         ->setCache('File', array('cache_dir' => './cache'))
                                         ->setUseCacheForStylesheetConstraint(true); //stylesheets will be also use cache
 
-    $facade = $builder->build();
+$facade = $builder->build();
 ```
 
 <a name="markdown"></a>
@@ -989,10 +1000,10 @@ Library supports basic (official) markdown syntax. To convert markdown document 
 Example:
 
 ```php
-    $facade = PHPPdf\Core\FacadeBuilder::create()
-                                       ->setDocumentParserType(PHPPdf\Core\FacadeBuilder::PARSER_MARKDOWN)
-                                       ->setMarkdownStylesheetFilepath(/** optionaly path to stylesheet in xml format */)
-                                       ->build();
+$facade = PHPPdf\Core\FacadeBuilder::create()
+                                   ->setDocumentParserType(PHPPdf\Core\FacadeBuilder::PARSER_MARKDOWN)
+                                   ->setMarkdownStylesheetFilepath(/** optionaly path to stylesheet in xml format */)
+                                   ->build();
 ```
 
 By default, in markdown pdf document, helvetica font is used.
@@ -1002,9 +1013,9 @@ The stylesheet structure has been described in the [stylesheet](#stylesheet) cha
 By default the stylesheet is empty, if you want to set another font type, the stylesheet should look like this:
 
 ```xml
-    <stylesheet>
-        <any font-type="DejaVuSans" />
-    </stylesheet>
+<stylesheet>
+    <any font-type="DejaVuSans" />
+</stylesheet>
 ```
 
 Internally the MarkdownDocumentParser converts a markdown document to html (via the [PHP markdown](https://github.com/wolfie/php-markdown) library), then converts html to xml, and at last xml to a pdf document.
@@ -1022,12 +1033,12 @@ PHPPdf is able to generate image (jpg or png) files insted of a pdf document.
 To achieve that, you must configure the FacadeBuilder, example:
 
 ```php
-    $facade = PHPPdf\Core\FacadeBuilder::create()
-                                       ->setEngineType('image')
-                                       ->build();
+$facade = PHPPdf\Core\FacadeBuilder::create()
+                                   ->setEngineType('image')
+                                   ->build();
 
-    //render method returns array of images' sources, one pdf page is generated to single image file 
-    $images = $facade->render(...);
+//render method returns array of images' sources, one pdf page is generated to single image file 
+$images = $facade->render(...);
 ```
     
 By default the GD library is used to render an image.
@@ -1036,12 +1047,12 @@ But you can also use Imagick, which offers a better quality, so it is recommende
 To switch the graphic library, you must configure the FacadeBuilder object using the setEngineOptions method:
 
 ```php
-    $builder = ...;
-    $builder->setEngineOptions(array(
-        'engine' => 'imagick',
-        'format' => 'png',//png, jpeg or wbmp
-        'quality' => 60,//int from 0 to 100
-    ));
+$builder = ...;
+$builder->setEngineOptions(array(
+    'engine' => 'imagick',
+    'format' => 'png',//png, jpeg or wbmp
+    'quality' => 60,//int from 0 to 100
+));
 ```
     
 Supported graphic libraries are: GD (default), imagick, gmagick. PHPPdf uses the [Imagine][2] library as an interface for graphics file generation.
