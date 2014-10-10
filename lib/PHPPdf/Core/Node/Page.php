@@ -195,7 +195,7 @@ class Page extends Container
             $pageSize = constant($const);
         }
 
-        if (!preg_match('/^(?P<width>[0-9]+):(?P<height>[0-9]+)$/', $pageSize, $matches)) {
+        if (!preg_match('/^(?P<width>[0-9]+(.[0-9]+)?):(?P<height>[0-9]+(.[0-9]+)?)$/', $pageSize, $matches)) {
             throw new InvalidArgumentException(sprintf('page-size attribute should be in "width:height" format, "%s" given.', $pageSize));
         }
 
