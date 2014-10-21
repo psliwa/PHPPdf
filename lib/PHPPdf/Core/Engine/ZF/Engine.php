@@ -184,5 +184,6 @@ class Engine extends AbstractEngine
         $this->graphicsContexts = array();
         $this->outlines = array();
         $this->zendPdf = null;
+        $this->images = array();
     }
 }
