@@ -5,7 +5,11 @@ CHANGELOG
 
   * [#47] support for max-height and max-width attributes
 
-* 1.2.5-DEV (???)
+* 1.2.6-DEV (???)
+
+  * (nothing)
+
+* 1.2.5 (2014-10-23)
 
   * [#80] fix memory leak when multiple documents was generated
 
