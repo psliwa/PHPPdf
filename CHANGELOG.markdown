@@ -3,7 +3,7 @@ CHANGELOG
 
 * 1.2.5-DEV (???)
 
-  * (nothing)
+  * [#80] fix memory leak when multiple documents was generated
 
 * 1.2.4 (2014-09-28)
 
