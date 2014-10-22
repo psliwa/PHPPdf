@@ -187,16 +187,21 @@ class Page extends Container
 
     private function getPageDimensions($pageSize)
     {
-        $pageSize = strtoupper(str_replace(array('-', ' ', '_'), '', $pageSize));
-        $pageSize = str_replace('LANDSCAPE', '', $pageSize, $isLandscape);
-        $const = 'PHPPdf\Core\Node\Page::SIZE_'.$pageSize;
+        $const = strtoupper(str_replace(array('-', ' ', '_'), '', $pageSize));
+        $const = str_replace('LANDSCAPE', '', $const, $isLandscape);
+        $const = 'PHPPdf\Core\Node\Page::SIZE_'.$const;
 
         if(defined($const))
         {
             $pageSize = constant($const);
         }
+        else
+        {
+            //page size is passed directly, so it is not a landscape
+            $isLandscape = false;
+        }
 
-        if(!preg_match('/^(?P<width>[0-9]+(.[0-9]+)?):(?P<height>[0-9]+(.[0-9]+)?)$/', $pageSize, $matches))
+        if(!preg_match('/^(?P<width>[0-9]+.*):(?P<height>[0-9]+.*)$/', $pageSize, $matches))
         {
             throw new InvalidArgumentException(sprintf('page-size attribute should be in "width:height" format, "%s" given.', $pageSize));
         }

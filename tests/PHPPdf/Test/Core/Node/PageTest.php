@@ -409,6 +409,7 @@ class PageTest extends \PHPPdf\PHPUnit\Framework\TestCase
         };
 
         return array(
+            array('100px:100px', '100:100'),
             array('4a0', Page::SIZE_4A0),
             array('4A0', Page::SIZE_4A0),
             array('4a0-landscape', $landscape(Page::SIZE_4A0)),

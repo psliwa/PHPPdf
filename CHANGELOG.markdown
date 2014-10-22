@@ -4,6 +4,7 @@ CHANGELOG
 * 1.3.0-DEV (???)
 
   * [#47] support for max-height and max-width attributes
+  * [#79] enhancements for page-size attribute support
 
 * 1.2.6-DEV (???)
 
