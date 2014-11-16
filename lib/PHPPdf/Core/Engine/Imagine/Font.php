@@ -10,7 +10,8 @@ namespace PHPPdf\Core\Engine\Imagine;
 
 use Imagine\Image\ImagineInterface;
 use PHPPdf\Core\Engine\AbstractFont;
-use Imagine\Image\Color as ImagineColor;
+use Imagine\Image\Palette\Color\RGB as Color;
+use Imagine\Image\Palette\RGB as ColorPalette;
 
 /**
  * @author Piotr Śliwa <peter.pl7@gmail.com>
@@ -49,9 +50,10 @@ class Font extends AbstractFont
     
     private function createColor($color)
     {
-        if(!$color instanceof ImagineColor)
+        if(!$color instanceof Color)
         {
-            $color = new ImagineColor($color);
+            $palette = new ColorPalette();
+            $color = $palette->color($color);
         }
 
         return $color;
