@@ -15,6 +15,11 @@ use Zend\Barcode\Object\ObjectInterface;
  * 
  * All of method expects getters, copy and commit should be buffered, and
  * invoked on commit method.
+ *
+ * Coordinate system:
+ *
+ * * left bottom (not upper!) corner point has (0,0) coordinates
+ * * when there are two points in method, first one is left bottom, second one is right upper
  * 
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
