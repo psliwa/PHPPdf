@@ -8,10 +8,13 @@
 
 namespace PHPPdf\Core\Engine\Imagine;
 
+use Imagine\Image\BoxInterface;
+use Imagine\Image\PointInterface;
 use PHPPdf\Bridge\Imagine\Image\Point;
 use Imagine\Image\Box;
 use Imagine\Image\ImageInterface;
 use Imagine\Image\ImagineInterface;
+use PHPPdf\Bridge\Imagine\Rectangle;
 use PHPPdf\Core\Engine\AbstractGraphicsContext;
 use PHPPdf\Core\Engine\GraphicsContext as BaseGraphicsContext;
 use PHPPdf\Core\Engine\Image as BaseImage;
@@ -138,8 +141,8 @@ class GraphicsContext extends AbstractGraphicsContext
                 $clipImage->rotate($angle);
                 $clipPoint = $p;
             }
-            
-            $image->paste($clipImage, $this->translatePoint($point, $clipPoint->getX(), $clipPoint->getY()));
+
+            $this->pasteImage($image, $clipImage, $this->translatePoint($point, $clipPoint->getX(), $clipPoint->getY()));
         }
         
         $this->state = $state;
@@ -161,29 +164,80 @@ class GraphicsContext extends AbstractGraphicsContext
     
     protected function doDrawImage(BaseImage $image, $x1, $y1, $x2, $y2)
     {
-        $height = $y2 - $y1;
-        $width = $x2 - $x1;
-        
+        $requestedHeight = $y2 - $y1;
+        $requestedWidth = $x2 - $x1;
+
+        /**
+         * @var ImageInterface $imagineImage
+         */
         $imagineImage = $image->getWrappedImage();
         
         $box = $imagineImage->getSize();
-        $drawedImageHeight = $box->getHeight();
-        $drawedImageWidth = $box->getWidth();
+        $imageHeight = $box->getHeight();
+        $imageWidth = $box->getWidth();
         
-        if($height != $drawedImageHeight || $width != $drawedImageWidth)
+        if($requestedHeight != $imageHeight || $requestedWidth != $imageWidth)
         {
-            $newBox = new Box($width, $height);
+            $newBox = new Box($requestedWidth, $requestedHeight);
             $imagineImage->resize($newBox);
         }
         
-        $y = $this->convertYCoord($y1 + $height);
-        
-        list($image, $point) = $this->getCurrentClip();
+        $y = $this->convertYCoord($y2);
 
-        $image->paste($imagineImage, $this->translatePoint($point, $x1, $y));
+        /**
+         * @var ImageInterface $image
+         */
+        list($image, $basePoint) = $this->getCurrentClip();
+
+        $point = $this->translatePoint($basePoint, $x1, $y);
+
+        $this->pasteImage($image, $imagineImage, $point);
+    }
+
+    private function pasteImage(ImageInterface $image, ImageInterface $imageToPaste, PointInterface $pastePoint)
+    {
+        if(!$this->boxContains($image->getSize(), $imageToPaste->getSize(), $pastePoint))
+        {
+            $rectangle = Rectangle::createWithSize($image->getSize())
+                ->intersection(Rectangle::create($pastePoint, $imageToPaste->getSize()));
+
+            if($rectangle !== null)
+            {
+                $croppingPoint = new Point(
+                    $rectangle->getStartingPoint()->getX() - $pastePoint->getX(),
+                    $rectangle->getStartingPoint()->getY() - $pastePoint->getY()
+                );
+
+                $imageToPaste->crop($croppingPoint, $rectangle->getSize());
+
+                $image->paste($imageToPaste, $this->ensureNonNegativePoint($pastePoint));
+            }
+        }
+        else
+        {
+            $image->paste($imageToPaste, $pastePoint);
+        }
+    }
+
+    private function boxContains(BoxInterface $box, BoxInterface $containedBox, PointInterface $point)
+    {
+        return
+            $point->getX() >= 0 && $point->getY() >= 0 && $point->getX() < $box->getWidth() && $point->getY() < $box->getHeight() &&
+            $box->getWidth() >= $containedBox->getWidth() + $point->getX() &&
+            $box->getHeight() >= $containedBox->getHeight() + $point->getY();
+    }
+
+    private function ensureNonNegativePoint(PointInterface $point)
+    {
+        if($point->getX() < 0 || $point->getY() < 0)
+        {
+            return new Point(max(0, $point->getX()), max(0, $point->getY()));
+        }
+
+        return $point;
     }
     
-    private function translatePoint(Point $point, $x, $y)
+    private function translatePoint(PointInterface $point, $x, $y)
     {
         return new Point($x - $point->getX(), $y - $point->getY());
     }
