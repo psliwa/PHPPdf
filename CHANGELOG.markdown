@@ -1,7 +1,11 @@
 CHANGELOG
 =========
 
-* 1.2.6-DEV (???)
+* 1.2.7 (???)
+
+  * (nothing)
+
+* 1.2.6 (2014-12-14)
 
   * [#83] remove Imagine\Image\Box, fix image drawing in Imagine engine
 
