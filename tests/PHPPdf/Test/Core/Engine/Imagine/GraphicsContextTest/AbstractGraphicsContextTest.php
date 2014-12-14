@@ -54,8 +54,8 @@ abstract class AbstractGraphicsContextTest extends TestCase
         $this->assertImage($this->gcImage)
             ->colorAt(1, 1, $color)
             ->colorAt($width - 2, $height - 2, $color)
-            ->colorAt($width + 2, $height - 2, self::GC_COLOR)
-            ->colorAt($width - 2, $height + 2, self::GC_COLOR);
+            ->colorAt($width + 6, $height - 2, self::GC_COLOR)
+            ->colorAt($width - 2, $height + 6, self::GC_COLOR);
     }
 }
 
@@ -70,8 +70,31 @@ class AbstractGraphicsContextTest_ImageAssert
 
     public function colorAt($x, $y, $expectedColor)
     {
-        \PHPUnit_Framework_Assert::assertEquals($expectedColor, (string) $this->image->getColorAt(new Point($x, $y)));
+        $actualColor = (string) $this->image->getColorAt(new Point($x, $y));
+
+        $actualRgb = $this->rgb($actualColor);
+        $expectedRgb = $this->rgb($expectedColor);
+
+        for($i=0; $i<3; $i++)
+        {
+            \PHPUnit_Framework_Assert::assertLessThanOrEqual(
+                255*0.03,//3% precision
+                abs($actualRgb[$i] - $expectedRgb[$i]),
+                'expected color: '.$expectedColor.', but given: '.$actualColor
+            );
+        }
 
         return $this;
+    }
+
+    private function rgb($color)
+    {
+        $color = str_replace('#', '', $color);
+
+        return array(
+            hexdec($color[0].$color[1]),
+            hexdec($color[2].$color[3]),
+            hexdec($color[4].$color[5]),
+        );
     }
 }
