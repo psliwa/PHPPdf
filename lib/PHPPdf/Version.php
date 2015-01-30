@@ -17,7 +17,7 @@ use PHPPdf\Exception\BadMethodCallException;
  */
 final class Version
 {
-    const VERSION = '1.2.7';
+    const VERSION = '1.2.8-DEV';
 
     private function __construct()
     {
