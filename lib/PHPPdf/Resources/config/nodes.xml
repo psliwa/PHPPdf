@@ -51,6 +51,24 @@
 	            <post class="PHPPdf\Core\Formatter\VerticalAlignFormatter" />
 	        </formatters>
 	    </node>
+        <node name="blockquote" class="PHPPdf\Core\Node\Container">
+            <stylesheet>
+                <attribute name="margin-left" value="40px" />
+                <attribute name="margin-right" value="40px" />
+                <attribute name="margin-top" value="20px" />
+                <attribute name="margin-bottom" value="20px" />
+            </stylesheet>
+            <formatters>
+                <pre class="PHPPdf\Core\Formatter\ConvertAttributesFormatter" />
+                <pre class="PHPPdf\Core\Formatter\StandardDimensionFormatter" />
+                <pre class="PHPPdf\Core\Formatter\FirstPointPositionFormatter" />
+
+                <post class="PHPPdf\Core\Formatter\ContainerDimensionFormatter" />
+                <post class="PHPPdf\Core\Formatter\StandardPositionFormatter" />
+                <post class="PHPPdf\Core\Formatter\FloatFormatter" />
+                <post class="PHPPdf\Core\Formatter\VerticalAlignFormatter" />
+            </formatters>
+        </node>
 	    <node name="circle" class="PHPPdf\Core\Node\Circle">
 	        <formatters>
 	            <pre class="PHPPdf\Core\Formatter\ConvertAttributesFormatter" />
