@@ -6,9 +6,13 @@ CHANGELOG
   * [#47] support for max-height and max-width attributes
   * [#79] enhancements for page-size attribute support
 
-* 1.2.7 (???)
+* 1.2.8 (???)
 
   * (nothing)
+
+* 1.2.7 (2015-01-30)
+
+  * [#87] add "blockquote" tag
 
 * 1.2.6 (2014-12-14)
 
