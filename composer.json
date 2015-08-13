@@ -9,16 +9,15 @@
             "name":     "Piotr Śliwa",
             "homepage": "http://ohey.pl",
             "email":    "peter.pl7@gmail.com"
-        }     
+        }
     ],
     "require": {
-        "zendframework/zendpdf":  ">=2.0.0,<2.4",
-        "zendframework/zend-cache":  ">=2.0.0,<2.4",
-        "zendframework/zend-memory": ">=2.0.0,<2.4"
+        "zendframework/zendpdf":  "~2.0.0",
+        "zendframework/zend-cache":  "^2.0"
     },
     "require-dev": {
-        "zendframework/zend-barcode": ">=2.0.0,<2.4",
-        "zendframework/zend-validator": ">=2.0.0,<2.4",
+        "zendframework/zend-barcode": "^2.0",
+        "zendframework/zend-validator": "^2.0",
         "imagine/Imagine": ">=0.2.0,<0.6.0"
     },
     "suggest": {
