@@ -12,7 +12,7 @@ use PHPPdf\Exception\InvalidArgumentException;
 
 /**
  * Abstract font
- * 
+ *
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
 abstract class AbstractFont implements Font
@@ -35,6 +35,8 @@ abstract class AbstractFont implements Font
             self::STYLE_BOLD,
             self::STYLE_ITALIC,
             self::STYLE_BOLD_ITALIC,
+            self::STYLE_LIGHT,
+            self::STYLE_LIGHT_ITALIC,
         );
 
         if(count($fonts) === 0)
@@ -50,14 +52,14 @@ abstract class AbstractFont implements Font
             throw new InvalidArgumentException('Path for normal font must by passed.');
         }
     }
-    
+
     public function setStyle($style)
     {
         $style = $this->convertStyleType($style);
 
         $this->currentStyle = $this->fontStyle($style);
     }
-    
+
     public function getCurrentStyle()
     {
         return $this->currentStyle;
@@ -82,7 +84,7 @@ abstract class AbstractFont implements Font
 
         return $style;
     }
-    
+
     public function hasStyle($style)
     {
         $style = $this->convertStyleType($style);

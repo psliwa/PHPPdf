@@ -81,7 +81,7 @@ If you want to use as features as barcodes or image generation, you should add e
     "imagine/Imagine": ">=0.2.0,<0.6.0"
 
 ```
-    
+
 <a name="symfony2-bundle"></a>
 Symfony2 bundle
 ----------------
@@ -101,16 +101,18 @@ You can also add custom fonts, in order that you should prepare xml config file 
 
 ```xml
 <!-- xml config file code -->
-<fonts>   
+<fonts>
     <font name="DejaVuSans">
    	    <normal src="%resources%/fonts/DejaVuSans/normal.ttf" /><!-- "%resources%" will be replaced by path to PHPPdf/Resources directory -->
         <bold src="%resources%/fonts/DejaVuSans/bold.ttf" />
         <italic src="%resources%/fonts/DejaVuSans/oblique.ttf" />
         <bold-italic src="%resources%/fonts/DejaVuSans/bold+oblique.ttf" />
+        <light src="%resources%/fonts/DejaVuSans/light.ttf" />
+        <light-italic src="%resources%/fonts/DejaVuSans/light+oblique.ttf" />
     </font>
 </fonts>
 ```
-    
+
 ```php
 //php code
 $loader = new PHPPdf\Core\Configuration\LoaderImpl();
@@ -119,7 +121,7 @@ $builder = PHPPdf\Core\FacadeBuilder::create($loader);
 $facade = $builder->build();
 ```
 
-```xml    
+```xml
 <!-- xml document code -->
 <pdf>
     <dynamic-page encoding="UTF-8" font-type="DejaVuSans">
@@ -131,7 +133,7 @@ You can find more datails in the [Configuration](#configuration) section.
 
 **Generating of a simple pdf file with png images takes a lot of time and memory, what should I do?**
 
-PHPPdf uses the Zend_Pdf library that poorly supports png files without compression. You should compress the png files. 
+PHPPdf uses the Zend_Pdf library that poorly supports png files without compression. You should compress the png files.
 
 **How can I change the page size/orientation?**
 
@@ -177,7 +179,7 @@ $content = $facade->render($documentXml, $stylesheetXml);
 
 header('Content-Type: application/pdf');
 echo $content;
-```    
+```
 
 <a name="structure"></a>
 Basic document structure
@@ -234,7 +236,7 @@ Example:
     </dynamic-page>
 </pdf>
 ```
-    
+
 Alternative syntax ("stylesheet" tag):
 
 ```xml
@@ -285,7 +287,7 @@ Example:
         </div>
     </dynamic-page>
 </pdf>
-```    
+```
 
 The Second layer inherits all attributes (simple and complex), and also those from external stylesheets.
 
@@ -344,7 +346,7 @@ Short style:
     <h2 class="header">
         <span font-size="9px">
         </span>
-        
+
         <div font-style="bold">
         </div>
     </h2>
@@ -426,13 +428,13 @@ Example:
     </page>
 </pdf>
 ```
-    
+
 ```php
     //php code
     use PHPPdf\DataSource\DataSource;
-    
+
     $facade = ...;
-    
+
     $content = $facade->render(
         DataSource::fromFile(__DIR__.'/document.xml'),
         DataSource::fromFile(__DIR__.'/stylesheet.xml'),
@@ -476,7 +478,7 @@ Attributes
 * padding (padding-top, padding-bottom, padding-left, padding-right): works similiar as in HTML/CSS
 * font-type - font name must occurs in fonts.xml config file, otherwise exception will be thrown
 * font-size - file size in points, there are no any unit
-* font-style - allowed values: normal, bold, italic, bold-italic
+* font-style - allowed values: normal, bold, italic, bold-italic, light, light-italic
 * color - text color. HTML/CSS style values are supported
 * breakable - if true, element is able to be broken in several pages. Default value for most tags is true..
 * float - works similar but not the same as in HTML/CSS. Allowed values: left|none|right, default none
@@ -497,7 +499,7 @@ Attributes
 * ignore-error (only for img tag) - ignore file loading error or throw exception? False by default, that means exception will be thrown.
 * keep-ratio (only for img tag) - keeps ratio by cutting fragment of image even if ratio of setted dimension is not the same as ratio of original source image. False by default.
 * position - the same as in html. Allowed values: static (default), relative, absolute
-* left and right - the same as in html, works with position relative or absolute. Right and bottom is not supported. 
+* left and right - the same as in html, works with position relative or absolute. Right and bottom is not supported.
 
 <a name="complex-attributes"></a>
 Complex attributes
@@ -513,7 +515,7 @@ For example: ```border.color="black"``` or ```border-color="black"```
     - type: which edges will be shown - default "top+bottom+left+right" (all edges). "none" value is possible (it disable border)
     - size: border size
     - radius: corner rounding in units of length (attention: if this parameter is set, type paramete will be ignored, rounded border always will be full - this will be fixed in future)
-    - position: border translation relative to original position. Positive values extends border, negative values decrases border. Owing to manipulation of this parameter, you can obtain complex pattern as border if you add another borders with different styles and positions. 
+    - position: border translation relative to original position. Positive values extends border, negative values decrases border. Owing to manipulation of this parameter, you can obtain complex pattern as border if you add another borders with different styles and positions.
 
 * background:
     - color: background color
@@ -535,7 +537,7 @@ You can achieve that by using the "stylesheet" tag instead of the short notation
     <dynamic-page>
         <div>
             <stylesheet>
-                <!-- Top and bootom edges are red, side edges are yellow-gray --> 
+                <!-- Top and bootom edges are red, side edges are yellow-gray -->
                 <complex-attribute name="border" color="red" type="top+bottom" />
                 <complex-attribute id="borderLeftAndRight" name="border" color="yellow" type="left+right" size="4px" />
                 <complex-attribute id="outerBorderLeftAndRight" name="border" color="gray" type="left+right" size="2px" position="1px" />
@@ -586,7 +588,7 @@ Example:
         <barcode type="code128" code="PHPPdf" />
     </dynamic-page>
 </pdf>
-```    
+```
 
 ```<barcode>``` tag supports the most of standard attributes and has some other attributes:
 
@@ -621,7 +623,7 @@ Example:
     </dynamic-page>
 </pdf>
 ```
-    
+
 The ```<pie-chart>``` tag has three extra attributes:
 
 * radius - radius of the chart
@@ -745,7 +747,7 @@ Example:
     </dynamic-page>
 </pdf>
 ```
-    
+
 The XML parser normalizes values of attributes, wich results ignoring new line characters.
 
 If you want to add a note with new line characters, you should use this syntax:
@@ -965,13 +967,13 @@ In order to change default the config files, you must pass to Facade constructor
 $loader = new PHPPdf\Core\Configuration\LoaderImpl(
     '/path/to/file/nodes.xml',
     '/path/to/file/enhancements.xml',
-    '/path/to/file/fonts.xml', 
+    '/path/to/file/fonts.xml',
     '/path/to/file/colors.xml'
 );
 
 $facade = new PHPPdf\Core\Facade($loader);
 ```
-    
+
 If you want to change only one config file, you should use LoaderImpl::set* method:
 
 ```php
@@ -981,8 +983,8 @@ $loader->setFontFile(
 $facade = new PHPPdf\Core\Facade($loader);
 ```
 
-FacadeBuilder can be uset to build and configure Facade. FacadeBuilder is able to configure cache, rendering engine and document parser. 
-    
+FacadeBuilder can be uset to build and configure Facade. FacadeBuilder is able to configure cache, rendering engine and document parser.
+
 ```php
 $builder = PHPPdf\Core\FacadeBuilder::create(/* you can pass specyfic configuration loader object */)
                                         ->setCache('File', array('cache_dir' => './cache'))
@@ -1037,10 +1039,10 @@ $facade = PHPPdf\Core\FacadeBuilder::create()
                                    ->setEngineType('image')
                                    ->build();
 
-//render method returns array of images' sources, one pdf page is generated to single image file 
+//render method returns array of images' sources, one pdf page is generated to single image file
 $images = $facade->render(...);
 ```
-    
+
 By default the GD library is used to render an image.
 
 But you can also use Imagick, which offers a better quality, so it is recommended that if you have the opportiunity to install Imagick on your server.
@@ -1054,7 +1056,7 @@ $builder->setEngineOptions(array(
     'quality' => 60,//int from 0 to 100
 ));
 ```
-    
+
 Supported graphic libraries are: GD (default), imagick, gmagick. PHPPdf uses the [Imagine][2] library as an interface for graphics file generation.
 
 
