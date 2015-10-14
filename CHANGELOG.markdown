@@ -3,7 +3,7 @@ CHANGELOG
 
 * 1.2.8 (???)
 
-  * (nothing)
+  * add "light" and "light-italic" font style
 
 * 1.2.7 (2015-01-30)
 

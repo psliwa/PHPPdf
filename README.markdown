@@ -66,21 +66,21 @@ PHPPdf is available at packagist.org, so you can use composer to download this l
 
 *(add to require section in your composer.json file)*
 
-``
+```json
     "psliwa/php-pdf": "*"
-``
+```
 
 You should choose last stable version (or wildcard of stable version), wildcard char ("*") is only an example.
 
 If you want to use as features as barcodes or image generation, you should add extra dependencies:
 
-``
+```json
 
     "zendframework/zend-barcode": ">=2.0.0,<2.4",
     "zendframework/zend-validator": ">=2.0.0,<2.4",
     "imagine/Imagine": ">=0.2.0,<0.6.0"
 
-``
+```
     
 <a name="symfony2-bundle"></a>
 Symfony2 bundle
@@ -101,16 +101,18 @@ You can also add custom fonts, in order that you should prepare xml config file 
 
 ```xml
     <!-- xml config file code -->
-    <fonts>   
+    <fonts>
         <font name="DejaVuSans">
-       	    <normal src="%resources%/fonts/DejaVuSans/normal.ttf" /><!-- "%resources%" will be replaced by path to PHPPdf/Resources directory -->
+            <normal src="%resources%/fonts/DejaVuSans/normal.ttf" /><!-- "%resources%" will be replaced by path to PHPPdf/Resources directory -->
             <bold src="%resources%/fonts/DejaVuSans/bold.ttf" />
             <italic src="%resources%/fonts/DejaVuSans/oblique.ttf" />
             <bold-italic src="%resources%/fonts/DejaVuSans/bold+oblique.ttf" />
+            <light src="%resources%/fonts/DejaVuSans/light.ttf" />
+            <light-italic src="%resources%/fonts/DejaVuSans/light+oblique.ttf" />
         </font>
     </fonts>
 ```
-    
+
 ```php
     //php code
     $loader = new PHPPdf\Core\Configuration\LoaderImpl();
@@ -234,7 +236,7 @@ Example:
         </dynamic-page>
     </pdf>
 ```
-    
+
 Alternative syntax ("stylesheet" tag):
 
 ```xml
@@ -432,8 +434,12 @@ Example:
     use PHPPdf\DataSource\DataSource;
     
     $facade = ...;
-    
-    $content = $facade->render(DataSource::fromFile(__DIR__.'/document.xml'), DataSource::fromFile(__DIR__.'/stylesheet.xml'), DataSource::fromFile(__DIR__.'/colors.xml'));
+
+    $content = $facade->render(
+        DataSource::fromFile(__DIR__.'/document.xml'),
+        DataSource::fromFile(__DIR__.'/stylesheet.xml'),
+        DataSource::fromFile(__DIR__.'/colors.xml')
+    );
 ```
 
 <a name="tags"></a>
@@ -471,7 +477,7 @@ Attributes
 * padding (padding-top, padding-bottom, padding-left, padding-right): works similiar as in HTML/CSS
 * font-type - font name must occurs in fonts.xml config file, otherwise exception will be thrown
 * font-size - file size in points, there are no any unit
-* font-style - allowed values: normal, bold, italic, bold-italic
+* font-style - allowed values: normal, bold, italic, bold-italic, light, light-italic
 * color - text color. HTML/CSS style values are supported
 * breakable - if true, element is able to be broken in several pages. Default value for most tags is true..
 * float - works similar but not the same as in HTML/CSS. Allowed values: left|none|right, default none
@@ -957,7 +963,13 @@ The library has four primary config files that allow you to adopt the library fo
 In order to change default the config files, you must pass to Facade constructor configured Loader object:
 
 ```php
-    $loader = new PHPPdf\Core\Configuration\LoaderImpl('/path/to/file/nodes.xml', '/path/to/file/enhancements.xml', '/path/to/file/fonts.xml', , '/path/to/file/colors.xml');
+    $loader = new PHPPdf\Core\Configuration\LoaderImpl(
+        '/path/to/file/nodes.xml',
+        '/path/to/file/enhancements.xml',
+        '/path/to/file/fonts.xml',
+        '/path/to/file/colors.xml'
+    );
+    
     $facade = new PHPPdf\Core\Facade($loader);
 ```
     
