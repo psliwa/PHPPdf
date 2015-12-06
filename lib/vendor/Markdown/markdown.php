@@ -1689,7 +1689,7 @@ class MarkdownExtra_Parser extends Markdown_Parser {
 	var $predef_abbr = array();
 
 
-	function MarkdownExtra_Parser() {
+	function __construct() {
 	#
 	# Constructor function. Initialize the parser object.
 	#
