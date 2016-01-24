@@ -1,6 +1,10 @@
 CHANGELOG
 =========
 
+* 1.2.9 (???)
+
+  * (nothing)
+
 * 1.2.8 (2016-01-24)
 
   * add "light" and "light-italic" font style
