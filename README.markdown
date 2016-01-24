@@ -100,17 +100,19 @@ PHPPdf provides some free fonts that support utf-8 encoding, for example, DejaVu
 You can also add custom fonts, in order that you should prepare xml config file and configure Facade object as shown below:
 
 ```xml
-<!-- xml config file code -->
-<fonts>   
-    <font name="DejaVuSans">
-   	    <normal src="%resources%/fonts/DejaVuSans/normal.ttf" /><!-- "%resources%" will be replaced by path to PHPPdf/Resources directory -->
-        <bold src="%resources%/fonts/DejaVuSans/bold.ttf" />
-        <italic src="%resources%/fonts/DejaVuSans/oblique.ttf" />
-        <bold-italic src="%resources%/fonts/DejaVuSans/bold+oblique.ttf" />
-    </font>
-</fonts>
+    <!-- xml config file code -->
+    <fonts>
+        <font name="DejaVuSans">
+            <normal src="%resources%/fonts/DejaVuSans/normal.ttf" /><!-- "%resources%" will be replaced by path to PHPPdf/Resources directory -->
+            <bold src="%resources%/fonts/DejaVuSans/bold.ttf" />
+            <italic src="%resources%/fonts/DejaVuSans/oblique.ttf" />
+            <bold-italic src="%resources%/fonts/DejaVuSans/bold+oblique.ttf" />
+            <light src="%resources%/fonts/DejaVuSans/light.ttf" />
+            <light-italic src="%resources%/fonts/DejaVuSans/light+oblique.ttf" />
+        </font>
+    </fonts>
 ```
-    
+
 ```php
 //php code
 $loader = new PHPPdf\Core\Configuration\LoaderImpl();
@@ -234,7 +236,7 @@ Example:
     </dynamic-page>
 </pdf>
 ```
-    
+
 Alternative syntax ("stylesheet" tag):
 
 ```xml
@@ -432,7 +434,7 @@ Example:
     use PHPPdf\DataSource\DataSource;
     
     $facade = ...;
-    
+
     $content = $facade->render(
         DataSource::fromFile(__DIR__.'/document.xml'),
         DataSource::fromFile(__DIR__.'/stylesheet.xml'),
@@ -476,7 +478,7 @@ Attributes
 * padding (padding-top, padding-bottom, padding-left, padding-right): works similiar as in HTML/CSS
 * font-type - font name must occurs in fonts.xml config file, otherwise exception will be thrown
 * font-size - file size in points, there are no any unit
-* font-style - allowed values: normal, bold, italic, bold-italic
+* font-style - allowed values: normal, bold, italic, bold-italic, light, light-italic
 * color - text color. HTML/CSS style values are supported
 * breakable - if true, element is able to be broken in several pages. Default value for most tags is true..
 * float - works similar but not the same as in HTML/CSS. Allowed values: left|none|right, default none
@@ -962,14 +964,14 @@ The library has four primary config files that allow you to adopt the library fo
 In order to change default the config files, you must pass to Facade constructor configured Loader object:
 
 ```php
-$loader = new PHPPdf\Core\Configuration\LoaderImpl(
-    '/path/to/file/nodes.xml',
-    '/path/to/file/enhancements.xml',
-    '/path/to/file/fonts.xml', 
-    '/path/to/file/colors.xml'
-);
-
-$facade = new PHPPdf\Core\Facade($loader);
+    $loader = new PHPPdf\Core\Configuration\LoaderImpl(
+        '/path/to/file/nodes.xml',
+        '/path/to/file/enhancements.xml',
+        '/path/to/file/fonts.xml',
+        '/path/to/file/colors.xml'
+    );
+    
+    $facade = new PHPPdf\Core\Facade($loader);
 ```
     
 If you want to change only one config file, you should use LoaderImpl::set* method:

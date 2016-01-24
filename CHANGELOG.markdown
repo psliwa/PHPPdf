@@ -6,9 +6,14 @@ CHANGELOG
   * [#47] support for max-height and max-width attributes
   * [#79] enhancements for page-size attribute support
 
-* 1.2.8 (???)
+* 1.2.9 (???)
 
   * (nothing)
+
+* 1.2.8 (2016-01-24)
+
+  * add "light" and "light-italic" font style
+  * php 7 support
 
 * 1.2.7 (2015-01-30)
 

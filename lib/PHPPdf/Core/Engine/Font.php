@@ -17,11 +17,13 @@ interface Font
     const STYLE_BOLD = 1;
     const STYLE_ITALIC = 2;
     const STYLE_BOLD_ITALIC = 3;
-    
+    const STYLE_LIGHT = 4;
+    const STYLE_LIGHT_ITALIC = 5;
+
     public function hasStyle($style);
     public function setStyle($style);
     public function getCurrentStyle();
-    
-    public function getCurrentResourceIdentifier();    
+
+    public function getCurrentResourceIdentifier();
     public function getWidthOfText($text, $fontSize);
 }
