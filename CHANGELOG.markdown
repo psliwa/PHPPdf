@@ -1,9 +1,10 @@
 CHANGELOG
 =========
 
-* 1.2.8 (???)
+* 1.2.8 (2016-01-24)
 
   * add "light" and "light-italic" font style
+  * php 7 support
 
 * 1.2.7 (2015-01-30)
 
