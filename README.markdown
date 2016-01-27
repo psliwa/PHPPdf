@@ -498,7 +498,7 @@ Attributes
 * ignore-error (only for img tag) - ignore file loading error or throw exception? False by default, that means exception will be thrown.
 * keep-ratio (only for img tag) - keeps ratio by cutting fragment of image even if ratio of setted dimension is not the same as ratio of original source image. False by default.
 * position - the same as in html. Allowed values: static (default), relative, absolute
-* left and right - the same as in html, works with position relative or absolute. Right and bottom is not supported. 
+* left and top - the same as in html, works with position relative or absolute. Right and bottom is not supported. 
 
 <a name="complex-attributes"></a>
 Complex attributes
