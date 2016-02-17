@@ -3,7 +3,7 @@ CHANGELOG
 
 * 1.2.9 (???)
 
-  * (nothing)
+  * [#106] More relevant exception messages for colors, fonts and pdf files
 
 * 1.2.8 (2016-01-24)
 
