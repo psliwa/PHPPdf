@@ -559,7 +559,7 @@ class GraphicsContextTest extends \PHPPdf\PHPUnit\Framework\TestCase
     
     private function assertOutline($expectedName, $expectedPage, $expectedTop, $actualOutline)
     {
-        $this->assertEquals(iconv(self::ENCODING, 'UTF-16', $expectedName), $actualOutline->getTitle());
+        $this->assertEquals(iconv(self::ENCODING, 'UTF-16BE', $expectedName), $actualOutline->getTitle());
         
         $target = $actualOutline->getTarget();
         
