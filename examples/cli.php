@@ -7,7 +7,7 @@ ini_set('display_startup_errors', 1);
 set_time_limit(240);
 
 require_once __DIR__.'/get_examples.php';
-require_once __DIR__.'/../lib/PHPPdf/Autoloader.php';
+require_once __DIR__.'/../vendor/autoload.php';
 
 PHPPdf\Autoloader::register();
 PHPPdf\Autoloader::register(__DIR__.'/../lib/vendor/Zend/library');

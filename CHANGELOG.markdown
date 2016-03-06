@@ -1,8 +1,9 @@
 CHANGELOG
 =========
 
-* 1.2.9 (???)
+* 1.2.9 (2016-03-06)
 
+  * [#95] relaxed ZF components versions
   * [#106] More relevant exception messages for colors, fonts and pdf files
 
 * 1.2.8 (2016-01-24)
