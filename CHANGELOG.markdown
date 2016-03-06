@@ -1,6 +1,10 @@
 CHANGELOG
 =========
 
+* 1.2.10 (???)
+
+  * (nothing)
+
 * 1.2.9 (2016-03-06)
 
   * [#95] relaxed ZF components versions
