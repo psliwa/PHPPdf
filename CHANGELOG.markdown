@@ -6,8 +6,13 @@ CHANGELOG
   * [#47] support for max-height and max-width attributes
   * [#79] enhancements for page-size attribute support
 
-* 1.2.9 (???)
+* 1.2.10 (???)
 
+  * (nothing)
+
+* 1.2.9 (2016-03-06)
+
+  * [#95] relaxed ZF components versions
   * [#106] More relevant exception messages for colors, fonts and pdf files
 
 * 1.2.8 (2016-01-24)
