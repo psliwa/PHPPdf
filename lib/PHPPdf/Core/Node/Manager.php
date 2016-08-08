@@ -17,29 +17,29 @@ use PHPPdf\Core\Parser\Exception\DuplicatedIdException;
 
 /**
  * Manager of nodes
- *
+ * 
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
 class Manager implements DocumentParserListener
 {
     private $nodes = array();
     private $wrappers = array();
-
+    
     private $managedNodes = array();
     private $behavioursTasks;
-
+    
     public function __construct()
     {
         $this->behavioursTasks = new DrawingTaskHeap();
     }
-
+    
     public function register($id, Node $node)
     {
         if(isset($this->nodes[$id]))
         {
             throw new DuplicatedIdException(sprintf('Duplicate of id "%s".', $id));
         }
-
+        
         $this->nodes[$id] = $node;
 
         if(isset($this->wrappers[$id]))
@@ -47,7 +47,7 @@ class Manager implements DocumentParserListener
             $this->wrappers[$id]->setNode($node);
         }
     }
-
+    
     /**
      * @return NodeAware
      */
@@ -57,26 +57,26 @@ class Manager implements DocumentParserListener
         {
             return $this->nodes[$id];
         }
-
+        
         if(isset($this->wrappers[$id]))
         {
             return $this->wrappers[$id];
         }
-
+        
         $wrapper = new NodeWrapper();
-
+        
         $this->wrappers[$id] = $wrapper;
-
+        
         return $wrapper;
     }
-
+    
     public function clear()
     {
         $this->behavioursTasks = new DrawingTaskHeap();
         $this->wrappers = array();
         $this->nodes = array();
     }
-
+    
     public function onEndParsePlaceholders(Document $document, PageCollection $root, Node $node, DocumentParsingContext $context)
     {
         if($this->isPage($node))
@@ -84,7 +84,7 @@ class Manager implements DocumentParserListener
             $this->invokePreFormatIfItHasntInvokedYet($document, $node);
         }
     }
-
+    
     public function onStartParseNode(Document $document, PageCollection $root, Node $node, DocumentParsingContext $context)
     {
         if(!$this->isPage($node) && $this->isPage($node->getParent()))
@@ -92,12 +92,12 @@ class Manager implements DocumentParserListener
             $this->invokePreFormatIfItHasntInvokedYet($document, $node->getParent());
         }
     }
-
+    
     private function isPage($node)
     {
         return $node instanceof \PHPPdf\Core\Node\Page;
     }
-
+    
     public function onEndParseNode(Document $document, PageCollection $root, Node $node, DocumentParsingContext $context)
     {
         if(!$this->isPage($node) && $this->isPage($node->getParent()))
@@ -105,13 +105,13 @@ class Manager implements DocumentParserListener
             $node->format($document);
             $node->collectUnorderedDrawingTasks($document, $this->behavioursTasks);
         }
-
+        
         $this->processDynamicPage($document, $node);
-
+              
         if($this->isPage($node))
         {
             $node->postFormat($document);
-
+            
             $tasks = new DrawingTaskHeap();
             if(!$this->isDynamicPage($node) || count($node->getPages()) > 0)
             {
@@ -119,21 +119,21 @@ class Manager implements DocumentParserListener
             }
             $node->collectPostDrawingTasks($document, $tasks);
             $document->invokeTasks($tasks);
-
+            
             $node->flush();
             $root->flush();
         }
     }
-
+    
     private function processDynamicPage(Document $document, Node $node)
     {
         if($this->isDynamicPage($node->getParent()) && $this->isOutOfPage($node))
         {
             $dynamicPage = $node->getParent();
             $dynamicPage->postFormat($document);
-
+            
             $pages = $dynamicPage->getAllPagesExceptsCurrent();
-
+            
             foreach($pages as $page)
             {
                 $tasks = new DrawingTaskHeap();
@@ -144,7 +144,7 @@ class Manager implements DocumentParserListener
 
             $currentPage = $dynamicPage->getCurrentPage(false);
             $dynamicPage->removeAllPagesExceptsCurrent();
-
+            
             if($currentPage)
             {
                 $dynamicPage->removeAll();
@@ -157,24 +157,24 @@ class Manager implements DocumentParserListener
             }
         }
     }
-
+    
     private function isDynamicPage($node)
     {
         return $node instanceof \PHPPdf\Core\Node\DynamicPage;
     }
-
+    
     private function isOutOfPage(Node $node)
     {
         $page = $node->getParent();
-
+        
         if($node->getAttribute('break'))
         {
             return true;
         }
-
+        
         return $page->getDiagonalPoint()->getY() > $node->getFirstPoint()->getY() && $node->getFloat() == Node::FLOAT_NONE;
     }
-
+    
     public function onEndParsing(Document $document, PageCollection $root)
     {
         $document->invokeTasks($this->behavioursTasks);
