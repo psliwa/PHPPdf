@@ -28,8 +28,6 @@ class Manager implements DocumentParserListener
     private $managedNodes = array();
     private $behavioursTasks;
 
-    private $preFormatInvoked = array();
-
     public function __construct()
     {
         $this->behavioursTasks = new DrawingTaskHeap();
