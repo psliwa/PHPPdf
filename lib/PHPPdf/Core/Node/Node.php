@@ -653,6 +653,26 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
         return $this->getAttributeDirectly('height');
     }
 
+    public function getMaxWidth()
+    {
+        return $this->getAttributeDirectly('max-width');
+    }
+
+    public function getMaxHeight()
+    {
+        return $this->getAttributeDirectly('max-height');
+    }
+
+    public function setMaxWidth($width)
+    {
+        $this->setAttributeDirectly('max-width', $this->convertUnit($width));
+    }
+
+    public function setMaxHeight($height)
+    {
+        $this->setAttributeDirectly('max-height', $this->convertUnit($height));
+    }
+
     public function setMarginTop($margin)
     {
         return $this->setMarginAttribute('margin-top', $margin);
