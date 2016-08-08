@@ -27,8 +27,6 @@ class Manager implements DocumentParserListener
     
     private $managedNodes = array();
     private $behavioursTasks;
-
-    private $preFormatInvoked = array();
     
     public function __construct()
     {
@@ -187,13 +185,12 @@ class Manager implements DocumentParserListener
     {
         if(!$this->preFormatHasBeenInvoked($node))
         {
-            $this->preFormatInvoked[spl_object_hash($node)] = true;
             $node->preFormat($document);
         }
     }
 
     private function preFormatHasBeenInvoked(Node $node)
     {
-        return isset($this->preFormatInvoked[spl_object_hash($node)]);
+        return $node->hasPreFormatBeenInvoked();
     }
 }
