@@ -1,9 +1,13 @@
 CHANGELOG
 =========
 
-* 1.2.10 (???)
+* 1.2.11 (???)
 
   * (nothing)
+
+* 1.2.10 (2016-08-15)
+
+  * [#114] Fix failures on nodes initialization in big documents
 
 * 1.2.9 (2016-03-06)
 
