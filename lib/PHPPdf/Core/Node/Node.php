@@ -84,6 +84,8 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
     private $closestAncestorWithPosition = null;
     private $positionTranslation = null;
 
+    private $preFormatInvoked = false;
+
     public function __construct(array $attributes = array(), UnitConverter $converter = null)
     {
         static::initializeTypeIfNecessary();
@@ -1327,6 +1329,7 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
         $copy->ancestorWithFontSize = null;
         $copy->ancestorWithRotation = null;
         $copy->closestAncestorWithPosition = null;
+        $copy->preFormatInvoked = false;
 
         return $copy;
     }
@@ -1606,8 +1609,9 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
     public function preFormat(Document $document)
     {
         $this->beforeFormat($document);
-        
+
         $this->doFormat('pre', $document);
+        $this->preFormatInvoked = true;
     }
     
     public function doFormat($type, Document $document)
@@ -1888,5 +1892,10 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
     public function getShape()
     {
         return self::SHAPE_RECTANGLE;
+    }
+
+    public function hasPreFormatBeenInvoked()
+    {
+        return $this->preFormatInvoked;
     }
 }

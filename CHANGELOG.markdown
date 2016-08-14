@@ -6,9 +6,13 @@ CHANGELOG
   * [#47] support for max-height and max-width attributes
   * [#79] enhancements for page-size attribute support
 
-* 1.2.10 (???)
+* 1.2.11 (???)
 
   * (nothing)
+
+* 1.2.10 (2016-08-15)
+
+  * [#114] Fix failures on nodes initialization in big documents
 
 * 1.2.9 (2016-03-06)
 
