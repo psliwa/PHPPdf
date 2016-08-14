@@ -84,6 +84,8 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
     private $closestAncestorWithPosition = null;
     private $positionTranslation = null;
 
+    private $preFormatInvoked = false;
+
     public function __construct(array $attributes = array(), UnitConverter $converter = null)
     {
         static::initializeTypeIfNecessary();
@@ -1888,5 +1890,17 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
     public function getShape()
     {
         return self::SHAPE_RECTANGLE;
+    }
+
+    public function isPreFormatInvoked()
+    {
+        return $this->preFormatInvoked;
+    }
+
+    public function setPreFormatInvoked()
+    {
+        $this->preFormatInvoked = true;
+
+        return $this;
     }
 }
