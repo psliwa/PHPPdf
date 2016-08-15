@@ -56,7 +56,7 @@ final class Util
     
         if(!$height && $width)
         {
-            $height = 1/$ratio * $width;
+            $height = $ratio == 0 ? 0 : $width/$ratio;
         }
 
         return array($width, $height);

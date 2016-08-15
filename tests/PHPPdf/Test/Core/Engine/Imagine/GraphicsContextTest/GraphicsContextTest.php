@@ -380,7 +380,7 @@ class GraphicsContextTest extends TestCase
     {
         $image = EmptyImage::getInstance();
         
-        $this->imagine->expects($this->never())
+        $this->image->expects($this->never())
                       ->method('paste');
                       
         $this->gc->drawImage($image, 50, 50, 100, 10);

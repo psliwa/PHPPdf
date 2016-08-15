@@ -3,7 +3,7 @@ CHANGELOG
 
 * 1.2.11 (???)
 
-  * (nothing)
+  * [#112] Fix possible divide by zero error when image is drawn
 
 * 1.2.10 (2016-08-15)
 
