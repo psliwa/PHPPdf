@@ -47,6 +47,8 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
     const TEXT_DECORATION_UNDERLINE = 'underline';
     const TEXT_DECORATION_LINE_THROUGH = 'line-through';
     const TEXT_DECORATION_OVERLINE = 'overline';
+    const TEXT_DECORATION_STYLE_NONE = 'none';
+    const TEXT_DECORATION_STYLE_DOTTED = 'dotted';
     const ROTATE_DIAGONALLY = 'diagonally';
     const ROTATE_OPPOSITE_DIAGONALLY = '-diagonally';
     const POSITION_STATIC = 'static';
@@ -209,7 +211,8 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
         static::addAttribute('vertical-align', null);
         
         static::addAttribute('text-decoration', null);
-        
+        static::addAttribute('text-decoration-style', null);
+
         static::addAttribute('dump', false);
         
         static::addAttribute('alpha', null);
@@ -528,6 +531,11 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
     public function getTextDecorationRecursively()
     {
         return $this->getRecurseAttribute('text-decoration');
+    }
+
+    public function getTextDecorationStyleRecursively()
+    {
+        return $this->getRecurseAttribute('text-decoration-style');
     }
 
     /**
