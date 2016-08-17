@@ -9,6 +9,7 @@
 namespace PHPPdf\Core\Node\Paragraph;
 
 use PHPPdf\Core\DrawingTaskHeap;
+use PHPPdf\Core\Engine\GraphicsContext;
 use PHPPdf\Core\Node\Node,
     PHPPdf\Core\DrawingTask,
     PHPPdf\Core\Document,
@@ -140,14 +141,32 @@ class LinePart implements Drawable
                     break;
             }
 
+            $textDecorationStyle = $text->getTextDecorationStyleRecursively();
+
+            switch($textDecorationStyle)
+            {
+                case Node::TEXT_DECORATION_STYLE_NONE;
+                    $lineDecorationStyle = false;
+                    break;
+                case Node::TEXT_DECORATION_STYLE_DOTTED;
+                    $lineDecorationStyle = GraphicsContext::DASHING_PATTERN_DOTTED;
+                    break;
+                default:
+                    $lineDecorationStyle = false;
+                    break;
+            }
+
             if($lineDecorationYTranslation !== false)
             {
                 $gc->setLineWidth(0.5);
-                if($color)
-                {
+                if($color) {
                     $gc->setLineColor($color);
                 }
-                
+
+                if($lineDecorationStyle !== false) {
+                    $gc->setLineDashingPattern($lineDecorationStyle);
+                }
+
                 $yCoord = $yCoord + $lineDecorationYTranslation;
                 $gc->drawLine($point->getX(), $yCoord, $point->getX() + $width, $yCoord);
             }
