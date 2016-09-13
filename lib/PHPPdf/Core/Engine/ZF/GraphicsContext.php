@@ -371,7 +371,7 @@ class GraphicsContext extends AbstractGraphicsContext
             $action = \ZendPdf\Action\GoToAction::create($destination);
             
             //convert from input encoding to UTF-16
-            $name = iconv($this->encoding, 'UTF-16', $name);
+            $name = iconv($this->encoding, 'UTF-16BE', $name);
             
             $outline = \ZendPdf\Outline\AbstractOutline::create($name, $action);
             
