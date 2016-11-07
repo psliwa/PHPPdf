@@ -47,7 +47,7 @@ $stylesheetFilename = __DIR__.'/'.$name.'-style.xml';
 
 if(!is_readable($documentFilename))
 {
-    die(sprintf('Example "%s" dosn\'t exist.', $name));
+    die(sprintf('Example "%s" doesn\'t exist.', $name));
 }
 
 $xml = str_replace('dir:', __DIR__.'/', file_get_contents($documentFilename));
