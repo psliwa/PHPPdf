@@ -598,7 +598,7 @@ class GraphicsContext extends AbstractGraphicsContext
         ob_start();
         imagepng($imageResource);
         $image = ob_get_clean();
-        @imagedestroy($image);
+        @imagedestroy($imageResource);
         
         $image = $this->imagine->load($image);
         $image = $image->resize(new Box($image->getSize()->getWidth()/2, $image->getSize()->getHeight()/2));
