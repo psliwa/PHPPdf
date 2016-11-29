@@ -77,4 +77,11 @@
     <font name="symbol">
         <normal src="symbol" />
     </font>
+    
+    <font name="thsarabun">
+        <normal src="%resources%/fonts/thsarabun/normal.ttf" />
+        <bold src="%resources%/fonts/thsarabun/bold.ttf" />
+        <italic src="%resources%/fonts/thsarabun/italic.ttf" />
+        <bold-italic src="%resources%/fonts/thsarabun/bold+italic.ttf" />
+    </font>
 </fonts>
