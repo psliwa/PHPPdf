@@ -28,82 +28,45 @@ class Page extends Container
     const ATTR_SIZE = 'page-size';
 
     const SIZE_A10 = '74:105';
-    const SIZE_A10_LANDSCAPE = '105:74';
     const SIZE_A9 = '105:147';
-    const SIZE_A9_LANDSCAPE = '147:105';
     const SIZE_A8 = '147:210';
-    const SIZE_A8_LANDSCAPE = '210:147';
     const SIZE_A7 = '210:298';
-    const SIZE_A7_LANDSCAPE = '298:210';
     const SIZE_A6 = '298:410';
-    const SIZE_A6_LANDSCAPE = '410:298';
     const SIZE_A5 = '410:595';
-    const SIZE_A5_LANDSCAPE = '595:410';
     const SIZE_A4 = '595:842';
-    const SIZE_A4_LANDSCAPE = '842:595';
     const SIZE_A3 = '842:1191';
-    const SIZE_A3_LANDSCAPE = '1191:842';
     const SIZE_A2 = '1191:1684';
-    const SIZE_A2_LANDSCAPE = '1684:1191';
     const SIZE_A1 = '1684:2384';
-    const SIZE_A1_LANDSCAPE = '2384:1684';
     const SIZE_A0 = '2384:3370';
-    const SIZE_A0_LANDSCAPE = '3370:2384';
     const SIZE_2A0 = '3370:4768';
-    const SIZE_2A0_LANDSCAPE = '4768:3370';
     const SIZE_4A0 = '4768:6741';
-    const SIZE_4A0_LANDSCAPE = '6741:4768';
 
     const SIZE_B10 = '88:125';
-    const SIZE_B10_LANDSCAPE = '125:88';
     const SIZE_B9 = '125:176';
-    const SIZE_B9_LANDSCAPE = '176:125';
     const SIZE_B8 = '176:249';
-    const SIZE_B8_LANDSCAPE = '249:176';
     const SIZE_B7 = '249:354';
-    const SIZE_B7_LANDSCAPE = '354:249';
     const SIZE_B6 = '354:499';
-    const SIZE_B6_LANDSCAPE = '499:354';
     const SIZE_B5 = '499:709';
-    const SIZE_B5_LANDSCAPE = '709:499';
     const SIZE_B4 = '709:1001';
-    const SIZE_B4_LANDSCAPE = '1001:709';
     const SIZE_B3 = '1001:1417';
-    const SIZE_B3_LANDSCAPE = '1417:1001';
     const SIZE_B2 = '1417:2004';
-    const SIZE_B2_LANDSCAPE = '2004:1417';
     const SIZE_B1 = '2004:2835';
-    const SIZE_B1_LANDSCAPE = '2835:2004';
     const SIZE_B0 = '2835:4008';
-    const SIZE_B0_LANDSCAPE = '4008:2835';
 
     const SIZE_C10 = '79:113';
-    const SIZE_C10_LANDSCAPE = '113:79';
     const SIZE_C9 = '113:161';
-    const SIZE_C9_LANDSCAPE = '161:113';
     const SIZE_C8 = '161:230';
-    const SIZE_C8_LANDSCAPE = '230:161';
     const SIZE_C7 = '230:323';
-    const SIZE_C7_LANDSCAPE = '323:230';
     const SIZE_C6 = '323:459';
-    const SIZE_C6_LANDSCAPE = '459:323';
     const SIZE_C5 = '459:649';
-    const SIZE_C5_LANDSCAPE = '649:459';
     const SIZE_C4 = '649:918';
-    const SIZE_C4_LANDSCAPE = '918:649';
     const SIZE_C3 = '918:1298';
-    const SIZE_C3_LANDSCAPE = '1298:918';
     const SIZE_C2 = '1298:1837';
-    const SIZE_C2_LANDSCAPE = '1837:1298';
     const SIZE_C1 = '1837:2599';
-    const SIZE_C1_LANDSCAPE = '2599:1837';
     const SIZE_C0 = '2599:3677';
-    const SIZE_C0_LANDSCAPE = '3677:2599';
 
     const SIZE_LETTER = '612:792';
-    const SIZE_LETTER_LANDSCAPE = '792:612';
     const SIZE_LEGAL = '612:1008';
-    const SIZE_LEGAL_LANDSCAPE = '1008:612';
 
     private $graphicsContext;
 
@@ -223,21 +186,26 @@ class Page extends Container
 
     private function getPageDimensions($pageSize)
     {
-        $const = 'PHPPdf\Core\Node\Page::SIZE_'.strtoupper(str_replace(array('-', ' '), '_', $pageSize));
+        $pageSize = strtoupper(str_replace(array('-', ' ', '_'), '', $pageSize));
+        $pageSize = str_replace('LANDSCAPE', '', $pageSize, $isLandscape);
+        $const = 'PHPPdf\Core\Node\Page::SIZE_'.$pageSize;
 
         if(defined($const))
         {
             $pageSize = constant($const);
         }
 
-        $sizes = explode(':', $pageSize);
-
-        if(count($sizes) < 2)
+        if (!preg_match('/^(?P<width>[0-9]+(.[0-9]+)?):(?P<height>[0-9]+(.[0-9]+)?)$/', $pageSize, $matches))
         {
             throw new InvalidArgumentException(sprintf('page-size attribute should be in "width:height" format, "%s" given.', $pageSize));
         }
 
-        return $sizes;
+        if ($isLandscape)
+        {
+            return array($matches['height'], $matches['width']);
+        } else {
+            return array($matches['width'], $matches['height']);
+        }
     }
 
     public function setWidth($width)
