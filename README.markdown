@@ -808,6 +808,8 @@ The watermark may be set on block's and container elements, for instance: div, p
 
 If you want to use an image as a watermark, you should wrap the img tag in a div.
 
+If you want to change vertical align of a watermark, you should wrap it in a div tag with "vertical-align" attribute 
+
 Example:
 
 ```xml
@@ -816,7 +818,8 @@ Example:
         <placeholders>
             <watermark>
                 <!-- rotate can have absolute values (45deg - in degrees, 0.123 - in radians) or relative values ("diagonally" and "-diagonally" - angle between diagonal and base side of the page) -->
-                <div rotate="diagonally" alpha="0.1">
+                <!-- vertical-align can have "top", "middle" or "bottom" value -->
+                <div rotate="diagonally" alpha="0.1" vertical-align="middle">
                     <img src="path/to/image.png" />
                 </div>
             </watermark>
