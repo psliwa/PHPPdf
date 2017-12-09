@@ -185,7 +185,7 @@ echo $content;
 Basic document structure
 ------------------------
 
-The library bases pages on an XML format similar to HTML, but this format isn't HTML - some tags are diffrent, interpretation of some attributes is not the as same as in the HTML and CSS standards,
+The library bases pages on an XML format similar to HTML, but this format isn't HTML - some tags are different, interpretation of some attributes is not the as same as in the HTML and CSS standards,
 adding attributes is also different.
 
 A simple document has following structure:
@@ -231,7 +231,7 @@ Example:
 <pdf>
     <dynamic-page>
         <div color="red" border.color="black" background.color="pink">
-            This text is red on pink backgroun into black border
+            This text is red on pink background into black border
         </div>
     </dynamic-page>
 </pdf>
@@ -248,7 +248,7 @@ Alternative syntax ("stylesheet" tag):
                 <complex-attribute name="border" color="black" />
                 <complex-attribute name="background" color="pink" />
             </stylesheet>
-            This text is red on pink backgroun into black border
+            This text is red on pink background into black border
         </div>
     </dynamic-page>
 </pdf>
@@ -257,8 +257,8 @@ Alternative syntax ("stylesheet" tag):
 Attributes can by set as XML attributes, directly after a tag name or by using the mentioned "stylesheet" tag.
 The HTML "style" attribute does not exist the PHPPdf XML dialect.
 
-The library is very strict in respecting the corectness of tags and attributes.
-If an unexisted tag or attribute is detected, the document parser will stop and throw an exception.
+The library is very strict in respecting the correctness of tags and attributes.
+If a nonexistent tag or attribute is detected, the document parser will stop and throw an exception.
 
 <a name="inheritance"></a>
 Inheritance
@@ -291,7 +291,7 @@ Example:
 
 The Second layer inherits all attributes (simple and complex), and also those from external stylesheets.
 
-Priorites in attributes setting:
+Priorities in attributes setting:
 
 1. Stylesheet tag directly in an element tag
 2. Attributes directly after a tag name (XML attributes)
@@ -456,7 +456,7 @@ In addition there are also not standard tags:
 * page-break, column-break, break - breaks page or column, this tag must be direct child of "dynamic-page" or "column-layout"!
 * column-layout - separate workspace on columns, additional attributes: number-of-columns, margin-between-columns, equals-columns
 * barcode - more information in <a href="#barcodes">barcode</a> chapter
-* circle - element that border and backgroud are in circle shape. Additional attributes: radius (it overwrites width and height attributes)
+* circle - element that border and background are in circle shape. Additional attributes: radius (it overwrites width and height attributes)
 * pie-chart - element that can be used to draw simple pie chart (more information in <a href="#charts">charts</a> chapter.
 
 There are tags that are only bags for attributes, a set of tags etc:
@@ -474,8 +474,8 @@ Attributes
 
 * width and height: rigidly sets height and width, supported units are described in separate [section](#units). Relative values in percent are supported.
 * max-width, max-height: sets max sizes of elements
-* margin (margin-top, margin-bottom, margin-left, margin-right): margin similar to margin from HTML/CSS. Margins of simblings are pooled. For side margins possible is "auto" value, it works similar as in HTML/CSS.
-* padding (padding-top, padding-bottom, padding-left, padding-right): works similiar as in HTML/CSS
+* margin (margin-top, margin-bottom, margin-left, margin-right): margin similar to margin from HTML/CSS. Margins of siblings are pooled. For side margins possible is "auto" value, it works similar as in HTML/CSS.
+* padding (padding-top, padding-bottom, padding-left, padding-right): works similar as in HTML/CSS
 * font-type - font name must occurs in fonts.xml config file, otherwise exception will be thrown
 * font-size - file size in points, there are no any unit
 * font-style - allowed values: normal, bold, italic, bold-italic, light, light-italic
@@ -511,11 +511,11 @@ For example: ```border.color="black"``` or ```border-color="black"```
 
 * border:
     - color: border color
-    - style: posible values: solid (solid line), dotted (predefined dotted line) or any definition in the form of integers separated by space
+    - style: possible values: solid (solid line), dotted (predefined dotted line) or any definition in the form of integers separated by space
     - type: which edges will be shown - default "top+bottom+left+right" (all edges). "none" value is possible (it disable border)
     - size: border size
-    - radius: corner rounding in units of length (attention: if this parameter is set, type paramete will be ignored, rounded border always will be full - this will be fixed in future)
-    - position: border translation relative to original position. Positive values extends border, negative values decrases border. Owing to manipulation of this parameter, you can obtain complex pattern as border if you add another borders with different styles and positions. 
+    - radius: corner rounding in units of length (attention: if this parameter is set, type parameter will be ignored, rounded border always will be full - this will be fixed in future)
+    - position: border translation relative to original position. Positive values extends border, negative values decreases border. Owing to manipulation of this parameter, you can obtain complex pattern as border if you add another borders with different styles and positions. 
 
 * background:
     - color: background color
@@ -547,9 +547,9 @@ You can achieve that by using the "stylesheet" tag instead of the short notation
 </pdf>
 ```
 
-In this example, the second border has a "borderLeftAndRight" indentifie, if this border had no id, the attributes from second border would be merged with the attributes from first border.
+In this example, the second border has a "borderLeftAndRight" identifier, if this border had no id, the attributes from second border would be merged with the attributes from first border.
 
-Remeber the default identifier "id" is as same as the "name" attribute.
+Remember the default identifier "id" is as same as the "name" attribute.
 The "id" attributes for complex attributes has nothing to do with the "id" attribute of tags (used in inheritance).
 
 It is possible to create complex borders the same as in the previous example (outerBorderLeftAndRight).
@@ -564,9 +564,9 @@ Supported units for numerical attributes:
 * cm (centimeters)
 * mm (milimeters)
 * pt (points)
-* pc (pica)*
+* pc (pica)
 * px (pixels)
-* * % (percent - only for width and height).
+* % (percent - only for width and height)
 
 Currently unsupported units are: em and ex
 
@@ -603,7 +603,7 @@ Example:
 
 You can find the description of these options and there default values in the [Zend\Barcode documentation][3].
 
-In order to render textual barcodes, you can't use to following embeded pdf fonts: courier, times-roman and helvetica.
+In order to render textual barcodes, you can't use to following embedded pdf fonts: courier, times-roman and helvetica.
 This will soon be fixed.
 
 <a name="charts"></a>
@@ -837,7 +837,7 @@ Page-info shows the current and total page number, page-number shows only the cu
 Attributes of this tags:
 
 * format - format of output string that will be used as argument of sprintf function. Default values: "%s." for page-number, "%s / %s" for page-info.
-* offset - value that will be added to current page number and total page number. Usefull if you want to count pages from a diffrent value than zero. Default: 0.
+* offset - value that will be added to current page number and total page number. Usefull if you want to count pages from a different value than zero. Default: 0.
 
 Example:
 
@@ -909,7 +909,7 @@ The above XML describes several pages of the pdf document, with green rectangles
 
 The "column-layout" tag has three additional parameters: number-of-columns, margin-between-columns and equals-columns.
 
-Default values for this attributes are 2, 10 and false respectlivy.
+Default values for this attributes are 2, 10 and false respectively.
 If the equals-columns attribute is set, columns will have more or less equals height.
 
 <a name="page-break"></a>
@@ -954,7 +954,7 @@ Example:
 Configuration
 -------------
 
-The library has four primary config files that allow you to adopt the library for specyfic needs and extending.
+The library has four primary config files that allow you to adopt the library for specific needs and extending.
 
 * complex-attributes.xml - declarations of complex attributes classes to logical names that identify attribute in whole library.
 * nodes.xml - definitions of allowed tags in xml document with default attributes and formatting objects.
@@ -1022,7 +1022,7 @@ By default the stylesheet is empty, if you want to set another font type, the st
 
 Internally the MarkdownDocumentParser converts a markdown document to html (via the [PHP markdown](https://github.com/wolfie/php-markdown) library), then converts html to xml, and at last xml to a pdf document.
 
-Be aware of that, if you in a markdown document use raw html that will be incompatible with the xml syntax of PHPPdf (for example unexistend attributes or tags), the parser will throw an exception then.
+Be aware of that, if you in a markdown document use raw html that will be incompatible with the xml syntax of PHPPdf (for example nonexistent attributes or tags), the parser will throw an exception then.
 
 	Not all tags used in the markdown implementation are propertly supported by PHPPdf, for example "pre" and "code" tags.
 	For now "pre" tag is an alias for "div", and "code" tag is an alias for "span", be aware of that.
@@ -1045,7 +1045,7 @@ $images = $facade->render(...);
     
 By default the GD library is used to render an image.
 
-But you can also use Imagick, which offers a better quality, so it is recommended that if you have the opportiunity to install Imagick on your server.
+But you can also use Imagick, which offers a better quality, so it is recommended that if you have the opportunity to install Imagick on your server.
 To switch the graphic library, you must configure the FacadeBuilder object using the setEngineOptions method:
 
 ```php
@@ -1070,9 +1070,9 @@ Below is a list of known limitations of the current version of the library:
 * partial support for float attribute within table element (floats might work improperly within a table)
 * vertical-align attribute works improperly if in element with this attribute set, are more than one element
 * border doesn't change dimensions of the element (while in HTML they do)
-* png files (expecially without compression) are inefficient. png files with high compression (compression level 6 or higher) or jpeg should be used instead
-* not all tags are propertly supported, for example the "pre" tag is an alias to "div" and the "code" tag is an alias for "span"
-* nesting of linear tags (text, span, code, page-info, page-number, a, b, i, em) is not properly supported. If one linear tag contains another, only text within this tags is merged, styles are taken from the most outher linear tag.
+* png files (especially without compression) are inefficient. png files with high compression (compression level 6 or higher) or jpeg should be used instead
+* not all tags are properly supported, for example the "pre" tag is an alias to "div" and the "code" tag is an alias for "span"
+* nesting of linear tags (text, span, code, page-info, page-number, a, b, i, em) is not properly supported. If one linear tag contains another, only text within this tags is merged, styles are taken from the most other linear tag.
 
 <a name="todo"></a>
 TODO - plans
