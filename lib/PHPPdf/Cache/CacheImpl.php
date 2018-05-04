@@ -21,6 +21,7 @@ class CacheImpl implements Cache
 {
     const ENGINE_FILE = 'File';
     const ENGINE_APC = 'Apc';
+    const ENGINE_APCU = 'Apcu';
     const ENGINE_MEMCACHED = 'Memcached';
     const ENGINE_FILESYSTEM = 'Filesystem';
     
