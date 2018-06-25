@@ -27,10 +27,10 @@ class ContainerDimensionFormatter extends BaseFormatter
             $firstPoint = $child->getFirstPoint();
             $diagonalPoint = $child->getDiagonalPoint();
 
-            $childMinX = $firstPoint->getX() - $child->getMarginLeft();
-            $childMaxX = $diagonalPoint->getX() + $child->getMarginRight();
-            $childMinY = $diagonalPoint->getY() - $child->getMarginBottom();
-            $childMaxY = $firstPoint->getY() + $child->getMarginTop();
+            $childMinX = $firstPoint->getX() - (int)$child->getMarginLeft();
+            $childMaxX = $diagonalPoint->getX() + (int)$child->getMarginRight();
+            $childMinY = $diagonalPoint->getY() - (int)$child->getMarginBottom();
+            $childMaxY = $firstPoint->getY() + (int)$child->getMarginTop();
 
             $maxX = $this->changeValueIfIsLess($maxX, $childMaxX);
             $maxY = $this->changeValueIfIsLess($maxY, $childMaxY);
