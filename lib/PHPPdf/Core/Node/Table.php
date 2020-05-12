@@ -82,8 +82,8 @@ class Table extends Container implements Listener
             $realColumnNumber = $columnNumber + $i;
             $currentWidth += isset($this->widthsOfColumns[$realColumnNumber]) ? $this->widthsOfColumns[$realColumnNumber] : 0;
         }
-        
-        $diff = ($width - $currentWidth)/$colspan;
+
+        $diff = ((float)$width - (float)$currentWidth)/ (float)$colspan;
         
         if($isWidthRelative)
         {

@@ -111,8 +111,8 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
     protected static function initializeType()
     {
         //TODO refactoring
-        $attributeWithGetters = array('width', 'height', 'max-width', 'max-height', 'margin-left', 'margin-right', 'margin-top', 'margin-bottom', 'padding-left', 'padding-right', 'padding-top', 'padding-bottom', 'font-type', 'font-size', 'float', 'breakable');
-        $attributeWithSetters = array('width', 'height', 'max-width', 'max-height', 'margin-left', 'margin-right', 'margin-top', 'margin-bottom', 'font-type', 'float', 'static-size', 'font-size', 'margin', 'padding', 'break', 'breakable', 'dump', 'padding-left', 'padding-right', 'padding-top', 'padding-bottom', 'min-width', 'line-height', 'line-break', 'left', 'top', 'position');
+        $attributeWithGetters = array('width', 'height', 'margin-left', 'margin-right', 'margin-top', 'margin-bottom', 'padding-left', 'padding-right', 'padding-top', 'padding-bottom', 'font-type', 'font-size', 'float', 'breakable');
+        $attributeWithSetters = array('width', 'height', 'margin-left', 'margin-right', 'margin-top', 'margin-bottom', 'font-type', 'float', 'static-size', 'font-size', 'margin', 'padding', 'break', 'breakable', 'dump', 'padding-left', 'padding-right', 'padding-top', 'padding-bottom', 'min-width', 'line-height', 'line-break', 'left', 'top', 'position');
 
         $predicateGetters = array('breakable');
         
@@ -174,8 +174,6 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
     {
         static::addAttribute('width', null);
         static::addAttribute('height', null);
-        static::addAttribute('max-width', null);
-        static::addAttribute('max-height', null);
 
         static::addAttribute('min-width', 0);
 
@@ -650,27 +648,7 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
 
     public function getHeight()
     {
-        return $this->getAttributeDirectly('height');
-    }
-
-    public function getMaxWidth()
-    {
-        return $this->getAttributeDirectly('max-width');
-    }
-
-    public function getMaxHeight()
-    {
-        return $this->getAttributeDirectly('max-height');
-    }
-
-    public function setMaxWidth($width)
-    {
-        $this->setAttributeDirectly('max-width', $this->convertUnit($width));
-    }
-
-    public function setMaxHeight($height)
-    {
-        $this->setAttributeDirectly('max-height', $this->convertUnit($height));
+        return (float) $this->getAttributeDirectly('height');
     }
 
     public function setMarginTop($margin)
@@ -702,22 +680,22 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
 
     public function getMarginTop()
     {
-        return $this->getAttributeDirectly('margin-top');
+        return (float) $this->getAttributeDirectly('margin-top');
     }
 
     public function getMarginLeft()
     {
-        return $this->getAttributeDirectly('margin-left');
+        return (float) $this->getAttributeDirectly('margin-left');
     }
 
     public function getMarginRight()
     {
-        return $this->getAttributeDirectly('margin-right');
+        return (float) $this->getAttributeDirectly('margin-right');
     }
 
     public function getMarginBottom()
     {
-        return $this->getAttributeDirectly('margin-bottom');
+        return (float) $this->getAttributeDirectly('margin-bottom');
     }
 
     /**

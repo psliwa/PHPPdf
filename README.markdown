@@ -1,3 +1,12 @@
+Important
+===========
+
+This is a simple fork to make the library compatible with php 7. Not indented for public use.
+
+
+
+
+
 Information
 ===========
 
