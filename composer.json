@@ -1,12 +1,12 @@
 {
-    "name": "psliwa/php-pdf",
-    "description": "Pdf and graphic files generator library for PHP.",
+    "name": "khwadj/php-pdf",
+    "description": "Pdf and graphic files generator library for PHP. Forked from psliwa/php-pdf",
     "keywords": ["PDF", "PHPPdf"],
     "type": "library",
     "license": "MIT",
     "authors": [
         {
-            "name":     "Piotr Śliwa",
+            "name":     "Pawlo Riveros && Piotr Śliwa",
             "homepage": "http://ohey.pl",
             "email":    "peter.pl7@gmail.com"
         }
