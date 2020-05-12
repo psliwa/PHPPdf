@@ -1,6 +1,10 @@
 CHANGELOG
 =========
 
+* 2.0.0
+
+  * Fixed some attributes calculations for php 7 
+
 * 1.3.0-DEV (???)
 
   * [#47] support for max-height and max-width attributes
