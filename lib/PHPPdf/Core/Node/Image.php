@@ -27,9 +27,6 @@ use PHPPdf\Core\Document,
  */
 class Image extends Node
 {
-    protected $originalHeight;
-    protected $originalWidth;
-
     protected static function setDefaultAttributes()
     {
         parent::setDefaultAttributes();
@@ -145,28 +142,22 @@ class Image extends Node
 
     protected function beforeFormat(Document $document)
     {
-        $source = $this->createImageSource($document);
-
-        $this->originalWidth = $source->getOriginalWidth();
-        $this->originalHeight = $source->getOriginalHeight();
-
         if(!$this->getWidth() && !$this->getHeight())
         {
-            $this->setWidth($this->originalWidth);
-            $this->setHeight($this->originalHeight);
+            $src = $this->getAttribute('src');
+    
+            if(is_string($src))
+            {
+                $source = $this->createSource($document);
+            }
+            else
+            {
+                $source = $src;
+            }
+
+            $this->setWidth($source->getOriginalWidth());
+            $this->setHeight($source->getOriginalHeight());
         }
-    }
-
-    public function getCurrentRatio()
-    {
-        $height = $this->getHeight();
-
-        return $height ? $this->getWidth()/$height : 0;
-    }
-
-    public function getOriginalRatio()
-    {
-        return $this->originalHeight ? $this->originalWidth/$this->originalHeight : 0;
     }
 
     public function breakAt($height)
@@ -188,17 +179,5 @@ class Image extends Node
     {
         $yCoord += $this->getHeight();
         return $this->getFirstPoint()->getY() > $yCoord;
-    }
-
-    /**
-     * @param Document $document
-     *
-     * @return \PHPPdf\Core\Engine\Image
-     */
-    protected function createImageSource(Document $document)
-    {
-        $src = $this->getAttribute('src');
-
-        return is_string($src) ? $this->createSource($document) : $src;
     }
 }
