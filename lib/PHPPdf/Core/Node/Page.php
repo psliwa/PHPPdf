@@ -381,7 +381,7 @@ class Page extends Container
      */
     public function getWidth()
     {
-        $horizontalMargins = $this->getMarginLeft() + $this->getMarginRight();
+        $horizontalMargins = (float) $this->getMarginLeft() + (float) $this->getMarginRight();
 
         return (parent::getWidth() - $horizontalMargins);
     }
@@ -470,7 +470,7 @@ class Page extends Container
         $boundary = $this->getBoundary();
         $height = $footer->getHeight();
 
-        $this->setMarginBottom($this->getMarginBottom() + $height);
+        $this->setMarginBottom((float) $this->getMarginBottom() + (float)$height);
         $footer->setWidth($this->getWidth());
 
         $footer->getBoundary()->setNext($boundary->getPoint(3))
@@ -500,9 +500,9 @@ class Page extends Container
         $header->setParent($this);
 
         $boundary = $this->getBoundary();
-        $height = $header->getHeight();
+        $height = (float) $header->getHeight();
 
-        $this->setMarginTop($this->getMarginTop() + $height);
+        $this->setMarginTop((float) $this->getMarginTop() + $height);
         $header->setWidth($this->getWidth());
 
         $header->getBoundary()->setNext($boundary->getPoint(0)->translate(0, -$height))

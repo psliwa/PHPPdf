@@ -561,7 +561,7 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
 
     public function getWidth()
     {
-        return (float) $this->getAttributeDirectly('width');
+        return $this->getAttributeDirectly('width');
     }
     
     /**
@@ -646,7 +646,7 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
 
     public function getHeight()
     {
-        return (float) $this->getAttributeDirectly('height');
+        return $this->getAttributeDirectly('height');
     }
 
     public function setMarginTop($margin)
@@ -678,22 +678,22 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
 
     public function getMarginTop()
     {
-        return (float) $this->getAttributeDirectly('margin-top');
+        return $this->getAttributeDirectly('margin-top');
     }
 
     public function getMarginLeft()
     {
-        return (float) $this->getAttributeDirectly('margin-left');
+        return $this->getAttributeDirectly('margin-left');
     }
 
     public function getMarginRight()
     {
-        return (float) $this->getAttributeDirectly('margin-right');
+        return $this->getAttributeDirectly('margin-right');
     }
 
     public function getMarginBottom()
     {
-        return (float) $this->getAttributeDirectly('margin-bottom');
+        return $this->getAttributeDirectly('margin-bottom');
     }
 
     /**
@@ -790,22 +790,22 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
     
     public function getPaddingTop()
     {
-        return (float) $this->getAttributeDirectly('padding-top');
+        return $this->getAttributeDirectly('padding-top');
     }
     
     public function getPaddingBottom()
     {
-        return (float) $this->getAttributeDirectly('padding-bottom');
+        return $this->getAttributeDirectly('padding-bottom');
     }
     
     public function getPaddingLeft()
     {
-        return (float) $this->getAttributeDirectly('padding-left');
+        return $this->getAttributeDirectly('padding-left');
     }
     
     public function getPaddingRight()
     {
-        return (float) $this->getAttributeDirectly('padding-right');
+        return $this->getAttributeDirectly('padding-right');
     }
     
     protected function setLeft($left)
@@ -1599,6 +1599,8 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
     {
         foreach($formattersNames as $formatterName)
         {
+
+            if ( $formatterName === 'PHPPdf\Core\Formatter\ImageRatioFormatter' ) continue;
             $formatter = $document->getFormatter($formatterName);
             $formatter->format($this, $document);
         }

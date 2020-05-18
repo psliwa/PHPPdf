@@ -70,7 +70,7 @@ class Table extends Container implements Listener
 
     private function setColumnWidthIfNecessary(Node $node)
     {
-        $width = $node->getWidth();
+        $width = (float) $node->getWidth();
         $columnNumber = $node->getNumberOfColumn();
         $colspan = (float) $node->getAttribute('colspan');
 
