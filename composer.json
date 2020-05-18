@@ -1,5 +1,5 @@
 {
-    "name": "psliwa/php-pdf",
+    "name": "khwadj/php-pdf",
     "description": "Pdf and graphic files generator library for PHP.",
     "keywords": ["PDF", "PHPPdf"],
     "type": "library",
