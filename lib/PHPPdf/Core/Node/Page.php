@@ -418,7 +418,7 @@ class Page extends Container
     {
         $value = $this->convertUnit($value);
 
-        $diff = $value - $this->getAttribute($name);
+        $diff = (float) $value - (float) $this->getAttribute($name);
 
         $this->translateMargin($name, $diff);
 
