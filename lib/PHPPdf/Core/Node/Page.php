@@ -434,22 +434,22 @@ class Page extends Container
         if($name == 'margin-left')
         {
             $indexes = array(0, 3, 4);
-            $x = $value;
+            $x = (float)$value;
         }
         elseif($name == 'margin-right')
         {
             $indexes = array(1, 2);
-            $x = -$value;
+            $x = -(float)$value;
         }
         elseif($name == 'margin-top')
         {
             $indexes = array(0, 1, 4);
-            $y = $value;
+            $y = (float)$value;
         }
         else
         {
             $indexes = array(2, 3);
-            $y = -$value;
+            $y = -(float)$value;
         }
 
         foreach($indexes as $index)
