@@ -8,7 +8,6 @@
 
 namespace PHPPdf\Core\Node;
 
-use PHPPdf\Core\Node\Node;
 use PHPPdf\Exception\InvalidArgumentException;
 use PHPPdf\Core\Node\Table\Cell;
 use PHPPdf\Core\Node\Node;
