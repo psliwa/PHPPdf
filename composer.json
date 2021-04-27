@@ -27,6 +27,6 @@
     	"imagine/Imagine": "If you want to use image generating (required version: >=v0.2.6)"
     },
     "autoload": {
-        "psr-0": { "PHPPdf": "lib/", "Imagine": "lib/" }
+        "psr-4": { "PHPPdf": "lib/" }
     }
 }
