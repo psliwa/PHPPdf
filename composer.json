@@ -1,5 +1,5 @@
 {
-    "name": "psliwa/php-pdf",
+    "name": "jobcloud/psliwa-php-pdf",
     "description": "Pdf and graphic files generator library for PHP.",
     "keywords": ["PDF", "PHPPdf"],
     "type": "library",
@@ -12,19 +12,20 @@
         }
     ],
     "require": {
-        "zendframework/zendpdf":  "~2.0.0",
-        "zendframework/zend-cache":  "^2.0"
+        "zendframework/zendpdf": "~2.0.0",
+        "laminas/laminas-cache": "^2.0",
+        "laminas/laminas-zendframework-bridge": "^1.1"
     },
     "require-dev": {
-        "zendframework/zend-barcode": "^2.0",
-        "zendframework/zend-validator": "^2.0",
-        "imagine/Imagine": ">=0.2.0,<0.6.0",
+        "laminas/laminas-barcode": "^2.0",
+        "laminas/laminas-validator": "^2.0",
+        "imagine/imagine": ">=0.2.0,<0.6.0",
         "phpunit/phpunit": ">=4,<5.4.0"
     },
     "suggest": {
-    	"zendframework/zend-barcode":  "If you want to use barcodes",
-    	"zendframework/zend-validator": "If you want to use barcodes (required by zend-barcode)",
-    	"imagine/Imagine": "If you want to use image generating (required version: >=v0.2.6)"
+    	"laminas/laminas-barcode":  "If you want to use barcodes",
+    	"laminas/laminas-validator": "If you want to use barcodes (required by zend-barcode)",
+    	"imagine/imagine": "If you want to use image generating (required version: >=v0.2.6)"
     },
     "autoload": {
         "psr-0": { "PHPPdf": "lib/", "Imagine": "lib/" }
