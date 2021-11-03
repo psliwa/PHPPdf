@@ -8,6 +8,7 @@
 
 namespace PHPPdf\Cache;
 
+use Zend\Cache\Exception\ExceptionInterface;
 use Zend\Cache\StorageFactory;
 use Zend\Cache\Storage\StorageInterface;
 use PHPPdf\Exception\RuntimeException;
@@ -21,6 +22,7 @@ class CacheImpl implements Cache
 {
     const ENGINE_FILE = 'File';
     const ENGINE_APC = 'Apc';
+    const ENGINE_APCU = 'Apcu';
     const ENGINE_MEMCACHED = 'Memcached';
     const ENGINE_FILESYSTEM = 'Filesystem';
     
@@ -93,7 +95,7 @@ class CacheImpl implements Cache
             
             return $data;
         }
-        catch(\Zend\Cache\Exception\ExceptionInterface $e)
+        catch(ExceptionInterface $e)
         {
             $this->wrapLowLevelException($e, __METHOD__);
         }
@@ -110,7 +112,7 @@ class CacheImpl implements Cache
         {
             return $this->adapter->hasItem($id);
         }
-        catch(\Zend\Cache\Exception\ExceptionInterface $e)
+        catch(ExceptionInterface $e)
         {
             $this->wrapLowLevelException($e, __METHOD__);
         }
@@ -133,7 +135,7 @@ class CacheImpl implements Cache
             
             return $this->adapter->setItem($id, $data);
         }
-        catch(\Zend\Cache\Exception\ExceptionInterface $e)
+        catch(ExceptionInterface $e)
         {
             $this->wrapLowLevelException($e, __METHOD__);
         }
@@ -145,7 +147,7 @@ class CacheImpl implements Cache
         {
             return $this->adapter->removeItem($id);
         }
-        catch(\Zend\Cache\Exception\ExceptionInterface $e)
+        catch(ExceptionInterface $e)
         {
             $this->wrapLowLevelException($e, __METHOD__);
         }

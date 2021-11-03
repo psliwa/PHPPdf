@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<stylesheet>
-	<div class="watermark" rotate="diagonally" alpha="0.1" font-size="106px" text-align="center"></div>
-	<any>
-		<div height="100%" vertical-align="middle" border.color="black">
-			<p font-size="31px" text-align="center" />
-		</div>
-	</any>
-</stylesheet>
