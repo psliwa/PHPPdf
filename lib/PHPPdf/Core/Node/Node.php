@@ -1603,6 +1603,8 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
     {
         foreach($formattersNames as $formatterName)
         {
+
+            if ( $formatterName === 'PHPPdf\Core\Formatter\ImageRatioFormatter' ) continue;
             $formatter = $document->getFormatter($formatterName);
             $formatter->format($this, $document);
         }

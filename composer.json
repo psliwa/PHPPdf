@@ -18,8 +18,8 @@
     "require-dev": {
         "zendframework/zend-barcode": "^2.0",
         "zendframework/zend-validator": "^2.0",
-        "imagine/Imagine": ">=0.2.0,<0.6.0",
-        "phpunit/phpunit": ">=4,<5.4.0"
+        "imagine/imagine": ">=0.2.0,<0.6.0",
+        "phpunit/phpunit": ">=4,<6.0.0"
     },
     "suggest": {
     	"zendframework/zend-barcode":  "If you want to use barcodes",

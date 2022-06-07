@@ -418,7 +418,7 @@ class Page extends Container
     {
         $value = $this->convertUnit($value);
 
-        $diff = (float) $value - (float)$this->getAttribute($name);
+        $diff = (float) $value - (float) $this->getAttribute($name);
 
         $this->translateMargin($name, $diff);
 
@@ -434,22 +434,22 @@ class Page extends Container
         if($name == 'margin-left')
         {
             $indexes = array(0, 3, 4);
-            $x = $value;
+            $x = (float)$value;
         }
         elseif($name == 'margin-right')
         {
             $indexes = array(1, 2);
-            $x = -$value;
+            $x = -(float)$value;
         }
         elseif($name == 'margin-top')
         {
             $indexes = array(0, 1, 4);
-            $y = $value;
+            $y = (float)$value;
         }
         else
         {
             $indexes = array(2, 3);
-            $y = -$value;
+            $y = -(float)$value;
         }
 
         foreach($indexes as $index)
@@ -470,7 +470,8 @@ class Page extends Container
         $boundary = $this->getBoundary();
         $height = $footer->getHeight();
 
-        $this->setMarginBottom($this->getMarginBottom() + (float)$height);
+        $this->setMarginBottom((float) $this->getMarginBottom() + (float)$height);
+
         $footer->setWidth($this->getWidth());
 
         $footer->getBoundary()->setNext($boundary->getPoint(3))
@@ -500,9 +501,10 @@ class Page extends Container
         $header->setParent($this);
 
         $boundary = $this->getBoundary();
-        $height = $header->getHeight();
+        $height = (float) $header->getHeight();
 
-        $this->setMarginTop((float)$this->getMarginTop() + (float)$height);
+        $this->setMarginTop((float) $this->getMarginTop() + $height);
+
         $header->setWidth($this->getWidth());
 
         $header->getBoundary()->setNext($boundary->getPoint(0)->translate(0, -(float)$height))
