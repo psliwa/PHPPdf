@@ -22,7 +22,7 @@ use ZendPdf\InternalType\ArrayObject;
 use ZendPdf\Font as ZendFont;
 use ZendPdf\Resource\Font\AbstractFont as ZendResourceFont;
 use ZendPdf\Color\Html as ZendColor;
-use Zend\Barcode\Object\ObjectInterface as Barcode;
+use Laminas\Barcode\Object\ObjectInterface as Barcode;
 
 /**
  * @author Piotr Śliwa <peter.pl7@gmail.com>
@@ -427,7 +427,7 @@ class GraphicsContext extends AbstractGraphicsContext
     
     protected function doDrawBarcode($x, $y, Barcode $barcode)
     {
-        $renderer = new \Zend\Barcode\Renderer\Pdf();
+        $renderer = new \Laminas\Barcode\Renderer\Pdf();
         
         $page = $this->getIndexOfPage();
         

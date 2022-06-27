@@ -170,7 +170,7 @@ class Barcode extends Node
             $background = $this->getComplexAttributes('background');
             $backgroundColor = isset($background['color']) ? $this->convertBarcodeColor($document, $background['color']) : '#FFFFFF';
 
-            $barcodeClass = sprintf('Zend\Barcode\Object\%s', ucfirst($this->getAttribute('type')));
+            $barcodeClass = sprintf('Laminas\Barcode\Object\%s', ucfirst($this->getAttribute('type')));
 
             $barcode = new $barcodeClass(array(
                 'text' => $this->getAttribute('code'),
@@ -190,7 +190,7 @@ class Barcode extends Node
             
             return $barcode;
         }
-        catch(\Zend\Barcode\Exception $e)
+        catch(\Laminas\Barcode\Exception $e)
         {
             throw new InvalidArgumentException('Invalid arguments passed to barcode, see cause exception for more details.', $previous->getCode(), $e);
         }

@@ -80,10 +80,10 @@ class Table extends Container implements Listener
         for($i=0; $i<$colspan; $i++)
         {
             $realColumnNumber = $columnNumber + $i;
-            $currentWidth += isset($this->widthsOfColumns[$realColumnNumber]) ? $this->widthsOfColumns[$realColumnNumber] : 0;
+            $currentWidth += isset($this->widthsOfColumns[$realColumnNumber]) ? (float)$this->widthsOfColumns[$realColumnNumber] : 0;
         }
         
-        $diff = ($width - $currentWidth)/$colspan;
+        $diff = ((int)$width - $currentWidth)/$colspan;
         
         if($isWidthRelative)
         {
@@ -96,7 +96,7 @@ class Table extends Container implements Listener
             {
                 $realColumnNumber = $columnNumber + $i;
                 
-                $this->widthsOfColumns[$realColumnNumber] = isset($this->widthsOfColumns[$realColumnNumber]) ? ($this->widthsOfColumns[$realColumnNumber] + $diff) : $diff;
+                $this->widthsOfColumns[$realColumnNumber] = isset($this->widthsOfColumns[$realColumnNumber]) ? ((float)$this->widthsOfColumns[$realColumnNumber] + $diff) : $diff;
             }
         }
     }

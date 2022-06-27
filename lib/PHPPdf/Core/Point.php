@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /*
  * Copyright 2011 Piotr Śliwa <peter.pl7@gmail.com>
@@ -22,13 +22,13 @@ final class Point implements \ArrayAccess
 {
     private static $zero;
     
-    private $x;
-    private $y;
+    private ?float $x;
+    private ?float $y;
 
     private function __construct($x, $y)
     {
-        $this->x = $x;
-        $this->y = $y;
+        $this->x = (float)$x;
+        $this->y = (float)$y;
     }
 
     /**
@@ -88,7 +88,7 @@ final class Point implements \ArrayAccess
         
         $firstNumberAsInteger = $this->convertToInteger($firstNumber, $precision);
         $secondNumberAsInteger = $this->convertToInteger($secondNumber, $precision);
-        
+
         if($firstNumberAsInteger > $secondNumberAsInteger)
         {
             return 1;

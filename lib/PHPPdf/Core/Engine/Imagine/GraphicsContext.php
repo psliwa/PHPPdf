@@ -21,7 +21,7 @@ use PHPPdf\Core\Engine\Image as BaseImage;
 use PHPPdf\Core\Engine\Font as BaseFont;
 use Imagine\Image\Color as ImagineColor;
 use Imagine\Image\FontInterface as ImagineFont;
-use Zend\Barcode\Object\ObjectInterface as Barcode;
+use Laminas\Barcode\Object\ObjectInterface as Barcode;
 
 /**
  * Graphics context for Imagine
@@ -588,7 +588,7 @@ class GraphicsContext extends AbstractGraphicsContext
     
     protected function doDrawBarcode($x, $y, Barcode $barcode)
     {
-        $renderer = new \Zend\Barcode\Renderer\Image(array());
+        $renderer = new \Laminas\Barcode\Renderer\Image(array());
         $imageResource = imagecreate($barcode->getWidth(true) + 1, $barcode->getHeight(true) + 1);
         
         $renderer->setResource($imageResource);

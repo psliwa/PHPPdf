@@ -8,8 +8,8 @@
 
 namespace PHPPdf\Cache;
 
-use Zend\Cache\StorageFactory;
-use Zend\Cache\Storage\StorageInterface;
+use Laminas\Cache\StorageFactory;
+use Laminas\Cache\Storage\StorageInterface;
 use PHPPdf\Exception\RuntimeException;
 
 /**
@@ -25,7 +25,7 @@ class CacheImpl implements Cache
     const ENGINE_FILESYSTEM = 'Filesystem';
     
     /**
-     * @var Zend\Cache\Storage\Adapter
+     * @var Laminas\Cache\Storage\Adapter
      */
     private $adapter;
     
@@ -93,7 +93,7 @@ class CacheImpl implements Cache
             
             return $data;
         }
-        catch(\Zend\Cache\Exception\ExceptionInterface $e)
+        catch(\Laminas\Cache\Exception\ExceptionInterface $e)
         {
             $this->wrapLowLevelException($e, __METHOD__);
         }
@@ -110,7 +110,7 @@ class CacheImpl implements Cache
         {
             return $this->adapter->hasItem($id);
         }
-        catch(\Zend\Cache\Exception\ExceptionInterface $e)
+        catch(\Laminas\Cache\Exception\ExceptionInterface $e)
         {
             $this->wrapLowLevelException($e, __METHOD__);
         }
@@ -133,7 +133,7 @@ class CacheImpl implements Cache
             
             return $this->adapter->setItem($id, $data);
         }
-        catch(\Zend\Cache\Exception\ExceptionInterface $e)
+        catch(\Laminas\Cache\Exception\ExceptionInterface $e)
         {
             $this->wrapLowLevelException($e, __METHOD__);
         }
@@ -145,7 +145,7 @@ class CacheImpl implements Cache
         {
             return $this->adapter->removeItem($id);
         }
-        catch(\Zend\Cache\Exception\ExceptionInterface $e)
+        catch(\Laminas\Cache\Exception\ExceptionInterface $e)
         {
             $this->wrapLowLevelException($e, __METHOD__);
         }
