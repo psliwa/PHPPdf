@@ -8,7 +8,6 @@
 
 namespace PHPPdf\Core\ComplexAttribute;
 
-use Zend\Code\Generator\DocBlockGenerator;
 
 use PHPPdf\Core\Node\Page,
     PHPPdf\Core\Node\Node,

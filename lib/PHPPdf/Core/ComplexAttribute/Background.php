@@ -196,7 +196,9 @@ class Background extends ComplexAttribute
             case self::POSITION_LEFT:
                 return $x;
             default:
-                return $x + $converter->convertUnit($converter->convertPercentageValue($this->positionX, $node->getWidth()));
+                $value = $converter->convertUnit($converter->convertPercentageValue($this->positionX, $node->getWidth()));
+                $value = str_replace(['px', 'pt', '%'], '', $value);
+                return $x + $value;
         }
     }
     
@@ -213,7 +215,9 @@ class Background extends ComplexAttribute
             case self::POSITION_TOP:
                 return $y;
             default:
-                return $y - $converter->convertUnit($converter->convertPercentageValue($this->positionY, $node->getHeight()));
+                $value = $converter->convertUnit($converter->convertPercentageValue($this->positionY, $node->getHeight()));
+                $value = str_replace(['px', 'pt', '%'], '', $value);
+                return $y - $value;
         }
     }
     

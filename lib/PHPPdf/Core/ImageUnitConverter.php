@@ -63,11 +63,13 @@ class ImageUnitConverter extends AbstractUnitConverter
     
 	protected function convertInUnit($value)
 	{
+	    $value = (float) $value;
 		return $value * $this->dpi;		
 	}
 
 	protected function convertPtUnit($value)
 	{
+	    $value = (float) $value;
 		return $value * $this->dpi / 72;
 	}
 

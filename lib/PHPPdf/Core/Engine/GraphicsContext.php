@@ -8,7 +8,7 @@
 
 namespace PHPPdf\Core\Engine;
 
-use Zend\Barcode\Object\ObjectInterface;
+use Laminas\Barcode\Object\ObjectInterface;
 
 /**
  * Interface of graphics context.
