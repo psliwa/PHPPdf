@@ -13,13 +13,13 @@
     ],
     "require": {
         "zendframework/zendpdf": "~2.0.0",
-        "laminas/laminas-cache": "^2.11.3"
+        "laminas/laminas-cache": "^3.0.1"
     },
     "require-dev": {
-        "laminas/laminas-barcode": "~2.8.0",
-        "laminas/laminas-validator": "~2.10.0",
-        "imagine/Imagine": ">=0.2.0,<0.6.0",
-        "phpunit/phpunit": ">=4,<5.4.0"
+        "laminas/laminas-barcode": "~2.11.0",
+        "laminas/laminas-validator": "~2.25.0",
+        "imagine/imagine": ">=0.2.0,<0.6.0",
+        "phpunit/phpunit": "^9.6.7"
     },
     "provide": {
         "laminas/laminas-cache-storage-implementation": "1.0"
