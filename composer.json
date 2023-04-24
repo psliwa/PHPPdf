@@ -1,35 +1,33 @@
 {
     "name": "jobcloud/psliwa-php-pdf",
     "description": "Pdf and graphic files generator library for PHP.",
-    "keywords": ["PDF", "PHPPdf"],
+    "keywords": [
+        "PDF",
+        "PHPPdf"
+    ],
     "type": "library",
     "license": "MIT",
     "authors": [
         {
-            "name":     "Piotr Śliwa",
+            "name": "Piotr Śliwa",
             "homepage": "http://ohey.pl",
-            "email":    "peter.pl7@gmail.com"
+            "email": "peter.pl7@gmail.com"
         }
     ],
     "require": {
-        "zendframework/zendpdf": "~2.0.0",
-        "laminas/laminas-cache": "^3.0.1"
+        "zendframework/zendpdf": "~2.0.0"
     },
     "require-dev": {
-        "laminas/laminas-barcode": "~2.11.0",
-        "laminas/laminas-validator": "~2.25.0",
         "imagine/imagine": ">=0.2.0,<0.6.0",
         "phpunit/phpunit": "^9.6.7"
     },
-    "provide": {
-        "laminas/laminas-cache-storage-implementation": "1.0"
-    },
     "suggest": {
-    	"laminas/laminas-barcode":  "If you want to use barcodes",
-    	"laminas/laminas-validator": "If you want to use barcodes (required by zend-barcode)",
-    	"imagine/imagine": "If you want to use image generating (required version: >=v0.2.6)"
+        "imagine/imagine": "If you want to use image generating (required version: >=v0.2.6)"
     },
     "autoload": {
-        "psr-0": { "PHPPdf": "lib/", "Imagine": "lib/" }
+        "psr-0": {
+            "PHPPdf": "lib/",
+            "Imagine": "lib/"
+        }
     }
 }

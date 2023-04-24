@@ -1,0 +1,12 @@
+version: '3.9'
+
+services:
+    php:
+        container_name: php-pdf
+        build:
+            dockerfile: ./Dockerfile
+            context: ./
+        ports:
+            - '8080:80'
+        volumes:
+            - ../:/var/www/html
